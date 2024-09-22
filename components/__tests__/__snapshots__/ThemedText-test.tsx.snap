@@ -2,19 +2,12 @@
 
 exports[`renders correctly 1`] = `
 <Text
+  className="text-base leading-6"
   style={
     [
       {
         "color": "#11181C",
       },
-      {
-        "fontSize": 16,
-        "lineHeight": 24,
-      },
-      undefined,
-      undefined,
-      undefined,
-      undefined,
       undefined,
     ]
   }
