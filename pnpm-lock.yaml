@@ -96,6 +96,9 @@ importers:
       '@types/react-test-renderer':
         specifier: ^18.3.0
         version: 18.3.0
+      devmoji:
+        specifier: ^2.3.0
+        version: 2.3.0
       husky:
         specifier: ^9.1.6
         version: 9.1.6
@@ -2195,6 +2198,10 @@ packages:
   detect-newline@4.0.1:
     resolution: {integrity: sha512-qE3Veg1YXzGHQhlA6jzebZN2qVf6NX+A7m7qlhCGG30dJixrAQhYOsJjsnBjJkCSmuOPpCk30145fr8FV0bzog==}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
+
+  devmoji@2.3.0:
+    resolution: {integrity: sha512-ErQdYUsE7tKxqDzQzRos6fKWaRIFUOJvMkQODq9iYDI3o5X6nxD78XEdGNYaW5AaJW4uxj+XQTkCuJkV86Qg6g==}
+    hasBin: true
 
   didyoumean@1.2.2:
     resolution: {integrity: sha512-gxtyfqMg7GKyhQmb056K7M3xszy/myH8w+B4RT+QXBQsvAOdc3XymqDDPHx1BgPgsdAA5SIifona89YtRATDzw==}
@@ -4760,6 +4767,9 @@ packages:
 
   ts-interface-checker@0.1.13:
     resolution: {integrity: sha512-Y/arvbn+rrz3JCKl9C4kVNfTfSm2/mEp5FSz5EsZSANGPSlQrpRI5M4PKF+mJnE52jOO90PnPSc3Ur3bTQw0gA==}
+
+  ts-interface-checker@1.0.0:
+    resolution: {integrity: sha512-yUeWbFBDiwPodNqrqpvQpGWheL6PvNu2/pVAb9yy2vzdkkflCgwVA4U2akByPCXzYTum3/5/nB92yKuiLpSo/Q==}
 
   tslib@2.7.0:
     resolution: {integrity: sha512-gLXCKdN1/j47AiHiOkJN69hJmcbGTHI0ImLmbYLHykhgeN0jVGola9yVjFgzCUklsZQMW55o+dW7IXv3RCXDzA==}
@@ -8056,6 +8066,12 @@ snapshots:
 
   detect-newline@4.0.1: {}
 
+  devmoji@2.3.0:
+    dependencies:
+      chalk: 4.1.2
+      commander: 7.2.0
+      ts-interface-checker: 1.0.0
+
   didyoumean@1.2.2: {}
 
   diff-sequences@29.6.3: {}
@@ -11106,6 +11122,8 @@ snapshots:
   trim-right@1.0.1: {}
 
   ts-interface-checker@0.1.13: {}
+
+  ts-interface-checker@1.0.0: {}
 
   tslib@2.7.0: {}
 
