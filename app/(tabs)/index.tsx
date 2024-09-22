@@ -1,4 +1,4 @@
-import { Image, Platform, StyleSheet } from "react-native";
+import { Image, Platform } from "react-native";
 
 import { HelloWave } from "@/components/HelloWave";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
@@ -12,15 +12,15 @@ export default function HomeScreen() {
       headerImage={
         <Image
           source={require("@/assets/images/partial-react-logo.png")}
-          style={styles.reactLogo}
+          className="absolute bottom-0 left-0 h-[178px] w-[290px]"
         />
       }
     >
-      <ThemedView style={styles.titleContainer}>
+      <ThemedView className="flex-row items-center gap-2">
         <ThemedText type="title">Welcome!</ThemedText>
         <HelloWave />
       </ThemedView>
-      <ThemedView style={styles.stepContainer}>
+      <ThemedView className="gap-2 mb-2">
         <ThemedText type="subtitle">Step 1: Try it</ThemedText>
         <ThemedText>
           Edit{" "}
@@ -32,14 +32,14 @@ export default function HomeScreen() {
           to open developer tools.
         </ThemedText>
       </ThemedView>
-      <ThemedView style={styles.stepContainer}>
+      <ThemedView className="gap-2 mb-2">
         <ThemedText type="subtitle">Step 2: Explore</ThemedText>
         <ThemedText>
           Tap the Explore tab to learn more about what's included in this
           starter app.
         </ThemedText>
       </ThemedView>
-      <ThemedView style={styles.stepContainer}>
+      <ThemedView className="gap-2 mb-2">
         <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
         <ThemedText>
           When you're ready, run{" "}
@@ -53,22 +53,3 @@ export default function HomeScreen() {
     </ParallaxScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: "absolute",
-  },
-});

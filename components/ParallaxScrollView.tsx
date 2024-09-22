@@ -1,5 +1,5 @@
 import type { PropsWithChildren, ReactElement } from "react";
-import { StyleSheet, useColorScheme } from "react-native";
+import { useColorScheme } from "react-native";
 import Animated, {
   interpolate,
   useAnimatedRef,
@@ -43,39 +43,23 @@ export default function ParallaxScrollView({
           ),
         },
       ],
+      backgroundColor: headerBackgroundColor[colorScheme],
     };
   });
 
   return (
-    <ThemedView style={styles.container}>
+    <ThemedView className="flex-1">
       <Animated.ScrollView ref={scrollRef} scrollEventThrottle={16}>
         <Animated.View
-          style={[
-            styles.header,
-            { backgroundColor: headerBackgroundColor[colorScheme] },
-            headerAnimatedStyle,
-          ]}
+          style={headerAnimatedStyle} // 애니메이션 스타일과 배경색을 함께 적용
+          className="h-[250px] overflow-hidden"
         >
           {headerImage}
         </Animated.View>
-        <ThemedView style={styles.content}>{children}</ThemedView>
+        <ThemedView className="flex-1 p-8 gap-4 overflow-hidden">
+          {children}
+        </ThemedView>
       </Animated.ScrollView>
     </ThemedView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  header: {
-    height: 250,
-    overflow: "hidden",
-  },
-  content: {
-    flex: 1,
-    padding: 32,
-    gap: 16,
-    overflow: "hidden",
-  },
-});

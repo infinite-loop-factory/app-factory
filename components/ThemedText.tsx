@@ -1,7 +1,7 @@
-import type { TextProps } from "react-native";
-import { StyleSheet, Text } from "react-native";
-
 import { useThemeColor } from "@/hooks/useThemeColor";
+import clsx from "clsx";
+import type { TextProps } from "react-native";
+import { Text } from "react-native";
 
 export type ThemedTextProps = TextProps & {
   lightColor?: string;
@@ -20,42 +20,15 @@ export function ThemedText({
 
   return (
     <Text
-      style={[
-        { color },
-        type === "default" ? styles.default : undefined,
-        type === "title" ? styles.title : undefined,
-        type === "defaultSemiBold" ? styles.defaultSemiBold : undefined,
-        type === "subtitle" ? styles.subtitle : undefined,
-        type === "link" ? styles.link : undefined,
-        style,
-      ]}
+      style={[{ color }, style]}
+      className={clsx({
+        "text-base leading-6": type === "default",
+        "text-4xl font-bold leading-8": type === "title",
+        "text-base leading-6 font-semibold": type === "defaultSemiBold",
+        "text-xl font-bold": type === "subtitle",
+        "text-base leading-7 text-[#0a7ea4]": type === "link",
+      })}
       {...rest}
     />
   );
 }
-
-const styles = StyleSheet.create({
-  default: {
-    fontSize: 16,
-    lineHeight: 24,
-  },
-  defaultSemiBold: {
-    fontSize: 16,
-    lineHeight: 24,
-    fontWeight: "600",
-  },
-  title: {
-    fontSize: 32,
-    fontWeight: "bold",
-    lineHeight: 32,
-  },
-  subtitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  link: {
-    lineHeight: 30,
-    fontSize: 16,
-    color: "#0a7ea4",
-  },
-});
