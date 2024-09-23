@@ -22,6 +22,14 @@
       "recommended": true,
       "style": {
         "useImportType": "error"
+      },
+      "nursery": {
+        "useSortedClasses": {
+          "level": "error",
+          "options": {
+            "functions": ["clsx"]
+          }
+        }
       }
     }
   },

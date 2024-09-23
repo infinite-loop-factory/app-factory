@@ -23,10 +23,10 @@ export function ThemedText({
       style={[{ color }, style]}
       className={clsx({
         "text-base leading-6": type === "default",
-        "text-4xl font-bold leading-8": type === "title",
-        "text-base leading-6 font-semibold": type === "defaultSemiBold",
-        "text-xl font-bold": type === "subtitle",
-        "text-base leading-7 text-[#0a7ea4]": type === "link",
+        "font-bold text-4xl leading-8": type === "title",
+        "font-semibold text-base leading-6": type === "defaultSemiBold",
+        "font-bold text-xl": type === "subtitle",
+        "text-[#0a7ea4] text-base leading-7": type === "link",
       })}
       {...rest}
     />

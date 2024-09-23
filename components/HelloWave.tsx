@@ -25,7 +25,7 @@ export function HelloWave() {
 
   return (
     <Animated.View style={animatedStyle}>
-      <ThemedText className="text-[28px] leading-[32px] mt-[-6px]">
+      <ThemedText className="mt-[-6px] text-[28px] leading-[32px]">
         👋
       </ThemedText>
     </Animated.View>

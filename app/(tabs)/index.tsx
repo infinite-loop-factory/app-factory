@@ -21,7 +21,7 @@ export default function HomeScreen() {
         <ThemedText type="title">{i18n.t("welcome")}!</ThemedText>
         <HelloWave />
       </ThemedView>
-      <ThemedView className="gap-2 mb-2">
+      <ThemedView className="mb-2 gap-2">
         <ThemedText type="subtitle">Step 1: Try it</ThemedText>
         <ThemedText>
           Edit{" "}
@@ -33,14 +33,14 @@ export default function HomeScreen() {
           to open developer tools.
         </ThemedText>
       </ThemedView>
-      <ThemedView className="gap-2 mb-2">
+      <ThemedView className="mb-2 gap-2">
         <ThemedText type="subtitle">Step 2: Explore</ThemedText>
         <ThemedText>
           Tap the Explore tab to learn more about what's included in this
           starter app.
         </ThemedText>
       </ThemedView>
-      <ThemedView className="gap-2 mb-2">
+      <ThemedView className="mb-2 gap-2">
         <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
         <ThemedText>
           When you're ready, run{" "}
