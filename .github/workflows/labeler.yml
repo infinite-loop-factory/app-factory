@@ -1,6 +1,5 @@
 name: labeler
 on: [pull_request]
-
 jobs:
   labeler:
     name: pr/labeler

@@ -1,8 +1,8 @@
-name: deps-review
+name: dependency-review
 on: [pull_request]
 jobs:
   dependency-review:
-    name: pr/deps-review
+    name: pr/dependency-review
     permissions:
       contents: read
     runs-on: ubuntu-latest
