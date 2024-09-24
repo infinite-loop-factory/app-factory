@@ -1,0 +1,16 @@
+{
+  "recommendations": [
+    "aaron-bond.better-comments",
+    "biomejs.biome",
+    "bradlc.vscode-tailwindcss",
+    "expo.vscode-expo-tools",
+    "github.vscode-github-actions",
+    "GitHub.vscode-pull-request-github",
+    "jasonnutter.vscode-codeowners",
+    "ms-vscode.vscode-typescript-next",
+    "pflannery.vscode-versionlens",
+    "usernamehw.errorlens",
+    "wix.vscode-import-cost",
+    "YoavBls.pretty-ts-errors"
+  ]
+}
