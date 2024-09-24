@@ -1,8 +1,8 @@
 // ? https://docs.expo.dev/guides/localization/
 import { getLocales } from "expo-localization";
 import { I18n } from "i18n-js";
-import en from './locales/en.json';
-import ko from './locales/ko.json';
+import en from "./locales/en.json";
+import ko from "./locales/ko.json";
 
 // Set the key-value pairs for the different languages you want to support.
 const translations = {
