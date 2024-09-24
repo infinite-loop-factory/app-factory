@@ -46,6 +46,9 @@
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@biomejs/biome": "^1.9.2",
+    "@commitlint/cli": "^19.5.0",
+    "@commitlint/config-conventional": "^19.5.0",
+    "@commitlint/types": "^19.5.0",
     "@types/jest": "^29.5.13",
     "@types/react": "~18.2.79",
     "@types/react-test-renderer": "^18.3.0",
