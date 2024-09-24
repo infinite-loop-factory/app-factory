@@ -1,16 +1,27 @@
 name: reviewdog
 on: [pull_request]
 jobs:
-  biome:
-    name: pr/biome
+  lint:
+    name: pr/lint
     runs-on: ubuntu-latest
     permissions:
       contents: read
       pull-requests: write
     steps:
-      - uses: actions/checkout@v4
-      - uses: mongolyy/reviewdog-action-biome@v1
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Run Biome with Reviewdog
+        uses: mongolyy/reviewdog-action-biome@v1
         with:
-          github_token: ${{ secrets.github_token }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-review
+          fail_on_error: true
+
+      - name: Run misspell with Reviewdog
+        uses: reviewdog/action-misspell@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          locale: "US"
           reporter: github-pr-review
           fail_on_error: true
