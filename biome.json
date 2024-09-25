@@ -51,7 +51,8 @@
             "allow": ["error"]
           }
         },
-        "noEmptyBlockStatements": "error"
+        "noEmptyBlockStatements": "error",
+        "useErrorMessage": "error"
       }
     }
   },
