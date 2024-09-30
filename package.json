@@ -2,7 +2,9 @@
   "name": "@infinite-loop-factory/app-factory",
   "private": true,
   "scripts": {
-    "lint": "biome lint --write --no-errors-on-unmatched"
+    "clean": "git clean -xdf node_modules",
+    "lint": "turbo run lint",
+    "test": "turbo run test"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.2",
@@ -14,5 +16,10 @@
     "lint-staged": "^15.2.10",
     "sort-package-json": "^2.10.1",
     "turbo": "^2.1.2"
+  },
+  "packageManager": "pnpm@9.11.0",
+  "engines": {
+    "node": ">=20",
+    "pnpm": ">=9"
   }
 }

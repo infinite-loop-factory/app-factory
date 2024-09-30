@@ -6,7 +6,7 @@
   "scripts": {
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "lint": "expo lint",
+    "lint": "biome lint --write --no-errors-on-unmatched",
     "prepare": "husky",
     "reset-project": "node ./scripts/reset-project.js",
     "start": "expo start",
@@ -52,9 +52,5 @@
     "jest-expo": "~51.0.4",
     "react-test-renderer": "18.2.0",
     "typescript": "~5.3.3"
-  },
-  "engines": {
-    "node": ">=20",
-    "pnpm": ">=9"
   }
 }

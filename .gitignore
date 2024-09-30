@@ -1,4 +1,6 @@
-# macOS
 .DS_Store
+.expo/
+.turbo/
+
 node_modules/
 dist/

@@ -1,0 +1,39 @@
+{
+  "$schema": "https://turborepo.org/schema.json",
+  "globalDependencies": ["**/.env"],
+  "globalEnv": ["DATABASE_URL"],
+  "globalPassThroughEnv": ["NODE_ENV", "CI", "GITHUB_TOKEN", "SUPABASE_URL"],
+
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": [
+        ".next/**",
+        "!.next/cache/**",
+        "next-env.d.ts",
+        "dist/**",
+        ".expo/**",
+        ".output/**",
+        ".vercel/output/**"
+      ]
+    },
+
+    "clean": {
+      "cache": false
+    },
+
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+
+    "lint": {
+      "dependsOn": ["^build"]
+    },
+
+    "test": {
+      "outputs": ["coverage/**"],
+      "dependsOn": ["build"]
+    }
+  }
+}

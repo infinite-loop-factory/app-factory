@@ -1,3 +1,4 @@
+const path = require("node:path");
 const { getDefaultConfig } = require("expo/metro-config");
 
 // 1. Enable CSS for Expo.
@@ -7,6 +8,13 @@ const config = getDefaultConfig(__dirname, {
 
 // This is not needed for NativeWind, it is configuration for Metro to understand monorepos
 const projectRoot = __dirname;
+const workspaceRoot = path.resolve(projectRoot, "../..");
+config.watchFolders = [workspaceRoot];
+config.resolver.disableHierarchicalLookup = true;
+config.resolver.nodeModulesPaths = [
+  path.resolve(projectRoot, "node_modules"),
+  path.resolve(workspaceRoot, "node_modules"),
+];
 
 // 2. Enable NativeWind
 const { withNativeWind } = require("nativewind/metro");
@@ -16,4 +24,7 @@ module.exports = withNativeWind(config, {
   // This is optional
   projectRoot,
   inlineRem: false,
+  features: {
+    transformPercentagePolyfill: true,
+  },
 });
