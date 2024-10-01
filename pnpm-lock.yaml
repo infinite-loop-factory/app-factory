@@ -35,6 +35,9 @@ importers:
       turbo:
         specifier: ^2.1.2
         version: 2.1.2
+      yaml:
+        specifier: ^2.5.1
+        version: 2.5.1
 
   apps/country-tracker:
     dependencies:
