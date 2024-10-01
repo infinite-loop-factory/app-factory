@@ -4,6 +4,7 @@
   "scripts": {
     "clean": "git clean -xdf node_modules",
     "lint": "turbo run lint",
+    "sort-package-json": "sort-package-json \"package.json\" \"apps/*/package.json\" \"packages/*/package.json\"",
     "test": "turbo run test"
   },
   "devDependencies": {
