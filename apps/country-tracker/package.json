@@ -2,7 +2,7 @@
   "name": "country-tracker",
   "version": "1.0.0",
   "private": true,
-  "main": "expo-router/entry",
+  "main": "index.ts",
   "scripts": {
     "android": "expo start --android",
     "ios": "expo start --ios",
