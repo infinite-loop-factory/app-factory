@@ -1,6 +1,6 @@
 {
-  "name": "country-tracker",
-  "version": "1.0.0",
+  "name": "template",
+  "version": "0.1.0",
   "private": true,
   "main": "index.ts",
   "scripts": {
