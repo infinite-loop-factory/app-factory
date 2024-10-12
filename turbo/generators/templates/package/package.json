@@ -1,0 +1,20 @@
+{
+  "name": "package",
+  "version": "0.1.0",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "build": "tsc",
+    "clean": "git clean -xdf .cache .turbo dist node_modules",
+    "dev": "tsc",
+    "lint": "biome lint --write --no-errors-on-unmatched",
+    "type-check": "tsc --noEmit --emitDeclarationOnly false"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "catalog:",
+    "type-fest": "catalog:",
+    "typescript": "catalog:"
+  }
+}

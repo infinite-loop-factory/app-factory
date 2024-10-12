@@ -1,13 +1,10 @@
 import type { PlopTypes } from "@turbo/gen";
 import type { PackageJson } from "type-fest";
 
-import { exec } from "node:child_process";
-import { readdir, rename } from "node:fs/promises";
+import { execSync } from "node:child_process";
+import { access, readdir, rename } from "node:fs/promises";
 import path from "node:path";
-import { promisify } from "node:util";
 import { kebabCase } from "es-toolkit/string";
-
-const execAsync = promisify(exec);
 
 const getTemplates = async () => {
   const templates = await readdir(path.resolve("turbo/generators/templates"));
@@ -43,7 +40,8 @@ export default function generator(plop: PlopTypes.NodePlopAPI): void {
       },
     ],
     actions: (answers) => {
-      const destinationBase = answers?.type === "package" ? "packages" : "apps";
+      const isPackage = answers?.type === "package";
+      const destinationBase = isPackage ? "packages" : "apps";
       const kebabTitle = kebabCase(answers?.title);
 
       return [
@@ -56,9 +54,11 @@ export default function generator(plop: PlopTypes.NodePlopAPI): void {
         {
           type: "modify",
           path: `${destinationBase}/${kebabTitle}/package.json`,
-          async transform(content, answers) {
+          async transform(content) {
             const pkg = JSON.parse(content) as PackageJson;
-            pkg.name = answers.title;
+            pkg.name = isPackage
+              ? `@infinite-loop-factory/${kebabTitle}`
+              : kebabTitle;
 
             return JSON.stringify(pkg, null, 2);
           },
@@ -73,10 +73,16 @@ export default function generator(plop: PlopTypes.NodePlopAPI): void {
             ".gitignore",
           );
 
-          await Promise.all([
-            rename(oldPath, newPath),
-            execAsync("pnpm install"),
-          ]);
+          // ? 필요시 fs-extra 사용
+          if (
+            await access(oldPath)
+              .then(() => true)
+              .catch(() => false)
+          ) {
+            await rename(oldPath, newPath);
+          }
+
+          execSync("pnpm install", { stdio: "inherit" });
 
           return "Package installed";
         },
