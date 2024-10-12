@@ -1,3 +1,8 @@
 packages:
   - apps/*
   - packages/*
+
+catalog:
+  "@biomejs/biome": ^1.9.3
+  typescript: ~5.3.3
+  type-fest: ^4.26.1
