@@ -5,7 +5,6 @@
     "nativewind",
     "SUPABASE",
     "tailwind",
-    "tailwindcss",
-    "typecheck"
+    "tailwindcss"
   ]
 }
