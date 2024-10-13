@@ -24,7 +24,7 @@ const appsDir = path.join(process.cwd(), "apps");
     ]);
 
     // Run the selected app using pnpm
-    const command = `pnpm --filter ${selectedApp} start --clear`;
+    const command = `pnpm --filter "@infinite-loop-factory/${selectedApp}" start --clear`;
     // biome-ignore lint/suspicious/noConsole: cmd
     console.log(chalk.green(`Running: ${command}`));
 

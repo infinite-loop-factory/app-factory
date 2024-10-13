@@ -1,5 +1,5 @@
 {
-  "name": "country-tracker",
+  "name": "@infinite-loop-factory/country-tracker",
   "version": "1.0.0",
   "private": true,
   "main": "index.ts",

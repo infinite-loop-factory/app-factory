@@ -56,9 +56,7 @@ export default function generator(plop: PlopTypes.NodePlopAPI): void {
           path: `${destinationBase}/${kebabTitle}/package.json`,
           async transform(content) {
             const pkg = JSON.parse(content) as PackageJson;
-            pkg.name = isPackage
-              ? `@infinite-loop-factory/${kebabTitle}`
-              : kebabTitle;
+            pkg.name = `@infinite-loop-factory/${kebabTitle}`;
 
             return JSON.stringify(pkg, null, 2);
           },
