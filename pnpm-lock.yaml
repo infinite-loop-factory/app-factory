@@ -4,12 +4,24 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+catalogs:
+  default:
+    '@biomejs/biome':
+      specifier: ^1.9.3
+      version: 1.9.3
+    type-fest:
+      specifier: ^4.26.1
+      version: 4.26.1
+    typescript:
+      specifier: ~5.3.3
+      version: 5.3.3
+
 importers:
 
   .:
     devDependencies:
       '@biomejs/biome':
-        specifier: ^1.9.3
+        specifier: 'catalog:'
         version: 1.9.3
       '@commitlint/cli':
         specifier: ^19.5.0
@@ -51,8 +63,11 @@ importers:
         specifier: ^2.1.3
         version: 2.1.3
       type-fest:
-        specifier: ^4.26.1
+        specifier: 'catalog:'
         version: 4.26.1
+      typescript:
+        specifier: 'catalog:'
+        version: 5.3.3
       yaml:
         specifier: ^2.5.1
         version: 2.5.1
@@ -136,7 +151,7 @@ importers:
         specifier: ^7.20.0
         version: 7.25.2
       '@biomejs/biome':
-        specifier: '*'
+        specifier: 'catalog:'
         version: 1.9.3
       '@types/jest':
         specifier: ^29.5.13
@@ -157,10 +172,10 @@ importers:
         specifier: 18.2.0
         version: 18.2.0(react@18.2.0)
       type-fest:
-        specifier: '*'
+        specifier: 'catalog:'
         version: 4.26.1
       typescript:
-        specifier: ~5.3.3
+        specifier: 'catalog:'
         version: 5.3.3
 
 packages:
