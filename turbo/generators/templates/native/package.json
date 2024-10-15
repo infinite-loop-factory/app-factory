@@ -6,7 +6,7 @@
   "scripts": {
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "lint": "biome lint --write --no-errors-on-unmatched",
+    "lint": "biome lint --fix --no-errors-on-unmatched",
     "start": "expo start",
     "test": "jest",
     "test:watch": "jest --watchAll",
