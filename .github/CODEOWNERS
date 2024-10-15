@@ -1,0 +1,16 @@
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+* @infinite-loop-factory/app-factory
+
+# apps
+/apps/country-tracker @gracefullight
+
+# packages
+
+# scripts
+
+# turbo
+/turbo/generator/config.ts @gracefullight @ckrbqja
+
+# settings
+/.husky @gracefullight
+/.vscode @gracefullight
