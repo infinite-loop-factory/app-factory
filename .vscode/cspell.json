@@ -5,6 +5,7 @@
     "nativewind",
     "SUPABASE",
     "tailwind",
-    "tailwindcss"
+    "tailwindcss",
+    "Turborepo"
   ]
 }
