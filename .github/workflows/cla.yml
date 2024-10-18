@@ -17,10 +17,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "CLA Assistant"
-        if: (github.event.comment.body == 'recheck' || github.event.comment.body == 'I have read the CLA Document and I hereby sign the CLA') || github.event_name == 'pull_request_target'
+        if: (github.event.comment.body == 'recheck' || github.event.comment.body == '저는 CLA 문서를 읽었으며, CLA에 서명합니다.') || github.event_name == 'pull_request_target'
         uses: contributor-assistant/github-action@v2.6.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
         with:
           path-to-signatures: ".github/signatures/cla.json"
           path-to-document: "https://gist.github.com/gracefullight/041ebde610b7eea1dc21d11d40b7d663#file-infinite-loop-factory-cla-md" # e.g. a CLA or a DCO document
