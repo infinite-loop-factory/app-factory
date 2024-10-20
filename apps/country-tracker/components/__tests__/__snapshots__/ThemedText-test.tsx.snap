@@ -2,15 +2,7 @@
 
 exports[`renders correctly 1`] = `
 <Text
-  className="text-base leading-6"
-  style={
-    [
-      {
-        "color": "#11181C",
-      },
-      undefined,
-    ]
-  }
+  className="text-typography-700 font-body text-base"
 >
   Snapshot test!
 </Text>

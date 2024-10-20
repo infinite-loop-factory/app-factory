@@ -2,8 +2,8 @@ import { Image, Platform } from "react-native";
 
 import { HelloWave } from "@/components/HelloWave";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
-import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
+import { Text } from "@/components/ui/text";
 import i18n from "@/i18n";
 
 export default function HomeScreen() {
@@ -18,38 +18,41 @@ export default function HomeScreen() {
       }
     >
       <ThemedView className="flex-row items-center gap-2">
-        <ThemedText type="title">{i18n.t("welcome")}!</ThemedText>
+        <Text bold size="4xl">
+          {i18n.t("welcome")}!
+        </Text>
         <HelloWave />
       </ThemedView>
       <ThemedView className="mb-2 gap-2">
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit{" "}
-          <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText>{" "}
-          to see changes. Press{" "}
-          <ThemedText type="defaultSemiBold">
+        <Text bold size="2xl">
+          Step 1: Try it
+        </Text>
+        <Text>
+          Edit <Text bold>app/(tabs)/index.tsx</Text> to see changes. Press{" "}
+          <Text bold>
             {Platform.select({ ios: "cmd + d", android: "cmd + m" })}
-          </ThemedText>{" "}
+          </Text>{" "}
           to open developer tools.
-        </ThemedText>
+        </Text>
       </ThemedView>
       <ThemedView className="mb-2 gap-2">
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
+        <Text bold size="2xl">
+          Step 2: Explore
+        </Text>
+        <Text>
           Tap the Explore tab to learn more about what's included in this
           starter app.
-        </ThemedText>
+        </Text>
       </ThemedView>
       <ThemedView className="mb-2 gap-2">
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{" "}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText>{" "}
-          to get a fresh <ThemedText type="defaultSemiBold">app</ThemedText>{" "}
-          directory. This will move the current{" "}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{" "}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
+        <Text bold size="2xl">
+          Step 3: Get a fresh start
+        </Text>
+        <Text>
+          When you're ready, run <Text bold>npm run reset-project</Text> to get
+          a fresh <Text bold>app</Text> directory. This will move the current{" "}
+          <Text bold>app</Text> to <Text bold>app-example</Text>.
+        </Text>
       </ThemedView>
     </ParallaxScrollView>
   );
