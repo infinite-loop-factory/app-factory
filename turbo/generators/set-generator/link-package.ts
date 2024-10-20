@@ -87,13 +87,12 @@ export default function linkPackageToApps(plop: PlopTypes.NodePlopAPI) {
       },
     ],
 
-    actions: ({
-      selectedPackage,
-      selectedApps,
-    }: {
-      selectedPackage: string;
-      selectedApps: string[];
-    }) => {
+    actions: (actions) => {
+      const { selectedPackage, selectedApps } = actions as {
+        selectedPackage: string;
+        selectedApps: string[];
+      };
+
       return [
         async () => {
           const packageName = await getPackageName(selectedPackage);
