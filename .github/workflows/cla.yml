@@ -27,5 +27,5 @@ jobs:
           custom-pr-sign-comment: "저는 CLA 문서를 읽었으며, CLA에 서명합니다."
           path-to-signatures: ".github/signatures/cla.json"
           path-to-document: "https://gist.github.com/gracefullight/041ebde610b7eea1dc21d11d40b7d663#file-infinite-loop-factory-cla-md" # e.g. a CLA or a DCO document
-          branch: "main"
+          branch: "chore/cla"
           allowlist: bot*
