@@ -13,9 +13,6 @@
     "test:watch": "jest --watchAll",
     "web": "DARK_MODE=media expo start --web"
   },
-  "jest": {
-    "preset": "jest-expo"
-  },
   "dependencies": {
     "@expo/vector-icons": "^14.0.4",
     "@gluestack-ui/nativewind-utils": "^1.0.25",
