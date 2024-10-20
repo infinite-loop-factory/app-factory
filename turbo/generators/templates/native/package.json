@@ -5,6 +5,7 @@
   "main": "index.ts",
   "scripts": {
     "android": "expo start --android",
+    "clean": "git clean -xdf .cache .expo .turbo android ios node_modules",
     "ios": "expo start --ios",
     "lint": "biome lint --fix --no-errors-on-unmatched",
     "start": "expo start",
