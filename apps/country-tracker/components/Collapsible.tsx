@@ -5,8 +5,8 @@ import { useColorScheme } from "nativewind";
 import { useState } from "react";
 import { TouchableOpacity } from "react-native";
 
-import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
+import { Text } from "@/components/ui/text";
 import { Colors } from "@/constants/Colors";
 
 export function Collapsible({
@@ -28,7 +28,7 @@ export function Collapsible({
           size={18}
           color={colorScheme === "light" ? Colors.light.icon : Colors.dark.icon}
         />
-        <ThemedText type="defaultSemiBold">{title}</ThemedText>
+        <Text bold>{title}</Text>
       </TouchableOpacity>
       {isOpen && <ThemedView className="mt-1.5 ml-6">{children}</ThemedView>}
     </ThemedView>

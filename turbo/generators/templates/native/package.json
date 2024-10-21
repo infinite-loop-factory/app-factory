@@ -42,12 +42,12 @@
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@biomejs/biome": "catalog:",
+    "@testing-library/react-native": "^12.7.2",
     "@types/jest": "^29.5.13",
     "@types/react": "~18.2.79",
     "@types/react-test-renderer": "^18.3.0",
     "jest": "^29.7.0",
     "jest-expo": "~51.0.4",
-    "react-test-renderer": "18.2.0",
     "type-fest": "catalog:",
     "typescript": "catalog:"
   }

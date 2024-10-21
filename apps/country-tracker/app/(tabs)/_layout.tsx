@@ -5,6 +5,23 @@ import { TabBarIcon } from "@/components/navigation/TabBarIcon";
 import { Colors } from "@/constants/Colors";
 import i18n from "@/i18n";
 
+const HomeTabBarIcon = ({
+  color,
+  focused,
+}: { color: string; focused: boolean }) => (
+  <TabBarIcon name={focused ? "home" : "home-outline"} color={color} />
+);
+
+const ExploreTabBarIcon = ({
+  color,
+  focused,
+}: { color: string; focused: boolean }) => (
+  <TabBarIcon
+    name={focused ? "code-slash" : "code-slash-outline"}
+    color={color}
+  />
+);
+
 export default function TabLayout() {
   const { colorScheme } = useColorScheme();
 
@@ -19,24 +36,14 @@ export default function TabLayout() {
         name="index"
         options={{
           title: i18n.t("home"),
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon
-              name={focused ? "home" : "home-outline"}
-              color={color}
-            />
-          ),
+          tabBarIcon: HomeTabBarIcon,
         }}
       />
       <Tabs.Screen
         name="explore"
         options={{
           title: "Explore",
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon
-              name={focused ? "code-slash" : "code-slash-outline"}
-              color={color}
-            />
-          ),
+          tabBarIcon: ExploreTabBarIcon,
         }}
       />
     </Tabs>
