@@ -21,10 +21,11 @@ jobs:
         uses: contributor-assistant/github-action@v2.6.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 
         with:
+          custom-notsigned-prcomment: "PR 감사합니다. 이 PR을 수락하기 전에 [Contributor License Agreement](https://gist.github.com/gracefullight/041ebde610b7eea1dc21d11d40b7d663#file-infinite-loop-factory-cla-md)에 동의하셔야합니다. CLA는 아래 문장과 동일한 코멘트를 추가해주시면 서명할 수 있습니다."
           custom-pr-sign-comment: "저는 CLA 문서를 읽었으며, CLA에 서명합니다."
+          custom-allsigned-prcomment: "**CLA Assistant Lite bot** 모든 Contributor가 CLA에 서명했습니다."
           path-to-signatures: ".github/signatures/cla.json"
           path-to-document: "https://gist.github.com/gracefullight/041ebde610b7eea1dc21d11d40b7d663#file-infinite-loop-factory-cla-md" # e.g. a CLA or a DCO document
           branch: "chore/cla"
