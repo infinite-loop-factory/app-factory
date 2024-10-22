@@ -31,6 +31,10 @@ jobs:
           branch: "chore/cla"
           allowlist: bot*
 
+      - uses: actions/checkout@v4
+        with:
+          ref: "chore/cla"
+
       - name: Create CLA Pull Request
         if: success()
         uses: peter-evans/create-pull-request@v7
