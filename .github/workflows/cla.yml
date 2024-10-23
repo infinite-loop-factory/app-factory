@@ -1,7 +1,5 @@
 name: "CLA Assistant"
 on:
-  issue_comment:
-    types: [created]
   pull_request_target:
     types: [opened, closed, synchronize]
 
@@ -17,6 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "CLA Assistant"
+        id: cla_assistant
         if: (github.event.comment.body == 'recheck' || github.event.comment.body == '저는 CLA 문서를 읽었으며, CLA에 서명합니다.') || github.event_name == 'pull_request_target'
         uses: contributor-assistant/github-action@v2.6.1
         env:
@@ -31,8 +30,13 @@ jobs:
           branch: "chore/cla"
           allowlist: bot*
 
+      - uses: actions/checkout@v4
+        if: steps.cla_assistant.conclusion == 'success'
+        with:
+          ref: "chore/cla"
+
       - name: Create CLA Pull Request
-        if: success()
+        if: steps.cla_assistant.conclusion == 'success'
         uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
