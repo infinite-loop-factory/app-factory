@@ -1,9 +1,8 @@
-import { Tabs } from "expo-router";
-import { useColorScheme } from "nativewind";
-
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
 import { Colors } from "@/constants/Colors";
 import i18n from "@/i18n";
+import { Tabs } from "expo-router";
+import { useColorScheme } from "nativewind";
 
 const HomeTabBarIcon = ({
   color,
