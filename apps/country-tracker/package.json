@@ -11,13 +11,16 @@
     "start": "expo start",
     "test": "jest",
     "test:watch": "jest --watchAll",
-    "web": "DARK_MODE=media expo start --web"
+    "web": "cross-env DARK_MODE=media expo start --web",
+    "web:publish": "tsx web-publish.ts"
   },
   "dependencies": {
+    "@expo/html-elements": "^0.10.1",
     "@expo/vector-icons": "^14.0.4",
     "@gluestack-ui/nativewind-utils": "^1.0.25",
     "@gluestack-ui/overlay": "^0.1.15",
     "@gluestack-ui/toast": "^1.0.7",
+    "@legendapp/motion": "^2.4.0",
     "@react-navigation/native": "^6.0.2",
     "clsx": "^2.1.1",
     "expo": "~51.0.38",
