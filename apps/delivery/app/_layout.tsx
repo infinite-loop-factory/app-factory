@@ -1,4 +1,5 @@
-import "../global.css";
+import "@/global.css";
+import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
 import {
   DarkTheme,
   DefaultTheme,
@@ -12,6 +13,7 @@ import { useEffect } from "react";
 import "react-native-reanimated";
 
 import "@/i18n";
+import WebviewLayout from "@/components/WebviewLayout";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -33,11 +35,15 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-    </ThemeProvider>
+    <GluestackUIProvider mode="light">
+      <ThemeProvider value={colorScheme !== "dark" ? DarkTheme : DefaultTheme}>
+        <WebviewLayout>
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="+not-found" />
+          </Stack>
+        </WebviewLayout>
+      </ThemeProvider>
+    </GluestackUIProvider>
   );
 }
