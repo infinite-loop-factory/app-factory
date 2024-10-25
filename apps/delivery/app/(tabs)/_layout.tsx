@@ -1,3 +1,4 @@
+import WebviewLayout from "@/components/WebviewLayout";
 import { Colors } from "@/constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
@@ -20,46 +21,48 @@ export default function TabLayout() {
   ];
 
   return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
-        headerShown: false,
-        tabBarShowLabel: false,
+    <WebviewLayout>
+      <Tabs
+        screenOptions={{
+          tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
+          headerShown: false,
+          tabBarShowLabel: false,
 
-        tabBarStyle: {
-          paddingVertical: 10,
-          height: 60,
-        },
-        tabBarItemStyle: {
-          paddingHorizontal: 30,
-        },
-        tabBarLabelStyle: {
-          fontSize: 12,
-          fontWeight: "bold",
-        },
-      }}
-    >
-      {tabScreens.map(({ name, title, icon }, index) => (
-        <Tabs.Screen
-          key={`screen-${`${index}`}`}
-          name={name}
-          options={{
-            title,
-            tabBarIcon: ({ color }) => (
-              <View className={"mt-[-5px] flex items-center justify-center"}>
-                <Ionicons name={icon} size={24} color={color} />
-                <Text
-                  className={
-                    "flex items-center justify-center whitespace-nowrap text-center font-bold text-[12px] text-gray-400"
-                  }
-                >
-                  {title}
-                </Text>
-              </View>
-            ),
-          }}
-        />
-      ))}
-    </Tabs>
+          tabBarStyle: {
+            paddingVertical: 10,
+            height: 60,
+          },
+          tabBarItemStyle: {
+            paddingHorizontal: 30,
+          },
+          tabBarLabelStyle: {
+            fontSize: 12,
+            fontWeight: "bold",
+          },
+        }}
+      >
+        {tabScreens.map(({ name, title, icon }, index) => (
+          <Tabs.Screen
+            key={`screen-${`${index}`}`}
+            name={name}
+            options={{
+              title,
+              tabBarIcon: ({ color }) => (
+                <View className={"mt-[-5px] flex items-center justify-center"}>
+                  <Ionicons name={icon} size={24} color={color} />
+                  <Text
+                    className={
+                      "flex items-center justify-center whitespace-nowrap text-center font-bold text-[12px] text-gray-400"
+                    }
+                  >
+                    {title}
+                  </Text>
+                </View>
+              ),
+            }}
+          />
+        ))}
+      </Tabs>
+    </WebviewLayout>
   );
 }
