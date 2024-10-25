@@ -29,6 +29,8 @@ export default function WebviewLayout({ children }: { children: ReactNode }) {
     })();
   }, []);
 
+  if (typeof window !== "undefined") return children;
+
   return (
     <SafeAreaView className={"flex-1 bg-[#b9e2e0]"}>
       <View className={"flex-1 flex-row items-center justify-center"}>
@@ -89,7 +91,7 @@ export default function WebviewLayout({ children }: { children: ReactNode }) {
         {/* 내용 */}
         <View
           className={
-            "h-full flex-[4] overflow-hidden md:h-[70%] md:min-w-[400px] "
+            "h-full flex-[4] overflow-hidden md:h-[70%] md:min-w-[400px] md:max-w-[400px] "
           }
           style={{
             shadowColor: "#000",
