@@ -1,5 +1,4 @@
 import type { ConfigContext, ExpoConfig } from "expo/config";
-
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   name: "delivery",
@@ -32,5 +31,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   experiments: {
     tsconfigPaths: true,
     typedRoutes: true,
+    baseUrl: "/app-factory/delivery",
   },
 });
