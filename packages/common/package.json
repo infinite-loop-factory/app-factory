@@ -1,0 +1,24 @@
+{
+  "name": "@infinite-loop-factory/common",
+  "version": "0.1.0",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "build": "tsc",
+    "clean": "git clean -xdf .cache .turbo dist node_modules",
+    "dev": "tsc",
+    "lint": "biome lint --fix --no-errors-on-unmatched",
+    "type-check": "tsc --noEmit --emitDeclarationOnly false"
+  },
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^2.5.4"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "catalog:",
+    "type-fest": "catalog:",
+    "typescript": "catalog:"
+  }
+}
