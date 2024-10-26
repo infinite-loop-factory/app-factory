@@ -7,10 +7,11 @@
     "android": "expo start --android",
     "clean": "git clean -xdf .cache .expo .turbo android ios node_modules",
     "ios": "expo start --ios",
-    "lint": "biome lint --fix --no-errors-on-unmatched",
+    "lint": "biome lint --fix --unsafe --no-errors-on-unmatched",
     "start": "expo start",
     "test": "jest",
     "test:watch": "jest --watchAll",
+    "type-check": "tsc --noEmit",
     "web": "expo start --web"
   },
   "dependencies": {
