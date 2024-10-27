@@ -17,6 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "CLA Assistant"
+        id: cla_assistant
         if: (github.event.comment.body == 'recheck' || github.event.comment.body == '저는 CLA 문서를 읽었으며, CLA에 서명합니다.') || github.event_name == 'pull_request_target'
         uses: contributor-assistant/github-action@v2.6.1
         env:
@@ -30,15 +31,3 @@ jobs:
           path-to-document: "https://gist.github.com/gracefullight/041ebde610b7eea1dc21d11d40b7d663#file-infinite-loop-factory-cla-md" # e.g. a CLA or a DCO document
           branch: "chore/cla"
           allowlist: bot*
-
-      - name: Create CLA Pull Request
-        if: success()
-        uses: peter-evans/create-pull-request@v7
-        with:
-          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-          title: "chore: CLA 서명 업데이트"
-          body: "CLA 서명 정보가 갱신되었습니다. 확인 부탁드립니다."
-          base: "main"
-          branch: "chore/cla"
-          assignees: gracefullight
-          team-reviewers: app-factory
