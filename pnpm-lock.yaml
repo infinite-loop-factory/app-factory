@@ -300,7 +300,7 @@ importers:
         version: 7.25.2
       '@biomejs/biome':
         specifier: 'catalog:'
-        version: 1.9.3
+        version: 1.9.4
       '@testing-library/react-native':
         specifier: ^12.7.2
         version: 12.7.2(jest@29.7.0(@types/node@22.5.5)(ts-node@10.9.2(@types/node@22.5.5)(typescript@5.3.3)))(react-native@0.74.5(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.79)(react@18.2.0))(react-test-renderer@18.2.0(react@18.2.0))(react@18.2.0)
@@ -412,7 +412,7 @@ importers:
         version: 7.25.2
       '@biomejs/biome':
         specifier: 'catalog:'
-        version: 1.9.3
+        version: 1.9.4
       '@testing-library/react-native':
         specifier: ^12.7.2
         version: 12.7.2(jest@29.7.0(@types/node@22.5.5)(ts-node@10.9.2(@types/node@22.5.5)(typescript@5.3.3)))(react-native@0.74.5(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.79)(react@18.2.0))(react-test-renderer@18.2.0(react@18.2.0))(react@18.2.0)
