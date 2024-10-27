@@ -1,9 +1,9 @@
 import { StyleSheet, Text, View } from "react-native";
 
-export default function Index() {
+export default function SearchScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Hello Playlist!</Text>
+      <Text style={styles.text}>Search screen</Text>
     </View>
   );
 }
@@ -11,16 +11,11 @@ export default function Index() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#0D0D0D",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#0D0D0D",
   },
   text: {
-    color: "white",
-  },
-  button: {
-    fontSize: 20,
-    textDecorationLine: "underline",
     color: "#fff",
   },
 });
