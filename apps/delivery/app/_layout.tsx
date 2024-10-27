@@ -36,7 +36,7 @@ export default function RootLayout() {
 
   return (
     <GluestackUIProvider mode="light">
-      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+      <ThemeProvider value={colorScheme !== "dark" ? DarkTheme : DefaultTheme}>
         <WebviewLayout>
           <Stack>
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />

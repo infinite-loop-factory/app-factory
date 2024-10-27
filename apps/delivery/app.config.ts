@@ -1,10 +1,9 @@
 import type { ConfigContext, ExpoConfig } from "expo/config";
-
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
-  name: "{{ dashCase title }}",
-  slug: "{{ dashCase title }}",
-  scheme: "{{ dashCase title }}",
+  name: "delivery",
+  slug: "delivery",
+  scheme: "delivery",
   version: "1.0.0",
   orientation: "portrait",
   icon: "./assets/images/icon.png",
@@ -32,6 +31,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   experiments: {
     tsconfigPaths: true,
     typedRoutes: true,
-    baseUrl: "/app-factory/{{ dashCase title }}",
+    baseUrl: "/app-factory/delivery",
   },
 });
