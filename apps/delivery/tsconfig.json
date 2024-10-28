@@ -1,5 +1,5 @@
 {
-  "extends": ["@infinite-loop-factory/config-typescript/native.json"],
+  "extends": "@infinite-loop-factory/config-typescript/native.json",
   "compilerOptions": {
     "jsx": "preserve",
     "paths": {
