@@ -12,9 +12,9 @@
     "start": "expo start",
     "test": "jest",
     "test:watch": "jest --watchAll",
+    "type-check": "tsc --noEmit",
     "web": "expo start --web",
     "web:publish": "tsx web-publish.ts"
-    "type-check": "tsc --noEmit",
   },
   "dependencies": {
     "@expo/vector-icons": "^14.0.3",
