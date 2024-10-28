@@ -5,11 +5,13 @@
     "extrablack",
     "gluestack",
     "jscodeshift",
+    "legendapp",
     "nativewind",
     "roboto",
     "SUPABASE",
     "tailwind",
     "tailwindcss",
+    "tsbuildinfo",
     "Turborepo"
   ]
 }

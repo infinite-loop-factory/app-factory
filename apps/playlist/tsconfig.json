@@ -1,7 +1,6 @@
 {
-  "extends": "expo/tsconfig.base",
+  "extends": ["@infinite-loop-factory/config-typescript/native.json"],
   "compilerOptions": {
-    "strict": true,
     "jsx": "preserve",
     "paths": {
       "@/*": ["./*"]

@@ -53,11 +53,9 @@ export default function WebviewLayout({ children }: { children: ReactNode }) {
           <View className={" flex items-center justify-center p-3"}>
             <Select
               className={"w-[350px] "}
-              selectedValue={
-                window.location.href.replace(baseURl, "").split("/")[0]
-              }
+              selectedValue={location.href.replace(baseURl, "").split("/")[0]}
               onValueChange={(d) => {
-                window.location.href = `${baseURl}${d}`;
+                location.href = `${baseURl}${d}`;
               }}
             >
               <SelectTrigger
