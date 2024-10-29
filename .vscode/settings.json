@@ -8,5 +8,8 @@
   "[json,javascript,typescript,typescriptreact]": {
     "editor.defaultFormatter": "biomejs.biome"
   },
-  "typescript.preferences.preferTypeOnlyAutoImports": true
+  "typescript.preferences.preferTypeOnlyAutoImports": true,
+  "tailwindCSS.experimental.classRegex": [
+    ["([\"'`][^\"'`]*.*?[\"'`])", "[\"'`]([^\"'`]*).*?[\"'`]"]
+  ]
 }
