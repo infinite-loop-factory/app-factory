@@ -8,39 +8,54 @@ import {
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { useColorScheme } from "nativewind";
-import { useEffect } from "react";
+import { type PropsWithChildren, useEffect, useState } from "react";
 import "react-native-reanimated";
-
+import WebviewLayout from "@/components/WebviewLayout";
 import "@/i18n";
-import { Slot } from "expo-router";
+import { Stack } from "expo-router";
 import { View } from "react-native";
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
-export default function RootLayout() {
+function AppContainer({ children }: PropsWithChildren) {
   const { colorScheme } = useColorScheme();
+
+  return (
+    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+      {children}
+    </ThemeProvider>
+  );
+}
+
+export default function RootLayout() {
   const [loaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
   });
+  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
     if (loaded) {
       SplashScreen.hideAsync();
+      setIsReady(true);
     }
   }, [loaded]);
 
-  if (!loaded) {
+  if (!(loaded && isReady)) {
     return null;
   }
 
   return (
-    <GluestackUIProvider mode="light">
-      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-        <View style={{ flex: 1 }}>
-          <Slot />
-        </View>
-      </ThemeProvider>
-    </GluestackUIProvider>
+    <View style={{ flex: 1 }}>
+      <GluestackUIProvider mode="light">
+        <AppContainer>
+          <WebviewLayout>
+            <Stack>
+              <Stack.Screen name="(pages)" options={{ headerShown: false }} />
+              <Stack.Screen name="+not-found" />
+            </Stack>
+          </WebviewLayout>
+        </AppContainer>
+      </GluestackUIProvider>
+    </View>
   );
 }
