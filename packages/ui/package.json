@@ -9,7 +9,10 @@
     },
     "./*": {
       "types": "./dist/src/*.d.ts",
-      "default": ["./src/*.ts", "./src/*.tsx"]
+      "default": [
+        "./src/*.ts",
+        "./src/*.tsx"
+      ]
     }
   },
   "scripts": {
@@ -21,6 +24,7 @@
   },
   "dependencies": {
     "nativewind": "catalog:",
+    "tailwind-variants": "^0.2.1",
     "tailwindcss": "catalog:"
   },
   "devDependencies": {
