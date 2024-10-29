@@ -470,6 +470,9 @@ importers:
       nativewind:
         specifier: 'catalog:'
         version: 4.1.21(react-native-reanimated@3.10.1(@babel/core@7.25.2)(react-native@0.74.5(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0))(react-native-safe-area-context@4.10.5(react-native@0.74.5(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0))(react-native-svg@13.4.0(react-native@0.74.5(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0))(react-native@0.74.5(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0)(tailwindcss@3.4.14(ts-node@10.9.2(@types/node@22.5.5)(typescript@5.3.3)))
+      tailwind-variants:
+        specifier: ^0.2.1
+        version: 0.2.1(tailwindcss@3.4.14(ts-node@10.9.2(@types/node@22.5.5)(typescript@5.3.3)))
       tailwindcss:
         specifier: 'catalog:'
         version: 3.4.14(ts-node@10.9.2(@types/node@22.5.5)(typescript@5.3.3))
@@ -6318,8 +6321,17 @@ packages:
   tailwind-merge@1.14.0:
     resolution: {integrity: sha512-3mFKyCo/MBcgyOTlrY8T7odzZFx+w+qKSMAmdFzRvqBfLlSigU6TZnlFHK0lkMwj9Bj8OYU+9yW9lmGuS0QEnQ==}
 
+  tailwind-merge@2.5.4:
+    resolution: {integrity: sha512-0q8cfZHMu9nuYP/b5Shb7Y7Sh1B7Nnl5GqNr1U+n2p6+mybvRtayrQ+0042Z5byvTA8ihjlP8Odo8/VnHbZu4Q==}
+
   tailwind-variants@0.1.20:
     resolution: {integrity: sha512-AMh7x313t/V+eTySKB0Dal08RHY7ggYK0MSn/ad8wKWOrDUIzyiWNayRUm2PIJ4VRkvRnfNuyRuKbLV3EN+ewQ==}
+    engines: {node: '>=16.x', pnpm: '>=7.x'}
+    peerDependencies:
+      tailwindcss: '*'
+
+  tailwind-variants@0.2.1:
+    resolution: {integrity: sha512-2xmhAf4UIc3PijOUcJPA1LP4AbxhpcHuHM2C26xM0k81r0maAO6uoUSHl3APmvHZcY5cZCY/bYuJdfFa4eGoaw==}
     engines: {node: '>=16.x', pnpm: '>=7.x'}
     peerDependencies:
       tailwindcss: '*'
@@ -14406,9 +14418,16 @@ snapshots:
 
   tailwind-merge@1.14.0: {}
 
+  tailwind-merge@2.5.4: {}
+
   tailwind-variants@0.1.20(tailwindcss@3.4.14(ts-node@10.9.2(@types/node@22.5.5)(typescript@5.3.3))):
     dependencies:
       tailwind-merge: 1.14.0
+      tailwindcss: 3.4.14(ts-node@10.9.2(@types/node@22.5.5)(typescript@5.3.3))
+
+  tailwind-variants@0.2.1(tailwindcss@3.4.14(ts-node@10.9.2(@types/node@22.5.5)(typescript@5.3.3))):
+    dependencies:
+      tailwind-merge: 2.5.4
       tailwindcss: 3.4.14(ts-node@10.9.2(@types/node@22.5.5)(typescript@5.3.3))
 
   tailwindcss@3.4.14(ts-node@10.9.2(@types/node@22.5.5)(typescript@5.3.3)):
