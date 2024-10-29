@@ -3,13 +3,40 @@ const path = require("node:path");
 const { getDefaultConfig } = require("expo/metro-config");
 const { FileStore } = require("metro-cache");
 const { withNativeWind } = require("nativewind/metro");
+const { execSync } = require("node:child_process");
+const { copyFileSync, renameSync } = require("node:fs");
+
+function patchNativeWind(config) {
+  const platforms = ["android", "ios", "web"];
+
+  execSync(
+    "npx tailwindcss --input global.css --output node_modules/nativewind/.cache/global.css --minify",
+    { stdio: "inherit" },
+  );
+
+  const source = "node_modules/nativewind/.cache/global.css";
+
+  for (const platform of platforms) {
+    const destination = `node_modules/nativewind/.cache/global.css.${platform}.css`;
+    copyFileSync(source, destination);
+  }
+
+  renameSync("global.css", "temp_global.css");
+
+  copyFileSync(source, "global.css");
+
+  return config;
+}
+const defaultConfig = getDefaultConfig(__dirname);
 
 const config = withTurborepoManagedCache(
   withMonorepoPaths(
-    withNativeWind(getDefaultConfig(__dirname), {
-      input: "./global.css",
-      configPath: "./tailwind.config.ts",
-    }),
+    process.env.BUILD_FLAG
+      ? patchNativeWind(defaultConfig)
+      : withNativeWind(defaultConfig, {
+          input: "./global.css",
+          configPath: "./tailwind.config.ts",
+        }),
   ),
 );
 
