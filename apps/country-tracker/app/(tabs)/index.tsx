@@ -5,7 +5,6 @@ import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedView } from "@/components/ThemedView";
 import { Text } from "@/components/ui/text";
 import i18n from "@/i18n";
-import { cn } from "@infinite-loop-factory/common";
 
 export default function HomeScreen() {
   return (
@@ -25,7 +24,7 @@ export default function HomeScreen() {
         <HelloWave />
       </ThemedView>
       <ThemedView className="mb-2 gap-2">
-        <Text bold size="2xl" className={cn("text-red-500", "ml-10")}>
+        <Text bold size="2xl">
           Step 1: Try it
         </Text>
         <Text>
