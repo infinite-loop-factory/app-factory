@@ -9,10 +9,7 @@
     },
     "./*": {
       "types": "./dist/src/*.d.ts",
-      "default": [
-        "./src/*.ts",
-        "./src/*.tsx"
-      ]
+      "default": ["./src/*.ts", "./src/*.tsx"]
     }
   },
   "scripts": {
