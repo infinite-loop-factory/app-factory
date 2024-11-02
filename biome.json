@@ -41,7 +41,7 @@
         "useSortedClasses": {
           "level": "error",
           "options": {
-            "functions": ["clsx"]
+            "functions": ["clsx", "cn"]
           }
         }
       },
