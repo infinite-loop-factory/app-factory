@@ -147,6 +147,9 @@ importers:
       i18n-js:
         specifier: ^4.5.0
         version: 4.5.0
+      lucide-react-native:
+          specifier: ^0.454.0
+          version: 0.454.0(react-native-svg@13.4.0(react-native@0.74.5(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0))(react-native@0.74.5(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0)
       jscodeshift:
         specifier: 0.15.2
         version: 0.15.2(@babel/preset-env@7.25.4(@babel/core@7.25.2))
