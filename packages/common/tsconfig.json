@@ -1,0 +1,9 @@
+{
+  "extends": "@infinite-loop-factory/config-typescript/internal-package.json",
+  "compilerOptions": {
+    "jsx": "preserve",
+    "lib": ["ES2022", "dom", "dom.iterable"]
+  },
+  "include": ["src"],
+  "exclude": ["node_modules"]
+}
