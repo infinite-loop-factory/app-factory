@@ -35,11 +35,11 @@ function runCommand(command: string) {
 
   runCommand(`cross-env BUILD_FLAG=true expo export --output-dir ${outputDir}`);
 
-  renameSync("temp_global.css", "global.css");
-
   writeFileSync(path.join("dist", appName), JSON.stringify(apps));
 
   runCommand(
-    `gh-pages -t -d dist -m "feat: ✨ auto-generate" --nojekyll --remove "${packageName}"  --remove "${appName}"`,
+    `gh-pages -t -d dist -m "feat: ✨ auto-generate" --nojekyll --remove "${packageName}"  --remove "${appName} --prefix dist"`,
   );
-})();
+})().finally(() => {
+  renameSync("temp_global.css", "global.css");
+});
