@@ -29,26 +29,42 @@ export default function linkPackageToApps(plop: PlopTypes.NodePlopAPI) {
 
     const appNames = await Promise.all(
       appFiles.map(async (appName: string) => {
-        const appPath = join(getDirectoryPath("apps"), appName);
-        const isDirectory = (await stat(appPath)).isDirectory();
+        try {
+          const appPath = join(getDirectoryPath("apps"), appName);
+          const isDirectory = (await stat(appPath)).isDirectory();
 
-        if (!isDirectory || appName.startsWith(".")) return null;
+          if (!isDirectory || appName.startsWith(".")) return null;
 
-        const packageJson = await readFile(
-          join(appPath, "package.json"),
-          "utf-8",
-        );
+          // package.json 파일 존재 여부 체크
+          const packageJsonPath = join(appPath, "package.json");
+          try {
+            await stat(packageJsonPath);
+          } catch {
+            console.error(`⚠️ Warning: No package.json found in ${appName}`);
+            return null;
+          }
 
-        const hasDependency =
-          packageName in JSON.parse(packageJson).dependencies;
+          const packageJson = await readFile(packageJsonPath, "utf-8");
+          const dependencies = JSON.parse(packageJson).dependencies || {};
 
-        const displayName = hasDependency ? `🟢 ${appName}` : `🔴 ${appName}`;
+          const hasDependency = packageName in dependencies;
+          const displayName = hasDependency ? `🟢 ${appName}` : `🔴 ${appName}`;
 
-        return { name: displayName, value: appName, checked: hasDependency };
+          return { name: displayName, value: appName, checked: hasDependency };
+        } catch (error) {
+          console.error(`⚠️ Warning: Error processing ${appName}:`, error);
+          return null;
+        }
       }),
     );
 
-    return appNames.filter(Boolean);
+    const validApps = appNames.filter(Boolean);
+
+    if (validApps.length === 0) {
+      throw new Error("\n❌ Error: No valid apps found in the workspace");
+    }
+
+    return validApps;
   };
 
   // 특정 패키지의 이름을 가져오는 함수
@@ -93,24 +109,36 @@ export default function linkPackageToApps(plop: PlopTypes.NodePlopAPI) {
         selectedApps: string[];
       };
 
+      if (!selectedApps || selectedApps.length === 0) {
+        throw new Error("\n❌ Error: No apps selected");
+      }
+
       return [
         async () => {
-          const packageName = await getPackageName(selectedPackage);
+          try {
+            const packageName = await getPackageName(selectedPackage);
 
-          // 모든 앱에서 해당 패키지를 제거하고 선택된 앱에 다시 추가
-          execSync(`pnpm --filter "*" remove ${packageName}`);
-          execSync(
-            [
-              "pnpm",
-              selectedApps.map((app) => `--filter ${app}`).join(" "),
-              "add",
-              `${packageName}@workspace:*`,
-            ].join(" "),
-          );
+            if (!packageName) {
+              throw new Error(`Package name not found for ${selectedPackage}`);
+            }
 
-          execSync("pnpm install");
+            // 모든 앱에서 해당 패키지를 제거하고 선택된 앱에 다시 추가
+            execSync(`pnpm --filter "*" remove ${packageName}`);
+            execSync(
+              [
+                "pnpm",
+                selectedApps.map((app) => `--filter ${app}`).join(" "),
+                "add",
+                `${packageName}@workspace:*`,
+              ].join(" "),
+            );
 
-          return "Package linked successfully to the selected apps";
+            execSync("pnpm install");
+
+            return "✅ Package linked successfully to the selected apps";
+          } catch (error) {
+            throw new Error(`\n❌ Error: ${(error as Error).message}`);
+          }
         },
       ];
     },
