@@ -21,8 +21,17 @@ export default {
   plugins: [gluestackPlugin],
   theme: {
     extend: {
+      spacing: {
+        xl: "32px",
+        l: "28px",
+        xm: "24px",
+        m: "20px",
+        xs: "18px",
+        s: "16px",
+      },
       colors: {
         primary: {
+          DEFAULT: "rgb(var(--color-primary)/<alpha-value>)",
           0: "rgb(var(--color-primary-0)/<alpha-value>)",
           50: "rgb(var(--color-primary-50)/<alpha-value>)",
           100: "rgb(var(--color-primary-100)/<alpha-value>)",
@@ -37,6 +46,7 @@ export default {
           950: "rgb(var(--color-primary-950)/<alpha-value>)",
         },
         secondary: {
+          Default: "rgb(var(--color-secondary-0)/<alpha-value>)",
           0: "rgb(var(--color-secondary-0)/<alpha-value>)",
           50: "rgb(var(--color-secondary-50)/<alpha-value>)",
           100: "rgb(var(--color-secondary-100)/<alpha-value>)",
@@ -51,6 +61,7 @@ export default {
           950: "rgb(var(--color-secondary-950)/<alpha-value>)",
         },
         tertiary: {
+          Default: "rgb(var(--color-tertiary-50)/<alpha-value>)",
           50: "rgb(var(--color-tertiary-50)/<alpha-value>)",
           100: "rgb(var(--color-tertiary-100)/<alpha-value>)",
           200: "rgb(var(--color-tertiary-200)/<alpha-value>)",
@@ -64,6 +75,7 @@ export default {
           950: "rgb(var(--color-tertiary-950)/<alpha-value>)",
         },
         error: {
+          Default: "rgb(var(--color-error-0)/<alpha-value>)",
           0: "rgb(var(--color-error-0)/<alpha-value>)",
           50: "rgb(var(--color-error-50)/<alpha-value>)",
           100: "rgb(var(--color-error-100)/<alpha-value>)",
@@ -78,6 +90,7 @@ export default {
           950: "rgb(var(--color-error-950)/<alpha-value>)",
         },
         success: {
+          Default: "rgb(var(--color-success-0)/<alpha-value>)",
           0: "rgb(var(--color-success-0)/<alpha-value>)",
           50: "rgb(var(--color-success-50)/<alpha-value>)",
           100: "rgb(var(--color-success-100)/<alpha-value>)",
@@ -92,6 +105,7 @@ export default {
           950: "rgb(var(--color-success-950)/<alpha-value>)",
         },
         warning: {
+          Default: "rgb(var(--color-warning-0)/<alpha-value>)",
           0: "rgb(var(--color-warning-0)/<alpha-value>)",
           50: "rgb(var(--color-warning-50)/<alpha-value>)",
           100: "rgb(var(--color-warning-100)/<alpha-value>)",
@@ -106,6 +120,7 @@ export default {
           950: "rgb(var(--color-warning-950)/<alpha-value>)",
         },
         info: {
+          Default: "rgb(var(--color-info-0)/<alpha-value>)",
           0: "rgb(var(--color-info-0)/<alpha-value>)",
           50: "rgb(var(--color-info-50)/<alpha-value>)",
           100: "rgb(var(--color-info-100)/<alpha-value>)",
@@ -120,6 +135,7 @@ export default {
           950: "rgb(var(--color-info-950)/<alpha-value>)",
         },
         typography: {
+          Default: "rgb(var(--color-typography-0)/<alpha-value>)",
           0: "rgb(var(--color-typography-0)/<alpha-value>)",
           50: "rgb(var(--color-typography-50)/<alpha-value>)",
           100: "rgb(var(--color-typography-100)/<alpha-value>)",
@@ -137,6 +153,7 @@ export default {
           black: "#181718",
         },
         outline: {
+          Default: "rgb(var(--color-outline-0)/<alpha-value>)",
           0: "rgb(var(--color-outline-0)/<alpha-value>)",
           50: "rgb(var(--color-outline-50)/<alpha-value>)",
           100: "rgb(var(--color-outline-100)/<alpha-value>)",
@@ -151,6 +168,7 @@ export default {
           950: "rgb(var(--color-outline-950)/<alpha-value>)",
         },
         background: {
+          Default: "rgb(var(--color-background-0)/<alpha-value>)",
           0: "rgb(var(--color-background-0)/<alpha-value>)",
           50: "rgb(var(--color-background-50)/<alpha-value>)",
           100: "rgb(var(--color-background-100)/<alpha-value>)",
@@ -172,6 +190,7 @@ export default {
           dark: "#181719",
         },
         indicator: {
+          Default: "rgb(var(--color-indicator-primary)/<alpha-value>)",
           primary: "rgb(var(--color-indicator-primary)/<alpha-value>)",
           info: "rgb(var(--color-indicator-info)/<alpha-value>)",
           error: "rgb(var(--color-indicator-error)/<alpha-value>)",
@@ -188,6 +207,12 @@ export default {
       },
       fontSize: {
         "2xs": "10px",
+        xl: "32px",
+        l: "28px",
+        xm: "24px",
+        m: "20px",
+        xs: "18px",
+        s: "16px",
       },
       boxShadow: {
         "hard-1": "-2px 2px 8px 0px rgba(38, 38, 38, 0.20)",

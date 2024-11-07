@@ -9,3 +9,126 @@ select {
 option {
   @apply p-[10px] text-[20px] font-bold;
 }
+
+/* size */
+.xl {
+  @apply md:w-xl md:h-xl w-l h-l;
+}
+.l {
+  @apply md:w-l md:h-l w-xm h-xm;
+}
+.xm {
+  @apply md:w-xm md:h-xm w-m h-m;
+}
+.m {
+  @apply md:w-m md:h-m w-xs h-xs;
+}
+.xs {
+  @apply md:w-xs md:h-xs w-s h-s;
+}
+.s {
+  @apply md:w-s md:h-s;
+}
+
+/* font size */
+.f-xl {
+  @apply md:text-l text-l text-typography-0;
+}
+.f-l {
+  @apply md:text-xm text-xm text-typography-0;
+}
+.f-xm {
+  @apply md:text-m text-m text-typography-0;
+}
+.f-m {
+  @apply md:text-xs text-xs text-typography-0;
+}
+.f-xs {
+  @apply md:text-s text-s text-typography-0;
+}
+.f-s {
+  @apply md:text-s text-s text-typography-0;
+}
+
+/* headline */
+.h1 {
+  @apply text-[56px] font-bold;
+}
+.h2 {
+  @apply text-[48px] font-bold;
+}
+.h3 {
+  @apply text-[40px] font-bold;
+}
+.h4 {
+  @apply f-l font-bold;
+}
+.h5 {
+  @apply f-xm font-bold;
+}
+.h6 {
+  @apply f-m font-bold;
+}
+.h7 {
+  @apply f-s font-bold;
+}
+
+/* title */
+.title-1 {
+  @apply f-l font-semibold;
+}
+.title-2 {
+  @apply f-xm font-semibold;
+}
+.title-3 {
+  @apply f-m font-semibold;
+}
+.title-4 {
+  @apply f-xs font-semibold;
+}
+.title-5 {
+  @apply f-s font-semibold;
+}
+
+/* body */
+.body-1 {
+  @apply f-l font-normal;
+}
+.body-2 {
+  @apply f-xm font-normal;
+}
+.body-3 {
+  @apply f-m font-normal;
+}
+.body-4 {
+  @apply f-xs font-normal;
+}
+.body-5 {
+  @apply f-s font-normal;
+}
+.body-6 {
+  @apply f-xs font-normal;
+}
+
+/* label */
+.label-1 {
+  @apply f-l font-medium;
+}
+.label-2 {
+  @apply f-xm font-medium;
+}
+.label-3 {
+  @apply f-m font-medium;
+}
+.label-4 {
+  @apply f-xs font-medium;
+}
+.label-5 {
+  @apply f-s font-medium;
+}
+.label-6 {
+  @apply f-xs font-medium;
+}
+.label-7 {
+  @apply text-[12px] font-medium;
+}
