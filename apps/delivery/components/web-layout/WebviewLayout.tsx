@@ -10,6 +10,7 @@ import {
   SelectPortal,
   SelectTrigger,
 } from "@/components/ui/select";
+import DarkModeToggle from "@/components/web-layout/DarkModeToggle";
 import { Colors } from "@/constants/Colors";
 import { type ReactNode, useEffect, useState } from "react";
 import { Image, Text, View } from "react-native";
@@ -29,10 +30,14 @@ export default function WebviewLayout({ children }: { children: ReactNode }) {
     })();
   }, []);
 
-  if (typeof window !== "undefined") return children;
+  if (typeof window === "undefined") return children;
+
+  const selectedApp = location.href.includes(baseURl)
+    ? location.href.replace(baseURl, "").split("/")[0]
+    : apps[0]?.name;
 
   return (
-    <SafeAreaView className={"flex-1 bg-[#b9e2e0]"}>
+    <SafeAreaView className={"flex-1 bg-primary-50 "}>
       <View className={"flex-1 flex-row items-center justify-center"}>
         {/* 좌측 메타 정보 */}
         <View
@@ -50,19 +55,20 @@ export default function WebviewLayout({ children }: { children: ReactNode }) {
           <Text className={"block text-center font-bold text-[45px]"}>
             {"앱 공장 "}
           </Text>
+          <View className={"flex items-center justify-center"}>
+            <DarkModeToggle />
+          </View>
           <View className={" flex items-center justify-center p-3"}>
             <Select
               className={"w-[350px] "}
-              selectedValue={
-                window.location.href.replace(baseURl, "").split("/")[0]
-              }
+              selectedValue={selectedApp}
               onValueChange={(d) => {
-                window.location.href = `${baseURl}${d}`;
+                location.href = `${baseURl}${d}`;
               }}
             >
               <SelectTrigger
                 className={
-                  "h-[90px] rounded-full !hover:border-black border-[3px] border-black bg-[#f9f9fb] "
+                  "h-[90px] rounded-full !hover:border-black border-[3px] border-black bg-background-50 "
                 }
               >
                 <SelectInput
