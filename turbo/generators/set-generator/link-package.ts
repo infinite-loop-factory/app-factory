@@ -98,23 +98,17 @@ export default function linkPackageToApps(plop: PlopTypes.NodePlopAPI) {
           const packageName = await getPackageName(selectedPackage);
 
           // 모든 앱에서 해당 패키지를 제거하고 선택된 앱에 다시 추가
-          execSync(`pnpm --filter "*" remove ${packageName}`, {
-            stdio: "inherit",
-          });
-
-          if (selectedApps.length > 0) {
-            // 필터와 add 명령어를 올바르게 조합하여 실행
-            const addCommand = [
+          execSync(`pnpm --filter "*" remove ${packageName}`);
+          execSync(
+            [
               "pnpm",
-              ...selectedApps.map((app) => `--filter ${app}`),
+              selectedApps.map((app) => `--filter ${app}`).join(" "),
               "add",
               `${packageName}@workspace:*`,
-            ].join(" ");
+            ].join(" "),
+          );
 
-            execSync(addCommand, { stdio: "inherit" });
-          }
-
-          execSync("pnpm install", { stdio: "inherit" });
+          execSync("pnpm install");
 
           return "Package linked successfully to the selected apps";
         },
