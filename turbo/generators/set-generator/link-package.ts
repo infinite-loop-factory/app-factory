@@ -1,5 +1,5 @@
 import { execSync } from "node:child_process";
-import { readFile, readdir, stat } from "node:fs/promises";
+import { readFile, readdir, stat, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import type { PlopTypes } from "@turbo/gen";
 
@@ -109,7 +109,7 @@ export default function linkPackageToApps(plop: PlopTypes.NodePlopAPI) {
         selectedApps: string[];
       };
 
-      if (!selectedApps || selectedApps.length === 0) {
+      if (!selectedApps?.length) {
         throw new Error("\n❌ Error: No apps selected");
       }
 
@@ -117,25 +117,41 @@ export default function linkPackageToApps(plop: PlopTypes.NodePlopAPI) {
         async () => {
           try {
             const packageName = await getPackageName(selectedPackage);
-
-            if (!packageName) {
+            if (!packageName)
               throw new Error(`Package name not found for ${selectedPackage}`);
-            }
 
-            // 모든 앱에서 해당 패키지를 제거하고 선택된 앱에 다시 추가
+            // 패키지 설치
             execSync(`pnpm --filter "*" remove ${packageName}`);
             execSync(
-              [
-                "pnpm",
-                selectedApps.map((app) => `--filter ${app}`).join(" "),
-                "add",
-                `${packageName}@workspace:*`,
-              ].join(" "),
+              `pnpm ${selectedApps.map((app) => `--filter ${app}`).join(" ")} add ${packageName}@workspace:*`,
             );
-
             execSync("pnpm install");
 
-            return "✅ Package linked successfully to the selected apps";
+            // 각 선택된 앱의 tsconfig.json 수정
+            for (const app of selectedApps) {
+              const tsconfigPath = join(
+                getDirectoryPath("apps"),
+                app,
+                "tsconfig.json",
+              );
+              const tsconfig = JSON.parse(
+                await readFile(tsconfigPath, "utf-8"),
+              );
+
+              // compilerOptions 설정
+              tsconfig.compilerOptions = {
+                ...tsconfig.compilerOptions,
+                baseUrl: ".",
+                paths: {
+                  ...tsconfig.compilerOptions?.paths,
+                  [packageName]: [`../../packages/${selectedPackage}/dist`],
+                },
+              };
+
+              await writeFile(tsconfigPath, JSON.stringify(tsconfig, null, 2));
+            }
+
+            return "✅ Package linked and tsconfig.json updated successfully";
           } catch (error) {
             throw new Error(`\n❌ Error: ${(error as Error).message}`);
           }
