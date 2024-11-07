@@ -3,8 +3,7 @@
   "compilerOptions": {
     "jsx": "preserve",
     "paths": {
-      "@/*": ["./*"],
-      "@infinite-loop-factory/common": ["../../packages/common/src"]
+      "@/*": ["./*"]
     }
   },
   "include": [
@@ -12,7 +11,6 @@
     "**/*.tsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts",
-    "nativewind-env.d.ts",
-    "../../packages/common/src/**/*"
+    "nativewind-env.d.ts"
   ]
 }
