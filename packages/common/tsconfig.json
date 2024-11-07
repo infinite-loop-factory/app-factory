@@ -1,38 +1,9 @@
 {
-  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "@infinite-loop-factory/config-typescript/internal-package.json",
   "compilerOptions": {
-    /** Base Options */
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "target": "ES2022",
-    "lib": ["ES2022"],
-    "allowJs": true,
-    "resolveJsonModule": true,
-    "moduleDetection": "force",
-    "isolatedModules": true,
-
-    /** Keep TSC performant in monorepos */
-    "incremental": true,
-    "disableSourceOfProjectReferenceRedirect": true,
-    "tsBuildInfoFile": "${configDir}/.cache/tsbuildinfo.json",
-
-    /** Strictness */
-    "strict": true,
-    "noUncheckedIndexedAccess": true,
-    "checkJs": true,
-
-    /** Transpile using Bundler (not tsc) */
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
-    // "noEmit": true,
-
-    /** Emit types for internal packages to speed up editor performance. */
-    "declaration": true,
-    "declarationMap": true,
-    "emitDeclarationOnly": true,
-    "noEmit": false,
-    "outDir": "${configDir}/dist"
+    "jsx": "preserve",
+    "lib": ["ES2022", "dom", "dom.iterable"]
   },
   "include": ["src"],
-  "exclude": ["node_modules", "build", "dist", ".next", ".expo"]
+  "exclude": ["node_modules"]
 }
