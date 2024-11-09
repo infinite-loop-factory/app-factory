@@ -36,6 +36,7 @@
     "expo-web-browser": "~13.0.3",
     "i18n-js": "^4.5.0",
     "jscodeshift": "0.15.2",
+    "lucide-react-native": "catalog:",
     "nativewind": "catalog:",
     "react": "catalog:react18",
     "react-dom": "catalog:react18",
