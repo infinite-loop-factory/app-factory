@@ -52,6 +52,7 @@ export default function TabLayout() {
         },
         tabBarIconStyle: {
           marginTop: 5,
+          marginBottom: -3,
         },
       }}
     >
