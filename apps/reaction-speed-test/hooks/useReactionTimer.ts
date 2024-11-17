@@ -35,10 +35,18 @@ export const useReactionTimer = () => {
     return timeResult;
   }, []);
 
+  const reset = useCallback(() => {
+    setResult(null);
+    setEarlyPress(false);
+    startTimeRef.current = 0;
+    isStartedRef.current = false;
+  }, []);
+
   return {
     result,
     start,
     stop,
+    reset,
     earlyPress,
   };
 };

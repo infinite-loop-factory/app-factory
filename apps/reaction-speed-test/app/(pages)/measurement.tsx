@@ -1,16 +1,15 @@
 import SmileSvg from "@/components/measurement/SmileSvg";
 import SvgWrapper from "@/components/measurement/SvgWrapper";
+import { Button, ButtonText } from "@/components/ui/button";
 import { useReactionTimer } from "@/hooks/useReactionTimer";
 import { DelayRender } from "@/utils/DelayRender";
-import { Stack } from "expo-router";
+import { Stack, useRouter } from "expo-router";
 import { type FC, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 
-/**
- * 다시하기 버튼 홈으로가기 버튼
- */
 const Measurement: FC = () => {
-  const { result, start, stop, earlyPress } = useReactionTimer();
+  const router = useRouter();
+  const { result, start, stop, reset, earlyPress } = useReactionTimer();
   const [shouldRestart, setShouldRestart] = useState(false);
 
   const handlePress = () => {
@@ -24,6 +23,14 @@ const Measurement: FC = () => {
         setShouldRestart(false);
       }, 100); // 짧은 지연으로 재시작 트리거 초기화
     }
+  };
+
+  const handleReset = () => {
+    reset();
+    setShouldRestart(true);
+    setTimeout(() => {
+      setShouldRestart(false);
+    }, 100);
   };
 
   return (
@@ -55,6 +62,22 @@ const Measurement: FC = () => {
           )}
           {earlyPress && !result && (
             <Text className="text-red-500">너무 빨리 터치했습니다!</Text>
+          )}
+        </View>
+
+        <View className="h-24 justify-end gap-y-2">
+          {result && (
+            <>
+              <Button className="w-40 bg-blue-500" onPress={handleReset}>
+                <ButtonText>다시하기</ButtonText>
+              </Button>
+              <Button
+                className="w-40 bg-slate-500"
+                onPress={() => router.push("/")}
+              >
+                <ButtonText>홈으로 가기</ButtonText>
+              </Button>
+            </>
           )}
         </View>
       </View>
