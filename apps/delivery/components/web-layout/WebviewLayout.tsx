@@ -12,7 +12,8 @@ import {
 } from "@/components/ui/select";
 import DarkModeToggle from "@/components/web-layout/DarkModeToggle";
 import { Colors } from "@/constants/Colors";
-import { type ReactNode, useEffect, useState } from "react";
+import type { ReactNode } from "react";
+import { useEffect, useState } from "react";
 import { Image, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
