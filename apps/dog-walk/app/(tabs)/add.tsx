@@ -1,9 +1,9 @@
 import { StyleSheet, Text, View } from "react-native";
 
-export default function HomeScreen() {
+export default function AddScreen() {
   return (
     <View style={styles.wrapper}>
-      <Text>홈 화면</Text>
+      <Text>산책 코스 추가 화면</Text>
     </View>
   );
 }

@@ -1,9 +1,9 @@
 import { StyleSheet, Text, View } from "react-native";
 
-export default function HomeScreen() {
+export default function ProfileScreen() {
   return (
     <View style={styles.wrapper}>
-      <Text>홈 화면</Text>
+      <Text>프로필 화면</Text>
     </View>
   );
 }
