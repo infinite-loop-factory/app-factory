@@ -16,7 +16,7 @@
     "web:publish": "tsx web-publish.ts"
   },
   "dependencies": {
-    "@expo/html-elements": "^0.4.2",
+    "@expo/html-elements": "^0.10.1",
     "@expo/vector-icons": "^14.0.4",
     "@gluestack-ui/input": "^0.1.32",
     "@gluestack-ui/nativewind-utils": "^1.0.25",

@@ -100,8 +100,8 @@ importers:
   apps/country-tracker:
     dependencies:
       '@expo/html-elements':
-        specifier: ^0.4.2
-        version: 0.4.2
+        specifier: ^0.10.1
+        version: 0.10.1
       '@expo/vector-icons':
         specifier: ^14.0.4
         version: 14.0.4
@@ -1999,9 +1999,6 @@ packages:
 
   '@expo/html-elements@0.10.1':
     resolution: {integrity: sha512-3PTmtkV15D7+lykXVtvkH1jQ5Y6JE+e3zCaoMMux7z2cSLGQUNwDEUwG37gew3OEB1/E4/SEWgjvg8m7E6/e2Q==}
-
-  '@expo/html-elements@0.4.2':
-    resolution: {integrity: sha512-lNioCgdtOrCMMqzHY+PCTdyuWBTU4yMBlOzPSkS4YFIWt9bq0zexM2ZJkpybTXmowNdE3zHO93xxAmiA2yDi2w==}
 
   '@expo/image-utils@0.5.1':
     resolution: {integrity: sha512-U/GsFfFox88lXULmFJ9Shfl2aQGcwoKPF7fawSCLixIKtMCpsI+1r0h+5i0nQnmt9tHuzXZDL8+Dg1z6OhkI9A==}
@@ -10051,8 +10048,6 @@ snapshots:
       - supports-color
 
   '@expo/html-elements@0.10.1': {}
-
-  '@expo/html-elements@0.4.2': {}
 
   '@expo/image-utils@0.5.1':
     dependencies:
