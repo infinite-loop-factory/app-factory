@@ -3,6 +3,7 @@ import { Box } from "@/components/ui/box";
 import { Heading } from "@/components/ui/heading";
 import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
 import { Text } from "@/components/ui/text";
+import { VStack } from "@/components/ui/vstack";
 import { Search } from "lucide-react-native";
 import type { ListRenderItem } from "react-native";
 import { FlatList } from "react-native";
@@ -37,7 +38,7 @@ export default function HomeScreen() {
         keyExtractor={(item) => item.id}
         renderItem={renderItem}
         ListHeaderComponent={
-          <Box className="flex gap-4">
+          <VStack space="md">
             <Heading className="text-2xl text-typography-900">
               Visited Countries
             </Heading>
@@ -47,7 +48,7 @@ export default function HomeScreen() {
                 <InputIcon as={Search} />
               </InputSlot>
             </Input>
-          </Box>
+          </VStack>
         }
         stickyHeaderIndices={[0]}
       />
