@@ -7,7 +7,7 @@ const Results: React.FC = () => {
 
   return (
     <View className="flex-1 items-center justify-center">
-      <Stack.Screen options={{ title: "기록 페이지" }} />
+      <Stack.Screen options={{ title: "기록 페이지", headerShown: false }} />
       <Text className="mb-5 text-2xl">기록 페이지</Text>
       <Button className="bg-slate-500" onPress={() => router.back()}>
         <ButtonText>뒤로 가기</ButtonText>

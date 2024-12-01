@@ -13,7 +13,6 @@ import "react-native-reanimated";
 import WebviewLayout from "@/components/WebviewLayout";
 import "@/i18n";
 import { Stack } from "expo-router";
-import { View } from "react-native";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -45,17 +44,15 @@ export default function RootLayout() {
   }
 
   return (
-    <View style={{ flex: 1 }}>
-      <GluestackUIProvider mode="light">
-        <AppContainer>
-          <WebviewLayout>
-            <Stack>
-              <Stack.Screen name="(pages)" options={{ headerShown: false }} />
-              <Stack.Screen name="+not-found" />
-            </Stack>
-          </WebviewLayout>
-        </AppContainer>
-      </GluestackUIProvider>
-    </View>
+    <GluestackUIProvider mode="light">
+      <AppContainer>
+        <WebviewLayout>
+          <Stack>
+            <Stack.Screen name="(pages)" options={{ headerShown: false }} />
+            <Stack.Screen name="+not-found" />
+          </Stack>
+        </WebviewLayout>
+      </AppContainer>
+    </GluestackUIProvider>
   );
 }
