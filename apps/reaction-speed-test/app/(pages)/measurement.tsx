@@ -1,5 +1,5 @@
 import SmileSvg from "@/components/measurement/SmileSvg";
-import SvgWrapper from "@/components/measurement/SvgComponent";
+import SvgWrapper from "@/components/measurement/SvgWrapper";
 import { useReactionTimer } from "@/hooks/useReactionTimer";
 import { DelayRender } from "@/utils/DelayRender";
 import { Stack } from "expo-router";
