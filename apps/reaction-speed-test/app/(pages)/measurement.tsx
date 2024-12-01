@@ -1,5 +1,6 @@
 import SmileSvg from "@/components/measurement/SmileSvg";
 import SvgWrapper from "@/components/measurement/SvgComponent";
+import { DelayRender } from "@/utils/DelayRender";
 import { Stack } from "expo-router";
 import type { FC } from "react";
 import { Text, View } from "react-native";
@@ -11,9 +12,11 @@ const Measurement: FC = () => {
       <Text className="mb-5 text-2xl">
         이미지가 나타나면 화면을 터치해주세요
       </Text>
-      <SvgWrapper>
-        <SmileSvg />
-      </SvgWrapper>
+      <DelayRender minDelay={1000} maxDelay={3000}>
+        <SvgWrapper>
+          <SmileSvg />
+        </SvgWrapper>
+      </DelayRender>
     </View>
   );
 };
