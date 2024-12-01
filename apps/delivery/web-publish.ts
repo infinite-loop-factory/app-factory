@@ -2,6 +2,7 @@ import { execSync } from "node:child_process";
 import * as fs from "node:fs";
 import { renameSync, writeFileSync } from "node:fs";
 import * as path from "node:path";
+import { uniq } from "es-toolkit";
 
 const packageJson = JSON.parse(fs.readFileSync("./package.json", "utf-8"));
 const packageName = packageJson.name.split("/").splice(1).join();
@@ -29,7 +30,7 @@ function runCommand(command: string) {
     (d) => d.json(),
   );
 
-  const apps = [...new Set([...data.map((d) => d.name), packageName])].map(
+  const apps = [...uniq([...data.map((d) => d.name), packageName])].map(
     (name) => ({ name }),
   );
 

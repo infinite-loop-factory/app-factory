@@ -28,6 +28,7 @@ export default {
         m: "20px",
         xs: "18px",
         s: "16px",
+        ss: "12px",
       },
       colors: {
         primary: {

@@ -12,8 +12,9 @@ import {
 } from "@/components/ui/select";
 import DarkModeToggle from "@/components/web-layout/DarkModeToggle";
 import { Colors } from "@/constants/Colors";
-import type { ReactNode } from "react";
-import { useEffect, useState } from "react";
+import { useAsyncEffect, useMountedState, usePlatform } from "@reactuses/core";
+import { noop } from "es-toolkit";
+import { type ReactNode, useState } from "react";
 import { Image, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -22,16 +23,22 @@ export default function WebviewLayout({ children }: { children: ReactNode }) {
   const baseURl = "https://infinite-loop-factory.github.io/app-factory/";
   const [apps, setApps] = useState<appType[]>([]);
 
-  useEffect(() => {
-    (async () => {
-      const data: appType[] = await fetch(`${baseURl}app-list.json`).then((d) =>
-        d.json(),
-      );
-      setApps(data);
-    })();
-  }, []);
-
-  if (typeof window === "undefined") return children;
+  useAsyncEffect(
+    async () => {
+      await fetch(`${baseURl}app-list.json`)
+        .then((d) => d.json())
+        .then(setApps);
+    },
+    noop,
+    [],
+  );
+  const isMounted = useMountedState();
+  const { platform } = usePlatform();
+  if (
+    (typeof window === "undefined" && isMounted()) ||
+    ["ios", "android", "unknown"].includes(platform)
+  )
+    return children;
 
   const selectedApp = location.href.includes(baseURl)
     ? location.href.replace(baseURl, "").split("/")[0]
@@ -81,7 +88,7 @@ export default function WebviewLayout({ children }: { children: ReactNode }) {
                 <SelectIcon className="mr-3" />
               </SelectTrigger>
               <SelectPortal className={"text-[33px] text-red"}>
-                <SelectBackdrop className={" text-red"} />
+                <SelectBackdrop className={"text-red"} />
                 <SelectContent className={"p-[100px] text-red"}>
                   <SelectDragIndicatorWrapper>
                     <SelectDragIndicator />
