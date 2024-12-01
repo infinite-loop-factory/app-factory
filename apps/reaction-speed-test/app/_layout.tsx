@@ -8,7 +8,8 @@ import {
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { useColorScheme } from "nativewind";
-import { type PropsWithChildren, useEffect, useState } from "react";
+import type { PropsWithChildren } from "react";
+import { useEffect, useState } from "react";
 import "react-native-reanimated";
 import WebviewLayout from "@/components/WebviewLayout";
 import "@/i18n";

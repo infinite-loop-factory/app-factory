@@ -4,7 +4,8 @@ import { Button, ButtonText } from "@/components/ui/button";
 import { useReactionTimer } from "@/hooks/useReactionTimer";
 import { DelayRender } from "@/utils/DelayRender";
 import { Stack, useRouter } from "expo-router";
-import { type FC, useState } from "react";
+import type { FC } from "react";
+import { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 
 const Measurement: FC = () => {
