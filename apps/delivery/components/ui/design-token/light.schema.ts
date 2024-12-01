@@ -121,8 +121,8 @@ export const lightSchema = {
     "--color-typography-black": "rgb(24 23 24)",
 
     /* Outline Colors */
-    "--color-outline": "rgb(205 205 205)",
-    "--color-outline-0": "rgb(245 245 245)",
+    "--color-outline": "rgb(215 215 215)",
+    "--color-outline-0": "rgb(205 205 205)",
     "--color-outline-50": "rgb(235 235 235)",
     "--color-outline-100": "rgb(225 225 225)",
     "--color-outline-200": "rgb(215 215 215)",
