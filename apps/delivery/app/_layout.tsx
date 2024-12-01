@@ -5,6 +5,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import "react-native-reanimated";
 
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "@/i18n";
 import { ColorSchemeProvider } from "@/components/ui/ColorSchemeProvider";
 import UiProvider from "@/components/ui/UiProvider";
@@ -13,6 +14,7 @@ import UiProvider from "@/components/ui/UiProvider";
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
+  const queryClient = new QueryClient();
   const [loaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
   });
@@ -24,13 +26,15 @@ export default function RootLayout() {
   if (!loaded) return null;
 
   return (
-    <ColorSchemeProvider>
-      <UiProvider>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="+not-found" />
-        </Stack>
-      </UiProvider>
-    </ColorSchemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <ColorSchemeProvider>
+        <UiProvider>
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="+not-found" />
+          </Stack>
+        </UiProvider>
+      </ColorSchemeProvider>
+    </QueryClientProvider>
   );
 }
