@@ -1,44 +1,48 @@
+import { Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
-import { useColorScheme } from "nativewind";
 
-import { TabBarIcon } from "@/components/navigation/TabBarIcon";
-import { Colors } from "@/constants/Colors";
-import i18n from "@/i18n";
-
-export default function TabLayout() {
-  const { colorScheme } = useColorScheme();
-
+export default function TapsLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
-        headerShown: false,
+        tabBarActiveTintColor: "#F2F2F2",
+        headerStyle: {
+          backgroundColor: "#0D0D0D",
+        },
+        headerShadowVisible: false,
+        headerTintColor: "#FFFFFE",
+        tabBarStyle: {
+          backgroundColor: "#0D0D0D",
+        },
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
-          title: i18n.t("home"),
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon
-              name={focused ? "home" : "home-outline"}
+          headerTitle: "Playlist",
+          tabBarIcon: ({ focused, color }) => (
+            <Ionicons
+              name={focused ? "home-sharp" : "home-outline"}
               color={color}
+              size={23}
             />
           ),
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="search"
         options={{
-          title: "Explore",
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon
-              name={focused ? "code-slash" : "code-slash-outline"}
+          headerTitle: "Search",
+          tabBarIcon: ({ focused, color }) => (
+            <Ionicons
+              name={focused ? "search" : "search-outline"}
               color={color}
+              size={23}
             />
           ),
         }}
       />
+      <Tabs.Screen name="+not-found" options={{}} />
     </Tabs>
   );
 }
