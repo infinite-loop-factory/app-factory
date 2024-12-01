@@ -1,8 +1,9 @@
 import { Button, ButtonText } from "@/components/ui/button";
 import { Stack, useRouter } from "expo-router";
+import type { FC } from "react";
 import { Text, View } from "react-native";
 
-const Measurement: React.FC = () => {
+const Measurement: FC = () => {
   const router = useRouter();
 
   return (
