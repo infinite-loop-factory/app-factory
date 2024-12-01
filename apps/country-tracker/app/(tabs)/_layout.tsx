@@ -1,50 +1,70 @@
-import { TabBarIcon } from "@/components/navigation/TabBarIcon";
+import type { BottomTabNavigationOptions } from "@react-navigation/bottom-tabs";
+import type { LucideProps } from "lucide-react-native";
+import type { ComponentType } from "react";
+
 import { Colors } from "@/constants/Colors";
 import i18n from "@/i18n";
 import { Tabs } from "expo-router";
+import { Globe, Home, Settings } from "lucide-react-native";
 import { useColorScheme } from "nativewind";
 
-const HomeTabBarIcon = ({
-  color,
-  focused,
-}: { color: string; focused: boolean }) => (
-  <TabBarIcon name={focused ? "home" : "home-outline"} color={color} />
-);
+type TabInfo = {
+  name: string;
+  title: string;
+  icon: BottomTabNavigationOptions["tabBarIcon"];
+};
 
-const ExploreTabBarIcon = ({
-  color,
-  focused,
-}: { color: string; focused: boolean }) => (
-  <TabBarIcon
-    name={focused ? "code-slash" : "code-slash-outline"}
-    color={color}
-  />
-);
+const createTabBarIcon = (
+  IconComponent: ComponentType<LucideProps>,
+): BottomTabNavigationOptions["tabBarIcon"] => {
+  return ({ color }) => <IconComponent color={color} />;
+};
 
 export default function TabLayout() {
   const { colorScheme } = useColorScheme();
+
+  const tabs: TabInfo[] = [
+    {
+      name: "index",
+      title: i18n.t("home"),
+      icon: createTabBarIcon(Home),
+    },
+    {
+      name: "map",
+      title: i18n.t("map"),
+      icon: createTabBarIcon(Globe),
+    },
+    {
+      name: "settings",
+      title: i18n.t("settings"),
+      icon: createTabBarIcon(Settings),
+    },
+  ];
 
   return (
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
         headerShown: false,
+        tabBarLabelPosition: "below-icon",
+        tabBarLabelStyle: {
+          fontSize: 12,
+        },
+        tabBarIconStyle: {
+          marginTop: 5,
+        },
       }}
     >
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: i18n.t("home"),
-          tabBarIcon: HomeTabBarIcon,
-        }}
-      />
-      <Tabs.Screen
-        name="explore"
-        options={{
-          title: "Explore",
-          tabBarIcon: ExploreTabBarIcon,
-        }}
-      />
+      {tabs.map((tab) => (
+        <Tabs.Screen
+          key={tab.name}
+          name={tab.name}
+          options={{
+            title: tab.title,
+            tabBarIcon: tab.icon,
+          }}
+        />
+      ))}
     </Tabs>
   );
 }
