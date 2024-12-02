@@ -11,7 +11,6 @@ import * as SplashScreen from "expo-splash-screen";
 import { useColorScheme } from "nativewind";
 import { useEffect } from "react";
 import "react-native-reanimated";
-
 import "@/i18n";
 import WebviewLayout from "@/components/WebviewLayout";
 

@@ -117,7 +117,7 @@ cssInterop(UIActionsheet.FlatList, {
 });
 cssInterop(UIActionsheet.SectionList, { className: "style" });
 cssInterop(UIActionsheet.SectionHeaderText, { className: "style" });
-cssInterop(UIActionsheet.Icon, { packclassName: "style" });
+cssInterop(UIActionsheet.Icon, { className: "style" });
 
 const actionsheetStyle = tva({ base: "w-full h-full web:pointer-events-none" });
 
