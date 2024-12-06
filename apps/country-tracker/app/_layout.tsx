@@ -31,7 +31,7 @@ Sentry.init({
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
-export default function RootLayout() {
+function RootLayout() {
   const navigationRef = useNavigationContainerRef();
   const { colorScheme } = useColorScheme();
   const [loaded] = useFonts({
@@ -67,3 +67,5 @@ export default function RootLayout() {
     </GluestackUIProvider>
   );
 }
+
+export default Sentry.wrap(RootLayout);
