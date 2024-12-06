@@ -2,7 +2,7 @@ import type { BottomTabNavigationOptions } from "@react-navigation/bottom-tabs";
 import type { LucideProps } from "lucide-react-native";
 import type { ComponentType } from "react";
 
-import { Colors } from "@/constants/Colors";
+import { COLORS } from "@/constants/colors";
 import i18n from "@/i18n";
 import { Tabs } from "expo-router";
 import { Globe, Home, Settings } from "lucide-react-native";
@@ -44,7 +44,7 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
+        tabBarActiveTintColor: COLORS[colorScheme ?? "light"].tint,
         headerShown: false,
         tabBarLabelPosition: "below-icon",
         tabBarLabelStyle: {

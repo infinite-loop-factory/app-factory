@@ -20,12 +20,14 @@
     "@expo/vector-icons": "^14.0.4",
     "@gluestack-ui/actionsheet": "^0.2.46",
     "@gluestack-ui/input": "^0.1.32",
-    "@gluestack-ui/nativewind-utils": "^1.0.25",
+    "@gluestack-ui/nativewind-utils": "^1.0.26",
     "@gluestack-ui/overlay": "^0.1.16",
     "@gluestack-ui/select": "^0.1.30",
     "@gluestack-ui/toast": "^1.0.8",
     "@legendapp/motion": "^2.4.0",
     "@react-navigation/native": "^6.0.2",
+    "@sentry/react-native": "^6.4.0",
+    "@t3-oss/env-core": "^0.11.1",
     "clsx": "^2.1.1",
     "expo": "~51.0.39",
     "expo-constants": "~16.0.2",
@@ -50,7 +52,8 @@
     "react-native-screens": "3.31.1",
     "react-native-svg": "catalog:",
     "react-native-web": "~0.19.13",
-    "tailwindcss": "catalog:"
+    "tailwindcss": "catalog:",
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
