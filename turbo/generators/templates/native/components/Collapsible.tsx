@@ -7,7 +7,7 @@ import { TouchableOpacity } from "react-native";
 
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-import { Colors } from "@/constants/Colors";
+import { COLORS } from "@/constants/colors";
 
 export function Collapsible({
   children,
@@ -26,7 +26,7 @@ export function Collapsible({
         <Ionicons
           name={isOpen ? "chevron-down" : "chevron-forward-outline"}
           size={18}
-          color={colorScheme === "light" ? Colors.light.icon : Colors.dark.icon}
+          color={colorScheme === "light" ? COLORS.light.icon : COLORS.dark.icon}
         />
         <ThemedText type="defaultSemiBold">{title}</ThemedText>
       </TouchableOpacity>

@@ -5,11 +5,11 @@
 
 import { useColorScheme } from "nativewind";
 
-import { Colors } from "@/constants/Colors";
+import { COLORS } from "@/constants/colors";
 
 export function useThemeColor(
   props: { light?: string; dark?: string },
-  colorName: keyof typeof Colors.light & keyof typeof Colors.dark,
+  colorName: keyof typeof COLORS.light & keyof typeof COLORS.dark,
 ) {
   const { colorScheme = "light" } = useColorScheme();
   const colorFromProps = props[colorScheme];
@@ -17,5 +17,5 @@ export function useThemeColor(
   if (colorFromProps) {
     return colorFromProps;
   }
-  return Colors[colorScheme][colorName];
+  return COLORS[colorScheme][colorName];
 }
