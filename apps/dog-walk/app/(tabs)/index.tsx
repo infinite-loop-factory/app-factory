@@ -1,10 +1,10 @@
 import CustomSafeAreaView from "@/components/CustomSafeAriaView";
+import CourseCard from "@/components/card/CourseCard";
+import ReviewCard from "@/components/card/ReviewCard";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import {
-  Dimensions,
   FlatList,
-  Image,
   ScrollView,
   Text,
   TouchableOpacity,
@@ -12,28 +12,8 @@ import {
 } from "react-native";
 // import { TouchableOpacity } from 'react-native-gesture-handler';
 
-type TRecommendedCourseItemProp = {
-  id: string;
-  title: string;
-  image: string;
-  distance: number;
-  totalTime: number;
-  address: string;
-};
-
-type TLatestReviewItemProp = {
-  id: string;
-  image: string;
-  name: string;
-  review: string;
-  createdAt: string;
-};
-
 export default function HomeScreen() {
   const router = useRouter();
-
-  const screenWidth = Dimensions.get("window").width;
-  const calculatedWidth = screenWidth - 110;
 
   const recommededCourse = [
     {
@@ -101,59 +81,6 @@ export default function HomeScreen() {
     },
   ];
 
-  const recommendedCourseItem = ({
-    item,
-  }: { item: TRecommendedCourseItemProp }) => {
-    const { title, distance, totalTime, image, address } = item;
-
-    return (
-      <View className=" flex w-72 flex-column overflow-hidden rounded-lg border border-slate-200">
-        <Image src={image} className="h-40 w-72 " />
-        <View className="flex p-4">
-          <Text className="mb-2 font-semibold text-md">{title}</Text>
-          <View className="flex flex-row">
-            <Text className="mr-2 mb-2 text-slate-500 text-sm">
-              거리 : {distance}km
-            </Text>
-            <Text className="mb-2 text-slate-500 text-sm">
-              소요 시간 : {totalTime}분
-            </Text>
-          </View>
-          <View className="flex flex-row items-center ">
-            <Ionicons name="map-outline" className="mr-2" color={"#6DBE6E"} />
-            {/* FIXME: 컬러 팔레트 정리하기 */}
-            <Text className="text-[#6DBE6E] text-sm">{address}</Text>
-          </View>
-        </View>
-      </View>
-    );
-  };
-
-  const latestReviewItem = ({ item }: { item: TLatestReviewItemProp }) => {
-    const { image, name, review, createdAt } = item;
-
-    return (
-      <View className="flex w-full flex-row rounded-lg border border-slate-200 p-4">
-        <Image src={image} className="mr-4 h-10 w-10 rounded-full" />
-        <View style={{ width: calculatedWidth }} className="flex flex-column">
-          <View className="flex flex-row justify-between">
-            <Text className="mb-2 font-semibold text-md">{name}</Text>
-            <Text className=" text-slate-500 text-sm">{createdAt}</Text>
-          </View>
-
-          <View className="flex flex-row overflow-hidden">
-            <Text
-              className="mr-2 mb-2 text-slate-500 text-sm"
-              numberOfLines={2}
-            >
-              {review}
-            </Text>
-          </View>
-        </View>
-      </View>
-    );
-  };
-
   return (
     <CustomSafeAreaView>
       <ScrollView>
@@ -170,6 +97,7 @@ export default function HomeScreen() {
             <Text className="text-slate-500 text-sm">산책 코스 검색하기</Text>
           </View>
         </TouchableOpacity>
+
         <View>
           <View className="flex w-full flex-row items-center justify-between py-4">
             <Text className="font-bold text-l">추천 산책 코스</Text>
@@ -186,9 +114,10 @@ export default function HomeScreen() {
           <View>
             <FlatList
               data={recommededCourse}
-              renderItem={recommendedCourseItem}
+              renderItem={CourseCard}
               keyExtractor={(item) => item.id}
               horizontal
+              nestedScrollEnabled={true}
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={{ gap: 16 }}
             />
@@ -210,8 +139,9 @@ export default function HomeScreen() {
           <View>
             <FlatList
               data={latestReviews}
-              renderItem={latestReviewItem}
+              renderItem={ReviewCard}
               keyExtractor={(item) => item.id}
+              nestedScrollEnabled={true}
               showsVerticalScrollIndicator={false}
               contentContainerStyle={{ gap: 16 }}
             />
