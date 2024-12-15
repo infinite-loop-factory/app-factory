@@ -10,7 +10,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-// import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -83,7 +82,10 @@ export default function HomeScreen() {
 
   return (
     <CustomSafeAreaView>
-      <ScrollView>
+      <ScrollView
+        nestedScrollEnabled={true}
+        showsVerticalScrollIndicator={false}
+      >
         <View className="py-4">
           <Text className=" text-slate-600 text-sm">안녕하세요 👋</Text>
           <Text className="font-bold text-2xl">댕댕이와 산책해요</Text>
