@@ -1,19 +1,32 @@
 import "@/global.css";
+import WebviewLayout from "@/components/WebviewLayout";
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
+import { supabase } from "@/utils/supabase";
 import {
   DarkTheme,
   DefaultTheme,
   ThemeProvider,
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
+import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useColorScheme } from "nativewind";
 import type { PropsWithChildren } from "react";
 import { useEffect, useState } from "react";
+import { AppState } from "react-native";
 import "react-native-reanimated";
-import WebviewLayout from "@/components/WebviewLayout";
 import "@/i18n";
-import { Stack } from "expo-router";
+import "react-native-url-polyfill/auto";
+
+global.WebSocket = require("react-native-websocket");
+
+AppState.addEventListener("change", (state) => {
+  if (state === "active") {
+    supabase.auth.startAutoRefresh();
+  } else {
+    supabase.auth.stopAutoRefresh();
+  }
+});
 
 SplashScreen.preventAutoHideAsync();
 
