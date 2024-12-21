@@ -40,6 +40,22 @@ const config = withTurborepoManagedCache(
   ),
 );
 
+config.resolver.extraNodeModules = {
+  assert: require.resolve("assert"),
+  stream: require.resolve("stream-browserify"),
+  buffer: require.resolve("buffer"),
+  crypto: require.resolve("crypto-browserify"),
+  http: require.resolve("stream-http"),
+  https: require.resolve("https-browserify"),
+  os: require.resolve("os-browserify/browser"),
+  path: require.resolve("path-browserify"),
+  util: require.resolve("util"),
+  url: require.resolve("url"),
+  net: require.resolve("react-native-tcp"),
+  tls: require.resolve("react-native-tls"),
+  zlib: require.resolve("browserify-zlib"),
+};
+
 // XXX: Resolve our exports in workspace packages
 // https://github.com/expo/expo/issues/26926
 config.resolver.unstable_enablePackageExports = true;

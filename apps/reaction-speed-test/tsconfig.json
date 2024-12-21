@@ -4,7 +4,8 @@
     "jsx": "preserve",
     "paths": {
       "@/*": ["./*"]
-    }
+    },
+    "moduleResolution": "bundler"
   },
   "include": [
     "**/*.ts",
