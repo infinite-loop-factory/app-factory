@@ -78,7 +78,7 @@ export default function HomeScreen() {
             >
               <InputField
                 placeholder="순대볶음 나와라 뚞딲!!"
-                className={"p-0"}
+                className={"label-3 p-0"}
               />
               <InputSlot>
                 <Ionicons name={"search"} size={24} color={primary} />
@@ -111,20 +111,16 @@ export default function HomeScreen() {
                 }
               >
                 {categories.map((d) => (
-                  <View
-                    key={d}
-                    className={cn(
-                      "title-3 !text-typography-400 h-full py-2 font-extrabold",
-                      {
+                  <TouchableOpacity onPress={() => setCurrentMenu(d)} key={d}>
+                    <View
+                      className={cn("h-full py-2 font-extrabold", {
                         "!text-typography-0 border-typography-0 border-b-2":
                           d === currentMenu,
-                      },
-                    )}
-                  >
-                    <TouchableOpacity onPress={() => setCurrentMenu(d)}>
-                      <Text>{d}</Text>
-                    </TouchableOpacity>
-                  </View>
+                      })}
+                    >
+                      <Text className={"title-3 "}>{d}</Text>
+                    </View>
+                  </TouchableOpacity>
                 ))}
               </View>
             </ScrollView>
