@@ -826,6 +826,9 @@ importers:
       cross-env:
         specifier: ^7.0.3
         version: 7.0.3
+      dotenv:
+        specifier: ^16.4.7
+        version: 16.4.7
       gh-pages:
         specifier: ^6.2.0
         version: 6.2.0
@@ -7334,12 +7337,9 @@ packages:
       }
     engines: { node: ">=12" }
 
-  dotenv@16.4.5:
-    resolution:
-      {
-        integrity: sha512-ZmdL2rui+eB2YwhsWzjInR8LldtZHGDoQ1ugH85ppHKwpUHL7j7rN0Ti9NCnGiQbhaZ11FpR+7ao1dNsmduNUg==,
-      }
-    engines: { node: ">=12" }
+  dotenv@16.4.7:
+    resolution: {integrity: sha512-47qPchRCykZC03FhkYAhrvwU4xDBFIj1QPqaarj6mdM/hgUzfPHcpkHJOn3mJAufFeeAxAzeGsr5X0M4k6fLZQ==}
+    engines: {node: '>=12'}
 
   eastasianwidth@0.2.0:
     resolution:
@@ -17197,7 +17197,7 @@ snapshots:
     dependencies:
       chalk: 4.1.2
       debug: 4.3.7
-      dotenv: 16.4.5
+      dotenv: 16.4.7
       dotenv-expand: 11.0.6
       getenv: 1.0.0
     transitivePeerDependencies:
@@ -21246,9 +21246,9 @@ snapshots:
 
   dotenv-expand@11.0.6:
     dependencies:
-      dotenv: 16.4.5
+      dotenv: 16.4.7
 
-  dotenv@16.4.5: {}
+  dotenv@16.4.7: {}
 
   eastasianwidth@0.2.0: {}
 
