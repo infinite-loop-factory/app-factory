@@ -19,6 +19,7 @@
     "@expo/html-elements": "^0.4.2",
     "@expo/vector-icons": "^14.0.4",
     "@gluestack-ui/actionsheet": "^0.2.46",
+    "@gluestack-ui/divider": "^0.1.10",
     "@gluestack-ui/input": "^0.1.32",
     "@gluestack-ui/nativewind-utils": "^1.0.26",
     "@gluestack-ui/overlay": "^0.1.16",

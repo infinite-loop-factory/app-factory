@@ -111,6 +111,9 @@ importers:
       '@gluestack-ui/actionsheet':
         specifier: ^0.2.46
         version: 0.2.46(react-dom@18.2.0(react@18.2.0))(react-native@0.74.5(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0)
+      '@gluestack-ui/divider':
+        specifier: ^0.1.10
+        version: 0.1.10(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@gluestack-ui/input':
         specifier: ^0.1.32
         version: 0.1.32(react-dom@18.2.0(react@18.2.0))(react-native@0.74.5(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0)
@@ -2110,6 +2113,12 @@ packages:
 
   '@gluestack-ui/button@1.0.7':
     resolution: {integrity: sha512-6hz5BPoB+iHMpDvys6AbIpeRPbnFiqyE3SnnbKPSCj8lgl3Dr9sFln41BvDmqmZ98d0usJluk50rz8pVNRZRgw==}
+    peerDependencies:
+      react: '>=16'
+      react-dom: '>=16'
+
+  '@gluestack-ui/divider@0.1.10':
+    resolution: {integrity: sha512-/hZx1Rmy4Pgln9AwAprAEQcxYPEHjHSNF4xCUWlK/q0peyiMT5Nagt54VnxykVn5A0b2zg5QKP0pOqOF9xeE6w==}
     peerDependencies:
       react: '>=16'
       react-dom: '>=16'
@@ -10427,6 +10436,11 @@ snapshots:
       react-dom: 18.2.0(react@18.2.0)
     transitivePeerDependencies:
       - react-native
+
+  '@gluestack-ui/divider@0.1.10(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
 
   '@gluestack-ui/form-control@0.1.18(react-dom@18.2.0(react@18.2.0))(react-native@0.74.5(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0)':
     dependencies:
