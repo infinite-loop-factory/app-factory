@@ -1,5 +1,6 @@
 import "@/global.css";
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   DarkTheme,
   DefaultTheme,
@@ -33,7 +34,7 @@ SplashScreen.preventAutoHideAsync();
 
 function RootLayout() {
   const navigationRef = useNavigationContainerRef();
-  const { colorScheme } = useColorScheme();
+  const { colorScheme, toggleColorScheme } = useColorScheme();
   const [loaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
   });
@@ -49,6 +50,21 @@ function RootLayout() {
       SplashScreen.hideAsync();
     }
   }, [loaded]);
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: 마운트시점 초기화
+  useEffect(() => {
+    (async () => {
+      const theme = await AsyncStorage.getItem("theme");
+      if (!theme) {
+        AsyncStorage.setItem("theme", colorScheme || "light");
+        return;
+      }
+      if (theme !== colorScheme) {
+        toggleColorScheme();
+        return;
+      }
+    })();
+  }, []);
 
   if (!loaded) {
     return null;
