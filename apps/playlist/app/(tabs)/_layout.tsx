@@ -42,7 +42,6 @@ export default function TapsLayout() {
           ),
         }}
       />
-      <Tabs.Screen name="+not-found" options={{}} />
     </Tabs>
   );
 }
