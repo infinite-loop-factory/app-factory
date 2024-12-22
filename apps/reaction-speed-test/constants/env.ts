@@ -7,6 +7,9 @@ export const env = createEnv({
     EXPO_PUBLIC_SUPABASE_URL: z.string().url(),
     EXPO_PUBLIC_SUPABASE_ANON_KEY: z.string().min(1),
   },
-  runtimeEnv: process.env,
+  runtimeEnv: {
+    EXPO_PUBLIC_SUPABASE_URL: process.env.EXPO_PUBLIC_SUPABASE_URL,
+    EXPO_PUBLIC_SUPABASE_ANON_KEY: process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY,
+  },
   emptyStringAsUndefined: true,
 });
