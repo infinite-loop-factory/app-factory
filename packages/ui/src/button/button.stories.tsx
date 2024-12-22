@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { View } from "react-native";
 import MyButton from "./button";
 
-const meta = {
+const meta: Meta<typeof MyButton> = {
   title: "MyButton",
   component: MyButton,
   argTypes: {
