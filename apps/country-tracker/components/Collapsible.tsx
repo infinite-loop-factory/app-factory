@@ -1,20 +1,21 @@
 import type { PropsWithChildren } from "react";
 
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { useColorScheme } from "nativewind";
 import { useState } from "react";
 import { TouchableOpacity } from "react-native";
 
+import { themeAtom } from "@/atoms/theme.atom";
 import { ThemedView } from "@/components/ThemedView";
 import { Text } from "@/components/ui/text";
 import { COLORS } from "@/constants/colors";
+import { useAtomValue } from "jotai";
 
 export function Collapsible({
   children,
   title,
 }: PropsWithChildren & { title: string }) {
   const [isOpen, setIsOpen] = useState(false);
-  const { colorScheme = "light" } = useColorScheme();
+  const savedTheme = useAtomValue(themeAtom);
 
   return (
     <ThemedView>
@@ -26,7 +27,7 @@ export function Collapsible({
         <Ionicons
           name={isOpen ? "chevron-down" : "chevron-forward-outline"}
           size={18}
-          color={colorScheme === "light" ? COLORS.light.icon : COLORS.dark.icon}
+          color={savedTheme === "light" ? COLORS.light.icon : COLORS.dark.icon}
         />
         <Text bold>{title}</Text>
       </TouchableOpacity>

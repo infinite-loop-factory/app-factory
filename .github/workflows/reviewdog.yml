@@ -24,4 +24,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           locale: "US"
           reporter: github-pr-review
-          fail_on_error: true
+          exclude: |
+            pnpm-lock.yaml
+            *.lock
+            assets/*

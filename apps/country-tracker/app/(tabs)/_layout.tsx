@@ -2,11 +2,12 @@ import type { BottomTabNavigationOptions } from "@react-navigation/bottom-tabs";
 import type { LucideProps } from "lucide-react-native";
 import type { ComponentType } from "react";
 
+import { themeAtom } from "@/atoms/theme.atom";
 import { COLORS } from "@/constants/colors";
 import i18n from "@/i18n";
 import { Tabs } from "expo-router";
+import { useAtomValue } from "jotai";
 import { Globe, Home, Settings } from "lucide-react-native";
-import { useColorScheme } from "nativewind";
 
 type TabInfo = {
   name: string;
@@ -21,7 +22,7 @@ const createTabBarIcon = (
 };
 
 export default function TabLayout() {
-  const { colorScheme } = useColorScheme();
+  const savedTheme = useAtomValue(themeAtom);
 
   const tabs: TabInfo[] = [
     {
@@ -44,7 +45,7 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: COLORS[colorScheme ?? "light"].tint,
+        tabBarActiveTintColor: COLORS[savedTheme].tint,
         headerShown: false,
         tabBarLabelPosition: "below-icon",
         tabBarLabelStyle: {
