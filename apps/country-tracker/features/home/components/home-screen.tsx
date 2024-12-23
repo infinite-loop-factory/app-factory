@@ -1,5 +1,6 @@
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { Box } from "@/components/ui/box";
+import { Divider } from "@/components/ui/divider";
 import { Heading } from "@/components/ui/heading";
 import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
 import { Text } from "@/components/ui/text";
@@ -22,17 +23,20 @@ const data: CountryItem[] = [
 
 export default function HomeScreen() {
   const renderItem: ListRenderItem<CountryItem> = ({ item }) => (
-    <Box className="mt-4 flex flex-row justify-between border-gray-100 border-b p-2">
-      <Box className="flex flex-1 flex-row gap-2">
-        <Text>{item.flag}</Text>
-        <Text>{item.country}</Text>
+    <VStack>
+      <Box className="mt-4 flex flex-row justify-between p-2">
+        <Box className="flex flex-1 flex-row gap-2">
+          <Text>{item.flag}</Text>
+          <Text>{item.country}</Text>
+        </Box>
+        <Text className="font-mono text-gray-500">{item.lastVisitDate}</Text>
       </Box>
-      <Text className="font-mono text-gray-500">{item.lastVisitDate}</Text>
-    </Box>
+      <Divider className="my-0.5" />
+    </VStack>
   );
 
   return (
-    <ParallaxScrollView>
+    <ParallaxScrollView scrollEnabled={false}>
       <FlatList
         data={data}
         keyExtractor={(item) => item.id}
