@@ -1,6 +1,5 @@
 import "@/global.css";
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   DarkTheme,
   DefaultTheme,
@@ -11,10 +10,13 @@ import { isRunningInExpoGo } from "expo";
 import { useFonts } from "expo-font";
 import { Stack, useNavigationContainerRef } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
+import { Provider as JotaiProvider, useAtom } from "jotai";
+import { useAtomsDebugValue } from "jotai-devtools/utils";
 import { useColorScheme } from "nativewind";
 import { useEffect } from "react";
 import "react-native-reanimated";
 import "@/i18n";
+import { themeAtom } from "@/atoms/theme.atom";
 import WebviewLayout from "@/components/WebviewLayout";
 import { env } from "@/constants/env";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -33,9 +35,15 @@ Sentry.init({
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
+const DebugAtoms = () => {
+  useAtomsDebugValue();
+  return null;
+};
+
 function RootLayout() {
   const navigationRef = useNavigationContainerRef();
   const { colorScheme, toggleColorScheme } = useColorScheme();
+  const [savedTheme, setSavedTheme] = useAtom(themeAtom);
   const [loaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
   });
@@ -52,20 +60,18 @@ function RootLayout() {
     }
   }, [loaded]);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: 마운트시점 초기화
+  // biome-ignore lint/correctness/useExhaustiveDependencies: 스킴 변경시 초기화
   useEffect(() => {
-    (async () => {
-      const theme = await AsyncStorage.getItem("theme");
-      if (!theme) {
-        AsyncStorage.setItem("theme", colorScheme || "light");
-        return;
-      }
-      if (theme !== colorScheme) {
-        toggleColorScheme();
-        return;
-      }
-    })();
-  }, []);
+    const initialTheme = savedTheme || colorScheme;
+
+    if (savedTheme && savedTheme !== colorScheme) {
+      toggleColorScheme();
+    }
+
+    if (!savedTheme) {
+      setSavedTheme(initialTheme);
+    }
+  }, [colorScheme, savedTheme]);
 
   if (!loaded) {
     return null;
@@ -73,18 +79,21 @@ function RootLayout() {
 
   return (
     <SafeAreaProvider>
-      <GluestackUIProvider mode={colorScheme}>
-        <ThemeProvider
-          value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
-        >
-          <WebviewLayout>
-            <Stack>
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-              <Stack.Screen name="+not-found" />
-            </Stack>
-          </WebviewLayout>
-        </ThemeProvider>
-      </GluestackUIProvider>
+      <JotaiProvider>
+        <DebugAtoms />
+        <GluestackUIProvider mode={savedTheme}>
+          <ThemeProvider
+            value={savedTheme === "dark" ? DarkTheme : DefaultTheme}
+          >
+            <WebviewLayout>
+              <Stack>
+                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                <Stack.Screen name="+not-found" />
+              </Stack>
+            </WebviewLayout>
+          </ThemeProvider>
+        </GluestackUIProvider>
+      </JotaiProvider>
     </SafeAreaProvider>
   );
 }

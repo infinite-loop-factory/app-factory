@@ -1,21 +1,16 @@
-/**
- * Learn more about light and dark modes:
- * https://docs.expo.dev/guides/color-schemes/
- */
-
-import { useColorScheme } from "nativewind";
-
+import { themeAtom } from "@/atoms/theme.atom";
 import { COLORS } from "@/constants/colors";
+import { useAtomValue } from "jotai";
 
 export function useThemeColor(
   props: { light?: string; dark?: string },
   colorName: keyof typeof COLORS.light & keyof typeof COLORS.dark,
 ) {
-  const { colorScheme = "light" } = useColorScheme();
-  const colorFromProps = props[colorScheme];
+  const savedTheme = useAtomValue(themeAtom);
+  const colorFromProps = props[savedTheme];
 
   if (colorFromProps) {
     return colorFromProps;
   }
-  return COLORS[colorScheme][colorName];
+  return COLORS[savedTheme][colorName];
 }
