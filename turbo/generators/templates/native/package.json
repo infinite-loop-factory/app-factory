@@ -51,6 +51,7 @@
     "@types/jest": "^29.5.13",
     "@types/react": "catalog:react18",
     "@types/react-test-renderer": "^18.3.0",
+    "babel-plugin-transform-vite-meta-env": "^1.0.3",
     "jest": "^29.7.0",
     "jest-expo": "~51.0.4",
     "type-fest": "catalog:",

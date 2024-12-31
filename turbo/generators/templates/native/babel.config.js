@@ -1,3 +1,4 @@
+/** @type {import("@babel/core").ConfigFunction} */
 module.exports = (api) => {
   api.cache(true);
   return {
@@ -10,6 +11,6 @@ module.exports = (api) => {
       ],
       "nativewind/babel",
     ],
-    plugins: ["react-native-reanimated/plugin"],
+    plugins: ["transform-vite-meta-env", "react-native-reanimated/plugin"],
   };
 };
