@@ -2,6 +2,10 @@ import { execSync } from "node:child_process";
 import * as fs from "node:fs";
 import { renameSync, writeFileSync } from "node:fs";
 import * as path from "node:path";
+import dotenv from "dotenv";
+
+// Load environment variables
+dotenv.config();
 
 const packageJson = JSON.parse(fs.readFileSync("./package.json", "utf-8"));
 const packageName = packageJson.name.split("/").splice(1).join();
