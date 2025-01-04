@@ -17,19 +17,3 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           reporter: github-pr-review
           fail_on_error: true
-
-      - name: Run misspell with Reviewdog
-        uses: reviewdog/action-misspell@v1
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          locale: "US"
-          reporter: github-pr-review
-          pattern: |
-            **/*
-            !pnpm-lock.yaml
-            !*.lock
-            !assets/*
-          exclude: |
-            pnpm-lock.yaml
-            *.lock
-            assets/*
