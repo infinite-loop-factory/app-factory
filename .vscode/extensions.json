@@ -9,6 +9,7 @@
     "gluestack.gluestack-vscode",
     "jasonnutter.vscode-codeowners",
     "pflannery.vscode-versionlens",
+    "redhat.vscode-yaml",
     "usernamehw.errorlens",
     "wix.vscode-import-cost",
     "YoavBls.pretty-ts-errors"
