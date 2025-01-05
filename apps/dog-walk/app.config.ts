@@ -15,9 +15,11 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     backgroundColor: "#ffffff",
   },
   ios: {
+    bundleIdentifier: "com.dog.walk",
     supportsTablet: true,
   },
   android: {
+    package: "com.dog.walk",
     adaptiveIcon: {
       foregroundImage: "./assets/images/adaptive-icon.png",
       backgroundColor: "#ffffff",
