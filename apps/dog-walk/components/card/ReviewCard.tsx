@@ -17,7 +17,7 @@ export default function ReviewCard({ item }: TCourseCardProp) {
   const calculatedWidth = screenWidth - 110;
 
   return (
-    <View className="flex w-full flex-row rounded-lg border border-slate-200 p-4">
+    <View className="mb-4 flex w-full flex-row rounded-lg border border-slate-200 p-4">
       <Image src={image} className="mr-4 h-10 w-10 rounded-full" />
       <View style={{ width: calculatedWidth }} className="flex flex-column">
         <View className="flex flex-row justify-between">
