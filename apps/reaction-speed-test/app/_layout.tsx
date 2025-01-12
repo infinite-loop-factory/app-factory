@@ -41,6 +41,8 @@ function AppContainer({ children }: PropsWithChildren) {
 }
 
 export default function RootLayout() {
+  const { colorScheme } = useColorScheme();
+
   const [loaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
   });
@@ -58,7 +60,7 @@ export default function RootLayout() {
   }
 
   return (
-    <GluestackUIProvider mode="light">
+    <GluestackUIProvider mode={colorScheme}>
       <AppContainer>
         <WebviewLayout>
           <Stack>
