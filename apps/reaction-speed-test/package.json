@@ -22,6 +22,7 @@
     "@gluestack-ui/actionsheet": "^0.2.45",
     "@gluestack-ui/button": "^1.0.7",
     "@gluestack-ui/form-control": "^0.1.19",
+    "@gluestack-ui/icon": "^0.1.25",
     "@gluestack-ui/input": "^0.1.32",
     "@gluestack-ui/nativewind-utils": "1.0.23",
     "@gluestack-ui/overlay": "^0.1.15",
