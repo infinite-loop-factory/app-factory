@@ -78,7 +78,7 @@ const Measurement: FC = () => {
               </Button>
               <Button
                 className="w-40 bg-slate-500"
-                onPress={() => router.push("/")}
+                onPress={() => router.push("/menu")}
               >
                 <ButtonText>홈으로 가기</ButtonText>
               </Button>

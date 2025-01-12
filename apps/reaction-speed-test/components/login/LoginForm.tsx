@@ -70,9 +70,7 @@ export default function LoginForm() {
         }
         return;
       }
-
-      // 로그인 성공 시 홈 또는 지정된 페이지로 이동
-      router.replace("/");
+      router.replace("/menu");
     } catch (error) {
       console.error("로그인 중 문제가 발생했습니다", error);
     } finally {
