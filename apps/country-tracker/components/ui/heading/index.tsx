@@ -52,6 +52,7 @@ const MappedHeading = memo(
                 class: className,
               })}
               {...props}
+              // @ts-expect-error
               ref={ref}
             />
           );
@@ -70,6 +71,7 @@ const MappedHeading = memo(
                 class: className,
               })}
               {...props}
+              // @ts-expect-error
               ref={ref}
             />
           );
@@ -88,6 +90,7 @@ const MappedHeading = memo(
                 class: className,
               })}
               {...props}
+              // @ts-expect-error
               ref={ref}
             />
           );
@@ -106,6 +109,7 @@ const MappedHeading = memo(
                 class: className,
               })}
               {...props}
+              // @ts-expect-error
               ref={ref}
             />
           );
@@ -124,6 +128,7 @@ const MappedHeading = memo(
                 class: className,
               })}
               {...props}
+              // @ts-expect-error
               ref={ref}
             />
           );
@@ -143,6 +148,7 @@ const MappedHeading = memo(
                 class: className,
               })}
               {...props}
+              // @ts-expect-error
               ref={ref}
             />
           );
@@ -161,6 +167,7 @@ const MappedHeading = memo(
                 class: className,
               })}
               {...props}
+              // @ts-expect-error
               ref={ref}
             />
           );

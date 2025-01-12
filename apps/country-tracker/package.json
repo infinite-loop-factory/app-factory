@@ -16,7 +16,7 @@
     "web:publish": "tsx web-publish.ts"
   },
   "dependencies": {
-    "@expo/html-elements": "^0.4.2",
+    "@expo/html-elements": "^0.11.1",
     "@expo/vector-icons": "^14.0.4",
     "@gluestack-ui/actionsheet": "^0.2.46",
     "@gluestack-ui/divider": "^0.1.10",
