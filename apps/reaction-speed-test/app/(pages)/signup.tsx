@@ -95,7 +95,7 @@ export default function SignUpForm() {
       <FormControl className="rounded-lg border border-outline-300 p-4">
         <VStack space="xl">
           <VStack space="xs">
-            <Text className="text-typography-500">Email</Text>
+            <Text className="text-typography-500">이메일</Text>
             <Input className="min-w-[250px]">
               <InputField
                 type="text"
@@ -131,7 +131,7 @@ export default function SignUpForm() {
           </VStack>
 
           <VStack space="xs">
-            <Text className="text-typography-500">Password</Text>
+            <Text className="text-typography-500">비밀번호</Text>
             <Input className="text-center">
               <InputField
                 type="password"
