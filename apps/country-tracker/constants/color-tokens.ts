@@ -1,6 +1,7 @@
 // ? From gluestack
 export const TOKENS = {
   light: {
+    "--color-primary": "rgb(115 115 115)",
     "--color-primary-0": "rgb(179 179 179)",
     "--color-primary-50": "rgb(153 153 153)",
     "--color-primary-100": "rgb(128 128 128)",
@@ -14,6 +15,7 @@ export const TOKENS = {
     "--color-primary-900": "rgb(10 10 10)",
     "--color-primary-950": "rgb(8 8 8)",
 
+    "--color-secondary": "rgb(219 219 219)",
     "--color-secondary-0": "rgb(254 255 255)",
     "--color-secondary-50": "rgb(241 242 242)",
     "--color-secondary-100": "rgb(231 232 232)",
@@ -27,6 +29,7 @@ export const TOKENS = {
     "--color-secondary-900": "rgb(24 23 23)",
     "--color-secondary-950": "rgb(11 12 12)",
 
+    "--color-tertiary": "rgb(253 180 116)",
     "--color-tertiary-0": "rgb(255 250 245)",
     "--color-tertiary-50": "rgb(255 242 229)",
     "--color-tertiary-100": "rgb(255 233 213)",
@@ -40,6 +43,7 @@ export const TOKENS = {
     "--color-tertiary-900": "rgb(108 61 19)",
     "--color-tertiary-950": "rgb(84 49 18)",
 
+    "--color-error": "rgb(248 113 113)",
     "--color-error-0": "rgb(254 233 233)",
     "--color-error-50": "rgb(254 226 226)",
     "--color-error-100": "rgb(254 202 202)",
@@ -53,6 +57,7 @@ export const TOKENS = {
     "--color-error-900": "rgb(127 29 29)",
     "--color-error-950": "rgb(83 19 19)",
 
+    "--color-success": "rgb(102 181 132)",
     "--color-success-0": "rgb(228 255 244)",
     "--color-success-50": "rgb(202 255 232)",
     "--color-success-100": "rgb(162 241 192)",
@@ -66,6 +71,7 @@ export const TOKENS = {
     "--color-success-900": "rgb(20 83 45)",
     "--color-success-950": "rgb(27 50 36)",
 
+    "--color-warning": "rgb(253 173 116)",
     "--color-warning-0": "rgb(255 253 251)",
     "--color-warning-50": "rgb(255 249 245)",
     "--color-warning-100": "rgb(255 231 213)",
@@ -79,6 +85,7 @@ export const TOKENS = {
     "--color-warning-900": "rgb(108 56 19)",
     "--color-warning-950": "rgb(84 45 18)",
 
+    "--color-info": "rgb(87 194 246)",
     "--color-info-0": "rgb(236 248 254)",
     "--color-info-50": "rgb(199 235 252)",
     "--color-info-100": "rgb(162 221 250)",
@@ -92,6 +99,7 @@ export const TOKENS = {
     "--color-info-900": "rgb(5 64 93)",
     "--color-info-950": "rgb(3 38 56)",
 
+    "--color-typography": "rgb(23 23 23)",
     "--color-typography-0": "rgb(254 254 255)",
     "--color-typography-50": "rgb(245 245 245)",
     "--color-typography-100": "rgb(229 229 229)",
@@ -105,6 +113,7 @@ export const TOKENS = {
     "--color-typography-900": "rgb(38 38 39)",
     "--color-typography-950": "rgb(23 23 23)",
 
+    "--color-outline": "rgb(26 23 23)",
     "--color-outline-0": "rgb(253 254 254)",
     "--color-outline-50": "rgb(243 243 243)",
     "--color-outline-100": "rgb(230 230 230)",
@@ -118,6 +127,7 @@ export const TOKENS = {
     "--color-outline-900": "rgb(39 38 36)",
     "--color-outline-950": "rgb(26 23 23)",
 
+    "--color-background": "rgb(255 255 255)",
     "--color-background-0": "rgb(255 255 255)",
     "--color-background-50": "rgb(246 246 246)",
     "--color-background-100": "rgb(242 241 241)",
@@ -143,6 +153,7 @@ export const TOKENS = {
   },
 
   dark: {
+    "--color-primary": "rgb(179 179 179)",
     "--color-primary-0": "rgb(130 130 130)",
     "--color-primary-50": "rgb(148 148 148)",
     "--color-primary-100": "rgb(158 158 158)",
@@ -156,6 +167,7 @@ export const TOKENS = {
     "--color-primary-900": "rgb(253 252 252)",
     "--color-primary-950": "rgb(253 252 252)",
 
+    "--color-secondary": "rgb(63 64 64)",
     "--color-secondary-0": "rgb(11 12 12)",
     "--color-secondary-50": "rgb(24 23 23)",
     "--color-secondary-100": "rgb(39 38 38)",
@@ -169,6 +181,7 @@ export const TOKENS = {
     "--color-secondary-900": "rgb(241 242 242)",
     "--color-secondary-950": "rgb(254 255 255)",
 
+    "--color-tertiary": "rgb(231 129 40)",
     "--color-tertiary-0": "rgb(84 49 18)",
     "--color-tertiary-50": "rgb(108 61 19)",
     "--color-tertiary-100": "rgb(130 73 23)",
@@ -182,6 +195,7 @@ export const TOKENS = {
     "--color-tertiary-900": "rgb(255 242 229)",
     "--color-tertiary-950": "rgb(255 250 245)",
 
+    "--color-error": "rgb(230 53 53)",
     "--color-error-0": "rgb(83 19 19)",
     "--color-error-50": "rgb(127 29 29)",
     "--color-error-100": "rgb(153 27 27)",
@@ -195,6 +209,7 @@ export const TOKENS = {
     "--color-error-900": "rgb(254 226 226)",
     "--color-error-950": "rgb(254 233 233)",
 
+    "--color-success": "rgb(52 131 82)",
     "--color-success-0": "rgb(27 50 36)",
     "--color-success-50": "rgb(20 83 45)",
     "--color-success-100": "rgb(22 101 52)",
@@ -208,6 +223,7 @@ export const TOKENS = {
     "--color-success-900": "rgb(202 255 232)",
     "--color-success-950": "rgb(228 255 244)",
 
+    "--color-warning": "rgb(231 120 40)",
     "--color-warning-0": "rgb(84 45 18)",
     "--color-warning-50": "rgb(108 56 19)",
     "--color-warning-100": "rgb(130 68 23)",
@@ -221,6 +237,7 @@ export const TOKENS = {
     "--color-warning-900": "rgb(255 249 245)",
     "--color-warning-950": "rgb(255 253 251)",
 
+    "--color-info": "rgb(13 166 242)",
     "--color-info-0": "rgb(3 38 56)",
     "--color-info-50": "rgb(5 64 93)",
     "--color-info-100": "rgb(7 90 131)",
@@ -234,6 +251,7 @@ export const TOKENS = {
     "--color-info-900": "rgb(199 235 252)",
     "--color-info-950": "rgb(236 248 254)",
 
+    "--color-typography": "rgb(254 254 255)",
     "--color-typography-0": "rgb(23 23 23)",
     "--color-typography-50": "rgb(38 38 39)",
     "--color-typography-100": "rgb(64 64 64)",
@@ -247,6 +265,7 @@ export const TOKENS = {
     "--color-typography-900": "rgb(245 245 245)",
     "--color-typography-950": "rgb(254 254 255)",
 
+    "--color-outline": "rgb(253 254 254)",
     "--color-outline-0": "rgb(26 23 23)",
     "--color-outline-50": "rgb(39 38 36)",
     "--color-outline-100": "rgb(65 65 65)",
@@ -260,6 +279,7 @@ export const TOKENS = {
     "--color-outline-900": "rgb(243 243 243)",
     "--color-outline-950": "rgb(253 254 254)",
 
+    "--color-background": "rgb(18 18 18)",
     "--color-background-0": "rgb(18 18 18)",
     "--color-background-50": "rgb(39 38 37)",
     "--color-background-100": "rgb(65 64 64)",
