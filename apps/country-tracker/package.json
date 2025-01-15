@@ -16,7 +16,7 @@
     "web:publish": "tsx web-publish.ts"
   },
   "dependencies": {
-    "@expo/html-elements": "^0.4.2",
+    "@expo/html-elements": "^0.11.1",
     "@expo/vector-icons": "^14.0.4",
     "@gluestack-ui/actionsheet": "^0.2.46",
     "@gluestack-ui/divider": "^0.1.10",
@@ -42,8 +42,7 @@
     "expo-system-ui": "~3.0.7",
     "expo-web-browser": "~13.0.3",
     "i18n-js": "^4.5.0",
-    "jotai": "^2.10.4",
-    "jotai-devtools": "^0.10.1",
+    "jotai": "^2.11.0",
     "jscodeshift": "0.15.2",
     "lucide-react-native": "catalog:",
     "nativewind": "catalog:",

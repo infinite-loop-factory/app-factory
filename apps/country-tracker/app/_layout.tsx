@@ -11,7 +11,6 @@ import { useFonts } from "expo-font";
 import { Stack, useNavigationContainerRef } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { Provider as JotaiProvider, useAtom } from "jotai";
-import { useAtomsDebugValue } from "jotai-devtools/utils";
 import { useColorScheme } from "nativewind";
 import { useEffect } from "react";
 import "react-native-reanimated";
@@ -34,11 +33,6 @@ Sentry.init({
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
-
-const DebugAtoms = () => {
-  useAtomsDebugValue();
-  return null;
-};
 
 function RootLayout() {
   const navigationRef = useNavigationContainerRef();
@@ -80,7 +74,6 @@ function RootLayout() {
   return (
     <SafeAreaProvider>
       <JotaiProvider>
-        <DebugAtoms />
         <GluestackUIProvider mode={savedTheme}>
           <ThemeProvider
             value={savedTheme === "dark" ? DarkTheme : DefaultTheme}
