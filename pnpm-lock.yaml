@@ -679,6 +679,9 @@ importers:
       '@react-navigation/native':
         specifier: ^6.0.2
         version: 6.1.18(react-native@0.74.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0)
+      '@reactuses/core':
+        specifier: ^5.0.23
+        version: 5.0.23(react@18.2.0)
       '@supabase/supabase-js':
         specifier: ^2.47.10
         version: 2.47.10

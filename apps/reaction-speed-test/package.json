@@ -31,6 +31,7 @@
     "@legendapp/motion": "^2.4.0",
     "@react-native-async-storage/async-storage": "1.23.1",
     "@react-navigation/native": "^6.0.2",
+    "@reactuses/core": "^5.0.23",
     "@supabase/supabase-js": "^2.47.10",
     "@t3-oss/env-core": "^0.11.1",
     "assert": "^2.1.0",
