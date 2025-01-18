@@ -40,8 +40,10 @@ const Measurement: FC = () => {
         <Stack.Screen options={{ title: "측정 페이지", headerShown: false }} />
 
         <View className="flex items-center">
-          <Text className="text-2xl">이미지가 나타나면</Text>
-          <Text className="text-2xl">화면을 터치해주세요</Text>
+          <Text className="text-2xl dark:text-gray-50">이미지가 나타나면</Text>
+          <Text className="text-2xl dark:text-gray-50">
+            화면을 터치해주세요
+          </Text>
         </View>
 
         <View className="h-32 w-32 items-center justify-center">
@@ -59,7 +61,9 @@ const Measurement: FC = () => {
 
         <View className="h-8 items-center justify-center">
           {result && (
-            <Text className="text-lg">반응 시간: {result.reactionTime}ms</Text>
+            <Text className="text-lg dark:text-gray-50">
+              반응 시간: {result.reactionTime}ms
+            </Text>
           )}
           {earlyPress && !result && (
             <Text className="text-red-500">너무 빨리 터치했습니다!</Text>
@@ -74,7 +78,7 @@ const Measurement: FC = () => {
               </Button>
               <Button
                 className="w-40 bg-slate-500"
-                onPress={() => router.push("/")}
+                onPress={() => router.push("/menu")}
               >
                 <ButtonText>홈으로 가기</ButtonText>
               </Button>
