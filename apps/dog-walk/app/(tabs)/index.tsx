@@ -82,10 +82,7 @@ export default function HomeScreen() {
 
   return (
     <CustomSafeAreaView>
-      <ScrollView
-        nestedScrollEnabled={true}
-        showsVerticalScrollIndicator={false}
-      >
+      <ScrollView className="flex-1 px-4" showsVerticalScrollIndicator={false}>
         <View className="py-4">
           <Text className=" text-slate-600 text-sm">안녕하세요 👋</Text>
           <Text className="font-bold text-2xl">댕댕이와 산책해요</Text>
@@ -102,7 +99,7 @@ export default function HomeScreen() {
 
         <View>
           <View className="flex w-full flex-row items-center justify-between py-4">
-            <Text className="font-bold text-l">추천 산책 코스</Text>
+            <Text className="font-bold text-lg">추천 산책 코스</Text>
             <TouchableOpacity
               className=""
               onPress={() => router.push("/search")}
@@ -127,7 +124,7 @@ export default function HomeScreen() {
         </View>
         <View>
           <View className="flex w-full flex-row items-center justify-between py-4">
-            <Text className="font-bold text-l">최근 리뷰</Text>
+            <Text className="font-bold text-lg">최근 리뷰</Text>
             <TouchableOpacity
               className=""
               onPress={() => router.push("/search")}
@@ -139,14 +136,9 @@ export default function HomeScreen() {
             </TouchableOpacity>
           </View>
           <View>
-            <FlatList
-              data={latestReviews}
-              renderItem={ReviewCard}
-              keyExtractor={(item) => item.id}
-              nestedScrollEnabled={true}
-              showsVerticalScrollIndicator={false}
-              contentContainerStyle={{ gap: 16 }}
-            />
+            {latestReviews.map((item) => {
+              return <ReviewCard key={item.id} item={item} />;
+            })}
           </View>
         </View>
       </ScrollView>

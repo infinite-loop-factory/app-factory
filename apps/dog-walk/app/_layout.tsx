@@ -1,4 +1,6 @@
 import "../global.css";
+import "@/global.css";
+import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
 import {
   DarkTheme,
   DefaultTheme,
@@ -33,13 +35,17 @@ export default function RootLayout() {
   }
 
   return (
-    <GestureHandlerRootView>
-      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="+not-found" />
-        </Stack>
-      </ThemeProvider>
-    </GestureHandlerRootView>
+    <GluestackUIProvider mode="light">
+      <GestureHandlerRootView>
+        <ThemeProvider
+          value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+        >
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="+not-found" />
+          </Stack>
+        </ThemeProvider>
+      </GestureHandlerRootView>
+    </GluestackUIProvider>
   );
 }

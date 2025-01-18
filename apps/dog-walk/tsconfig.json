@@ -3,7 +3,8 @@
   "compilerOptions": {
     "jsx": "preserve",
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "tailwind.config": ["./tailwind.config.ts"]
     }
   },
   "include": [
