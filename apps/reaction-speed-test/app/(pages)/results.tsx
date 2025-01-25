@@ -96,16 +96,18 @@ const Results: FC = () => {
                 <View
                   key={record.id}
                   className={cn(
-                    "mb-3 rounded p-3 dark:bg-gray-800",
-                    isNewest && "bg-yellow-300",
-                    isLowest && "bg-red-300",
-                    isDefault && "bg-blue-300",
+                    "mb-3 rounded p-3",
+                    isNewest &&
+                      "bg-yellow-300 dark:bg-yellow-300 dark:text-gray-950",
+                    isLowest && "bg-red-300 dark:bg-red-300 dark:text-gray-950",
+                    isDefault &&
+                      "bg-blue-300 dark:bg-blue-300 dark:text-gray-950",
                   )}
                 >
-                  <Text className="text-sm dark:text-gray-300">
+                  <Text className="text-sm dark:text-gray-950">
                     {formatDateTime(record.created_at)}
                   </Text>
-                  <Text className="font-semibold text-lg dark:text-gray-50">
+                  <Text className="font-semibold text-lg dark:text-gray-950">
                     {getResultText(record, { isNewest, isLowest })}
                   </Text>
                 </View>
