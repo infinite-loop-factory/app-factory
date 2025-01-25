@@ -1,9 +1,8 @@
+import { getCurrentUser } from "@/services";
 import { supabase } from "@/utils/supabase";
 
 export const insertRecord = async (result_value: number) => {
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getCurrentUser();
 
   if (!user) {
     throw new Error("User not authenticated");
@@ -26,9 +25,7 @@ export const insertRecord = async (result_value: number) => {
 };
 
 export const getRecords = async () => {
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getCurrentUser();
 
   if (!user) {
     throw new Error("로그인이 필요합니다");
