@@ -1,6 +1,7 @@
 import { Button, ButtonText } from "@/components/ui/button";
 import { getRecords } from "@/services";
 import { supabase } from "@/utils/supabase";
+import { cn } from "@infinite-loop-factory/common";
 import { useAsyncEffect } from "@reactuses/core";
 import { noop } from "es-toolkit";
 import { Stack, useRouter } from "expo-router";
@@ -21,6 +22,11 @@ interface Record {
   created_at: string;
   result_value: number;
   unit: string;
+}
+
+interface RecordStatus {
+  isNewest: boolean;
+  isLowest: boolean;
 }
 
 const formatDateTime = (dateTimeString: string) => {
@@ -56,31 +62,58 @@ const Results: FC = () => {
     [],
   );
 
+  const getResultText = (
+    record: Record,
+    { isNewest, isLowest }: RecordStatus,
+  ): string => {
+    const baseText = `결과값: ${record.result_value}${record.unit}`;
+
+    if (isNewest) return `${baseText} | 최근 기록`;
+    if (isLowest) return `${baseText} | 최단 기록`;
+    return baseText;
+  };
+
   return (
     <ScrollView>
-      <View className="flex-1 items-center justify-center">
+      <View className="my-8 flex-1 items-center justify-center">
         <Stack.Screen options={{ title: "기록 페이지", headerShown: false }} />
         <Text className="mb-5 text-2xl dark:text-gray-50">기록 페이지</Text>
         {loading ? (
           <Text className="dark:text-gray-50">로딩 중...</Text>
         ) : (
-          <View className="w-full px-4">
-            {records.map((record) => (
-              <View
-                key={record.id}
-                className="mb-3 rounded bg-gray-100 p-3 dark:bg-gray-800"
-              >
-                <Text className="text-sm dark:text-gray-300">
-                  {formatDateTime(record.created_at)}
-                </Text>
-                <Text className="font-semibold text-lg dark:text-gray-50">
-                  {`결과값: ${record.result_value}${record.unit}`}
-                </Text>
-              </View>
-            ))}
+          <View className="w-full max-w-[20rem] px-4">
+            {records.map((record) => {
+              const isNewest =
+                records.length > 0 &&
+                record.created_at === records.at(0)?.created_at;
+              const lowestValue = Math.min(
+                ...records.map((r) => r.result_value),
+              );
+              const isLowest = record.result_value === lowestValue;
+              const isDefault = !(isNewest || isLowest);
+
+              return (
+                <View
+                  key={record.id}
+                  className={cn(
+                    "mb-3 rounded p-3 dark:bg-gray-800",
+                    isNewest && "bg-yellow-300",
+                    isLowest && "bg-red-300",
+                    isDefault && "bg-blue-300",
+                  )}
+                >
+                  <Text className="text-sm dark:text-gray-300">
+                    {formatDateTime(record.created_at)}
+                  </Text>
+                  <Text className="font-semibold text-lg dark:text-gray-50">
+                    {getResultText(record, { isNewest, isLowest })}
+                  </Text>
+                </View>
+              );
+            })}
           </View>
         )}
-        <Button className="bg-slate-500" onPress={() => router.back()}>
+        <Button className="mt-8 bg-slate-500" onPress={() => router.back()}>
           <ButtonText>뒤로 가기</ButtonText>
         </Button>
       </View>
