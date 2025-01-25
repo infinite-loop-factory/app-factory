@@ -1,4 +1,4 @@
-import { insertRecord } from "@/services/records";
+import { insertRecord } from "@/services";
 import { useAsyncEffect } from "@reactuses/core";
 import { noop } from "es-toolkit";
 import { useCallback, useRef, useState } from "react";

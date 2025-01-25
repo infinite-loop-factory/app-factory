@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/form-control";
 import { Input, InputField } from "@/components/ui/input";
 import { VStack } from "@/components/ui/vstack";
-import { supabase } from "@/utils/supabase";
+import { signInUser } from "@/services";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Text } from "react-native";
@@ -54,7 +54,7 @@ export default function LoginForm() {
 
     setLoading(true);
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      const { error } = await signInUser({
         email: formData.email,
         password: formData.password,
       });

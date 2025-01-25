@@ -1,5 +1,5 @@
 import { Button, ButtonText } from "@/components/ui/button";
-import { getRecords } from "@/services/records";
+import { getRecords } from "@/services";
 import { supabase } from "@/utils/supabase";
 import { useAsyncEffect } from "@reactuses/core";
 import { noop } from "es-toolkit";
