@@ -1,5 +1,6 @@
 import { Button, ButtonText } from "@/components/ui/button";
 import { getRecords } from "@/services";
+import { formatDateTime } from "@/utils/date";
 import { supabase } from "@/utils/supabase";
 import { cn } from "@infinite-loop-factory/common";
 import { useAsyncEffect } from "@reactuses/core";
@@ -28,14 +29,6 @@ interface RecordStatus {
   isNewest: boolean;
   isLowest: boolean;
 }
-
-const formatDateTime = (dateTimeString: string) => {
-  const [date, time] = dateTimeString.split("T");
-  const formattedDate = date?.replace(/-/g, ". ");
-  const formattedTime = time?.substring(0, 8);
-
-  return `${formattedDate} ${formattedTime}`;
-};
 
 const Results: FC = () => {
   const router = useRouter();
@@ -105,7 +98,7 @@ const Results: FC = () => {
                   )}
                 >
                   <Text className="text-sm dark:text-gray-950">
-                    {formatDateTime(record.created_at)}
+                    {formatDateTime(record.created_at, "Asia/Seoul")}
                   </Text>
                   <Text className="font-semibold text-lg dark:text-gray-950">
                     {getResultText(record, { isNewest, isLowest })}
