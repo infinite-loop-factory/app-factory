@@ -42,7 +42,7 @@ export default function HomeScreen() {
           <Text className="text-lg">{item.flag}</Text>
           <Text className="text-lg">{item.country}</Text>
         </Box>
-        <Text className="text-gray-500" style={{ fontFamily: "SpaceMono" }}>
+        <Text className="font-mono text-gray-500">
           {formatDate(item.lastVisitDate)}
         </Text>
       </Box>

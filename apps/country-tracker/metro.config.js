@@ -10,14 +10,14 @@ function patchNativeWind(config) {
   const platforms = ["android", "ios", "web"];
 
   execSync(
-    "npx tailwindcss --input global.css --output node_modules/nativewind/.cache/global.css --minify",
+    "npx tailwindcss --input global.css --output node_modules/nativewind/.cache/src/global.css --minify",
     { stdio: "inherit" },
   );
 
-  const source = "node_modules/nativewind/.cache/global.css";
+  const source = "node_modules/nativewind/.cache/src/global.css";
 
   for (const platform of platforms) {
-    const destination = `node_modules/nativewind/.cache/global.css.${platform}.css`;
+    const destination = `node_modules/nativewind/.cache/src/global.css.${platform}.css`;
     copyFileSync(source, destination);
   }
 
@@ -34,7 +34,7 @@ const config = withTurborepoManagedCache(
     process.env.BUILD_FLAG
       ? patchNativeWind(defaultConfig)
       : withNativeWind(defaultConfig, {
-          input: "./global.css",
+          input: "./src/global.css",
           configPath: "./tailwind.config.ts",
         }),
   ),

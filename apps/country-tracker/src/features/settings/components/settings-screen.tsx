@@ -1,4 +1,4 @@
-import { Image, Platform } from "react-native";
+import { Platform } from "react-native";
 
 import { Collapsible } from "@/components/Collapsible";
 import { ExternalLink } from "@/components/ExternalLink";
@@ -41,10 +41,6 @@ export default function SettingsScreen() {
           <Text bold>@3x</Text> suffixes to provide files for different screen
           densities
         </Text>
-        <Image
-          source={require("@/assets/images/react-logo.png")}
-          className="self-center"
-        />
         <ExternalLink href="https://reactnative.dev/docs/images">
           <Text underline>Learn more</Text>
         </ExternalLink>

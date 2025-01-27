@@ -6,11 +6,7 @@ import nativewind from "nativewind/preset";
 
 export default {
   darkMode: "media",
-  content: [
-    "./index.{tsx,jsx,ts,js}",
-    "./app/**/*.{tsx,jsx,ts,js}",
-    "./components/**/*.{tsx,jsx,ts,js}",
-  ],
+  content: ["./src/**/*.{ts,tsx}"],
   presets: [nativewind],
   safelist: [
     {

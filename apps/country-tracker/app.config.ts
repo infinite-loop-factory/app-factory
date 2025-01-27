@@ -7,10 +7,10 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   scheme: "country-tracker",
   version: "1.0.0",
   orientation: "portrait",
-  icon: "./assets/images/icon.png",
+  icon: "./src/assets/images/icon.png",
   userInterfaceStyle: "automatic",
   splash: {
-    image: "./assets/images/splash.png",
+    image: "./src/assets/images/splash.png",
     resizeMode: "contain",
     backgroundColor: "#ffffff",
   },
@@ -19,14 +19,14 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   android: {
     adaptiveIcon: {
-      foregroundImage: "./assets/images/adaptive-icon.png",
+      foregroundImage: "./src/assets/images/adaptive-icon.png",
       backgroundColor: "#ffffff",
     },
   },
   web: {
     bundler: "metro",
     output: "static",
-    favicon: "./assets/images/favicon.png",
+    favicon: "./src/assets/images/favicon.png",
   },
   plugins: ["expo-router", "expo-localization"],
   experiments: {

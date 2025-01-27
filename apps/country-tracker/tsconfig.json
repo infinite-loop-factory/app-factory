@@ -3,13 +3,14 @@
   "compilerOptions": {
     "jsx": "preserve",
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./src/*"]
     },
     "moduleResolution": "bundler"
   },
   "include": [
-    "**/*.ts",
-    "**/*.tsx",
+    "src",
+    "*.ts",
+    "*.js",
     ".expo/types/**/*.ts",
     "expo-env.d.ts",
     "nativewind-env.d.ts"
