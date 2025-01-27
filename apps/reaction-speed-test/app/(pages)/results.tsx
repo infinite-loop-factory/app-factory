@@ -9,6 +9,7 @@ import { Stack, useRouter } from "expo-router";
 import type { FC } from "react";
 import { useState } from "react";
 import { Alert, AppState, ScrollView, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 AppState.addEventListener("change", (state) => {
   if (state === "active") {
@@ -67,52 +68,61 @@ const Results: FC = () => {
   };
 
   return (
-    <ScrollView>
-      <View className="my-8 flex-1 items-center justify-center">
-        <Stack.Screen options={{ title: "기록 페이지", headerShown: false }} />
-        <Text className="mb-5 text-2xl dark:text-gray-50">기록 페이지</Text>
-        {loading ? (
-          <Text className="dark:text-gray-50">로딩 중...</Text>
-        ) : (
-          <View className="w-full max-w-[20rem] px-4">
-            {records.map((record) => {
-              const isNewest =
-                records.length > 0 &&
-                record.created_at === records.at(0)?.created_at;
-              const lowestValue = Math.min(
-                ...records.map((r) => r.result_value),
-              );
-              const isLowest = record.result_value === lowestValue;
-              const isDefault = !(isNewest || isLowest);
+    <SafeAreaView>
+      <ScrollView>
+        <View className="my-8 flex-1 items-center justify-center">
+          <Stack.Screen
+            options={{ title: "기록 페이지", headerShown: false }}
+          />
+          <Text className="mb-5 font-mono text-2xl tracking-tighter dark:text-gray-50">
+            기록 페이지
+          </Text>
+          {loading ? (
+            <Text className="font-mono tracking-tighter dark:text-gray-50">
+              로딩 중...
+            </Text>
+          ) : (
+            <View className="w-full max-w-[20rem] px-4">
+              {records.map((record) => {
+                const isNewest =
+                  records.length > 0 &&
+                  record.created_at === records.at(0)?.created_at;
+                const lowestValue = Math.min(
+                  ...records.map((r) => r.result_value),
+                );
+                const isLowest = record.result_value === lowestValue;
+                const isDefault = !(isNewest || isLowest);
 
-              return (
-                <View
-                  key={record.id}
-                  className={cn(
-                    "mb-3 rounded p-3",
-                    isNewest &&
-                      "bg-yellow-300 dark:bg-yellow-300 dark:text-gray-950",
-                    isLowest && "bg-red-300 dark:bg-red-300 dark:text-gray-950",
-                    isDefault &&
-                      "bg-blue-300 dark:bg-blue-300 dark:text-gray-950",
-                  )}
-                >
-                  <Text className="text-sm dark:text-gray-950">
-                    {formatDateTime(record.created_at, "Asia/Seoul")}
-                  </Text>
-                  <Text className="font-semibold text-lg dark:text-gray-950">
-                    {getResultText(record, { isNewest, isLowest })}
-                  </Text>
-                </View>
-              );
-            })}
-          </View>
-        )}
-        <Button className="mt-8 bg-slate-500" onPress={() => router.back()}>
-          <ButtonText>뒤로 가기</ButtonText>
-        </Button>
-      </View>
-    </ScrollView>
+                return (
+                  <View
+                    key={record.id}
+                    className={cn(
+                      "mb-3 rounded p-3",
+                      isNewest &&
+                        "bg-yellow-300 dark:bg-yellow-300 dark:text-gray-950",
+                      isLowest &&
+                        "bg-red-300 dark:bg-red-300 dark:text-gray-950",
+                      isDefault &&
+                        "bg-blue-300 dark:bg-blue-300 dark:text-gray-950",
+                    )}
+                  >
+                    <Text className="font-mono text-sm tracking-tighter dark:text-gray-950">
+                      {formatDateTime(record.created_at, "Asia/Seoul")}
+                    </Text>
+                    <Text className="font-mono font-semibold text-lg tracking-tighter dark:text-gray-950">
+                      {getResultText(record, { isNewest, isLowest })}
+                    </Text>
+                  </View>
+                );
+              })}
+            </View>
+          )}
+          <Button className="mt-8 bg-slate-500" onPress={() => router.back()}>
+            <ButtonText>뒤로 가기</ButtonText>
+          </Button>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 

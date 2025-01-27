@@ -180,7 +180,7 @@ export default {
       fontFamily: {
         heading: [],
         body: [],
-        mono: [],
+        mono: ["SpaceMono"],
         roboto: ["Roboto", "sans-serif"],
       },
       fontWeight: {
