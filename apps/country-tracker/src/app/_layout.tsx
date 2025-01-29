@@ -39,7 +39,7 @@ function RootLayout() {
   const { colorScheme, toggleColorScheme } = useColorScheme();
   const [savedTheme, setSavedTheme] = useAtom(themeAtom);
   const [loaded] = useFonts({
-    SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
+    SpaceMono: require("@/assets/fonts/SpaceMono-Regular.ttf"),
   });
 
   useEffect(() => {
