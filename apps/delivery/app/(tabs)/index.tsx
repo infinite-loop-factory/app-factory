@@ -1,4 +1,5 @@
 import { Input, InputField, InputSlot } from "@/components/ui/input";
+import DarkModeToggle from "@/components/web-layout/DarkModeToggle";
 import { useColorToken } from "@/hooks/useThemeColor";
 import { Ionicons } from "@expo/vector-icons";
 import { cn } from "@infinite-loop-factory/common";
@@ -61,10 +62,11 @@ export default function HomeScreen() {
             <Text className="title-3">서초구 효령로 321</Text>
             <Ionicons name={"chevron-down"} size={20} color={typography} />
           </TouchableOpacity>
-          <View className="flex flex-row gap-5">
+          <View className="flex flex-row items-center gap-5">
             <Ionicons name={"calculator"} size={24} color={typography} />
             <Ionicons name={"search"} size={24} color={typography} />
             <Ionicons name={"cart-outline"} size={24} color={typography} />
+            <DarkModeToggle />
           </View>
         </View>
 
