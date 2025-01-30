@@ -1,4 +1,5 @@
 import { Colors } from "@/constants/Colors";
+import { useColorToken } from "@/hooks/useThemeColor";
 import { Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 import { useColorScheme } from "nativewind";
@@ -11,6 +12,9 @@ type TabScreensType = {
 };
 export default function TabLayout() {
   const { colorScheme } = useColorScheme();
+  const { background50 } = useColorToken({
+    background50: true,
+  });
 
   const tabScreens: TabScreensType[] = [
     { name: "index", title: "홈", icon: "home" },
@@ -27,6 +31,7 @@ export default function TabLayout() {
         tabBarShowLabel: false,
 
         tabBarStyle: {
+          backgroundColor: background50,
           paddingVertical: 10,
           height: 60,
         },

@@ -1,9 +1,9 @@
-import { useCustomColorScheme } from "@/components/ui/ColorSchemeProvider";
+import { useColorSchemaStore } from "@/store/colorScheme.store";
 import { Cloud, Moon, Star, Sun } from "lucide-react-native";
 import { Pressable, View } from "react-native";
 
 export default function DarkModeToggle() {
-  const { toggleColorScheme, colorScheme } = useCustomColorScheme();
+  const { toggleColorScheme, colorScheme } = useColorSchemaStore();
   const darkMode = colorScheme === "dark";
 
   return (

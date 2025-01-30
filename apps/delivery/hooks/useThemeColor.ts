@@ -1,7 +1,7 @@
-import { useCustomColorScheme } from "@/components/ui/ColorSchemeProvider";
 import * as schema from "@/components/ui/design-token/_index";
 import type { defaultSchemaType } from "@/components/ui/design-token/light.schema";
 import { Colors } from "@/constants/Colors";
+import { useColorSchemaStore } from "@/store/colorScheme.store";
 import { kebabCase } from "es-toolkit";
 import { useColorScheme } from "nativewind";
 import type { CamelCase } from "type-fest";
@@ -26,7 +26,7 @@ export function useColorToken<
     Record<CamelCase<CleanColorToken<defaultSchemaType["token"]>>, boolean>
   >,
 >(token: T): Record<keyof T, string> {
-  const { colorScheme } = useCustomColorScheme();
+  const { colorScheme } = useColorSchemaStore();
 
   if (!colorScheme) throw new Error("Color scheme not available");
 
