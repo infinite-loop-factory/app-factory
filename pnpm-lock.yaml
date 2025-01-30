@@ -304,12 +304,18 @@ importers:
       '@infinite-loop-factory/common':
         specifier: workspace:^
         version: link:../../packages/common
+      '@react-native-async-storage/async-storage':
+        specifier: 1.23.1
+        version: 1.23.1(react-native@0.74.5(@babel/core@7.26.7)(@babel/preset-env@7.26.7(@babel/core@7.26.7))(@types/react@18.2.79)(react@18.2.0))
       '@react-navigation/native':
         specifier: ^6.0.2
         version: 6.1.18(react-native@0.74.5(@babel/core@7.26.7)(@babel/preset-env@7.26.7(@babel/core@7.26.7))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0)
       '@reactuses/core':
         specifier: ^5.0.23
         version: 5.0.23(react@18.2.0)
+      '@supabase/supabase-js':
+        specifier: ^2.47.10
+        version: 2.48.1
       '@tanstack/react-query':
         specifier: ^5.59.20
         version: 5.64.2(react@18.2.0)
@@ -376,6 +382,9 @@ importers:
       react-native-screens:
         specifier: 3.31.1
         version: 3.31.1(react-native@0.74.5(@babel/core@7.26.7)(@babel/preset-env@7.26.7(@babel/core@7.26.7))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0)
+      react-native-url-polyfill:
+        specifier: ^2.0.0
+        version: 2.0.0(react-native@0.74.5(@babel/core@7.26.7)(@babel/preset-env@7.26.7(@babel/core@7.26.7))(@types/react@18.2.79)(react@18.2.0))
       react-native-web:
         specifier: ~0.19.10
         version: 0.19.13(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
