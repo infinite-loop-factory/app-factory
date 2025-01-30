@@ -7,7 +7,7 @@ const { withNativeWind } = require("nativewind/metro");
 const config = withTurborepoManagedCache(
   withMonorepoPaths(
     withNativeWind(getDefaultConfig(__dirname), {
-      input: "./global.css",
+      input: "./src/global.css",
       configPath: "./tailwind.config.ts",
     }),
   ),
