@@ -109,8 +109,6 @@ export default function WebviewLayout({ children }: { children: ReactNode }) {
           }
           style={{
             shadowColor: "#000",
-            shadowOffset: { width: 0, height: 4 },
-            shadowOpacity: 0.25,
             shadowRadius: 10,
             elevation: 8,
           }}
