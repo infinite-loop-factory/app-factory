@@ -319,9 +319,21 @@ importers:
       '@tanstack/react-query':
         specifier: ^5.59.20
         version: 5.64.2(react@18.2.0)
+      assert:
+        specifier: ^2.1.0
+        version: 2.1.0
+      browserify-zlib:
+        specifier: ^0.2.0
+        version: 0.2.0
+      buffer:
+        specifier: ^6.0.3
+        version: 6.0.3
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
+      crypto-browserify:
+        specifier: ^3.12.1
+        version: 3.12.1
       expo:
         specifier: ~51.0.36
         version: 51.0.39(@babel/core@7.26.7)(@babel/preset-env@7.26.7(@babel/core@7.26.7))
@@ -355,6 +367,9 @@ importers:
       expo-web-browser:
         specifier: ~13.0.3
         version: 13.0.3(expo@51.0.39(@babel/core@7.26.7)(@babel/preset-env@7.26.7(@babel/core@7.26.7)))
+      https-browserify:
+        specifier: ^1.0.0
+        version: 1.0.0
       i18n-js:
         specifier: ^4.4.3
         version: 4.5.1
@@ -364,6 +379,12 @@ importers:
       nativewind:
         specifier: 'catalog:'
         version: 4.1.23(react-native-reanimated@3.10.1(@babel/core@7.26.7)(react-native@0.74.5(@babel/core@7.26.7)(@babel/preset-env@7.26.7(@babel/core@7.26.7))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0))(react-native-safe-area-context@4.10.5(react-native@0.74.5(@babel/core@7.26.7)(@babel/preset-env@7.26.7(@babel/core@7.26.7))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0))(react-native-svg@14.1.0(react-native@0.74.5(@babel/core@7.26.7)(@babel/preset-env@7.26.7(@babel/core@7.26.7))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0))(react-native@0.74.5(@babel/core@7.26.7)(@babel/preset-env@7.26.7(@babel/core@7.26.7))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0)(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@22.10.10)(typescript@5.3.3)))
+      os-browserify:
+        specifier: ^0.3.0
+        version: 0.3.0
+      path-browserify:
+        specifier: ^1.0.1
+        version: 1.0.1
       react:
         specifier: catalog:react18
         version: 18.2.0
@@ -385,15 +406,33 @@ importers:
       react-native-screens:
         specifier: 3.31.1
         version: 3.31.1(react-native@0.74.5(@babel/core@7.26.7)(@babel/preset-env@7.26.7(@babel/core@7.26.7))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0)
+      react-native-tcp:
+        specifier: ^4.0.0
+        version: 4.0.0(react-native@0.74.5(@babel/core@7.26.7)(@babel/preset-env@7.26.7(@babel/core@7.26.7))(@types/react@18.2.79)(react@18.2.0))
+      react-native-tls:
+        specifier: ^0.0.2
+        version: 0.0.2(react-native@0.74.5(@babel/core@7.26.7)(@babel/preset-env@7.26.7(@babel/core@7.26.7))(@types/react@18.2.79)(react@18.2.0))
       react-native-url-polyfill:
         specifier: ^2.0.0
         version: 2.0.0(react-native@0.74.5(@babel/core@7.26.7)(@babel/preset-env@7.26.7(@babel/core@7.26.7))(@types/react@18.2.79)(react@18.2.0))
       react-native-web:
         specifier: ~0.19.10
         version: 0.19.13(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      stream-browserify:
+        specifier: ^3.0.0
+        version: 3.0.0
+      stream-http:
+        specifier: ^3.2.0
+        version: 3.2.0
       tailwindcss:
         specifier: 'catalog:'
         version: 3.4.17(ts-node@10.9.2(@types/node@22.10.10)(typescript@5.3.3))
+      url:
+        specifier: ^0.11.4
+        version: 0.11.4
+      util:
+        specifier: ^0.12.5
+        version: 0.12.5
       zustand:
         specifier: ^5.0.3
         version: 5.0.3(@types/react@18.2.79)(react@18.2.0)(use-sync-external-store@1.4.0(react@18.2.0))
@@ -830,9 +869,6 @@ importers:
 
   apps/reaction-speed-test:
     dependencies:
-      '@expo/html-elements':
-        specifier: 0.10.1
-        version: 0.10.1
       '@expo/vector-icons':
         specifier: ^14.0.3
         version: 14.0.4
@@ -2423,9 +2459,6 @@ packages:
 
   '@expo/env@0.3.0':
     resolution: {integrity: sha512-OtB9XVHWaXidLbHvrVDeeXa09yvTl3+IQN884sO6PhIi2/StXfgSH/9zC7IvzrDB8kW3EBJ1PPLuCUJ2hxAT7Q==}
-
-  '@expo/html-elements@0.10.1':
-    resolution: {integrity: sha512-3PTmtkV15D7+lykXVtvkH1jQ5Y6JE+e3zCaoMMux7z2cSLGQUNwDEUwG37gew3OEB1/E4/SEWgjvg8m7E6/e2Q==}
 
   '@expo/html-elements@0.11.2':
     resolution: {integrity: sha512-OC98eZ4mMzpFQq/KF9t+CGC4Vcg4RnoOxWAzSmNVd3VZ2dFFi64QCoHlT719wDmuccemn1VPXu1/rFvOGmJgOg==}
@@ -11007,8 +11040,6 @@ snapshots:
       getenv: 1.0.0
     transitivePeerDependencies:
       - supports-color
-
-  '@expo/html-elements@0.10.1': {}
 
   '@expo/html-elements@0.11.2': {}
 
