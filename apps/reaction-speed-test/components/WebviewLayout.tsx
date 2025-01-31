@@ -96,7 +96,6 @@ export default function WebviewLayout({ children }: { children: ReactNode }) {
             shadowColor: "#000",
             shadowOpacity: 0.25,
             shadowRadius: 10,
-            elevation: 8,
           }}
         >
           <View className={"flex-1"}>
