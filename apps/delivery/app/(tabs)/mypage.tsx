@@ -1,127 +1,88 @@
+import { Button, ButtonText } from "@/components/ui/button";
+import { useColorToken } from "@/features/shared/hooks/useThemeColor";
+import { useUserStore } from "@/features/user/store/user.store";
 import { Ionicons } from "@expo/vector-icons";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
-
-import ShoppingArticle from "@/components/shopping/shopping.article";
-import { useColorToken } from "@/hooks/useThemeColor";
-import { cn } from "@infinite-loop-factory/common";
-import { useMemo, useState } from "react";
+import { useRouter } from "expo-router";
+import { Text } from "react-native";
+import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function MyPage() {
+  const { user, logout } = useUserStore();
   const { typography } = useColorToken({
     typography: true,
     primary: true,
   });
-  const categories = useMemo(() => {
-    return ["홈", "치킨", "중식", "돈까스", "피자", "패스트푸드"];
-  }, []);
 
-  const [currentMenu, setCurrentMenu] = useState(categories[0]);
+  const router = useRouter();
 
   return (
-    <SafeAreaView className={"flex-1"}>
-      <ScrollView>
-        {/*  head */}
-        <View className="sticky top-0 z-[10000] flex flex-row justify-between bg-background-50 p-5 py-4">
-          <TouchableOpacity
-            className={"flex flex-row items-center justify-center gap-1"}
-          >
-            <Text className="title-3">서초구 효령로 321</Text>
-            <Ionicons name={"chevron-down"} size={20} color={typography} />
-          </TouchableOpacity>
-          <View className="flex flex-row gap-5">
-            <Ionicons name={"calculator"} size={24} color={typography} />
-            <Ionicons name={"search"} size={24} color={typography} />
-            <Ionicons name={"cart-outline"} size={24} color={typography} />
-          </View>
-        </View>
-
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          className={" border-outline-50 border-b"}
-        >
-          <View
-            className={"flex w-full flex-row gap-[15px] space-x-3 px-5 pt-2"}
-          >
-            {categories.map((d) => (
-              <TouchableOpacity
-                onPress={() => setCurrentMenu(d)}
-                key={d}
-                className={"min-w-[60px]"}
-              >
-                <View
-                  className={cn(" py-1 font-extrabold", {
-                    "!text-typography-0 border-typography-0 border-b-2":
-                      d === currentMenu,
-                  })}
-                >
-                  <Text className={"title-3 text-center"}>{d}</Text>
-                </View>
-              </TouchableOpacity>
-            ))}
-          </View>
-        </ScrollView>
-
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          className={"border-outline-50 border-b"}
-        >
-          <View
-            className={
-              "flex h-full w-full flex-row items-center justify-center gap-3 space-x-3 p-2 pt-2"
-            }
-          >
-            <TouchableOpacity
-              className={
-                "flex h-[30px] items-center justify-center rounded-3xl bg-white px-3 shadow"
-              }
-            >
-              <Text className={"m-auto font-bold"}>기본순</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              className={
-                "flex h-[30px] items-center justify-center rounded-3xl bg-white px-3 shadow"
-              }
-            >
-              <Text className={"m-auto font-bold"}>쿠폰</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              className={
-                "flex h-[30px] items-center justify-center rounded-3xl bg-white px-3 shadow"
-              }
-            >
-              <Text className={"m-auto font-bold"}>배달방식</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              className={
-                "flex h-[30px] items-center justify-center rounded-3xl bg-white px-3 shadow"
-              }
-            >
-              <Text className={"m-auto font-bold"}>배달팁</Text>
-            </TouchableOpacity>
-          </View>
-        </ScrollView>
-
+    <SafeAreaView className={"flex-1 "}>
+      {/*header*/}
+      <View className={"flex flex-row items-center justify-between p-[16px]"}>
         <View>
-          <View className={"p-3"}>
-            {[...Array(10)].map((_d, i) => {
-              return (
-                <View
-                  key={String(i)}
-                  className={cn(
-                    "border-outline-50 border-b last:border-b-0",
-                    "mb-1 py-4 last:py-0",
-                  )}
-                >
-                  <ShoppingArticle />
+          <Text className={"title-3 !font-extrabold"}>마이배민</Text>
+        </View>
+
+        <View className="flex flex-row items-center gap-5">
+          <Ionicons name={"notifications"} size={24} color={typography} />
+          <Ionicons name={"settings"} size={24} color={typography} />
+        </View>
+      </View>
+
+      {/*  body */}
+      <View className={"flex px-[16px]"}>
+        <View className={"flex flex-row gap-[16px]"}>
+          {/*image */}
+          <View
+            className={"min-h-[53px] min-w-[53px] rounded-full bg-primary"}
+          />
+
+          {/* 상태 */}
+          <View className={"flex gap-[4px]"}>
+            <View>
+              {user ? (
+                <View className={"flex flex-row gap-[8px]"}>
+                  <Text className={"body-2"}>{user?.name}</Text>
+                  <Button onPress={logout} size={"2xs"}>
+                    <ButtonText>로그아웃</ButtonText>
+                  </Button>
                 </View>
-              );
-            })}
+              ) : (
+                <View className={"flex flex-row gap-[4px]"}>
+                  <Button
+                    onPress={() => router.push("/auth/login")}
+                    size={"2xs"}
+                  >
+                    <ButtonText>로그인</ButtonText>
+                  </Button>
+                  <Button
+                    onPress={() => router.push("/auth/signup")}
+                    size={"2xs"}
+                  >
+                    <ButtonText>회원가입</ButtonText>
+                  </Button>
+                </View>
+              )}
+            </View>
+            <View className={"flex flex-row gap-[8px]"}>
+              <Text className={"label-6"}>리뷰관리</Text>
+              <Text className={"label-6"}>|</Text>
+              <Text className={"label-6"}>주소관리</Text>
+            </View>
           </View>
         </View>
-      </ScrollView>
+
+        <View className={"min-h-[16px]"} />
+
+        {/*  AD 영역*/}
+        <View className={"rounded-xl border border-outline-300 p-[12px]"}>
+          <Text className={"body-5 !font-extrabold"}>
+            샤르르 소리까지 나는{" "}
+            <Text className={"text-yellow-500"}>달달한</Text> 나의 배민 취향
+          </Text>
+        </View>
+      </View>
     </SafeAreaView>
   );
 }
