@@ -1,16 +1,15 @@
 import * as schema from "@/components/ui/design-token/_index";
 import type { defaultSchemaType } from "@/components/ui/design-token/light.schema";
-import { Colors } from "@/constants/Colors";
-import { useColorSchemaStore } from "@/store/colorScheme.store";
+import { Colors } from "@/features/shared/constants/Colors";
+import { useColorSchemaStore } from "@/features/shared/store/colorScheme.store";
 import { kebabCase } from "es-toolkit";
-import { useColorScheme } from "nativewind";
 import type { CamelCase } from "type-fest";
 
 export function useThemeColor(
   props: { light?: string; dark?: string },
   colorName: keyof typeof Colors.light & keyof typeof Colors.dark,
 ) {
-  const { colorScheme = "light" } = useColorScheme();
+  const { colorScheme = "light" } = useColorSchemaStore();
   const colorFromProps = props[colorScheme];
 
   if (colorFromProps) {
