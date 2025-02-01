@@ -1,10 +1,11 @@
 import type { ReactNode } from "react";
 import type { ColorSchemeName, ViewProps } from "react-native";
 
+import { useColorSchemaStore } from "@/features/shared/store/colorScheme.store";
 import { OverlayProvider } from "@gluestack-ui/overlay";
 import { ToastProvider } from "@gluestack-ui/toast";
 import { colorScheme as colorSchemeNW } from "nativewind";
-import { View, useColorScheme } from "react-native";
+import { View } from "react-native";
 import { config } from "./config";
 
 type ModeType = "light" | "dark" | "system";
@@ -27,7 +28,7 @@ export function GluestackUIProvider({
   children?: ReactNode;
   style?: ViewProps["style"];
 }) {
-  const colorScheme = useColorScheme();
+  const { colorScheme } = useColorSchemaStore();
 
   const colorSchemeName = getColorSchemeName(colorScheme, mode);
 

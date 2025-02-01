@@ -1,8 +1,6 @@
-import { Colors } from "@/constants/Colors";
-import { useColorToken } from "@/hooks/useThemeColor";
+import { useColorToken } from "@/features/shared/hooks/useThemeColor";
 import { Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
-import { useColorScheme } from "nativewind";
 import { Text, View } from "react-native";
 
 type TabScreensType = {
@@ -11,9 +9,9 @@ type TabScreensType = {
   icon: "home" | "search" | "heart-outline" | "person-outline" | "menu-outline";
 };
 export default function TabLayout() {
-  const { colorScheme } = useColorScheme();
-  const { background50 } = useColorToken({
+  const { background50, primary } = useColorToken({
     background50: true,
+    primary: true,
   });
 
   const tabScreens: TabScreensType[] = [
@@ -26,7 +24,7 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
+        tabBarActiveTintColor: primary,
         headerShown: false,
         tabBarShowLabel: false,
 

@@ -1,6 +1,6 @@
 import { Input, InputField, InputSlot } from "@/components/ui/input";
 import DarkModeToggle from "@/components/web-layout/DarkModeToggle";
-import { useColorToken } from "@/hooks/useThemeColor";
+import { useColorToken } from "@/features/shared/hooks/useThemeColor";
 import { Ionicons } from "@expo/vector-icons";
 import { cn } from "@infinite-loop-factory/common";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";

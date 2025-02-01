@@ -1,7 +1,7 @@
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
 import WebviewLayout from "@/components/web-layout/WebviewLayout";
-import { useColorToken } from "@/hooks/useThemeColor";
-import { useColorSchemaStore } from "@/store/colorScheme.store";
+import { useColorToken } from "@/features/shared/hooks/useThemeColor";
+import { useColorSchemaStore } from "@/features/shared/store/colorScheme.store";
 import { ThemeProvider } from "@react-navigation/native";
 import type { ReactNode } from "react";
 
