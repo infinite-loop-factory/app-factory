@@ -1,26 +1,26 @@
 import type { ConfigContext, ExpoConfig } from "expo/config";
 
-const validateEnv = () => {
-  const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL || "";
-  const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || "";
+// const validateEnv = () => {
+//   const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL || "";
+//   const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || "";
 
-  if (!supabaseUrl) {
-    throw new Error(
-      "Required environment variable EXPO_PUBLIC_SUPABASE_URL is missing",
-    );
-  }
+//   if (!supabaseUrl) {
+//     throw new Error(
+//       "Required environment variable EXPO_PUBLIC_SUPABASE_URL is missing",
+//     );
+//   }
 
-  if (!supabaseAnonKey) {
-    throw new Error(
-      "Required environment variable EXPO_PUBLIC_SUPABASE_ANON_KEY is missing",
-    );
-  }
+//   if (!supabaseAnonKey) {
+//     throw new Error(
+//       "Required environment variable EXPO_PUBLIC_SUPABASE_ANON_KEY is missing",
+//     );
+//   }
 
-  return { supabaseUrl, supabaseAnonKey };
-};
+//   return { supabaseUrl, supabaseAnonKey };
+// };
 
 export default ({ config }: ConfigContext): ExpoConfig => {
-  const env = validateEnv();
+  // const env = validateEnv();
 
   return {
     ...config,
@@ -56,9 +56,9 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       typedRoutes: true,
       baseUrl: "/app-factory/reaction-speed-test",
     },
-    extra: {
-      supabaseUrl: env.supabaseUrl,
-      supabaseAnonKey: env.supabaseAnonKey,
-    },
+    // extra: {
+    //   supabaseUrl: env.supabaseUrl,
+    //   supabaseAnonKey: env.supabaseAnonKey,
+    // },
   };
 };

@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/form-control";
 import { Input, InputField } from "@/components/ui/input";
 import { VStack } from "@/components/ui/vstack";
-import { supabase } from "@/utils/supabase";
+import { signUpUser } from "@/services";
 import { Stack, useRouter } from "expo-router";
 import { useState } from "react";
 import { Text, View } from "react-native";
@@ -63,14 +63,10 @@ export default function SignUpForm() {
 
     setLoading(true);
     try {
-      const { error } = await supabase.auth.signUp({
+      const { error } = await signUpUser({
         email: formData.email,
         password: formData.password,
-        options: {
-          data: {
-            username: formData.username,
-          },
-        },
+        username: formData.username,
       });
 
       if (error) {
