@@ -1,15 +1,17 @@
-import { Button, ButtonText } from "@/components/ui/button";
-import { useFormInput } from "@/features/shared/ui/FormInput";
+import { Button, ButtonSpinner, ButtonText } from "@/components/ui/button";
+import { Heading } from "@/components/ui/heading";
+import { VStack } from "@/components/ui/vstack";
+import useGlobalToast from "@/features/shared/hooks/useGlobalToast";
+import { FormInput } from "@/features/shared/ui/FormInput";
 import { supabase } from "@/supabase/utils/supabase";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "expo-router";
 import { useForm } from "react-hook-form";
-import { Text, View } from "react-native";
 import { z } from "zod";
 
 const schema = z.object({
   email: z.string().email("이메일 형식으로 입력해주세요").default(""),
-  password: z.string().min(1, "필수 값 입니다.").default(""),
+  password: z.string().min(6, "6자 이상으로 입력하세요").default(""),
   name: z.string().min(1, "필수 값 입니다.").default(""),
 });
 
@@ -18,36 +20,55 @@ export default function Signup() {
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<schemaType>({ resolver: zodResolver(schema) });
 
-  const { FormInput } = useFormInput({ control, errors });
+  const { showToast } = useGlobalToast();
   const router = useRouter();
 
+  const formInputProps = { control, errors };
+
   return (
-    <View className={"flex gap-[12px]"}>
-      <Text className={"title-3 mx-auto"}>화원가입</Text>
+    <VStack space={"md"}>
+      <Heading as={"h1"} size={"xl"} className={"mx-auto"}>
+        화원가입
+      </Heading>
 
-      <FormInput label={"이메일을 입력하세요"} name={"email"} />
-
-      <FormInput label={"페스워드 입력하세요"} name={"password"} />
-
-      <FormInput label={"이름을 입력하세요"} name={"name"} />
+      <FormInput
+        name={"email"}
+        label={"이메일을 입력하세요"}
+        {...formInputProps}
+      />
+      <FormInput
+        name={"password"}
+        label={"페스워드 입력하세요"}
+        {...formInputProps}
+      />
+      <FormInput
+        name={"name"}
+        label={"이름을 입력하세요"}
+        {...formInputProps}
+      />
 
       <Button
+        disabled={isSubmitting}
         onPress={handleSubmit(async ({ email, name, password }) => {
           const res = await supabase.auth.signUp({
             email,
             password,
             options: { data: { name } },
           });
-          if (res.error) return alert("에러발생");
+          if (res.error)
+            return showToast({ title: "에러발생", action: "error" });
+
+          showToast({ title: "회원가입 되었습니다" });
 
           router.push("/(stack)/auth/login");
         })}
       >
-        <ButtonText>가입하기</ButtonText>
+        <ButtonText className={"text-white"}>가입하기</ButtonText>
+        {isSubmitting && <ButtonSpinner />}
       </Button>
-    </View>
+    </VStack>
   );
 }

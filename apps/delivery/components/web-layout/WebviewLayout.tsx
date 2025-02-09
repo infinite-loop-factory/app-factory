@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/select";
 import DarkModeToggle from "@/components/web-layout/DarkModeToggle";
 import { Colors } from "@/features/shared/constants/Colors";
-import { useAsyncEffect, useMountedState, usePlatform } from "@reactuses/core";
+import { useAsyncEffect, usePlatform } from "@reactuses/core";
 import { noop } from "es-toolkit";
 import { type ReactNode, useState } from "react";
 import { Image, Text, View } from "react-native";
@@ -32,13 +32,8 @@ export default function WebviewLayout({ children }: { children: ReactNode }) {
     noop,
     [],
   );
-  const isMounted = useMountedState();
   const { platform } = usePlatform();
-  if (
-    (typeof window === "undefined" && isMounted()) ||
-    ["ios", "android", "unknown"].includes(platform)
-  )
-    return children;
+  if (["ios", "android"].includes(platform)) return children;
 
   const selectedApp = location.href.includes(baseURl)
     ? location.href.replace(baseURl, "").split("/")[0]

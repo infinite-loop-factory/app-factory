@@ -1,16 +1,18 @@
-import { Button, ButtonText } from "@/components/ui/button";
-import { useFormInput } from "@/features/shared/ui/FormInput";
+import { Button, ButtonSpinner, ButtonText } from "@/components/ui/button";
+import { Heading } from "@/components/ui/heading";
+import { VStack } from "@/components/ui/vstack";
+import useGlobalToast from "@/features/shared/hooks/useGlobalToast";
+import { FormInput } from "@/features/shared/ui/FormInput";
 import { useUserStore } from "@/features/user/store/user.store";
 import { supabase } from "@/supabase/utils/supabase";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "expo-router";
 import { useForm } from "react-hook-form";
-import { Text, View } from "react-native";
 import { z } from "zod";
 
 const schema = z.object({
   email: z.string().email("이메일 형식으로 입력해주세요").default(""),
-  password: z.string().min(1, "필수 값 입니다.").default(""),
+  password: z.string().min(6, "6자 이상으로 입력하세요").default(""),
 });
 
 type schemaType = z.infer<typeof schema>;
@@ -18,39 +20,59 @@ export default function Signin() {
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<schemaType>({ resolver: zodResolver(schema) });
 
-  const { setUser } = useUserStore();
-  const { FormInput } = useFormInput({ control, errors });
-
+  const { showToast } = useGlobalToast();
   const router = useRouter();
+  const { setUser } = useUserStore();
+
+  const formInputProps = { control, errors };
 
   return (
-    <View className={"flex gap-[12px]"}>
-      <Text className={"title-3 mx-auto"}>로그인</Text>
+    <VStack space={"md"}>
+      <Heading as={"h1"} size={"xl"} className={"mx-auto"}>
+        로그인
+      </Heading>
 
-      <FormInput label={"이메일을 입력하세요"} name={"email"} />
-      <FormInput label={"페스워드 입력하세요"} name={"password"} />
+      <FormInput
+        name={"email"}
+        label={"이메일을 입력하세요"}
+        {...formInputProps}
+      />
+      <FormInput
+        name={"password"}
+        label={"페스워드를 입력하세요"}
+        {...formInputProps}
+      />
 
       <Button
+        disabled={isSubmitting}
         onPress={handleSubmit(async ({ email, password }) => {
           const res = //
             await supabase.auth.signInWithPassword({ email, password });
 
           const user = res.data.user;
-          if (!user) return alert("유저가 존재하지 않습니다");
+
+          if (!user)
+            return showToast({
+              title: "유저가 존재하지 않습니다",
+              action: "error",
+            });
 
           const { data } = await supabase.from("user").select("name").single();
-          if (!data?.name) return alert("에러발생");
+          if (!data?.name)
+            return showToast({ title: "에러 발생", action: "error" });
 
           setUser({ email, id: user.id, name: data.name });
 
+          showToast({ title: "로그인 되었습니다" });
           router.push("/(tabs)/mypage");
         })}
       >
-        <ButtonText>로그인</ButtonText>
+        <ButtonText className={"text-white"}>로그인</ButtonText>
+        {isSubmitting && <ButtonSpinner />}
       </Button>
-    </View>
+    </VStack>
   );
 }
