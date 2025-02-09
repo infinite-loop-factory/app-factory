@@ -1,5 +1,5 @@
 import { Button, ButtonSpinner, ButtonText } from "@/components/ui/button";
-import { Heading } from "@/components/ui/heading";
+import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
 import useGlobalToast from "@/features/shared/hooks/useGlobalToast";
 import { FormInput } from "@/features/shared/ui/FormInput";
@@ -31,9 +31,9 @@ export default function Signin() {
 
   return (
     <VStack space={"md"}>
-      <Heading as={"h1"} size={"xl"} className={"mx-auto"}>
+      <Text size={"xl"} className={"mx-auto"}>
         로그인
-      </Heading>
+      </Text>
 
       <FormInput
         name={"email"}

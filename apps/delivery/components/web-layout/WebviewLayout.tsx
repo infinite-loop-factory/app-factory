@@ -33,7 +33,9 @@ export default function WebviewLayout({ children }: { children: ReactNode }) {
     [],
   );
   const { platform } = usePlatform();
-  if (["ios", "android"].includes(platform)) return children;
+  // biome-ignore lint/suspicious/noConsole: <explanation>
+  console.log(platform);
+  if (["ios", "android", "unknown"].includes(platform)) return children;
 
   const selectedApp = location.href.includes(baseURl)
     ? location.href.replace(baseURl, "").split("/")[0]

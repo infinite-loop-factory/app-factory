@@ -1,6 +1,5 @@
 import { Box } from "@/components/ui/box";
 import { Button, ButtonText } from "@/components/ui/button";
-import { Heading } from "@/components/ui/heading";
 import { HStack } from "@/components/ui/hstack";
 import { Text } from "@/components/ui/text";
 import { useColorToken } from "@/features/shared/hooks/useThemeColor";
@@ -23,9 +22,7 @@ export default function MyPage() {
       {/*header*/}
       <Box className={"flex flex-row items-center justify-between p-[16px]"}>
         <Box>
-          <Heading as={"h1"} size={"xl"}>
-            마이배민
-          </Heading>
+          <Text size={"xl"}>마이배민</Text>
         </Box>
 
         <Box className="flex flex-row items-center gap-5">
@@ -87,7 +84,8 @@ export default function MyPage() {
         <Box className={"rounded-xl border border-outline-300 p-[12px]"}>
           <Text className={"body-5 !font-extrabold"}>
             샤르르 소리까지 나는{" "}
-            <Text className={"text-yellow-500"}>달달한</Text> 나의 배민 취향
+            <Text className={"text-yellow-500"}>달달한</Text>{" "}
+            <Text>나의 배민 취향</Text>
           </Text>
         </Box>
       </Box>

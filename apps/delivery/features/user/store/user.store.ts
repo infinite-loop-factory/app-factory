@@ -8,16 +8,17 @@ type UserType = {
 };
 
 type UserStoreProps = {
-  user?: UserType | null;
+  user: UserType | null;
   isLogin: boolean;
   setUser: (user: UserType) => void;
   logout: () => void;
 };
 
 export const useUserStore = create<UserStoreProps>((set) => ({
+  user: null,
   isLogin: false,
   setUser: (user: UserType) => set({ user, isLogin: true }),
   logout: () => {
-    supabase.auth.signOut().then(() => set({ user: null }));
+    supabase.auth.signOut().then(() => set({ user: null, isLogin: false }));
   },
 }));
