@@ -199,9 +199,7 @@ const Select = React.forwardRef<
 >(({ className, ...props }, ref) => {
   return (
     <UISelect
-      className={selectStyle({
-        class: className,
-      })}
+      className={selectStyle({ class: className })}
       ref={ref}
       {...props}
     />
@@ -309,6 +307,7 @@ const SelectContent = UISelect.Content;
 const SelectDragIndicator = UISelect.DragIndicator;
 const SelectDragIndicatorWrapper = UISelect.DragIndicatorWrapper;
 const SelectItem = UISelect.Item;
+// @ts-ignore
 const SelectItemText = UISelect.ItemText;
 const SelectScrollView = UISelect.ScrollView;
 const SelectVirtualizedList = UISelect.VirtualizedList;

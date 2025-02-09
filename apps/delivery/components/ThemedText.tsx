@@ -1,4 +1,4 @@
-import { useThemeColor } from "@/hooks/useThemeColor";
+import { useThemeColor } from "@/features/shared/hooks/useThemeColor";
 import clsx from "clsx";
 import type { TextProps } from "react-native";
 import { Text } from "react-native";

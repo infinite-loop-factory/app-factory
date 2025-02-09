@@ -11,7 +11,7 @@ import {
   SelectTrigger,
 } from "@/components/ui/select";
 import DarkModeToggle from "@/components/web-layout/DarkModeToggle";
-import { Colors } from "@/constants/Colors";
+import { Colors } from "@/features/shared/constants/Colors";
 import { useAsyncEffect, useMountedState, usePlatform } from "@reactuses/core";
 import { noop } from "es-toolkit";
 import { type ReactNode, useState } from "react";
@@ -109,8 +109,6 @@ export default function WebviewLayout({ children }: { children: ReactNode }) {
           }
           style={{
             shadowColor: "#000",
-            shadowOffset: { width: 0, height: 4 },
-            shadowOpacity: 0.25,
             shadowRadius: 10,
             elevation: 8,
           }}

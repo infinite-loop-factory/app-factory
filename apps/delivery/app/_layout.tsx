@@ -7,7 +7,6 @@ import "react-native-reanimated";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "@/i18n";
-import { ColorSchemeProvider } from "@/components/ui/ColorSchemeProvider";
 import UiProvider from "@/components/ui/UiProvider";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -27,14 +26,12 @@ export default function RootLayout() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ColorSchemeProvider>
-        <UiProvider>
-          <Stack>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen name="+not-found" />
-          </Stack>
-        </UiProvider>
-      </ColorSchemeProvider>
+      <UiProvider>
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="(tabs)" />
+          <Stack.Screen name="+not-found" />
+        </Stack>
+      </UiProvider>
     </QueryClientProvider>
   );
 }
