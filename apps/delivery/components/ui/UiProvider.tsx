@@ -29,10 +29,10 @@ export default function UiProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <ThemeProvider value={Theme}>
-      <GluestackUIProvider mode={colorScheme}>
+    <GluestackUIProvider mode={colorScheme}>
+      <ThemeProvider value={Theme}>
         <WebviewLayout>{children}</WebviewLayout>
-      </GluestackUIProvider>
-    </ThemeProvider>
+      </ThemeProvider>
+    </GluestackUIProvider>
   );
 }

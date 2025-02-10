@@ -1,4 +1,5 @@
 import ShoppingImage from "@/components/shopping/shopping.image";
+import { HStack } from "@/components/ui/hstack";
 import { CircleDollarSign, Info, Star } from "lucide-react-native";
 import { ScrollView, Text, View } from "react-native";
 
@@ -43,14 +44,14 @@ export default function ShoppingArticle() {
           </View>
         </View>
 
-        <View className={"flex flex-row "}>
+        <HStack className={"flex flex-row"} space={"xs"}>
           <View className={"rounded border bg-white p-1"}>
             <Text>배달</Text>
           </View>
           <View className={"rounded border bg-white p-1"}>
             <Text>배달팁 할인중</Text>
           </View>
-        </View>
+        </HStack>
       </View>
     </View>
   );

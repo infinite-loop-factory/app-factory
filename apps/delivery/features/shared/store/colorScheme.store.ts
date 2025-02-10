@@ -3,7 +3,7 @@ import { create } from "zustand";
 
 export type ColorSchemeType = "light" | "dark";
 type ColorSchemeContextType = {
-  colorScheme?: ColorSchemeType;
+  colorScheme: ColorSchemeType;
   toggleColorScheme: () => void;
   setColorScheme: (colorScheme: ColorSchemeType) => void;
 };
