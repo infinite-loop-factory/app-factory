@@ -13,7 +13,7 @@ export default function ParallaxScrollView({
   scrollEnabled = true,
 }: ParallaxScrollViewProps) {
   const scrollRef = useAnimatedRef<Animated.ScrollView>();
-  const backgroundColor = useThemeColor({}, "background");
+  const backgroundColor = useThemeColor("background");
 
   if (scrollEnabled) {
     return (
