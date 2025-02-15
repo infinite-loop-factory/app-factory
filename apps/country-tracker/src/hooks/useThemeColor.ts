@@ -1,16 +1,13 @@
 import { themeAtom } from "@/atoms/theme.atom";
-import { COLORS } from "@/constants/colors";
+import { TOKENS } from "@/constants/color-tokens";
 import { useAtomValue } from "jotai";
 
-export function useThemeColor(
-  props: { light?: string; dark?: string },
-  colorName: keyof typeof COLORS.light & keyof typeof COLORS.dark,
-) {
-  const savedTheme = useAtomValue(themeAtom);
-  const colorFromProps = props[savedTheme];
+type ColorToken = keyof typeof TOKENS.light;
+type ColorTokenName = ColorToken extends `--color-${infer R}` ? R : never;
 
-  if (colorFromProps) {
-    return colorFromProps;
-  }
-  return COLORS[savedTheme][colorName];
+export function useThemeColor(colorName: ColorTokenName): string {
+  const savedTheme = useAtomValue(themeAtom);
+
+  const tokenKey = `--color-${colorName}` as ColorToken;
+  return TOKENS[savedTheme][tokenKey];
 }

@@ -10,7 +10,6 @@ import {
   SelectPortal,
   SelectTrigger,
 } from "@/components/ui/select";
-import { COLORS } from "@/constants/colors";
 import type { ReactNode } from "react";
 import { useEffect, useState } from "react";
 import { Image, Text, View } from "react-native";
@@ -100,10 +99,7 @@ export default function WebviewLayout({ children }: { children: ReactNode }) {
           }}
         >
           <View className={"flex-1"}>
-            <View
-              className={"flex-1"}
-              style={{ backgroundColor: COLORS.light.background }}
-            >
+            <View className={"flex-1"} style={{ backgroundColor: "#FFF" }}>
               {children}
             </View>
           </View>
