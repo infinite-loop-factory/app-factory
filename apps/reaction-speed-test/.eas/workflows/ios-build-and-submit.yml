@@ -1,0 +1,17 @@
+name: Release iOS app
+
+on:
+  push:
+    branches: ['feature/reaction-speed-test']
+
+jobs:
+  build:
+    type: build
+    params:
+      platform: ios
+      profile: production
+  submit:
+    needs: [build]
+    type: submit
+    params:
+      build_id: ${{ needs.build.outputs.build_id }}

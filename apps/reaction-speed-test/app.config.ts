@@ -60,5 +60,11 @@ export default ({ config }: ConfigContext): ExpoConfig => {
     //   supabaseUrl: env.supabaseUrl,
     //   supabaseAnonKey: env.supabaseAnonKey,
     // },
+    extra: {
+      eas: {
+        projectId: "bf06d3a4-f856-475c-8c2b-993178ae6c12",
+      },
+    },
+    owner: "jam-park",
   };
 };
