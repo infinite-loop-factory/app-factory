@@ -23,7 +23,7 @@ export default function TabLayout() {
   const [iconHighlightColor, tabBackgroundColor, borderColor] = useThemeColor([
     "primary-500",
     "background",
-    "background-200",
+    "outline-200",
   ]);
 
   const tabs: TabInfo[] = [
