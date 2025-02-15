@@ -1,10 +1,11 @@
+import { Box } from "@/components/ui/box";
 import { Button, ButtonText } from "@/components/ui/button";
+import { HStack } from "@/components/ui/hstack";
+import { Text } from "@/components/ui/text";
 import { useColorToken } from "@/features/shared/hooks/useThemeColor";
 import { useUserStore } from "@/features/user/store/user.store";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { Text } from "react-native";
-import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function MyPage() {
@@ -19,70 +20,75 @@ export default function MyPage() {
   return (
     <SafeAreaView className={"flex-1 "}>
       {/*header*/}
-      <View className={"flex flex-row items-center justify-between p-[16px]"}>
-        <View>
-          <Text className={"title-3 !font-extrabold"}>마이배민</Text>
-        </View>
+      <Box className={"flex flex-row items-center justify-between p-[16px]"}>
+        <Box>
+          <Text size={"xl"}>마이배민</Text>
+        </Box>
 
-        <View className="flex flex-row items-center gap-5">
+        <Box className="flex flex-row items-center gap-5">
           <Ionicons name={"notifications"} size={24} color={typography} />
           <Ionicons name={"settings"} size={24} color={typography} />
-        </View>
-      </View>
+        </Box>
+      </Box>
 
       {/*  body */}
-      <View className={"flex px-[16px]"}>
-        <View className={"flex flex-row gap-[16px]"}>
+      <Box className={"flex px-[16px]"}>
+        <Box className={"flex flex-row gap-[16px]"}>
           {/*image */}
-          <View
+          <Box
             className={"min-h-[53px] min-w-[53px] rounded-full bg-primary"}
           />
 
           {/* 상태 */}
-          <View className={"flex gap-[4px]"}>
-            <View>
+          <Box className={"flex gap-[4px]"}>
+            <Box>
               {user ? (
-                <View className={"flex flex-row gap-[8px]"}>
+                <HStack className={"items-center"} space={"md"}>
                   <Text className={"body-2"}>{user?.name}</Text>
-                  <Button onPress={logout} size={"2xs"}>
+                  <Button
+                    className={"text-white"}
+                    onPress={logout}
+                    size={"2xs"}
+                  >
                     <ButtonText>로그아웃</ButtonText>
                   </Button>
-                </View>
+                </HStack>
               ) : (
-                <View className={"flex flex-row gap-[4px]"}>
+                <Box className={"flex flex-row gap-[4px]"}>
                   <Button
                     onPress={() => router.push("/auth/login")}
                     size={"2xs"}
                   >
-                    <ButtonText>로그인</ButtonText>
+                    <ButtonText className={"text-white"}>로그인</ButtonText>
                   </Button>
                   <Button
                     onPress={() => router.push("/auth/signup")}
                     size={"2xs"}
                   >
-                    <ButtonText>회원가입</ButtonText>
+                    <ButtonText className={"text-white"}>회원가입</ButtonText>
                   </Button>
-                </View>
+                </Box>
               )}
-            </View>
-            <View className={"flex flex-row gap-[8px]"}>
+            </Box>
+            <Box className={"flex flex-row gap-[8px]"}>
               <Text className={"label-6"}>리뷰관리</Text>
               <Text className={"label-6"}>|</Text>
               <Text className={"label-6"}>주소관리</Text>
-            </View>
-          </View>
-        </View>
+            </Box>
+          </Box>
+        </Box>
 
-        <View className={"min-h-[16px]"} />
+        <Box className={"min-h-[16px]"} />
 
         {/*  AD 영역*/}
-        <View className={"rounded-xl border border-outline-300 p-[12px]"}>
+        <Box className={"rounded-xl border border-outline-300 p-[12px]"}>
           <Text className={"body-5 !font-extrabold"}>
             샤르르 소리까지 나는{" "}
-            <Text className={"text-yellow-500"}>달달한</Text> 나의 배민 취향
+            <Text className={"text-yellow-500"}>달달한</Text>{" "}
+            <Text>나의 배민 취향</Text>
           </Text>
-        </View>
-      </View>
+        </Box>
+      </Box>
     </SafeAreaView>
   );
 }

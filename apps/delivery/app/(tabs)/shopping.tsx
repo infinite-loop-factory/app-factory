@@ -1,7 +1,9 @@
 import { Ionicons } from "@expo/vector-icons";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { ScrollView, TouchableOpacity } from "react-native";
 
 import ShoppingArticle from "@/components/shopping/shopping.article";
+import { Box } from "@/components/ui/box";
+import { Text } from "@/components/ui/text";
 import { useColorToken } from "@/features/shared/hooks/useThemeColor";
 import { cn } from "@infinite-loop-factory/common";
 import { useMemo, useState } from "react";
@@ -22,26 +24,26 @@ export default function Shopping() {
     <SafeAreaView className={"flex-1"}>
       <ScrollView>
         {/*  head */}
-        <View className="sticky top-0 z-[10000] flex flex-row justify-between bg-background-50 p-5 py-4">
+        <Box className="sticky top-0 z-[10000] flex flex-row justify-between bg-background-50 p-5 py-4">
           <TouchableOpacity
             className={"flex flex-row items-center justify-center gap-1"}
           >
             <Text className="title-3">서초구 효령로 321</Text>
             <Ionicons name={"chevron-down"} size={20} color={typography} />
           </TouchableOpacity>
-          <View className="flex flex-row gap-5">
+          <Box className="flex flex-row gap-5">
             <Ionicons name={"calculator"} size={24} color={typography} />
             <Ionicons name={"search"} size={24} color={typography} />
             <Ionicons name={"cart-outline"} size={24} color={typography} />
-          </View>
-        </View>
+          </Box>
+        </Box>
 
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
           className={" border-outline-50 border-b"}
         >
-          <View
+          <Box
             className={"flex w-full flex-row gap-[15px] space-x-3 px-5 pt-2"}
           >
             {categories.map((d) => (
@@ -50,17 +52,17 @@ export default function Shopping() {
                 key={d}
                 className={"min-w-[60px]"}
               >
-                <View
+                <Box
                   className={cn(" py-1 font-extrabold", {
                     "!text-typography-0 border-typography-0 border-b-2":
                       d === currentMenu,
                   })}
                 >
                   <Text className={"title-3 text-center"}>{d}</Text>
-                </View>
+                </Box>
               </TouchableOpacity>
             ))}
-          </View>
+          </Box>
         </ScrollView>
 
         <ScrollView
@@ -68,7 +70,7 @@ export default function Shopping() {
           showsHorizontalScrollIndicator={false}
           className={"border-outline-50 border-b"}
         >
-          <View
+          <Box
             className={
               "flex h-full w-full flex-row items-center justify-center gap-3 space-x-3 p-2 pt-2"
             }
@@ -78,37 +80,37 @@ export default function Shopping() {
                 "flex h-[30px] items-center justify-center rounded-3xl bg-white px-3 shadow"
               }
             >
-              <Text className={"m-auto font-bold"}>기본순</Text>
+              <Text className={"m-auto font-bold text-black"}>기본순</Text>
             </TouchableOpacity>
             <TouchableOpacity
               className={
                 "flex h-[30px] items-center justify-center rounded-3xl bg-white px-3 shadow"
               }
             >
-              <Text className={"m-auto font-bold"}>쿠폰</Text>
+              <Text className={"m-auto font-bold text-black"}>쿠폰</Text>
             </TouchableOpacity>
             <TouchableOpacity
               className={
                 "flex h-[30px] items-center justify-center rounded-3xl bg-white px-3 shadow"
               }
             >
-              <Text className={"m-auto font-bold"}>배달방식</Text>
+              <Text className={"m-auto font-bold text-black"}>배달방식</Text>
             </TouchableOpacity>
             <TouchableOpacity
               className={
                 "flex h-[30px] items-center justify-center rounded-3xl bg-white px-3 shadow"
               }
             >
-              <Text className={"m-auto font-bold"}>배달팁</Text>
+              <Text className={"m-auto font-bold text-black"}>배달팁</Text>
             </TouchableOpacity>
-          </View>
+          </Box>
         </ScrollView>
 
-        <View>
-          <View className={"p-3"}>
+        <Box>
+          <Box className={"p-3"}>
             {[...Array(10)].map((_d, i) => {
               return (
-                <View
+                <Box
                   key={String(i)}
                   className={cn(
                     "border-outline-50 border-b last:border-b-0",
@@ -116,11 +118,11 @@ export default function Shopping() {
                   )}
                 >
                   <ShoppingArticle />
-                </View>
+                </Box>
               );
             })}
-          </View>
-        </View>
+          </Box>
+        </Box>
       </ScrollView>
     </SafeAreaView>
   );
