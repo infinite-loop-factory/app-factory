@@ -5,9 +5,20 @@ import { useAtomValue } from "jotai";
 type ColorToken = keyof typeof TOKENS.light;
 type ColorTokenName = ColorToken extends `--color-${infer R}` ? R : never;
 
-export function useThemeColor(colorName: ColorTokenName): string {
+export function useThemeColor(colorName: ColorTokenName): string;
+export function useThemeColor(colorNames: ColorTokenName[]): string[];
+export function useThemeColor(
+  colorNames: ColorTokenName | ColorTokenName[],
+): string | string[] {
   const savedTheme = useAtomValue(themeAtom);
 
-  const tokenKey = `--color-${colorName}` as ColorToken;
+  if (Array.isArray(colorNames)) {
+    return colorNames.map((name) => {
+      const tokenKey = `--color-${name}` as ColorToken;
+      return TOKENS[savedTheme][tokenKey];
+    });
+  }
+
+  const tokenKey = `--color-${colorNames}` as ColorToken;
   return TOKENS[savedTheme][tokenKey];
 }

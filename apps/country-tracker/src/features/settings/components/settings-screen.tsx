@@ -1,86 +1,135 @@
-import { Platform } from "react-native";
-
-import { Collapsible } from "@/components/Collapsible";
-import { ExternalLink } from "@/components/ExternalLink";
+import { themeAtom } from "@/atoms/theme.atom";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
-import { ThemedView } from "@/components/ThemedView";
+import { Box } from "@/components/ui/box";
+import { Heading } from "@/components/ui/heading";
+import { Switch } from "@/components/ui/switch";
 import { Text } from "@/components/ui/text";
+import { useThemeColor } from "@/hooks/useThemeColor";
+import { useAtom } from "jotai";
+import { ChevronRight, Moon, Sun } from "lucide-react-native";
+import { TouchableOpacity, View } from "react-native";
 
 export default function SettingsScreen() {
+  const [theme, setTheme] = useAtom(themeAtom);
+  const toggleTheme = () => setTheme(theme === "light" ? "dark" : "light");
+
+  const [
+    background, // 카드 배경, 전체 배경
+    borderColor, // 테두리 색
+    headingColor, // 헤딩 텍스트 색
+    textColor, // 일반 텍스트 색
+    highlightColor, // 스위치 OFF일 때 트랙 색상
+    switchBgColor, // iOS 전용 배경색
+  ] = useThemeColor([
+    "background",
+    "outline-200",
+    "typography-900",
+    "typography",
+    "primary-400", // ON 트랙용 (주황색 계열)
+    "background-100", // iOS 백그라운드
+  ]);
+
   return (
     <ParallaxScrollView>
-      <ThemedView className="flex-row gap-2">
-        <Text bold size="4xl">
-          Explore
-        </Text>
-      </ThemedView>
-      <Text>This app includes example code to help you get started.</Text>
-      <Collapsible title="File-based routing">
-        <Text>
-          This app has two screens: <Text bold>app/(tabs)/index.tsx</Text> and{" "}
-          <Text bold>app/(tabs)/explore.tsx</Text>
-        </Text>
-        <Text>
-          The layout file in <Text bold>app/(tabs)/_layout.tsx</Text> sets up
-          the tab navigator.
-        </Text>
-        <ExternalLink href="https://docs.expo.dev/router/introduction">
-          <Text bold>Learn more</Text>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Android, iOS, and web support">
-        <Text>
-          You can open this project on Android, iOS, and the web. To open the
-          web version, press <Text bold>w</Text> in the terminal running this
-          project.
-        </Text>
-      </Collapsible>
-      <Collapsible title="Images">
-        <Text>
-          For static images, you can use the <Text bold>@2x</Text> and{" "}
-          <Text bold>@3x</Text> suffixes to provide files for different screen
-          densities
-        </Text>
-        <ExternalLink href="https://reactnative.dev/docs/images">
-          <Text underline>Learn more</Text>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Custom fonts">
-        <Text>
-          Open <Text bold>app/_layout.tsx</Text> to see how to load{" "}
-          <Text className="font-mono">custom fonts such as this one.</Text>
-        </Text>
-        <ExternalLink href="https://docs.expo.dev/versions/latest/sdk/font">
-          <Text underline>Learn more</Text>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Light and dark mode components">
-        <Text>
-          This template has light and dark mode support. The{" "}
-          <Text bold>useColorScheme()</Text> hook lets you inspect what the
-          user's current color scheme is, and so you can adjust UI colors
-          accordingly.
-        </Text>
-        <ExternalLink href="https://docs.expo.dev/develop/user-interface/color-themes/">
-          <Text underline>Learn more</Text>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Animations">
-        <Text>
-          This template includes an example of an animated component. The{" "}
-          <Text bold>components/HelloWave.tsx</Text> component uses the powerful{" "}
-          <Text bold>react-native-reanimated</Text> library to create a waving
-          hand animation. library to create a waving hand animation.
-        </Text>
-        {Platform.select({
-          ios: (
-            <Text>
-              The <Text bold>components/ParallaxScrollView.tsx</Text> component
-              provides a parallax effect for the header image.
+      {/* 상단 헤더 영역 */}
+      <Box className="mb-4 px-1 pt-6">
+        <Heading className="font-bold text-3xl" style={{ color: headingColor }}>
+          Settings
+        </Heading>
+      </Box>
+
+      {/* Appearance 그룹 */}
+      <Box
+        className="mx-1 mb-4 rounded-lg border shadow-xs"
+        style={{ backgroundColor: background, borderColor }}
+      >
+        <Box
+          className="border-b p-4"
+          style={{ borderBottomColor: borderColor }}
+        >
+          <Heading
+            className="font-bold text-xl"
+            style={{ color: headingColor }}
+          >
+            Appearance
+          </Heading>
+        </Box>
+        <View className="flex-row items-center justify-between p-4">
+          <View className="flex-row items-center">
+            <Text
+              className="mr-2 font-bold text-base"
+              style={{ color: textColor }}
+            >
+              Theme
             </Text>
-          ),
-        })}
-      </Collapsible>
+            {theme === "light" ? (
+              <Sun size={20} color={textColor} />
+            ) : (
+              <Moon size={20} color={textColor} />
+            )}
+          </View>
+          <Switch
+            value={theme === "dark"}
+            onValueChange={toggleTheme}
+            // iOS 환경에서 배경색
+            ios_backgroundColor={switchBgColor}
+            // OFF / ON 트랙 색상
+            trackColor={{ false: switchBgColor, true: switchBgColor }}
+            // Thumb(동그라미) 색상
+            thumbColor={highlightColor}
+            // @ts-expect-error
+            activeThumbColor={highlightColor}
+          />
+        </View>
+        <TouchableOpacity className="flex-row items-center justify-between p-4">
+          <Text className="font-bold text-base" style={{ color: textColor }}>
+            Language
+          </Text>
+          <ChevronRight size={20} color={textColor} />
+        </TouchableOpacity>
+      </Box>
+
+      {/* General 그룹 */}
+      <Box
+        className="mx-1 mb-4 rounded-lg border shadow-xs"
+        style={{ backgroundColor: background, borderColor }}
+      >
+        <Box
+          className="border-b p-4"
+          style={{ borderBottomColor: borderColor }}
+        >
+          <Heading
+            className="font-bold text-xl"
+            style={{ color: headingColor }}
+          >
+            General
+          </Heading>
+        </Box>
+        <TouchableOpacity
+          className="flex-row items-center justify-between border-b p-4"
+          style={{ borderBottomColor: borderColor }}
+        >
+          <Text className="font-bold text-base" style={{ color: textColor }}>
+            Rate the App
+          </Text>
+          <ChevronRight size={20} color={textColor} />
+        </TouchableOpacity>
+        <TouchableOpacity
+          className="flex-row items-center justify-between border-b p-4"
+          style={{ borderBottomColor: borderColor }}
+        >
+          <Text className="font-bold text-base" style={{ color: textColor }}>
+            License
+          </Text>
+          <ChevronRight size={20} color={textColor} />
+        </TouchableOpacity>
+        <TouchableOpacity className="flex-row items-center justify-between p-4">
+          <Text className="font-bold text-base" style={{ color: textColor }}>
+            Denylist Countries
+          </Text>
+          <ChevronRight size={20} color={textColor} />
+        </TouchableOpacity>
+      </Box>
     </ParallaxScrollView>
   );
 }

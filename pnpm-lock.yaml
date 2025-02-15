@@ -123,6 +123,9 @@ importers:
       '@gluestack-ui/select':
         specifier: ^0.1.30
         version: 0.1.30(react-dom@18.2.0(react@18.2.0))(react-native@0.74.5(@babel/core@7.26.7)(@babel/preset-env@7.26.7(@babel/core@7.26.7))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0)
+      '@gluestack-ui/switch':
+        specifier: ^0.1.23
+        version: 0.1.23(react-dom@18.2.0(react@18.2.0))(react-native@0.74.5(@babel/core@7.26.7)(@babel/preset-env@7.26.7(@babel/core@7.26.7))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0)
       '@gluestack-ui/toast':
         specifier: ^1.0.8
         version: 1.0.8(react-dom@18.2.0(react@18.2.0))(react-native@0.74.5(@babel/core@7.26.7)(@babel/preset-env@7.26.7(@babel/core@7.26.7))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0)
@@ -2584,6 +2587,12 @@ packages:
       react: '>=16'
       react-dom: '>=16'
 
+  '@gluestack-ui/switch@0.1.23':
+    resolution: {integrity: sha512-Ur2EMsDyXMTUdXcvrs24InpXpqY0Mq2BhzfxdfvDWXEuPGn6+UFokIBTUE7HwHBWp07Gjqj6WGDiGnhKJMuT+w==}
+    peerDependencies:
+      react: '>=16'
+      react-dom: '>=16'
+
   '@gluestack-ui/textarea@0.1.24':
     resolution: {integrity: sha512-maABWaI+Vif9S5twBVzcF1pqv43NMigYuKNM7aNZA5+Mzi3/cf3esPpYjB2VFg3r3VKLZq9JbVFkgLq9MauFxw==}
     peerDependencies:
@@ -3151,6 +3160,11 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
+  '@react-stately/toggle@3.8.1':
+    resolution: {integrity: sha512-MVpe79ghVQiwLmVzIPhF/O/UJAUc9B+ZSylVTyJiEPi0cwhbkKGQv9thOF0ebkkRkace5lojASqUAYtSTZHQJA==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
   '@react-stately/utils@3.10.5':
     resolution: {integrity: sha512-iMQSGcpaecghDIh3mZEpZfoFH3ExBwTtuBEcvZ2XnGzCgQjeYXcMdIUwAfVQLXFTdHUHGF6Gu6/dFrYsCzySBQ==}
     peerDependencies:
@@ -3158,6 +3172,11 @@ packages:
 
   '@react-types/button@3.10.2':
     resolution: {integrity: sha512-h8SB/BLoCgoBulCpyzaoZ+miKXrolK9XC48+n1dKJXT8g4gImrficurDW6+PRTQWaRai0Q0A6bu8UibZOU4syg==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
+  '@react-types/checkbox@3.9.1':
+    resolution: {integrity: sha512-0x/KQcipfNM9Nvy6UMwYG25roRLvsiqf0J3woTYylNNWzF+72XT0iI5FdJkE3w2wfa0obmSoeq4WcbFREQrH/A==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
@@ -11306,6 +11325,18 @@ snapshots:
     transitivePeerDependencies:
       - react-native
 
+  '@gluestack-ui/switch@0.1.23(react-dom@18.2.0(react@18.2.0))(react-native@0.74.5(@babel/core@7.26.7)(@babel/preset-env@7.26.7(@babel/core@7.26.7))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0)':
+    dependencies:
+      '@gluestack-ui/form-control': 0.1.19(react-dom@18.2.0(react@18.2.0))(react-native@0.74.5(@babel/core@7.26.7)(@babel/preset-env@7.26.7(@babel/core@7.26.7))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0)
+      '@gluestack-ui/utils': 0.1.14(react-dom@18.2.0(react@18.2.0))(react-native@0.74.5(@babel/core@7.26.7)(@babel/preset-env@7.26.7(@babel/core@7.26.7))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0)
+      '@react-native-aria/focus': 0.2.9(react-dom@18.2.0(react@18.2.0))(react-native@0.74.5(@babel/core@7.26.7)(@babel/preset-env@7.26.7(@babel/core@7.26.7))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0)
+      '@react-native-aria/interactions': 0.2.13(react-dom@18.2.0(react@18.2.0))(react-native@0.74.5(@babel/core@7.26.7)(@babel/preset-env@7.26.7(@babel/core@7.26.7))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0)
+      '@react-stately/toggle': 3.8.1(react@18.2.0)
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+    transitivePeerDependencies:
+      - react-native
+
   '@gluestack-ui/textarea@0.1.24(react-dom@18.2.0(react@18.2.0))(react-native@0.74.5(@babel/core@7.26.7)(@babel/preset-env@7.26.7(@babel/core@7.26.7))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0)':
     dependencies:
       '@gluestack-ui/form-control': 0.1.19(react-dom@18.2.0(react@18.2.0))(react-native@0.74.5(@babel/core@7.26.7)(@babel/preset-env@7.26.7(@babel/core@7.26.7))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0)
@@ -12289,12 +12320,25 @@ snapshots:
       '@swc/helpers': 0.5.15
       react: 18.2.0
 
+  '@react-stately/toggle@3.8.1(react@18.2.0)':
+    dependencies:
+      '@react-stately/utils': 3.10.5(react@18.2.0)
+      '@react-types/checkbox': 3.9.1(react@18.2.0)
+      '@react-types/shared': 3.27.0(react@18.2.0)
+      '@swc/helpers': 0.5.15
+      react: 18.2.0
+
   '@react-stately/utils@3.10.5(react@18.2.0)':
     dependencies:
       '@swc/helpers': 0.5.15
       react: 18.2.0
 
   '@react-types/button@3.10.2(react@18.2.0)':
+    dependencies:
+      '@react-types/shared': 3.27.0(react@18.2.0)
+      react: 18.2.0
+
+  '@react-types/checkbox@3.9.1(react@18.2.0)':
     dependencies:
       '@react-types/shared': 3.27.0(react@18.2.0)
       react: 18.2.0

@@ -20,7 +20,11 @@ const createTabBarIcon = (
 };
 
 export default function TabLayout() {
-  const iconHighlightColor = useThemeColor("primary-500");
+  const [iconHighlightColor, tabBackgroundColor, borderColor] = useThemeColor([
+    "primary-500",
+    "background",
+    "background-200",
+  ]);
 
   const tabs: TabInfo[] = [
     {
@@ -52,6 +56,10 @@ export default function TabLayout() {
         tabBarIconStyle: {
           marginTop: 5,
           marginBottom: -3,
+        },
+        tabBarStyle: {
+          borderTopColor: borderColor,
+          backgroundColor: tabBackgroundColor,
         },
       }}
     >
