@@ -62,9 +62,9 @@ export default ({ config }: ConfigContext): ExpoConfig => {
     // },
     extra: {
       eas: {
-        projectId: "bf06d3a4-f856-475c-8c2b-993178ae6c12",
+        projectId: "51a90ad0-6136-4643-8d36-bb77e2838ac4",
       },
     },
-    owner: "jam-park",
+    owner: "infinite-loop-factory",
   };
 };
