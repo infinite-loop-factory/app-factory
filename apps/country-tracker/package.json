@@ -24,6 +24,7 @@
     "@gluestack-ui/nativewind-utils": "^1.0.26",
     "@gluestack-ui/overlay": "^0.1.16",
     "@gluestack-ui/select": "^0.1.30",
+    "@gluestack-ui/switch": "^0.1.23",
     "@gluestack-ui/toast": "^1.0.8",
     "@legendapp/motion": "^2.4.0",
     "@react-native-async-storage/async-storage": "^2.1.0",
