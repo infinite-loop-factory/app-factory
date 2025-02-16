@@ -6,7 +6,7 @@
   "scripts": {
     "android": "cross-env DARK_MODE=media expo start --android",
     "prebuild": "rm -rf patches",
-    "build:development": "eas build --profile development --local",
+    "build:development": "eas build --profile development --platform ios --local",
     "build:local": "eas build --local",
     "build:preview": "eas build --profile preview --local",
     "build:production": "eas build --profile production --local",

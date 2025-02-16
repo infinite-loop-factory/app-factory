@@ -16,12 +16,18 @@
       "env": {
         "PNPM_VERSION": "9.11.0"
       },
-      "distribution": "internal"
+      "distribution": "internal",
+      "ios": {
+        "simulator": true
+      }
     },
     "production": {
       "node": "20.18.0",
       "env": {
         "PNPM_VERSION": "9.11.0"
+      },
+      "ios": {
+        "simulator": true
       }
     }
   }
