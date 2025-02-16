@@ -3,7 +3,9 @@
     "development": {
       "node": "20.18.0",
       "env": {
-        "PNPM_VERSION": "9.11.0"
+        "PNPM_VERSION": "9.11.0",
+        "SKIP_POSTINSTALL": "1",
+        "PNPM_FLAGS": "--ignore-scripts"
       },
       "developmentClient": true,
       "distribution": "internal",
