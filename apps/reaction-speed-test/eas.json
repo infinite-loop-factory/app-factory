@@ -1,6 +1,11 @@
 {
   "build": {
     "development": {
+      "node": "20.18.0",
+      "env": {
+        "PNPM_VERSION": "9.11.0"
+      },
+      "prebuildCommands": ["rm -rf patches"],
       "developmentClient": true,
       "distribution": "internal",
       "ios": {
@@ -8,8 +13,19 @@
       }
     },
     "preview": {
+      "node": "20.18.0",
+      "env": {
+        "PNPM_VERSION": "9.11.0"
+      },
+      "prebuildCommands": ["rm -rf patches"],
       "distribution": "internal"
     },
-    "production": {}
+    "production": {
+      "node": "20.18.0",
+      "env": {
+        "PNPM_VERSION": "9.11.0"
+      },
+      "prebuildCommands": ["rm -rf patches"]
+    }
   }
 }
