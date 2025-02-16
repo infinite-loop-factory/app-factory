@@ -13,11 +13,14 @@ type TCourseCardProp = {
 };
 
 export default function CourseCard({ item }: TCourseCardProp) {
-  const { title, distance, totalTime, image, address } = item;
+  const { title, distance, totalTime, address } = item;
 
   return (
     <View className=" flex w-72 flex-column overflow-hidden rounded-lg border border-slate-200">
-      <Image src={image} className="h-40 w-72 " />
+      <Image
+        source={require("../../assets/images/walking-main-3.png")}
+        className="h-40 w-72"
+      />
       <View className="flex p-4">
         <Text className="mb-2 font-semibold text-md">{title}</Text>
         <View className="flex flex-row">
