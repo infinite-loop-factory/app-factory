@@ -40,6 +40,13 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
           "The app accesses your photos to let you share them with your friends.",
       },
     ],
+    [
+      "expo-location",
+      {
+        locationAlwaysAndWhenInUsePermission:
+          "Allow '산책 with 댕댕' to use your location.",
+      },
+    ],
   ],
   experiments: {
     tsconfigPaths: true,
