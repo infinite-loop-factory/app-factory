@@ -16,6 +16,9 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   ios: {
     supportsTablet: true,
+    infoPlist: {
+      UIBackgroundModes: ["location"],
+    },
   },
   android: {
     adaptiveIcon: {
@@ -28,7 +31,17 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     output: "static",
     favicon: "./src/assets/images/favicon.png",
   },
-  plugins: ["expo-router", "expo-localization"],
+  plugins: [
+    "expo-localization",
+    [
+      "expo-location",
+      {
+        isIosBackgroundLocationEnabled: true,
+        isAndroidBackgroundLocationEnabled: true,
+      },
+    ],
+    "expo-router",
+  ],
   experiments: {
     tsconfigPaths: true,
     typedRoutes: true,
