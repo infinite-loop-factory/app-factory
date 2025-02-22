@@ -5,6 +5,7 @@ import {
   DefaultTheme,
   ThemeProvider,
 } from "@react-navigation/native";
+import { useMount } from "@reactuses/core";
 import * as Sentry from "@sentry/react-native";
 import { isRunningInExpoGo } from "expo";
 import { useFonts } from "expo-font";
@@ -18,6 +19,7 @@ import "@/i18n";
 import { themeAtom } from "@/atoms/theme.atom";
 import WebviewLayout from "@/components/WebviewLayout";
 import { env } from "@/constants/env";
+import { startLocationTask } from "@/features/location/location-permission";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 const navigationIntegration = Sentry.reactNavigationIntegration({
@@ -66,6 +68,10 @@ function RootLayout() {
       setSavedTheme(initialTheme);
     }
   }, [colorScheme, savedTheme]);
+
+  useMount(() => {
+    startLocationTask();
+  });
 
   if (!loaded) {
     return null;
