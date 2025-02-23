@@ -1,8 +1,12 @@
 import { execSync } from "node:child_process";
+import type { ExecSyncOptionsWithBufferEncoding } from "node:child_process";
 
-export const runCommand = (command: string) => {
+export const runCommand = (
+  command: string,
+  _options: ExecSyncOptionsWithBufferEncoding,
+) => {
   try {
-    execSync(command, { stdio: "inherit" });
+    execSync(command, { stdio: "inherit", ..._options });
   } catch (error: unknown) {
     console.error(
       error instanceof Error
