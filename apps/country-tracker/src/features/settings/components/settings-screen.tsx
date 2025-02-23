@@ -55,9 +55,11 @@ export default function SettingsScreen() {
                 borderColor,
               }}
             >
-              <ToastTitle style={{ color: errorColor }}>앗!</ToastTitle>
+              <ToastTitle style={{ color: errorColor }}>
+                {i18n.t("settings.toast.language.title")}
+              </ToastTitle>
               <ToastDescription style={{ color: textColor }}>
-                설정 &gt; 앱 &gt; 언어설정에서 직접 언어를 바꿔주세요.
+                {i18n.t("settings.toast.language.description")}
               </ToastDescription>
             </Toast>
           );
