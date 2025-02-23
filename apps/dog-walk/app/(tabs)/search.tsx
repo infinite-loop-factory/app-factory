@@ -1,13 +1,12 @@
 import CustomSafeAreaView from "@/components/CustomSafeAriaView";
+import KakaoMap from "@/components/KakaoMap";
 import CourseDetailCard from "@/components/card/CourseDetailCard";
-import { Text } from "@/components/ui/text";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import * as Location from "expo-location";
 import { useFocusEffect } from "expo-router";
 import { useCallback, useMemo, useRef, useState } from "react";
-import { Alert, Linking, StyleSheet } from "react-native";
+import { Alert, Linking } from "react-native";
 import { FlatList, GestureHandlerRootView } from "react-native-gesture-handler";
-import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 
 export default function SearchScreen() {
   const bottomSheetRef = useRef<BottomSheet>(null);
@@ -91,23 +90,9 @@ export default function SearchScreen() {
   return (
     <CustomSafeAreaView>
       <GestureHandlerRootView className="flex-1">
-        <MapView
-          provider={PROVIDER_GOOGLE}
-          style={styles.map}
-          initialRegion={{
-            latitude: 37.5665,
-            longitude: 126.978,
-            latitudeDelta: 0.05,
-            longitudeDelta: 0.05,
-          }}
-        >
-          {/* {location && <Marker coordinate={location} title="현재 위치" />} */}
-        </MapView>
+        <KakaoMap latitude={location.latitude} longitude={location.longitude} />
         <BottomSheet ref={bottomSheetRef} snapPoints={snapPoints}>
           <BottomSheetView className="flex-1 items-center p-4">
-            <Text>
-              {location.latitude} {location.longitude}
-            </Text>
             <FlatList
               className="w-full"
               data={courseList}
@@ -120,10 +105,3 @@ export default function SearchScreen() {
     </CustomSafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  map: {
-    width: "100%",
-    flex: 1,
-  },
-});
