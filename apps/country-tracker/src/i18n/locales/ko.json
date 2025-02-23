@@ -1,6 +1,28 @@
 {
   "welcome": "환영합니다",
-  "home": "홈",
   "map": "지도",
-  "settings": "설정"
+
+  "home": {
+    "tab": "홈",
+    "title": "방문 국가",
+    "search": "국가명 검색"
+  },
+
+  "settings": {
+    "tab": "홈",
+    "title": "설정",
+
+    "appearance": {
+      "title": "모양",
+      "theme": "테마 바꾸기",
+      "language": "언어 바꾸기"
+    },
+
+    "general": {
+      "title": "일반",
+      "denylist": "예외 국가 적용하기",
+      "rate-the-app": "앱 리뷰 남기기",
+      "license": "라이센스 보기"
+    }
+  }
 }

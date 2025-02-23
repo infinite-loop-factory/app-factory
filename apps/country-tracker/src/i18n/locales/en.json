@@ -1,6 +1,28 @@
 {
   "welcome": "Welcome",
-  "home": "Home",
   "map": "Map",
-  "settings": "Settings"
+
+  "home": {
+    "tab": "Home",
+    "title": "Visited Countries",
+    "search": "Search"
+  },
+
+  "settings": {
+    "tab": "Settings",
+    "title": "Settings",
+
+    "appearance": {
+      "title": "Appearance",
+      "theme": "Theme",
+      "language": "Language"
+    },
+
+    "general": {
+      "title": "General",
+      "denylist": "Denylist Countries",
+      "rate-the-app": "Rate the App",
+      "license": "License"
+    }
+  }
 }

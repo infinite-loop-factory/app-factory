@@ -17,6 +17,7 @@ import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
 import { COUNTRIES } from "@/features/home/constants/dummy";
 import { useThemeColor } from "@/hooks/useThemeColor";
+import i18n from "@/i18n";
 
 export default function HomeScreen() {
   const [data, setData] = useState<CountryItem[]>(COUNTRIES);
@@ -68,9 +69,9 @@ export default function HomeScreen() {
 
   return (
     <ParallaxScrollView scrollEnabled={false}>
-      <VStack space="md" className="mb-4 shrink-0 px-1 pt-6">
+      <VStack space="md" className="mb-4 shrink-0 px-1 pt-2">
         <Heading className="font-bold text-3xl" style={{ color: headingColor }}>
-          Visited Countries
+          {i18n.t("home.title")}
         </Heading>
         <Input
           className="rounded-full border px-4 py-3 shadow-xs"
@@ -78,7 +79,7 @@ export default function HomeScreen() {
           style={{ backgroundColor: inputBg, borderColor }}
         >
           <InputField
-            placeholder="Search..."
+            placeholder={i18n.t("home.search")}
             value={searchText}
             onChangeText={handleSearch}
             onSubmitEditing={() => handleSearch(searchText)}
