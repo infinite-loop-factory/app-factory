@@ -27,5 +27,9 @@
     "@infinite-loop-factory/config-typescript": "workspace:^",
     "type-fest": "catalog:",
     "typescript": "catalog:"
+  },
+  "peerDependencies": {
+    "expo-intent-launcher": "^11",
+    "expo-linking": "^6"
   }
 }

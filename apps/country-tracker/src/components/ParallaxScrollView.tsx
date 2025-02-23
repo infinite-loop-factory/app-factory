@@ -23,7 +23,7 @@ export default function ParallaxScrollView({
           scrollEventThrottle={16}
           contentContainerStyle={{ flexGrow: 1 }}
         >
-          <ThemedView className="flex-1 px-4 pt-6" style={{ backgroundColor }}>
+          <ThemedView className="flex-1 px-4 pt-2" style={{ backgroundColor }}>
             {children}
           </ThemedView>
         </Animated.ScrollView>
@@ -33,7 +33,7 @@ export default function ParallaxScrollView({
 
   return (
     <SafeAreaView className="flex-1" style={{ backgroundColor }}>
-      <ThemedView className="flex-1 px-4 pt-6" style={{ backgroundColor }}>
+      <ThemedView className="flex-1 px-4 pt-2" style={{ backgroundColor }}>
         {children}
       </ThemedView>
     </SafeAreaView>

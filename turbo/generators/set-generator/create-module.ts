@@ -52,7 +52,7 @@ export default function createModule(plop: PlopTypes.NodePlopAPI) {
         {
           type: "modify",
           path: `${destinationBase}/${kebabTitle}/package.json`,
-          async transform(content) {
+          transform(content) {
             const pkg = JSON.parse(content) as PackageJson;
             pkg.name = `@infinite-loop-factory/${kebabTitle}`;
 

@@ -4,6 +4,7 @@ packages:
 
 catalog:
   "@biomejs/biome": ^1.9.4
+  es-toolkit: ^1.32.0
   lucide-react-native: "^0.474.0"
   nativewind: 4.1.23
   react-native-css-interop: ^0.1.22
