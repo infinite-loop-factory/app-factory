@@ -9,6 +9,9 @@ catalogs:
     '@biomejs/biome':
       specifier: ^1.9.4
       version: 1.9.4
+    es-toolkit:
+      specifier: ^1.32.0
+      version: 1.32.0
     lucide-react-native:
       specifier: ^0.474.0
       version: 0.474.0
@@ -67,8 +70,8 @@ importers:
         specifier: ^2.3.0
         version: 2.3.0
       es-toolkit:
-        specifier: ^1.24.0
-        version: 1.31.0
+        specifier: 'catalog:'
+        version: 1.32.0
       husky:
         specifier: ^9.1.6
         version: 9.1.7
@@ -154,7 +157,7 @@ importers:
         specifier: ^2.1.1
         version: 2.1.1
       es-toolkit:
-        specifier: ^1.32.0
+        specifier: 'catalog:'
         version: 1.32.0
       expo:
         specifier: ~51.0.39
@@ -5348,9 +5351,6 @@ packages:
   es-to-primitive@1.3.0:
     resolution: {integrity: sha512-w+5mJ3GuFL+NjVtJlvydShqE1eN3h3PbI7/5LAsYJP/2qtuMXjfL2LpHSRqo4b4eSF5K/DH1JXKUAHSB2UW50g==}
     engines: {node: '>= 0.4'}
-
-  es-toolkit@1.31.0:
-    resolution: {integrity: sha512-vwS0lv/tzjM2/t4aZZRAgN9I9TP0MSkWuvt6By+hEXfG/uLs8yg2S1/ayRXH/x3pinbLgVJYT+eppueg3cM6tg==}
 
   es-toolkit@1.32.0:
     resolution: {integrity: sha512-ZfSfHP1l6ubgW/B/FRtqb9bYdMvI6jizbOSfbwwJNcOQ1QE6TFsC3jpQkZ900uUPSR3t3SU5Ds7UWKnYz+uP8Q==}
@@ -15166,8 +15166,6 @@ snapshots:
       is-callable: 1.2.7
       is-date-object: 1.1.0
       is-symbol: 1.1.1
-
-  es-toolkit@1.31.0: {}
 
   es-toolkit@1.32.0: {}
 
