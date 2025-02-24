@@ -29,7 +29,7 @@ export default function TabLayout() {
   const tabs: TabInfo[] = [
     {
       name: "index",
-      title: i18n.t("home"),
+      title: i18n.t("home.tab"),
       icon: createTabBarIcon(Home),
     },
     {
@@ -39,7 +39,7 @@ export default function TabLayout() {
     },
     {
       name: "settings",
-      title: i18n.t("settings"),
+      title: i18n.t("settings.tab"),
       icon: createTabBarIcon(Settings),
     },
   ];

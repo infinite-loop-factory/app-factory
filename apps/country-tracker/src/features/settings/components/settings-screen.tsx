@@ -4,37 +4,75 @@ import { Box } from "@/components/ui/box";
 import { Heading } from "@/components/ui/heading";
 import { Switch } from "@/components/ui/switch";
 import { Text } from "@/components/ui/text";
+import {
+  Toast,
+  ToastDescription,
+  ToastTitle,
+  useToast,
+} from "@/components/ui/toast";
 import { useThemeColor } from "@/hooks/useThemeColor";
+import i18n from "@/i18n";
+import { openLanguageSetting } from "@infinite-loop-factory/common";
 import { useAtom } from "jotai";
 import { ChevronRight, Moon, Sun } from "lucide-react-native";
 import { TouchableOpacity, View } from "react-native";
 
 export default function SettingsScreen() {
   const [theme, setTheme] = useAtom(themeAtom);
+  const toast = useToast();
   const toggleTheme = () => setTheme(theme === "light" ? "dark" : "light");
 
   const [
     background, // 카드 배경, 전체 배경
-    borderColor, // 테두리 색
-    headingColor, // 헤딩 텍스트 색
-    textColor, // 일반 텍스트 색
-    highlightColor, // 스위치 OFF일 때 트랙 색상
-    switchBgColor, // iOS 전용 배경색
+    borderColor, // 테두리
+    errorColor, // 에러 타이틀
+    headingColor, // 헤딩 텍스트
+    textColor, // 일반 텍스트
+    highlightColor, // 스위치 OFF일 때 트랙
+    switchBgColor, // iOS 전용 스위치 배경
   ] = useThemeColor([
     "background",
     "outline-200",
+    "error-600",
     "typography-900",
     "typography",
-    "primary-400", // ON 트랙용 (주황색 계열)
-    "background-100", // iOS 백그라운드
+    "primary-400",
+    "background-100",
   ]);
+
+  const handleLanguageSetting = async () => {
+    const openLanguageSettingResult = await openLanguageSetting();
+    if (!openLanguageSettingResult) {
+      toast.show({
+        duration: 3000,
+        render: () => {
+          return (
+            <Toast
+              action="error"
+              variant="outline"
+              style={{
+                backgroundColor: background,
+                borderColor,
+              }}
+            >
+              <ToastTitle style={{ color: errorColor }}>
+                {i18n.t("settings.toast.language.title")}
+              </ToastTitle>
+              <ToastDescription style={{ color: textColor }}>
+                {i18n.t("settings.toast.language.description")}
+              </ToastDescription>
+            </Toast>
+          );
+        },
+      });
+    }
+  };
 
   return (
     <ParallaxScrollView>
-      {/* 상단 헤더 영역 */}
-      <Box className="mb-4 px-1 pt-6">
+      <Box className="mb-4 px-1 pt-2">
         <Heading className="font-bold text-3xl" style={{ color: headingColor }}>
-          Settings
+          {i18n.t("settings.title")}
         </Heading>
       </Box>
 
@@ -51,16 +89,19 @@ export default function SettingsScreen() {
             className="font-bold text-xl"
             style={{ color: headingColor }}
           >
-            Appearance
+            {i18n.t("settings.appearance.title")}
           </Heading>
         </Box>
-        <View className="flex-row items-center justify-between p-4">
+        <View
+          className="flex-row items-center justify-between border-b px-4 android:py-3 ios:py-3 py-4"
+          style={{ borderColor }}
+        >
           <View className="flex-row items-center">
             <Text
               className="mr-2 font-bold text-base"
               style={{ color: textColor }}
             >
-              Theme
+              {i18n.t("settings.appearance.theme")}
             </Text>
             {theme === "light" ? (
               <Sun size={20} color={textColor} />
@@ -81,9 +122,12 @@ export default function SettingsScreen() {
             activeThumbColor={highlightColor}
           />
         </View>
-        <TouchableOpacity className="flex-row items-center justify-between p-4">
+        <TouchableOpacity
+          className="flex-row items-center justify-between p-4"
+          onPress={handleLanguageSetting}
+        >
           <Text className="font-bold text-base" style={{ color: textColor }}>
-            Language
+            {i18n.t("settings.appearance.language")}
           </Text>
           <ChevronRight size={20} color={textColor} />
         </TouchableOpacity>
@@ -102,7 +146,7 @@ export default function SettingsScreen() {
             className="font-bold text-xl"
             style={{ color: headingColor }}
           >
-            General
+            {i18n.t("settings.general.title")}
           </Heading>
         </Box>
         <TouchableOpacity
@@ -110,7 +154,7 @@ export default function SettingsScreen() {
           style={{ borderBottomColor: borderColor }}
         >
           <Text className="font-bold text-base" style={{ color: textColor }}>
-            Rate the App
+            {i18n.t("settings.general.denylist")}
           </Text>
           <ChevronRight size={20} color={textColor} />
         </TouchableOpacity>
@@ -119,13 +163,13 @@ export default function SettingsScreen() {
           style={{ borderBottomColor: borderColor }}
         >
           <Text className="font-bold text-base" style={{ color: textColor }}>
-            License
+            {i18n.t("settings.general.rate-the-app")}
           </Text>
           <ChevronRight size={20} color={textColor} />
         </TouchableOpacity>
         <TouchableOpacity className="flex-row items-center justify-between p-4">
           <Text className="font-bold text-base" style={{ color: textColor }}>
-            Denylist Countries
+            {i18n.t("settings.general.license")}
           </Text>
           <ChevronRight size={20} color={textColor} />
         </TouchableOpacity>
