@@ -12,7 +12,10 @@ import {
 } from "@/components/ui/toast";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import i18n from "@/i18n";
-import { openLanguageSetting } from "@infinite-loop-factory/common";
+import {
+  openLanguageSetting,
+  openStorePage,
+} from "@infinite-loop-factory/common";
 import { useAtom } from "jotai";
 import { ChevronRight, Moon, Sun } from "lucide-react-native";
 import { TouchableOpacity, View } from "react-native";
@@ -161,6 +164,7 @@ export default function SettingsScreen() {
         <TouchableOpacity
           className="flex-row items-center justify-between border-b p-4"
           style={{ borderBottomColor: borderColor }}
+          onPress={() => openStorePage({})}
         >
           <Text className="font-bold text-base" style={{ color: textColor }}>
             {i18n.t("settings.general.rate-the-app")}
