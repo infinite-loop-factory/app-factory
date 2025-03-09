@@ -1,3 +1,4 @@
+import { router } from "expo-router";
 import { MapPinnedIcon, StarIcon } from "lucide-react-native";
 import { Image } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -19,10 +20,14 @@ type TCourseDetailCardProp = {
 };
 
 export default function CourseDetailCard({ item }: TCourseDetailCardProp) {
-  const { title, distance, totalTime, address, rate } = item;
+  const { id, title, distance, totalTime, address, rate } = item;
 
   return (
-    <TouchableOpacity>
+    <TouchableOpacity
+      onPress={() => {
+        router.push({ pathname: "/(screens)/detail/[id]", params: { id } });
+      }}
+    >
       <HStack className="border-slate-200 border-b p-4">
         <Image
           className="mr-4 h-20 w-20 rounded-lg object-cover"
