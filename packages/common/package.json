@@ -30,6 +30,7 @@
   },
   "peerDependencies": {
     "expo-intent-launcher": "^11",
-    "expo-linking": "^6"
+    "expo-linking": "^6",
+    "react-native": ">=0.74"
   }
 }
