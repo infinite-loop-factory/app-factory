@@ -12,7 +12,6 @@ export default function MapGlobe() {
 
   useEffect(() => {
     (async () => {
-      // 위치 권한 및 현재 위치 로직 (실제 기기/에뮬레이터에서만 동작)
       const location = await Location.getCurrentPositionAsync();
       if (location) {
         setRegion((prev) => ({
