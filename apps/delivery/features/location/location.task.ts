@@ -10,12 +10,13 @@ const LOCATION_TASK_NAME = "background-location-task";
 TaskManager.defineTask<{ locations: Location.LocationObject[] }>(
   LOCATION_TASK_NAME,
   async ({ data, error }) => {
+    if (error) return console.error("🚨 백그라운드 위치 추적 오류:", error);
+
     const orderId = await AsyncStorage.getItem("orderId");
 
-    if (error || !data || !orderId)
-      return console.error("🚨 백그라운드 위치 추적 오류:", error);
+    if (!(data && orderId)) return;
 
-    const orderStatus = await supabase
+    const { data: orderData, error: orderError } = await supabase
       .from("order")
       .select("id, order_status(status), driver_location(id)")
       .order("created_at", {
@@ -27,9 +28,8 @@ TaskManager.defineTask<{ locations: Location.LocationObject[] }>(
       .eq("id", +orderId)
       .single();
 
-    if (orderStatus.error) return console.error("🚨 에러발생");
-    if (isEmpty(orderStatus.data.order_status)) {
-      console.error("배송이 완료되었습니다.");
+    if (orderError) return console.error("🚨 에러발생");
+    if (isEmpty(orderData.order_status)) {
       return stopBackgroundLocationTracking();
     }
 
@@ -39,7 +39,7 @@ TaskManager.defineTask<{ locations: Location.LocationObject[] }>(
 
     const { latitude = 0, longitude = 0 } = locations?.coords ?? {};
 
-    const driver = orderStatus.data.driver_location[0];
+    const driver = orderData.driver_location[0];
     if (!driver) return console.error("🚨 에러발생");
 
     await supabase
