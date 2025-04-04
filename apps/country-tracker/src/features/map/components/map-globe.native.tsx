@@ -23,7 +23,6 @@ export default function MapGlobe() {
     })();
   }, []);
 
-  // 네이티브 환경에서 MapView 사용
   return (
     <MapView
       style={{ flex: 1 }}
