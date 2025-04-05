@@ -20,6 +20,7 @@ import WebviewLayout from "@/components/WebviewLayout";
 import { env } from "@/constants/env";
 import "@/features/location/location-task";
 import { startLocationTask } from "@/features/location/location-permission";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 const navigationIntegration = Sentry.reactNavigationIntegration({
@@ -81,16 +82,21 @@ function RootLayout() {
     <SafeAreaProvider>
       <JotaiProvider>
         <GluestackUIProvider mode={savedTheme}>
-          <ThemeProvider
-            value={savedTheme === "dark" ? DarkTheme : DefaultTheme}
-          >
-            <WebviewLayout>
-              <Stack>
-                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-                <Stack.Screen name="+not-found" />
-              </Stack>
-            </WebviewLayout>
-          </ThemeProvider>
+          <GestureHandlerRootView style={{ flex: 1 }}>
+            <ThemeProvider
+              value={savedTheme === "dark" ? DarkTheme : DefaultTheme}
+            >
+              <WebviewLayout>
+                <Stack>
+                  <Stack.Screen
+                    name="(tabs)"
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Screen name="+not-found" />
+                </Stack>
+              </WebviewLayout>
+            </ThemeProvider>
+          </GestureHandlerRootView>
         </GluestackUIProvider>
       </JotaiProvider>
     </SafeAreaProvider>
