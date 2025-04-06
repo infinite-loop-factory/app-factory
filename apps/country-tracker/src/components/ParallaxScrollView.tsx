@@ -13,17 +13,17 @@ export default function ParallaxScrollView({
   scrollEnabled = true,
 }: ParallaxScrollViewProps) {
   const scrollRef = useAnimatedRef<Animated.ScrollView>();
-  const backgroundColor = useThemeColor({}, "background");
+  const backgroundColor = useThemeColor("background");
 
   if (scrollEnabled) {
     return (
-      <SafeAreaView className="flex-1" style={[{ backgroundColor }]}>
+      <SafeAreaView className="flex-1" style={{ backgroundColor }}>
         <Animated.ScrollView
           ref={scrollRef}
           scrollEventThrottle={16}
           contentContainerStyle={{ flexGrow: 1 }}
         >
-          <ThemedView className="flex-1 gap-4 overflow-hidden p-8">
+          <ThemedView className="flex-1 px-4 pt-2" style={{ backgroundColor }}>
             {children}
           </ThemedView>
         </Animated.ScrollView>
@@ -32,8 +32,8 @@ export default function ParallaxScrollView({
   }
 
   return (
-    <SafeAreaView className="flex-1" style={[{ backgroundColor }]}>
-      <ThemedView className="flex-1 gap-4 overflow-hidden p-8">
+    <SafeAreaView className="flex-1" style={{ backgroundColor }}>
+      <ThemedView className="flex-1 px-4 pt-2" style={{ backgroundColor }}>
         {children}
       </ThemedView>
     </SafeAreaView>

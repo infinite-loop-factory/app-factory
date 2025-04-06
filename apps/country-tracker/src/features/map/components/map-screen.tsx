@@ -1,19 +1,61 @@
 import { ThemedView } from "@/components/ThemedView";
-import { Globe } from "lucide-react-native";
-import { ImageBackground, Text, View } from "react-native";
+import { Button, ButtonIcon } from "@/components/ui/button";
+import { Heading } from "@/components/ui/heading";
+import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
+import MapGlobe from "@/features/map/components/map-globe";
+import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
+import { Search, Share } from "lucide-react-native";
+import { useRef, useState } from "react";
+import { View } from "react-native";
 
 export default function MapScreen() {
+  const bottomSheetRef = useRef<BottomSheet>(null);
+  const [searchText, setSearchText] = useState("");
+
+  const handleSheetChanges = (index: number) => {
+    // biome-ignore lint/suspicious/noConsole: 테스트
+    console.log("handleSheetChanges", index);
+  };
+
+  const handleShare = () => {
+    // biome-ignore lint/suspicious/noConsole: 테스트
+    console.log("handleShare");
+  };
+
+  const handleSearch = (text: string) => {
+    setSearchText(text);
+  };
+
   return (
     <ThemedView className="flex-1">
-      <ImageBackground
-        source={{ uri: "https://example.com/globe-background.png" }} // Globe 배경 이미지 URL
-        className="flex-1 items-center justify-center"
+      <MapGlobe />
+
+      <BottomSheet
+        ref={bottomSheetRef}
+        onChange={handleSheetChanges}
+        snapPoints={["40%", "90%", "14%"]}
+        enableDynamicSizing={false}
       >
-        <View className="items-center justify-center rounded-lg bg-black bg-opacity-50 p-5">
-          <Globe color="white" size={100} />
-          <Text className="mt-2 text-2xl text-white">Map Screen</Text>
-        </View>
-      </ImageBackground>
+        <BottomSheetView className="px-4 py-2">
+          <View className="mb-2 flex flex-row items-center justify-between">
+            <Heading className="font-bold text-xl">Countries</Heading>
+            <Button onPress={handleShare} variant="link" className="mr-1">
+              <ButtonIcon as={Share} />
+            </Button>
+          </View>
+
+          <Input className="rounded-full border px-4 py-3 shadow-xs">
+            <InputField
+              placeholder="Search for a country..."
+              value={searchText}
+              onChangeText={handleSearch}
+            />
+            <InputSlot>
+              <InputIcon as={Search} />
+            </InputSlot>
+          </Input>
+        </BottomSheetView>
+      </BottomSheet>
     </ThemedView>
   );
 }

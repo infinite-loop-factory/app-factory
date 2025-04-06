@@ -11,14 +11,17 @@ type TCourseCardProp = {
 };
 
 export default function ReviewCard({ item }: TCourseCardProp) {
-  const { image, name, review, createdAt } = item;
+  const { name, review, createdAt } = item;
 
   const screenWidth = Dimensions.get("window").width;
   const calculatedWidth = screenWidth - 110;
 
   return (
     <View className="mb-4 flex w-full flex-row rounded-lg border border-slate-200 p-4">
-      <Image src={image} className="mr-4 h-10 w-10 rounded-full" />
+      <Image
+        source={require("../../assets/images/blank-image.png")}
+        className="mr-4 h-10 w-10 rounded-full"
+      />
       <View style={{ width: calculatedWidth }} className="flex flex-column">
         <View className="flex flex-row justify-between">
           <Text className="mb-2 font-semibold text-md">{name}</Text>
