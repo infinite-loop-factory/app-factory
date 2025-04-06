@@ -3,13 +3,17 @@ import { ScrollView, TouchableOpacity } from "react-native";
 
 import ShoppingArticle from "@/components/shopping/shopping.article";
 import { Box } from "@/components/ui/box";
+import { Button, ButtonText } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
 import { useColorToken } from "@/features/shared/hooks/useThemeColor";
 import { cn } from "@infinite-loop-factory/common";
+import { useRouter } from "expo-router";
 import { useMemo, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Shopping() {
+  const router = useRouter();
+
   const { typography } = useColorToken({
     typography: true,
     primary: true,
@@ -82,6 +86,9 @@ export default function Shopping() {
             >
               <Text className={"m-auto font-bold text-black"}>기본순</Text>
             </TouchableOpacity>
+            <Button onPress={() => router.push("/map")} size={"2xs"}>
+              <ButtonText className={"text-white"}>맵보기</ButtonText>
+            </Button>
             <TouchableOpacity
               className={
                 "flex h-[30px] items-center justify-center rounded-3xl bg-white px-3 shadow"

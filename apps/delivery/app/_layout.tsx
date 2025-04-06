@@ -8,6 +8,7 @@ import "react-native-reanimated";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "@/i18n";
 import UiProvider from "@/components/ui/UiProvider";
+import * as Location from "expo-location";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -20,6 +21,24 @@ export default function RootLayout() {
 
   useEffect(() => {
     if (loaded) SplashScreen.hideAsync();
+
+    (async () => {
+      try {
+        const { granted } = await Location.requestForegroundPermissionsAsync();
+        /**
+         * Note: Foreground permissions should be granted before asking for the background permissions
+         * (your app can't obtain background permission without foreground permission).
+         */
+
+        // biome-ignore lint/suspicious/noConsole: <explanation>
+        console.log(granted);
+        if (granted) {
+          await Location.requestBackgroundPermissionsAsync();
+        }
+      } catch (e) {
+        console.error(`Location request has been failed: ${e}`);
+      }
+    })();
   }, [loaded]);
 
   if (!loaded) return null;

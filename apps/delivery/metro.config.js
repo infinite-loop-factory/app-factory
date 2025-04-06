@@ -40,9 +40,9 @@ defaultConfig.resolver.extraNodeModules = {
   path: require.resolve("path-browserify"),
   util: require.resolve("util"),
   url: require.resolve("url"),
-  tls: require.resolve("react-native-tls"),
+  tls: require.resolve("react-native-crypto"),
   zlib: require.resolve("browserify-zlib"),
-  net: require.resolve("react-native-tcp"),
+  net: require.resolve("react-native-tcp-socket"),
 };
 
 const config = withTurborepoManagedCache(

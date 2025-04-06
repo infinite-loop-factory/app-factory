@@ -74,6 +74,9 @@ export default function MyPage() {
               <Text className={"label-6"}>리뷰관리</Text>
               <Text className={"label-6"}>|</Text>
               <Text className={"label-6"}>주소관리</Text>
+              <Button onPress={() => router.push("/map")} size={"2xs"}>
+                <ButtonText className={"text-white"}>맵보기</ButtonText>
+              </Button>
             </Box>
           </Box>
         </Box>
