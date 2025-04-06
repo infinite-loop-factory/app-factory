@@ -1,12 +1,29 @@
 import { StyleSheet } from "react-native";
 import { WebView } from "react-native-webview";
 
-interface IKakaoMapProps {
+interface IData {
+  id: string;
+  title: string;
+  image: string;
+  distance: number;
+  totalTime: number;
+  address: string;
+  rate: number;
   latitude: number;
   longitude: number;
 }
 
-export default function KakaoMap({ latitude, longitude }: IKakaoMapProps) {
+interface IKakaoMapProps {
+  latitude: number;
+  longitude: number;
+  data: IData[];
+}
+
+export default function KakaoMap({
+  latitude,
+  longitude,
+  data,
+}: IKakaoMapProps) {
   const html = `
   <html>
     <head>
@@ -27,18 +44,33 @@ export default function KakaoMap({ latitude, longitude }: IKakaoMapProps) {
 
           function initMap() {
             const container = document.getElementById('map');
+
             const options = {
               center: new kakao.maps.LatLng(${latitude}, ${longitude}),
               level: 3
             };
+
             const map = new kakao.maps.Map(container, options);
 
-            // 마커 생성 및 지도에 추가
-            const markerPosition = new kakao.maps.LatLng(${latitude}, ${longitude});
-            const marker = new kakao.maps.Marker({
-              position: markerPosition
+            // 배열 데이터의 마커 추가
+            const locations = ${JSON.stringify(data)};
+            locations.forEach(item => {
+              const markerPosition = new kakao.maps.LatLng(item.latitude, item.longitude);
+              const marker = new kakao.maps.Marker({
+                position: markerPosition,
+              });
+              marker.setMap(map);
             });
-            marker.setMap(map);
+
+
+            // 현재 위치 마커 추가
+            const currentMarkerPosition = new kakao.maps.LatLng(${latitude}, ${longitude});
+            
+            const currentMarker = new kakao.maps.Marker({
+              position: currentMarkerPosition
+            });
+            
+            currentMarker.setMap(map);
           }
 
           waitForKakao();
@@ -58,9 +90,4 @@ export default function KakaoMap({ latitude, longitude }: IKakaoMapProps) {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    width: "100%",
-    flex: 1,
-  },
-});
+const styles = StyleSheet.create({ container: { width: "100%", flex: 1 } });
