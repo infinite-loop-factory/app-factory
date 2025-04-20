@@ -1,4 +1,4 @@
-import { IconTextEnum } from "@/types/displayType";
+import { IconTextType } from "@/types/displayType";
 import { Clock, MapPin, Star } from "lucide-react-native";
 import { useCallback } from "react";
 import { HStack } from "../ui/hstack";
@@ -6,17 +6,17 @@ import { Icon } from "../ui/icon";
 import { Text } from "../ui/text";
 
 interface IIconTextProps {
-  type: IconTextEnum;
+  type: IconTextType;
   content: string;
 }
 
 export default function IconText({ type, content }: IIconTextProps) {
   const renderIcon = useCallback(() => {
-    if (type === IconTextEnum.MAP) {
+    if (type === IconTextType.MAP) {
       return MapPin;
     }
 
-    if (type === IconTextEnum.CLOCK) {
+    if (type === IconTextType.CLOCK) {
       return Clock;
     }
     return Star;

@@ -9,9 +9,9 @@ import { Button, ButtonText } from "@/components/ui/button";
 import { HStack } from "@/components/ui/hstack";
 import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
-import { IconTextEnum, TabKeyEnum } from "@/types/displayType";
+import { IconTextType, TabKeyType } from "@/types/displayType";
 import { useLocalSearchParams } from "expo-router";
-import { useMemo, useState } from "react";
+import { memo, useMemo, useRef, useState } from "react";
 import { Dimensions, FlatList, Image, ScrollView, View } from "react-native";
 
 export default function DetailScreen() {
@@ -19,7 +19,7 @@ export default function DetailScreen() {
 
   const { id } = useLocalSearchParams();
 
-  const [selectedTab, setSelectedTab] = useState(TabKeyEnum.INFO);
+  const [selectedTab, setSelectedTab] = useState<TabKeyType>(TabKeyType.INFO);
 
   const [isFavorite, setIsFavorite] = useState(false);
 
@@ -36,49 +36,45 @@ export default function DetailScreen() {
       "몽마르뜨 공원은 강아지와 함께 산책하기에 최적의 장소입니다. 다음과 같은 이유로 반려견 산책 코스로 추천합니다.",
   });
 
-  const tabInfo = useMemo(() => {
+  const tabInfo: { key: TabKeyType; title: string }[] = useMemo(() => {
     return [
-      { key: TabKeyEnum.INFO, title: "정보" },
-      { key: TabKeyEnum.MAP, title: "지도" },
-      { key: TabKeyEnum.REVIEW, title: "리뷰" },
+      { key: TabKeyType.INFO, title: "정보" },
+      { key: TabKeyType.MAP, title: "지도" },
+      { key: TabKeyType.REVIEW, title: "리뷰" },
     ];
   }, []);
 
-  const startPlace = useMemo(() => {
-    return {
-      longitude: 127.0022,
-      latitude: 37.49328,
-    };
-  }, []);
+  const startPlace = useRef({
+    longitude: 127.0022,
+    latitude: 37.49328,
+  }).current;
 
-  const endPlace = useMemo(() => {
-    return {
-      latitude: 37.49649,
-      longitude: 127.004,
-    };
-  }, []);
+  const endPlace = useRef({
+    latitude: 37.49649,
+    longitude: 127.004,
+  }).current;
 
-  const courseInfoItems: { type: IconTextEnum; content: string }[] = [
-    { type: IconTextEnum.CLOCK, content: `${course.totalTime}분` },
-    { type: IconTextEnum.MAP, content: `${course.distance}km` },
+  const courseInfoItems: { type: IconTextType; content: string }[] = [
+    { type: IconTextType.CLOCK, content: `${course.totalTime}분` },
+    { type: IconTextType.MAP, content: `${course.distance}km` },
     {
-      type: IconTextEnum.STAR,
+      type: IconTextType.STAR,
       content: `${course.rate} (${course.reviewCount})`,
     },
   ];
 
-  const TabContent = ({ selectedTab }: { selectedTab: TabKeyEnum }) => {
+  const TabContent = memo(({ selectedTab }: { selectedTab: TabKeyType }) => {
     switch (selectedTab) {
-      case TabKeyEnum.INFO:
+      case TabKeyType.INFO:
         return <DetailDescription content={course.description} />;
-      case TabKeyEnum.MAP:
+      case TabKeyType.MAP:
         return <DetailMap start={startPlace} end={endPlace} />;
-      case TabKeyEnum.REVIEW:
+      case TabKeyType.REVIEW:
         return <Reviews />;
       default:
         return null;
     }
-  };
+  });
 
   return (
     <CustomSafeAreaView>
@@ -96,7 +92,7 @@ export default function DetailScreen() {
               {course.title}
             </Text>
 
-            <IconText type={IconTextEnum.MAP} content={course.address} />
+            <IconText type={IconTextType.MAP} content={course.address} />
 
             <HStack className="items-center gap-4">
               {courseInfoItems.map((data) => (
