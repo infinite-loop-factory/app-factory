@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useState } from "react";
 
 interface IDetailMapProps {
@@ -44,19 +45,16 @@ export default function usePedestrianRoutes() {
     };
 
     try {
-      const res = await fetch(
+      const { data } = await axios.post<TMapResponse>(
         "https://apis.openapi.sk.com/tmap/routes/pedestrian?version=1",
+        requestBody,
         {
-          method: "POST",
           headers: {
             "Content-Type": "application/json",
             appKey: process.env.EXPO_PUBLIC_TMAP_KEY,
           },
-          body: JSON.stringify(requestBody),
         },
       );
-
-      const data: TMapResponse = await res.json();
 
       return data.features;
     } catch (_error) {
