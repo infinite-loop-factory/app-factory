@@ -9,24 +9,307 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      user: {
+      cart: {
         Row: {
           created_at: string;
           id: number;
-          name: string | null;
-          user_id: string | null;
+          menu_cnt: number | null;
+          menu_id: number;
+          ordered_at: string | null;
+          user_id: string;
         };
         Insert: {
           created_at?: string;
           id?: number;
-          name?: string | null;
-          user_id?: string | null;
+          menu_cnt?: number | null;
+          menu_id: number;
+          ordered_at?: string | null;
+          user_id: string;
         };
         Update: {
           created_at?: string;
           id?: number;
+          menu_cnt?: number | null;
+          menu_id?: number;
+          ordered_at?: string | null;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "cart_menu_id_fkey";
+            columns: ["menu_id"];
+            isOneToOne: false;
+            referencedRelation: "menu";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "cart_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "user";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      driver: {
+        Row: {
+          created_at: string;
+          id: number;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: number;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: number;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "driver_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: true;
+            referencedRelation: "user";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      driver_location: {
+        Row: {
+          created_at: string;
+          driver_id: number;
+          id: number;
+          lat: number;
+          lon: number;
+          order_id: number;
+          updated_at: string;
+        };
+        Insert: {
+          created_at?: string;
+          driver_id: number;
+          id?: number;
+          lat?: number;
+          lon?: number;
+          order_id: number;
+          updated_at?: string;
+        };
+        Update: {
+          created_at?: string;
+          driver_id?: number;
+          id?: number;
+          lat?: number;
+          lon?: number;
+          order_id?: number;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "driver_location_driver_id_fkey";
+            columns: ["driver_id"];
+            isOneToOne: false;
+            referencedRelation: "driver";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "driver_location_order_id_fkey";
+            columns: ["order_id"];
+            isOneToOne: false;
+            referencedRelation: "order";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      menu: {
+        Row: {
+          created_at: string;
+          id: number;
+          name: string;
+          price: number;
+          restaurant_id: number;
+        };
+        Insert: {
+          created_at?: string;
+          id?: number;
+          name: string;
+          price: number;
+          restaurant_id: number;
+        };
+        Update: {
+          created_at?: string;
+          id?: number;
+          name?: string;
+          price?: number;
+          restaurant_id?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "menu_restaurant_id_fkey";
+            columns: ["restaurant_id"];
+            isOneToOne: false;
+            referencedRelation: "restaurant";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      order: {
+        Row: {
+          amount: number;
+          created_at: string;
+          driver_at: string | null;
+          driver_id: number | null;
+          id: number;
+        };
+        Insert: {
+          amount: number;
+          created_at?: string;
+          driver_at?: string | null;
+          driver_id?: number | null;
+          id?: number;
+        };
+        Update: {
+          amount?: number;
+          created_at?: string;
+          driver_at?: string | null;
+          driver_id?: number | null;
+          id?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "order_driver_id_fkey";
+            columns: ["driver_id"];
+            isOneToOne: false;
+            referencedRelation: "driver";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      order_menu: {
+        Row: {
+          created_at: string;
+          id: number;
+          menu_cnt: number;
+          menu_id: number;
+          menu_name: string;
+          menu_price: number;
+          order_id: number;
+        };
+        Insert: {
+          created_at?: string;
+          id?: number;
+          menu_cnt?: number;
+          menu_id: number;
+          menu_name: string;
+          menu_price: number;
+          order_id: number;
+        };
+        Update: {
+          created_at?: string;
+          id?: number;
+          menu_cnt?: number;
+          menu_id?: number;
+          menu_name?: string;
+          menu_price?: number;
+          order_id?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "order_menu_menu_id_fkey";
+            columns: ["menu_id"];
+            isOneToOne: false;
+            referencedRelation: "menu";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "order_menu_order_id_fkey";
+            columns: ["order_id"];
+            isOneToOne: false;
+            referencedRelation: "order";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      order_status: {
+        Row: {
+          created_at: string;
+          id: number;
+          order_id: number;
+          status: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: number;
+          order_id: number;
+          status?: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: number;
+          order_id?: number;
+          status?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "order_status_order_id_fkey";
+            columns: ["order_id"];
+            isOneToOne: false;
+            referencedRelation: "order";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      restaurant: {
+        Row: {
+          created_at: string;
+          id: number;
+          name: string;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: number;
+          name: string;
+          user_id?: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: number;
+          name?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "restaurant_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "user";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      user: {
+        Row: {
+          created_at: string;
+          id: string;
+          lat: number | null;
+          lon: number | null;
+          name: string | null;
+        };
+        Insert: {
+          created_at?: string;
+          id: string;
+          lat?: number | null;
+          lon?: number | null;
           name?: string | null;
-          user_id?: string | null;
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+          lat?: number | null;
+          lon?: number | null;
+          name?: string | null;
         };
         Relationships: [];
       };
