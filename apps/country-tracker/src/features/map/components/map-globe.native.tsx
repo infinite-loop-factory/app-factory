@@ -1,3 +1,5 @@
+import type { Region } from "react-native-maps";
+
 import * as Location from "expo-location";
 import {
   forwardRef,
@@ -6,7 +8,7 @@ import {
   useRef,
   useState,
 } from "react";
-import MapView, { type Region } from "react-native-maps";
+import MapView from "react-native-maps";
 
 export interface MapGlobeRef {
   moveToLocation: (latitude: number, longitude: number) => void;
