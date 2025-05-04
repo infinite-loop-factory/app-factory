@@ -1,18 +1,53 @@
-import { Button, ButtonText } from "@/components/ui/button";
+import { supabase } from "@/api/supabaseClient";
+import { userAtom } from "@/atoms/userAtom";
 import { Icon } from "@/components/ui/icon";
 import { Text } from "@/components/ui/text";
+import {
+  GoogleSignin,
+  GoogleSigninButton,
+} from "@react-native-google-signin/google-signin";
+import { useSetAtom } from "jotai/react";
 import { PawPrint } from "lucide-react-native";
 import { View } from "react-native";
 
-interface IAtuthRequiredViewProp {
-  setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
-}
+export default function AuthRequiredView() {
+  const setUserInfo = useSetAtom(userAtom);
 
-export default function AuthRequiredView({
-  setIsLoggedIn,
-}: IAtuthRequiredViewProp) {
-  const handleLogin = () => {
-    setIsLoggedIn(true);
+  GoogleSignin.configure({
+    scopes: ["https://www.googleapis.com/auth/drive.readonly"],
+    webClientId: process.env.EXPO_PUBLIC_GOOGLE_CLIENT_WEB_ID,
+    iosClientId: process.env.EXPO_PUBLIC_GOOGLE_CLIENT_IOS_ID,
+  });
+
+  const onPressGoogleLogin = async () => {
+    try {
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+
+      if (userInfo.data?.idToken) {
+        const { data } = await supabase.auth.signInWithIdToken({
+          provider: "google",
+          token: userInfo.data.idToken,
+        });
+
+        const { session } = data;
+
+        const { access_token, refresh_token, user } = session || {};
+
+        setUserInfo(() => ({
+          accessToken: access_token ?? "",
+          refreshToken: refresh_token ?? "",
+          email: user?.email ?? "",
+          name: user?.user_metadata?.full_name ?? "",
+          imageUrl: user?.user_metadata?.picture ?? "",
+          id: user?.id ?? "",
+        }));
+      } else {
+        throw new Error("no ID token present!");
+      }
+    } catch (error) {
+      throw new Error(`Error: ${(error as Error).message}`);
+    }
   };
 
   return (
@@ -29,18 +64,11 @@ export default function AuthRequiredView({
             프로필을 보고 다양한 기능을 이용하려면 로그인해 주세요. 로그인하면
             나만의 산책 코스를 만들고 관리할 수 있어요!
           </Text>
-          <Button
-            className="mb-4 w-full rounded-xl"
-            size={"xl"}
-            onPress={handleLogin}
-          >
-            <ButtonText className="text-white" size="md">
-              로그인
-            </ButtonText>
-          </Button>
-          <Button variant="outline" className="w-full rounded-xl" size={"xl"}>
-            <ButtonText size="md">회원가입</ButtonText>
-          </Button>
+          <GoogleSigninButton
+            size={GoogleSigninButton.Size.Wide}
+            color={GoogleSigninButton.Color.Dark}
+            onPress={onPressGoogleLogin}
+          />
         </View>
       </View>
     </View>
