@@ -12,12 +12,6 @@ import { Animated, Easing } from "react-native";
 import MapView from "react-native-maps";
 
 export interface MapGlobeRef {
-  moveToLocation: (
-    latitude: number,
-    longitude: number,
-    duration?: number,
-    zoomLevel?: number,
-  ) => void;
   globeRotationAnimation: (
     targetLatitude: number,
     targetLongitude: number,
@@ -76,23 +70,6 @@ const MapGlobe = forwardRef<MapGlobeRef>((_, ref) => {
   });
 
   useImperativeHandle(ref, () => ({
-    moveToLocation: (
-      latitude: number,
-      longitude: number,
-      duration = 1000,
-      zoomLevel = 25,
-    ) => {
-      const newRegion = {
-        latitude,
-        longitude: normalizeLongitude(longitude),
-        latitudeDelta: zoomLevel,
-        longitudeDelta: zoomLevel,
-      };
-
-      setRegion(newRegion);
-      mapRef.current?.animateToRegion(newRegion, duration);
-    },
-
     // 지구본 회전
     globeRotationAnimation: (
       targetLatitude: number,
