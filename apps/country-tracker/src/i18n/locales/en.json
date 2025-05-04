@@ -1,11 +1,16 @@
 {
   "welcome": "Welcome",
-  "map": "Map",
 
   "home": {
     "tab": "Home",
     "title": "Visited Countries",
     "search": "Search"
+  },
+
+  "map": {
+    "tab": "Map",
+    "countries": "Countries",
+    "search-placeholder": "Search for a country"
   },
 
   "settings": {

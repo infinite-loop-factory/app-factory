@@ -34,7 +34,7 @@ export default function TabLayout() {
     },
     {
       name: "map",
-      title: i18n.t("map"),
+      title: i18n.t("map.tab"),
       icon: createTabBarIcon(Globe),
     },
     {
