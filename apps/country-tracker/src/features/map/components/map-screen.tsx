@@ -7,6 +7,7 @@ import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
 import MapGlobe from "@/features/map/components/map-globe";
 import { findCountryLocation } from "@/features/map/constants/countries";
 import { useThemeColor } from "@/hooks/useThemeColor";
+import i18n from "@/i18n";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import { Search, Share } from "lucide-react-native";
 import { useRef, useState } from "react";
@@ -35,23 +36,26 @@ export default function MapScreen() {
     setSearchText(text);
   };
 
-  // * 검색 버튼 클릭 시 지구본 이동
+  // * 검색 버튼 클릭 시 지구본 회전 애니메이션과 함께 이동
   const handleSearchSubmit = () => {
     if (searchText.trim() === "") return;
 
     const countryLocation = findCountryLocation(searchText);
     if (countryLocation) {
-      mapGlobeRef.current?.moveToLocation(
+      // 항상 일반 회전 애니메이션 적용
+      mapGlobeRef.current?.globeRotationAnimation(
         countryLocation.latitude,
         countryLocation.longitude,
+        3500, // 애니메이션 지속 시간(ms)
+        15, // 최종 줌 레벨
       );
 
       // * 크기 조절
       bottomSheetRef.current?.snapToIndex(2);
     } else {
       Alert.alert(
-        "국가를 찾을 수 없습니다",
-        "검색한 국가를 찾을 수 없습니다. 다른 국가 이름을 입력해보세요.",
+        i18n.t("map.alert.country-not-found.title"),
+        i18n.t("map.alert.country-not-found.message"),
       );
     }
   };
@@ -74,11 +78,13 @@ export default function MapScreen() {
               className="font-bold text-2xl"
               style={{ color: textColor }}
             >
-              Countries
+              {i18n.t("map.countries")}
             </Heading>
-            <Button onPress={handleShare} variant="link" className="mr-1">
-              <ButtonIcon as={Share} />
-            </Button>
+            <View className="flex flex-row">
+              <Button onPress={handleShare} variant="link" className="mr-1">
+                <ButtonIcon as={Share} />
+              </Button>
+            </View>
           </View>
 
           <Input
@@ -87,7 +93,7 @@ export default function MapScreen() {
             style={{ backgroundColor: inputBackgroundColor, borderColor }}
           >
             <InputField
-              placeholder="Search for a country..."
+              placeholder={i18n.t("map.search-placeholder")}
               value={searchText}
               onChangeText={handleSearch}
               onSubmitEditing={handleSearchSubmit}
