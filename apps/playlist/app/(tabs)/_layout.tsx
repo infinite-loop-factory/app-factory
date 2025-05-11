@@ -17,7 +17,7 @@ export default function TapsLayout() {
       }}
     >
       <Tabs.Screen
-        name="home"
+        name="index"
         options={{
           tabBarLabel: "Home",
           headerTitle: "Playlist",
