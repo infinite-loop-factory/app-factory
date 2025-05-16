@@ -1,3 +1,5 @@
+import { userAtom } from "@/atoms/userAtom";
+import { useAtomValue } from "jotai/react";
 import { useEffect, useMemo, useState } from "react";
 import { ScrollView, View } from "react-native";
 import ProfileMenuItem from "./ProfileMenuItem";
@@ -8,10 +10,12 @@ import { Heading } from "./ui/heading";
 import { Text } from "./ui/text";
 
 export default function ProfileView() {
+  const userInfo = useAtomValue(userAtom);
+
   const [dogInfo, setDogInfo] = useState({
     name: "",
-    age: 0,
-    breed: "",
+    age: 11,
+    breed: "푸들",
   });
 
   const latestWalking = useMemo(() => {
@@ -41,12 +45,13 @@ export default function ProfileView() {
   }, []);
 
   useEffect(() => {
-    setDogInfo(() => ({
-      name: "댕댕이",
-      age: 11,
-      breed: "푸들",
-    }));
-  }, []);
+    if (userInfo.name) {
+      setDogInfo((prev) => ({
+        ...prev,
+        name: `${userInfo.name}의 댕댕이`,
+      }));
+    }
+  }, [userInfo.name]);
 
   return (
     <ScrollView className="flex-1 p-6">

@@ -42,7 +42,9 @@ const config = withTurborepoManagedCache(
 
 // XXX: Resolve our exports in workspace packages
 // https://github.com/expo/expo/issues/26926
-config.resolver.unstable_enablePackageExports = true;
+config.resolver.unstable_enablePackageExports = false;
+
+config.resolver.unstable_conditionNames = ["require", "default", "browser"];
 
 module.exports = config;
 
