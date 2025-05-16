@@ -101,11 +101,11 @@ const MapGlobe = forwardRef<MapGlobeRef>((_, ref) => {
         // 줌 아웃/인 효과
         let currentZoom = zoomLevel;
         if (progress < 0.25) {
-          currentZoom = zoomLevel + (100 - zoomLevel) * (progress / 0.25);
+          currentZoom = zoomLevel + (MAX_ZOOM_LEVEL - zoomLevel) * (progress / 0.25);
         } else if (progress > 0.75) {
-          currentZoom = 100 - (100 - zoomLevel) * ((progress - 0.75) / 0.25);
+          currentZoom = MAX_ZOOM_LEVEL - (MAX_ZOOM_LEVEL - zoomLevel) * ((progress - 0.75) / 0.25);
         } else {
-          currentZoom = 100;
+          currentZoom = MAX_ZOOM_LEVEL;
         }
 
         // 최단 경로로 직접 이동
