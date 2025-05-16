@@ -20,6 +20,8 @@ export interface MapGlobeRef {
   ) => void;
 }
 
+const MAX_ZOOM_LEVEL = 100;
+
 // 경도를 -180 ~ 180 범위로 정규화하는 함수
 const normalizeLongitude = (lngParam: number): number => {
   let lng = lngParam % 360;
@@ -101,9 +103,12 @@ const MapGlobe = forwardRef<MapGlobeRef>((_, ref) => {
         // 줌 아웃/인 효과
         let currentZoom = zoomLevel;
         if (progress < 0.25) {
-          currentZoom = zoomLevel + (MAX_ZOOM_LEVEL - zoomLevel) * (progress / 0.25);
+          currentZoom =
+            zoomLevel + (MAX_ZOOM_LEVEL - zoomLevel) * (progress / 0.25);
         } else if (progress > 0.75) {
-          currentZoom = MAX_ZOOM_LEVEL - (MAX_ZOOM_LEVEL - zoomLevel) * ((progress - 0.75) / 0.25);
+          currentZoom =
+            MAX_ZOOM_LEVEL -
+            (MAX_ZOOM_LEVEL - zoomLevel) * ((progress - 0.75) / 0.25);
         } else {
           currentZoom = MAX_ZOOM_LEVEL;
         }
