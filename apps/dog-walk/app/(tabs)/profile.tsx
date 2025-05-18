@@ -1,16 +1,18 @@
+import { userAtom } from "@/atoms/userAtom";
 import AuthRequiredView from "@/components/AuthRequiredView";
 import CustomSafeAreaView from "@/components/CustomSafeAriaView";
 import HeaderBar from "@/components/HeaderBar";
 import ProfileView from "@/components/ProfileView";
-import { useState } from "react";
+import { useAtomValue } from "jotai/react";
 
 export default function ProfileScreen() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const userInfo = useAtomValue(userAtom);
+  const isLoggedIn = Boolean(userInfo.accessToken);
 
   return (
     <CustomSafeAreaView>
       <HeaderBar title={"프로필"} />
-      {!isLoggedIn && <AuthRequiredView setIsLoggedIn={setIsLoggedIn} />}
+      {!isLoggedIn && <AuthRequiredView />}
       {isLoggedIn && <ProfileView />}
     </CustomSafeAreaView>
   );
