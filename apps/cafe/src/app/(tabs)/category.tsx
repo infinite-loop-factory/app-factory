@@ -20,78 +20,77 @@ interface CategoryItem {
 const allCategories: CategoryItem[] = [
   {
     id: "1",
-    title: "취미",
+    title: "카페 맛집",
     icon: require("../../assets/images/react-logo.png"),
     count: 120,
   },
   {
     id: "2",
-    title: "운동",
+    title: "테마 카페",
     icon: require("../../assets/images/react-logo.png"),
     count: 85,
   },
   {
     id: "3",
-    title: "독서",
+    title: "스터디 카페",
     icon: require("../../assets/images/react-logo.png"),
     count: 64,
   },
   {
     id: "4",
-    title: "맛집",
+    title: "디저트 카페",
     icon: require("../../assets/images/react-logo.png"),
     count: 93,
   },
   {
     id: "5",
-    title: "반려동물",
+    title: "브런치 카페",
     icon: require("../../assets/images/react-logo.png"),
     count: 72,
   },
   {
     id: "6",
-    title: "여행",
+    title: "베이커리 카페",
     icon: require("../../assets/images/react-logo.png"),
     count: 58,
   },
   {
     id: "7",
-    title: "영화",
+    title: "북 카페",
     icon: require("../../assets/images/react-logo.png"),
     count: 47,
   },
   {
     id: "8",
-    title: "음악",
+    title: "루프탑 카페",
     icon: require("../../assets/images/react-logo.png"),
     count: 39,
   },
   {
     id: "9",
-    title: "게임",
+    title: "애견 카페",
     icon: require("../../assets/images/react-logo.png"),
     count: 81,
   },
   {
     id: "10",
-    title: "요리",
+    title: "보드게임 카페",
     icon: require("../../assets/images/react-logo.png"),
     count: 63,
   },
   {
     id: "11",
-    title: "패션",
+    title: "꽃/식물 카페",
     icon: require("../../assets/images/react-logo.png"),
     count: 42,
   },
   {
     id: "12",
-    title: "육아",
+    title: "전통 찻집",
     icon: require("../../assets/images/react-logo.png"),
     count: 37,
   },
 ];
-
 const CategoryItem = ({ item }: { item: CategoryItem }) => (
   <TouchableOpacity className="flex-row items-center border-gray-200 border-b p-4">
     <Image source={item.icon} className="resize-contain mr-4 h-10 w-10" />
