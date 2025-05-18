@@ -19,6 +19,7 @@ export default function TapsLayout() {
       <Tabs.Screen
         name="index"
         options={{
+          tabBarLabel: "Home",
           headerTitle: "Playlist",
           tabBarIcon: ({ focused, color }) => (
             <Ionicons
@@ -32,6 +33,7 @@ export default function TapsLayout() {
       <Tabs.Screen
         name="search"
         options={{
+          tabBarLabel: "Search",
           headerTitle: "Search",
           tabBarIcon: ({ focused, color }) => (
             <Ionicons
