@@ -27,13 +27,27 @@ export default function TabLayout() {
           ),
         }}
       />
+
       <Tabs.Screen
-        name="explore"
+        name="mypage"
         options={{
-          title: "Explore",
+          title: "마이페이지",
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
-              name={focused ? "code-slash" : "code-slash-outline"}
+              name={focused ? "person" : "person-outline"}
+              color={color}
+            />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="category"
+        options={{
+          title: "카테고리",
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon
+              name={focused ? "grid" : "grid-outline"}
               color={color}
             />
           ),
