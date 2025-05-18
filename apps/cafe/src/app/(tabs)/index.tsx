@@ -51,142 +51,142 @@ interface TabButtonProps {
 const recommendedCafes = [
   {
     id: "1",
-    title: "독서 모임",
-    members: "멤버 1,240명",
-    tag: "독서",
+    title: "블루보틀 커피",
+    members: "멤버 2,340명",
+    tag: "커피",
     image: require("../../assets/images/react-logo.png"),
   },
   {
     id: "2",
-    title: "러닝 크루",
-    members: "멤버 890명",
-    tag: "운동",
+    title: "스타벅스 리저브",
+    members: "멤버 1,890명",
+    tag: "커피",
     image: require("../../assets/images/react-logo.png"),
   },
   {
     id: "3",
-    title: "반려견 사랑",
-    members: "멤버 2,100명",
-    tag: "반려동물",
+    title: "핸드드립 전문점",
+    members: "멤버 980명",
+    tag: "커피",
     image: require("../../assets/images/react-logo.png"),
   },
   {
     id: "4",
-    title: "홍 베이킹",
-    members: "멤버 760명",
-    tag: "요리",
+    title: "커피 로스터리",
+    members: "멤버 1,260명",
+    tag: "커피",
     image: require("../../assets/images/react-logo.png"),
   },
   {
     id: "5",
-    title: "영화 감상 모임",
+    title: "커피빈",
     members: "멤버 1,560명",
-    tag: "영화",
+    tag: "커피",
     image: require("../../assets/images/react-logo.png"),
   },
   {
     id: "6",
-    title: "등산 동호회",
-    members: "멤버 980명",
-    tag: "운동",
+    title: "투썸플레이스",
+    members: "멤버 1,780명",
+    tag: "커피",
     image: require("../../assets/images/react-logo.png"),
   },
   {
     id: "7",
-    title: "고양이 집사들",
-    members: "멤버 1,850명",
-    tag: "반려동물",
+    title: "폴 바셋",
+    members: "멤버 850명",
+    tag: "커피",
     image: require("../../assets/images/react-logo.png"),
   },
   {
     id: "8",
-    title: "한식 요리교실",
-    members: "멤버 670명",
-    tag: "요리",
+    title: "카페베네",
+    members: "멤버 1,670명",
+    tag: "커피",
     image: require("../../assets/images/react-logo.png"),
   },
   {
     id: "9",
-    title: "사진 촬영반",
-    members: "멤버 920명",
-    tag: "사진",
+    title: "이디야커피",
+    members: "멤버 2,120명",
+    tag: "커피",
     image: require("../../assets/images/react-logo.png"),
   },
   {
     id: "10",
-    title: "여행 동호회",
+    title: "할리스커피",
     members: "멤버 1,340명",
-    tag: "여행",
+    tag: "커피",
     image: require("../../assets/images/react-logo.png"),
   },
   {
     id: "11",
-    title: "클래식 감상회",
-    members: "멤버 580명",
-    tag: "음악",
+    title: "매머드커피",
+    members: "멤버 1,580명",
+    tag: "커피",
     image: require("../../assets/images/react-logo.png"),
   },
   {
     id: "12",
-    title: "가드닝 클럽",
-    members: "멤버 730명",
-    tag: "원예",
+    title: "커피베이",
+    members: "멤버 930명",
+    tag: "커피",
     image: require("../../assets/images/react-logo.png"),
   },
   {
     id: "13",
-    title: "DIY 공방",
-    members: "멤버 850명",
-    tag: "공예",
+    title: "빽다방",
+    members: "멤버 1,850명",
+    tag: "커피",
     image: require("../../assets/images/react-logo.png"),
   },
   {
     id: "14",
-    title: "보드게임 모임",
+    title: "탐앤탐스",
     members: "멤버 1,120명",
-    tag: "게임",
+    tag: "커피",
     image: require("../../assets/images/react-logo.png"),
   },
   {
     id: "15",
-    title: "외국어 스터디",
-    members: "멤버 940명",
-    tag: "어학",
+    title: "메가커피",
+    members: "멤버 1,940명",
+    tag: "커피",
     image: require("../../assets/images/react-logo.png"),
   },
   {
     id: "16",
-    title: "명상 모임",
-    members: "멤버 460명",
-    tag: "힐링",
+    title: "더벤티",
+    members: "멤버 1,460명",
+    tag: "커피",
     image: require("../../assets/images/react-logo.png"),
   },
   {
     id: "17",
-    title: "서예 동호회",
-    members: "멤버 380명",
-    tag: "예술",
+    title: "컴포즈커피",
+    members: "멤버 1,380명",
+    tag: "커피",
     image: require("../../assets/images/react-logo.png"),
   },
   {
     id: "18",
-    title: "테니스 클럽",
+    title: "요거프레소",
     members: "멤버 820명",
-    tag: "운동",
+    tag: "커피",
     image: require("../../assets/images/react-logo.png"),
   },
   {
     id: "19",
-    title: "와인 테이스팅",
+    title: "커피스미스",
     members: "멤버 640명",
-    tag: "음식",
+    tag: "커피",
     image: require("../../assets/images/react-logo.png"),
   },
   {
     id: "20",
-    title: "코딩 스터디",
+    title: "앤젤리너스",
     members: "멤버 1,080명",
-    tag: "IT",
+    tag: "커피",
     image: require("../../assets/images/react-logo.png"),
   },
 ];
@@ -194,58 +194,56 @@ const recommendedCafes = [
 const categories = [
   {
     id: "1",
-    title: "취미",
+    title: "아메리카노",
     icon: require("../../assets/images/react-logo.png"),
   },
   {
     id: "2",
-    title: "운동",
+    title: "카페라떼",
     icon: require("../../assets/images/react-logo.png"),
   },
   {
     id: "3",
-    title: "독서",
+    title: "에스프레소",
     icon: require("../../assets/images/react-logo.png"),
   },
   {
     id: "4",
-    title: "맛집",
+    title: "카푸치노",
     icon: require("../../assets/images/react-logo.png"),
   },
   {
     id: "5",
-    title: "반려동물",
+    title: "콜드브루",
     icon: require("../../assets/images/react-logo.png"),
   },
 ];
-
 const posts = [
   {
     id: "1",
-    title: "홍 베이킹",
-    description: "집에서 만드는 달콤한 디저트",
+    title: "스타벅스 강남점",
+    description: "트렌디한 분위기의 프리미엄 카페",
     comments: "댓글 120개",
     time: "1시간 전",
     image: require("../../assets/images/react-logo.png"),
   },
   {
     id: "2",
-    title: "영화 감상",
-    description: "다양한 장르의 영화 리뷰와 추천",
+    title: "블루보틀 삼청동점",
+    description: "감각적인 분위기의 로스터리 카페",
     comments: "댓글 340개",
     time: "2시간 전",
     image: require("../../assets/images/react-logo.png"),
   },
   {
     id: "3",
-    title: "여행 이야기",
-    description: "국내외 여행 정보 공유",
+    title: "커피브루잉컴퍼니",
+    description: "고급스러운 원두 전문 카페",
     comments: "댓글 210개",
     time: "3시간 전",
     image: require("../../assets/images/react-logo.png"),
   },
 ];
-
 const RecommendedCafeItem = ({ item }: RecommendedCafeItemProps) => {
   return (
     <TouchableOpacity className="mr-3 mb-4 w-36">
@@ -360,22 +358,21 @@ export default function HomeScreen() {
             <PostItem key={post.id} item={post} />
           ))}
         </View>
-
         <View className="border-gray-200 border-b p-4">
           <View className="mb-2 flex-row items-center">
             <Text className="mr-2 font-semibold text-base">
-              오늘 읽은 책 추천합니다
+              신메뉴 출시 - 피스타치오 라떼
             </Text>
-            <Text className="text-gray-400 text-xs">독서 모임 · 책토론</Text>
+            <Text className="text-gray-400 text-xs">신메뉴 · 이벤트</Text>
           </View>
-          <Text className="text-gray-400 text-xs">댓글 24개</Text>
+          <Text className="text-gray-400 text-xs">댓글 45개</Text>
         </View>
 
         <View className="border-gray-200 border-b p-4">
           <Text className="mb-2 font-semibold text-base">
-            주말 러닝 코스 공유해요
+            주말 브런치 세트 할인 이벤트
           </Text>
-          <Text className="text-gray-400 text-xs">댓글 18개</Text>
+          <Text className="text-gray-400 text-xs">댓글 32개</Text>
         </View>
       </ScrollView>
     </SafeAreaView>
