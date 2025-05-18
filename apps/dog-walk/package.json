@@ -85,18 +85,9 @@
     "jest": "^29.7.0",
     "jest-expo": "~51.0.4",
     "jscodeshift": "0.15.2",
-    "patch-package": "^8.0.0",
     "postinstall-postinstall": "^2.1.0",
     "proc-log": "^5.0.0",
     "type-fest": "catalog:",
     "typescript": "catalog:"
-  },
-  "pnpm": {
-    "overrides": {
-      "@supabase/realtime-js>ws": "-"
-    },
-    "patchedDependencies": {
-      "@supabase/realtime-js": "patches/@supabase__realtime-js.patch"
-    }
   }
 }
