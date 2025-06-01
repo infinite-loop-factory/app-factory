@@ -1,12 +1,18 @@
 import { FontAwesome } from "@expo/vector-icons";
-import { Pressable, Text, View } from "react-native";
+import {
+  type GestureResponderEvent,
+  Pressable,
+  Text,
+  View,
+} from "react-native";
 
 type Props = {
   label: string;
   theme?: "primary";
+  onPress?: (event: GestureResponderEvent) => void;
 };
 
-export default function Button({ label, theme }: Props) {
+export default function Button({ label, theme, onPress }: Props) {
   if (theme === "primary") {
     return (
       <View className="mx-5 h-[68px] w-80 items-center justify-center rounded-xl border-4 border-[#ffd33d] p-1">
@@ -29,7 +35,7 @@ export default function Button({ label, theme }: Props) {
     <View className="mx-5 h-[68px] w-80 items-center justify-center p-1">
       <Pressable
         className="h-full w-full flex-row items-center justify-center rounded-lg"
-        onPress={() => alert("You pressed a button.")}
+        onPress={onPress}
       >
         <Text className="text-base text-white">{label}</Text>
       </Pressable>
