@@ -14,7 +14,7 @@ import { Image, ScrollView } from "react-native";
 
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-import { Modal, Pressable, TouchableOpacity, View } from "react-native";
+import { TouchableOpacity } from "react-native";
 
 interface MenuItem {
   icon: LucideIcon;
@@ -138,31 +138,31 @@ export default function MyPage() {
         </ThemedView>
       </ScrollView>
 
-      <Modal
-        visible={true}
-        animationType="slide"
-        transparent={true}
-        onRequestClose={() => setIsBottomSheetVisible(false)}
-      >
-        <Pressable
-          className="flex-1 bg-black/50"
-          onPress={() => setIsBottomSheetVisible(false)}
-        >
-          <View className="mt-auto rounded-t-xl bg-white p-4">
-            <ThemedView className="p-4">
-              <ThemedText type="title" className="mb-4">
-                설정
-              </ThemedText>
-              <TouchableOpacity
-                className="py-3"
-                onPress={() => setIsBottomSheetVisible(false)}
-              >
-                <ThemedText>닫기</ThemedText>
-              </TouchableOpacity>
-            </ThemedView>
-          </View>
-        </Pressable>
-      </Modal>
+      {/*<Modal*/}
+      {/*  visible={true}*/}
+      {/*  animationType="slide"*/}
+      {/*  transparent={true}*/}
+      {/*  onRequestClose={() => setIsBottomSheetVisible(false)}*/}
+      {/*>*/}
+      {/*  <Pressable*/}
+      {/*    className="flex-1 bg-black/50"*/}
+      {/*    onPress={() => setIsBottomSheetVisible(false)}*/}
+      {/*  >*/}
+      {/*    <View className="mt-auto rounded-t-xl bg-white p-4">*/}
+      {/*      <ThemedView className="p-4">*/}
+      {/*        <ThemedText type="title" className="mb-4">*/}
+      {/*          설정*/}
+      {/*        </ThemedText>*/}
+      {/*        <TouchableOpacity*/}
+      {/*          className="py-3"*/}
+      {/*          onPress={() => setIsBottomSheetVisible(false)}*/}
+      {/*        >*/}
+      {/*          <ThemedText>닫기</ThemedText>*/}
+      {/*        </TouchableOpacity>*/}
+      {/*      </ThemedView>*/}
+      {/*    </View>*/}
+      {/*  </Pressable>*/}
+      {/*</Modal>*/}
     </>
   );
 }
