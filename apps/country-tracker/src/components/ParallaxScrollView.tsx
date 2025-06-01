@@ -1,8 +1,9 @@
-import { useThemeColor } from "@/hooks/useThemeColor";
 import type { PropsWithChildren } from "react";
+
+import { ThemedView } from "@/components/ThemedView";
+import { useThemeColor } from "@/hooks/useThemeColor";
 import Animated, { useAnimatedRef } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { ThemedView } from "./ThemedView";
 
 interface ParallaxScrollViewProps extends PropsWithChildren {
   scrollEnabled?: boolean;
