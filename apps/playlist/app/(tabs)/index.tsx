@@ -17,11 +17,11 @@ export default function Index() {
   const [selectedArtist, setSelectedArtist] = useState("Jennie");
 
   const images: Record<string, ImageSourcePropType> = {
-    Jennie: require("../../assets/images/Jennie.png"),
-    Lisa: require("../../assets/images/Lisa.png"),
-    Rosé: require("../../assets/images/Rose.png"),
+    Jennie: require("../../assets/images/jennie.png"),
+    Lisa: require("../../assets/images/lisa.png"),
+    Rosé: require("../../assets/images/rose.png"),
     Jisoo: require("../../assets/images/jisoo.png"),
-    IU: require("../../assets/images/IU.png"),
+    IU: require("../../assets/images/iu.png"),
   };
 
   const selectArtist = (artist: string) => {
