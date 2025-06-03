@@ -282,7 +282,7 @@ const PostItem = ({ item }: PostItemProps) => {
   return (
     <TouchableOpacity
       className="flex-row border-gray-200 border-b p-4"
-      onPress={() => router.push("/cafe[id]")}
+      onPress={() => router.push(`/cafe/${item.id}`)}
     >
       <Image source={item.image} className="h-15 w-15 rounded bg-gray-200" />
       <View className="ml-3 flex-1 flex-row justify-between">
