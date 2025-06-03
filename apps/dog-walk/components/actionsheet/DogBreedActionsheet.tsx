@@ -16,30 +16,20 @@ import { Text } from "../ui/text";
 interface IDogBreedActionsheetProps {
   showActionsheet: boolean;
   setShowActionsheet: React.Dispatch<React.SetStateAction<boolean>>;
-  setSelectedBreed: React.Dispatch<
-    React.SetStateAction<{
-      name: string;
-      dogBreed: string;
-      gender: string;
-      birth: Date;
-    }>
-  >;
+  setDogBreed: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export default function DogBreedActionsheet({
   showActionsheet,
   setShowActionsheet,
-  setSelectedBreed,
+  setDogBreed,
 }: IDogBreedActionsheetProps) {
   const handleClose = () => {
     setShowActionsheet(false);
   };
 
   const onPressItem = (label: string) => {
-    setSelectedBreed((prev) => ({
-      ...prev,
-      dogBreed: label,
-    }));
+    setDogBreed(label);
     setShowActionsheet(false);
   };
 
