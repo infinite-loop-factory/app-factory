@@ -2,18 +2,12 @@ import CustomSafeAreaView from "@/components/CustomSafeAriaView";
 import DatePickerModal from "@/components/DatePickerModal";
 import HeaderBar from "@/components/HeaderBar";
 import SectionTitle from "@/components/SectionTitle";
+import DatePicker from "@/components/molecules/DatePicker";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
 import { Textarea, TextareaInput } from "@/components/ui/textarea";
-import RNDateTimePicker, {
-  type DateTimePickerEvent,
-} from "@react-native-community/datetimepicker";
 import * as ImagePicker from "expo-image-picker";
-import {
-  Calendar as CalendarIcon,
-  Camera,
-  MapPinPlusInside,
-} from "lucide-react-native";
+import { Camera, MapPinPlusInside } from "lucide-react-native";
 import { useEffect, useState } from "react";
 import {
   Image,
@@ -51,19 +45,6 @@ export default function AddScreen() {
     }
   };
 
-  const onChangeDatePicker = (
-    _event: DateTimePickerEvent,
-    selectedDate?: Date,
-  ) => {
-    if (!selectedDate) return;
-    setShowPicker(false);
-    setDate(selectedDate);
-  };
-
-  const showDatePicker = () => {
-    setShowPicker(true);
-  };
-
   useEffect(() => {
     if (date && startSpot && endSpot && image && description) {
       setIsRegistrationEnabled(true);
@@ -88,39 +69,9 @@ export default function AddScreen() {
         </View>
 
         <SectionTitle title={"다녀온 날짜"}>
-          <TouchableOpacity
-            onPress={showDatePicker}
-            className="flex items-center justify-between rounded-xl bg-slate-50 p-4"
-          >
-            <View className="flex w-full flex-row items-center justify-between">
-              <View className="flex-row items-center">
-                <CalendarIcon color={"#6DBE6E"} className="h-5 w-5" />
-                <Text size="md" className="ml-2 text-slate-600">
-                  {showPicker && Platform.OS === "android" && (
-                    <RNDateTimePicker
-                      testID="dateTimePicker"
-                      value={date}
-                      mode={"date"}
-                      is24Hour={true}
-                      onChange={onChangeDatePicker}
-                      display="spinner"
-                    />
-                  )}
-                  {!showPicker && (
-                    <Text>
-                      {date.getFullYear()}.
-                      {(date.getMonth() + 1).toString().padStart(2, "0")}.
-                      {date.getDate().toString().padStart(2, "0")}
-                    </Text>
-                  )}
-                </Text>
-              </View>
-              <Text size={"sm"} className="text-slate-400">
-                선택하기
-              </Text>
-            </View>
-          </TouchableOpacity>
+          <DatePicker date={date} setDate={setDate} />
         </SectionTitle>
+
         <SectionTitle title={"경로 추가"}>
           <TouchableOpacity>
             <View className="flex items-center justify-between rounded-xl bg-slate-50 p-4">
