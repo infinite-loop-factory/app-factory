@@ -16,6 +16,7 @@ import {
   openLanguageSetting,
   openStorePage,
 } from "@infinite-loop-factory/common";
+import { useRouter } from "expo-router";
 import { useAtom } from "jotai";
 import { ChevronRight, Moon, Sun } from "lucide-react-native";
 import { TouchableOpacity, View } from "react-native";
@@ -23,6 +24,7 @@ import { TouchableOpacity, View } from "react-native";
 export default function SettingsScreen() {
   const [theme, setTheme] = useAtom(themeAtom);
   const toast = useToast();
+  const router = useRouter();
   const toggleTheme = () => setTheme(theme === "light" ? "dark" : "light");
 
   const [
@@ -171,7 +173,10 @@ export default function SettingsScreen() {
           </Text>
           <ChevronRight size={20} color={textColor} />
         </TouchableOpacity>
-        <TouchableOpacity className="flex-row items-center justify-between p-4">
+        <TouchableOpacity
+          className="flex-row items-center justify-between p-4"
+          onPress={() => router.push("/settings/license")}
+        >
           <Text className="font-bold text-base" style={{ color: textColor }}>
             {i18n.t("settings.general.license")}
           </Text>

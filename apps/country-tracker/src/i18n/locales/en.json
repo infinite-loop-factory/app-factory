@@ -30,6 +30,13 @@
       "license": "License"
     },
 
+    "license": {
+      "title": "License",
+      "description": "License information for open source libraries used in this app.",
+      "libraries": "Libraries",
+      "tap-to-view": "Tap to view detailed information on the npm package page."
+    },
+
     "toast": {
       "language": {
         "title": "Oops!",
