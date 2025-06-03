@@ -26,5 +26,5 @@ export const dogBreeds: Option[] = [
 
 export const dogGender: Option[] = [
   { label: "남아", value: "MALE" },
-  { label: "여야", value: "FEMALE" },
+  { label: "여아", value: "FEMALE" },
 ];
