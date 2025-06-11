@@ -37,6 +37,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       backgroundColor: "#ffffff",
     },
     ios: {
+      bundleIdentifier: "com.infiniteloopfactory.reactionspeedtest",
       supportsTablet: true,
     },
     android: {
