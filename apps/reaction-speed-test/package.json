@@ -10,6 +10,7 @@
     "eas-build-post-install": "rm -rf patches",
     "eas-build-pre-install": "rm -rf patches",
     "preinstall": "rm -rf patches",
+    "postinstall": "patch-package",
     "ios": "DARK_MODE=media expo start --ios",
     "lint": "biome lint --fix --unsafe --no-errors-on-unmatched",
     "start": "expo start",
@@ -100,5 +101,10 @@
     "jscodeshift": "0.15.2",
     "type-fest": "catalog:",
     "typescript": "^5.3.3"
+  },
+  "pnpm": {
+    "executionEnv": {
+      "nodeVersion": "22.16.0"
+    }
   }
 }
