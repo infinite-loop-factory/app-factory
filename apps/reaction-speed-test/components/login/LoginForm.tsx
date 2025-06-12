@@ -79,10 +79,12 @@ export default function LoginForm() {
   };
 
   return (
-    <FormControl className="rounded-lg border border-outline-300 p-4">
+    <FormControl className="rounded-lg border border-gray-300 bg-white p-6 shadow-sm dark:border-gray-600 dark:bg-gray-800">
       <VStack space="xl">
         <VStack space="xs">
-          <Text className="text-typography-500">이메일</Text>
+          <Text className="font-medium text-gray-700 text-sm dark:text-gray-300">
+            이메일
+          </Text>
           <Input className="min-w-[250px]">
             <InputField
               type="text"
@@ -90,37 +92,48 @@ export default function LoginForm() {
               onChangeText={(text) =>
                 setFormData((prev) => ({ ...prev, email: text }))
               }
+              placeholder="이메일을 입력하세요"
             />
           </Input>
           {errors.email && (
             <FormControlHelper>
-              <FormControlHelperText>{errors.email}</FormControlHelperText>
+              <FormControlHelperText className="text-red-500">
+                {errors.email}
+              </FormControlHelperText>
             </FormControlHelper>
           )}
         </VStack>
 
         <VStack space="xs">
-          <Text className="text-typography-500">비밀번호</Text>
-          <Input className="text-center">
+          <Text className="font-medium text-gray-700 text-sm dark:text-gray-300">
+            비밀번호
+          </Text>
+          <Input>
             <InputField
               type="password"
               value={formData.password}
               onChangeText={(text) =>
                 setFormData((prev) => ({ ...prev, password: text }))
               }
+              placeholder="비밀번호를 입력하세요"
             />
           </Input>
           {errors.password && (
             <FormControlHelper>
-              <FormControlHelperText>{errors.password}</FormControlHelperText>
+              <FormControlHelperText className="text-red-500">
+                {errors.password}
+              </FormControlHelperText>
             </FormControlHelper>
           )}
         </VStack>
 
-        <Button className="ml-auto" onPress={handleLogin} disabled={loading}>
-          <ButtonText className="text-typography-0">
-            {loading ? "처리중..." : "로그인"}
-          </ButtonText>
+        <Button
+          action="primary"
+          className="w-full"
+          onPress={handleLogin}
+          disabled={loading}
+        >
+          <ButtonText>{loading ? "처리중..." : "로그인"}</ButtonText>
         </Button>
       </VStack>
     </FormControl>

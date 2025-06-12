@@ -36,12 +36,14 @@ const Measurement: FC = () => {
 
   return (
     <Pressable onPress={handlePress} className="flex-1">
-      <View className="flex-1 items-center justify-center gap-y-5">
+      <View className="flex-1 items-center justify-center gap-y-5 bg-gray-50 dark:bg-gray-900">
         <Stack.Screen options={{ title: "측정 페이지", headerShown: false }} />
 
         <View className="flex items-center">
-          <Text className="text-2xl dark:text-gray-50">이미지가 나타나면</Text>
-          <Text className="text-2xl dark:text-gray-50">
+          <Text className="font-medium text-2xl text-gray-900 dark:text-gray-50">
+            이미지가 나타나면
+          </Text>
+          <Text className="font-medium text-2xl text-gray-900 dark:text-gray-50">
             화면을 터치해주세요
           </Text>
         </View>
@@ -61,23 +63,26 @@ const Measurement: FC = () => {
 
         <View className="h-8 items-center justify-center">
           {result && (
-            <Text className="text-lg dark:text-gray-50">
+            <Text className="font-semibold text-gray-800 text-lg dark:text-gray-200">
               반응 시간: {result.reactionTime}ms
             </Text>
           )}
           {earlyPress && !result && (
-            <Text className="text-red-500">너무 빨리 터치했습니다!</Text>
+            <Text className="font-medium text-red-500">
+              너무 빨리 터치했습니다!
+            </Text>
           )}
         </View>
 
         <View className="h-24 justify-end gap-y-2">
           {result && (
             <>
-              <Button className="w-40 bg-blue-500" onPress={handleReset}>
+              <Button action="primary" className="w-40" onPress={handleReset}>
                 <ButtonText>다시하기</ButtonText>
               </Button>
               <Button
-                className="w-40 bg-slate-500"
+                action="secondary"
+                className="w-40"
                 onPress={() => router.push("/menu")}
               >
                 <ButtonText>홈으로 가기</ButtonText>
