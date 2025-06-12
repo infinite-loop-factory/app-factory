@@ -74,11 +74,11 @@ const Results: FC = () => {
           <Stack.Screen
             options={{ title: "기록 페이지", headerShown: false }}
           />
-          <Text className="mb-5 font-mono text-2xl tracking-tighter dark:text-gray-50">
+          <Text className="mb-5 font-mono text-2xl text-typography-900 tracking-tighter dark:text-typography-50">
             기록 페이지
           </Text>
           {loading ? (
-            <Text className="font-mono tracking-tighter dark:text-gray-50">
+            <Text className="font-mono text-typography-900 tracking-tighter dark:text-typography-50">
               로딩 중...
             </Text>
           ) : (
@@ -99,17 +99,17 @@ const Results: FC = () => {
                     className={cn(
                       "mb-3 rounded p-3",
                       isNewest &&
-                        "bg-yellow-300 dark:bg-yellow-300 dark:text-gray-950",
+                        "bg-accent-start text-typography-900 dark:bg-accent-start dark:text-typography-900",
                       isLowest &&
-                        "bg-red-300 dark:bg-red-300 dark:text-gray-950",
+                        "bg-accent-stop text-typography-900 dark:bg-accent-stop dark:text-typography-900",
                       isDefault &&
-                        "bg-blue-300 dark:bg-blue-300 dark:text-gray-950",
+                        "bg-secondary-300 text-typography-900 dark:bg-secondary-700 dark:text-typography-100",
                     )}
                   >
-                    <Text className="font-mono text-sm tracking-tighter dark:text-gray-950">
+                    <Text className="font-mono text-sm tracking-tighter">
                       {formatDateTime(record.created_at, "Asia/Seoul")}
                     </Text>
-                    <Text className="font-mono font-semibold text-lg tracking-tighter dark:text-gray-950">
+                    <Text className="font-mono font-semibold text-lg tracking-tighter">
                       {getResultText(record, { isNewest, isLowest })}
                     </Text>
                   </View>
@@ -117,7 +117,11 @@ const Results: FC = () => {
               })}
             </View>
           )}
-          <Button className="mt-8 bg-slate-500" onPress={() => router.back()}>
+          <Button
+            action="secondary"
+            className="mt-8"
+            onPress={() => router.back()}
+          >
             <ButtonText>뒤로 가기</ButtonText>
           </Button>
         </View>
