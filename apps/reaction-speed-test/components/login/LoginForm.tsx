@@ -78,21 +78,27 @@ export default function LoginForm() {
     }
   };
 
+  const clearError = (field: string) => {
+    setErrors((prev) => ({ ...prev, [field]: "" }));
+  };
+
   return (
-    <FormControl className="rounded-lg border border-secondary-300 bg-background-0 p-6 shadow-sm dark:border-secondary-600 dark:bg-background-800">
+    <FormControl>
       <VStack space="xl">
         <VStack space="xs">
-          <Text className="font-medium text-secondary-700 text-sm dark:text-secondary-300">
+          <Text className="font-medium text-slate-700 text-sm dark:text-slate-300">
             이메일
           </Text>
-          <Input className="min-w-[250px]">
+          <Input className="border-slate-300 bg-slate-50 dark:border-slate-600 dark:bg-slate-800">
             <InputField
               type="text"
               value={formData.email}
-              onChangeText={(text) =>
-                setFormData((prev) => ({ ...prev, email: text }))
-              }
+              onChangeText={(text) => {
+                setFormData((prev) => ({ ...prev, email: text }));
+                clearError("email");
+              }}
               placeholder="이메일을 입력하세요"
+              className="text-slate-900 dark:text-slate-100"
             />
           </Input>
           {errors.email && (
@@ -105,17 +111,19 @@ export default function LoginForm() {
         </VStack>
 
         <VStack space="xs">
-          <Text className="font-medium text-secondary-700 text-sm dark:text-secondary-300">
+          <Text className="font-medium text-slate-700 text-sm dark:text-slate-300">
             비밀번호
           </Text>
-          <Input>
+          <Input className="border-slate-300 bg-slate-50 dark:border-slate-600 dark:bg-slate-800">
             <InputField
               type="password"
               value={formData.password}
-              onChangeText={(text) =>
-                setFormData((prev) => ({ ...prev, password: text }))
-              }
+              onChangeText={(text) => {
+                setFormData((prev) => ({ ...prev, password: text }));
+                clearError("password");
+              }}
               placeholder="비밀번호를 입력하세요"
+              className="text-slate-900 dark:text-slate-100"
             />
           </Input>
           {errors.password && (
@@ -129,11 +137,13 @@ export default function LoginForm() {
 
         <Button
           action="primary"
-          className="w-full"
+          className="h-12 w-full bg-slate-900 dark:bg-slate-100"
           onPress={handleLogin}
           disabled={loading}
         >
-          <ButtonText>{loading ? "처리중..." : "로그인"}</ButtonText>
+          <ButtonText className="text-slate-100 dark:text-slate-900">
+            {loading ? "처리중..." : "로그인"}
+          </ButtonText>
         </Button>
       </VStack>
     </FormControl>

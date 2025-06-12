@@ -1,5 +1,3 @@
-// TODO: 추후 추가할 기능 - LoginForm 컴포넌트 대신 v0 디자인 적용
-// import LoginForm from "@/components/login/LoginForm";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Stack, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
@@ -69,10 +67,10 @@ export default function HomeScreen() {
           <Button
             action="primary"
             className="h-14 w-full bg-slate-900 dark:bg-slate-100"
-            onPress={() => router.push("/menu")}
+            onPress={() => router.push("/login")}
           >
             <ButtonText className="text-lg text-slate-100 dark:text-slate-900">
-              시작하기
+              로그인하기
             </ButtonText>
           </Button>
           <Button
