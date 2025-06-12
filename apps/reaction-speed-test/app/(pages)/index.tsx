@@ -5,9 +5,9 @@ import { SafeAreaView, Text, View } from "react-native";
 
 export default function HomeScreen() {
   return (
-    <SafeAreaView className="h-full bg-gray-50 dark:bg-gray-900">
+    <SafeAreaView className="h-full bg-background-50 dark:bg-background-900">
       <View className="flex-auto items-center justify-center gap-y-10 px-6">
-        <Text className="font-bold text-3xl text-gray-900 dark:text-gray-50">
+        <Text className="font-bold text-3xl text-typography-900 dark:text-typography-50">
           반응 속도 테스트
         </Text>
         <LoginForm />

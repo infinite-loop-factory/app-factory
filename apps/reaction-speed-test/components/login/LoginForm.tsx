@@ -79,10 +79,10 @@ export default function LoginForm() {
   };
 
   return (
-    <FormControl className="rounded-lg border border-gray-300 bg-white p-6 shadow-sm dark:border-gray-600 dark:bg-gray-800">
+    <FormControl className="rounded-lg border border-secondary-300 bg-background-0 p-6 shadow-sm dark:border-secondary-600 dark:bg-background-800">
       <VStack space="xl">
         <VStack space="xs">
-          <Text className="font-medium text-gray-700 text-sm dark:text-gray-300">
+          <Text className="font-medium text-secondary-700 text-sm dark:text-secondary-300">
             이메일
           </Text>
           <Input className="min-w-[250px]">
@@ -105,7 +105,7 @@ export default function LoginForm() {
         </VStack>
 
         <VStack space="xs">
-          <Text className="font-medium text-gray-700 text-sm dark:text-gray-300">
+          <Text className="font-medium text-secondary-700 text-sm dark:text-secondary-300">
             비밀번호
           </Text>
           <Input>

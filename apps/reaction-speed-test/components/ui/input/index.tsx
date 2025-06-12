@@ -34,7 +34,7 @@ cssInterop(PrimitiveIcon, {
 });
 
 const inputStyle = tva({
-  base: "border-gray-300 flex-row overflow-hidden content-center data-[hover=true]:border-gray-400 data-[focus=true]:border-gray-600 data-[focus=true]:hover:border-gray-600 data-[disabled=true]:opacity-40 data-[disabled=true]:hover:border-gray-300 items-center",
+  base: "border-secondary-300 flex-row overflow-hidden content-center data-[hover=true]:border-secondary-400 data-[focus=true]:border-primary-600 data-[focus=true]:hover:border-primary-600 data-[disabled=true]:opacity-40 data-[disabled=true]:hover:border-secondary-300 items-center",
 
   variants: {
     size: {
@@ -49,16 +49,16 @@ const inputStyle = tva({
         "rounded-none border-b data-[invalid=true]:border-b-2 data-[invalid=true]:border-red-500 data-[invalid=true]:hover:border-red-500 data-[invalid=true]:data-[focus=true]:border-red-500 data-[invalid=true]:data-[focus=true]:hover:border-red-500 data-[invalid=true]:data-[disabled=true]:hover:border-red-500",
 
       outline:
-        "rounded-lg border data-[invalid=true]:border-red-500 data-[invalid=true]:hover:border-red-500 data-[invalid=true]:data-[focus=true]:border-red-500 data-[invalid=true]:data-[focus=true]:hover:border-red-500 data-[invalid=true]:data-[disabled=true]:hover:border-red-500 data-[focus=true]:web:ring-1 data-[focus=true]:web:ring-inset data-[focus=true]:web:ring-gray-400 data-[invalid=true]:web:ring-1 data-[invalid=true]:web:ring-inset data-[invalid=true]:web:ring-red-400 data-[invalid=true]:data-[focus=true]:hover:web:ring-1 data-[invalid=true]:data-[focus=true]:hover:web:ring-inset data-[invalid=true]:data-[focus=true]:hover:web:ring-red-400 data-[invalid=true]:data-[disabled=true]:hover:web:ring-1 data-[invalid=true]:data-[disabled=true]:hover:web:ring-inset data-[invalid=true]:data-[disabled=true]:hover:web:ring-red-400",
+        "rounded-lg border data-[invalid=true]:border-red-500 data-[invalid=true]:hover:border-red-500 data-[invalid=true]:data-[focus=true]:border-red-500 data-[invalid=true]:data-[focus=true]:hover:border-red-500 data-[invalid=true]:data-[disabled=true]:hover:border-red-500 data-[focus=true]:web:ring-1 data-[focus=true]:web:ring-inset data-[focus=true]:web:ring-primary-400 data-[invalid=true]:web:ring-1 data-[invalid=true]:web:ring-inset data-[invalid=true]:web:ring-red-400 data-[invalid=true]:data-[focus=true]:hover:web:ring-1 data-[invalid=true]:data-[focus=true]:hover:web:ring-inset data-[invalid=true]:data-[focus=true]:hover:web:ring-red-400 data-[invalid=true]:data-[disabled=true]:hover:web:ring-1 data-[invalid=true]:data-[disabled=true]:hover:web:ring-inset data-[invalid=true]:data-[disabled=true]:hover:web:ring-red-400",
 
       rounded:
-        "rounded-full border data-[invalid=true]:border-red-500 data-[invalid=true]:hover:border-red-500 data-[invalid=true]:data-[focus=true]:border-red-500 data-[invalid=true]:data-[focus=true]:hover:border-red-500 data-[invalid=true]:data-[disabled=true]:hover:border-red-500 data-[focus=true]:web:ring-1 data-[focus=true]:web:ring-inset data-[focus=true]:web:ring-gray-400 data-[invalid=true]:web:ring-1 data-[invalid=true]:web:ring-inset data-[invalid=true]:web:ring-red-400 data-[invalid=true]:data-[focus=true]:hover:web:ring-1 data-[invalid=true]:data-[focus=true]:hover:web:ring-inset data-[invalid=true]:data-[focus=true]:hover:web:ring-red-400 data-[invalid=true]:data-[disabled=true]:hover:web:ring-1 data-[invalid=true]:data-[disabled=true]:hover:web:ring-inset data-[invalid=true]:data-[disabled=true]:hover:web:ring-red-400",
+        "rounded-full border data-[invalid=true]:border-red-500 data-[invalid=true]:hover:border-red-500 data-[invalid=true]:data-[focus=true]:border-red-500 data-[invalid=true]:data-[focus=true]:hover:border-red-500 data-[invalid=true]:data-[disabled=true]:hover:border-red-500 data-[focus=true]:web:ring-1 data-[focus=true]:web:ring-inset data-[focus=true]:web:ring-primary-400 data-[invalid=true]:web:ring-1 data-[invalid=true]:web:ring-inset data-[invalid=true]:web:ring-red-400 data-[invalid=true]:data-[focus=true]:hover:web:ring-1 data-[invalid=true]:data-[focus=true]:hover:web:ring-inset data-[invalid=true]:data-[focus=true]:hover:web:ring-red-400 data-[invalid=true]:data-[disabled=true]:hover:web:ring-1 data-[invalid=true]:data-[disabled=true]:hover:web:ring-inset data-[invalid=true]:data-[disabled=true]:hover:web:ring-red-400",
     },
   },
 });
 
 const inputIconStyle = tva({
-  base: "justify-center items-center text-gray-500 fill-none",
+  base: "justify-center items-center text-secondary-500 fill-none",
   parentVariants: {
     size: {
       "2xs": "h-3 w-3",
@@ -76,7 +76,7 @@ const inputSlotStyle = tva({
 });
 
 const inputFieldStyle = tva({
-  base: "flex-1 text-gray-900 py-0 px-3 placeholder:text-gray-500 h-full ios:leading-[0px] web:cursor-text web:data-[disabled=true]:cursor-not-allowed",
+  base: "flex-1 text-typography-900 dark:text-typography-100 py-0 px-3 placeholder:text-secondary-500 h-full ios:leading-[0px] web:cursor-text web:data-[disabled=true]:cursor-not-allowed",
 
   parentVariants: {
     variant: {

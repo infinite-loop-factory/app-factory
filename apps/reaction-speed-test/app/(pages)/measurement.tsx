@@ -36,14 +36,14 @@ const Measurement: FC = () => {
 
   return (
     <Pressable onPress={handlePress} className="flex-1">
-      <View className="flex-1 items-center justify-center gap-y-5 bg-gray-50 dark:bg-gray-900">
+      <View className="flex-1 items-center justify-center gap-y-5 bg-background-50 dark:bg-background-900">
         <Stack.Screen options={{ title: "측정 페이지", headerShown: false }} />
 
         <View className="flex items-center">
-          <Text className="font-medium text-2xl text-gray-900 dark:text-gray-50">
+          <Text className="font-medium text-2xl text-typography-900 dark:text-typography-50">
             이미지가 나타나면
           </Text>
-          <Text className="font-medium text-2xl text-gray-900 dark:text-gray-50">
+          <Text className="font-medium text-2xl text-typography-900 dark:text-typography-50">
             화면을 터치해주세요
           </Text>
         </View>
@@ -63,7 +63,7 @@ const Measurement: FC = () => {
 
         <View className="h-8 items-center justify-center">
           {result && (
-            <Text className="font-semibold text-gray-800 text-lg dark:text-gray-200">
+            <Text className="font-semibold text-lg text-typography-800 dark:text-typography-200">
               반응 시간: {result.reactionTime}ms
             </Text>
           )}

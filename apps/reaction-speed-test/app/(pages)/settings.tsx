@@ -9,8 +9,10 @@ const Settings: FC = () => {
   return (
     <View className="flex-1 items-center justify-center">
       <Stack.Screen options={{ title: "설정 페이지", headerShown: false }} />
-      <Text className="mb-5 text-2xl dark:text-gray-50">설정 페이지</Text>
-      <Button className="bg-slate-500" onPress={() => router.back()}>
+      <Text className="mb-5 text-2xl text-typography-900 dark:text-typography-50">
+        설정 페이지
+      </Text>
+      <Button action="secondary" onPress={() => router.back()}>
         <ButtonText>뒤로 가기</ButtonText>
       </Button>
     </View>
