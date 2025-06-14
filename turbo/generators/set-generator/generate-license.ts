@@ -138,29 +138,6 @@ export default function generateLicense(plop: PlopTypes.NodePlopAPI) {
     return apps.filter((app) => !app.startsWith("."));
   };
 
-  // Helper function to get app name from process args
-  const getAppNameFromArgs = (): string | undefined => {
-    const argv = process.argv;
-
-    // Look for JSON argument that contains args
-    for (const arg of argv) {
-      try {
-        const parsed = JSON.parse(arg);
-        if (
-          parsed.args &&
-          Array.isArray(parsed.args) &&
-          parsed.args.length > 0
-        ) {
-          return parsed.args[0];
-        }
-      } catch {
-        // Not JSON, continue
-      }
-    }
-
-    return undefined;
-  };
-
   // Helper function to generate license for a given app name
   const generateLicenseForApp = async (appName: string): Promise<string> => {
     // Validate app exists
@@ -242,15 +219,10 @@ export default function generateLicense(plop: PlopTypes.NodePlopAPI) {
     ],
     actions: [
       async (answers: object) => {
-        // Try args first, then answers
-        const argAppName = getAppNameFromArgs();
-        const appName = argAppName || (answers as GeneratorAnswers).appName;
+        const { appName } = answers as GeneratorAnswers;
 
         if (!appName) {
-          const apps = await getApps();
-          throw new Error(
-            `App name is required. Usage: turbo gen license --args <app-name>\nAvailable apps: ${apps.join(", ")}`,
-          );
+          throw new Error("App name is required.");
         }
 
         return await generateLicenseForApp(appName);
