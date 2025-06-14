@@ -257,24 +257,4 @@ export default function generateLicense(plop: PlopTypes.NodePlopAPI) {
       },
     ],
   });
-
-  // Keep interactive-only generator for explicit use
-  plop.setGenerator("license-interactive", {
-    description:
-      "Generate licenses.json file for an app (interactive selection only)",
-    prompts: [
-      {
-        type: "list",
-        name: "appName",
-        message: "Which app would you like to generate licenses for?",
-        choices: getApps,
-      },
-    ],
-    actions: [
-      async (answers: object) => {
-        const typedAnswers = answers as GeneratorAnswers;
-        return await generateLicenseForApp(typedAnswers.appName);
-      },
-    ],
-  });
 }
