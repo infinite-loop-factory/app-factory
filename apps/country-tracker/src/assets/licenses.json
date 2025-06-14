@@ -1,0 +1,568 @@
+{
+  "generated": "2025-06-14T09:30:16.696Z",
+  "app": "country-tracker",
+  "totalPackages": 67,
+  "stats": {
+    "local": 67,
+    "npm": 0,
+    "fallback": 0
+  },
+  "appVersion": "1.0.0",
+  "licenses": [
+    {
+      "name": "@babel/core",
+      "version": "7.27.1",
+      "license": "MIT",
+      "author": "The Babel Team (https://babel.dev/team)",
+      "description": "Babel compiler core.",
+      "repository": "https://github.com/babel/babel.git",
+      "homepage": "https://babel.dev/docs/en/next/babel-core"
+    },
+    {
+      "name": "@biomejs/biome",
+      "version": "1.9.4",
+      "license": "MIT OR Apache-2.0",
+      "author": "Emanuele Stoppa",
+      "description": "Biome is a toolchain for the web: formatter, linter and more",
+      "repository": "git+https://github.com/biomejs/biome.git",
+      "homepage": "https://biomejs.dev"
+    },
+    {
+      "name": "@expo/html-elements",
+      "version": "0.4.2",
+      "license": "MIT",
+      "author": "650 Industries, Inc.",
+      "description": "Universal semantic HTML React components for iOS, Android, web, and desktop",
+      "repository": "https://github.com/expo/expo.git",
+      "homepage": "https://github.com/expo/expo/tree/main/packages/html-elements"
+    },
+    {
+      "name": "@expo/vector-icons",
+      "version": "14.1.0",
+      "license": "MIT",
+      "author": "Brent Vatne",
+      "description": "Built-in support for popular icon fonts and the tooling to create your own Icon components from your font and glyph map. This is a wrapper around react-native-vector-icons to make it compatible with Expo.",
+      "repository": "https://github.com/expo/vector-icons.git",
+      "homepage": "https://expo.github.io/vector-icons"
+    },
+    {
+      "name": "@gluestack-ui/actionsheet",
+      "version": "0.2.53",
+      "description": "A universal headless actionsheet component for React Native, Next.js & React",
+      "repository": "git+https://github.com/gluestack/gluestack-ui.git",
+      "homepage": "https://github.com/gluestack/gluestack-ui/tree/main/packages/unstyled/actionsheet#readme"
+    },
+    {
+      "name": "@gluestack-ui/button",
+      "version": "1.0.14",
+      "description": "A universal headless Button component for React Native, Next.js & React",
+      "repository": "git+https://github.com/gluestack/gluestack-ui.git",
+      "homepage": "https://github.com/gluestack/gluestack-ui/tree/main/packages/unstyled/button#readme"
+    },
+    {
+      "name": "@gluestack-ui/divider",
+      "version": "0.1.10",
+      "description": "A universal headless Divider component for React Native, Next.js & React",
+      "repository": "git+https://github.com/gluestack/gluestack-ui.git",
+      "homepage": "https://github.com/gluestack/gluestack-ui/tree/main/packages/unstyled/divider#readme"
+    },
+    {
+      "name": "@gluestack-ui/fab",
+      "version": "0.1.28",
+      "description": "A universal headless fab component for React Native, Next.js & React",
+      "repository": "git+https://github.com/gluestack/gluestack-ui.git",
+      "homepage": "https://github.com/gluestack/gluestack-ui/tree/main/packages/unstyled/fab#readme"
+    },
+    {
+      "name": "@gluestack-ui/input",
+      "version": "0.1.38",
+      "description": "A universal headless input component for React Native, Next.js & React",
+      "repository": "git+https://github.com/gluestack/gluestack-ui.git",
+      "homepage": "https://github.com/gluestack/gluestack-ui/tree/main/packages/unstyled/input#readme"
+    },
+    {
+      "name": "@gluestack-ui/menu",
+      "version": "0.2.43",
+      "description": "A universal headless menu component for React Native, Next.js & React",
+      "repository": "git+https://github.com/gluestack/gluestack-ui.git",
+      "homepage": "https://github.com/gluestack/gluestack-ui/tree/main/packages/unstyled/menu#readme"
+    },
+    {
+      "name": "@gluestack-ui/nativewind-utils",
+      "version": "1.0.26",
+      "description": "A utility function package for @gluestack-ui/nativewind"
+    },
+    {
+      "name": "@gluestack-ui/overlay",
+      "version": "0.1.22",
+      "description": "A universal headless overlay component for React Native, Next.js & React",
+      "repository": "git+https://github.com/gluestack/gluestack-ui.git",
+      "homepage": "https://github.com/gluestack/gluestack-ui/tree/main/packages/unstyled/overlay#readme"
+    },
+    {
+      "name": "@gluestack-ui/select",
+      "version": "0.1.31",
+      "description": "A universal headless select component for React Native, Next.js & React",
+      "repository": "git+https://github.com/gluestack/gluestack-ui.git",
+      "homepage": "https://github.com/gluestack/gluestack-ui/tree/main/packages/unstyled/select#readme"
+    },
+    {
+      "name": "@gluestack-ui/switch",
+      "version": "0.1.29",
+      "description": "A universal headless Switch component for React Native, Next.js & React",
+      "repository": "git+https://github.com/gluestack/gluestack-ui.git",
+      "homepage": "https://github.com/gluestack/gluestack-ui/tree/main/packages/unstyled/switch#readme"
+    },
+    {
+      "name": "@gluestack-ui/toast",
+      "version": "1.0.9",
+      "description": "A universal headless toast component for React Native, Next.js & React",
+      "repository": "git+https://github.com/gluestack/gluestack-ui.git",
+      "homepage": "https://github.com/gluestack/gluestack-ui/tree/main/packages/unstyled/toast#readme"
+    },
+    {
+      "name": "@gorhom/bottom-sheet",
+      "version": "5.1.4",
+      "license": "MIT",
+      "author": "Mo Gorhom (https://gorhom.dev)",
+      "description": "A performant interactive bottom sheet with fully configurable options 🚀",
+      "repository": "https://github.com/gorhom/react-native-bottom-sheet",
+      "homepage": "https://gorhom.dev/react-native-bottom-sheet/"
+    },
+    {
+      "name": "@legendapp/motion",
+      "version": "2.4.0",
+      "license": "MIT",
+      "author": "Legend <contact@legendapp.com> (https://github.com/LegendApp)",
+      "description": "legend-motion",
+      "repository": "git+https://github.com/LegendApp/legend-motion.git",
+      "homepage": "https://github.com/LegendApp/legend-motion#readme"
+    },
+    {
+      "name": "@react-native-async-storage/async-storage",
+      "version": "1.23.1",
+      "license": "MIT",
+      "author": "Krzysztof Borowy <hello@krizzu.dev>",
+      "description": "Asynchronous, persistent, key-value storage system for React Native.",
+      "repository": "https://github.com/react-native-async-storage/async-storage.git",
+      "homepage": "https://github.com/react-native-async-storage/async-storage#readme"
+    },
+    {
+      "name": "@react-navigation/native",
+      "version": "6.1.18",
+      "license": "MIT",
+      "description": "React Native integration for React Navigation",
+      "repository": "https://github.com/react-navigation/react-navigation.git",
+      "homepage": "https://reactnavigation.org"
+    },
+    {
+      "name": "@reactuses/core",
+      "version": "5.0.23",
+      "license": "Unlicense",
+      "repository": "git+https://github.com/childrentime/reactuse.git",
+      "homepage": "https://www.reactuse.com/"
+    },
+    {
+      "name": "@sentry/react-native",
+      "version": "6.13.1",
+      "license": "MIT",
+      "author": "Sentry",
+      "description": "Official Sentry SDK for react-native",
+      "repository": "https://github.com/getsentry/sentry-react-native",
+      "homepage": "https://github.com/getsentry/sentry-react-native"
+    },
+    {
+      "name": "@t3-oss/env-core",
+      "version": "0.12.0",
+      "license": "MIT",
+      "author": "Julius Marminge",
+      "repository": "https://github.com/t3-oss/t3-env"
+    },
+    {
+      "name": "@testing-library/react-native",
+      "version": "12.9.0",
+      "license": "MIT",
+      "author": "Michał Pierzchała <thymikee@gmail.com> (https://github.com/thymikee), Maciej Jastrzębski <mdjastrzebski@gmail.com> (https://github.com/mdjastrzebski)",
+      "description": "Simple and complete React Native testing utilities that encourage good testing practices.",
+      "repository": "https://www.github.com/callstack/react-native-testing-library.git",
+      "homepage": "https://callstack.github.io/react-native-testing-library"
+    },
+    {
+      "name": "@types/jest",
+      "version": "29.5.14",
+      "license": "MIT",
+      "description": "TypeScript definitions for jest",
+      "repository": "https://github.com/DefinitelyTyped/DefinitelyTyped.git",
+      "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/jest"
+    },
+    {
+      "name": "@types/luxon",
+      "version": "3.6.2",
+      "license": "MIT",
+      "description": "TypeScript definitions for luxon",
+      "repository": "https://github.com/DefinitelyTyped/DefinitelyTyped.git",
+      "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/luxon"
+    },
+    {
+      "name": "@types/react",
+      "version": "18.2.79",
+      "license": "MIT",
+      "description": "TypeScript definitions for react",
+      "repository": "https://github.com/DefinitelyTyped/DefinitelyTyped.git",
+      "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/react"
+    },
+    {
+      "name": "@types/react-test-renderer",
+      "version": "18.3.1",
+      "license": "MIT",
+      "description": "TypeScript definitions for react-test-renderer",
+      "repository": "https://github.com/DefinitelyTyped/DefinitelyTyped.git",
+      "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/react-test-renderer"
+    },
+    {
+      "name": "babel-plugin-module-resolver",
+      "version": "5.0.2",
+      "license": "MIT",
+      "author": "Tommy Leunen",
+      "description": "Module resolver plugin for Babel",
+      "repository": "https://github.com/tleunen/babel-plugin-module-resolver.git"
+    },
+    {
+      "name": "babel-plugin-transform-vite-meta-env",
+      "version": "1.0.3",
+      "license": "MIT",
+      "author": "Michael Peyper <mpeyper7@gmail.com>",
+      "description": "babel plugin that emulates vite's import.meta.env functionality",
+      "repository": "git+https://github.com/OpenSourceRaidGuild/babel-vite.git",
+      "homepage": "https://github.com/OpenSourceRaidGuild/babel-vite#readme"
+    },
+    {
+      "name": "clsx",
+      "version": "2.1.1",
+      "license": "MIT",
+      "author": "Luke Edwards",
+      "description": "A tiny (239B) utility for constructing className strings conditionally.",
+      "repository": "lukeed/clsx"
+    },
+    {
+      "name": "es-toolkit",
+      "version": "1.37.2",
+      "license": "MIT",
+      "description": "A state-of-the-art, high-performance JavaScript utility library with a small bundle size and strong type annotations.",
+      "repository": "https://github.com/toss/es-toolkit.git",
+      "homepage": "https://es-toolkit.slash.page"
+    },
+    {
+      "name": "expo",
+      "version": "51.0.39",
+      "license": "MIT",
+      "author": "Expo",
+      "description": "The Expo SDK",
+      "repository": "https://github.com/expo/expo.git",
+      "homepage": "https://github.com/expo/expo/tree/main/packages/expo"
+    },
+    {
+      "name": "expo-constants",
+      "version": "16.0.2",
+      "license": "MIT",
+      "author": "650 Industries, Inc.",
+      "description": "Provides system information that remains constant throughout the lifetime of your app.",
+      "repository": "https://github.com/expo/expo.git",
+      "homepage": "https://docs.expo.dev/versions/latest/sdk/constants/"
+    },
+    {
+      "name": "expo-font",
+      "version": "12.0.10",
+      "license": "MIT",
+      "author": "650 Industries, Inc.",
+      "description": "Load fonts at runtime and use them in React Native components.",
+      "repository": "https://github.com/expo/expo.git",
+      "homepage": "https://docs.expo.dev/versions/latest/sdk/font/"
+    },
+    {
+      "name": "expo-intent-launcher",
+      "version": "11.0.1",
+      "license": "MIT",
+      "author": "650 Industries, Inc.",
+      "description": "Provides a way to launch Android intents, e.g. opening a specific activity.",
+      "repository": "https://github.com/expo/expo.git",
+      "homepage": "https://docs.expo.dev/versions/latest/sdk/intent-launcher/"
+    },
+    {
+      "name": "expo-linking",
+      "version": "6.3.1",
+      "license": "MIT",
+      "author": "650 Industries, Inc.",
+      "description": "Create and open deep links universally",
+      "repository": "https://github.com/expo/expo.git",
+      "homepage": "https://docs.expo.dev/versions/latest/sdk/linking"
+    },
+    {
+      "name": "expo-localization",
+      "version": "15.0.3",
+      "license": "MIT",
+      "author": "650 Industries, Inc.",
+      "description": "Provides an interface for native user localization information.",
+      "repository": "https://github.com/expo/expo.git",
+      "homepage": "https://docs.expo.dev/versions/latest/sdk/localization/"
+    },
+    {
+      "name": "expo-location",
+      "version": "17.0.1",
+      "license": "MIT",
+      "author": "650 Industries, Inc.",
+      "description": "Allows reading geolocation information from the device. Your app can poll for the current location or subscribe to location update events.",
+      "repository": "https://github.com/expo/expo.git",
+      "homepage": "https://docs.expo.dev/versions/latest/sdk/location/"
+    },
+    {
+      "name": "expo-router",
+      "version": "3.5.24",
+      "license": "MIT",
+      "author": "650 Industries, Inc.",
+      "description": "Expo Router is a file-based router for React Native and web applications.",
+      "repository": "https://github.com/expo/expo.git",
+      "homepage": "https://docs.expo.dev/routing/introduction/"
+    },
+    {
+      "name": "expo-splash-screen",
+      "version": "0.27.7",
+      "license": "MIT",
+      "author": "650 Industries, Inc.",
+      "description": "Provides a module to allow keeping the native Splash Screen visible until you choose to hide it.",
+      "repository": "https://github.com/expo/expo.git",
+      "homepage": "https://docs.expo.dev/versions/latest/sdk/splash-screen/"
+    },
+    {
+      "name": "expo-status-bar",
+      "version": "1.12.1",
+      "license": "MIT",
+      "author": "650 Industries, Inc.",
+      "description": "Provides the same interface as the React Native StatusBar API, but with slightly different defaults to work great in Expo environments.",
+      "repository": "https://github.com/expo/expo.git",
+      "homepage": "https://docs.expo.dev/versions/latest/sdk/status-bar/"
+    },
+    {
+      "name": "expo-system-ui",
+      "version": "3.0.7",
+      "license": "MIT",
+      "author": "650 Industries, Inc.",
+      "description": "Interact with system UI elements",
+      "repository": "https://github.com/expo/expo.git",
+      "homepage": "https://docs.expo.dev/versions/latest/sdk/system-ui"
+    },
+    {
+      "name": "expo-task-manager",
+      "version": "11.8.2",
+      "license": "MIT",
+      "author": "650 Industries, Inc.",
+      "description": "Expo module that provides support for tasks that can run in the background.",
+      "repository": "https://github.com/expo/expo.git",
+      "homepage": "https://docs.expo.dev/versions/latest/sdk/task-manager/"
+    },
+    {
+      "name": "expo-web-browser",
+      "version": "13.0.3",
+      "license": "MIT",
+      "author": "650 Industries, Inc.",
+      "description": "Provides access to the system's web browser and supports handling redirects. On iOS, it uses SFSafariViewController or SFAuthenticationSession, depending on the method you call, and on Android it uses ChromeCustomTabs. As of iOS 11, SFSafariViewController no longer shares cookies with Safari, so if you are using WebBrowser for authentication you will want to use WebBrowser.openAuthSessionAsync, and if you just want to open a webpage (such as your app privacy policy), then use WebBrowser.openBrowserAsync.",
+      "repository": "https://github.com/expo/expo.git",
+      "homepage": "https://docs.expo.dev/versions/latest/sdk/webbrowser/"
+    },
+    {
+      "name": "i18n-js",
+      "version": "4.5.1",
+      "license": "MIT",
+      "author": "Nando Vieira <me@fnando.com>",
+      "description": "A small library to provide I18n on JavaScript.",
+      "repository": "https://github.com/fnando/i18n"
+    },
+    {
+      "name": "jest",
+      "version": "29.7.0",
+      "license": "MIT",
+      "description": "Delightful JavaScript Testing.",
+      "repository": "https://github.com/jestjs/jest.git",
+      "homepage": "https://jestjs.io/"
+    },
+    {
+      "name": "jest-expo",
+      "version": "51.0.4",
+      "license": "MIT",
+      "description": "A Jest preset to painlessly test your Expo / React Native apps.",
+      "repository": "git://github.com/expo/expo.git",
+      "homepage": "https://github.com/expo/expo/tree/main/packages/jest-expo"
+    },
+    {
+      "name": "jotai",
+      "version": "2.12.4",
+      "license": "MIT",
+      "author": "Daishi Kato",
+      "description": "👻 Primitive and flexible state management for React",
+      "repository": "git+https://github.com/pmndrs/jotai.git",
+      "homepage": "https://github.com/pmndrs/jotai"
+    },
+    {
+      "name": "jscodeshift",
+      "version": "0.15.2",
+      "license": "MIT",
+      "author": "Felix Kling",
+      "description": "A toolkit for JavaScript codemods",
+      "repository": "https://github.com/facebook/jscodeshift.git"
+    },
+    {
+      "name": "lucide-react-native",
+      "version": "0.511.0",
+      "license": "ISC",
+      "author": "Eric Fennis",
+      "description": "A Lucide icon library package for React Native applications.",
+      "repository": "https://github.com/lucide-icons/lucide.git",
+      "homepage": "https://lucide.dev"
+    },
+    {
+      "name": "luxon",
+      "version": "3.6.1",
+      "license": "MIT",
+      "author": "Isaac Cambron",
+      "description": "Immutable date wrapper",
+      "repository": "https://github.com/moment/luxon"
+    },
+    {
+      "name": "nativewind",
+      "version": "4.1.23",
+      "license": "MIT",
+      "author": "Mark Lawlor",
+      "description": "Use Tailwindcss in your cross-platform React Native applications",
+      "repository": "git+https://github.com/marklawlor/nativewind.git",
+      "homepage": "https://nativewind.dev"
+    },
+    {
+      "name": "prettier",
+      "version": "3.5.3",
+      "license": "MIT",
+      "author": "James Long",
+      "description": "Prettier is an opinionated code formatter",
+      "repository": "prettier/prettier",
+      "homepage": "https://prettier.io"
+    },
+    {
+      "name": "react",
+      "version": "18.2.0",
+      "license": "MIT",
+      "description": "React is a JavaScript library for building user interfaces.",
+      "repository": "https://github.com/facebook/react.git",
+      "homepage": "https://reactjs.org/"
+    },
+    {
+      "name": "react-dom",
+      "version": "18.2.0",
+      "license": "MIT",
+      "description": "React package for working with the DOM.",
+      "repository": "https://github.com/facebook/react.git",
+      "homepage": "https://reactjs.org/"
+    },
+    {
+      "name": "react-native",
+      "version": "0.74.5",
+      "license": "MIT",
+      "description": "A framework for building native apps using React",
+      "repository": "https://github.com/facebook/react-native.git",
+      "homepage": "https://reactnative.dev/"
+    },
+    {
+      "name": "react-native-gesture-handler",
+      "version": "2.16.2",
+      "license": "MIT",
+      "author": "Krzysztof Magiera",
+      "description": "Experimental implementation of a new declarative API for gesture handling in react-native",
+      "repository": "git+https://github.com/software-mansion/react-native-gesture-handler.git",
+      "homepage": "https://github.com/software-mansion/react-native-gesture-handler#readme"
+    },
+    {
+      "name": "react-native-maps",
+      "version": "1.23.7",
+      "license": "MIT",
+      "author": "Leland Richardson <leland.m.richardson@gmail.com>",
+      "description": "React Native Mapview component for iOS + Android",
+      "repository": "https://github.com/react-native-maps/react-native-maps",
+      "homepage": "https://github.com/react-native-maps/react-native-maps#readme"
+    },
+    {
+      "name": "react-native-reanimated",
+      "version": "3.10.1",
+      "license": "MIT",
+      "author": "Krzysztof Magiera",
+      "description": "More powerful alternative to Animated library for React Native.",
+      "repository": "git+https://github.com/software-mansion/react-native-reanimated.git",
+      "homepage": "https://github.com/software-mansion/react-native-reanimated#readme"
+    },
+    {
+      "name": "react-native-safe-area-context",
+      "version": "4.10.5",
+      "license": "MIT",
+      "author": "Janic Duplessis <janicduplessis@gmail.com>",
+      "description": "A flexible way to handle safe area, also works on Android and web.",
+      "repository": "https://github.com/th3rdwave/react-native-safe-area-context.git",
+      "homepage": "https://github.com/th3rdwave/react-native-safe-area-context#readme"
+    },
+    {
+      "name": "react-native-screens",
+      "version": "3.31.1",
+      "license": "MIT",
+      "author": "Krzysztof Magiera",
+      "description": "Native navigation primitives for your React Native app.",
+      "repository": "git+https://github.com/software-mansion/react-native-screens.git",
+      "homepage": "https://github.com/software-mansion/react-native-screens#readme"
+    },
+    {
+      "name": "react-native-svg",
+      "version": "15.12.0",
+      "license": "MIT",
+      "description": "SVG library for react-native",
+      "repository": "https://github.com/react-native-community/react-native-svg",
+      "homepage": "https://github.com/react-native-community/react-native-svg"
+    },
+    {
+      "name": "react-native-web",
+      "version": "0.19.13",
+      "license": "MIT",
+      "author": "Nicolas Gallagher",
+      "description": "React Native for Web",
+      "repository": "git://github.com/necolas/react-native-web.git"
+    },
+    {
+      "name": "tailwindcss",
+      "version": "3.4.17",
+      "license": "MIT",
+      "description": "A utility-first CSS framework for rapidly building custom user interfaces.",
+      "repository": "https://github.com/tailwindlabs/tailwindcss.git",
+      "homepage": "https://tailwindcss.com"
+    },
+    {
+      "name": "type-fest",
+      "version": "4.41.0",
+      "license": "(MIT OR CC0-1.0)",
+      "author": "Sindre Sorhus",
+      "description": "A collection of essential TypeScript types",
+      "repository": "sindresorhus/type-fest"
+    },
+    {
+      "name": "typescript",
+      "version": "5.8.3",
+      "license": "Apache-2.0",
+      "author": "Microsoft Corp.",
+      "description": "TypeScript is a language for application scale JavaScript development",
+      "repository": "https://github.com/microsoft/TypeScript.git",
+      "homepage": "https://www.typescriptlang.org/"
+    },
+    {
+      "name": "zod",
+      "version": "3.24.4",
+      "license": "MIT",
+      "author": "Colin McDonnell <colin@colinhacks.com>",
+      "description": "TypeScript-first schema declaration and validation library with static type inference",
+      "repository": "git+https://github.com/colinhacks/zod.git",
+      "homepage": "https://zod.dev"
+    }
+  ]
+}
