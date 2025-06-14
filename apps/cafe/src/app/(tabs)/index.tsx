@@ -1,3 +1,4 @@
+import { useRouter } from "expo-router";
 import { useState } from "react";
 import {
   FlatList,
@@ -245,8 +246,13 @@ const posts = [
   },
 ];
 const RecommendedCafeItem = ({ item }: RecommendedCafeItemProps) => {
+  const router = useRouter();
+
   return (
-    <TouchableOpacity className="mr-3 mb-4 w-36">
+    <TouchableOpacity
+      className="mr-3 mb-4 w-36"
+      onPress={() => router.push(`/cafe/${item.id}`)}
+    >
       <View className="relative h-32 w-full items-center justify-center overflow-hidden rounded-lg bg-gray-200">
         <Image
           source={item.image}
@@ -270,19 +276,26 @@ const CategoryItem = ({ item }: CategoryItemProps) => (
   </TouchableOpacity>
 );
 
-const PostItem = ({ item }: PostItemProps) => (
-  <TouchableOpacity className="flex-row border-gray-200 border-b p-4">
-    <Image source={item.image} className="h-15 w-15 rounded bg-gray-200" />
-    <View className="ml-3 flex-1 flex-row justify-between">
-      <View>
-        <Text className="mb-1 font-semibold text-base">{item.title}</Text>
-        <Text className="mb-1 text-gray-600 text-sm">{item.description}</Text>
-        <Text className="text-gray-400 text-xs">{item.comments}</Text>
+const PostItem = ({ item }: PostItemProps) => {
+  const router = useRouter();
+
+  return (
+    <TouchableOpacity
+      className="flex-row border-gray-200 border-b p-4"
+      onPress={() => router.push(`/cafe/${item.id}`)}
+    >
+      <Image source={item.image} className="h-15 w-15 rounded bg-gray-200" />
+      <View className="ml-3 flex-1 flex-row justify-between">
+        <View>
+          <Text className="mb-1 font-semibold text-base">{item.title}</Text>
+          <Text className="mb-1 text-gray-600 text-sm">{item.description}</Text>
+          <Text className="text-gray-400 text-xs">{item.comments}</Text>
+        </View>
+        <Text className="text-gray-400 text-xs">{item.time}</Text>
       </View>
-      <Text className="text-gray-400 text-xs">{item.time}</Text>
-    </View>
-  </TouchableOpacity>
-);
+    </TouchableOpacity>
+  );
+};
 
 const TabButton = ({ title, isActive, onPress }: TabButtonProps) => (
   <TouchableOpacity
