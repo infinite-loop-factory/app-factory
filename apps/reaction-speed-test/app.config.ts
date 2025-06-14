@@ -37,9 +37,11 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       backgroundColor: "#ffffff",
     },
     ios: {
+      bundleIdentifier: "com.infiniteloopfactory.reactionspeedtest",
       supportsTablet: true,
     },
     android: {
+      package: "com.infiniteloopfactory.reactionspeedtest",
       adaptiveIcon: {
         foregroundImage: "./assets/images/adaptive-icon.png",
         backgroundColor: "#ffffff",
@@ -56,9 +58,12 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       typedRoutes: true,
       baseUrl: "/app-factory/reaction-speed-test",
     },
-    // extra: {
-    //   supabaseUrl: env.supabaseUrl,
-    //   supabaseAnonKey: env.supabaseAnonKey,
-    // },
+    extra: {
+      eas: {
+        projectId: "bf06d3a4-f856-475c-8c2b-993178ae6c12",
+      },
+      // supabaseUrl: env.supabaseUrl,
+      // supabaseAnonKey: env.supabaseAnonKey,
+    },
   };
 };

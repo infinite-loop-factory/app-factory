@@ -51,8 +51,8 @@ config.resolver.extraNodeModules = {
   path: require.resolve("path-browserify"),
   util: require.resolve("util"),
   url: require.resolve("url"),
-  net: require.resolve("react-native-tcp"),
-  tls: require.resolve("react-native-tls"),
+  net: require.resolve("react-native-tcp-socket"),
+  tls: require.resolve("react-native-crypto"),
   zlib: require.resolve("browserify-zlib"),
 };
 
