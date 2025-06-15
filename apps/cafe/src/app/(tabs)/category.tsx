@@ -1,4 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import {
   FlatList,
   Image,
@@ -91,16 +92,23 @@ const allCategories: CategoryItem[] = [
     count: 37,
   },
 ];
-const CategoryItem = ({ item }: { item: CategoryItem }) => (
-  <TouchableOpacity className="flex-row items-center border-gray-200 border-b p-4">
-    <Image source={item.icon} className="resize-contain mr-4 h-10 w-10" />
-    <View className="flex-1">
-      <Text className="mb-1 font-medium text-base">{item.title}</Text>
-      <Text className="text-gray-600 text-xs">카페 {item.count}개</Text>
-    </View>
-    <Ionicons name="chevron-forward" size={20} color="#ccc" />
-  </TouchableOpacity>
-);
+const CategoryItem = ({ item }: { item: CategoryItem }) => {
+  const router = useRouter();
+
+  return (
+    <TouchableOpacity
+      className="flex-row items-center border-gray-200 border-b p-4"
+      onPress={() => router.push(`/category/${item.id}`)}
+    >
+      <Image source={item.icon} className="resize-contain mr-4 h-10 w-10" />
+      <View className="flex-1">
+        <Text className="mb-1 font-medium text-base">{item.title}</Text>
+        <Text className="text-gray-600 text-xs">카페 {item.count}개</Text>
+      </View>
+      <Ionicons name="chevron-forward" size={20} color="#ccc" />
+    </TouchableOpacity>
+  );
+};
 
 export default function CategoryScreen() {
   return (
