@@ -1,52 +1,38 @@
-import { supabase } from "@/api/supabaseClient";
+import { useFindUserById } from "@/api/reactQuery/users/useFindUserById";
 import { userAtom } from "@/atoms/userAtom";
 import { Icon } from "@/components/ui/icon";
 import { Text } from "@/components/ui/text";
-import {
-  GoogleSignin,
-  GoogleSigninButton,
-} from "@react-native-google-signin/google-signin";
-import { useSetAtom } from "jotai/react";
+import { useGoogleAuth } from "@/hooks/useGoogleAuth";
+import { GoogleSigninButton } from "@react-native-google-signin/google-signin";
+import { useAtom } from "jotai/react";
 import { PawPrint } from "lucide-react-native";
 import { View } from "react-native";
 
 export default function AuthRequiredView() {
-  const setUserInfo = useSetAtom(userAtom);
+  const [userInfo, setUserInfo] = useAtom(userAtom);
 
-  GoogleSignin.configure({
-    scopes: ["https://www.googleapis.com/auth/drive.readonly"],
-    webClientId: process.env.EXPO_PUBLIC_GOOGLE_CLIENT_WEB_ID,
-    iosClientId: process.env.EXPO_PUBLIC_GOOGLE_CLIENT_IOS_ID,
-  });
+  const { handleLogin, handleSignup } = useGoogleAuth();
+
+  const { refetch: refetchFindUserById } = useFindUserById(userInfo.id);
 
   const onPressGoogleLogin = async () => {
     try {
-      await GoogleSignin.hasPlayServices();
-      const userInfo = await GoogleSignin.signIn();
+      const userData = await handleLogin();
 
-      if (userInfo.data?.idToken) {
-        const { data } = await supabase.auth.signInWithIdToken({
-          provider: "google",
-          token: userInfo.data.idToken,
+      setUserInfo(() => userData);
+
+      const { data: existingUser } = await refetchFindUserById();
+
+      if (!existingUser) {
+        handleSignup({
+          id: userData.id,
+          email: userData.email,
+          name: userData.name,
+          profileImageUrl: userData.imageUrl,
         });
-
-        const { session } = data;
-
-        const { access_token, refresh_token, user } = session || {};
-
-        setUserInfo(() => ({
-          accessToken: access_token ?? "",
-          refreshToken: refresh_token ?? "",
-          email: user?.email ?? "",
-          name: user?.user_metadata?.full_name ?? "",
-          imageUrl: user?.user_metadata?.picture ?? "",
-          id: user?.id ?? "",
-        }));
-      } else {
-        throw new Error("no ID token present!");
       }
     } catch (error) {
-      throw new Error(`Error: ${(error as Error).message}`);
+      console.error("로그인 실패:", error);
     }
   };
 
