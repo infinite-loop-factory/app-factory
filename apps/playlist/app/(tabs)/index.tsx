@@ -1,4 +1,6 @@
 import Button from "@/components/Buttons";
+import CircleButton from "@/components/CircleButton";
+import IconButton from "@/components/IconButton";
 import ImageViewer from "@/components/ImageViewer";
 import { useState } from "react";
 import {
@@ -15,6 +17,7 @@ const ARTISTS = ["Jennie", "Lisa", "Rosé", "Jisoo", "IU"];
 export default function Index() {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedArtist, setSelectedArtist] = useState("Jennie");
+  const [showArtistOptions, setShowArtistOptions] = useState(false);
 
   const images: Record<string, ImageSourcePropType> = {
     Jennie: require("../../assets/images/jennie.png"),
@@ -27,6 +30,19 @@ export default function Index() {
   const selectArtist = (artist: string) => {
     setSelectedArtist(artist);
     setModalVisible(false);
+    setShowArtistOptions(true);
+  };
+
+  const onReset = () => {
+    setShowArtistOptions(false);
+  };
+
+  const onPlay = () => {
+    // i will implement this later
+  };
+
+  const onShowQueue = async () => {
+    // i will implement this later
   };
 
   return (
@@ -41,13 +57,26 @@ export default function Index() {
           </Text>
         </View>
       </View>
-
-      <View className="flex-[0.33] items-center">
-        <Button label="Choose a mix" theme="primary" />
-        <Button
-          label="Choose an artist"
-          onPress={() => setModalVisible(true)}
-        />
+      <View className="flex-[0.33]">
+        {showArtistOptions ? (
+          <View className="flex-row">
+            <IconButton icon="refresh" label="Reset" onPress={onReset} />
+            <CircleButton onPress={onPlay} />
+            <IconButton
+              icon="playlist-play"
+              label="Queue"
+              onPress={onShowQueue}
+            />
+          </View>
+        ) : (
+          <>
+            <Button label="Choose a mix" theme="primary" />
+            <Button
+              label="Choose an artist"
+              onPress={() => setModalVisible(true)}
+            />
+          </>
+        )}
       </View>
 
       <Modal

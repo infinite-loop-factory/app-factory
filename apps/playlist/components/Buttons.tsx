@@ -15,7 +15,7 @@ type Props = {
 export default function Button({ label, theme, onPress }: Props) {
   if (theme === "primary") {
     return (
-      <View className="mx-5 h-[68px] w-80 items-center justify-center rounded-xl border-4 border-[#ffd33d] p-1">
+      <View className="mx-5 h-[68px] w-80 items-center justify-center rounded-xl border-4 border-[#1ED760] p-1">
         <Pressable
           className="h-full w-full flex-row items-center justify-center rounded-lg bg-white"
           onPress={() => alert("You pressed a button.")}
