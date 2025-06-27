@@ -131,7 +131,7 @@ importers:
         version: 15.0.3(expo@51.0.39(@babel/core@7.27.1)(@babel/preset-env@7.27.2(@babel/core@7.27.1))(react-native@0.74.5(@babel/core@7.27.1)(@babel/preset-env@7.27.2(@babel/core@7.27.1))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0))
       expo-router:
         specifier: ~3.5.23
-        version: 3.5.24(qckq6ugcc7j7zaxldepwhbpavq)
+        version: 3.5.24(d30abb552e1e6aadfd088357b42f3242)
       expo-splash-screen:
         specifier: ~0.27.6
         version: 0.27.7(expo-modules-autolinking@1.11.3)(expo@51.0.39(@babel/core@7.27.1)(@babel/preset-env@7.27.2(@babel/core@7.27.1))(react-native@0.74.5(@babel/core@7.27.1)(@babel/preset-env@7.27.2(@babel/core@7.27.1))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0))
@@ -312,7 +312,7 @@ importers:
         version: 17.0.1(expo@51.0.39(@babel/core@7.27.1)(@babel/preset-env@7.27.2(@babel/core@7.27.1))(react-native@0.74.5(@babel/core@7.27.1)(@babel/preset-env@7.27.2(@babel/core@7.27.1))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0))
       expo-router:
         specifier: ~3.5.24
-        version: 3.5.24(qckq6ugcc7j7zaxldepwhbpavq)
+        version: 3.5.24(d30abb552e1e6aadfd088357b42f3242)
       expo-splash-screen:
         specifier: ~0.27.7
         version: 0.27.7(expo-modules-autolinking@1.11.3)(expo@51.0.39(@babel/core@7.27.1)(@babel/preset-env@7.27.2(@babel/core@7.27.1))(react-native@0.74.5(@babel/core@7.27.1)(@babel/preset-env@7.27.2(@babel/core@7.27.1))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0))
@@ -535,7 +535,7 @@ importers:
         version: 17.0.1(expo@51.0.39(@babel/core@7.27.1)(@babel/preset-env@7.27.2(@babel/core@7.27.1))(react-native@0.74.5(@babel/core@7.27.1)(@babel/preset-env@7.27.2(@babel/core@7.27.1))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0))
       expo-router:
         specifier: ~3.5.23
-        version: 3.5.24(qckq6ugcc7j7zaxldepwhbpavq)
+        version: 3.5.24(d30abb552e1e6aadfd088357b42f3242)
       expo-splash-screen:
         specifier: ~0.27.6
         version: 0.27.7(expo-modules-autolinking@1.11.3)(expo@51.0.39(@babel/core@7.27.1)(@babel/preset-env@7.27.2(@babel/core@7.27.1))(react-native@0.74.5(@babel/core@7.27.1)(@babel/preset-env@7.27.2(@babel/core@7.27.1))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0))
@@ -702,6 +702,9 @@ importers:
       '@gluestack-ui/overlay':
         specifier: ^0.1.16
         version: 0.1.22(react-dom@18.2.0(react@18.2.0))(react-native@0.74.5(@babel/core@7.27.1)(@babel/preset-env@7.27.2(@babel/core@7.27.1))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0)
+      '@gluestack-ui/radio':
+        specifier: ^0.1.40
+        version: 0.1.40(react-dom@18.2.0(react@18.2.0))(react-native@0.74.5(@babel/core@7.27.1)(@babel/preset-env@7.27.2(@babel/core@7.27.1))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0)
       '@gluestack-ui/textarea':
         specifier: ^0.1.24
         version: 0.1.25(react-dom@18.2.0(react@18.2.0))(react-native@0.74.5(@babel/core@7.27.1)(@babel/preset-env@7.27.2(@babel/core@7.27.1))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0)
@@ -732,6 +735,9 @@ importers:
       '@supabase/supabase-js':
         specifier: ^2.48.1
         version: 2.49.4
+      '@tanstack/react-query':
+        specifier: ^5.59.20
+        version: 5.75.7(react@18.2.0)
       axios:
         specifier: ^1.8.4
         version: 1.9.0
@@ -767,7 +773,7 @@ importers:
         version: 17.0.1(expo@51.0.39(@babel/core@7.27.1)(@babel/preset-env@7.27.2(@babel/core@7.27.1))(react-native@0.74.5(@babel/core@7.27.1)(@babel/preset-env@7.27.2(@babel/core@7.27.1))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0))
       expo-router:
         specifier: ~3.5.23
-        version: 3.5.24(qckq6ugcc7j7zaxldepwhbpavq)
+        version: 3.5.24(d30abb552e1e6aadfd088357b42f3242)
       expo-splash-screen:
         specifier: ~0.27.6
         version: 0.27.7(expo-modules-autolinking@1.11.3)(expo@51.0.39(@babel/core@7.27.1)(@babel/preset-env@7.27.2(@babel/core@7.27.1))(react-native@0.74.5(@babel/core@7.27.1)(@babel/preset-env@7.27.2(@babel/core@7.27.1))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0))
@@ -912,7 +918,7 @@ importers:
         version: 15.0.3(expo@51.0.39(@babel/core@7.27.1)(@babel/preset-env@7.27.2(@babel/core@7.27.1))(react-native@0.74.5(@babel/core@7.27.1)(@babel/preset-env@7.27.2(@babel/core@7.27.1))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0))
       expo-router:
         specifier: ~3.5.23
-        version: 3.5.24(qckq6ugcc7j7zaxldepwhbpavq)
+        version: 3.5.24(d30abb552e1e6aadfd088357b42f3242)
       expo-splash-screen:
         specifier: ~0.27.6
         version: 0.27.7(expo-modules-autolinking@1.11.3)(expo@51.0.39(@babel/core@7.27.1)(@babel/preset-env@7.27.2(@babel/core@7.27.1))(react-native@0.74.5(@babel/core@7.27.1)(@babel/preset-env@7.27.2(@babel/core@7.27.1))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0))
@@ -1087,7 +1093,7 @@ importers:
         version: 15.0.3(expo@51.0.39(@babel/core@7.27.1)(@babel/preset-env@7.27.2(@babel/core@7.27.1))(react-native@0.74.5(@babel/core@7.27.1)(@babel/preset-env@7.27.2(@babel/core@7.27.1))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0))
       expo-router:
         specifier: ~3.5.23
-        version: 3.5.24(qckq6ugcc7j7zaxldepwhbpavq)
+        version: 3.5.24(d30abb552e1e6aadfd088357b42f3242)
       expo-splash-screen:
         specifier: ~0.27.6
         version: 0.27.7(expo-modules-autolinking@1.11.3)(expo@51.0.39(@babel/core@7.27.1)(@babel/preset-env@7.27.2(@babel/core@7.27.1))(react-native@0.74.5(@babel/core@7.27.1)(@babel/preset-env@7.27.2(@babel/core@7.27.1))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0))
@@ -2600,6 +2606,12 @@ packages:
       react: '>=16'
       react-dom: '>=16'
 
+  '@gluestack-ui/radio@0.1.40':
+    resolution: {integrity: sha512-UJ6i3qpbBVsSWrxQi889yXczPjmfhfHCplMK2n4xkEfsYcjDVKpronVfqbJ41gf27fBzyLJFnCec3uPL4+obSA==}
+    peerDependencies:
+      react: '>=16'
+      react-dom: '>=16'
+
   '@gluestack-ui/react-native-aria@0.1.7':
     resolution: {integrity: sha512-mdK/M6RQafAYiHyJnDNjaE9+ttr9eg48f2InmO3rvcrjsdaLcu/vwHlwrO9N3xYcb3wb9z2+YZ4OIgtymFNTOw==}
     peerDependencies:
@@ -2803,14 +2815,26 @@ packages:
   '@internationalized/date@3.8.0':
     resolution: {integrity: sha512-J51AJ0fEL68hE4CwGPa6E0PO6JDaVLd8aln48xFCSy7CZkZc96dGEGmLs2OEEbBxcsVZtfrqkXJwI2/MSG8yKw==}
 
+  '@internationalized/date@3.8.2':
+    resolution: {integrity: sha512-/wENk7CbvLbkUvX1tu0mwq49CVkkWpkXubGel6birjRPyo6uQ4nQpnq5xZu823zRCwwn82zgHrvgF1vZyvmVgA==}
+
   '@internationalized/message@3.1.7':
     resolution: {integrity: sha512-gLQlhEW4iO7DEFPf/U7IrIdA3UyLGS0opeqouaFwlMObLUzwexRjbygONHDVbC9G9oFLXsLyGKYkJwqXw/QADg==}
+
+  '@internationalized/message@3.1.8':
+    resolution: {integrity: sha512-Rwk3j/TlYZhn3HQ6PyXUV0XP9Uv42jqZGNegt0BXlxjE6G3+LwHjbQZAGHhCnCPdaA6Tvd3ma/7QzLlLkJxAWA==}
 
   '@internationalized/number@3.6.1':
     resolution: {integrity: sha512-UVsb4bCwbL944E0SX50CHFtWEeZ2uB5VozZ5yDXJdq6iPZsZO5p+bjVMZh2GxHf4Bs/7xtDCcPwEa2NU9DaG/g==}
 
+  '@internationalized/number@3.6.3':
+    resolution: {integrity: sha512-p+Zh1sb6EfrfVaS86jlHGQ9HA66fJhV9x5LiE5vCbZtXEHAuhcmUZUdZ4WrFpUBfNalr2OkAJI5AcKEQF+Lebw==}
+
   '@internationalized/string@3.2.6':
     resolution: {integrity: sha512-LR2lnM4urJta5/wYJVV7m8qk5DrMZmLRTuFhbQO5b9/sKLHgty6unQy1Li4+Su2DWydmB4aZdS5uxBRXIq2aAw==}
+
+  '@internationalized/string@3.2.7':
+    resolution: {integrity: sha512-D4OHBjrinH+PFZPvfCXvG28n2LSykWcJ7GIioQL+ok0LON15SdfoUssoHzzOUmVZLbRoREsQXVzA6r8JKsbP6A==}
 
   '@isaacs/cliui@8.0.2':
     resolution: {integrity: sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==}
@@ -3006,6 +3030,24 @@ packages:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
       react-dom: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
+  '@react-aria/focus@3.20.5':
+    resolution: {integrity: sha512-JpFtXmWQ0Oca7FcvkqgjSyo6xEP7v3oQOLUId6o0xTvm4AD5W0mU2r3lYrbhsJ+XxdUUX4AVR5473sZZ85kU4A==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+      react-dom: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
+  '@react-aria/form@3.0.18':
+    resolution: {integrity: sha512-e4Ktc3NiNwV5dz82zVE7lspYmKwAnGoJfOHgc9MApS7Fy/BEAuVUuLgTjMo1x5me7dY+ADxqrIhbOpifscGGoQ==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+      react-dom: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
+  '@react-aria/i18n@3.12.10':
+    resolution: {integrity: sha512-1j00soQ2W0nTgzaaIsGFdMF/5aN60AEdCJPhmXGZiuWdWzMxObN9LQ9vdzYPTjTqyqMdSaSp9DZKs5I26Xovpw==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+      react-dom: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
   '@react-aria/i18n@3.12.8':
     resolution: {integrity: sha512-V/Nau9WuwTwxfFffQL4URyKyY2HhRlu9zmzkF2Hw/j5KmEQemD+9jfaLueG2CJu85lYL06JrZXUdnhZgKnqMkA==}
     peerDependencies:
@@ -3014,6 +3056,18 @@ packages:
 
   '@react-aria/interactions@3.25.0':
     resolution: {integrity: sha512-GgIsDLlO8rDU/nFn6DfsbP9rfnzhm8QFjZkB9K9+r+MTSCn7bMntiWQgMM+5O6BiA8d7C7x4zuN4bZtc0RBdXQ==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+      react-dom: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
+  '@react-aria/interactions@3.25.3':
+    resolution: {integrity: sha512-J1bhlrNtjPS/fe5uJQ+0c7/jiXniwa4RQlP+Emjfc/iuqpW2RhbF9ou5vROcLzWIyaW8tVMZ468J68rAs/aZ5A==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+      react-dom: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
+  '@react-aria/label@3.7.19':
+    resolution: {integrity: sha512-ZJIj/BKf66q52idy24ErzX77vDGuyQn4neWtu51RRSk4npI3pJqEPsdkPCdo2dlBCo/Uc1pfuLGg2hY3N/ni9Q==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
       react-dom: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
@@ -3030,6 +3084,12 @@ packages:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
       react-dom: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
+  '@react-aria/radio@3.11.5':
+    resolution: {integrity: sha512-6BjpeTupQnxetfvC2bqIxWUt6USMqNZoKOoOO7mUL7ESF6/Gp8ocutvQn0VnTxU+7OhdrZX5AACPg/qIQYumVw==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+      react-dom: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
   '@react-aria/selection@3.24.0':
     resolution: {integrity: sha512-RfGXVc04zz41NVIW89/a3quURZ4LT/GJLkiajQK2VjhisidPdrAWkcfjjWJj0n+tm5gPWbi9Rs5R/Rc8mrvq8Q==}
     peerDependencies:
@@ -3042,8 +3102,20 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
+  '@react-aria/ssr@3.9.9':
+    resolution: {integrity: sha512-2P5thfjfPy/np18e5wD4WPt8ydNXhij1jwA8oehxZTFqlgVMGXzcWKxTb4RtJrLFsqPO7RUQTiY8QJk0M4Vy2g==}
+    engines: {node: '>= 12'}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
   '@react-aria/utils@3.28.2':
     resolution: {integrity: sha512-J8CcLbvnQgiBn54eeEvQQbIOfBF3A1QizxMw9P4cl9MkeR03ug7RnjTIdJY/n2p7t59kLeAB3tqiczhcj+Oi5w==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+      react-dom: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
+  '@react-aria/utils@3.29.1':
+    resolution: {integrity: sha512-yXMFVJ73rbQ/yYE/49n5Uidjw7kh192WNN9PNQGV0Xoc7EJUlSOxqhnpHmYTyO0EotJ8fdM1fMH8durHjUSI8g==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
       react-dom: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
@@ -3083,6 +3155,12 @@ packages:
     peerDependencies:
       react: '*'
       react-dom: '*'
+      react-native: '*'
+
+  '@react-native-aria/radio@0.2.13':
+    resolution: {integrity: sha512-80FQ+k10738MOnFwOyP3RvAGUAdozYY54vUZNNg2z7MH6GaKyok538cDIzVa9p4cCL58CU8Te8vnd+ItOR3nBg==}
+    peerDependencies:
+      react: '*'
       react-native: '*'
 
   '@react-native-aria/utils@0.2.12':
@@ -3327,8 +3405,16 @@ packages:
   '@react-stately/flags@3.1.1':
     resolution: {integrity: sha512-XPR5gi5LfrPdhxZzdIlJDz/B5cBf63l4q6/AzNqVWFKgd0QqY5LvWJftXkklaIUpKSJkIKQb8dphuZXDtkWNqg==}
 
+  '@react-stately/flags@3.1.2':
+    resolution: {integrity: sha512-2HjFcZx1MyQXoPqcBGALwWWmgFVUk2TuKVIQxCbRq7fPyWXIl6VHcakCLurdtYC2Iks7zizvz0Idv48MQ38DWg==}
+
   '@react-stately/form@3.1.3':
     resolution: {integrity: sha512-Jisgm0facSS3sAzHfSgshoCo3LxfO0wmQj98MOBCGXyVL+MSwx2ilb38eXIyBCzHJzJnPRTLaK/E4T49aph47A==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
+  '@react-stately/form@3.1.5':
+    resolution: {integrity: sha512-wOs0SVXFgNr1aIdywiNH1MhxrFlN5YxBr1k9y3Z7lX+pc/MGRJFTgfDDw5JDxvwLH9joJ9ciniCdWep9L/TqcQ==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
@@ -3359,6 +3445,11 @@ packages:
 
   '@react-stately/radio@3.10.12':
     resolution: {integrity: sha512-hFH45CXVa7uyXeTYQy7LGR0SnmGnNRx7XnEXS25w4Ch6BpH8m8SAbhKXqysgcmsE3xrhRas7P9zWw7wI24G28Q==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
+  '@react-stately/radio@3.10.14':
+    resolution: {integrity: sha512-Y7xizUWJ0YJ8pEtqMeKOibX21B5dk56fHgMHXYLeUEm43y5muWQft2YvP0/n4mlkP2Isbk96kPbv7/ez3Gi+lA==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
@@ -3417,6 +3508,11 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
+  '@react-stately/utils@3.10.7':
+    resolution: {integrity: sha512-cWvjGAocvy4abO9zbr6PW6taHgF24Mwy/LbQ4TC4Aq3tKdKDntxyD+sh7AkSRfJRT2ccMVaHVv2+FfHThd3PKQ==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
   '@react-types/button@3.12.0':
     resolution: {integrity: sha512-YrASNa+RqGQpzJcxNAahzNuTYVID1OE6HCorrEOXIyGS3EGogHsQmFs9OyThXnGHq6q4rLlA806/jWbP9uZdxA==}
     peerDependencies:
@@ -3472,6 +3568,11 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
+  '@react-types/radio@3.8.10':
+    resolution: {integrity: sha512-hLOu2CXxzxQqkEkXSM71jEJMnU5HvSzwQ+DbJISDjgfgAKvZZHMQX94Fht2Vj+402OdI77esl3pJ1tlSLyV5VQ==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
   '@react-types/radio@3.8.8':
     resolution: {integrity: sha512-QfAIp+0CnRSnoRTJVXUEPi+9AvFvRzWLIKEnE9OmgXjuvJCU3QNiwd8NWjNeE+94QBEVvAZQcqGU+44q5poxNg==}
     peerDependencies:
@@ -3489,6 +3590,11 @@ packages:
 
   '@react-types/shared@3.29.0':
     resolution: {integrity: sha512-IDQYu/AHgZimObzCFdNl1LpZvQW/xcfLt3v20sorl5qRucDVj4S9os98sVTZ4IRIBjmS+MkjqpR5E70xan7ooA==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
+  '@react-types/shared@3.30.0':
+    resolution: {integrity: sha512-COIazDAx1ncDg046cTJ8SFYsX8aS3lB/08LDnbkH/SkdYrFPWDlXMrO/sUam8j1WWM+PJ+4d1mj7tODIKNiFog==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
@@ -11656,6 +11762,20 @@ snapshots:
     transitivePeerDependencies:
       - react-native
 
+  '@gluestack-ui/radio@0.1.40(react-dom@18.2.0(react@18.2.0))(react-native@0.74.5(@babel/core@7.27.1)(@babel/preset-env@7.27.2(@babel/core@7.27.1))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0)':
+    dependencies:
+      '@gluestack-ui/form-control': 0.1.19(react-dom@18.2.0(react@18.2.0))(react-native@0.74.5(@babel/core@7.27.1)(@babel/preset-env@7.27.2(@babel/core@7.27.1))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0)
+      '@gluestack-ui/utils': 0.1.15(react-dom@18.2.0(react@18.2.0))(react-native@0.74.5(@babel/core@7.27.1)(@babel/preset-env@7.27.2(@babel/core@7.27.1))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0)
+      '@react-aria/visually-hidden': 3.8.22(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@react-native-aria/focus': 0.2.9(react-dom@18.2.0(react@18.2.0))(react-native@0.74.5(@babel/core@7.27.1)(@babel/preset-env@7.27.2(@babel/core@7.27.1))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0)
+      '@react-native-aria/interactions': 0.2.16(react-dom@18.2.0(react@18.2.0))(react-native@0.74.5(@babel/core@7.27.1)(@babel/preset-env@7.27.2(@babel/core@7.27.1))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0)
+      '@react-native-aria/radio': 0.2.13(react-dom@18.2.0(react@18.2.0))(react-native@0.74.5(@babel/core@7.27.1)(@babel/preset-env@7.27.2(@babel/core@7.27.1))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0)
+      '@react-stately/radio': 3.10.12(react@18.2.0)
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+    transitivePeerDependencies:
+      - react-native
+
   '@gluestack-ui/react-native-aria@0.1.7(react-dom@18.2.0(react@18.2.0))(react-native@0.74.5(@babel/core@7.27.1)(@babel/preset-env@7.27.2(@babel/core@7.27.1))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0)':
     dependencies:
       '@react-native-aria/focus': 0.2.9(react-dom@18.2.0(react@18.2.0))(react-native@0.74.5(@babel/core@7.27.1)(@babel/preset-env@7.27.2(@babel/core@7.27.1))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0)
@@ -11881,7 +12001,16 @@ snapshots:
     dependencies:
       '@swc/helpers': 0.5.17
 
+  '@internationalized/date@3.8.2':
+    dependencies:
+      '@swc/helpers': 0.5.17
+
   '@internationalized/message@3.1.7':
+    dependencies:
+      '@swc/helpers': 0.5.17
+      intl-messageformat: 10.7.16
+
+  '@internationalized/message@3.1.8':
     dependencies:
       '@swc/helpers': 0.5.17
       intl-messageformat: 10.7.16
@@ -11890,7 +12019,15 @@ snapshots:
     dependencies:
       '@swc/helpers': 0.5.17
 
+  '@internationalized/number@3.6.3':
+    dependencies:
+      '@swc/helpers': 0.5.17
+
   '@internationalized/string@3.2.6':
+    dependencies:
+      '@swc/helpers': 0.5.17
+
+  '@internationalized/string@3.2.7':
     dependencies:
       '@swc/helpers': 0.5.17
 
@@ -12202,6 +12339,39 @@ snapshots:
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
 
+  '@react-aria/focus@3.20.5(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
+    dependencies:
+      '@react-aria/interactions': 3.25.3(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@react-aria/utils': 3.29.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@react-types/shared': 3.30.0(react@18.2.0)
+      '@swc/helpers': 0.5.17
+      clsx: 2.1.1
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+
+  '@react-aria/form@3.0.18(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
+    dependencies:
+      '@react-aria/interactions': 3.25.3(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@react-aria/utils': 3.29.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@react-stately/form': 3.1.5(react@18.2.0)
+      '@react-types/shared': 3.30.0(react@18.2.0)
+      '@swc/helpers': 0.5.17
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+
+  '@react-aria/i18n@3.12.10(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
+    dependencies:
+      '@internationalized/date': 3.8.2
+      '@internationalized/message': 3.1.8
+      '@internationalized/number': 3.6.3
+      '@internationalized/string': 3.2.7
+      '@react-aria/ssr': 3.9.9(react@18.2.0)
+      '@react-aria/utils': 3.29.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@react-types/shared': 3.30.0(react@18.2.0)
+      '@swc/helpers': 0.5.17
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+
   '@react-aria/i18n@3.12.8(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
     dependencies:
       '@internationalized/date': 3.8.0
@@ -12221,6 +12391,24 @@ snapshots:
       '@react-aria/utils': 3.28.2(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@react-stately/flags': 3.1.1
       '@react-types/shared': 3.29.0(react@18.2.0)
+      '@swc/helpers': 0.5.17
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+
+  '@react-aria/interactions@3.25.3(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
+    dependencies:
+      '@react-aria/ssr': 3.9.9(react@18.2.0)
+      '@react-aria/utils': 3.29.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@react-stately/flags': 3.1.2
+      '@react-types/shared': 3.30.0(react@18.2.0)
+      '@swc/helpers': 0.5.17
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+
+  '@react-aria/label@3.7.19(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
+    dependencies:
+      '@react-aria/utils': 3.29.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@react-types/shared': 3.30.0(react@18.2.0)
       '@swc/helpers': 0.5.17
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
@@ -12260,6 +12448,21 @@ snapshots:
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
 
+  '@react-aria/radio@3.11.5(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
+    dependencies:
+      '@react-aria/focus': 3.20.5(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@react-aria/form': 3.0.18(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@react-aria/i18n': 3.12.10(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@react-aria/interactions': 3.25.3(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@react-aria/label': 3.7.19(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@react-aria/utils': 3.29.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@react-stately/radio': 3.10.14(react@18.2.0)
+      '@react-types/radio': 3.8.10(react@18.2.0)
+      '@react-types/shared': 3.30.0(react@18.2.0)
+      '@swc/helpers': 0.5.17
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+
   '@react-aria/selection@3.24.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
     dependencies:
       '@react-aria/focus': 3.20.2(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -12277,12 +12480,28 @@ snapshots:
       '@swc/helpers': 0.5.17
       react: 18.2.0
 
+  '@react-aria/ssr@3.9.9(react@18.2.0)':
+    dependencies:
+      '@swc/helpers': 0.5.17
+      react: 18.2.0
+
   '@react-aria/utils@3.28.2(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
     dependencies:
       '@react-aria/ssr': 3.9.8(react@18.2.0)
       '@react-stately/flags': 3.1.1
       '@react-stately/utils': 3.10.6(react@18.2.0)
       '@react-types/shared': 3.29.0(react@18.2.0)
+      '@swc/helpers': 0.5.17
+      clsx: 2.1.1
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+
+  '@react-aria/utils@3.29.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
+    dependencies:
+      '@react-aria/ssr': 3.9.9(react@18.2.0)
+      '@react-stately/flags': 3.1.2
+      '@react-stately/utils': 3.10.7(react@18.2.0)
+      '@react-types/shared': 3.30.0(react@18.2.0)
       '@swc/helpers': 0.5.17
       clsx: 2.1.1
       react: 18.2.0
@@ -12355,6 +12574,19 @@ snapshots:
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       react-native: 0.74.5(@babel/core@7.27.1)(@babel/preset-env@7.27.2(@babel/core@7.27.1))(@types/react@18.2.79)(react@18.2.0)
+
+  '@react-native-aria/radio@0.2.13(react-dom@18.2.0(react@18.2.0))(react-native@0.74.5(@babel/core@7.27.1)(@babel/preset-env@7.27.2(@babel/core@7.27.1))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0)':
+    dependencies:
+      '@react-aria/radio': 3.11.5(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@react-aria/utils': 3.28.2(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@react-native-aria/interactions': 0.2.16(react-dom@18.2.0(react@18.2.0))(react-native@0.74.5(@babel/core@7.27.1)(@babel/preset-env@7.27.2(@babel/core@7.27.1))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0)
+      '@react-native-aria/utils': 0.2.12(react-dom@18.2.0(react@18.2.0))(react-native@0.74.5(@babel/core@7.27.1)(@babel/preset-env@7.27.2(@babel/core@7.27.1))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0)
+      '@react-stately/radio': 3.10.12(react@18.2.0)
+      '@react-types/radio': 3.8.8(react@18.2.0)
+      react: 18.2.0
+      react-native: 0.74.5(@babel/core@7.27.1)(@babel/preset-env@7.27.2(@babel/core@7.27.1))(@types/react@18.2.79)(react@18.2.0)
+    transitivePeerDependencies:
+      - react-dom
 
   '@react-native-aria/utils@0.2.12(react-dom@18.2.0(react@18.2.0))(react-native@0.74.5(@babel/core@7.27.1)(@babel/preset-env@7.27.2(@babel/core@7.27.1))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0)':
     dependencies:
@@ -12843,9 +13075,19 @@ snapshots:
     dependencies:
       '@swc/helpers': 0.5.17
 
+  '@react-stately/flags@3.1.2':
+    dependencies:
+      '@swc/helpers': 0.5.17
+
   '@react-stately/form@3.1.3(react@18.2.0)':
     dependencies:
       '@react-types/shared': 3.29.0(react@18.2.0)
+      '@swc/helpers': 0.5.17
+      react: 18.2.0
+
+  '@react-stately/form@3.1.5(react@18.2.0)':
+    dependencies:
+      '@react-types/shared': 3.30.0(react@18.2.0)
       '@swc/helpers': 0.5.17
       react: 18.2.0
 
@@ -12897,6 +13139,15 @@ snapshots:
       '@react-stately/utils': 3.10.6(react@18.2.0)
       '@react-types/radio': 3.8.8(react@18.2.0)
       '@react-types/shared': 3.29.0(react@18.2.0)
+      '@swc/helpers': 0.5.17
+      react: 18.2.0
+
+  '@react-stately/radio@3.10.14(react@18.2.0)':
+    dependencies:
+      '@react-stately/form': 3.1.5(react@18.2.0)
+      '@react-stately/utils': 3.10.7(react@18.2.0)
+      '@react-types/radio': 3.8.10(react@18.2.0)
+      '@react-types/shared': 3.30.0(react@18.2.0)
       '@swc/helpers': 0.5.17
       react: 18.2.0
 
@@ -12989,6 +13240,11 @@ snapshots:
       '@swc/helpers': 0.5.17
       react: 18.2.0
 
+  '@react-stately/utils@3.10.7(react@18.2.0)':
+    dependencies:
+      '@swc/helpers': 0.5.17
+      react: 18.2.0
+
   '@react-types/button@3.12.0(react@18.2.0)':
     dependencies:
       '@react-types/shared': 3.29.0(react@18.2.0)
@@ -13051,6 +13307,11 @@ snapshots:
       '@react-types/shared': 3.29.0(react@18.2.0)
       react: 18.2.0
 
+  '@react-types/radio@3.8.10(react@18.2.0)':
+    dependencies:
+      '@react-types/shared': 3.30.0(react@18.2.0)
+      react: 18.2.0
+
   '@react-types/radio@3.8.8(react@18.2.0)':
     dependencies:
       '@react-types/shared': 3.29.0(react@18.2.0)
@@ -13068,6 +13329,10 @@ snapshots:
       react: 18.2.0
 
   '@react-types/shared@3.29.0(react@18.2.0)':
+    dependencies:
+      react: 18.2.0
+
+  '@react-types/shared@3.30.0(react@18.2.0)':
     dependencies:
       react: 18.2.0
 
@@ -15796,7 +16061,7 @@ snapshots:
     dependencies:
       invariant: 2.2.4
 
-  expo-router@3.5.24(qckq6ugcc7j7zaxldepwhbpavq):
+  expo-router@3.5.24(d30abb552e1e6aadfd088357b42f3242):
     dependencies:
       '@expo/metro-runtime': 3.2.3(react-native@0.74.5(@babel/core@7.27.1)(@babel/preset-env@7.27.2(@babel/core@7.27.1))(@types/react@18.2.79)(react@18.2.0))
       '@expo/server': 0.4.4(typescript@5.8.3)
