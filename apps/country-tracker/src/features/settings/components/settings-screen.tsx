@@ -1,7 +1,9 @@
 import { themeAtom } from "@/atoms/theme.atom";
-import ParallaxScrollView from "@/components/ParallaxScrollView";
+import ParallaxScrollView from "@/components/parallax-scroll-view";
+import { Badge, BadgeText } from "@/components/ui/badge";
 import { Box } from "@/components/ui/box";
 import { Heading } from "@/components/ui/heading";
+import { Image } from "@/components/ui/image";
 import { Switch } from "@/components/ui/switch";
 import { Text } from "@/components/ui/text";
 import {
@@ -10,22 +12,32 @@ import {
   ToastTitle,
   useToast,
 } from "@/components/ui/toast";
-import { useThemeColor } from "@/hooks/useThemeColor";
-import i18n from "@/i18n";
+import { useAuthUser } from "@/hooks/use-auth-user";
+import { useThemeColor } from "@/hooks/use-theme-color";
+import i18n from "@/libs/i18n";
+import supabase from "@/libs/supabase";
 import {
   openLanguageSetting,
   openStorePage,
 } from "@infinite-loop-factory/common";
+import { get } from "es-toolkit/compat";
 import { useRouter } from "expo-router";
 import { useAtom } from "jotai";
 import { ChevronRight, Moon, Sun } from "lucide-react-native";
+import { colorScheme } from "nativewind";
 import { TouchableOpacity, View } from "react-native";
 
 export default function SettingsScreen() {
   const [theme, setTheme] = useAtom(themeAtom);
   const toast = useToast();
   const router = useRouter();
-  const toggleTheme = () => setTheme(theme === "light" ? "dark" : "light");
+  const { user } = useAuthUser();
+
+  const toggleTheme = () => {
+    const nextTheme = theme === "light" ? "dark" : "light";
+    setTheme(nextTheme);
+    colorScheme.set(nextTheme);
+  };
 
   const [
     background, // 카드 배경, 전체 배경
@@ -44,6 +56,8 @@ export default function SettingsScreen() {
     "primary-400",
     "background-100",
   ]);
+
+  const provider = get(user, "identities.0.provider") as string | undefined;
 
   const handleLanguageSetting = async () => {
     const openLanguageSettingResult = await openLanguageSetting();
@@ -73,12 +87,47 @@ export default function SettingsScreen() {
     }
   };
 
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    router.replace("/login");
+  };
+
   return (
     <ParallaxScrollView>
       <Box className="mb-4 px-1 pt-2">
         <Heading className="font-bold text-3xl" style={{ color: headingColor }}>
           {i18n.t("settings.title")}
         </Heading>
+      </Box>
+      {/* 내 정보 박스 */}
+      <Box className="mx-1 mb-4 flex-row items-center justify-between rounded-lg border p-4 shadow-xs">
+        <Box className="flex-row items-center">
+          <Image
+            source={
+              user?.user_metadata?.avatar_url
+                ? { uri: user.user_metadata.avatar_url }
+                : require("@/assets/images/icon.png")
+            }
+            className="mr-4 h-12 w-12 rounded-full"
+            alt="avatar"
+          />
+          <Box>
+            <Text className="font-bold text-lg" style={{ color: headingColor }}>
+              {user?.user_metadata?.name || user?.email || "-"}
+            </Text>
+            <Box className="flex-row items-center">
+              <Text className="text-gray-500 text-sm">{user?.email}</Text>
+              <Badge action="muted" size="sm" className="ml-2">
+                <BadgeText>{provider}</BadgeText>
+              </Badge>
+            </Box>
+          </Box>
+        </Box>
+        <TouchableOpacity onPress={handleLogout}>
+          <Text className="font-bold text-error-600">
+            {i18n.t("settings.logout")}
+          </Text>
+        </TouchableOpacity>
       </Box>
 
       {/* Appearance 그룹 */}
@@ -109,19 +158,20 @@ export default function SettingsScreen() {
               {i18n.t("settings.appearance.theme")}
             </Text>
             {theme === "light" ? (
-              <Sun size={20} color={textColor} />
+              <Sun size={24} color={textColor} style={{ marginLeft: 2 }} />
             ) : (
-              <Moon size={20} color={textColor} />
+              <Moon
+                size={24}
+                color={highlightColor}
+                style={{ marginLeft: 2 }}
+              />
             )}
           </View>
           <Switch
             value={theme === "dark"}
             onValueChange={toggleTheme}
-            // iOS 환경에서 배경색
             ios_backgroundColor={switchBgColor}
-            // OFF / ON 트랙 색상
             trackColor={{ false: switchBgColor, true: switchBgColor }}
-            // Thumb(동그라미) 색상
             thumbColor={highlightColor}
             // @ts-expect-error
             activeThumbColor={highlightColor}

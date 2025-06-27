@@ -1,26 +1,26 @@
 import type { CountryItem } from "@/features/home/types/country";
 import type { ListRenderItem } from "react-native";
 
-import { useAtomValue } from "jotai";
-import { Search } from "lucide-react-native";
-import { DateTime } from "luxon";
-import { useState } from "react";
-import { FlatList } from "react-native";
-
 import { themeAtom } from "@/atoms/theme.atom";
-import ParallaxScrollView from "@/components/ParallaxScrollView";
+import ParallaxScrollView from "@/components/parallax-scroll-view";
 import { Box } from "@/components/ui/box";
 import { Divider } from "@/components/ui/divider";
 import { Heading } from "@/components/ui/heading";
 import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
 import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
-import { COUNTRIES } from "@/features/home/constants/dummy";
-import { useThemeColor } from "@/hooks/useThemeColor";
-import i18n from "@/i18n";
+import { useThemeColor } from "@/hooks/use-theme-color";
+import i18n from "@/libs/i18n";
+import supabase from "@/libs/supabase";
+import { fetchVisitedCountries } from "@/utils/fetch-visited-countries";
+import { useQuery } from "@tanstack/react-query";
+import { useAtomValue } from "jotai";
+import { Search } from "lucide-react-native";
+import { DateTime } from "luxon";
+import { useState } from "react";
+import { FlatList } from "react-native";
 
 export default function HomeScreen() {
-  const [data, setData] = useState<CountryItem[]>(COUNTRIES);
   const [searchText, setSearchText] = useState("");
   const theme = useAtomValue(themeAtom);
 
@@ -36,16 +36,28 @@ export default function HomeScreen() {
   const formatDate = (isoDate: string) =>
     DateTime.fromISO(isoDate).toFormat("yyyy-MM-dd");
 
+  const {
+    data = [],
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["visited-countries", searchText],
+    queryFn: async () => {
+      const { data: userData } = await supabase.auth.getUser();
+      const user = userData?.user;
+      if (!user) return [];
+      return await fetchVisitedCountries(user.id);
+    },
+    select: (allCountries) =>
+      searchText.trim()
+        ? allCountries.filter((item) =>
+            item.country.toLowerCase().includes(searchText.toLowerCase()),
+          )
+        : allCountries,
+  });
+
   const handleSearch = (text: string) => {
     setSearchText(text);
-    if (text.trim() === "") {
-      setData(COUNTRIES);
-    } else {
-      const filteredData = COUNTRIES.filter((item) =>
-        item.country.toLowerCase().includes(text.toLowerCase()),
-      );
-      setData(filteredData);
-    }
   };
 
   const renderItem: ListRenderItem<CountryItem> = ({ item }) => (
@@ -96,6 +108,20 @@ export default function HomeScreen() {
         className="mx-1 mb-2 overflow-hidden rounded-lg border bg-background-50 shadow-xs"
         style={{ backgroundColor: background, borderColor }}
       >
+        {isLoading && (
+          <Box className="flex-1 items-center justify-center p-6">
+            <Text className="text-lg" style={{ color: textColor }}>
+              Loading...
+            </Text>
+          </Box>
+        )}
+        {isError && (
+          <Box className="flex-1 items-center justify-center p-6">
+            <Text className="text-lg" style={{ color: textColor }}>
+              Error loading countries.
+            </Text>
+          </Box>
+        )}
         <FlatList
           data={data}
           keyExtractor={(item) => `${theme}-${item.id}`}

@@ -42,6 +42,14 @@
         "title": "Oops!",
         "description": "Please go to System Settings > Apps > Language settings to change your language."
       }
-    }
+    },
+    "logout": "Logout"
+  },
+
+  "login": {
+    "title": "Country Tracker",
+    "description": "Login is required to use this service.",
+    "google": "Login with Google",
+    "github": "Login with GitHub"
   }
 }

@@ -37,6 +37,14 @@
         "title": "앗!",
         "description": "시스템설정 > 앱 > 언어설정에서 직접 언어를 바꿔주세요."
       }
-    }
+    },
+    "logout": "로그아웃"
+  },
+
+  "login": {
+    "title": "Country Tracker",
+    "description": "로그인 후 이용 가능합니다.",
+    "google": "구글 로그인",
+    "github": "깃허브 로그인"
   }
 }

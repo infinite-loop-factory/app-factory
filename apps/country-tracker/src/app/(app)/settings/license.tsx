@@ -1,5 +1,5 @@
 import LicenseScreen from "@/features/settings/components/license-screen";
-import i18n from "@/i18n";
+import i18n from "@/libs/i18n";
 import { Stack } from "expo-router";
 
 export default function License() {

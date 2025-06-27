@@ -1,3 +1,5 @@
+import type { PropsWithChildren } from "react";
+
 import { Fab, FabIcon } from "@/components/ui/fab";
 import { Menu, MenuItem } from "@/components/ui/menu";
 import {
@@ -13,14 +15,13 @@ import {
   SelectTrigger,
 } from "@/components/ui/select";
 import { MenuIcon } from "lucide-react-native";
-import type { ReactNode } from "react";
 import { useEffect, useState } from "react";
 import { Image, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 type appType = { name: string };
 
-export default function WebviewLayout({ children }: { children: ReactNode }) {
+export default function WebviewLayout({ children }: PropsWithChildren) {
   const baseURL = "https://infinite-loop-factory.github.io/app-factory/";
   const [apps, setApps] = useState<appType[]>([]);
 
