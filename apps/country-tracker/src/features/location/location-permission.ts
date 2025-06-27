@@ -2,6 +2,7 @@ import type { User } from "@supabase/supabase-js";
 
 import { LOCATION_TASK_NAME } from "@/constants/location";
 import supabase from "@/libs/supabase";
+import { getCountryByLatLng } from "@/utils/reverse-geo";
 import * as Location from "expo-location";
 import * as TaskManager from "expo-task-manager";
 import { DateTime } from "luxon";
@@ -9,10 +10,16 @@ import { Platform } from "react-native";
 
 async function handleWebLocationInsert(user: User, pos: GeolocationPosition) {
   // 소수점 2자리 반올림
-  const round = (v: number) => Math.round(v * 100) / 100;
-  const latitude = round(pos.coords.latitude);
-  const longitude = round(pos.coords.longitude);
-  const timestamp = new Date(pos.timestamp).toISOString();
+  const {
+    coords: { latitude, longitude },
+    timestamp,
+  } = pos;
+
+  // reverse geocoding
+  const { country, countryCode } = await getCountryByLatLng(
+    latitude,
+    longitude,
+  );
 
   const storageKey = "country-tracker-last-location";
   let last: { ts: string; lat: number; lon: number } | null = null;
@@ -36,15 +43,18 @@ async function handleWebLocationInsert(user: User, pos: GeolocationPosition) {
   if (!shouldInsert) {
     return;
   }
-  // insert
+
   const { error } = await supabase.from("locations").insert([
     {
       user_id: user.id,
       latitude,
       longitude,
-      timestamp,
+      timestamp: new Date(pos.timestamp),
+      country,
+      country_code: countryCode,
     },
   ]);
+
   if (!error) {
     localStorage.setItem(
       storageKey,

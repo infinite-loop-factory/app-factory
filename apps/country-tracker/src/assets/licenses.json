@@ -1,9 +1,9 @@
 {
-  "generated": "2025-06-14T09:30:16.696Z",
+  "generated": "2025-06-27T12:44:12.752Z",
   "app": "country-tracker",
-  "totalPackages": 67,
+  "totalPackages": 72,
   "stats": {
-    "local": 67,
+    "local": 72,
     "npm": 0,
     "fallback": 0
   },
@@ -72,6 +72,13 @@
       "description": "A universal headless fab component for React Native, Next.js & React",
       "repository": "git+https://github.com/gluestack/gluestack-ui.git",
       "homepage": "https://github.com/gluestack/gluestack-ui/tree/main/packages/unstyled/fab#readme"
+    },
+    {
+      "name": "@gluestack-ui/image",
+      "version": "0.1.17",
+      "description": "A universal headless Button component for React Native, Next.js & React",
+      "repository": "git+https://github.com/gluestack/gluestack-ui.git",
+      "homepage": "https://github.com/gluestack/gluestack-ui/tree/main/packages/unstyled/image#readme"
     },
     {
       "name": "@gluestack-ui/input",
@@ -156,13 +163,6 @@
       "homepage": "https://reactnavigation.org"
     },
     {
-      "name": "@reactuses/core",
-      "version": "5.0.23",
-      "license": "Unlicense",
-      "repository": "git+https://github.com/childrentime/reactuse.git",
-      "homepage": "https://www.reactuse.com/"
-    },
-    {
       "name": "@sentry/react-native",
       "version": "6.13.1",
       "license": "MIT",
@@ -172,11 +172,29 @@
       "homepage": "https://github.com/getsentry/sentry-react-native"
     },
     {
+      "name": "@supabase/supabase-js",
+      "version": "2.49.4",
+      "license": "MIT",
+      "author": "Supabase",
+      "description": "Isomorphic Javascript client for Supabase",
+      "repository": "supabase/supabase-js",
+      "homepage": "https://github.com/supabase/supabase-js"
+    },
+    {
       "name": "@t3-oss/env-core",
-      "version": "0.12.0",
+      "version": "0.13.8",
       "license": "MIT",
       "author": "Julius Marminge",
       "repository": "https://github.com/t3-oss/t3-env"
+    },
+    {
+      "name": "@tanstack/react-query",
+      "version": "5.75.7",
+      "license": "MIT",
+      "author": "tannerlinsley",
+      "description": "Hooks for managing, caching and syncing asynchronous and remote data in React",
+      "repository": "https://github.com/TanStack/query.git",
+      "homepage": "https://tanstack.com/query"
     },
     {
       "name": "@testing-library/react-native",
@@ -218,6 +236,15 @@
       "description": "TypeScript definitions for react-test-renderer",
       "repository": "https://github.com/DefinitelyTyped/DefinitelyTyped.git",
       "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/react-test-renderer"
+    },
+    {
+      "name": "axios",
+      "version": "1.9.0",
+      "license": "MIT",
+      "author": "Matt Zabriskie",
+      "description": "Promise based HTTP client for the browser and node.js",
+      "repository": "https://github.com/axios/axios.git",
+      "homepage": "https://axios-http.com"
     },
     {
       "name": "babel-plugin-module-resolver",
@@ -262,6 +289,15 @@
       "homepage": "https://github.com/expo/expo/tree/main/packages/expo"
     },
     {
+      "name": "expo-auth-session",
+      "version": "6.2.0",
+      "license": "MIT",
+      "author": "650 Industries, Inc.",
+      "description": "Expo module for browser-based authentication",
+      "repository": "https://github.com/expo/expo.git",
+      "homepage": "https://docs.expo.dev/versions/latest/sdk/auth-session"
+    },
+    {
       "name": "expo-constants",
       "version": "16.0.2",
       "license": "MIT",
@@ -269,6 +305,15 @@
       "description": "Provides system information that remains constant throughout the lifetime of your app.",
       "repository": "https://github.com/expo/expo.git",
       "homepage": "https://docs.expo.dev/versions/latest/sdk/constants/"
+    },
+    {
+      "name": "expo-crypto",
+      "version": "14.1.5",
+      "license": "MIT",
+      "author": "650 Industries, Inc.",
+      "description": "Provides cryptography primitives for Android, iOS and web.",
+      "repository": "https://github.com/expo/expo.git",
+      "homepage": "https://docs.expo.dev/versions/latest/sdk/crypto/"
     },
     {
       "name": "expo-font",
@@ -480,7 +525,7 @@
     },
     {
       "name": "react-native-maps",
-      "version": "1.23.7",
+      "version": "1.14.0",
       "license": "MIT",
       "author": "Leland Richardson <leland.m.richardson@gmail.com>",
       "description": "React Native Mapview component for iOS + Android",

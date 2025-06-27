@@ -16,12 +16,10 @@ export async function getCountryByLatLng(
 ): Promise<ReverseGeoResult> {
   const round = (v: number) => Math.round(v * 100) / 100;
   const key = `${round(lat)},${round(lng)}`;
-  if (geoCache[key]) {
-    return geoCache[key];
-  }
   if (pendingPromises[key]) {
     return pendingPromises[key];
   }
+
   if (Platform.OS === "web") {
     pendingPromises[key] = (async () => {
       try {
@@ -43,6 +41,7 @@ export async function getCountryByLatLng(
     })();
     return pendingPromises[key];
   }
+
   try {
     const results = await Location.reverseGeocodeAsync({
       latitude: round(lat),

@@ -3,6 +3,7 @@ import type { ListRenderItem } from "react-native";
 
 import { themeAtom } from "@/atoms/theme.atom";
 import ParallaxScrollView from "@/components/parallax-scroll-view";
+import { Badge, BadgeText } from "@/components/ui/badge";
 import { Box } from "@/components/ui/box";
 import { Divider } from "@/components/ui/divider";
 import { Heading } from "@/components/ui/heading";
@@ -12,7 +13,7 @@ import { VStack } from "@/components/ui/vstack";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import i18n from "@/libs/i18n";
 import supabase from "@/libs/supabase";
-import { fetchVisitedCountries } from "@/utils/fetch-visited-countries";
+import { fetchVisitedCountries } from "@/utils/visited-countries";
 import { useQuery } from "@tanstack/react-query";
 import { useAtomValue } from "jotai";
 import { Search } from "lucide-react-native";
@@ -73,9 +74,16 @@ export default function HomeScreen() {
           {item.country}
         </Text>
       </Box>
-      <Text className="font-mono" style={{ color: textColor }}>
-        {formatDate(item.lastVisitDate)}
-      </Text>
+      <Box className="flex flex-row items-center gap-2">
+        <Text className="font-mono" style={{ color: textColor }}>
+          {formatDate(item.endDate)}
+        </Text>
+        {item.stayDays > 0 && (
+          <Badge size="sm">
+            <BadgeText>+{item.stayDays}</BadgeText>
+          </Badge>
+        )}
+      </Box>
     </Box>
   );
 
@@ -103,7 +111,6 @@ export default function HomeScreen() {
           </InputSlot>
         </Input>
       </VStack>
-      {/* FlatList의 renderItem 들을 단일 Surface(카드)로 감쌉니다. */}
       <Box
         className="mx-1 mb-2 overflow-hidden rounded-lg border bg-background-50 shadow-xs"
         style={{ backgroundColor: background, borderColor }}

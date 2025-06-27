@@ -41,7 +41,6 @@ export default function SettingsScreen() {
 
   const [
     background, // 카드 배경, 전체 배경
-    borderColor, // 테두리
     errorColor, // 에러 타이틀
     headingColor, // 헤딩 텍스트
     textColor, // 일반 텍스트
@@ -49,7 +48,6 @@ export default function SettingsScreen() {
     switchBgColor, // iOS 전용 스위치 배경
   ] = useThemeColor([
     "background",
-    "outline-200",
     "error-600",
     "typography-900",
     "typography",
@@ -69,9 +67,9 @@ export default function SettingsScreen() {
             <Toast
               action="error"
               variant="outline"
+              className="border-neutral-600"
               style={{
                 backgroundColor: background,
-                borderColor,
               }}
             >
               <ToastTitle style={{ color: errorColor }}>
@@ -100,7 +98,7 @@ export default function SettingsScreen() {
         </Heading>
       </Box>
       {/* 내 정보 박스 */}
-      <Box className="mx-1 mb-4 flex-row items-center justify-between rounded-lg border p-4 shadow-xs">
+      <Box className="mx-1 mb-4 flex-row items-center justify-between rounded-lg border border-neutral-600 p-4 shadow-xs">
         <Box className="flex-row items-center">
           <Image
             source={
@@ -132,13 +130,10 @@ export default function SettingsScreen() {
 
       {/* Appearance 그룹 */}
       <Box
-        className="mx-1 mb-4 rounded-lg border shadow-xs"
-        style={{ backgroundColor: background, borderColor }}
+        className="mx-1 mb-4 rounded-lg border border-neutral-600 shadow-xs"
+        style={{ backgroundColor: background }}
       >
-        <Box
-          className="border-b p-4"
-          style={{ borderBottomColor: borderColor }}
-        >
+        <Box className="border-b border-b-neutral-600 p-4">
           <Heading
             className="font-bold text-xl"
             style={{ color: headingColor }}
@@ -146,10 +141,7 @@ export default function SettingsScreen() {
             {i18n.t("settings.appearance.title")}
           </Heading>
         </Box>
-        <View
-          className="flex-row items-center justify-between border-b px-4 android:py-3 ios:py-3 py-4"
-          style={{ borderColor }}
-        >
+        <View className="flex-row items-center justify-between border-neutral-600 border-b px-4 android:py-3 ios:py-3 py-4">
           <View className="flex-row items-center">
             <Text
               className="mr-2 font-bold text-base"
@@ -190,13 +182,10 @@ export default function SettingsScreen() {
 
       {/* General 그룹 */}
       <Box
-        className="mx-1 mb-4 rounded-lg border shadow-xs"
-        style={{ backgroundColor: background, borderColor }}
+        className="mx-1 mb-4 rounded-lg border border-neutral-600 shadow-xs"
+        style={{ backgroundColor: background }}
       >
-        <Box
-          className="border-b p-4"
-          style={{ borderBottomColor: borderColor }}
-        >
+        <Box className="border-b border-b-neutral-600 p-4">
           <Heading
             className="font-bold text-xl"
             style={{ color: headingColor }}
@@ -204,18 +193,14 @@ export default function SettingsScreen() {
             {i18n.t("settings.general.title")}
           </Heading>
         </Box>
-        <TouchableOpacity
-          className="flex-row items-center justify-between border-b p-4"
-          style={{ borderBottomColor: borderColor }}
-        >
+        <TouchableOpacity className="flex-row items-center justify-between border-b border-b-neutral-600 p-4">
           <Text className="font-bold text-base" style={{ color: textColor }}>
             {i18n.t("settings.general.denylist")}
           </Text>
           <ChevronRight size={20} color={textColor} />
         </TouchableOpacity>
         <TouchableOpacity
-          className="flex-row items-center justify-between border-b p-4"
-          style={{ borderBottomColor: borderColor }}
+          className="flex-row items-center justify-between border-b border-b-neutral-600 p-4"
           onPress={() => openStorePage({})}
         >
           <Text className="font-bold text-base" style={{ color: textColor }}>

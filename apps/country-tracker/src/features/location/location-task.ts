@@ -2,6 +2,7 @@ import type { LocationObject } from "expo-location";
 
 import { LOCATION_TASK_NAME } from "@/constants/location";
 import supabase from "@/libs/supabase";
+import { getCountryByLatLng } from "@/utils/reverse-geo";
 import * as TaskManager from "expo-task-manager";
 
 type LocationTaskEvent = {
@@ -24,12 +25,28 @@ TaskManager.defineTask<LocationTaskEvent>(
         const { data: userData } = await supabase.auth.getUser();
         const user = userData?.user;
         if (!user) return;
-        const rows = data.data.locations.map((loc: LocationObject) => ({
-          user_id: user.id,
-          latitude: loc.coords.latitude,
-          longitude: loc.coords.longitude,
-          timestamp: new Date(loc.timestamp),
-        }));
+        const rows = await Promise.all(
+          data.data.locations.map(async (loc: LocationObject) => {
+            const {
+              coords: { latitude, longitude },
+              timestamp,
+            } = loc;
+
+            const { country, countryCode } = await getCountryByLatLng(
+              latitude,
+              longitude,
+            );
+            return {
+              user_id: user.id,
+              latitude,
+              longitude,
+              timestamp: new Date(timestamp),
+              country,
+              country_code: countryCode,
+            };
+          }),
+        );
+
         if (rows.length > 0) {
           const { error } = await supabase.from("locations").insert(rows);
           if (error) {
