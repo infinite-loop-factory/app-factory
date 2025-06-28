@@ -40,7 +40,7 @@ export default function LoginPage() {
             </Button>
             <Button
               action="secondary"
-              className="h-14 w-full border-slate-300 dark:border-slate-700"
+              className="h-14 w-full border border-slate-500 dark:border-slate-700"
               onPress={() => router.back()}
             >
               <ButtonText className="text-lg text-slate-700 dark:text-slate-300">

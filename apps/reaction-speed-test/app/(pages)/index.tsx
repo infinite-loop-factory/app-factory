@@ -45,7 +45,7 @@ export default function HomeScreen() {
             <View className="w-full gap-y-3">
               <Button
                 action="secondary"
-                className="h-12 w-full border-slate-300 dark:border-slate-700"
+                className="h-14 w-full border border-slate-500 dark:border-slate-700"
                 onPress={() => router.push("/login")}
               >
                 <ButtonText className="text-slate-700 dark:text-slate-300">
@@ -54,7 +54,7 @@ export default function HomeScreen() {
               </Button>
               <Button
                 action="secondary"
-                className="h-12 w-full border-slate-300 dark:border-slate-700"
+                className="h-14 w-full border border-slate-500 dark:border-slate-700"
                 onPress={() => router.push("/signup")}
               >
                 <ButtonText className="text-slate-700 dark:text-slate-300">

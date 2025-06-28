@@ -11,7 +11,11 @@ const Settings: FC = () => {
       <Text className="mb-5 text-2xl text-typography-900 dark:text-typography-50">
         설정 페이지
       </Text>
-      <Button action="secondary" onPress={() => router.back()}>
+      <Button
+        action="secondary"
+        className="h-14 w-full border border-slate-500 dark:border-slate-700"
+        onPress={() => router.back()}
+      >
         <ButtonText>뒤로 가기</ButtonText>
       </Button>
     </View>
