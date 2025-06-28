@@ -69,23 +69,28 @@ const Results: FC = () => {
 
   return (
     <View className="flex-1 bg-slate-50 dark:bg-slate-950">
+      <Stack.Screen options={{ title: "기록", headerShown: false }} />
       <SafeAreaView className="flex-1">
-        <ScrollView className="flex-1">
-          <View className="mx-auto max-w-md px-4 py-8">
-            {/* 헤더 */}
-            <Stack.Screen options={{ title: "기록", headerShown: false }} />
-            <View className="mb-6 flex-row items-center justify-between">
-              <Pressable onPress={() => router.back()} className="p-2">
-                <Text className="text-slate-600 dark:text-slate-400">
-                  ← 뒤로
-                </Text>
-              </Pressable>
-              <Text className="font-bold text-slate-900 text-xl dark:text-slate-100">
-                측정 기록
-              </Text>
-              <View className="w-10" />
-            </View>
+        <View className="relative items-center justify-center px-4 py-3">
+          <Pressable
+            onPress={() => router.back()}
+            className="absolute left-4 p-2"
+          >
+            <Text className="text-slate-600 dark:text-slate-400">← 뒤로</Text>
+          </Pressable>
+          <Text className="font-bold text-slate-900 text-xl dark:text-slate-100">
+            측정 기록
+          </Text>
+        </View>
 
+        <ScrollView
+          className="flex-1"
+          showsVerticalScrollIndicator={false}
+          overScrollMode="never"
+          bounces={false}
+          keyboardShouldPersistTaps="handled"
+        >
+          <View className="mx-auto max-w-md px-4 py-6">
             {loading ? (
               <View className="items-center py-12">
                 <Text className="text-slate-600 dark:text-slate-400">

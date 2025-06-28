@@ -6,7 +6,7 @@ export default function HomeScreen() {
   const router = useRouter();
 
   return (
-    <View className="flex-1 items-center justify-center bg-slate-50 px-4 dark:bg-slate-950">
+    <View className="flex-1 items-center justify-center bg-slate-50 px-6 dark:bg-slate-950">
       <Stack.Screen
         options={{ title: "Reaction Speed Test", headerShown: false }}
       />
@@ -25,7 +25,7 @@ export default function HomeScreen() {
           </Text>
         </View>
 
-        <View className="w-full gap-y-4">
+        <View className="w-full gap-y-6">
           <Button
             action="primary"
             className="h-14 w-full bg-slate-900 dark:bg-slate-100"
@@ -37,7 +37,7 @@ export default function HomeScreen() {
           </Button>
           <Button
             action="secondary"
-            className="h-12 w-full border-slate-300 dark:border-slate-700"
+            className="h-14 w-full border-slate-300 dark:border-slate-700"
             onPress={() => router.push("/signup")}
           >
             <ButtonText className="text-slate-700 dark:text-slate-300">
