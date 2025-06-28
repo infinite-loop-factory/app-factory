@@ -1,32 +1,29 @@
-import { RecordList, RecordStatistics } from "@/components/results";
+import {
+  EmptyRecords,
+  RecordList,
+  RecordStatistics,
+} from "@/components/results";
 import { Button, ButtonText } from "@/components/ui/button";
 import { useRecordStatistics } from "@/hooks/useRecordStatistics";
-import { getRecords } from "@/services";
+import { type LocalRecord, getLocalRecords } from "@/services/localRecords";
 import { useAsyncEffect } from "@reactuses/core";
 import { noop } from "es-toolkit";
-import { useRouter } from "expo-router";
+import { Stack, useRouter } from "expo-router";
 import type { FC } from "react";
 import { useState } from "react";
 import { Alert, Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-interface Record {
-  id: string;
-  created_at: string;
-  result_value: number;
-  unit: string;
-}
-
-const Results: FC = () => {
+const GuestResults: FC = () => {
   const router = useRouter();
-  const [records, setRecords] = useState<Record[]>([]);
+  const [records, setRecords] = useState<LocalRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const { bestTime, averageTime } = useRecordStatistics(records);
 
   useAsyncEffect(
     async () => {
       try {
-        const data = await getRecords();
+        const data = await getLocalRecords();
         setRecords(data);
       } catch (error) {
         if (error instanceof Error) {
@@ -45,6 +42,7 @@ const Results: FC = () => {
 
   return (
     <View className="flex-1 bg-slate-50 dark:bg-slate-950">
+      <Stack.Screen options={{ title: "게스트 기록", headerShown: false }} />
       <SafeAreaView className="flex-1">
         <View className="relative items-center justify-center px-4 py-3">
           <Pressable
@@ -66,6 +64,14 @@ const Results: FC = () => {
           keyboardShouldPersistTaps="handled"
         >
           <View className="mx-auto max-w-md px-4 py-6">
+            {/* 로그인 권유 메시지 */}
+            <View className="mb-6 rounded-lg bg-blue-50 p-4 dark:bg-blue-950/20">
+              <Text className="text-center text-blue-700 text-sm dark:text-blue-300">
+                💡 로그인하시면 기록이 클라우드에 저장되어{"\n"}다른 기기에서도
+                확인할 수 있습니다
+              </Text>
+            </View>
+
             {loading ? (
               <View className="items-center py-12">
                 <Text className="text-slate-600 dark:text-slate-400">
@@ -74,11 +80,17 @@ const Results: FC = () => {
               </View>
             ) : (
               <>
-                <RecordStatistics
-                  bestTime={bestTime}
-                  averageTime={averageTime}
-                />
-                <RecordList records={records} bestTime={bestTime} />
+                {records.length === 0 ? (
+                  <EmptyRecords />
+                ) : (
+                  <>
+                    <RecordStatistics
+                      bestTime={bestTime}
+                      averageTime={averageTime}
+                    />
+                    <RecordList records={records} bestTime={bestTime} />
+                  </>
+                )}
               </>
             )}
 
@@ -96,7 +108,7 @@ const Results: FC = () => {
               <Button
                 action="secondary"
                 className="h-14 w-full border border-slate-500 dark:border-slate-700"
-                onPress={() => router.push("/menu")}
+                onPress={() => router.push("/guest-menu")}
               >
                 <ButtonText className="text-slate-700 dark:text-slate-300">
                   메뉴로 돌아가기
@@ -110,4 +122,4 @@ const Results: FC = () => {
   );
 };
 
-export default Results;
+export default GuestResults;

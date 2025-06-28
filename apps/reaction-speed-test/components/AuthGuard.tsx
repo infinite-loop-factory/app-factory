@@ -21,7 +21,7 @@ export default function AuthGuard({ children }: PropsWithChildren) {
   const shouldRedirectToHome = useCallback(
     (currentPath: string): boolean => {
       const inAuthGroup = segments[0] === "(pages)";
-      const allowedGuestPages = ["measurement"];
+      const allowedGuestPages = ["measurement", "guest-menu", "guest-results"];
       const isGuestAllowedPage = allowedGuestPages.some((page) =>
         currentPath.includes(page),
       );

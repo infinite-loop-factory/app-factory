@@ -1,6 +1,7 @@
 import SmileSvg from "@/components/measurement/SmileSvg";
 import SvgWrapper from "@/components/measurement/SvgWrapper";
 import { Button, ButtonText } from "@/components/ui/button";
+import { useAuth } from "@/hooks/useAuth";
 import { useReactionTimer } from "@/hooks/useReactionTimer";
 import { DelayRender } from "@/utils/DelayRender";
 import { noop } from "es-toolkit";
@@ -13,6 +14,7 @@ type MeasurementState = "waiting" | "ready" | "measuring" | "result" | "early";
 
 const Measurement: FC = () => {
   const router = useRouter();
+  const { isAuthenticated } = useAuth();
   const { result, start, stop, reset } = useReactionTimer();
   const [shouldRestart, setShouldRestart] = useState(false);
   const [state, setState] = useState<MeasurementState>("waiting");
@@ -45,6 +47,14 @@ const Measurement: FC = () => {
       setShouldRestart(false);
     }, 100);
   }, [reset]);
+
+  const handleBackToMenu = useCallback(() => {
+    if (isAuthenticated) {
+      router.push("/menu");
+    } else {
+      router.push("/guest-menu");
+    }
+  }, [isAuthenticated, router]);
 
   useEffect(() => {
     if (result) {
@@ -160,7 +170,7 @@ const Measurement: FC = () => {
           <Button
             action="secondary"
             className="h-14 w-full border border-slate-500 dark:border-slate-700"
-            onPress={() => router.push("/menu")}
+            onPress={handleBackToMenu}
           >
             <ButtonText className="text-slate-700 dark:text-slate-300">
               메뉴로 돌아가기

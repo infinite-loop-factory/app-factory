@@ -1,4 +1,6 @@
+import { useAuth } from "@/hooks/useAuth";
 import { insertRecord } from "@/services";
+import { insertLocalRecord } from "@/services/localRecords";
 import { useAsyncEffect } from "@reactuses/core";
 import { noop } from "es-toolkit";
 import { useCallback, useRef, useState } from "react";
@@ -10,6 +12,7 @@ export interface TimeResult {
 }
 
 export const useReactionTimer = () => {
+  const { isAuthenticated } = useAuth();
   const [result, setResult] = useState<TimeResult | null>(null);
   const [earlyPress, setEarlyPress] = useState(false);
   const startTimeRef = useRef<number>(0);
@@ -19,14 +22,18 @@ export const useReactionTimer = () => {
     async () => {
       if (result) {
         try {
-          await insertRecord(result.reactionTime);
+          if (isAuthenticated) {
+            await insertRecord(result.reactionTime);
+          } else {
+            await insertLocalRecord(result.reactionTime);
+          }
         } catch (error) {
           console.error("Failed to save record:", error);
         }
       }
     },
     noop,
-    [result],
+    [result, isAuthenticated],
   );
 
   const start = useCallback(() => {
