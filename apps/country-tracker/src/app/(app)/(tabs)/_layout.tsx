@@ -1,10 +1,11 @@
+import type { BottomTabNavigationOptions } from "@react-navigation/bottom-tabs";
+import type { LucideProps } from "lucide-react-native";
+import type { ComponentType } from "react";
+
 import { useThemeColor } from "@/hooks/use-theme-color";
 import i18n from "@/libs/i18n";
-import type { BottomTabNavigationOptions } from "@react-navigation/bottom-tabs";
 import { Tabs } from "expo-router";
-import type { LucideProps } from "lucide-react-native";
 import { Globe, Home, Settings } from "lucide-react-native";
-import type { ComponentType } from "react";
 
 type TabInfo = {
   name: string;

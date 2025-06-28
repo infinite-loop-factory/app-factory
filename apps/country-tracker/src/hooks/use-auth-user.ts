@@ -16,25 +16,6 @@ export function useAuthUser() {
       setLoading(false);
     });
 
-    // OAuth 리디렉션 후 해시에서 토큰 복원
-    if (
-      typeof window !== "undefined" &&
-      window.location.hash.includes("access_token")
-    ) {
-      const params = new URLSearchParams(window.location.hash.substring(1));
-      const access_token = params.get("access_token");
-      const refresh_token = params.get("refresh_token");
-      if (access_token && refresh_token) {
-        supabase.auth.setSession({ access_token, refresh_token }).then(() => {
-          window.history.replaceState(
-            {},
-            document.title,
-            window.location.pathname,
-          );
-        });
-      }
-    }
-
     // auth 상태 변화 구독만 사용
     const { data: listener } = supabase.auth.onAuthStateChange(
       (_event, session) => {
