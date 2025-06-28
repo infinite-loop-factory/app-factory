@@ -101,10 +101,5 @@
     "jscodeshift": "0.15.2",
     "type-fest": "catalog:",
     "typescript": "^5.3.3"
-  },
-  "pnpm": {
-    "executionEnv": {
-      "nodeVersion": "22.16.0"
-    }
   }
 }

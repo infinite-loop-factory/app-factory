@@ -8,7 +8,7 @@
     "prepare": "husky",
     "sort-package-json": "sort-package-json \"package.json\" \"apps/*/package.json\" \"packages/*/package.json\"",
     "start": "tsx scripts/start.ts",
-    "test": "turbo run test -- -u"
+    "test": "turbo run test"
   },
   "devDependencies": {
     "@biomejs/biome": "catalog:",
