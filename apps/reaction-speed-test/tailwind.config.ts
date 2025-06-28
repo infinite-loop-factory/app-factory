@@ -15,7 +15,7 @@ export default {
   safelist: [
     {
       pattern:
-        /(bg|border|text|stroke|fill)-(primary|secondary|tertiary|error|success|warning|info|typography|outline|background)-(0|50|100|200|300|400|500|600|700|800|900|950|white|gray|black|error|warning|muted|success|info|light|dark)/,
+        /(bg|border|text|stroke|fill)-(primary|secondary|tertiary|error|success|warning|info|typography|outline|background|accent)-(0|50|100|200|300|400|500|600|700|800|900|950|white|gray|black|error|warning|muted|success|info|light|dark|start|stop|neutral)/,
     },
   ],
   plugins: [gluestackPlugin],
@@ -132,9 +132,9 @@ export default {
           800: "rgb(var(--color-typography-800)/<alpha-value>)",
           900: "rgb(var(--color-typography-900)/<alpha-value>)",
           950: "rgb(var(--color-typography-950)/<alpha-value>)",
-          white: "#FFFFFF",
-          gray: "#D4D4D4",
-          black: "#181718",
+          white: "#ffffff",
+          gray: "#71717a",
+          black: "#09090b",
         },
         outline: {
           0: "rgb(var(--color-outline-0)/<alpha-value>)",
@@ -168,13 +168,18 @@ export default {
           muted: "rgb(var(--color-background-muted)/<alpha-value>)",
           success: "rgb(var(--color-background-success)/<alpha-value>)",
           info: "rgb(var(--color-background-info)/<alpha-value>)",
-          light: "#FBFBFB",
-          dark: "#181719",
+          light: "#ffffff",
+          dark: "#09090b",
         },
         indicator: {
           primary: "rgb(var(--color-indicator-primary)/<alpha-value>)",
           info: "rgb(var(--color-indicator-info)/<alpha-value>)",
           error: "rgb(var(--color-indicator-error)/<alpha-value>)",
+        },
+        accent: {
+          start: "#10b981",
+          stop: "#ef4444",
+          neutral: "#6b7280",
         },
       },
       fontFamily: {

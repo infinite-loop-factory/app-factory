@@ -1,4 +1,4 @@
-import { getCurrentUser } from "@/services";
+import { getCurrentUser } from "@/services/user";
 import { supabase } from "@/utils/supabase";
 
 export const insertRecord = async (result_value: number) => {
