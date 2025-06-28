@@ -1,13 +1,24 @@
 import { Button, ButtonText } from "@/components/ui/button";
 import {
+  Checkbox,
+  CheckboxIcon,
+  CheckboxIndicator,
+  CheckboxLabel,
+} from "@/components/ui/checkbox";
+import {
   FormControl,
   FormControlHelper,
   FormControlHelperText,
 } from "@/components/ui/form-control";
+import { CheckIcon } from "@/components/ui/icon";
 import { Input, InputField } from "@/components/ui/input";
 import { VStack } from "@/components/ui/vstack";
 import { signInUser } from "@/services";
-import { useState } from "react";
+import {
+  getAutoLoginSetting,
+  setAutoLoginSetting,
+} from "@/utils/autoLoginStorage";
+import { useEffect, useState } from "react";
 import { Text } from "react-native";
 
 export default function LoginForm() {
@@ -22,6 +33,20 @@ export default function LoginForm() {
   });
 
   const [loading, setLoading] = useState(false);
+  const [autoLogin, setAutoLogin] = useState(true);
+
+  useEffect(() => {
+    const loadAutoLoginSetting = async () => {
+      try {
+        const savedSetting = await getAutoLoginSetting();
+        setAutoLogin(savedSetting);
+      } catch (error) {
+        console.error("Error loading auto login setting:", error);
+      }
+    };
+
+    loadAutoLoginSetting();
+  }, []);
 
   const validateForm = () => {
     const newErrors = {
@@ -68,6 +93,8 @@ export default function LoginForm() {
         }
         return;
       }
+
+      await setAutoLoginSetting(autoLogin);
     } catch (error) {
       console.error("로그인 중 문제가 발생했습니다", error);
     } finally {
@@ -77,6 +104,10 @@ export default function LoginForm() {
 
   const clearError = (field: string) => {
     setErrors((prev) => ({ ...prev, [field]: "" }));
+  };
+
+  const handleAutoLoginChange = (value: boolean) => {
+    setAutoLogin(value);
   };
 
   return (
@@ -131,6 +162,20 @@ export default function LoginForm() {
             </FormControlHelper>
           )}
         </VStack>
+
+        <Checkbox
+          size="sm"
+          value="autoLogin"
+          isChecked={autoLogin}
+          onChange={handleAutoLoginChange}
+        >
+          <CheckboxIndicator>
+            <CheckboxIcon as={CheckIcon} />
+          </CheckboxIndicator>
+          <CheckboxLabel className="text-slate-700 dark:text-slate-300">
+            자동 로그인
+          </CheckboxLabel>
+        </Checkbox>
 
         <Button
           action="primary"

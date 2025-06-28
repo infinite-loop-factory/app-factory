@@ -1,3 +1,7 @@
+import {
+  clearAutoLoginSetting,
+  getAutoLoginSetting,
+} from "@/utils/autoLoginStorage";
 import { supabase } from "@/utils/supabase";
 import type { Session, User } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
@@ -20,6 +24,18 @@ export const useAuth = () => {
   useEffect(() => {
     const getInitialSession = async () => {
       try {
+        const autoLoginEnabled = await getAutoLoginSetting();
+
+        if (!autoLoginEnabled) {
+          setAuthState({
+            user: null,
+            session: null,
+            loading: false,
+            isAuthenticated: false,
+          });
+          return;
+        }
+
         const {
           data: { session },
           error,
@@ -63,6 +79,7 @@ export const useAuth = () => {
       if (error) {
         console.error("Error signing out:", error);
       }
+      await clearAutoLoginSetting();
     } catch (error) {
       console.error("Error in signOut:", error);
     }
