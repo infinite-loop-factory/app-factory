@@ -1,5 +1,6 @@
 import { Button, ButtonText } from "@/components/ui/button";
-import { fetchUsername, getCurrentUser } from "@/services";
+import { useAuth } from "@/hooks/useAuth";
+import { fetchUsername } from "@/services";
 import { useAsyncEffect } from "@reactuses/core";
 import { noop } from "es-toolkit";
 import { useRouter } from "expo-router";
@@ -9,11 +10,11 @@ import { Pressable, SafeAreaView, Text, View } from "react-native";
 export default function MenuScreen() {
   const [username, setUsername] = useState<string | null>(null);
   const router = useRouter();
+  const { user, signOut } = useAuth();
 
   useAsyncEffect(
     async () => {
       try {
-        const user = await getCurrentUser();
         if (user) {
           const username = await fetchUsername(user.id);
           setUsername(username);
@@ -23,8 +24,12 @@ export default function MenuScreen() {
       }
     },
     noop,
-    [],
+    [user],
   );
+
+  const handleSignOut = async () => {
+    await signOut();
+  };
 
   const menuItems = [
     {
@@ -123,7 +128,7 @@ export default function MenuScreen() {
           <Button
             action="secondary"
             className="h-14 w-full border-slate-300 dark:border-slate-700"
-            onPress={() => router.push("/")}
+            onPress={handleSignOut}
           >
             <ButtonText className="text-lg text-slate-700 dark:text-slate-300">
               로그아웃

@@ -1,4 +1,5 @@
 import "@/global.css";
+import AuthGuard from "@/components/AuthGuard";
 import WebviewLayout from "@/components/WebviewLayout";
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
 import { supabase } from "@/utils/supabase";
@@ -62,12 +63,14 @@ export default function RootLayout() {
   return (
     <GluestackUIProvider mode={colorScheme}>
       <AppContainer>
-        <WebviewLayout>
-          <Stack>
-            <Stack.Screen name="(pages)" options={{ headerShown: false }} />
-            <Stack.Screen name="+not-found" />
-          </Stack>
-        </WebviewLayout>
+        <AuthGuard>
+          <WebviewLayout>
+            <Stack>
+              <Stack.Screen name="(pages)" options={{ headerShown: false }} />
+              <Stack.Screen name="+not-found" />
+            </Stack>
+          </WebviewLayout>
+        </AuthGuard>
       </AppContainer>
     </GluestackUIProvider>
   );

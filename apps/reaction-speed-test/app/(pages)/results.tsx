@@ -1,29 +1,13 @@
 import { Button, ButtonText } from "@/components/ui/button";
 import { getRecords } from "@/services";
 import { formatDateTime } from "@/utils/date";
-import { supabase } from "@/utils/supabase";
 import { useAsyncEffect } from "@reactuses/core";
 import { noop } from "es-toolkit";
 import { useRouter } from "expo-router";
 import type { FC } from "react";
 import { useState } from "react";
-import {
-  Alert,
-  AppState,
-  Pressable,
-  ScrollView,
-  Text,
-  View,
-} from "react-native";
+import { Alert, Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
-AppState.addEventListener("change", (state) => {
-  if (state === "active") {
-    supabase.auth.startAutoRefresh();
-  } else {
-    supabase.auth.stopAutoRefresh();
-  }
-});
 
 interface Record {
   id: string;
@@ -215,7 +199,7 @@ const Results: FC = () => {
               </Button>
               <Button
                 action="secondary"
-                className="w-full border-slate-300 dark:border-slate-700"
+                className="h-12 w-full border-slate-300 dark:border-slate-700"
                 onPress={() => router.push("/menu")}
               >
                 <ButtonText className="text-slate-700 dark:text-slate-300">

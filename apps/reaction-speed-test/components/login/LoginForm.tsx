@@ -7,12 +7,10 @@ import {
 import { Input, InputField } from "@/components/ui/input";
 import { VStack } from "@/components/ui/vstack";
 import { signInUser } from "@/services";
-import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Text } from "react-native";
 
 export default function LoginForm() {
-  const router = useRouter();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -70,7 +68,6 @@ export default function LoginForm() {
         }
         return;
       }
-      router.replace("/menu");
     } catch (error) {
       console.error("로그인 중 문제가 발생했습니다", error);
     } finally {
