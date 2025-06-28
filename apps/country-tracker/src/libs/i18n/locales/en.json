@@ -1,0 +1,55 @@
+{
+  "welcome": "Welcome",
+
+  "home": {
+    "tab": "Home",
+    "title": "Visited Countries",
+    "search": "Search"
+  },
+
+  "map": {
+    "tab": "Map",
+    "countries": "Countries",
+    "search-placeholder": "Search for a country"
+  },
+
+  "settings": {
+    "tab": "Settings",
+    "title": "Settings",
+
+    "appearance": {
+      "title": "Appearance",
+      "theme": "Theme",
+      "language": "Language"
+    },
+
+    "general": {
+      "title": "General",
+      "denylist": "Denylist Countries",
+      "rate-the-app": "Rate the App",
+      "license": "License"
+    },
+
+    "license": {
+      "title": "License",
+      "description": "License information for open source libraries used in this app.",
+      "libraries": "Libraries",
+      "tap-to-view": "Tap to view detailed information on the npm package page."
+    },
+
+    "toast": {
+      "language": {
+        "title": "Oops!",
+        "description": "Please go to System Settings > Apps > Language settings to change your language."
+      }
+    },
+    "logout": "Logout"
+  },
+
+  "login": {
+    "title": "Country Tracker",
+    "description": "Login is required to use this service.",
+    "google": "Login with Google",
+    "github": "Login with GitHub"
+  }
+}

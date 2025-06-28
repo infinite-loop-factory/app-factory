@@ -1,10 +1,11 @@
 import licensesData from "@/assets/licenses.json";
-import ParallaxScrollView from "@/components/ParallaxScrollView";
+import ParallaxScrollView from "@/components/parallax-scroll-view";
+import { Badge, BadgeText } from "@/components/ui/badge";
 import { Box } from "@/components/ui/box";
 import { Heading } from "@/components/ui/heading";
 import { Text } from "@/components/ui/text";
-import { useThemeColor } from "@/hooks/useThemeColor";
-import i18n from "@/i18n";
+import { useThemeColor } from "@/hooks/use-theme-color";
+import i18n from "@/libs/i18n";
 import { ExternalLink } from "lucide-react-native";
 import { Linking, TouchableOpacity } from "react-native";
 
@@ -76,9 +77,14 @@ export default function LicenseScreen() {
             </Box>
 
             {item.license && (
-              <Text className="mb-1 text-sm" style={{ color: linkColor }}>
-                {item.license}
-              </Text>
+              <Badge
+                className="mb-1 self-start"
+                style={{ alignSelf: "flex-start" }}
+              >
+                <BadgeText className="font-bold text-xs">
+                  {item.license}
+                </BadgeText>
+              </Badge>
             )}
 
             {item.author && (

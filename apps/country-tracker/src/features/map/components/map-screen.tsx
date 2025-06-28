@@ -1,13 +1,13 @@
 import type { MapGlobeRef } from "@/features/map/components/map-globe";
 
-import { ThemedView } from "@/components/ThemedView";
+import { ThemedView } from "@/components/themed-view";
 import { Button, ButtonIcon } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
 import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
 import MapGlobe from "@/features/map/components/map-globe";
 import { findCountryLocation } from "@/features/map/constants/countries";
-import { useThemeColor } from "@/hooks/useThemeColor";
-import i18n from "@/i18n";
+import { useThemeColor } from "@/hooks/use-theme-color";
+import i18n from "@/libs/i18n";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import { Search, Share } from "lucide-react-native";
 import { useRef, useState } from "react";
