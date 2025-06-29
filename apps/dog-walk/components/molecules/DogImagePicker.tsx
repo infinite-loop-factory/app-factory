@@ -4,8 +4,10 @@ import { Image, TouchableOpacity, View } from "react-native";
 import { Icon } from "../ui/icon";
 
 interface IDogImagePickerProps {
-  dogImage: string | null;
-  setDogImage: React.Dispatch<React.SetStateAction<string | null>>;
+  dogImage: ImagePicker.ImagePickerAsset[];
+  setDogImage: React.Dispatch<
+    React.SetStateAction<ImagePicker.ImagePickerAsset[]>
+  >;
 }
 
 export default function DogImagePicker({
@@ -18,17 +20,21 @@ export default function DogImagePicker({
       allowsEditing: true,
       aspect: [1, 1],
       quality: 1,
+      base64: true,
     });
 
-    if (result && !result.canceled) {
-      setDogImage((result.assets[0] ?? { uri: "" }).uri);
+    if (result && !result.canceled && result.assets[0]) {
+      const image = result.assets[0];
+      setDogImage(() => [image]);
     }
   };
 
   return (
     <TouchableOpacity onPress={onPickImage}>
-      {dogImage && <Image src={dogImage} className="h-28 w-28 rounded-full" />}
-      {!dogImage && (
+      {!!dogImage.length && (
+        <Image src={dogImage[0]?.uri} className="h-28 w-28 rounded-full" />
+      )}
+      {!dogImage.length && (
         <View className="relative">
           <View
             className={
