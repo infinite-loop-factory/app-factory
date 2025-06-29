@@ -1,3 +1,4 @@
+import { userAtom } from "@/atoms/userAtom";
 import CustomSafeAreaView from "@/components/CustomSafeAriaView";
 import HeaderBar from "@/components/HeaderBar";
 import SectionTitle from "@/components/SectionTitle";
@@ -18,16 +19,31 @@ import {
 import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
 import { dogGender } from "@/constants/DogBreeds";
-import { useState } from "react";
+import { useRegisterDog } from "@/hooks/useRegisterDog";
+import type * as ImagePicker from "expo-image-picker";
+import { useAtomValue } from "jotai/react";
+import { useMemo, useState } from "react";
 import { ScrollView, View } from "react-native";
 
 export default function DogRegisterScreen() {
-  const [dogImage, setDogImage] = useState<string | null>(null);
+  const [dogImage, setDogImage] = useState<ImagePicker.ImagePickerAsset[]>([]);
+
   const [dogName, setDogName] = useState("");
   const [dogBreed, setDogBreed] = useState("");
   const [dogGenderValue, setDogGenderValue] = useState("MALE");
   const [dogBirth, setDogBirth] = useState(new Date());
+
   const [showDogBreedActionsheet, setShowDogBreedActionsheet] = useState(false);
+
+  const userInfo = useAtomValue(userAtom);
+
+  const { handleRegister } = useRegisterDog();
+
+  const isRegister = useMemo(() => {
+    return (
+      dogImage.length > 0 && dogName.trim().length > 0 && dogBreed && !!dogBirth
+    );
+  }, [dogImage, dogName, dogBreed, dogBirth]);
 
   return (
     <CustomSafeAreaView>
@@ -93,11 +109,24 @@ export default function DogRegisterScreen() {
         </VStack>
       </ScrollView>
       <View className="p-6">
-        <Button>
+        <Button
+          onPress={() => {
+            handleRegister({
+              dogImage,
+              userId: userInfo.id,
+              name: dogName,
+              breed: dogBreed,
+              gender: dogGenderValue,
+              birthdate: dogBirth,
+            });
+          }}
+          isDisabled={!isRegister}
+        >
           <ButtonText>등록하기</ButtonText>
         </Button>
       </View>
       <DogBreedActionsheet
+        dogBreed={dogBreed}
         showActionsheet={showDogBreedActionsheet}
         setShowActionsheet={setShowDogBreedActionsheet}
         setDogBreed={setDogBreed}

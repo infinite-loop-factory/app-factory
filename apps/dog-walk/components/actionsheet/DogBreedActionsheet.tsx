@@ -15,12 +15,14 @@ import { Text } from "../ui/text";
 
 interface IDogBreedActionsheetProps {
   showActionsheet: boolean;
+  dogBreed: string;
   setShowActionsheet: React.Dispatch<React.SetStateAction<boolean>>;
   setDogBreed: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export default function DogBreedActionsheet({
   showActionsheet,
+  dogBreed,
   setShowActionsheet,
   setDogBreed,
 }: IDogBreedActionsheetProps) {
@@ -33,9 +35,15 @@ export default function DogBreedActionsheet({
     setShowActionsheet(false);
   };
 
-  const DogBreedItem = ({ label }: Option) => {
+  const DogBreedItem = ({
+    label,
+    isFocused,
+  }: {
+    label: string;
+    isFocused: boolean;
+  }) => {
     return (
-      <ActionsheetItem onPress={() => onPressItem(label)}>
+      <ActionsheetItem isFocused={isFocused} onPress={() => onPressItem(label)}>
         <ActionsheetItemText>{label}</ActionsheetItemText>
       </ActionsheetItem>
     );
@@ -54,10 +62,13 @@ export default function DogBreedActionsheet({
           </Text>
         </View>
         <ActionsheetFlatList
-          data={dogBreeds}
-          keyExtractor={(item: Option) => item.value}
-          renderItem={({ item }: { item: Option }) => (
-            <DogBreedItem label={item.label} value={item.value} />
+          data={dogBreeds as Option[]}
+          keyExtractor={(item) => (item as Option).value}
+          renderItem={({ item }) => (
+            <DogBreedItem
+              label={(item as Option).label}
+              isFocused={dogBreed === (item as Option).label}
+            />
           )}
         />
       </ActionsheetContent>
