@@ -4,7 +4,7 @@ import { formatDateTime } from "@/utils/date";
 import { supabase } from "@/utils/supabase";
 import { useAsyncEffect } from "@reactuses/core";
 import { noop } from "es-toolkit";
-import { Stack, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import type { FC } from "react";
 import { useState } from "react";
 import {
@@ -69,7 +69,6 @@ const Results: FC = () => {
 
   return (
     <View className="flex-1 bg-slate-50 dark:bg-slate-950">
-      <Stack.Screen options={{ title: "기록", headerShown: false }} />
       <SafeAreaView className="flex-1">
         <View className="relative items-center justify-center px-4 py-3">
           <Pressable

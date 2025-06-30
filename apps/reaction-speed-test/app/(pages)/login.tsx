@@ -1,6 +1,6 @@
 import LoginForm from "@/components/login/LoginForm";
 import { Button, ButtonText } from "@/components/ui/button";
-import { Stack, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { SafeAreaView, Text, View } from "react-native";
 
 export default function LoginPage() {
@@ -8,8 +8,6 @@ export default function LoginPage() {
 
   return (
     <SafeAreaView className="flex-1 items-center justify-center bg-slate-50 px-6 dark:bg-slate-950">
-      <Stack.Screen options={{ title: "측정 페이지", headerShown: false }} />
-
       <View className="w-full max-w-md items-center gap-y-12">
         <View className="items-center gap-y-4">
           <Text className="text-center font-bold text-3xl text-slate-900 dark:text-slate-100">

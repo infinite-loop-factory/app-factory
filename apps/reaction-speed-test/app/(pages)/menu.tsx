@@ -2,7 +2,7 @@ import { Button, ButtonText } from "@/components/ui/button";
 import { fetchUsername, getCurrentUser } from "@/services";
 import { useAsyncEffect } from "@reactuses/core";
 import { noop } from "es-toolkit";
-import { Stack, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Pressable, SafeAreaView, Text, View } from "react-native";
 
@@ -53,8 +53,6 @@ export default function MenuScreen() {
 
   return (
     <SafeAreaView className="flex-1 items-center justify-center bg-slate-50 px-6 dark:bg-slate-950">
-      <Stack.Screen options={{ title: "메뉴", headerShown: false }} />
-
       <View className="w-full max-w-md items-center gap-y-12">
         <View className="items-center gap-y-4">
           <Text className="text-center font-bold text-3xl text-slate-900 dark:text-slate-100">

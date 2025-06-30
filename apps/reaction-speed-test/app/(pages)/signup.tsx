@@ -2,7 +2,7 @@ import { Button, ButtonText } from "@/components/ui/button";
 import { Input, InputField } from "@/components/ui/input";
 import { VStack } from "@/components/ui/vstack";
 import { signUpUser } from "@/services";
-import { Stack, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { useState } from "react";
 import { SafeAreaView, Text, View } from "react-native";
 
@@ -97,8 +97,6 @@ export default function SignUpForm() {
 
   return (
     <SafeAreaView className="flex-1 items-center justify-center bg-slate-50 px-6 dark:bg-slate-950">
-      <Stack.Screen options={{ title: "회원가입", headerShown: false }} />
-
       <View className="w-full max-w-md items-center gap-y-12">
         <View className="items-center gap-y-4">
           <Text className="text-center font-bold text-3xl text-slate-900 dark:text-slate-100">

@@ -4,7 +4,7 @@ import { Button, ButtonText } from "@/components/ui/button";
 import { useReactionTimer } from "@/hooks/useReactionTimer";
 import { DelayRender } from "@/utils/DelayRender";
 import { noop } from "es-toolkit";
-import { Stack, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import type { FC } from "react";
 import { useCallback, useEffect, useState } from "react";
 import { Pressable, Text, View } from "react-native";
@@ -109,8 +109,6 @@ const Measurement: FC = () => {
       onPress={config.action}
       className="flex-1 items-center justify-center bg-slate-50 dark:bg-slate-950"
     >
-      <Stack.Screen options={{ title: "측정", headerShown: false }} />
-
       <View className="flex-1 items-center justify-center px-4">
         {state === "ready" && (
           <DelayRender

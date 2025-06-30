@@ -1,5 +1,5 @@
 import { Button, ButtonText } from "@/components/ui/button";
-import { Stack, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { Text, View } from "react-native";
 
 export default function HomeScreen() {
@@ -7,9 +7,6 @@ export default function HomeScreen() {
 
   return (
     <View className="flex-1 items-center justify-center bg-slate-50 px-6 dark:bg-slate-950">
-      <Stack.Screen
-        options={{ title: "Reaction Speed Test", headerShown: false }}
-      />
       <View className="w-full max-w-md items-center gap-y-12">
         <View className="items-center gap-y-8">
           <View className="h-32 w-32 items-center justify-center rounded-full bg-slate-900 dark:bg-slate-100">
