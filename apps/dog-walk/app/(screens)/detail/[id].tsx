@@ -1,5 +1,4 @@
 import CustomSafeAreaView from "@/components/CustomSafeAriaView";
-import { CustomToast } from "@/components/CustomToast";
 import IconText from "@/components/atoms/IconText";
 import DetailDescription from "@/components/organisms/DetailDescription";
 import DetailHeaderBar from "@/components/organisms/DetailHeaderBar";
@@ -136,7 +135,6 @@ export default function DetailScreen() {
           <TabContent selectedTab={selectedTab} />
         </VStack>
       </ScrollView>
-      <CustomToast />
     </CustomSafeAreaView>
   );
 }

@@ -1,14 +1,16 @@
+import { useFindDogs } from "@/api/reactQuery/dogs/useFindDogs";
 import { userAtom } from "@/atoms/userAtom";
-import { router } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
 import { useAtomValue } from "jotai/react";
-import { Dog } from "lucide-react-native";
-import { useEffect, useMemo, useState } from "react";
+import { Dog, PlusCircle } from "lucide-react-native";
+import { useCallback, useMemo } from "react";
 import { ScrollView, View } from "react-native";
 import ProfileMenuItem from "./ProfileMenuItem";
 import SectionTitle from "./SectionTitle";
+import DogInfoCard from "./card/DogInfoCard";
 import WalkingHistoryCard from "./card/WalikingHistoryCard";
 import { Avatar, AvatarImage } from "./ui/avatar";
-import { Button, ButtonText } from "./ui/button";
+import { Button, ButtonIcon, ButtonText } from "./ui/button";
 import { Heading } from "./ui/heading";
 import { HStack } from "./ui/hstack";
 import { Icon } from "./ui/icon";
@@ -18,11 +20,7 @@ import { VStack } from "./ui/vstack";
 export default function ProfileView() {
   const userInfo = useAtomValue(userAtom);
 
-  const [dogInfo, setDogInfo] = useState({
-    name: "",
-    age: 11,
-    breed: "푸들",
-  });
+  const { data: dogsData, refetch: refetchDogsData } = useFindDogs(userInfo.id);
 
   const latestWalking = useMemo(() => {
     return [
@@ -50,14 +48,11 @@ export default function ProfileView() {
     ];
   }, []);
 
-  useEffect(() => {
-    if (userInfo.name) {
-      setDogInfo((prev) => ({
-        ...prev,
-        name: `${userInfo.name}`,
-      }));
-    }
-  }, [userInfo.name]);
+  useFocusEffect(
+    useCallback(() => {
+      refetchDogsData();
+    }, [refetchDogsData]),
+  );
 
   return (
     <ScrollView className="flex-1 p-6">
@@ -74,32 +69,65 @@ export default function ProfileView() {
             />
           </Avatar>
           <View>
-            <Heading className="fong-semibold">{dogInfo.name}</Heading>
+            <Heading className="font-semibold">{userInfo.name}</Heading>
             <Text size={"sm"} className="text-slate-500">
               {userInfo.email}
             </Text>
           </View>
         </View>
 
-        <VStack className="mt-6 gap-4 rounded-xl bg-primary-500/10 p-6">
-          <HStack className="items-center justify-between">
-            <Text size={"lg"} className="font-semibold text-500">
-              반려견 등록
+        {(dogsData ?? []).length === 0 && (
+          <VStack className="mt-6 gap-4 rounded-xl bg-primary-500/10 p-6">
+            <HStack className="items-center justify-between">
+              <Text size={"lg"} className="font-semibold text-500">
+                반려견 등록
+              </Text>
+              <Icon as={Dog} className="h-6 w-6 text-primary-500" />
+            </HStack>
+            <Text size="sm" className="text-slate-600">
+              아직 등록된 반려견이 없어요. 반려견을 등록해 보세요!
             </Text>
-            <Icon as={Dog} className="h-6 w-6 text-primary-500" />
-          </HStack>
-          <Text size="sm" className="text-slate-600">
-            아직 등록된 반려견이 없어요. 반려견을 등록해 보세요!
-          </Text>
-          <Button
-            className="w-full"
-            onPress={() => {
-              router.push("/(screens)/dog/register");
-            }}
-          >
-            <ButtonText>반려견 등록하기</ButtonText>
-          </Button>
-        </VStack>
+            <Button
+              className="w-full"
+              onPress={() => {
+                router.push("/(screens)/dog/register");
+              }}
+            >
+              <ButtonText>반려견 등록하기</ButtonText>
+            </Button>
+          </VStack>
+        )}
+
+        {(dogsData ?? []).length > 0 && (
+          <VStack className="mt-6 gap-4">
+            <HStack className="items-center justify-between">
+              <Text size="lg" className="font-semibold">
+                내 반려견
+              </Text>
+              <Button
+                variant="outline"
+                size="sm"
+                onPress={() => {
+                  router.push("/(screens)/dog/register");
+                }}
+              >
+                <ButtonIcon as={PlusCircle} />
+                <ButtonText>추가하기</ButtonText>
+              </Button>
+            </HStack>
+
+            {dogsData?.map((data) => (
+              <DogInfoCard
+                key={data.id}
+                imageUrl={data.image_url}
+                name={data.name}
+                breed={data.breed}
+                birthdate={data.birthdate}
+                gender={data.gender}
+              />
+            ))}
+          </VStack>
+        )}
 
         {/* NOTE: <== 강아지 프로필 */}
         <SectionTitle title={"최근 산책"}>
