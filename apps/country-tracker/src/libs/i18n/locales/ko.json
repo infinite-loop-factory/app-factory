@@ -1,0 +1,50 @@
+{
+  "welcome": "환영합니다",
+  "map": "지도",
+
+  "home": {
+    "tab": "홈",
+    "title": "방문 국가",
+    "search": "국가명 검색"
+  },
+
+  "settings": {
+    "tab": "홈",
+    "title": "설정",
+
+    "appearance": {
+      "title": "모양",
+      "theme": "테마 바꾸기",
+      "language": "언어 바꾸기"
+    },
+
+    "general": {
+      "title": "일반",
+      "denylist": "예외 국가 적용하기",
+      "rate-the-app": "앱 리뷰 남기기",
+      "license": "라이센스 보기"
+    },
+
+    "license": {
+      "title": "라이센스",
+      "description": "이 앱에서 사용된 오픈소스 라이브러리들의 라이센스 정보입니다.",
+      "libraries": "라이브러리",
+      "tap-to-view": "탭하여 npm 패키지 페이지에서 자세한 정보를 확인하세요."
+    },
+
+    "toast": {
+      "language": {
+        "title": "앗!",
+        "description": "시스템설정 > 앱 > 언어설정에서 직접 언어를 바꿔주세요."
+      }
+    },
+    "logout": "로그아웃"
+  },
+
+  "login": {
+    "title": "Country Tracker",
+    "description": "로그인 후 이용 가능합니다.",
+    "google": "구글 로그인",
+    "github": "깃허브 로그인"
+  }
+}

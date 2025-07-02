@@ -8,18 +8,19 @@ import {
 import * as Sentry from "@sentry/react-native";
 import { isRunningInExpoGo } from "expo";
 import { useFonts } from "expo-font";
-import { Stack, useNavigationContainerRef } from "expo-router";
+import { Slot, useNavigationContainerRef } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { Provider as JotaiProvider, useAtom } from "jotai";
 import { useColorScheme } from "nativewind";
 import { useEffect } from "react";
 import "react-native-reanimated";
-import "@/i18n";
+import "@/libs/i18n";
 import { themeAtom } from "@/atoms/theme.atom";
-import WebviewLayout from "@/components/WebviewLayout";
+import WebviewLayout from "@/components/web-view-layout";
 import { env } from "@/constants/env";
 import "@/features/location/location-task";
 import { startLocationTask } from "@/features/location/location-permission";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
@@ -36,6 +37,8 @@ Sentry.init({
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
+
+const queryClient = new QueryClient();
 
 function RootLayout() {
   const navigationRef = useNavigationContainerRef();
@@ -80,25 +83,21 @@ function RootLayout() {
 
   return (
     <SafeAreaProvider>
-      <JotaiProvider>
-        <GluestackUIProvider mode={savedTheme}>
-          <GestureHandlerRootView style={{ flex: 1 }}>
-            <ThemeProvider
-              value={savedTheme === "dark" ? DarkTheme : DefaultTheme}
-            >
-              <WebviewLayout>
-                <Stack>
-                  <Stack.Screen
-                    name="(tabs)"
-                    options={{ headerShown: false }}
-                  />
-                  <Stack.Screen name="+not-found" />
-                </Stack>
-              </WebviewLayout>
-            </ThemeProvider>
-          </GestureHandlerRootView>
-        </GluestackUIProvider>
-      </JotaiProvider>
+      <QueryClientProvider client={queryClient}>
+        <JotaiProvider>
+          <GluestackUIProvider mode={savedTheme}>
+            <GestureHandlerRootView style={{ flex: 1 }}>
+              <ThemeProvider
+                value={savedTheme === "dark" ? DarkTheme : DefaultTheme}
+              >
+                <WebviewLayout>
+                  <Slot />
+                </WebviewLayout>
+              </ThemeProvider>
+            </GestureHandlerRootView>
+          </GluestackUIProvider>
+        </JotaiProvider>
+      </QueryClientProvider>
     </SafeAreaProvider>
   );
 }
