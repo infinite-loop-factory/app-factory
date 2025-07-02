@@ -76,7 +76,7 @@ export default function ProfileView() {
           </View>
         </View>
 
-        {!dogsData?.length && (
+        {(dogsData ?? []).length === 0 && (
           <VStack className="mt-6 gap-4 rounded-xl bg-primary-500/10 p-6">
             <HStack className="items-center justify-between">
               <Text size={"lg"} className="font-semibold text-500">
@@ -98,7 +98,7 @@ export default function ProfileView() {
           </VStack>
         )}
 
-        {!!dogsData?.length && (
+        {(dogsData ?? []).length > 0 && (
           <VStack className="mt-6 gap-4">
             <HStack className="items-center justify-between">
               <Text size="lg" className="font-semibold">
