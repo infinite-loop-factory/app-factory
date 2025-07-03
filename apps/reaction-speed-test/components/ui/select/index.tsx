@@ -33,7 +33,7 @@ const SelectTriggerWrapper = React.forwardRef<
 });
 
 const selectIconStyle = tva({
-  base: "text-background-500 fill-none",
+  base: "text-secondary-500 fill-none",
   parentVariants: {
     size: {
       "2xs": "h-3 w-3",
