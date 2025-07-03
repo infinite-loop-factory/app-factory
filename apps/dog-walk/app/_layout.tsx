@@ -1,6 +1,6 @@
 import "../global.css";
 import "@/global.css";
-import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
+
 import {
   DarkTheme,
   DefaultTheme,
@@ -11,11 +11,13 @@ import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useColorScheme } from "nativewind";
 import { useEffect } from "react";
+import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
 import "react-native-reanimated";
 import "@/i18n";
-import { configureGoogleSignin } from "@/config/google";
+
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { configureGoogleSignin } from "@/config/google";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -23,9 +25,9 @@ SplashScreen.preventAutoHideAsync();
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 1000 * 60 * 10,
-      retry: 1,
       gcTime: 1000 * 60 * 60,
+      retry: 1,
+      staleTime: 1000 * 60 * 10,
     },
   },
 });
