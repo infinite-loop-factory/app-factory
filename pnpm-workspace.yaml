@@ -3,7 +3,7 @@ packages:
   - packages/*
 
 catalog:
-  "@biomejs/biome": ^1.9.4
+  "@biomejs/biome": ^2.0.6
   es-toolkit: ^1.37.2
   lucide-react-native: "^0.511.0"
   nativewind: 4.1.23

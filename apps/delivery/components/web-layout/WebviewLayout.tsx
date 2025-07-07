@@ -1,3 +1,8 @@
+import { useAsyncEffect, usePlatform } from "@reactuses/core";
+import { noop } from "es-toolkit";
+import { type ReactNode, useState } from "react";
+import { Image, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import {
   Select,
   SelectBackdrop,
@@ -12,11 +17,6 @@ import {
 } from "@/components/ui/select";
 import DarkModeToggle from "@/components/web-layout/DarkModeToggle";
 import { Colors } from "@/features/shared/constants/Colors";
-import { useAsyncEffect, usePlatform } from "@reactuses/core";
-import { noop } from "es-toolkit";
-import { type ReactNode, useState } from "react";
-import { Image, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 type appType = { name: string };
 export default function WebviewLayout({ children }: { children: ReactNode }) {
@@ -33,7 +33,7 @@ export default function WebviewLayout({ children }: { children: ReactNode }) {
     [],
   );
   const { platform } = usePlatform();
-  // biome-ignore lint/suspicious/noConsole: <explanation>
+  // biome-ignore lint/suspicious/noConsole: debug
   console.log(platform);
   if (["ios", "android", "unknown"].includes(platform)) return children;
 
@@ -52,8 +52,8 @@ export default function WebviewLayout({ children }: { children: ReactNode }) {
         >
           <Image
             className={"mx-auto"}
-            style={{ width: 150, height: 150 }}
             source={require("@/assets/images/il.png")}
+            style={{ height: 150, width: 150 }}
           />
 
           <Text className={"block text-center text-[45px]"}>{"무한루프"}</Text>
@@ -66,10 +66,10 @@ export default function WebviewLayout({ children }: { children: ReactNode }) {
           <View className={" flex items-center justify-center p-3"}>
             <Select
               className={"w-[350px] "}
-              selectedValue={selectedApp}
               onValueChange={(d) => {
                 location.href = `${baseURl}${d}`;
               }}
+              selectedValue={selectedApp}
             >
               <SelectTrigger
                 className={
@@ -77,10 +77,10 @@ export default function WebviewLayout({ children }: { children: ReactNode }) {
                 }
               >
                 <SelectInput
-                  placeholder="Select App"
                   className={
                     "!hover:border-black border-black text-center font-bold text-[33px]"
                   }
+                  placeholder="Select App"
                 />
                 <SelectIcon className="mr-3" />
               </SelectTrigger>
@@ -105,9 +105,9 @@ export default function WebviewLayout({ children }: { children: ReactNode }) {
             "h-full flex-[4] overflow-hidden md:h-[70%] md:min-w-[400px] md:max-w-[400px] "
           }
           style={{
+            elevation: 8,
             shadowColor: "#000",
             shadowRadius: 10,
-            elevation: 8,
           }}
         >
           <View className={"flex-1"}>

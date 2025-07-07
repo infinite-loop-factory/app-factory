@@ -1,4 +1,5 @@
 import "@/global.css";
+
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
@@ -7,8 +8,9 @@ import "react-native-reanimated";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "@/i18n";
-import UiProvider from "@/components/ui/UiProvider";
+
 import * as Location from "expo-location";
+import UiProvider from "@/components/ui/UiProvider";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -30,7 +32,7 @@ export default function RootLayout() {
          * (your app can't obtain background permission without foreground permission).
          */
 
-        // biome-ignore lint/suspicious/noConsole: <explanation>
+        // biome-ignore lint/suspicious/noConsole: debug
         console.log(granted);
         if (granted) {
           await Location.requestBackgroundPermissionsAsync();

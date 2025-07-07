@@ -1,9 +1,10 @@
-import * as schema from "@/components/ui/design-token/_index";
+import type { CamelCase } from "type-fest";
 import type { defaultSchemaType } from "@/components/ui/design-token/light.schema";
+
+import { kebabCase } from "es-toolkit";
+import { darkSchema, lightSchema } from "@/components/ui/design-token/_index";
 import { Colors } from "@/features/shared/constants/Colors";
 import { useColorSchemaStore } from "@/features/shared/store/colorScheme.store";
-import { kebabCase } from "es-toolkit";
-import type { CamelCase } from "type-fest";
 
 export function useThemeColor(
   props: { light?: string; dark?: string },
@@ -29,12 +30,15 @@ export function useColorToken<
 
   if (!colorScheme) throw new Error("Color scheme not available");
 
+  const schemaMap = { light: lightSchema, dark: darkSchema };
+  const currentSchema = schemaMap[colorScheme];
+
   return Object.fromEntries(
     Object.keys(token)
       .filter((key) => token[key as keyof T])
       .map((key) => [
         key,
-        schema[`${colorScheme}Schema`].token[
+        currentSchema.token[
           `--color-${kebabCase(key)}` as keyof defaultSchemaType["token"]
         ],
       ]),

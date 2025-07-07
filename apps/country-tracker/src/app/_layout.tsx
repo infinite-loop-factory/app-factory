@@ -1,5 +1,5 @@
 import "@/global.css";
-import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
+
 import {
   DarkTheme,
   DefaultTheme,
@@ -13,16 +13,19 @@ import * as SplashScreen from "expo-splash-screen";
 import { Provider as JotaiProvider, useAtom } from "jotai";
 import { useColorScheme } from "nativewind";
 import { useEffect } from "react";
+import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
 import "react-native-reanimated";
 import "@/libs/i18n";
+
 import { themeAtom } from "@/atoms/theme.atom";
 import WebviewLayout from "@/components/web-view-layout";
 import { env } from "@/constants/env";
 import "@/features/location/location-task";
-import { startLocationTask } from "@/features/location/location-permission";
+
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { startLocationTask } from "@/features/location/location-permission";
 
 const navigationIntegration = Sentry.reactNavigationIntegration({
   enableTimeToInitialDisplay: !isRunningInExpoGo(),
@@ -60,7 +63,6 @@ function RootLayout() {
     }
   }, [loaded]);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: 스킴 변경시 초기화
   useEffect(() => {
     const initialTheme = savedTheme || colorScheme;
 

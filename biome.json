@@ -1,28 +1,53 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
-  "vcs": {
-    "enabled": true,
-    "clientKind": "git",
-    "useIgnoreFile": true
+  "$schema": "https://biomejs.dev/schemas/2.0.6/schema.json",
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": {
+          "level": "on",
+          "options": {
+            "groups": [
+              {
+                "type": true
+              },
+              ":BLANK_LINE:",
+              ":URL:",
+              ":NODE:",
+              ":PACKAGE_WITH_PROTOCOL:",
+              ":PACKAGE:",
+              ":ALIAS:",
+              ":PATH:",
+              "**"
+            ]
+          }
+        },
+        "useSortedAttributes": "on"
+      }
+    },
+    "enabled": true
   },
   "files": {
     "ignoreUnknown": false,
-    "ignore": []
+    "includes": ["**"]
   },
   "formatter": {
+    "attributePosition": "auto",
     "enabled": true,
-    "indentStyle": "space"
+    "formatWithErrors": false,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineEnding": "lf",
+    "lineWidth": 80
   },
-  "organizeImports": {
-    "enabled": true
+  "javascript": {
+    "formatter": {
+      "indentStyle": "space"
+    }
   },
   "linter": {
     "enabled": true,
+    "includes": ["**", "!**/components/ui/**/*.ts*"],
     "rules": {
-      "recommended": true,
-      "style": {
-        "useImportType": "error"
-      },
       "complexity": {
         "noExcessiveCognitiveComplexity": "error",
         "noUselessStringConcat": "error",
@@ -32,18 +57,32 @@
         "noUnusedFunctionParameters": "error",
         "noUnusedImports": "error",
         "noUnusedVariables": "error",
-        "useArrayLiterals": "error",
         "useHookAtTopLevel": "error"
       },
       "nursery": {
-        "noEnum": "error",
-        "noNestedTernary": "error",
         "useSortedClasses": {
           "level": "error",
           "options": {
             "functions": ["clsx", "cn"]
           }
         }
+      },
+      "recommended": true,
+      "style": {
+        "noEnum": "error",
+        "noInferrableTypes": "error",
+        "noNestedTernary": "error",
+        "noParameterAssign": "error",
+        "noUnusedTemplateLiteral": "error",
+        "noUselessElse": "error",
+        "useArrayLiterals": "error",
+        "useAsConstAssertion": "error",
+        "useDefaultParameterLast": "error",
+        "useEnumInitializers": "error",
+        "useImportType": "error",
+        "useNumberNamespace": "error",
+        "useSelfClosingElements": "error",
+        "useSingleVarDeclarator": "error"
       },
       "suspicious": {
         "noConsole": {
@@ -58,9 +97,9 @@
       }
     }
   },
-  "javascript": {
-    "formatter": {
-      "quoteStyle": "double"
-    }
+  "vcs": {
+    "clientKind": "git",
+    "enabled": true,
+    "useIgnoreFile": true
   }
 }
