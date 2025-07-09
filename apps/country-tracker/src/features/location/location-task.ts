@@ -1,9 +1,9 @@
 import type { LocationObject } from "expo-location";
 
+import * as TaskManager from "expo-task-manager";
 import { LOCATION_TASK_NAME } from "@/constants/location";
 import supabase from "@/libs/supabase";
 import { getCountryByLatLng } from "@/utils/reverse-geo";
-import * as TaskManager from "expo-task-manager";
 
 type LocationTaskEvent = {
   data?: {
