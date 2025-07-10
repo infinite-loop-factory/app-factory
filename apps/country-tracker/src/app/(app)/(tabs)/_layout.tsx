@@ -2,10 +2,11 @@ import type { BottomTabNavigationOptions } from "@react-navigation/bottom-tabs";
 import type { LucideProps } from "lucide-react-native";
 import type { ComponentType } from "react";
 
-import { useThemeColor } from "@/hooks/use-theme-color";
-import i18n from "@/libs/i18n";
 import { Tabs } from "expo-router";
 import { Globe, Home, Settings } from "lucide-react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useThemeColor } from "@/hooks/use-theme-color";
+import i18n from "@/libs/i18n";
 
 type TabInfo = {
   name: string;
@@ -43,6 +44,7 @@ export default function TabsLayout() {
     "background",
     "outline-200",
   ]);
+  const insets = useSafeAreaInsets();
 
   return (
     <Tabs
@@ -60,6 +62,7 @@ export default function TabsLayout() {
         tabBarStyle: {
           borderTopColor: borderColor,
           backgroundColor: tabBackgroundColor,
+          height: 60 + insets.bottom,
         },
       }}
     >

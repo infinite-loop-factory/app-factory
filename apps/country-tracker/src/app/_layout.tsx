@@ -73,7 +73,7 @@ function RootLayout() {
     if (!savedTheme) {
       setSavedTheme(initialTheme);
     }
-  }, [colorScheme, savedTheme]);
+  }, [colorScheme, savedTheme, toggleColorScheme, setSavedTheme]);
 
   useEffect(() => {
     startLocationTask();

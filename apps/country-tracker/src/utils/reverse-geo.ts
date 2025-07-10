@@ -1,4 +1,4 @@
-import axios from "axios";
+import { fetch } from "expo/fetch";
 import * as Location from "expo-location";
 import { Platform } from "react-native";
 
@@ -23,10 +23,10 @@ export async function getCountryByLatLng(
   if (Platform.OS === "web") {
     pendingPromises[key] = (async () => {
       try {
-        const res = await axios.get(
+        const res = await fetch(
           `https://nominatim.openstreetmap.org/reverse?format=json&lat=${round(lat)}&lon=${round(lng)}`,
         );
-        const data = res.data;
+        const data = await res.json();
         const result = {
           country: data.address?.country || "Unknown",
           countryCode: data.address?.country_code?.toUpperCase() || "",

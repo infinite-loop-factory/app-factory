@@ -28,7 +28,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     output: "static",
     favicon: "./assets/images/favicon.png",
   },
-  plugins: ["expo-router", "expo-localization"],
+  plugins: ["expo-router", "expo-localization", "expo-font"],
   experiments: {
     tsconfigPaths: true,
     typedRoutes: true,
