@@ -1,3 +1,11 @@
+import type { FC } from "react";
+
+import { useAsyncEffect } from "@reactuses/core";
+import { noop } from "es-toolkit";
+import { Stack, useRouter } from "expo-router";
+import { useState } from "react";
+import { Alert, Pressable, ScrollView, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import {
   EmptyRecords,
   RecordList,
@@ -5,14 +13,7 @@ import {
 } from "@/components/results";
 import { Button, ButtonText } from "@/components/ui/button";
 import { useRecordStatistics } from "@/hooks/useRecordStatistics";
-import { type LocalRecord, getLocalRecords } from "@/services/localRecords";
-import { useAsyncEffect } from "@reactuses/core";
-import { noop } from "es-toolkit";
-import { Stack, useRouter } from "expo-router";
-import type { FC } from "react";
-import { useState } from "react";
-import { Alert, Pressable, ScrollView, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { getLocalRecords, type LocalRecord } from "@/services/localRecords";
 
 const GuestResults: FC = () => {
   const router = useRouter();
@@ -46,8 +47,8 @@ const GuestResults: FC = () => {
       <SafeAreaView className="flex-1">
         <View className="relative items-center justify-center px-4 py-3">
           <Pressable
-            onPress={() => router.back()}
             className="absolute left-4 p-2"
+            onPress={() => router.back()}
           >
             <Text className="text-slate-600 dark:text-slate-400">← 뒤로</Text>
           </Pressable>
@@ -57,11 +58,11 @@ const GuestResults: FC = () => {
         </View>
 
         <ScrollView
-          className="flex-1"
-          showsVerticalScrollIndicator={false}
-          overScrollMode="never"
           bounces={false}
+          className="flex-1"
           keyboardShouldPersistTaps="handled"
+          overScrollMode="never"
+          showsVerticalScrollIndicator={false}
         >
           <View className="mx-auto max-w-md px-4 py-6">
             {/* 로그인 권유 메시지 */}
@@ -72,25 +73,23 @@ const GuestResults: FC = () => {
               </Text>
             </View>
 
-            {loading ? (
+            {loading && (
               <View className="items-center py-12">
                 <Text className="text-slate-600 dark:text-slate-400">
                   로딩 중...
                 </Text>
               </View>
-            ) : (
+            )}
+
+            {!loading && records.length === 0 && <EmptyRecords />}
+
+            {!loading && records.length > 0 && (
               <>
-                {records.length === 0 ? (
-                  <EmptyRecords />
-                ) : (
-                  <>
-                    <RecordStatistics
-                      bestTime={bestTime}
-                      averageTime={averageTime}
-                    />
-                    <RecordList records={records} bestTime={bestTime} />
-                  </>
-                )}
+                <RecordStatistics
+                  averageTime={averageTime}
+                  bestTime={bestTime}
+                />
+                <RecordList bestTime={bestTime} records={records} />
               </>
             )}
 
