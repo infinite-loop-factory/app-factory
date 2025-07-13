@@ -2,7 +2,7 @@ import type { FC } from "react";
 
 import { useAsyncEffect } from "@reactuses/core";
 import { noop } from "es-toolkit";
-import { Stack, useRouter } from "expo-router";
+import { Stack } from "expo-router";
 import { useState } from "react";
 import { Alert, Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -12,11 +12,13 @@ import {
   RecordStatistics,
 } from "@/components/results";
 import { Button, ButtonText } from "@/components/ui/button";
+import { useAuthAwareNavigation } from "@/hooks/useAuthAwareNavigation";
 import { useRecordStatistics } from "@/hooks/useRecordStatistics";
 import { getLocalRecords, type LocalRecord } from "@/services/localRecords";
 
 const GuestResults: FC = () => {
-  const router = useRouter();
+  const { smartBack, navigateToMenu, navigateToHome } =
+    useAuthAwareNavigation();
   const [records, setRecords] = useState<LocalRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const { bestTime, averageTime } = useRecordStatistics(records);
@@ -41,14 +43,71 @@ const GuestResults: FC = () => {
     [],
   );
 
+  if (loading) {
+    return (
+      <View className="flex-1 bg-slate-50 dark:bg-slate-950">
+        <Stack.Screen options={{ title: "기록", headerShown: false }} />
+        <SafeAreaView className="flex-1 items-center justify-center">
+          <Text className="text-slate-600 dark:text-slate-400">로딩 중...</Text>
+        </SafeAreaView>
+      </View>
+    );
+  }
+
+  if (records.length === 0) {
+    return (
+      <View className="flex-1 bg-slate-50 dark:bg-slate-950">
+        <Stack.Screen options={{ title: "기록", headerShown: false }} />
+        <SafeAreaView className="flex-1">
+          <View className="relative items-center justify-center px-4 py-3">
+            <Pressable
+              className="absolute left-4 p-2"
+              onPress={() => smartBack("/guest-menu")}
+            >
+              <Text className="text-slate-600 dark:text-slate-400">← 뒤로</Text>
+            </Pressable>
+            <Text className="font-bold text-slate-900 text-xl dark:text-slate-100">
+              측정 기록
+            </Text>
+          </View>
+
+          <View className="flex-1 items-center justify-center px-4">
+            <EmptyRecords />
+
+            <View className="mt-8 w-full max-w-md gap-y-3">
+              <Button
+                action="primary"
+                className="h-12 w-full bg-slate-900 dark:bg-slate-100"
+                onPress={() => smartBack("/measurement")}
+              >
+                <ButtonText className="text-slate-100 dark:text-slate-900">
+                  첫 측정 시작하기
+                </ButtonText>
+              </Button>
+              <Button
+                action="secondary"
+                className="h-14 w-full border border-slate-500 dark:border-slate-700"
+                onPress={navigateToMenu}
+              >
+                <ButtonText className="text-slate-700 dark:text-slate-300">
+                  메뉴로 돌아가기
+                </ButtonText>
+              </Button>
+            </View>
+          </View>
+        </SafeAreaView>
+      </View>
+    );
+  }
+
   return (
     <View className="flex-1 bg-slate-50 dark:bg-slate-950">
-      <Stack.Screen options={{ title: "게스트 기록", headerShown: false }} />
+      <Stack.Screen options={{ title: "기록", headerShown: false }} />
       <SafeAreaView className="flex-1">
         <View className="relative items-center justify-center px-4 py-3">
           <Pressable
             className="absolute left-4 p-2"
-            onPress={() => router.back()}
+            onPress={() => smartBack("/guest-menu")}
           >
             <Text className="text-slate-600 dark:text-slate-400">← 뒤로</Text>
           </Pressable>
@@ -65,40 +124,33 @@ const GuestResults: FC = () => {
           showsVerticalScrollIndicator={false}
         >
           <View className="mx-auto max-w-md px-4 py-6">
-            {/* 로그인 권유 메시지 */}
-            <View className="mb-6 rounded-lg bg-blue-50 p-4 dark:bg-blue-950/20">
-              <Text className="text-center text-blue-700 text-sm dark:text-blue-300">
-                💡 로그인하시면 기록이 클라우드에 저장되어{"\n"}다른 기기에서도
-                확인할 수 있습니다
+            <RecordStatistics averageTime={averageTime} bestTime={bestTime} />
+            <RecordList bestTime={bestTime} records={records} />
+
+            {/* 클라우드 저장 권유 */}
+            <View className="mt-6 rounded-lg bg-blue-50 p-4 dark:bg-blue-950/20">
+              <Text className="mb-2 font-semibold text-blue-900 dark:text-blue-100">
+                💡 더 나은 경험을 위해
               </Text>
+              <Text className="mb-3 text-blue-800 text-sm dark:text-blue-200">
+                로그인하면 기록이 클라우드에 안전하게 저장되고, 다른 기기에서도
+                확인할 수 있습니다.
+              </Text>
+              <Button
+                action="primary"
+                className="h-10 w-full bg-blue-600 dark:bg-blue-500"
+                onPress={navigateToHome}
+              >
+                <ButtonText className="text-white">로그인하기</ButtonText>
+              </Button>
             </View>
-
-            {loading && (
-              <View className="items-center py-12">
-                <Text className="text-slate-600 dark:text-slate-400">
-                  로딩 중...
-                </Text>
-              </View>
-            )}
-
-            {!loading && records.length === 0 && <EmptyRecords />}
-
-            {!loading && records.length > 0 && (
-              <>
-                <RecordStatistics
-                  averageTime={averageTime}
-                  bestTime={bestTime}
-                />
-                <RecordList bestTime={bestTime} records={records} />
-              </>
-            )}
 
             {/* 하단 버튼 */}
             <View className="mt-6 gap-y-3">
               <Button
                 action="primary"
                 className="h-12 w-full bg-slate-900 dark:bg-slate-100"
-                onPress={() => router.push("/measurement")}
+                onPress={() => smartBack("/measurement")}
               >
                 <ButtonText className="text-slate-100 dark:text-slate-900">
                   다시 측정하기
@@ -107,7 +159,7 @@ const GuestResults: FC = () => {
               <Button
                 action="secondary"
                 className="h-14 w-full border border-slate-500 dark:border-slate-700"
-                onPress={() => router.push("/guest-menu")}
+                onPress={navigateToMenu}
               >
                 <ButtonText className="text-slate-700 dark:text-slate-300">
                   메뉴로 돌아가기

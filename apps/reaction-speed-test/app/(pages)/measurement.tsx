@@ -1,14 +1,15 @@
+import type { FC } from "react";
+
+import { noop } from "es-toolkit";
+import { useRouter } from "expo-router";
+import { useCallback, useEffect, useState } from "react";
+import { Pressable, Text, View } from "react-native";
 import SmileSvg from "@/components/measurement/SmileSvg";
 import SvgWrapper from "@/components/measurement/SvgWrapper";
 import { Button, ButtonText } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { useReactionTimer } from "@/hooks/useReactionTimer";
 import { DelayRender } from "@/utils/DelayRender";
-import { noop } from "es-toolkit";
-import { useRouter } from "expo-router";
-import type { FC } from "react";
-import { useCallback, useEffect, useState } from "react";
-import { Pressable, Text, View } from "react-native";
 
 type MeasurementState = "waiting" | "ready" | "measuring" | "result" | "early";
 
@@ -18,6 +19,13 @@ const Measurement: FC = () => {
   const { result, start, stop, reset } = useReactionTimer();
   const [shouldRestart, setShouldRestart] = useState(false);
   const [state, setState] = useState<MeasurementState>("waiting");
+
+  const getResultFeedback = (reactionTime: number): string => {
+    if (reactionTime < 300) return "매우 빠름! 🚀";
+    if (reactionTime < 500) return "빠름! ⚡";
+    if (reactionTime < 700) return "보통 👍";
+    return "연습하면 더 빨라져요! 💪";
+  };
 
   const startMeasurement = useCallback(() => {
     setState("ready");
@@ -56,6 +64,14 @@ const Measurement: FC = () => {
     }
   }, [isAuthenticated, router]);
 
+  const handleViewResults = useCallback(() => {
+    if (isAuthenticated) {
+      router.push("/results");
+    } else {
+      router.push("/guest-results");
+    }
+  }, [isAuthenticated, router]);
+
   useEffect(() => {
     if (result) {
       setState("result");
@@ -63,6 +79,9 @@ const Measurement: FC = () => {
   }, [result]);
 
   const getStateConfig = () => {
+    const baseTextColor = "text-slate-900 dark:text-slate-100";
+    const baseSubTextColor = "text-slate-600 dark:text-slate-400";
+
     switch (state) {
       case "waiting":
         return {
@@ -70,8 +89,8 @@ const Measurement: FC = () => {
           subText: "스마일 아이콘이 나타나면 즉시 터치하세요",
           showIcon: false,
           action: startMeasurement,
-          textColor: "text-slate-900 dark:text-slate-100",
-          subTextColor: "text-slate-600 dark:text-slate-400",
+          textColor: baseTextColor,
+          subTextColor: baseSubTextColor,
         };
       case "ready":
         return {
@@ -79,8 +98,8 @@ const Measurement: FC = () => {
           subText: "스마일 아이콘이 곧 나타납니다",
           showIcon: false,
           action: handleTouch,
-          textColor: "text-slate-900 dark:text-slate-100",
-          subTextColor: "text-slate-600 dark:text-slate-400",
+          textColor: baseTextColor,
+          subTextColor: baseSubTextColor,
         };
       case "measuring":
         return {
@@ -88,17 +107,17 @@ const Measurement: FC = () => {
           subText: "",
           showIcon: true,
           action: handleTouch,
-          textColor: "text-slate-900 dark:text-slate-100",
-          subTextColor: "text-slate-600 dark:text-slate-400",
+          textColor: baseTextColor,
+          subTextColor: baseSubTextColor,
         };
       case "result":
         return {
           text: result ? `${result.reactionTime}ms` : "측정 완료",
-          subText: "훌륭합니다!",
+          subText: result ? getResultFeedback(result.reactionTime) : "",
           showIcon: false,
           action: noop,
-          textColor: "text-slate-900 dark:text-slate-100",
-          subTextColor: "text-slate-600 dark:text-slate-400",
+          textColor: baseTextColor,
+          subTextColor: baseSubTextColor,
         };
       case "early":
         return {
@@ -106,8 +125,8 @@ const Measurement: FC = () => {
           subText: "스마일 아이콘이 나타난 후에 터치하세요",
           showIcon: false,
           action: noop,
-          textColor: "text-slate-900 dark:text-slate-100",
-          subTextColor: "text-slate-600 dark:text-slate-400",
+          textColor: baseTextColor,
+          subTextColor: baseSubTextColor,
         };
     }
   };
@@ -116,14 +135,14 @@ const Measurement: FC = () => {
 
   return (
     <Pressable
-      onPress={config.action}
       className="flex-1 items-center justify-center bg-slate-50 dark:bg-slate-950"
+      onPress={config.action}
     >
       <View className="flex-1 items-center justify-center px-4">
         {state === "ready" && (
           <DelayRender
-            minDelay={1000}
             maxDelay={3000}
+            minDelay={1000}
             onRender={handleDelayRender}
             shouldRestart={shouldRestart}
           >
@@ -158,15 +177,41 @@ const Measurement: FC = () => {
 
       {(state === "result" || state === "early") && (
         <View className="w-full max-w-md gap-y-4 p-6">
-          <Button
-            action="primary"
-            className="h-14 w-full bg-slate-900 dark:bg-slate-100"
-            onPress={handleReset}
-          >
-            <ButtonText className="text-lg text-slate-100 dark:text-slate-900">
-              다시 측정하기
-            </ButtonText>
-          </Button>
+          {state === "result" && (
+            <>
+              <Button
+                action="primary"
+                className="h-14 w-full bg-blue-600 dark:bg-blue-500"
+                onPress={handleViewResults}
+              >
+                <ButtonText className="text-lg text-white">
+                  📊 결과 보기
+                </ButtonText>
+              </Button>
+              <Button
+                action="secondary"
+                className="h-14 w-full bg-slate-900 dark:bg-slate-100"
+                onPress={handleReset}
+              >
+                <ButtonText className="text-lg text-slate-100 dark:text-slate-900">
+                  다시 측정하기
+                </ButtonText>
+              </Button>
+            </>
+          )}
+
+          {state === "early" && (
+            <Button
+              action="primary"
+              className="h-14 w-full bg-slate-900 dark:bg-slate-100"
+              onPress={handleReset}
+            >
+              <ButtonText className="text-lg text-slate-100 dark:text-slate-900">
+                다시 측정하기
+              </ButtonText>
+            </Button>
+          )}
+
           <Button
             action="secondary"
             className="h-14 w-full border border-slate-500 dark:border-slate-700"

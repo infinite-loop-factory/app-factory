@@ -1,14 +1,15 @@
-import { RecordList, RecordStatistics } from "@/components/results";
-import { Button, ButtonText } from "@/components/ui/button";
-import { useRecordStatistics } from "@/hooks/useRecordStatistics";
-import { getRecords } from "@/services";
+import type { FC } from "react";
+
 import { useAsyncEffect } from "@reactuses/core";
 import { noop } from "es-toolkit";
-import { useRouter } from "expo-router";
-import type { FC } from "react";
 import { useState } from "react";
 import { Alert, Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { RecordList, RecordStatistics } from "@/components/results";
+import { Button, ButtonText } from "@/components/ui/button";
+import { useAuthAwareNavigation } from "@/hooks/useAuthAwareNavigation";
+import { useRecordStatistics } from "@/hooks/useRecordStatistics";
+import { getRecords } from "@/services";
 
 interface Record {
   id: string;
@@ -18,7 +19,7 @@ interface Record {
 }
 
 const Results: FC = () => {
-  const router = useRouter();
+  const { smartBack, navigateToMenu } = useAuthAwareNavigation();
   const [records, setRecords] = useState<Record[]>([]);
   const [loading, setLoading] = useState(true);
   const { bestTime, averageTime } = useRecordStatistics(records);
@@ -48,8 +49,8 @@ const Results: FC = () => {
       <SafeAreaView className="flex-1">
         <View className="relative items-center justify-center px-4 py-3">
           <Pressable
-            onPress={() => router.back()}
             className="absolute left-4 p-2"
+            onPress={() => smartBack("/menu")}
           >
             <Text className="text-slate-600 dark:text-slate-400">← 뒤로</Text>
           </Pressable>
@@ -59,11 +60,11 @@ const Results: FC = () => {
         </View>
 
         <ScrollView
-          className="flex-1"
-          showsVerticalScrollIndicator={false}
-          overScrollMode="never"
           bounces={false}
+          className="flex-1"
           keyboardShouldPersistTaps="handled"
+          overScrollMode="never"
+          showsVerticalScrollIndicator={false}
         >
           <View className="mx-auto max-w-md px-4 py-6">
             {loading ? (
@@ -75,10 +76,10 @@ const Results: FC = () => {
             ) : (
               <>
                 <RecordStatistics
-                  bestTime={bestTime}
                   averageTime={averageTime}
+                  bestTime={bestTime}
                 />
-                <RecordList records={records} bestTime={bestTime} />
+                <RecordList bestTime={bestTime} records={records} />
               </>
             )}
 
@@ -87,7 +88,7 @@ const Results: FC = () => {
               <Button
                 action="primary"
                 className="h-12 w-full bg-slate-900 dark:bg-slate-100"
-                onPress={() => router.push("/measurement")}
+                onPress={() => smartBack("/measurement")}
               >
                 <ButtonText className="text-slate-100 dark:text-slate-900">
                   다시 측정하기
@@ -96,7 +97,7 @@ const Results: FC = () => {
               <Button
                 action="secondary"
                 className="h-14 w-full border border-slate-500 dark:border-slate-700"
-                onPress={() => router.push("/menu")}
+                onPress={navigateToMenu}
               >
                 <ButtonText className="text-slate-700 dark:text-slate-300">
                   메뉴로 돌아가기
