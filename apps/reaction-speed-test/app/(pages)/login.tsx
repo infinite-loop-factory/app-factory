@@ -1,7 +1,7 @@
-import LoginForm from "@/components/login/LoginForm";
-import { Button, ButtonText } from "@/components/ui/button";
 import { useRouter } from "expo-router";
 import { SafeAreaView, Text, View } from "react-native";
+import LoginForm from "@/components/login/LoginForm";
+import { Button, ButtonText } from "@/components/ui/button";
 
 export default function LoginPage() {
   const router = useRouter();

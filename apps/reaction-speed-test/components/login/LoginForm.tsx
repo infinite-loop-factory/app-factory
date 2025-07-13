@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import { Text } from "react-native";
 import { Button, ButtonText } from "@/components/ui/button";
 import {
   Checkbox,
@@ -18,8 +20,6 @@ import {
   getAutoLoginSetting,
   setAutoLoginSetting,
 } from "@/utils/autoLoginStorage";
-import { useEffect, useState } from "react";
-import { Text } from "react-native";
 
 export default function LoginForm() {
   const [formData, setFormData] = useState({
@@ -119,14 +119,14 @@ export default function LoginForm() {
           </Text>
           <Input className="border-slate-300 bg-slate-50 dark:border-slate-600 dark:bg-slate-800">
             <InputField
-              type="text"
-              value={formData.email}
+              className="text-slate-900 dark:text-slate-100"
               onChangeText={(text) => {
                 setFormData((prev) => ({ ...prev, email: text }));
                 clearError("email");
               }}
               placeholder="이메일을 입력하세요"
-              className="text-slate-900 dark:text-slate-100"
+              type="text"
+              value={formData.email}
             />
           </Input>
           {errors.email && (
@@ -144,14 +144,14 @@ export default function LoginForm() {
           </Text>
           <Input className="border-slate-300 bg-slate-50 dark:border-slate-600 dark:bg-slate-800">
             <InputField
-              type="password"
-              value={formData.password}
+              className="text-slate-900 dark:text-slate-100"
               onChangeText={(text) => {
                 setFormData((prev) => ({ ...prev, password: text }));
                 clearError("password");
               }}
               placeholder="비밀번호를 입력하세요"
-              className="text-slate-900 dark:text-slate-100"
+              type="password"
+              value={formData.password}
             />
           </Input>
           {errors.password && (
@@ -164,10 +164,10 @@ export default function LoginForm() {
         </VStack>
 
         <Checkbox
-          size="sm"
-          value="autoLogin"
           isChecked={autoLogin}
           onChange={handleAutoLoginChange}
+          size="sm"
+          value="autoLogin"
         >
           <CheckboxIndicator>
             <CheckboxIcon as={CheckIcon} />
@@ -180,8 +180,8 @@ export default function LoginForm() {
         <Button
           action="primary"
           className="h-12 w-full bg-slate-900 dark:bg-slate-100"
-          onPress={handleLogin}
           disabled={loading}
+          onPress={handleLogin}
         >
           <ButtonText className="text-slate-100 dark:text-slate-900">
             {loading ? "처리중..." : "로그인"}

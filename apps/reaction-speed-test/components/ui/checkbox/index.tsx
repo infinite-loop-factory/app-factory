@@ -1,8 +1,10 @@
 "use client";
 
-import { createCheckbox } from "@gluestack-ui/checkbox";
-import { type IPrimitiveIcon, PrimitiveIcon, UIIcon } from "@gluestack-ui/icon";
 import type { VariantProps } from "@gluestack-ui/nativewind-utils";
+import type { TextProps, ViewProps } from "react-native";
+
+import { createCheckbox } from "@gluestack-ui/checkbox";
+import { type IPrimitiveIcon, PrimitiveIcon } from "@gluestack-ui/icon";
 import { tva } from "@gluestack-ui/nativewind-utils/tva";
 import {
   useStyleContext,
@@ -11,7 +13,7 @@ import {
 import { cssInterop } from "nativewind";
 import React from "react";
 import { Platform, Pressable, Text, View } from "react-native";
-import type { TextProps, ViewProps } from "react-native";
+import { Icon } from "../icon";
 
 const IndicatorWrapper = React.forwardRef<
   React.ComponentRef<typeof View>,
@@ -30,8 +32,8 @@ const LabelWrapper = React.forwardRef<
 const IconWrapper = React.forwardRef<
   React.ComponentRef<typeof PrimitiveIcon>,
   IPrimitiveIcon
->(function IconWrapper({ ...props }, ref) {
-  return <UIIcon {...props} ref={ref} />;
+>(function IconWrapper({ size, ...props }, ref) {
+  return <Icon ref={ref} size={size as any} {...props} />;
 });
 
 const SCOPE = "CHECKBOX";

@@ -1,10 +1,10 @@
+import { useRouter } from "expo-router";
+import { useState } from "react";
+import { SafeAreaView, Text, View } from "react-native";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Input, InputField } from "@/components/ui/input";
 import { VStack } from "@/components/ui/vstack";
 import { signUpUser } from "@/services";
-import { useRouter } from "expo-router";
-import { useState } from "react";
-import { SafeAreaView, Text, View } from "react-native";
 
 export default function SignUpForm() {
   const router = useRouter();
@@ -117,10 +117,10 @@ export default function SignUpForm() {
                 className={`${errors.username ? "border-red-500" : "border-slate-300 dark:border-slate-700"}`}
               >
                 <InputField
-                  type="text"
-                  value={formData.username}
                   onChangeText={(text) => handleInputChange("username", text)}
                   placeholder="사용자명을 입력하세요"
+                  type="text"
+                  value={formData.username}
                 />
               </Input>
               {errors.username && (
@@ -134,10 +134,10 @@ export default function SignUpForm() {
                 className={`${errors.email ? "border-red-500" : "border-slate-300 dark:border-slate-700"}`}
               >
                 <InputField
-                  type="text"
-                  value={formData.email}
                   onChangeText={(text) => handleInputChange("email", text)}
                   placeholder="이메일을 입력하세요"
+                  type="text"
+                  value={formData.email}
                 />
               </Input>
               {errors.email && (
@@ -153,10 +153,10 @@ export default function SignUpForm() {
                 className={`${errors.password ? "border-red-500" : "border-slate-300 dark:border-slate-700"}`}
               >
                 <InputField
-                  type="password"
-                  value={formData.password}
                   onChangeText={(text) => handleInputChange("password", text)}
                   placeholder="비밀번호를 입력하세요"
+                  type="password"
+                  value={formData.password}
                 />
               </Input>
               {errors.password && (
@@ -172,12 +172,12 @@ export default function SignUpForm() {
                 className={`${errors.confirmPassword ? "border-red-500" : "border-slate-300 dark:border-slate-700"}`}
               >
                 <InputField
-                  type="password"
-                  value={formData.confirmPassword}
                   onChangeText={(text) =>
                     handleInputChange("confirmPassword", text)
                   }
                   placeholder="비밀번호를 다시 입력하세요"
+                  type="password"
+                  value={formData.confirmPassword}
                 />
               </Input>
               {errors.confirmPassword && (
@@ -189,8 +189,8 @@ export default function SignUpForm() {
 
             <Button
               className="mt-4 h-14 w-full bg-slate-900 dark:bg-slate-100"
-              onPress={handleSignUp}
               disabled={loading}
+              onPress={handleSignUp}
             >
               <ButtonText className="text-lg text-slate-100 dark:text-slate-900">
                 {loading ? "가입 중..." : "회원가입"}
