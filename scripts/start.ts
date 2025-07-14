@@ -35,7 +35,8 @@ const appsDir = path.join(process.cwd(), "apps");
     }
 
     // 앱 실행
-    const command = `pnpm --filter "@infinite-loop-factory/${selectedApp}" start --clear`;
+    const devClient = args.includes("--dev");
+    const command = `pnpm --filter "@infinite-loop-factory/${selectedApp}" start --clear${devClient ? " --dev-client" : ""}`;
     execSync(command, { stdio: "inherit" });
   } catch (error) {
     console.error(chalk.red("An error occurred:"), error);

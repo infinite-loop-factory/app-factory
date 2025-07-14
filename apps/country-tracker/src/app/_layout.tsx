@@ -14,6 +14,7 @@ import { Provider as JotaiProvider, useAtom } from "jotai";
 import { useColorScheme } from "nativewind";
 import { useEffect } from "react";
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
+import { store } from "@/libs/jotai";
 import "react-native-reanimated";
 import "@/libs/i18n";
 
@@ -86,7 +87,7 @@ function RootLayout() {
   return (
     <SafeAreaProvider>
       <QueryClientProvider client={queryClient}>
-        <JotaiProvider>
+        <JotaiProvider store={store}>
           <GluestackUIProvider mode={savedTheme}>
             <GestureHandlerRootView style={{ flex: 1 }}>
               <ThemeProvider

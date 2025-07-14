@@ -1,12 +1,5 @@
 import type { Provider } from "@supabase/supabase-js";
 
-import { Button } from "@/components/ui/button";
-import { Image } from "@/components/ui/image";
-import { Text } from "@/components/ui/text";
-import { useAuthUser } from "@/hooks/use-auth-user";
-import { useThemeColor } from "@/hooks/use-theme-color";
-import i18n from "@/libs/i18n";
-import supabase from "@/libs/supabase";
 import clsx from "clsx";
 import { makeRedirectUri } from "expo-auth-session";
 import * as QueryParams from "expo-auth-session/build/QueryParams";
@@ -15,6 +8,13 @@ import { Stack, useRouter } from "expo-router";
 import * as WebBrowser from "expo-web-browser";
 import { useEffect } from "react";
 import { ActivityIndicator, View } from "react-native";
+import { Button } from "@/components/ui/button";
+import { Image } from "@/components/ui/image";
+import { Text } from "@/components/ui/text";
+import { useAuthUser } from "@/hooks/use-auth-user";
+import { useThemeColor } from "@/hooks/use-theme-color";
+import i18n from "@/libs/i18n";
+import supabase from "@/libs/supabase";
 
 WebBrowser.maybeCompleteAuthSession();
 const redirectTo = makeRedirectUri();
@@ -98,10 +98,10 @@ export default function LoginPage() {
         >
           {/* 앱 로고/아이콘 (예시: 지구본) */}
           <Image
-            source={require("@/assets/images/icon.png")}
+            alt="logo"
             className="mb-4 h-12 w-12 rounded-xl"
             resizeMode="contain"
-            alt="logo"
+            source={require("@/assets/images/icon.png")}
           />
           <Text
             className="mb-2 font-bold text-2xl"
@@ -120,13 +120,13 @@ export default function LoginPage() {
           ) : (
             OAUTH_PROVIDERS.map((provider, idx) => (
               <Button
-                key={provider.key}
-                onPress={() => handleLogin(provider.key)}
-                variant="outline"
                 className={clsx(
                   "w-full rounded-lg py-2",
                   idx !== OAUTH_PROVIDERS.length - 1 && "mb-4",
                 )}
+                key={provider.key}
+                onPress={() => handleLogin(provider.key)}
+                variant="outline"
               >
                 <Text>{i18n.t(provider.labelKey)}</Text>
               </Button>

@@ -4,6 +4,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   name: "country-tracker",
   slug: "country-tracker",
+  owner: "gracefullight",
   scheme: "country-tracker",
   version: "1.0.0",
   orientation: "portrait",
@@ -16,6 +17,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   ios: {
     supportsTablet: true,
+    bundleIdentifier: "com.gracefullight.countrytracker",
     infoPlist: {
       UIBackgroundModes: ["location"],
     },
@@ -25,6 +27,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       foregroundImage: "./src/assets/images/adaptive-icon.png",
       backgroundColor: "#ffffff",
     },
+    package: "com.gracefullight.countrytracker",
   },
   web: {
     bundler: "metro",
@@ -49,6 +52,9 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     baseUrl: "/app-factory/country-tracker",
   },
   extra: {
+    eas: {
+      projectId: "8ff90dba-d8e0-48a8-9116-0fc9d41c4396",
+    },
     env: {
       EXPO_PUBLIC_SUPABASE_URL: process.env.EXPO_PUBLIC_SUPABASE_URL,
       EXPO_PUBLIC_SUPABASE_ANON_KEY: process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY,
