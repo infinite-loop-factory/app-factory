@@ -19,7 +19,7 @@ interface Record {
 }
 
 const Results: FC = () => {
-  const { smartBack, navigateToMenu } = useAuthAwareNavigation();
+  const { navigateBackWithFallback, navigateToMenu } = useAuthAwareNavigation();
   const [records, setRecords] = useState<Record[]>([]);
   const [loading, setLoading] = useState(true);
   const { bestTime, averageTime } = useRecordStatistics(records);
@@ -50,7 +50,7 @@ const Results: FC = () => {
         <View className="relative items-center justify-center px-4 py-3">
           <Pressable
             className="absolute left-4 p-2"
-            onPress={() => smartBack("/menu")}
+            onPress={() => navigateBackWithFallback("/menu")}
           >
             <Text className="text-slate-600 dark:text-slate-400">← 뒤로</Text>
           </Pressable>
@@ -88,7 +88,7 @@ const Results: FC = () => {
               <Button
                 action="primary"
                 className="h-12 w-full bg-slate-900 dark:bg-slate-100"
-                onPress={() => smartBack("/measurement")}
+                onPress={() => navigateBackWithFallback("/measurement")}
               >
                 <ButtonText className="text-slate-100 dark:text-slate-900">
                   다시 측정하기

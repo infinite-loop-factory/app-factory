@@ -1,10 +1,11 @@
-import { Button, ButtonText } from "@/components/ui/button";
-import { useRouter } from "expo-router";
 import type { FC } from "react";
+
 import { Text, View } from "react-native";
+import { Button, ButtonText } from "@/components/ui/button";
+import { useAuthAwareNavigation } from "@/hooks/useAuthAwareNavigation";
 
 const Settings: FC = () => {
-  const router = useRouter();
+  const { navigateBackWithFallback } = useAuthAwareNavigation();
 
   return (
     <View className="flex-1 items-center justify-center">
@@ -14,7 +15,7 @@ const Settings: FC = () => {
       <Button
         action="secondary"
         className="h-14 w-full border border-slate-500 dark:border-slate-700"
-        onPress={() => router.back()}
+        onPress={() => navigateBackWithFallback("/menu")}
       >
         <ButtonText>뒤로 가기</ButtonText>
       </Button>

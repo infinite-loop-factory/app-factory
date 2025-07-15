@@ -10,9 +10,9 @@ import {
   useStyleContext,
   withStyleContext,
 } from "@gluestack-ui/nativewind-utils/withStyleContext";
-import { cssInterop } from "nativewind";
 import React from "react";
 import { Platform, Pressable, Text, View } from "react-native";
+import { cssInterop } from "react-native-css-interop";
 import { Icon } from "../icon";
 
 const IndicatorWrapper = React.forwardRef<

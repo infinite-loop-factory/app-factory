@@ -2,9 +2,11 @@ import { useRouter } from "expo-router";
 import { SafeAreaView, Text, View } from "react-native";
 import LoginForm from "@/components/login/LoginForm";
 import { Button, ButtonText } from "@/components/ui/button";
+import { useAuthAwareNavigation } from "@/hooks/useAuthAwareNavigation";
 
 export default function LoginPage() {
   const router = useRouter();
+  const { navigateBackWithFallback } = useAuthAwareNavigation();
 
   return (
     <SafeAreaView className="flex-1 items-center justify-center bg-slate-50 px-6 dark:bg-slate-950">
@@ -41,7 +43,7 @@ export default function LoginPage() {
             <Button
               action="secondary"
               className="h-14 w-full border border-slate-500 dark:border-slate-700"
-              onPress={() => router.back()}
+              onPress={() => navigateBackWithFallback("/")}
             >
               <ButtonText className="text-lg text-slate-700 dark:text-slate-300">
                 뒤로가기

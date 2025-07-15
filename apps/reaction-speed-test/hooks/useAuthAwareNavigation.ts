@@ -1,5 +1,6 @@
 import { type Href, useRouter } from "expo-router";
 import { useCallback } from "react";
+import { ROUTES } from "@/constants/routes";
 import { useAuth } from "@/hooks/useAuth";
 
 export const useAuthAwareNavigation = () => {
@@ -8,25 +9,25 @@ export const useAuthAwareNavigation = () => {
 
   const navigateToMenu = useCallback(() => {
     if (isAuthenticated) {
-      router.push("/menu");
+      router.push(ROUTES.MENU);
     } else {
-      router.push("/guest-menu");
+      router.push(ROUTES.GUEST_MENU);
     }
   }, [isAuthenticated, router]);
 
   const navigateToResults = useCallback(() => {
     if (isAuthenticated) {
-      router.push("/results");
+      router.push(ROUTES.RESULTS);
     } else {
-      router.push("/guest-results");
+      router.push(ROUTES.GUEST_RESULTS);
     }
   }, [isAuthenticated, router]);
 
   const navigateToHome = useCallback(() => {
-    router.push("/");
+    router.push(ROUTES.HOME);
   }, [router]);
 
-  const smartBack = useCallback(
+  const navigateBackWithFallback = useCallback(
     (fallbackRoute?: string) => {
       // 히스토리가 있으면 뒤로가기, 없으면 메뉴나 홈으로
       if (router.canGoBack()) {
@@ -34,9 +35,9 @@ export const useAuthAwareNavigation = () => {
       } else if (fallbackRoute) {
         router.push(fallbackRoute as Href);
       } else if (isAuthenticated) {
-        router.push("/menu");
+        router.push(ROUTES.MENU);
       } else {
-        router.push("/");
+        router.push(ROUTES.HOME);
       }
     },
     [router, isAuthenticated],
@@ -46,7 +47,7 @@ export const useAuthAwareNavigation = () => {
     navigateToMenu,
     navigateToResults,
     navigateToHome,
-    smartBack,
+    navigateBackWithFallback,
     isAuthenticated,
   };
 };

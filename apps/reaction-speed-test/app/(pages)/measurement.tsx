@@ -1,21 +1,19 @@
 import type { FC } from "react";
 
 import { noop } from "es-toolkit";
-import { useRouter } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import SmileSvg from "@/components/measurement/SmileSvg";
 import SvgWrapper from "@/components/measurement/SvgWrapper";
 import { Button, ButtonText } from "@/components/ui/button";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuthAwareNavigation } from "@/hooks/useAuthAwareNavigation";
 import { useReactionTimer } from "@/hooks/useReactionTimer";
 import { DelayRender } from "@/utils/DelayRender";
 
 type MeasurementState = "waiting" | "ready" | "measuring" | "result" | "early";
 
 const Measurement: FC = () => {
-  const router = useRouter();
-  const { isAuthenticated } = useAuth();
+  const { navigateToMenu, navigateToResults } = useAuthAwareNavigation();
   const { result, start, stop, reset } = useReactionTimer();
   const [shouldRestart, setShouldRestart] = useState(false);
   const [state, setState] = useState<MeasurementState>("waiting");
@@ -57,20 +55,12 @@ const Measurement: FC = () => {
   }, [reset]);
 
   const handleBackToMenu = useCallback(() => {
-    if (isAuthenticated) {
-      router.push("/menu");
-    } else {
-      router.push("/guest-menu");
-    }
-  }, [isAuthenticated, router]);
+    navigateToMenu();
+  }, [navigateToMenu]);
 
   const handleViewResults = useCallback(() => {
-    if (isAuthenticated) {
-      router.push("/results");
-    } else {
-      router.push("/guest-results");
-    }
-  }, [isAuthenticated, router]);
+    navigateToResults();
+  }, [navigateToResults]);
 
   useEffect(() => {
     if (result) {

@@ -1,22 +1,23 @@
 import { Stack, useRouter } from "expo-router";
 import { SafeAreaView, Text, View } from "react-native";
 import { Button, ButtonText } from "@/components/ui/button";
+import { ROUTES } from "@/constants/routes";
 
 export default function HomeScreen() {
   const router = useRouter();
 
   const handleGuestStart = () => {
-    router.push("/guest-menu");
+    router.push(ROUTES.GUEST_MENU);
   };
 
   const handleLogin = () => {
     // 로그인 후 메뉴로 이동하도록 설정 (기본값이므로 설정하지 않음)
-    router.push("/login");
+    router.push(ROUTES.LOGIN);
   };
 
   const handleSignup = () => {
     // 회원가입 후 메뉴로 이동하도록 설정 (기본값이므로 설정하지 않음)
-    router.push("/signup");
+    router.push(ROUTES.SIGNUP);
   };
 
   return (

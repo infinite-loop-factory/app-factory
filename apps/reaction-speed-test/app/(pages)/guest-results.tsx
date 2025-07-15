@@ -17,7 +17,7 @@ import { useRecordStatistics } from "@/hooks/useRecordStatistics";
 import { getLocalRecords, type LocalRecord } from "@/services/localRecords";
 
 const GuestResults: FC = () => {
-  const { smartBack, navigateToMenu, navigateToHome } =
+  const { navigateBackWithFallback, navigateToMenu, navigateToHome } =
     useAuthAwareNavigation();
   const [records, setRecords] = useState<LocalRecord[]>([]);
   const [loading, setLoading] = useState(true);
@@ -62,7 +62,7 @@ const GuestResults: FC = () => {
           <View className="relative items-center justify-center px-4 py-3">
             <Pressable
               className="absolute left-4 p-2"
-              onPress={() => smartBack("/guest-menu")}
+              onPress={() => navigateBackWithFallback("/guest-menu")}
             >
               <Text className="text-slate-600 dark:text-slate-400">← 뒤로</Text>
             </Pressable>
@@ -78,7 +78,7 @@ const GuestResults: FC = () => {
               <Button
                 action="primary"
                 className="h-12 w-full bg-slate-900 dark:bg-slate-100"
-                onPress={() => smartBack("/measurement")}
+                onPress={() => navigateBackWithFallback("/measurement")}
               >
                 <ButtonText className="text-slate-100 dark:text-slate-900">
                   첫 측정 시작하기
@@ -107,7 +107,7 @@ const GuestResults: FC = () => {
         <View className="relative items-center justify-center px-4 py-3">
           <Pressable
             className="absolute left-4 p-2"
-            onPress={() => smartBack("/guest-menu")}
+            onPress={() => navigateBackWithFallback("/guest-menu")}
           >
             <Text className="text-slate-600 dark:text-slate-400">← 뒤로</Text>
           </Pressable>
@@ -150,7 +150,7 @@ const GuestResults: FC = () => {
               <Button
                 action="primary"
                 className="h-12 w-full bg-slate-900 dark:bg-slate-100"
-                onPress={() => smartBack("/measurement")}
+                onPress={() => navigateBackWithFallback("/measurement")}
               >
                 <ButtonText className="text-slate-100 dark:text-slate-900">
                   다시 측정하기

@@ -8,8 +8,8 @@ import {
   Svg,
 } from "@gluestack-ui/icon";
 import { tva } from "@gluestack-ui/nativewind-utils/tva";
-import { cssInterop } from "nativewind";
 import React from "react";
+import { cssInterop } from "react-native-css-interop";
 import { Path } from "react-native-svg";
 
 export const UIIcon = createIcon({

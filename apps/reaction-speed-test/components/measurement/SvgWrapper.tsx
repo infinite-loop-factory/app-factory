@@ -1,5 +1,6 @@
 import type { FC, PropsWithChildren } from "react";
 import type { ViewStyle } from "react-native";
+
 import Svg from "react-native-svg";
 
 interface FigmaSvgProps {
@@ -16,11 +17,11 @@ const SvgWrapper: FC<PropsWithChildren<FigmaSvgProps>> = ({
 }) => {
   return (
     <Svg
-      width={width}
-      height={height}
-      viewBox="0 0 409 422"
       fill="none"
+      height={height}
       style={style}
+      viewBox="0 0 409 422"
+      width={width}
     >
       {children}
     </Svg>

@@ -7,10 +7,10 @@ import {
 } from "@gluestack-ui/nativewind-utils/withStyleContext";
 import { withStyleContextAndStates } from "@gluestack-ui/nativewind-utils/withStyleContextAndStates";
 import { createSelect } from "@gluestack-ui/select";
-import { cssInterop } from "nativewind";
 import React, { useMemo } from "react";
 import { Platform, Pressable, TextInput, View } from "react-native";
-import { Svg } from "react-native-svg";
+import { cssInterop } from "react-native-css-interop";
+import Svg from "react-native-svg";
 import {
   Actionsheet,
   ActionsheetBackdrop,

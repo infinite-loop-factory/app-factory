@@ -4,10 +4,12 @@ import { SafeAreaView, Text, View } from "react-native";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Input, InputField } from "@/components/ui/input";
 import { VStack } from "@/components/ui/vstack";
+import { useAuthAwareNavigation } from "@/hooks/useAuthAwareNavigation";
 import { signUpUser } from "@/services";
 
 export default function SignUpForm() {
   const router = useRouter();
+  const { navigateBackWithFallback } = useAuthAwareNavigation();
   const [formData, setFormData] = useState({
     email: "",
     username: "",
@@ -216,7 +218,7 @@ export default function SignUpForm() {
             <Button
               action="secondary"
               className="h-14 w-full border border-slate-500 dark:border-slate-700"
-              onPress={() => router.back()}
+              onPress={() => navigateBackWithFallback("/")}
             >
               <ButtonText className="text-lg text-slate-700 dark:text-slate-300">
                 뒤로가기

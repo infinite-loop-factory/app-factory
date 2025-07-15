@@ -1,6 +1,8 @@
 "use client";
-import { createButton } from "@gluestack-ui/button";
 import type { VariantProps } from "@gluestack-ui/nativewind-utils";
+import type { PressableProps } from "react-native";
+
+import { createButton } from "@gluestack-ui/button";
 import { tva } from "@gluestack-ui/nativewind-utils/tva";
 import { withStates } from "@gluestack-ui/nativewind-utils/withStates";
 import {
@@ -8,9 +10,7 @@ import {
   withStyleContext,
 } from "@gluestack-ui/nativewind-utils/withStyleContext";
 import { withStyleContextAndStates } from "@gluestack-ui/nativewind-utils/withStyleContextAndStates";
-import { cssInterop } from "nativewind";
 import React, { useMemo } from "react";
-import type { PressableProps } from "react-native";
 import {
   ActivityIndicator,
   Platform,
@@ -18,7 +18,8 @@ import {
   Text,
   View,
 } from "react-native";
-import { Svg } from "react-native-svg";
+import { cssInterop } from "react-native-css-interop";
+import Svg from "react-native-svg";
 
 const SCOPE = "BUTTON";
 const ButtonWrapper = React.forwardRef<
@@ -81,7 +82,7 @@ const PrimitiveIcon = React.forwardRef<
       return <AsComp ref={ref} {...props} {...sizeProps} {...colorProps} />;
     }
     return (
-      <Svg ref={ref} height={height} width={width} {...colorProps} {...props} />
+      <Svg height={height} ref={ref} width={width} {...colorProps} {...props} />
     );
   },
 );

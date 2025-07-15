@@ -10,7 +10,6 @@ import {
   createMotionAnimatedComponent,
   Motion,
 } from "@legendapp/motion";
-import { cssInterop } from "nativewind";
 import React, { useMemo } from "react";
 import {
   FlatList,
@@ -22,7 +21,8 @@ import {
   View,
   VirtualizedList,
 } from "react-native";
-import { Svg } from "react-native-svg";
+import { cssInterop } from "react-native-css-interop";
+import Svg from "react-native-svg";
 
 const AnimatedPressable = createMotionAnimatedComponent(Pressable);
 
