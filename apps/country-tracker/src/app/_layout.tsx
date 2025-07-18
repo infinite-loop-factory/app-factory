@@ -10,8 +10,8 @@ import { isRunningInExpoGo } from "expo";
 import { useFonts } from "expo-font";
 import { Slot, useNavigationContainerRef } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
-import { Provider as JotaiProvider, useAtom } from "jotai";
-import { useColorScheme } from "nativewind";
+import { Provider as JotaiProvider, useAtomValue } from "jotai";
+import { colorScheme } from "nativewind"; // Directly import colorScheme
 import { useEffect } from "react";
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
 import { store } from "@/libs/jotai";
@@ -46,8 +46,7 @@ const queryClient = new QueryClient();
 
 function RootLayout() {
   const navigationRef = useNavigationContainerRef();
-  const { colorScheme, toggleColorScheme } = useColorScheme();
-  const [savedTheme, setSavedTheme] = useAtom(themeAtom);
+  const savedTheme = useAtomValue(themeAtom);
   const [loaded] = useFonts({
     SpaceMono: require("@/assets/fonts/SpaceMono-Regular.ttf"),
   });
@@ -65,16 +64,8 @@ function RootLayout() {
   }, [loaded]);
 
   useEffect(() => {
-    const initialTheme = savedTheme || colorScheme;
-
-    if (savedTheme && savedTheme !== colorScheme) {
-      toggleColorScheme();
-    }
-
-    if (!savedTheme) {
-      setSavedTheme(initialTheme);
-    }
-  }, [colorScheme, savedTheme, toggleColorScheme, setSavedTheme]);
+    colorScheme.set(savedTheme);
+  }, [savedTheme]);
 
   useEffect(() => {
     startLocationTask();
