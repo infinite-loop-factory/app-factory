@@ -1,12 +1,12 @@
 import type { User } from "@supabase/supabase-js";
 
-import { LOCATION_TASK_NAME } from "@/constants/location";
-import supabase from "@/libs/supabase";
-import { getCountryByLatLng } from "@/utils/reverse-geo";
 import * as Location from "expo-location";
 import * as TaskManager from "expo-task-manager";
 import { DateTime } from "luxon";
 import { Platform } from "react-native";
+import { LOCATION_TASK_NAME } from "@/constants/location";
+import supabase from "@/libs/supabase";
+import { getCountryByLatLng } from "@/utils/reverse-geo";
 
 async function handleWebLocationInsert(user: User, pos: GeolocationPosition) {
   // 소수점 2자리 반올림

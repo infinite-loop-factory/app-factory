@@ -1,7 +1,10 @@
 import type { CountryItem } from "@/features/home/types/country";
 
-import supabase from "@/libs/supabase";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { DateTime } from "luxon";
+import supabase from "@/libs/supabase";
+
+const DENYLIST_STORAGE_KEY = "denylisted_countries";
 
 function countryCodeToFlagEmoji(countryCode: string): string {
   return countryCode
@@ -50,6 +53,7 @@ function makeCountryItemGroup(
   return {
     id: `${country}-${start}-${end}`,
     country,
+    country_code: countryCode,
     flag: countryCodeToFlagEmoji(countryCode),
     startDate: start,
     endDate: end,
@@ -91,6 +95,12 @@ function groupConsecutiveDatesToItems(
 export async function fetchVisitedCountries(
   userId: string,
 ): Promise<CountryItem[]> {
+  // Fetch denylisted countries from AsyncStorage
+  const denylistJson = await AsyncStorage.getItem(DENYLIST_STORAGE_KEY);
+  const denylistedCodes = new Set<string>(
+    denylistJson ? JSON.parse(denylistJson) : [],
+  );
+
   const { data: locations, error } = await supabase
     .from("locations")
     .select("latitude,longitude,timestamp,country,country_code")
@@ -100,8 +110,13 @@ export async function fetchVisitedCountries(
     return [];
   }
 
+  // Filter out denylisted locations
+  const filteredLocations = locations.filter(
+    (loc) => !denylistedCodes.has(loc.country_code),
+  );
+
   const currentZone = DateTime.local().zoneName;
-  const countryDateMap = groupDatesByCountry(locations, currentZone);
+  const countryDateMap = groupDatesByCountry(filteredLocations, currentZone);
 
   let items: CountryItem[] = [];
   for (const [country, { countryCode, dates }] of countryDateMap.entries()) {

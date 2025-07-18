@@ -4,7 +4,9 @@
   "home": {
     "tab": "Home",
     "title": "Visited Countries",
-    "search": "Search"
+    "search": "Search",
+    "no-visited-countries": "No Visited Countries Yet",
+    "no-visited-countries-description": "Start your journey and see your visited countries here!"
   },
 
   "map": {
@@ -28,6 +30,10 @@
       "denylist": "Denylist Countries",
       "rate-the-app": "Rate the App",
       "license": "License"
+    },
+
+    "denylist": {
+      "description": "Select countries to exclude from your visited list. This will hide them from the home screen and map."
     },
 
     "license": {
