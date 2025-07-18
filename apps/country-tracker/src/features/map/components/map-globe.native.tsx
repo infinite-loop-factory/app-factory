@@ -1,5 +1,6 @@
 import type { Region } from "react-native-maps";
 
+import { useQuery } from "@tanstack/react-query";
 import * as Location from "expo-location";
 import {
   forwardRef,
@@ -9,7 +10,10 @@ import {
   useState,
 } from "react";
 import { Animated, Easing } from "react-native";
-import MapView from "react-native-maps";
+import MapView, { Polygon } from "react-native-maps";
+import { useAuthUser } from "@/hooks/use-auth-user";
+import { useThemeColor } from "@/hooks/use-theme-color";
+import { fetchVisitedCountries } from "@/utils/visited-countries";
 
 export interface MapGlobeRef {
   globeRotationAnimation: (
@@ -51,11 +55,36 @@ const calculateLongitudeDifference = (start: number, end: number): number => {
 
 const MapGlobe = forwardRef<MapGlobeRef>((_, ref) => {
   const mapRef = useRef<MapView>(null);
+  const { user } = useAuthUser();
+  const [primaryColor] = useThemeColor(["primary-500"]);
   const [region, setRegion] = useState<Region>({
     latitude: 37.7749,
     longitude: -122.4194,
     latitudeDelta: 75,
     longitudeDelta: 75,
+  });
+
+  const { data: countryPolygons } = useQuery({
+    queryKey: ["country-polygons", user?.id],
+    queryFn: async () => {
+      if (!user) return [];
+      const visited = await fetchVisitedCountries(user.id);
+      const countryCodes = visited.map((v) => v.country_code);
+      const polygons = await Promise.all(
+        countryCodes.map(async (code) => {
+          try {
+            const data = await import(
+              `@/assets/geodata/countries/${code}.json`
+            );
+            return { ...data, country_code: code };
+          } catch {
+            return null;
+          }
+        }),
+      );
+      return polygons.filter(Boolean);
+    },
+    enabled: !!user,
   });
 
   // 애니메이션 값 생성
@@ -160,13 +189,33 @@ const MapGlobe = forwardRef<MapGlobeRef>((_, ref) => {
 
   return (
     <MapView
-      ref={mapRef}
-      style={{ flex: 1 }}
-      showsCompass={false}
       mapType="satelliteFlyover"
-      region={region}
       onRegionChangeComplete={(newRegion) => setRegion(newRegion)}
-    />
+      ref={mapRef}
+      region={region}
+      showsCompass={false}
+      style={{ flex: 1 }}
+    >
+      {countryPolygons?.map((polygonData) =>
+        polygonData.coordinates.map((coords: number[][], index: number) => (
+          <Polygon
+            coordinates={coords
+              .filter(
+                ([longitude, latitude]: number[]) =>
+                  typeof latitude === "number" && typeof longitude === "number",
+              )
+              .map(([longitude, latitude]: number[]) => ({
+                latitude: latitude as number,
+                longitude: longitude as number,
+              }))}
+            fillColor={`${primaryColor}80`}
+            key={`${polygonData.country_code}_${index}`}
+            strokeColor={primaryColor}
+            strokeWidth={1}
+          />
+        )),
+      )}
+    </MapView>
   );
 });
 

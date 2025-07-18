@@ -1,9 +1,9 @@
 import type { PropsWithChildren } from "react";
 
-import { ThemedView } from "@/components/themed-view";
-import { useThemeColor } from "@/hooks/use-theme-color";
 import Animated, { useAnimatedRef } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { ThemedView } from "@/components/themed-view";
+import { useThemeColor } from "@/hooks/use-theme-color";
 
 interface ParallaxScrollViewProps extends PropsWithChildren {
   scrollEnabled?: boolean;
@@ -20,9 +20,9 @@ export default function ParallaxScrollView({
     return (
       <SafeAreaView className="flex-1" style={{ backgroundColor }}>
         <Animated.ScrollView
+          contentContainerStyle={{ flexGrow: 1 }}
           ref={scrollRef}
           scrollEventThrottle={16}
-          contentContainerStyle={{ flexGrow: 1 }}
         >
           <ThemedView className="flex-1 px-4 pt-2" style={{ backgroundColor }}>
             {children}

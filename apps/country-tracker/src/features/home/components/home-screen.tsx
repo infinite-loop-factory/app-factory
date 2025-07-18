@@ -1,6 +1,13 @@
-import type { CountryItem } from "@/features/home/types/country";
 import type { ListRenderItem } from "react-native";
+import type { CountryItem } from "@/features/home/types/country";
 
+import { Motion } from "@legendapp/motion";
+import { useQuery } from "@tanstack/react-query";
+import { useAtomValue } from "jotai";
+import { Map as MapIcon, Search } from "lucide-react-native";
+import { DateTime } from "luxon";
+import { useState } from "react";
+import { FlatList, View } from "react-native";
 import { themeAtom } from "@/atoms/theme.atom";
 import ParallaxScrollView from "@/components/parallax-scroll-view";
 import { Badge, BadgeText } from "@/components/ui/badge";
@@ -8,18 +15,13 @@ import { Box } from "@/components/ui/box";
 import { Divider } from "@/components/ui/divider";
 import { Heading } from "@/components/ui/heading";
 import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import i18n from "@/libs/i18n";
 import supabase from "@/libs/supabase";
 import { fetchVisitedCountries } from "@/utils/visited-countries";
-import { useQuery } from "@tanstack/react-query";
-import { useAtomValue } from "jotai";
-import { Search } from "lucide-react-native";
-import { DateTime } from "luxon";
-import { useState } from "react";
-import { FlatList } from "react-native";
 
 export default function HomeScreen() {
   const [searchText, setSearchText] = useState("");
@@ -37,11 +39,7 @@ export default function HomeScreen() {
   const formatDate = (isoDate: string) =>
     DateTime.fromISO(isoDate).toFormat("yyyy-MM-dd");
 
-  const {
-    data = [],
-    isLoading,
-    isError,
-  } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ["visited-countries", searchText],
     queryFn: async () => {
       const { data: userData } = await supabase.auth.getUser();
@@ -61,35 +59,41 @@ export default function HomeScreen() {
     setSearchText(text);
   };
 
-  const renderItem: ListRenderItem<CountryItem> = ({ item }) => (
-    <Box
-      className="flex flex-row justify-between p-4 transition-colors duration-200 hover:bg-gray-50"
-      style={{ backgroundColor: background }}
+  const renderItem: ListRenderItem<CountryItem> = ({ item, index }) => (
+    <Motion.View
+      animate={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, y: 20 }}
+      transition={{ type: "timing", duration: 300, delay: index * 50 }}
     >
-      <Box className="flex flex-row items-center gap-4">
-        <Text className="text-xl" style={{ color: textColor }}>
-          {item.flag}
-        </Text>
-        <Text className="font-semibold text-xl" style={{ color: textColor }}>
-          {item.country}
-        </Text>
+      <Box
+        className="flex flex-row justify-between p-4 transition-colors duration-200 hover:bg-gray-50"
+        style={{ backgroundColor: background }}
+      >
+        <Box className="flex flex-row items-center gap-4">
+          <Text className="text-xl" style={{ color: textColor }}>
+            {item.flag}
+          </Text>
+          <Text className="font-semibold text-xl" style={{ color: textColor }}>
+            {item.country}
+          </Text>
+        </Box>
+        <Box className="flex flex-row items-center gap-2">
+          <Text className="font-mono" style={{ color: textColor }}>
+            {formatDate(item.endDate)}
+          </Text>
+          {item.stayDays > 0 && (
+            <Badge size="sm">
+              <BadgeText>+{item.stayDays}</BadgeText>
+            </Badge>
+          )}
+        </Box>
       </Box>
-      <Box className="flex flex-row items-center gap-2">
-        <Text className="font-mono" style={{ color: textColor }}>
-          {formatDate(item.endDate)}
-        </Text>
-        {item.stayDays > 0 && (
-          <Badge size="sm">
-            <BadgeText>+{item.stayDays}</BadgeText>
-          </Badge>
-        )}
-      </Box>
-    </Box>
+    </Motion.View>
   );
 
   return (
     <ParallaxScrollView scrollEnabled={false}>
-      <VStack space="md" className="mb-4 shrink-0 px-1 pt-2">
+      <VStack className="mb-4 shrink-0 px-1 pt-2" space="md">
         <Heading className="font-bold text-3xl" style={{ color: headingColor }}>
           {i18n.t("home.title")}
         </Heading>
@@ -99,12 +103,12 @@ export default function HomeScreen() {
           style={{ backgroundColor: inputBg, borderColor }}
         >
           <InputField
-            placeholder={i18n.t("home.search")}
-            value={searchText}
+            className="placeholder-gray-500"
             onChangeText={handleSearch}
             onSubmitEditing={() => handleSearch(searchText)}
-            className="placeholder-gray-500"
+            placeholder={i18n.t("home.search")}
             style={{ color: textColor }}
+            value={searchText}
           />
           <InputSlot onPress={() => handleSearch(searchText)}>
             <InputIcon as={() => <Search color={textColor} />} />
@@ -115,40 +119,47 @@ export default function HomeScreen() {
         className="mx-1 mb-2 overflow-hidden rounded-lg border bg-background-50 shadow-xs"
         style={{ backgroundColor: background, borderColor }}
       >
-        {isLoading && (
-          <Box className="flex-1 items-center justify-center p-6">
-            <Text className="text-lg" style={{ color: textColor }}>
-              Loading...
-            </Text>
-          </Box>
-        )}
-        {isError && (
+        {isError ? (
           <Box className="flex-1 items-center justify-center p-6">
             <Text className="text-lg" style={{ color: textColor }}>
               Error loading countries.
             </Text>
           </Box>
+        ) : (
+          <Skeleton className="h-[300px] w-full" isLoaded={!isLoading}>
+            {!data || data?.length === 0 ? (
+              <View className="flex-1 items-center justify-center p-10">
+                <MapIcon color={textColor} size={48} />
+                <Text
+                  className="mt-4 text-center text-lg"
+                  style={{ color: textColor }}
+                >
+                  {i18n.t("home.no-visited-countries")}
+                </Text>
+                <Text
+                  className="mt-2 text-center text-sm"
+                  style={{ color: textColor }}
+                >
+                  {i18n.t("home.no-visited-countries-description")}
+                </Text>
+              </View>
+            ) : (
+              <FlatList
+                contentContainerStyle={{
+                  paddingTop: 0,
+                  paddingBottom: 4,
+                }}
+                data={data}
+                ItemSeparatorComponent={() => (
+                  <Divider style={{ backgroundColor: borderColor }} />
+                )}
+                keyExtractor={(item) => `${theme}-${item.id}`}
+                renderItem={renderItem}
+                showsVerticalScrollIndicator={false}
+              />
+            )}
+          </Skeleton>
         )}
-        <FlatList
-          data={data}
-          keyExtractor={(item) => `${theme}-${item.id}`}
-          renderItem={renderItem}
-          ItemSeparatorComponent={() => (
-            <Divider style={{ backgroundColor: borderColor }} />
-          )}
-          contentContainerStyle={{
-            paddingTop: 0,
-            paddingBottom: 4,
-          }}
-          showsVerticalScrollIndicator={false}
-          ListEmptyComponent={
-            <Box className="flex-1 items-center justify-center p-6">
-              <Text className="text-lg" style={{ color: textColor }}>
-                No visited countries.
-              </Text>
-            </Box>
-          }
-        />
       </Box>
     </ParallaxScrollView>
   );

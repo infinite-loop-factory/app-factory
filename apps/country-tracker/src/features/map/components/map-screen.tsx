@@ -1,23 +1,28 @@
 import type { MapGlobeRef } from "@/features/map/components/map-globe";
+import type { CountryLocation } from "@/features/map/constants/countries";
 
+import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
+import { Info, Search, Share } from "lucide-react-native";
+import { useRef, useState } from "react";
+import { Alert, View } from "react-native";
 import { ThemedView } from "@/components/themed-view";
-import { Button, ButtonIcon } from "@/components/ui/button";
+import { Button, ButtonIcon, ButtonText } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
 import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
+import { Text } from "@/components/ui/text";
 import MapGlobe from "@/features/map/components/map-globe";
 import { findCountryLocation } from "@/features/map/constants/countries";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import i18n from "@/libs/i18n";
-import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
-import { Search, Share } from "lucide-react-native";
-import { useRef, useState } from "react";
-import { Alert, View } from "react-native";
+import { countryCodeToFlagEmoji } from "@/utils/country-code-to-flag-emoji";
 
 export default function MapScreen() {
   const bottomSheetRef = useRef<BottomSheet>(null);
   const mapGlobeRef = useRef<MapGlobeRef>(null);
 
   const [searchText, setSearchText] = useState("");
+  const [selectedCountry, setSelectedCountry] =
+    useState<CountryLocation | null>(null);
   const [backgroundColor, inputBackgroundColor, borderColor, textColor] =
     useThemeColor(["background", "background-50", "outline-200", "typography"]);
 
@@ -42,6 +47,7 @@ export default function MapScreen() {
 
     const countryLocation = findCountryLocation(searchText);
     if (countryLocation) {
+      setSelectedCountry(countryLocation);
       // 항상 일반 회전 애니메이션 적용
       mapGlobeRef.current?.globeRotationAnimation(
         countryLocation.latitude,
@@ -53,6 +59,7 @@ export default function MapScreen() {
       // * 크기 조절
       bottomSheetRef.current?.snapToIndex(2);
     } else {
+      setSelectedCountry(null);
       Alert.alert(
         i18n.t("map.alert.country-not-found.title"),
         i18n.t("map.alert.country-not-found.message"),
@@ -65,12 +72,12 @@ export default function MapScreen() {
       <MapGlobe ref={mapGlobeRef} />
 
       <BottomSheet
-        ref={bottomSheetRef}
-        onChange={handleSheetChanges}
-        snapPoints={["40%", "90%", "14%"]}
-        enableDynamicSizing={false}
         backgroundStyle={{ backgroundColor }}
+        enableDynamicSizing={false}
         handleIndicatorStyle={{ backgroundColor: textColor }}
+        onChange={handleSheetChanges}
+        ref={bottomSheetRef}
+        snapPoints={["40%", "90%", "20%"]}
       >
         <BottomSheetView className="px-4 py-2">
           <View className="mb-2 flex flex-row items-center justify-between">
@@ -81,7 +88,7 @@ export default function MapScreen() {
               {i18n.t("map.countries")}
             </Heading>
             <View className="flex flex-row">
-              <Button onPress={handleShare} variant="link" className="mr-1">
+              <Button className="mr-1" onPress={handleShare} variant="link">
                 <ButtonIcon as={Share} />
               </Button>
             </View>
@@ -93,15 +100,40 @@ export default function MapScreen() {
             style={{ backgroundColor: inputBackgroundColor, borderColor }}
           >
             <InputField
-              placeholder={i18n.t("map.search-placeholder")}
-              value={searchText}
               onChangeText={handleSearch}
               onSubmitEditing={handleSearchSubmit}
+              placeholder={i18n.t("map.search-placeholder")}
+              value={searchText}
             />
             <InputSlot onPress={handleSearchSubmit}>
               <InputIcon as={Search} />
             </InputSlot>
           </Input>
+
+          {selectedCountry && (
+            <View className="mt-4">
+              <View className="flex-row items-center gap-3 p-2">
+                <Text className="text-4xl">
+                  {countryCodeToFlagEmoji(selectedCountry.country_code)}
+                </Text>
+                <View>
+                  <Text
+                    className="font-bold text-2xl"
+                    style={{ color: textColor }}
+                  >
+                    {selectedCountry.country}
+                  </Text>
+                  <Text className="text-base" style={{ color: textColor }}>
+                    {selectedCountry.capital}
+                  </Text>
+                </View>
+              </View>
+              <Button action="secondary" className="mt-2">
+                <ButtonIcon as={Info} className="mr-2" />
+                <ButtonText>View Details</ButtonText>
+              </Button>
+            </View>
+          )}
         </BottomSheetView>
       </BottomSheet>
     </ThemedView>

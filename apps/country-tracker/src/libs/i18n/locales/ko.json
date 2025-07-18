@@ -5,7 +5,9 @@
   "home": {
     "tab": "홈",
     "title": "방문 국가",
-    "search": "국가명 검색"
+    "search": "국가명 검색",
+    "no-visited-countries": "아직 방문한 국가가 없어요",
+    "no-visited-countries-description": "여행을 시작하고 방문한 국가들을 확인해보세요!"
   },
 
   "settings": {
@@ -23,6 +25,10 @@
       "denylist": "예외 국가 적용하기",
       "rate-the-app": "앱 리뷰 남기기",
       "license": "라이센스 보기"
+    },
+
+    "denylist": {
+      "description": "방문 목록에서 제외할 국가를 선택하세요. 홈 화면과 지도에서 해당 국가가 숨겨집니다."
     },
 
     "license": {

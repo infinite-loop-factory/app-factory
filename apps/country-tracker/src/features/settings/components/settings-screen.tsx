@@ -1,3 +1,12 @@
+import {
+  openLanguageSetting,
+  openStorePage,
+} from "@infinite-loop-factory/common";
+import { get } from "es-toolkit/compat";
+import { useRouter } from "expo-router";
+import { useAtom } from "jotai";
+import { ChevronRight, Moon, Sun } from "lucide-react-native";
+import { TouchableOpacity, View } from "react-native";
 import { themeAtom } from "@/atoms/theme.atom";
 import ParallaxScrollView from "@/components/parallax-scroll-view";
 import { Badge, BadgeText } from "@/components/ui/badge";
@@ -16,16 +25,6 @@ import { useAuthUser } from "@/hooks/use-auth-user";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import i18n from "@/libs/i18n";
 import supabase from "@/libs/supabase";
-import {
-  openLanguageSetting,
-  openStorePage,
-} from "@infinite-loop-factory/common";
-import { get } from "es-toolkit/compat";
-import { useRouter } from "expo-router";
-import { useAtom } from "jotai";
-import { ChevronRight, Moon, Sun } from "lucide-react-native";
-import { colorScheme } from "nativewind";
-import { TouchableOpacity, View } from "react-native";
 
 export default function SettingsScreen() {
   const [theme, setTheme] = useAtom(themeAtom);
@@ -36,7 +35,6 @@ export default function SettingsScreen() {
   const toggleTheme = () => {
     const nextTheme = theme === "light" ? "dark" : "light";
     setTheme(nextTheme);
-    colorScheme.set(nextTheme);
   };
 
   const [
@@ -66,11 +64,11 @@ export default function SettingsScreen() {
           return (
             <Toast
               action="error"
-              variant="outline"
               className="border-neutral-600"
               style={{
                 backgroundColor: background,
               }}
+              variant="outline"
             >
               <ToastTitle style={{ color: errorColor }}>
                 {i18n.t("settings.toast.language.title")}
@@ -101,13 +99,13 @@ export default function SettingsScreen() {
       <Box className="mx-1 mb-4 flex-row items-center justify-between rounded-lg border border-neutral-600 p-4 shadow-xs">
         <Box className="flex-row items-center">
           <Image
+            alt="avatar"
+            className="mr-4 h-12 w-12 rounded-full"
             source={
               user?.user_metadata?.avatar_url
                 ? { uri: user.user_metadata.avatar_url }
                 : require("@/assets/images/icon.png")
             }
-            className="mr-4 h-12 w-12 rounded-full"
-            alt="avatar"
           />
           <Box>
             <Text className="font-bold text-lg" style={{ color: headingColor }}>
@@ -115,7 +113,7 @@ export default function SettingsScreen() {
             </Text>
             <Box className="flex-row items-center">
               <Text className="text-gray-500 text-sm">{user?.email}</Text>
-              <Badge action="muted" size="sm" className="ml-2">
+              <Badge action="muted" className="ml-2" size="sm">
                 <BadgeText>{provider}</BadgeText>
               </Badge>
             </Box>
@@ -150,23 +148,23 @@ export default function SettingsScreen() {
               {i18n.t("settings.appearance.theme")}
             </Text>
             {theme === "light" ? (
-              <Sun size={24} color={textColor} style={{ marginLeft: 2 }} />
+              <Sun color={textColor} size={24} style={{ marginLeft: 2 }} />
             ) : (
               <Moon
-                size={24}
                 color={highlightColor}
+                size={24}
                 style={{ marginLeft: 2 }}
               />
             )}
           </View>
           <Switch
-            value={theme === "dark"}
-            onValueChange={toggleTheme}
-            ios_backgroundColor={switchBgColor}
-            trackColor={{ false: switchBgColor, true: switchBgColor }}
-            thumbColor={highlightColor}
-            // @ts-expect-error
             activeThumbColor={highlightColor}
+            ios_backgroundColor={switchBgColor}
+            onValueChange={toggleTheme}
+            thumbColor={highlightColor}
+            trackColor={{ false: switchBgColor, true: switchBgColor }}
+            // @ts-expect-error
+            value={theme === "dark"}
           />
         </View>
         <TouchableOpacity
@@ -176,7 +174,7 @@ export default function SettingsScreen() {
           <Text className="font-bold text-base" style={{ color: textColor }}>
             {i18n.t("settings.appearance.language")}
           </Text>
-          <ChevronRight size={20} color={textColor} />
+          <ChevronRight color={textColor} size={20} />
         </TouchableOpacity>
       </Box>
 
@@ -193,11 +191,14 @@ export default function SettingsScreen() {
             {i18n.t("settings.general.title")}
           </Heading>
         </Box>
-        <TouchableOpacity className="flex-row items-center justify-between border-b border-b-neutral-600 p-4">
+        <TouchableOpacity
+          className="flex-row items-center justify-between border-b border-b-neutral-600 p-4"
+          onPress={() => router.push("/settings/denylist")}
+        >
           <Text className="font-bold text-base" style={{ color: textColor }}>
             {i18n.t("settings.general.denylist")}
           </Text>
-          <ChevronRight size={20} color={textColor} />
+          <ChevronRight color={textColor} size={20} />
         </TouchableOpacity>
         <TouchableOpacity
           className="flex-row items-center justify-between border-b border-b-neutral-600 p-4"
@@ -206,7 +207,7 @@ export default function SettingsScreen() {
           <Text className="font-bold text-base" style={{ color: textColor }}>
             {i18n.t("settings.general.rate-the-app")}
           </Text>
-          <ChevronRight size={20} color={textColor} />
+          <ChevronRight color={textColor} size={20} />
         </TouchableOpacity>
         <TouchableOpacity
           className="flex-row items-center justify-between p-4"
@@ -215,7 +216,7 @@ export default function SettingsScreen() {
           <Text className="font-bold text-base" style={{ color: textColor }}>
             {i18n.t("settings.general.license")}
           </Text>
-          <ChevronRight size={20} color={textColor} />
+          <ChevronRight color={textColor} size={20} />
         </TouchableOpacity>
       </Box>
     </ParallaxScrollView>

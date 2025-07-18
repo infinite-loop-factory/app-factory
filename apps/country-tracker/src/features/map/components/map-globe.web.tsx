@@ -1,6 +1,6 @@
+import { forwardRef } from "react";
 import { ThemedView } from "@/components/themed-view";
 import { Text } from "@/components/ui/text";
-import { forwardRef } from "react";
 
 const MapGlobe = forwardRef(function MapGlobe(_props, _ref) {
   // ref는 웹에서는 무시
