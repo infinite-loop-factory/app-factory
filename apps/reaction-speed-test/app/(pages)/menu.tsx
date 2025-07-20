@@ -1,24 +1,16 @@
-import type { MigrationResult } from "@/services/dataMigration";
-
 import { useAsyncEffect } from "@reactuses/core";
 import { noop } from "es-toolkit";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { Alert, Pressable, SafeAreaView, Text, View } from "react-native";
-import { DataMigrationModal } from "@/components/migration/DataMigrationModal";
+import { Pressable, SafeAreaView, Text, View } from "react-native";
 import { Button, ButtonText } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
-import { useMigrationModal } from "@/hooks/useMigrationModal";
 import { fetchUsername } from "@/services";
 
 export default function MenuScreen() {
   const [username, setUsername] = useState<string | null>(null);
   const router = useRouter();
-  const { user, signOut, isAuthenticated } = useAuth();
-  const { showMigrationModal, closeMigrationModal } = useMigrationModal(
-    isAuthenticated,
-    user,
-  );
+  const { user, signOut } = useAuth();
 
   useAsyncEffect(
     async () => {
@@ -37,26 +29,6 @@ export default function MenuScreen() {
 
   const handleSignOut = async () => {
     await signOut();
-  };
-
-  const handleMigrationComplete = (result: MigrationResult) => {
-    if (result.migratedRecords > 0) {
-      // 잠시 후 결과 페이지로 이동 권유
-      setTimeout(() => {
-        Alert.alert(
-          "마이그레이션 완료! 🎉",
-          `${result.migratedRecords}개의 기록이 클라우드에 저장되었습니다.\n\n이제 결과 페이지에서 모든 기록을 확인하실 수 있습니다.`,
-          [
-            { text: "나중에 보기", style: "cancel" },
-            {
-              text: "결과 보기",
-              style: "default",
-              onPress: () => router.push("/results"),
-            },
-          ],
-        );
-      }, 1000);
-    }
   };
 
   const menuItems = [
@@ -164,12 +136,6 @@ export default function MenuScreen() {
           </Button>
         </View>
       </View>
-
-      <DataMigrationModal
-        isVisible={showMigrationModal}
-        onClose={closeMigrationModal}
-        onMigrationComplete={handleMigrationComplete}
-      />
     </SafeAreaView>
   );
 }

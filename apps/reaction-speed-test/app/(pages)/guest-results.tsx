@@ -17,8 +17,7 @@ import { useRecordStatistics } from "@/hooks/useRecordStatistics";
 import { getLocalRecords, type LocalRecord } from "@/services/localRecords";
 
 const GuestResults: FC = () => {
-  const { navigateBackWithFallback, navigateToMenu, navigateToHome } =
-    useAuthAwareNavigation();
+  const { navigateBackWithFallback, navigateToMenu } = useAuthAwareNavigation();
   const [records, setRecords] = useState<LocalRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const { bestTime, averageTime } = useRecordStatistics(records);
@@ -126,24 +125,6 @@ const GuestResults: FC = () => {
           <View className="mx-auto max-w-md px-4 py-6">
             <RecordStatistics averageTime={averageTime} bestTime={bestTime} />
             <RecordList bestTime={bestTime} records={records} />
-
-            {/* 클라우드 저장 권유 */}
-            <View className="mt-6 rounded-lg bg-blue-50 p-4 dark:bg-blue-950/20">
-              <Text className="mb-2 font-semibold text-blue-900 dark:text-blue-100">
-                💡 더 나은 경험을 위해
-              </Text>
-              <Text className="mb-3 text-blue-800 text-sm dark:text-blue-200">
-                로그인하면 기록이 클라우드에 안전하게 저장되고, 다른 기기에서도
-                확인할 수 있습니다.
-              </Text>
-              <Button
-                action="primary"
-                className="h-10 w-full bg-blue-600 dark:bg-blue-500"
-                onPress={navigateToHome}
-              >
-                <ButtonText className="text-white">로그인하기</ButtonText>
-              </Button>
-            </View>
 
             {/* 하단 버튼 */}
             <View className="mt-6 gap-y-3">

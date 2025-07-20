@@ -1,16 +1,12 @@
 import { Stack, useRouter } from "expo-router";
 import { Pressable, SafeAreaView, Text, View } from "react-native";
 import { Button, ButtonText } from "@/components/ui/button";
-import { useAuth } from "@/hooks/useAuth";
 
 export default function GuestMenuScreen() {
   const router = useRouter();
-  const { setRedirectPath } = useAuth();
 
-  const handleLogin = async () => {
-    // 로그인 후 게스트 메뉴로 돌아오도록 설정
-    await setRedirectPath("/guest-menu");
-    router.push("/");
+  const handleLogin = () => {
+    router.push("/login");
   };
 
   const menuItems = [
@@ -43,24 +39,6 @@ export default function GuestMenuScreen() {
           <Text className="text-center text-lg text-slate-600 dark:text-slate-400">
             비회원으로 앱을 사용하고 있습니다
           </Text>
-        </View>
-
-        {/* 클라우드 저장 혜택 안내 */}
-        <View className="w-full rounded-lg bg-blue-50 p-6 dark:bg-blue-950/20">
-          <Text className="mb-3 font-semibold text-blue-900 text-lg dark:text-blue-100">
-            🚀 더 나은 경험을 위해
-          </Text>
-          <Text className="mb-4 text-blue-800 text-sm leading-relaxed dark:text-blue-200">
-            • 기록이 클라우드에 안전하게 저장됩니다{"\n"}• 다른 기기에서도
-            기록을 확인할 수 있습니다{"\n"}• 기록을 잃어버릴 걱정이 없습니다
-          </Text>
-          <Button
-            action="primary"
-            className="h-12 w-full bg-blue-600 dark:bg-blue-500"
-            onPress={handleLogin}
-          >
-            <ButtonText className="text-white">로그인하기</ButtonText>
-          </Button>
         </View>
 
         <View className="w-full gap-y-4">
@@ -117,6 +95,18 @@ export default function GuestMenuScreen() {
               </View>
             </Pressable>
           ))}
+        </View>
+
+        <View className="w-full">
+          <Button
+            action="secondary"
+            className="h-12 w-full border border-slate-300 dark:border-slate-700"
+            onPress={handleLogin}
+          >
+            <ButtonText className="text-slate-700 dark:text-slate-300">
+              로그인하기
+            </ButtonText>
+          </Button>
         </View>
       </View>
     </SafeAreaView>

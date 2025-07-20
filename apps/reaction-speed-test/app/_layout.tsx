@@ -1,8 +1,6 @@
 import "@/global.css";
-import AuthGuard from "@/components/AuthGuard";
-import WebviewLayout from "@/components/WebviewLayout";
-import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
-import { supabase } from "@/utils/supabase";
+import type { PropsWithChildren } from "react";
+
 import {
   DarkTheme,
   DefaultTheme,
@@ -12,9 +10,13 @@ import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useColorScheme } from "nativewind";
-import type { PropsWithChildren } from "react";
 import { useEffect, useState } from "react";
 import { AppState } from "react-native";
+import AuthGuard from "@/components/AuthGuard";
+import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
+import WebviewLayout from "@/components/WebviewLayout";
+import { AuthContext, useAuthProvider } from "@/hooks/useAuth";
+import { supabase } from "@/utils/supabase";
 import "react-native-reanimated";
 import "@/i18n";
 import "react-native-url-polyfill/auto";
@@ -43,6 +45,7 @@ function AppContainer({ children }: PropsWithChildren) {
 
 export default function RootLayout() {
   const { colorScheme } = useColorScheme();
+  const authValue = useAuthProvider();
 
   const [loaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
@@ -61,17 +64,19 @@ export default function RootLayout() {
   }
 
   return (
-    <GluestackUIProvider mode={colorScheme}>
-      <AppContainer>
-        <AuthGuard>
-          <WebviewLayout>
-            <Stack>
-              <Stack.Screen name="(pages)" options={{ headerShown: false }} />
-              <Stack.Screen name="+not-found" />
-            </Stack>
-          </WebviewLayout>
-        </AuthGuard>
-      </AppContainer>
-    </GluestackUIProvider>
+    <AuthContext.Provider value={authValue}>
+      <GluestackUIProvider mode={colorScheme}>
+        <AppContainer>
+          <AuthGuard>
+            <WebviewLayout>
+              <Stack>
+                <Stack.Screen name="(pages)" options={{ headerShown: false }} />
+                <Stack.Screen name="+not-found" />
+              </Stack>
+            </WebviewLayout>
+          </AuthGuard>
+        </AppContainer>
+      </GluestackUIProvider>
+    </AuthContext.Provider>
   );
 }

@@ -1,52 +1,62 @@
 import { supabase } from "@/utils/supabase";
 
-interface SignUpParams {
+export interface SignUpData {
   email: string;
   password: string;
   username: string;
 }
 
-interface SignInParams {
+export interface SignInData {
   email: string;
   password: string;
 }
 
-export const getCurrentUser = async () => {
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  return user;
-};
+export const signUpUser = async (data: SignUpData) => {
+  const { email, password, username } = data;
 
-export const signUpUser = async ({
-  email,
-  password,
-  username,
-}: SignUpParams) => {
-  const { error } = await supabase.auth.signUp({
-    email,
-    password,
-    options: {
-      data: { username },
-    },
-  });
-  return { error };
-};
-
-export const signInUser = async ({ email, password }: SignInParams) => {
-  const { error } = await supabase.auth.signInWithPassword({
+  const { data: authData, error: authError } = await supabase.auth.signUp({
     email,
     password,
   });
-  return { error };
+
+  if (authError) {
+    return { error: authError };
+  }
+
+  if (authData.user) {
+    const { error: profileError } = await supabase
+      .from("profiles")
+      .insert([{ id: authData.user.id, username, email }]);
+
+    if (profileError) {
+      return { error: profileError };
+    }
+  }
+
+  return { data: authData };
 };
 
-export const fetchUsername = async (userId: string) => {
-  const { data: profileData } = await supabase
+export const signInUser = async (data: SignInData) => {
+  const { email, password } = data;
+
+  const { data: authData, error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
+
+  return { data: authData, error };
+};
+
+export const fetchUsername = async (userId: string): Promise<string> => {
+  const { data, error } = await supabase
     .from("profiles")
     .select("username")
     .eq("id", userId)
     .single();
 
-  return profileData?.username ?? null;
+  if (error) {
+    throw error;
+  }
+
+  return data?.username || "사용자";
 };
