@@ -1,7 +1,8 @@
-import { useAuth } from "@/hooks/useAuth";
-import { useRouter, useSegments } from "expo-router";
 import type { PropsWithChildren } from "react";
+
+import { useRouter, useSegments } from "expo-router";
 import { useCallback, useEffect } from "react";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function AuthGuard({ children }: PropsWithChildren) {
   const { isAuthenticated, loading } = useAuth();

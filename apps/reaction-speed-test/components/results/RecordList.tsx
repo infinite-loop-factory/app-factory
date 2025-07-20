@@ -1,5 +1,5 @@
-import { formatDateTime } from "@/utils/date";
 import { Text, View } from "react-native";
+import { formatDateTime } from "@/utils/date";
 
 interface RecordData {
   id: string;
@@ -52,8 +52,8 @@ export const RecordList = <T extends RecordData>({
 
         return (
           <View
-            key={record.id}
             className={`flex-row items-center justify-between border-slate-100 border-b p-4 last:border-b-0 dark:border-slate-800 ${getBackgroundStyle(isLowest, isNewest)}`}
+            key={record.id}
           >
             <View className="flex-row items-center">
               <View
