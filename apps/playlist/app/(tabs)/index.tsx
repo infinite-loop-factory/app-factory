@@ -1,4 +1,4 @@
-import { Audio } from "expo-av";
+import { Audio, type AVPlaybackSource } from "expo-av";
 import { useState } from "react";
 import {
   FlatList,
@@ -31,7 +31,7 @@ export default function Index() {
     IU: require("../../assets/images/iu.png"),
   };
 
-  const audioFiles: Record<string, any> = {
+  const audioFiles: Record<string, number> = {
     Jennie: require("../../assets/sounds/jennie.mp3"),
     Lisa: require("../../assets/sounds/jennie.mp3"),
     Rosé: require("../../assets/sounds/jennie.mp3"),
@@ -64,7 +64,7 @@ export default function Index() {
       } else {
         if (!sound || currentArtist !== selectedArtist) {
           const { sound: newSound } = await Audio.Sound.createAsync(
-            audioFiles[selectedArtist],
+            audioFiles[selectedArtist] as AVPlaybackSource,
           );
           setSound(newSound);
           setCurrentArtist(selectedArtist);
