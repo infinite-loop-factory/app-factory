@@ -1,4 +1,5 @@
 import type { VariantProps } from "@gluestack-ui/nativewind-utils";
+
 import { tva } from "@gluestack-ui/nativewind-utils/tva";
 import {
   useStyleContext,
@@ -6,10 +7,10 @@ import {
 } from "@gluestack-ui/nativewind-utils/withStyleContext";
 import { withStyleContextAndStates } from "@gluestack-ui/nativewind-utils/withStyleContextAndStates";
 import { createSelect } from "@gluestack-ui/select";
-import { cssInterop } from "nativewind";
 import React, { useMemo } from "react";
 import { Platform, Pressable, TextInput, View } from "react-native";
-import { Svg } from "react-native-svg";
+import { cssInterop } from "react-native-css-interop";
+import Svg from "react-native-svg";
 import {
   Actionsheet,
   ActionsheetBackdrop,
@@ -140,7 +141,7 @@ const PrimitiveIcon = React.forwardRef<
       return <AsComp ref={ref} {...props} {...sizeProps} {...colorProps} />;
     }
     return (
-      <Svg ref={ref} height={height} width={width} {...colorProps} {...props} />
+      <Svg height={height} ref={ref} width={width} {...colorProps} {...props} />
     );
   },
 );
@@ -222,8 +223,8 @@ const SelectTrigger = React.forwardRef<
         size,
         variant,
       })}
-      ref={ref}
       context={{ size, variant }}
+      ref={ref}
       {...props}
     />
   );

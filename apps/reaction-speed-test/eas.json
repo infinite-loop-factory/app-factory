@@ -7,15 +7,18 @@
     "development": {
       "developmentClient": true,
       "distribution": "internal",
-      "node": "22.16.0"
+      "node": "22.16.0",
+      "pnpm": "10.12.1"
     },
     "preview": {
       "distribution": "internal",
-      "node": "22.16.0"
+      "node": "22.16.0",
+      "pnpm": "10.12.1"
     },
     "production": {
       "autoIncrement": true,
-      "node": "22.16.0"
+      "node": "22.16.0",
+      "pnpm": "10.12.1"
     }
   },
   "submit": {

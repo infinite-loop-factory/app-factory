@@ -1,18 +1,27 @@
+import { useEffect, useState } from "react";
+import { Text } from "react-native";
 import { Button, ButtonText } from "@/components/ui/button";
+import {
+  Checkbox,
+  CheckboxIcon,
+  CheckboxIndicator,
+  CheckboxLabel,
+} from "@/components/ui/checkbox";
 import {
   FormControl,
   FormControlHelper,
   FormControlHelperText,
 } from "@/components/ui/form-control";
+import { CheckIcon } from "@/components/ui/icon";
 import { Input, InputField } from "@/components/ui/input";
 import { VStack } from "@/components/ui/vstack";
 import { signInUser } from "@/services";
-import { useRouter } from "expo-router";
-import { useState } from "react";
-import { Text } from "react-native";
+import {
+  getAutoLoginSetting,
+  setAutoLoginSetting,
+} from "@/utils/autoLoginStorage";
 
 export default function LoginForm() {
-  const router = useRouter();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -24,6 +33,20 @@ export default function LoginForm() {
   });
 
   const [loading, setLoading] = useState(false);
+  const [autoLogin, setAutoLogin] = useState(true);
+
+  useEffect(() => {
+    const loadAutoLoginSetting = async () => {
+      try {
+        const savedSetting = await getAutoLoginSetting();
+        setAutoLogin(savedSetting);
+      } catch (error) {
+        console.error("Error loading auto login setting:", error);
+      }
+    };
+
+    loadAutoLoginSetting();
+  }, []);
 
   const validateForm = () => {
     const newErrors = {
@@ -70,7 +93,8 @@ export default function LoginForm() {
         }
         return;
       }
-      router.replace("/menu");
+
+      await setAutoLoginSetting(autoLogin);
     } catch (error) {
       console.error("로그인 중 문제가 발생했습니다", error);
     } finally {
@@ -82,6 +106,10 @@ export default function LoginForm() {
     setErrors((prev) => ({ ...prev, [field]: "" }));
   };
 
+  const handleAutoLoginChange = (value: boolean) => {
+    setAutoLogin(value);
+  };
+
   return (
     <FormControl>
       <VStack space="xl">
@@ -91,14 +119,14 @@ export default function LoginForm() {
           </Text>
           <Input className="border-slate-300 bg-slate-50 dark:border-slate-600 dark:bg-slate-800">
             <InputField
-              type="text"
-              value={formData.email}
+              className="text-slate-900 dark:text-slate-100"
               onChangeText={(text) => {
                 setFormData((prev) => ({ ...prev, email: text }));
                 clearError("email");
               }}
               placeholder="이메일을 입력하세요"
-              className="text-slate-900 dark:text-slate-100"
+              type="text"
+              value={formData.email}
             />
           </Input>
           {errors.email && (
@@ -116,14 +144,14 @@ export default function LoginForm() {
           </Text>
           <Input className="border-slate-300 bg-slate-50 dark:border-slate-600 dark:bg-slate-800">
             <InputField
-              type="password"
-              value={formData.password}
+              className="text-slate-900 dark:text-slate-100"
               onChangeText={(text) => {
                 setFormData((prev) => ({ ...prev, password: text }));
                 clearError("password");
               }}
               placeholder="비밀번호를 입력하세요"
-              className="text-slate-900 dark:text-slate-100"
+              type="password"
+              value={formData.password}
             />
           </Input>
           {errors.password && (
@@ -135,11 +163,25 @@ export default function LoginForm() {
           )}
         </VStack>
 
+        <Checkbox
+          isChecked={autoLogin}
+          onChange={handleAutoLoginChange}
+          size="sm"
+          value="autoLogin"
+        >
+          <CheckboxIndicator>
+            <CheckboxIcon as={CheckIcon} />
+          </CheckboxIndicator>
+          <CheckboxLabel className="text-slate-700 dark:text-slate-300">
+            자동 로그인
+          </CheckboxLabel>
+        </Checkbox>
+
         <Button
           action="primary"
           className="h-12 w-full bg-slate-900 dark:bg-slate-100"
-          onPress={handleLogin}
           disabled={loading}
+          onPress={handleLogin}
         >
           <ButtonText className="text-slate-100 dark:text-slate-900">
             {loading ? "처리중..." : "로그인"}

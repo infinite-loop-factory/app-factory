@@ -1,43 +1,48 @@
-import { getCurrentUser } from "@/services/user";
 import { supabase } from "@/utils/supabase";
 
-export const insertRecord = async (result_value: number) => {
-  const user = await getCurrentUser();
+export interface ReactionRecord {
+  id?: string;
+  user_id: string;
+  reaction_time: number;
+  created_at?: string;
+}
 
-  if (!user) {
-    throw new Error("User not authenticated");
+export const insertRecord = async (
+  userId: string,
+  reactionTime: number,
+): Promise<void> => {
+  const { error } = await supabase.from("records").insert([
+    {
+      user_id: userId,
+      reaction_time: reactionTime,
+    },
+  ]);
+
+  if (error) {
+    throw error;
   }
-
-  const { data, error } = await supabase
-    .from("records")
-    .insert([
-      {
-        user_id: user.id,
-        result_value,
-        unit: "ms",
-      },
-    ])
-    .select()
-    .single();
-
-  if (error) throw error;
-  return data;
 };
 
-export const getRecords = async () => {
-  const user = await getCurrentUser();
-
-  if (!user) {
-    throw new Error("로그인이 필요합니다");
-  }
-
+export const fetchRecords = async (
+  userId: string,
+): Promise<ReactionRecord[]> => {
   const { data, error } = await supabase
     .from("records")
-    .select("id, created_at, result_value, unit")
-    .eq("user_id", user.id)
+    .select("*")
+    .eq("user_id", userId)
     .order("created_at", { ascending: false });
 
-  if (error) throw error;
+  if (error) {
+    throw error;
+  }
 
-  return data;
+  return data || [];
+};
+
+export const deleteRecord = async (recordId: string): Promise<void> => {
+  const { error } = await supabase.from("records").delete().eq("id", recordId);
+
+  if (error) {
+    throw error;
+  }
 };

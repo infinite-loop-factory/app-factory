@@ -1,5 +1,16 @@
+import type { VariantProps } from "@gluestack-ui/nativewind-utils";
+
 import { H4 } from "@expo/html-elements";
 import { createActionsheet } from "@gluestack-ui/actionsheet";
+import { tva } from "@gluestack-ui/nativewind-utils/tva";
+import { withStyleContext } from "@gluestack-ui/nativewind-utils/withStyleContext";
+import { withStyleContextAndStates } from "@gluestack-ui/nativewind-utils/withStyleContextAndStates";
+import {
+  AnimatePresence,
+  createMotionAnimatedComponent,
+  Motion,
+} from "@legendapp/motion";
+import React, { useMemo } from "react";
 import {
   FlatList,
   Platform,
@@ -10,20 +21,8 @@ import {
   View,
   VirtualizedList,
 } from "react-native";
-
-import type { VariantProps } from "@gluestack-ui/nativewind-utils";
-import { tva } from "@gluestack-ui/nativewind-utils/tva";
-import { withStyleContext } from "@gluestack-ui/nativewind-utils/withStyleContext";
-import { withStyleContextAndStates } from "@gluestack-ui/nativewind-utils/withStyleContextAndStates";
-import {
-  AnimatePresence,
-  Motion,
-  createMotionAnimatedComponent,
-} from "@legendapp/motion";
-import { cssInterop } from "nativewind";
-
-import React, { useMemo } from "react";
-import { Svg } from "react-native-svg";
+import { cssInterop } from "react-native-css-interop";
+import Svg from "react-native-svg";
 
 const AnimatedPressable = createMotionAnimatedComponent(Pressable);
 
@@ -64,7 +63,7 @@ const PrimitiveIcon = React.forwardRef<
     return <AsComp ref={ref} {...sizeProps} {...colorProps} {...props} />;
   }
   return (
-    <Svg ref={ref} height={height} width={width} {...colorProps} {...props} />
+    <Svg height={height} ref={ref} width={width} {...colorProps} {...props} />
   );
 });
 
@@ -422,13 +421,13 @@ const ActionsheetBackdrop = React.forwardRef<
 >(({ className, ...props }, ref) => {
   return (
     <UIActionsheet.Backdrop
-      initial={{
-        opacity: 0,
-      }}
       animate={{
         opacity: 0.5,
       }}
       exit={{
+        opacity: 0,
+      }}
+      initial={{
         opacity: 0,
       }}
       {...props}
