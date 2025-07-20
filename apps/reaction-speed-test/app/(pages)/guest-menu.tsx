@@ -1,34 +1,12 @@
-import { useAsyncEffect } from "@reactuses/core";
-import { noop } from "es-toolkit";
-import { useRouter } from "expo-router";
-import { useState } from "react";
+import { Stack, useRouter } from "expo-router";
 import { Pressable, SafeAreaView, Text, View } from "react-native";
 import { Button, ButtonText } from "@/components/ui/button";
-import { useAuth } from "@/hooks/useAuth";
-import { fetchUsername } from "@/services";
 
-export default function MenuScreen() {
-  const [username, setUsername] = useState<string | null>(null);
+export default function GuestMenuScreen() {
   const router = useRouter();
-  const { user, signOut } = useAuth();
 
-  useAsyncEffect(
-    async () => {
-      try {
-        if (user) {
-          const username = await fetchUsername(user.id);
-          setUsername(username);
-        }
-      } catch (error) {
-        console.error("Error fetching username:", error);
-      }
-    },
-    noop,
-    [user],
-  );
-
-  const handleSignOut = async () => {
-    await signOut();
+  const handleLogin = () => {
+    router.push("/login");
   };
 
   const menuItems = [
@@ -45,26 +23,21 @@ export default function MenuScreen() {
       title: "기록 보기",
       description: "지금까지의 측정 기록을 확인하세요",
       icon: "📊",
-      href: "/results" as const,
-    },
-    {
-      id: "settings",
-      title: "설정",
-      description: "앱 설정을 변경하세요",
-      icon: "⚙️",
-      href: "/settings" as const,
+      href: "/guest-results" as const,
     },
   ];
 
   return (
     <SafeAreaView className="flex-1 items-center justify-center bg-slate-50 px-6 dark:bg-slate-950">
+      <Stack.Screen options={{ title: "비회원 메뉴", headerShown: false }} />
+
       <View className="w-full max-w-md items-center gap-y-12">
         <View className="items-center gap-y-4">
           <Text className="text-center font-bold text-3xl text-slate-900 dark:text-slate-100">
-            안녕하세요, {username || "사용자"}님!
+            환영합니다! 👋
           </Text>
           <Text className="text-center text-lg text-slate-600 dark:text-slate-400">
-            오늘도 반응 속도를 측정해보세요
+            비회원으로 앱을 사용하고 있습니다
           </Text>
         </View>
 
@@ -127,11 +100,11 @@ export default function MenuScreen() {
         <View className="w-full">
           <Button
             action="secondary"
-            className="h-14 w-full border border-slate-500 dark:border-slate-700"
-            onPress={handleSignOut}
+            className="h-12 w-full border border-slate-300 dark:border-slate-700"
+            onPress={handleLogin}
           >
-            <ButtonText className="text-lg text-slate-700 dark:text-slate-300">
-              로그아웃
+            <ButtonText className="text-slate-700 dark:text-slate-300">
+              로그인하기
             </ButtonText>
           </Button>
         </View>
