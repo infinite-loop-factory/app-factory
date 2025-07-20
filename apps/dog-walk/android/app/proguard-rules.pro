@@ -11,7 +11,4 @@
 -keep class com.swmansion.reanimated.** { *; }
 -keep class com.facebook.react.turbomodule.** { *; }
 
--keep class com.google.android.gms.maps.** { *; }
--keep class com.google.android.gms.maps.model.** { *; }
-
 # Add any project specific keep options here:
