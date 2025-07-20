@@ -59,7 +59,15 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     [
       "expo-build-properties",
       {
-        android: { googleServicesFile: "./google-services.json" },
+        android: {
+          googleServicesFile: "./google-services.json",
+          gradleProperties: {
+            "android.useAndroidX": "true",
+            "android.enableJetifier": "false",
+            "org.gradle.jvmargs":
+              "-Xmx4096m -XX:MaxMetaspaceSize=1024m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8",
+          },
+        },
       },
     ],
   ],
