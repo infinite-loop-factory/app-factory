@@ -1,7 +1,4 @@
-import Button from "@/components/Buttons";
-import CircleButton from "@/components/CircleButton";
-import IconButton from "@/components/IconButton";
-import ImageViewer from "@/components/ImageViewer";
+import { Audio } from "expo-av";
 import { useState } from "react";
 import {
   FlatList,
@@ -11,6 +8,10 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import Button from "@/components/Buttons";
+import CircleButton from "@/components/CircleButton";
+import IconButton from "@/components/IconButton";
+import ImageViewer from "@/components/ImageViewer";
 
 const ARTISTS = ["Jennie", "Lisa", "Rosé", "Jisoo", "IU"];
 
@@ -18,6 +19,9 @@ export default function Index() {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedArtist, setSelectedArtist] = useState("Jennie");
   const [showArtistOptions, setShowArtistOptions] = useState(false);
+  const [currentArtist, setCurrentArtist] = useState<string | null>(null);
+  const [sound, setSound] = useState<Audio.Sound | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   const images: Record<string, ImageSourcePropType> = {
     Jennie: require("../../assets/images/jennie.png"),
@@ -25,6 +29,14 @@ export default function Index() {
     Rosé: require("../../assets/images/rose.png"),
     Jisoo: require("../../assets/images/jisoo.png"),
     IU: require("../../assets/images/iu.png"),
+  };
+
+  const audioFiles: Record<string, any> = {
+    Jennie: require("../../assets/sounds/jennie.mp3"),
+    Lisa: require("../../assets/sounds/jennie.mp3"),
+    Rosé: require("../../assets/sounds/jennie.mp3"),
+    Jisoo: require("../../assets/sounds/jennie.mp3"),
+    IU: require("../../assets/sounds/jennie.mp3"),
   };
 
   const selectArtist = (artist: string) => {
@@ -37,8 +49,34 @@ export default function Index() {
     setShowArtistOptions(false);
   };
 
-  const onPlay = () => {
-    // i will implement this later
+  const onPlay = async () => {
+    try {
+      if (sound && currentArtist !== selectedArtist) {
+        await sound.stopAsync();
+        await sound.unloadAsync();
+        setSound(null);
+        setIsPlaying(false);
+      }
+
+      if (isPlaying && currentArtist === selectedArtist) {
+        await sound?.pauseAsync();
+        setIsPlaying(false);
+      } else {
+        if (!sound || currentArtist !== selectedArtist) {
+          const { sound: newSound } = await Audio.Sound.createAsync(
+            audioFiles[selectedArtist],
+          );
+          setSound(newSound);
+          setCurrentArtist(selectedArtist);
+          await newSound.playAsync();
+        } else {
+          await sound.playAsync();
+        }
+        setIsPlaying(true);
+      }
+    } catch (error) {
+      console.error("Audio playback error:", error);
+    }
   };
 
   const onShowQueue = async () => {
@@ -61,7 +99,15 @@ export default function Index() {
         {showArtistOptions ? (
           <View className="flex-row">
             <IconButton icon="refresh" label="Reset" onPress={onReset} />
-            <CircleButton onPress={onPlay} />
+            <CircleButton
+              iconName={
+                isPlaying && currentArtist === selectedArtist
+                  ? "pause"
+                  : "play-arrow"
+              }
+              onPress={onPlay}
+            />
+
             <IconButton
               icon="playlist-play"
               label="Queue"
@@ -80,8 +126,8 @@ export default function Index() {
       </View>
 
       <Modal
-        visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}
+        visible={modalVisible}
       >
         <View className="flex-1 items-center justify-center bg-black">
           <View className="w-3/4 rounded-lg p-4">
