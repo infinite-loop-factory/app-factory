@@ -5,7 +5,10 @@
   "main": "index.ts",
   "scripts": {
     "android": "cross-env DARK_MODE=media expo start --android",
+    "build:android": "eas build --platform android --profile production",
+    "build:apk": "eas build --platform android --profile production-apk",
     "build:dev": "eas build --profile development",
+    "build:prod": "eas build --profile production",
     "clean": "git clean -xdf .cache .expo .turbo android ios node_modules",
     "eas-build-post-install": "rm -rf patches",
     "eas-build-pre-install": "rm -rf patches",

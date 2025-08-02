@@ -19,6 +19,15 @@
       "autoIncrement": true,
       "node": "22.16.0",
       "pnpm": "10.12.1"
+    },
+    "production-apk": {
+      "android": {
+        "buildType": "apk"
+      },
+      "distribution": "internal",
+      "autoIncrement": true,
+      "node": "22.16.0",
+      "pnpm": "10.12.1"
     }
   },
   "submit": {
