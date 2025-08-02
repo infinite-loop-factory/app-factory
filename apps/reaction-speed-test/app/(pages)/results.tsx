@@ -7,18 +7,21 @@ import { Alert, Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { RecordList, RecordStatistics } from "@/components/results";
 import { Button, ButtonText } from "@/components/ui/button";
+import { useAuth } from "@/hooks/useAuth";
 import { useAuthAwareNavigation } from "@/hooks/useAuthAwareNavigation";
 import { useRecordStatistics } from "@/hooks/useRecordStatistics";
 import { getRecords } from "@/services";
 
 interface Record {
-  id: string;
-  created_at: string;
+  id?: string;
+  created_at?: string;
   result_value: number;
   unit: string;
+  reaction_time?: number;
 }
 
 const Results: FC = () => {
+  const { user } = useAuth();
   const { navigateBackWithFallback, navigateToMenu } = useAuthAwareNavigation();
   const [records, setRecords] = useState<Record[]>([]);
   const [loading, setLoading] = useState(true);
@@ -27,7 +30,10 @@ const Results: FC = () => {
   useAsyncEffect(
     async () => {
       try {
-        const data = await getRecords();
+        if (!user?.id) {
+          return;
+        }
+        const data = await getRecords(user.id);
         setRecords(data);
       } catch (error) {
         if (error instanceof Error) {
@@ -41,7 +47,7 @@ const Results: FC = () => {
       }
     },
     noop,
-    [],
+    [user?.id],
   );
 
   return (

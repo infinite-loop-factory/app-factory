@@ -7,3 +7,6 @@ dist/
 .cache
 
 *storybook.log
+
+# Claude Code files
+CLAUDE.md

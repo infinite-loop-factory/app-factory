@@ -1,27 +1,6 @@
 import type { ConfigContext, ExpoConfig } from "expo/config";
 
-// const validateEnv = () => {
-//   const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL || "";
-//   const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || "";
-
-//   if (!supabaseUrl) {
-//     throw new Error(
-//       "Required environment variable EXPO_PUBLIC_SUPABASE_URL is missing",
-//     );
-//   }
-
-//   if (!supabaseAnonKey) {
-//     throw new Error(
-//       "Required environment variable EXPO_PUBLIC_SUPABASE_ANON_KEY is missing",
-//     );
-//   }
-
-//   return { supabaseUrl, supabaseAnonKey };
-// };
-
 export default ({ config }: ConfigContext): ExpoConfig => {
-  // const env = validateEnv();
-
   return {
     ...config,
     name: "reaction-speed-test",
@@ -63,8 +42,6 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       eas: {
         projectId: "bf06d3a4-f856-475c-8c2b-993178ae6c12",
       },
-      // supabaseUrl: env.supabaseUrl,
-      // supabaseAnonKey: env.supabaseAnonKey,
     },
   };
 };
