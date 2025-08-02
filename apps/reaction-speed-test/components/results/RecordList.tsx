@@ -2,8 +2,8 @@ import { Text, View } from "react-native";
 import { formatDateTime } from "@/utils/date";
 
 interface RecordData {
-  id: string;
-  created_at: string;
+  id?: string;
+  created_at?: string;
   result_value: number;
   unit: string;
 }
@@ -53,7 +53,7 @@ export const RecordList = <T extends RecordData>({
         return (
           <View
             className={`flex-row items-center justify-between border-slate-100 border-b p-4 last:border-b-0 dark:border-slate-800 ${getBackgroundStyle(isLowest, isNewest)}`}
-            key={record.id}
+            key={record.id || index}
           >
             <View className="flex-row items-center">
               <View
@@ -71,7 +71,9 @@ export const RecordList = <T extends RecordData>({
                   {record.unit}
                 </Text>
                 <Text className="text-slate-500 text-sm dark:text-slate-500">
-                  {formatDateTime(record.created_at, "Asia/Seoul")}
+                  {record.created_at
+                    ? formatDateTime(record.created_at, "Asia/Seoul")
+                    : "알 수 없음"}
                 </Text>
               </View>
             </View>
