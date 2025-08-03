@@ -57,7 +57,7 @@ export default function MapScreen() {
       );
 
       // * 크기 조절
-      bottomSheetRef.current?.snapToIndex(2);
+      bottomSheetRef.current?.snapToIndex(1);
     } else {
       setSelectedCountry(null);
       Alert.alert(
@@ -75,11 +75,12 @@ export default function MapScreen() {
         backgroundStyle={{ backgroundColor }}
         enableDynamicSizing={false}
         handleIndicatorStyle={{ backgroundColor: textColor }}
+        index={0}
         onChange={handleSheetChanges}
         ref={bottomSheetRef}
-        snapPoints={["40%", "90%", "20%"]}
+        snapPoints={["20%", "40%", "90%"]}
       >
-        <BottomSheetView className="px-4 py-2">
+        <BottomSheetView style={{ paddingHorizontal: 24, paddingVertical: 16 }}>
           <View className="mb-2 flex flex-row items-center justify-between">
             <Heading
               className="font-bold text-2xl"
