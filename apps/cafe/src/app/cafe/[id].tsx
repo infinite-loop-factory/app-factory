@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { NaverMapView } from "../../components/NaverMapView";
+import { ReviewForm } from "../../components/ReviewForm";
 
 // Mock data for cafe details
 const cafeDetails = {
@@ -103,6 +104,16 @@ export default function CafeDetailScreen() {
   const { id } = useLocalSearchParams();
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("메뉴");
+  const [showReviewForm, setShowReviewForm] = useState(false);
+  const [reviews, setReviews] = useState<
+    Array<{
+      id: string;
+      rating: number;
+      content: string;
+      date: string;
+      author: string;
+    }>
+  >([]);
 
   // Get cafe details based on ID
   const cafe = cafeDetails[id as keyof typeof cafeDetails];
@@ -127,9 +138,9 @@ export default function CafeDetailScreen() {
         {/* Header with back button */}
         <View className="relative">
           <Image
-            source={cafe.image}
             className="h-64 w-full"
             resizeMode="cover"
+            source={cafe.image}
           />
           <TouchableOpacity
             className="absolute top-4 left-4 flex h-7 w-7 items-center justify-center rounded-full bg-black/50 p-2"
@@ -154,7 +165,7 @@ export default function CafeDetailScreen() {
             <Text className="font-bold text-lg text-yellow-500">
               {cafe.rating}
             </Text>
-            <Star className="ml-1" size={16} fill="#fbbf24" color="#fbbf24" />
+            <Star className="ml-1" color="#fbbf24" fill="#fbbf24" size={16} />
             <Text className="ml-1 text-gray-500">({cafe.reviews} 리뷰)</Text>
             <Text className="ml-4 text-gray-500">{cafe.members}</Text>
           </View>
@@ -177,17 +188,17 @@ export default function CafeDetailScreen() {
           {/* Naver Map View */}
           <View className="mt-4">
             <Text className="mb-2 font-bold text-lg">위치</Text>
-            <NaverMapView address={cafe.address} width={350} height={180} />
+            <NaverMapView address={cafe.address} height={180} width={350} />
           </View>
         </View>
 
         {/* Tabs */}
         <View className="flex-row border-gray-200 border-b">
           <TouchableOpacity
-            onPress={() => setActiveTab("메뉴")}
             className={`flex-1 items-center py-3 ${
               activeTab === "메뉴" ? "border-black border-b-2" : ""
             }`}
+            onPress={() => setActiveTab("메뉴")}
           >
             <Text
               className={`${
@@ -200,10 +211,10 @@ export default function CafeDetailScreen() {
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => setActiveTab("소식")}
             className={`flex-1 items-center py-3 ${
               activeTab === "소식" ? "border-black border-b-2" : ""
             }`}
+            onPress={() => setActiveTab("소식")}
           >
             <Text
               className={`${
@@ -216,10 +227,10 @@ export default function CafeDetailScreen() {
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => setActiveTab("리뷰")}
             className={`flex-1 items-center py-3 ${
               activeTab === "리뷰" ? "border-black border-b-2" : ""
             }`}
+            onPress={() => setActiveTab("리뷰")}
           >
             <Text
               className={`${
@@ -240,13 +251,13 @@ export default function CafeDetailScreen() {
               <Text className="mb-4 font-bold text-lg">인기 메뉴</Text>
               {cafe.menu.map((item) => (
                 <View
-                  key={item.id}
                   className="mb-4 flex-row border-gray-100 border-b pb-4"
+                  key={item.id}
                 >
                   <Image
-                    source={item.image}
                     className="h-20 w-20 rounded-md bg-gray-200"
                     resizeMode="cover"
+                    source={item.image}
                   />
                   <View className="ml-3 flex-1">
                     <View className="flex-row justify-between">
@@ -267,8 +278,8 @@ export default function CafeDetailScreen() {
               <Text className="mb-4 font-bold text-lg">최근 소식</Text>
               {cafe.posts.map((post) => (
                 <View
-                  key={post.id}
                   className="mb-4 border-gray-100 border-b pb-4"
+                  key={post.id}
                 >
                   <Text className="font-bold text-base">{post.title}</Text>
                   <Text className="mt-1 text-gray-600">{post.content}</Text>
@@ -283,14 +294,73 @@ export default function CafeDetailScreen() {
             </>
           )}
 
-          {activeTab === "리뷰" && (
-            <View className="items-center justify-center py-8">
-              <Text className="text-gray-500">아직 리뷰가 없습니다.</Text>
-              <TouchableOpacity className="mt-4 rounded-md bg-black px-4 py-2">
-                <Text className="text-white">리뷰 작성하기</Text>
-              </TouchableOpacity>
-            </View>
-          )}
+          {activeTab === "리뷰" &&
+            (showReviewForm ? (
+              <ReviewForm
+                cafeId={cafe.id}
+                onCancel={() => setShowReviewForm(false)}
+                onSubmit={(review) => {
+                  const newReview = {
+                    id: Date.now().toString(),
+                    rating: review.rating,
+                    content: review.content,
+                    date: String(new Date().toISOString().split("T")[0]),
+                    author: "사용자",
+                  };
+                  setReviews([newReview, ...reviews]);
+                  setShowReviewForm(false);
+                }}
+              />
+            ) : (
+              <View className="py-4">
+                <View className="mb-4 flex-row items-center justify-between">
+                  <Text className="font-bold text-lg">
+                    리뷰 {reviews.length}개
+                  </Text>
+                  <TouchableOpacity
+                    className="rounded-md bg-black px-4 py-2"
+                    onPress={() => setShowReviewForm(true)}
+                  >
+                    <Text className="text-white">리뷰 작성하기</Text>
+                  </TouchableOpacity>
+                </View>
+
+                {reviews.length === 0 ? (
+                  <View className="items-center justify-center py-8">
+                    <Text className="text-gray-500">아직 리뷰가 없습니다.</Text>
+                  </View>
+                ) : (
+                  reviews.map((review) => (
+                    <View
+                      className="mb-4 border-gray-100 border-b pb-4"
+                      key={review.id}
+                    >
+                      <View className="flex-row items-center justify-between">
+                        <Text className="font-bold">{review.author}</Text>
+                        <Text className="text-gray-400 text-xs">
+                          {review.date}
+                        </Text>
+                      </View>
+                      <View className="my-1 flex-row items-center">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <Star
+                            color="#fbbf24"
+                            fill={
+                              review.rating >= star ? "#fbbf24" : "transparent"
+                            }
+                            key={star}
+                            size={16}
+                          />
+                        ))}
+                      </View>
+                      <Text className="mt-1 text-gray-600">
+                        {review.content}
+                      </Text>
+                    </View>
+                  ))
+                )}
+              </View>
+            ))}
         </View>
       </ScrollView>
     </SafeAreaView>
