@@ -22,6 +22,7 @@ export default function Index() {
   const [currentArtist, setCurrentArtist] = useState<string | null>(null);
   const [sound, setSound] = useState<Audio.Sound | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [queueModalVisible, setQueueModalVisible] = useState(false);
 
   const images: Record<string, ImageSourcePropType> = {
     Jennie: require("../../assets/images/jennie.png"),
@@ -37,6 +38,31 @@ export default function Index() {
     Rosé: require("../../assets/sounds/jennie.mp3"),
     Jisoo: require("../../assets/sounds/jennie.mp3"),
     IU: require("../../assets/sounds/jennie.mp3"),
+  };
+
+  const artistTracks: Record<string, { title: string; file: number }[]> = {
+    Jennie: [
+      { title: "SOLO", file: require("../../assets/sounds/jennie.mp3") },
+      { title: "You & Me", file: require("../../assets/sounds/jennie.mp3") },
+    ],
+    Lisa: [
+      { title: "LALISA", file: require("../../assets/sounds/jennie.mp3") },
+      { title: "MONEY", file: require("../../assets/sounds/jennie.mp3") },
+    ],
+    Rosé: [
+      {
+        title: "On The Ground",
+        file: require("../../assets/sounds/jennie.mp3"),
+      },
+      { title: "GONE", file: require("../../assets/sounds/jennie.mp3") },
+    ],
+    Jisoo: [
+      { title: "FLOWER", file: require("../../assets/sounds/jennie.mp3") },
+    ],
+    IU: [
+      { title: "Blueming", file: require("../../assets/sounds/jennie.mp3") },
+      { title: "Celebrity", file: require("../../assets/sounds/jennie.mp3") },
+    ],
   };
 
   const selectArtist = (artist: string) => {
@@ -79,8 +105,8 @@ export default function Index() {
     }
   };
 
-  const onShowQueue = async () => {
-    // i will implement this later
+  const onShowQueue = () => {
+    setQueueModalVisible(true);
   };
 
   return (
@@ -147,6 +173,49 @@ export default function Index() {
               )}
             />
             <Button label="Cancel" onPress={() => setModalVisible(false)} />
+          </View>
+        </View>
+      </Modal>
+      <Modal
+        onRequestClose={() => setQueueModalVisible(false)}
+        transparent={true}
+        visible={queueModalVisible}
+      >
+        <View className="flex-1 items-center justify-center bg-black bg-opacity-80">
+          <View className="max-h-[70%] w-11/12 rounded-lg bg-[#1a1a1a] p-5">
+            <Text className="mb-4 font-bold text-lg text-white">
+              {selectedArtist}'s Songs
+            </Text>
+            <FlatList
+              data={artistTracks[selectedArtist]}
+              keyExtractor={(item) => item.title}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  className="mb-2 rounded bg-gray-800 p-3"
+                  onPress={async () => {
+                    try {
+                      if (sound) {
+                        await sound.stopAsync();
+                        await sound.unloadAsync();
+                      }
+                      const { sound: newSound } = await Audio.Sound.createAsync(
+                        item.file as AVPlaybackSource,
+                      );
+                      setSound(newSound);
+                      setCurrentArtist(selectedArtist);
+                      await newSound.playAsync();
+                      setIsPlaying(true);
+                      setQueueModalVisible(false);
+                    } catch (error) {
+                      console.error("Error playing track:", error);
+                    }
+                  }}
+                >
+                  <Text className="text-white">{item.title}</Text>
+                </TouchableOpacity>
+              )}
+            />
+            <Button label="Close" onPress={() => setQueueModalVisible(false)} />
           </View>
         </View>
       </Modal>
