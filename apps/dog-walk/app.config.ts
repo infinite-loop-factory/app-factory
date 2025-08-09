@@ -74,7 +74,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
           NSLocationTemporaryUsageDescriptionDictionary: {
             purposeKey: "dog-walk",
             usageDescription:
-              "주변에 있는 산ㅐ 코스 추천을 위해 현재 위치 정보가 필요합니다.",
+              "주변에 있는 산책 코스 추천을 위해 현재 위치 정보가 필요합니다.",
           },
         },
       },
