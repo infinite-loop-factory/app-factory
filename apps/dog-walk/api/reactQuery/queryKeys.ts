@@ -5,4 +5,7 @@ export const queryKeys = {
   dogs: {
     findDogs: "dogs",
   },
+  tmap: {
+    pois: "tmap/pois",
+  },
 };

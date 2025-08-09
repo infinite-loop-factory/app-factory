@@ -26,6 +26,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       backgroundColor: "#ffffff",
     },
     googleServicesFile: "./google-services.json",
+    newArchEnabled: true,
   },
   web: {
     bundler: "metro",
@@ -57,9 +58,40 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       },
     ],
     [
+      "@mj-studio/react-native-naver-map",
+      {
+        client_id: process.env.EXPO_PUBLIC_NAVER_MAP_CLIENT_ID,
+        android: {
+          ACCESS_FINE_LOCATION: true,
+          ACCESS_COARSE_LOCATION: true,
+          ACCESS_BACKGROUND_LOCATION: true,
+        },
+        ios: {
+          NSLocationAlwaysAndWhenInUseUsageDescription:
+            "앱이 백그라운드에서도 현재 위치를 사용하여 주변 서비스를 제공할 수 있도록 허용해 주세요.",
+          NSLocationWhenInUseUsageDescription:
+            "앱 사용 중 현재 위치를 기반으로 맞춤형 정보를 제공하기 위해 위치 접근이 필요합니다.",
+          NSLocationTemporaryUsageDescriptionDictionary: {
+            purposeKey: "dog-walk",
+            usageDescription:
+              "주변에 있는 산책 코스 추천을 위해 현재 위치 정보가 필요합니다.",
+          },
+        },
+      },
+    ],
+    [
       "expo-build-properties",
       {
-        android: { googleServicesFile: "./google-services.json" },
+        android: {
+          googleServicesFile: "./google-services.json",
+          gradleProperties: {
+            "android.useAndroidX": "true",
+            "android.enableJetifier": "false",
+            "org.gradle.jvmargs":
+              "-Xmx4096m -XX:MaxMetaspaceSize=1024m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8",
+          },
+          extraMavenRepos: ["https://repository.map.naver.com/archive/maven"],
+        },
       },
     ],
   ],
