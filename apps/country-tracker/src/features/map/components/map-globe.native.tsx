@@ -9,7 +9,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { Animated, Easing } from "react-native";
+import { Animated, Easing, Platform } from "react-native";
 import MapView, { Polygon } from "react-native-maps";
 import { QUERY_KEYS } from "@/constants/query-keys";
 import { useAuthUser } from "@/hooks/use-auth-user";
@@ -153,7 +153,20 @@ const MapGlobe = forwardRef<MapGlobeRef>((_, ref) => {
           latitudeDelta: currentZoom,
           longitudeDelta: currentZoom,
         };
+        // Keep region in sync for both platforms
         mapRef.current?.animateToRegion(newRegion, 0);
+
+        // Android: apply subtle tilt for faux-3D
+        if (Platform.OS === "android") {
+          mapRef.current?.animateCamera(
+            {
+              center: { latitude: currentLat, longitude: currentLng },
+              pitch: 35,
+              heading: 0,
+            },
+            { duration: 0 },
+          );
+        }
       });
 
       Animated.timing(animatedValue, {
@@ -171,6 +184,19 @@ const MapGlobe = forwardRef<MapGlobeRef>((_, ref) => {
           longitudeDelta: zoomLevel,
         };
         mapRef.current?.animateToRegion(finalRegion, 300);
+        if (Platform.OS === "android") {
+          mapRef.current?.animateCamera(
+            {
+              center: {
+                latitude: targetLatitude,
+                longitude: normalizeLongitude(targetLongitude),
+              },
+              pitch: 35,
+              heading: 0,
+            },
+            { duration: 300 },
+          );
+        }
       });
     },
   }));
@@ -190,7 +216,7 @@ const MapGlobe = forwardRef<MapGlobeRef>((_, ref) => {
 
   return (
     <MapView
-      mapType="satelliteFlyover"
+      mapType={Platform.OS === "ios" ? "satelliteFlyover" : "terrain"}
       onRegionChangeComplete={(newRegion) => setRegion(newRegion)}
       ref={mapRef}
       region={region}

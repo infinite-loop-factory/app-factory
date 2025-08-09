@@ -15,7 +15,9 @@
   "map": {
     "tab": "Map",
     "countries": "Countries",
-    "search-placeholder": "Search for a country"
+    "search-placeholder": "Search for a country",
+    "web-disclaimer": "3D globe is available on iOS. This is a 2D web view.",
+    "download-app": "Download the app"
   },
 
   "settings": {

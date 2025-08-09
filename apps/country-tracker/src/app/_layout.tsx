@@ -105,9 +105,9 @@ function RootLayout() {
   }
 
   return (
-    <SafeAreaProvider>
-      <QueryClientProvider client={queryClient}>
-        <JotaiProvider store={store}>
+    <JotaiProvider store={store}>
+      <SafeAreaProvider>
+        <QueryClientProvider client={queryClient}>
           <GluestackUIProvider mode={savedTheme}>
             <GestureHandlerRootView style={{ flex: 1 }}>
               <ThemeProvider
@@ -119,9 +119,9 @@ function RootLayout() {
               </ThemeProvider>
             </GestureHandlerRootView>
           </GluestackUIProvider>
-        </JotaiProvider>
-      </QueryClientProvider>
-    </SafeAreaProvider>
+        </QueryClientProvider>
+      </SafeAreaProvider>
+    </JotaiProvider>
   );
 }
 

@@ -1,6 +1,5 @@
 {
   "welcome": "환영합니다",
-  "map": "지도",
 
   "home": {
     "tab": "홈",
@@ -49,6 +48,14 @@
       }
     },
     "logout": "로그아웃"
+  },
+
+  "map": {
+    "tab": "지도",
+    "countries": "국가",
+    "search-placeholder": "국가 검색",
+    "web-disclaimer": "3D 지구본은 iOS에서만 지원됩니다. 현재는 2D 웹 보기입니다.",
+    "download-app": "앱 다운로드"
   },
 
   "login": {
