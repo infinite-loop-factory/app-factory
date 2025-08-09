@@ -21,13 +21,26 @@ import "react-native-reanimated";
 import "@/i18n";
 import "react-native-url-polyfill/auto";
 
-global.WebSocket = require("react-native-websocket");
+// WebSocket polyfill for React Native
+if (typeof global.WebSocket === "undefined") {
+  try {
+    global.WebSocket = require("react-native-websocket");
+  } catch (error) {
+    // Gracefully handle WebSocket polyfill loading failure
+    console.error("WebSocket polyfill failed to load:", error);
+  }
+}
 
 AppState.addEventListener("change", (state) => {
-  if (state === "active") {
-    supabase.auth.startAutoRefresh();
-  } else {
-    supabase.auth.stopAutoRefresh();
+  try {
+    if (state === "active") {
+      supabase.auth.startAutoRefresh();
+    } else {
+      supabase.auth.stopAutoRefresh();
+    }
+  } catch (error) {
+    // Gracefully handle Supabase auth refresh errors
+    console.error("Supabase auth refresh error:", error);
   }
 });
 
