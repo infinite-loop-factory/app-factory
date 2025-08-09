@@ -11,6 +11,7 @@ import {
 } from "react";
 import { Animated, Easing } from "react-native";
 import MapView, { Polygon } from "react-native-maps";
+import { QUERY_KEYS } from "@/constants/query-keys";
 import { useAuthUser } from "@/hooks/use-auth-user";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { fetchVisitedCountries } from "@/utils/visited-countries";
@@ -65,7 +66,7 @@ const MapGlobe = forwardRef<MapGlobeRef>((_, ref) => {
   });
 
   const { data: countryPolygons } = useQuery({
-    queryKey: ["country-polygons", user?.id],
+    queryKey: QUERY_KEYS.countryPolygons(user?.id ?? null),
     queryFn: async () => {
       if (!user) return [];
       const visited = await fetchVisitedCountries(user.id);

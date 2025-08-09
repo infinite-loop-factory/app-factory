@@ -1,5 +1,6 @@
 import type { Provider } from "@supabase/supabase-js";
 
+import * as Sentry from "@sentry/react-native";
 import clsx from "clsx";
 import { makeRedirectUri } from "expo-auth-session";
 import * as QueryParams from "expo-auth-session/build/QueryParams";
@@ -11,6 +12,13 @@ import { ActivityIndicator, View } from "react-native";
 import { Button } from "@/components/ui/button";
 import { Image } from "@/components/ui/image";
 import { Text } from "@/components/ui/text";
+import {
+  Toast,
+  ToastDescription,
+  ToastTitle,
+  useToast,
+} from "@/components/ui/toast";
+import { flushLocationQueueIfAny } from "@/features/location/location-task";
 import { useAuthUser } from "@/hooks/use-auth-user";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import i18n from "@/libs/i18n";
@@ -62,26 +70,51 @@ export default function LoginPage() {
     "typography-900",
     "typography",
   ]);
+  const toast = useToast();
 
   useEffect(() => {
     if (user) {
+      // best-effort: flush any queued background locations after auth
+      flushLocationQueueIfAny().catch((e) =>
+        Sentry.captureMessage(`queue flush failed: ${String(e)}`),
+      );
       router.replace("/");
     }
   }, [user, router]);
 
   const handleLogin = async (provider: Provider) => {
-    const { data, error } = await supabase.auth.signInWithOAuth({
-      provider,
-      options: { redirectTo, skipBrowserRedirect: true },
-    });
-    if (error) throw error;
+    try {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider,
+        options: { redirectTo, skipBrowserRedirect: true },
+      });
+      if (error) throw error;
 
-    const res = await WebBrowser.openAuthSessionAsync(
-      data?.url ?? "",
-      redirectTo,
-    );
-    if (res.type === "success") {
-      await createSessionFromUrl(res.url);
+      const res = await WebBrowser.openAuthSessionAsync(
+        data?.url ?? "",
+        redirectTo,
+      );
+      if (res.type === "success") {
+        await createSessionFromUrl(res.url);
+        // after setting session, flush any queued locations
+        await flushLocationQueueIfAny();
+      }
+    } catch (e) {
+      const message =
+        e instanceof Error ? e.message : i18n.t("home.error-loading");
+      toast.show({
+        duration: 3000,
+        render: () => (
+          <Toast
+            action="error"
+            className="border-neutral-600"
+            variant="outline"
+          >
+            <ToastTitle>{i18n.t("settings.toast.language.title")}</ToastTitle>
+            <ToastDescription>{message}</ToastDescription>
+          </Toast>
+        ),
+      });
     }
   };
 

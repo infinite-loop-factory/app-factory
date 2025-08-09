@@ -7,6 +7,8 @@ import { Box } from "@/components/ui/box";
 import { Divider } from "@/components/ui/divider";
 import { Switch } from "@/components/ui/switch";
 import { Text } from "@/components/ui/text";
+import { QUERY_KEYS } from "@/constants/query-keys";
+import { DENYLIST_STORAGE_KEY } from "@/constants/storage-keys";
 import { useAuthUser } from "@/hooks/use-auth-user";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import i18n from "@/libs/i18n";
@@ -17,7 +19,7 @@ type AllCountry = {
   country_code: string;
 };
 
-const DENYLIST_STORAGE_KEY = "denylisted_countries";
+// moved to shared constants
 
 // Fetches all unique countries from the user's location history
 const fetchAllUniqueCountries = async (
@@ -67,8 +69,11 @@ export default function DenylistScreen() {
     ]);
 
   const { data: allCountries, isLoading: isLoadingCountries } = useQuery({
-    queryKey: ["all-unique-countries", user?.id],
-    queryFn: () => fetchAllUniqueCountries(user?.id),
+    queryKey: QUERY_KEYS.allUniqueCountries(user?.id ?? null),
+    queryFn: async () => {
+      if (!user) return [] as AllCountry[];
+      return await fetchAllUniqueCountries(user.id);
+    },
     enabled: !!user,
   });
 
@@ -93,8 +98,12 @@ export default function DenylistScreen() {
     await saveDenylist(newDenylist);
 
     // Invalidate queries to refetch
-    await queryClient.invalidateQueries({ queryKey: ["visited-countries"] });
-    await queryClient.invalidateQueries({ queryKey: ["country-polygons"] });
+    await queryClient.invalidateQueries({
+      queryKey: QUERY_KEYS.visitedCountries(null),
+    });
+    await queryClient.invalidateQueries({
+      queryKey: QUERY_KEYS.countryPolygons(user?.id ?? null),
+    });
   };
 
   const isLoading = isLoadingCountries || isLoadingDenylist;
@@ -126,6 +135,7 @@ export default function DenylistScreen() {
                     {country.country}
                   </Text>
                   <Switch
+                    accessibilityLabel={i18n.t("settings.denylist.switch-a11y")}
                     ios_backgroundColor={switchBgColor}
                     onValueChange={() =>
                       handleToggle(country.country_code, isDenylisted)
