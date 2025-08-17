@@ -1,5 +1,4 @@
 import axios from "axios";
-import { useState } from "react";
 
 interface IDetailMapProps {
   start: {
@@ -12,23 +11,20 @@ interface IDetailMapProps {
   };
 }
 
-interface Coord {
-  lat: number;
-  lon: number;
-}
-
 interface TMapResponse {
   features: {
     geometry: {
       type: string;
       coordinates: [number, number][];
     };
+    properties: {
+      totalDistance: number;
+      totalTime: number;
+    };
   }[];
 }
 
 export default function usePedestrianRoutes() {
-  const [pathCoords, setPathCoords] = useState<Coord[]>([]);
-
   const fetchRoutes = async ({ start, end }: IDetailMapProps) => {
     if (!(start.latitude && start.longitude && end.latitude && end.longitude))
       return;
@@ -65,17 +61,22 @@ export default function usePedestrianRoutes() {
   const getRoutes = async ({ start, end }: IDetailMapProps) => {
     const data = await fetchRoutes({ start, end });
 
-    if (!data?.length) return [];
+    if (!data?.length)
+      return { pathCoords: [], totalDistance: 0, totalTime: 0 };
+
+    const distanceFeature = data.find(
+      (item) => item.properties?.totalDistance !== undefined,
+    );
+    const totalDistance = distanceFeature?.properties?.totalDistance ?? 0;
+    const totalTime = distanceFeature?.properties?.totalTime ?? 0;
 
     const pathCoords = data
       .filter((item) => item.geometry.type === "LineString")
       .flatMap((item) => item.geometry.coordinates)
       .map(([lon, lat]) => ({ lat, lon }));
 
-    setPathCoords(pathCoords);
-
-    return pathCoords;
+    return { pathCoords, totalDistance, totalTime };
   };
 
-  return { getRoutes, pathCoords };
+  return { getRoutes };
 }
