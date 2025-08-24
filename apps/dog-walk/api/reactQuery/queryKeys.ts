@@ -8,4 +8,7 @@ export const queryKeys = {
   tmap: {
     pois: "tmap/pois",
   },
+  course: {
+    findCourse: "course",
+  },
 };

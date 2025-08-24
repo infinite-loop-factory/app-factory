@@ -1,8 +1,8 @@
 import * as ImagePicker from "expo-image-picker";
 import { router } from "expo-router";
-import { useAtomValue } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { Camera, MapPinPlusInside } from "lucide-react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Image,
   Platform,
@@ -11,6 +11,7 @@ import {
   View,
 } from "react-native";
 import { endPointAtom, startPointAtom } from "@/atoms/pointAtom";
+import { userAtom } from "@/atoms/userAtom";
 import CustomSafeAreaView from "@/components/CustomSafeAriaView";
 import DatePickerModal from "@/components/DatePickerModal";
 import HeaderBar from "@/components/HeaderBar";
@@ -19,12 +20,15 @@ import SectionTitle from "@/components/SectionTitle";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
 import { Textarea, TextareaInput } from "@/components/ui/textarea";
+import { useRegisterWalkingCourse } from "@/hooks/useRegisterWalkingCourse";
 
 export default function AddScreen() {
-  const startPoint = useAtomValue(startPointAtom);
-  const endPoint = useAtomValue(endPointAtom);
+  const userInfo = useAtomValue(userAtom);
 
-  const [image, setImage] = useState<string | null>(null);
+  const [startPoint, setStartPoint] = useAtom(startPointAtom);
+  const [endPoint, setEndPoint] = useAtom(endPointAtom);
+
+  const [image, setImage] = useState<ImagePicker.ImagePickerAsset[]>([]);
 
   const [date, setDate] = useState(new Date());
 
@@ -32,11 +36,13 @@ export default function AddScreen() {
 
   const [description, setDescription] = useState("");
 
+  const { handleRegister } = useRegisterWalkingCourse();
+
   const isRegistrationEnabled =
     date &&
     startPoint?.name &&
     endPoint?.name &&
-    image &&
+    image.length > 0 &&
     description.trim().length > 0;
 
   const pickImage = async () => {
@@ -45,11 +51,43 @@ export default function AddScreen() {
       allowsEditing: true,
       aspect: [1, 1],
       quality: 1,
+      base64: true,
     });
 
-    if (result && !result.canceled) {
-      setImage((result.assets[0] ?? { uri: "" }).uri);
+    if (result && !result.canceled && result.assets[0]) {
+      const courseImage = result.assets[0];
+
+      setImage(() => [courseImage]);
     }
+  };
+
+  // NOTE: 산책 코스 등록 화면 언마운트시 전역변수 초기화
+  useEffect(() => {
+    return () => {
+      setStartPoint(null);
+      setEndPoint(null);
+    };
+  }, [setStartPoint, setEndPoint]);
+
+  const onPressRegister = () => {
+    if (!(startPoint && endPoint)) return;
+
+    handleRegister({
+      userId: userInfo.id,
+      visitedDate: date,
+      start: {
+        name: startPoint.name,
+        lat: startPoint.latitude,
+        lng: startPoint.longitude,
+      },
+      end: {
+        name: endPoint.name,
+        lat: endPoint.latitude,
+        lng: endPoint.longitude,
+      },
+      courseImage: image,
+      recommendReason: description,
+    });
   };
 
   return (
@@ -127,13 +165,15 @@ export default function AddScreen() {
             className="flex aspect-[1/1] items-center justify-center rounded-xl bg-slate-50"
             onPress={pickImage}
           >
-            {!image && (
+            {image.length === 0 && (
               <View className="flex h-full w-full flex-col items-center justify-center gap-2">
                 <Camera className="h-6 w-6" color={"#6DBE6E"} />
                 <Text className="text-slate-600">사진 추가</Text>
               </View>
             )}
-            {image && <Image className="h-72 w-72 rounded-xl" src={image} />}
+            {image.length > 0 && (
+              <Image className="h-72 w-72 rounded-xl" src={image[0]?.uri} />
+            )}
           </TouchableOpacity>
         </SectionTitle>
         <SectionTitle title={"추천 이유"}>
@@ -151,6 +191,7 @@ export default function AddScreen() {
         <Button
           className="rounded-xl"
           isDisabled={!isRegistrationEnabled}
+          onPress={onPressRegister}
           size={"xl"}
         >
           <ButtonText>등록하기</ButtonText>
