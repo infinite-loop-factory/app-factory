@@ -23,7 +23,6 @@ import WebviewLayout from "@/components/web-view-layout";
 import { env } from "@/constants/env";
 import "@/features/location/location-task";
 
-// Lazily import expo-network to avoid native module errors in mismatched clients
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useNetworkState } from "expo-network";
 import { useRef } from "react";
@@ -87,7 +86,6 @@ function RootLayout() {
     startLocationTask();
   }, []);
 
-  // Flush when connectivity becomes available
   useEffect(() => {
     const connected =
       Boolean(net.isConnected) && net.isInternetReachable !== false;
