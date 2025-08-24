@@ -1,161 +1,97 @@
-import usePedestrianRoutes from "@/hooks/usePedestrianRoutes";
-import { useEffect, useRef, useState } from "react";
-import { StyleSheet } from "react-native";
-import { WebView } from "react-native-webview";
+import {
+  type Coord,
+  NaverMapMarkerOverlay,
+  NaverMapPathOverlay,
+  NaverMapView,
+  type NaverMapViewRef,
+  type Region,
+} from "@mj-studio/react-native-naver-map";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Dimensions, Image } from "react-native";
+import Images from "@/assets/images";
 
 interface IDetailMapProps {
-  start: {
-    latitude: number;
-    longitude: number;
-  };
-  end: {
-    latitude: number;
-    longitude: number;
-  };
+  path: { lat: number; lon: number }[];
+  start: { latitude: number; longitude: number };
+  end: { latitude: number; longitude: number };
 }
 
-export default function DetailMap({ start, end }: IDetailMapProps) {
-  const webViewRef = useRef<WebView>(null);
+export default function DetailMap({ path, start, end }: IDetailMapProps) {
+  const screenWidth = Dimensions.get("window").width;
 
-  const [isWebViewReady, setIsWebViewReady] = useState(false);
+  const mapRef = useRef<NaverMapViewRef | null>(null);
+  const [mapReady, setMapReady] = useState(false);
 
-  const { getRoutes, pathCoords } = usePedestrianRoutes();
+  const coords: Coord[] = useMemo(() => {
+    const converted = path.map((p) => ({
+      latitude: p.lat,
+      longitude: p.lon,
+    }));
 
-  const html = `
-    <html>
-      <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.EXPO_PUBLIC_KAKAO_MAPS_KEY}&libraries=services"></script>
-      </head>
-      <body style="margin:0;padding:0;">
-        <div id="map" style="width:100%;height:100%"></div>
-        <script>
-          let map;
-  
-          function drawPath(path) {
-            const linePath = path.map(coord => new kakao.maps.LatLng(coord.lat, coord.lon));
-          
-            const polyline = new kakao.maps.Polyline({
-              path: linePath,
-              strokeWeight: 5,
-              strokeColor: '#A9746E',
-              strokeOpacity: 0.8,
-              strokeStyle: 'solid'
-            });
-          
-            polyline.setMap(map);
-  
-            // NOTE: 경로 전체가 화면에 보이도록 설정
-            const bounds = new kakao.maps.LatLngBounds();
-            linePath.forEach(p => bounds.extend(p));
-            map.setBounds(bounds);
-          }
-  
-          document.addEventListener("DOMContentLoaded", function() {
-            function waitForKakao() {
-              if (window.kakao && window.kakao.maps) {
-                initMap();
-                window.ReactNativeWebView.postMessage("READY");
-              } else {
-                setTimeout(waitForKakao, 100);
-              }
-            }
-  
-            function initMap() {
-              const container = document.getElementById('map');
-  
-              const options = {
-                center: new kakao.maps.LatLng(${start.latitude}, ${start.longitude}),
-                level: 3
-              };
-  
-              map = new kakao.maps.Map(container, options);
-  
-              const startSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/red_b.png',
-                startSize = new kakao.maps.Size(50, 45),
-                startOption = { 
-                  offset: new kakao.maps.Point(15, 43)
-                };
-  
-  
-              const startImage = new kakao.maps.MarkerImage(startSrc, startSize, startOption);
-  
-  
-              const arriveSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/blue_b.png',
-                arriveSize = new kakao.maps.Size(50, 45),
-                arriveOption = { 
-                  offset: new kakao.maps.Point(15, 43)
-                };
-  
-              const arriveImage = new kakao.maps.MarkerImage(arriveSrc, arriveSize, arriveOption);
-  
-              const locations = ${JSON.stringify([start, end])};
-  
-              locations.forEach((item, index) => {
-                const markerPosition = new kakao.maps.LatLng(item.latitude, item.longitude);
-                const marker = new kakao.maps.Marker({
-                  position: markerPosition,
-                  image: index === 0 ? startImage : arriveImage
-                });
-  
-                marker.setMap(map);
-  
-              });
-  
-            }
-  
-            waitForKakao();
-          });
-  
-          // NOTE: 메시지 수신 설정
-          document.addEventListener("message", function (event) {
-            try {
-              const coords = JSON.parse(event.data);
-              drawPath(coords);
-            } catch (err) {
-              console.error("Kakao Map Error :", err);
-            }
-          });
-        </script>
-      </body>
-    </html>    
-    `;
+    return converted;
+  }, [path]);
 
   useEffect(() => {
-    getRoutes({ start, end });
-  }, [start, end, getRoutes]);
+    if (!(mapReady && mapRef.current) || coords.length < 2) return;
 
-  useEffect(() => {
-    if (isWebViewReady && pathCoords.length > 0) {
-      setTimeout(() => {
-        webViewRef.current?.postMessage(JSON.stringify(pathCoords));
-      }, 300);
-    }
-  }, [isWebViewReady, pathCoords]);
+    if (!(start && end)) return;
+
+    mapRef.current.animateCameraWithTwoCoords({
+      coord1: start,
+      coord2: end,
+      duration: 500,
+      easing: "EaseOut",
+    });
+  }, [coords, mapReady, start, end]);
+
+  const initialRegion: Region | undefined = useMemo(() => {
+    if (!coords || coords.length === 0) return undefined;
+    return {
+      latitude: coords[0]?.latitude ?? 36,
+      longitude: coords[0]?.longitude ?? 127,
+      latitudeDelta: 0.01,
+      longitudeDelta: 0.01,
+    };
+  }, [coords]);
 
   return (
-    <WebView
-      ref={webViewRef}
-      style={styles.container}
-      source={{ html }}
-      javaScriptEnabled={true}
-      domStorageEnabled={true}
-      onMessage={(event) => {
-        const msg = event.nativeEvent.data;
-
-        if (msg === "READY") {
-          setIsWebViewReady(true);
-        }
+    <NaverMapView
+      initialRegion={initialRegion}
+      isShowScaleBar={false}
+      isShowZoomControls={false}
+      mapPadding={{ right: 18, left: 18 }}
+      onInitialized={() => setMapReady(true)}
+      ref={mapRef}
+      style={{
+        flex: 1,
+        width: "100%",
+        height: screenWidth,
+        marginVertical: 24,
       }}
-    />
+    >
+      {coords.length >= 2 && <NaverMapPathOverlay coords={coords} width={6} />}
+
+      {start && (
+        <NaverMapMarkerOverlay
+          height={40}
+          latitude={start.latitude}
+          longitude={start.longitude}
+          width={50}
+        >
+          <Image className="h-full w-full" source={Images.startPinIcon} />
+        </NaverMapMarkerOverlay>
+      )}
+
+      {end && (
+        <NaverMapMarkerOverlay
+          height={40}
+          latitude={end.latitude}
+          longitude={end.longitude}
+          width={50}
+        >
+          <Image className="h-full w-full" source={Images.endPinIcon} />
+        </NaverMapMarkerOverlay>
+      )}
+    </NaverMapView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    marginTop: 24,
-    width: "100%",
-    height: 200,
-    flex: 1,
-  },
-});
