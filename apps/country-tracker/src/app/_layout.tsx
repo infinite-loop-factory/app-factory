@@ -23,8 +23,10 @@ import WebviewLayout from "@/components/web-view-layout";
 import { env } from "@/constants/env";
 import "@/features/location/location-task";
 
-import NetInfo from "@react-native-community/netinfo";
+// Lazily import expo-network to avoid native module errors in mismatched clients
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useNetworkState } from "expo-network";
+import { useRef } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { startLocationTask } from "@/features/location/location-permission";
@@ -62,6 +64,8 @@ function RootLayout() {
   const [loaded] = useFonts({
     SpaceMono: require("@/assets/fonts/SpaceMono-Regular.ttf"),
   });
+  const net = useNetworkState();
+  const wasConnectedRef = useRef(false);
 
   useEffect(() => {
     if (navigationRef) {
@@ -81,24 +85,19 @@ function RootLayout() {
 
   useEffect(() => {
     startLocationTask();
-    // best-effort: flush any queued background locations on startup
-    flushLocationQueueIfAny().catch((e) =>
-      Sentry.captureMessage(`queue flush on start failed: ${String(e)}`),
-    );
-    // flush when connectivity is restored
-    const unsub = NetInfo.addEventListener((state) => {
-      if (state.isConnected) {
-        flushLocationQueueIfAny().catch((e) =>
-          Sentry.captureMessage(
-            `queue flush on reconnect failed: ${String(e)}`,
-          ),
-        );
-      }
-    });
-    return () => {
-      unsub();
-    };
   }, []);
+
+  // Flush when connectivity becomes available
+  useEffect(() => {
+    const connected =
+      Boolean(net.isConnected) && net.isInternetReachable !== false;
+    if (connected && !wasConnectedRef.current) {
+      flushLocationQueueIfAny().catch((e) =>
+        Sentry.captureMessage(`queue flush on reconnect failed: ${String(e)}`),
+      );
+    }
+    wasConnectedRef.current = connected;
+  }, [net.isConnected, net.isInternetReachable]);
 
   if (!loaded) {
     return null;

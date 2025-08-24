@@ -1,8 +1,8 @@
 import type { LocationObject } from "expo-location";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import NetInfo from "@react-native-community/netinfo";
 import * as Sentry from "@sentry/react-native";
+import * as Network from "expo-network";
 import * as TaskManager from "expo-task-manager";
 import { DateTime } from "luxon";
 import { LOCATION_TASK_NAME } from "@/constants/location";
@@ -104,8 +104,14 @@ async function flushQueueWith(
 }
 
 export async function flushLocationQueueIfAny(): Promise<void> {
-  const { isConnected } = await NetInfo.fetch();
-  if (!isConnected) return;
+  try {
+    const state = await Network.getNetworkStateAsync();
+    const ok =
+      Boolean(state?.isConnected) && state?.isInternetReachable !== false;
+    if (!ok) return;
+  } catch {
+    // If network module is unavailable, assume online to avoid blocking flows
+  }
   await flushQueueWith([]);
 }
 
@@ -133,8 +139,15 @@ TaskManager.defineTask<LocationTaskData>(
       const filtered = dedupeRows(rows, last);
       if (filtered.length === 0) return;
 
-      const { isConnected } = await NetInfo.fetch();
-      if (!isConnected) {
+      let ok = true;
+      try {
+        const state = await Network.getNetworkStateAsync();
+        ok =
+          Boolean(state?.isConnected) && state?.isInternetReachable !== false;
+      } catch {
+        ok = true;
+      }
+      if (!ok) {
         await appendQueue(filtered);
         return;
       }

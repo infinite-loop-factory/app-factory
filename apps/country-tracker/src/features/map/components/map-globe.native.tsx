@@ -11,6 +11,7 @@ import {
 } from "react";
 import { Animated, Easing, Platform } from "react-native";
 import MapView, { Polygon } from "react-native-maps";
+import { getCountryPolygon } from "@/assets/geodata/countries";
 import { QUERY_KEYS } from "@/constants/query-keys";
 import { useAuthUser } from "@/hooks/use-auth-user";
 import { useThemeColor } from "@/hooks/use-theme-color";
@@ -71,18 +72,14 @@ const MapGlobe = forwardRef<MapGlobeRef>((_, ref) => {
       if (!user) return [];
       const visited = await fetchVisitedCountries(user.id);
       const countryCodes = visited.map((v) => v.country_code);
-      const polygons = await Promise.all(
-        countryCodes.map(async (code) => {
-          try {
-            const data = await import(
-              `@/assets/geodata/countries/${code}.json`
-            );
-            return { ...data, country_code: code };
-          } catch {
-            return null;
-          }
-        }),
-      );
+      const polygons = countryCodes.map((code) => {
+        try {
+          const data = getCountryPolygon(code);
+          return data ? { ...data, country_code: code } : null;
+        } catch {
+          return null;
+        }
+      });
       return polygons.filter(Boolean);
     },
     enabled: !!user,
