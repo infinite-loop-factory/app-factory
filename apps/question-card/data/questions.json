@@ -1,0 +1,1028 @@
+{
+  "categories": [
+    {
+      "id": "hobby",
+      "name": "나의 취향",
+      "icon": "📝",
+      "color": "#FF6B6B",
+      "description": "좋아하는 것들에 대한 질문"
+    },
+    {
+      "id": "talent",
+      "name": "나의 재능",
+      "icon": "🎯",
+      "color": "#4ECDC4",
+      "description": "능력과 소질에 대한 질문"
+    },
+    {
+      "id": "values",
+      "name": "나의 가치관",
+      "icon": "⚖️",
+      "color": "#45B7D1",
+      "description": "신념과 가치관에 대한 질문"
+    },
+    {
+      "id": "experience",
+      "name": "나의 경험",
+      "icon": "🌟",
+      "color": "#96CEB4",
+      "description": "과거 경험에 대한 질문"
+    },
+    {
+      "id": "daily",
+      "name": "나의 일상",
+      "icon": "🏠",
+      "color": "#FFEAA7",
+      "description": "일상생활에 대한 질문"
+    },
+    {
+      "id": "direction",
+      "name": "나의 방향성",
+      "icon": "🧭",
+      "color": "#DDA0DD",
+      "description": "미래와 목표에 대한 질문"
+    }
+  ],
+  "difficulties": [
+    {
+      "id": "easy",
+      "name": "쉬움",
+      "color": "#2ECC71",
+      "description": "가벼운 대화용"
+    },
+    {
+      "id": "medium",
+      "name": "보통",
+      "color": "#F39C12",
+      "description": "일반적인 대화용"
+    },
+    {
+      "id": "hard",
+      "name": "어려움",
+      "color": "#E74C3C",
+      "description": "깊은 대화용"
+    }
+  ],
+  "questions": [
+    {
+      "id": 1,
+      "categoryId": "hobby",
+      "categoryName": "나의 취향",
+      "difficulty": "easy",
+      "content": "두려움을 극복하고 해낸 일이 있나요?",
+      "order": 1
+    },
+    {
+      "id": 2,
+      "categoryId": "hobby",
+      "categoryName": "나의 취향",
+      "difficulty": "easy",
+      "content": "평소 즐겨 듣는 음악 장르가 있나요?",
+      "order": 2
+    },
+    {
+      "id": 3,
+      "categoryId": "hobby",
+      "categoryName": "나의 취향",
+      "difficulty": "easy",
+      "content": "좋아하는 영화나 드라마 장르는 무엇인가요?",
+      "order": 3
+    },
+    {
+      "id": 4,
+      "categoryId": "hobby",
+      "categoryName": "나의 취향",
+      "difficulty": "easy",
+      "content": "여가시간에 가장 자주 하는 일은?",
+      "order": 4
+    },
+    {
+      "id": 5,
+      "categoryId": "hobby",
+      "categoryName": "나의 취향",
+      "difficulty": "easy",
+      "content": "좋아하는 음식 종류나 맛은?",
+      "order": 5
+    },
+    {
+      "id": 6,
+      "categoryId": "hobby",
+      "categoryName": "나의 취향",
+      "difficulty": "easy",
+      "content": "선호하는 여행 스타일은 어떤 것인가요?",
+      "order": 6
+    },
+    {
+      "id": 7,
+      "categoryId": "hobby",
+      "categoryName": "나의 취향",
+      "difficulty": "easy",
+      "content": "책을 읽는다면 어떤 분야를 선호하나요?",
+      "order": 7
+    },
+    {
+      "id": 8,
+      "categoryId": "hobby",
+      "categoryName": "나의 취향",
+      "difficulty": "easy",
+      "content": "가장 좋아하는 색깔이 있나요?",
+      "order": 8
+    },
+    {
+      "id": 9,
+      "categoryId": "hobby",
+      "categoryName": "나의 취향",
+      "difficulty": "medium",
+      "content": "인생에서 가장 영향을 준 책이나 영화가 있다면?",
+      "order": 9
+    },
+    {
+      "id": 10,
+      "categoryId": "hobby",
+      "categoryName": "나의 취향",
+      "difficulty": "medium",
+      "content": "새로운 취미를 시작한다면 무엇을 해보고 싶나요?",
+      "order": 10
+    },
+    {
+      "id": 11,
+      "categoryId": "hobby",
+      "categoryName": "나의 취향",
+      "difficulty": "medium",
+      "content": "어떤 종류의 사람들과 함께 있을 때 편안함을 느끼나요?",
+      "order": 11
+    },
+    {
+      "id": 12,
+      "categoryId": "hobby",
+      "categoryName": "나의 취향",
+      "difficulty": "medium",
+      "content": "완벽한 하루를 보낸다면 어떤 일정으로 채우고 싶나요?",
+      "order": 12
+    },
+    {
+      "id": 13,
+      "categoryId": "hobby",
+      "categoryName": "나의 취향",
+      "difficulty": "medium",
+      "content": "스트레스를 받을 때 가장 효과적인 해소 방법은?",
+      "order": 13
+    },
+    {
+      "id": 14,
+      "categoryId": "hobby",
+      "categoryName": "나의 취향",
+      "difficulty": "medium",
+      "content": "예술 중에서 가장 끌리는 분야는 무엇인가요?",
+      "order": 14
+    },
+    {
+      "id": 15,
+      "categoryId": "hobby",
+      "categoryName": "나의 취향",
+      "difficulty": "medium",
+      "content": "혼자만의 시간과 사람들과의 시간 중 어느 것을 더 선호하나요?",
+      "order": 15
+    },
+    {
+      "id": 16,
+      "categoryId": "hobby",
+      "categoryName": "나의 취향",
+      "difficulty": "medium",
+      "content": "어떤 향기나 냄새를 가장 좋아하나요?",
+      "order": 16
+    },
+    {
+      "id": 17,
+      "categoryId": "hobby",
+      "categoryName": "나의 취향",
+      "difficulty": "hard",
+      "content": "현재의 취향이 형성된 가장 큰 계기나 영향은 무엇인가요?",
+      "order": 17
+    },
+    {
+      "id": 18,
+      "categoryId": "hobby",
+      "categoryName": "나의 취향",
+      "difficulty": "hard",
+      "content": "자신만의 독특하거나 특별한 취향이 있다면 무엇인가요?",
+      "order": 18
+    },
+    {
+      "id": 19,
+      "categoryId": "hobby",
+      "categoryName": "나의 취향",
+      "difficulty": "hard",
+      "content": "나이가 들면서 변한 취향이 있나요? 왜 변했다고 생각하나요?",
+      "order": 19
+    },
+    {
+      "id": 20,
+      "categoryId": "hobby",
+      "categoryName": "나의 취향",
+      "difficulty": "hard",
+      "content": "다른 사람들이 이해하기 어려워하는 나만의 취향이 있나요?",
+      "order": 20
+    },
+    {
+      "id": 21,
+      "categoryId": "talent",
+      "categoryName": "나의 재능",
+      "difficulty": "easy",
+      "content": "어떤 분야에 소질이 있다고 생각하나요?",
+      "order": 1
+    },
+    {
+      "id": 22,
+      "categoryId": "talent",
+      "categoryName": "나의 재능",
+      "difficulty": "easy",
+      "content": "친구들이 인정해주는 나의 장점은?",
+      "order": 2
+    },
+    {
+      "id": 23,
+      "categoryId": "talent",
+      "categoryName": "나의 재능",
+      "difficulty": "easy",
+      "content": "새로운 것을 배울 때 가장 빠르게 익히는 분야는?",
+      "order": 3
+    },
+    {
+      "id": 24,
+      "categoryId": "talent",
+      "categoryName": "나의 재능",
+      "difficulty": "easy",
+      "content": "다른 사람들이 나에게 도움을 요청하는 일은 주로 무엇인가요?",
+      "order": 4
+    },
+    {
+      "id": 25,
+      "categoryId": "talent",
+      "categoryName": "나의 재능",
+      "difficulty": "easy",
+      "content": "어려서부터 남들보다 잘했던 것이 있나요?",
+      "order": 5
+    },
+    {
+      "id": 26,
+      "categoryId": "talent",
+      "categoryName": "나의 재능",
+      "difficulty": "easy",
+      "content": "칭찬을 가장 많이 받아본 분야는?",
+      "order": 6
+    },
+    {
+      "id": 27,
+      "categoryId": "talent",
+      "categoryName": "나의 재능",
+      "difficulty": "easy",
+      "content": "손재주나 몸을 쓰는 일 중 잘하는 것이 있나요?",
+      "order": 7
+    },
+    {
+      "id": 28,
+      "categoryId": "talent",
+      "categoryName": "나의 재능",
+      "difficulty": "easy",
+      "content": "문제 해결이나 창의적 아이디어가 필요할 때 어떤 방식으로 접근하나요?",
+      "order": 8
+    },
+    {
+      "id": 29,
+      "categoryId": "talent",
+      "categoryName": "나의 재능",
+      "difficulty": "medium",
+      "content": "아직 제대로 발휘해보지 못한 잠재력이 있다고 생각하나요?",
+      "order": 9
+    },
+    {
+      "id": 30,
+      "categoryId": "talent",
+      "categoryName": "나의 재능",
+      "difficulty": "medium",
+      "content": "팀에서 주로 맡게 되는 역할이나 포지션이 있나요?",
+      "order": 10
+    },
+    {
+      "id": 31,
+      "categoryId": "talent",
+      "categoryName": "나의 재능",
+      "difficulty": "medium",
+      "content": "스트레스 상황에서 발휘되는 나만의 능력이 있나요?",
+      "order": 11
+    },
+    {
+      "id": 32,
+      "categoryId": "talent",
+      "categoryName": "나의 재능",
+      "difficulty": "medium",
+      "content": "다른 사람들과의 소통에서 나의 강점은 무엇인가요?",
+      "order": 12
+    },
+    {
+      "id": 33,
+      "categoryId": "talent",
+      "categoryName": "나의 재능",
+      "difficulty": "medium",
+      "content": "새로운 도전이나 배움에 대한 나의 접근 방식은?",
+      "order": 13
+    },
+    {
+      "id": 34,
+      "categoryId": "talent",
+      "categoryName": "나의 재능",
+      "difficulty": "medium",
+      "content": "리더십을 발휘한 경험이나 순간이 있나요?",
+      "order": 14
+    },
+    {
+      "id": 35,
+      "categoryId": "talent",
+      "categoryName": "나의 재능",
+      "difficulty": "medium",
+      "content": "감정적 상황에서 나는 어떤 역할을 하게 되나요?",
+      "order": 15
+    },
+    {
+      "id": 36,
+      "categoryId": "talent",
+      "categoryName": "나의 재능",
+      "difficulty": "medium",
+      "content": "논리적 사고와 감성적 사고 중 어느 쪽이 더 강한가요?",
+      "order": 16
+    },
+    {
+      "id": 37,
+      "categoryId": "talent",
+      "categoryName": "나의 재능",
+      "difficulty": "hard",
+      "content": "나의 재능을 최대로 발휘하려면 어떤 환경이나 조건이 필요한가요?",
+      "order": 17
+    },
+    {
+      "id": 38,
+      "categoryId": "talent",
+      "categoryName": "나의 재능",
+      "difficulty": "hard",
+      "content": "재능과 노력 중 무엇이 나의 성과에 더 큰 영향을 미쳤나요?",
+      "order": 18
+    },
+    {
+      "id": 39,
+      "categoryId": "talent",
+      "categoryName": "나의 재능",
+      "difficulty": "hard",
+      "content": "나만의 독특한 관점이나 사고방식이 있다고 생각하나요?",
+      "order": 19
+    },
+    {
+      "id": 40,
+      "categoryId": "talent",
+      "categoryName": "나의 재능",
+      "difficulty": "hard",
+      "content": "내가 가진 재능을 사회나 다른 사람들에게 어떻게 기여하고 싶나요?",
+      "order": 20
+    },
+    {
+      "id": 41,
+      "categoryId": "values",
+      "categoryName": "나의 가치관",
+      "difficulty": "easy",
+      "content": "가장 중요하게 생각하는 가치는 무엇인가요?",
+      "order": 1
+    },
+    {
+      "id": 42,
+      "categoryId": "values",
+      "categoryName": "나의 가치관",
+      "difficulty": "easy",
+      "content": "친구를 선택할 때 가장 중시하는 기준은?",
+      "order": 2
+    },
+    {
+      "id": 43,
+      "categoryId": "values",
+      "categoryName": "나의 가치관",
+      "difficulty": "easy",
+      "content": "돈과 행복 중 무엇이 더 중요하다고 생각하나요?",
+      "order": 3
+    },
+    {
+      "id": 44,
+      "categoryId": "values",
+      "categoryName": "나의 가치관",
+      "difficulty": "easy",
+      "content": "정직함과 친절함 중 어느 것을 더 중요하게 여기나요?",
+      "order": 4
+    },
+    {
+      "id": 45,
+      "categoryId": "values",
+      "categoryName": "나의 가치관",
+      "difficulty": "easy",
+      "content": "성공의 기준을 어떻게 정의하나요?",
+      "order": 5
+    },
+    {
+      "id": 46,
+      "categoryId": "values",
+      "categoryName": "나의 가치관",
+      "difficulty": "easy",
+      "content": "다른 사람을 도울 때 기분이 좋아지나요?",
+      "order": 6
+    },
+    {
+      "id": 47,
+      "categoryId": "values",
+      "categoryName": "나의 가치관",
+      "difficulty": "easy",
+      "content": "전통과 변화 중 어느 쪽을 더 선호하나요?",
+      "order": 7
+    },
+    {
+      "id": 48,
+      "categoryId": "values",
+      "categoryName": "나의 가치관",
+      "difficulty": "easy",
+      "content": "개인의 자유와 사회적 책임 중 무엇이 더 중요한가요?",
+      "order": 8
+    },
+    {
+      "id": 49,
+      "categoryId": "values",
+      "categoryName": "나의 가치관",
+      "difficulty": "medium",
+      "content": "절대 타협할 수 없는 원칙이 있나요?",
+      "order": 9
+    },
+    {
+      "id": 50,
+      "categoryId": "values",
+      "categoryName": "나의 가치관",
+      "difficulty": "medium",
+      "content": "윤리적 딜레마 상황에서 어떻게 판단하나요?",
+      "order": 10
+    },
+    {
+      "id": 51,
+      "categoryId": "values",
+      "categoryName": "나의 가치관",
+      "difficulty": "medium",
+      "content": "부모님의 가치관 중 받아들인 것과 거부한 것이 있나요?",
+      "order": 11
+    },
+    {
+      "id": 52,
+      "categoryId": "values",
+      "categoryName": "나의 가치관",
+      "difficulty": "medium",
+      "content": "사회적 정의에 대한 나의 생각은 어떤가요?",
+      "order": 12
+    },
+    {
+      "id": 53,
+      "categoryId": "values",
+      "categoryName": "나의 가치관",
+      "difficulty": "medium",
+      "content": "실패보다 시도하지 않는 것이 더 나쁘다고 생각하나요?",
+      "order": 13
+    },
+    {
+      "id": 54,
+      "categoryId": "values",
+      "categoryName": "나의 가치관",
+      "difficulty": "medium",
+      "content": "경쟁과 협력 중 어느 것을 더 중시하나요?",
+      "order": 14
+    },
+    {
+      "id": 55,
+      "categoryId": "values",
+      "categoryName": "나의 가치관",
+      "difficulty": "medium",
+      "content": "내 가치관이 다른 사람과 충돌할 때 어떻게 대처하나요?",
+      "order": 15
+    },
+    {
+      "id": 56,
+      "categoryId": "values",
+      "categoryName": "나의 가치관",
+      "difficulty": "medium",
+      "content": "물질적 풍요와 정신적 만족 중 무엇을 우선하나요?",
+      "order": 16
+    },
+    {
+      "id": 57,
+      "categoryId": "values",
+      "categoryName": "나의 가치관",
+      "difficulty": "hard",
+      "content": "내 가치관이 형성된 가장 큰 계기나 경험은 무엇인가요?",
+      "order": 17
+    },
+    {
+      "id": 58,
+      "categoryId": "values",
+      "categoryName": "나의 가치관",
+      "difficulty": "hard",
+      "content": "나이가 들면서 변화한 가치관이 있나요? 왜 변했을까요?",
+      "order": 18
+    },
+    {
+      "id": 59,
+      "categoryId": "values",
+      "categoryName": "나의 가치관",
+      "difficulty": "hard",
+      "content": "내 가치관이 시험받았던 가장 어려운 순간은 언제였나요?",
+      "order": 19
+    },
+    {
+      "id": 60,
+      "categoryId": "values",
+      "categoryName": "나의 가치관",
+      "difficulty": "hard",
+      "content": "미래 세대에게 어떤 가치를 전해주고 싶나요?",
+      "order": 20
+    },
+    {
+      "id": 61,
+      "categoryId": "experience",
+      "categoryName": "나의 경험",
+      "difficulty": "easy",
+      "content": "가장 기억에 남는 여행지는 어디인가요?",
+      "order": 1
+    },
+    {
+      "id": 62,
+      "categoryId": "experience",
+      "categoryName": "나의 경험",
+      "difficulty": "easy",
+      "content": "어린 시절 가장 좋아했던 놀이나 활동은?",
+      "order": 2
+    },
+    {
+      "id": 63,
+      "categoryId": "experience",
+      "categoryName": "나의 경험",
+      "difficulty": "easy",
+      "content": "처음으로 성취감을 느꼈던 경험이 있나요?",
+      "order": 3
+    },
+    {
+      "id": 64,
+      "categoryId": "experience",
+      "categoryName": "나의 경험",
+      "difficulty": "easy",
+      "content": "가장 맛있게 먹었던 음식과 그때 상황은?",
+      "order": 4
+    },
+    {
+      "id": 65,
+      "categoryId": "experience",
+      "categoryName": "나의 경험",
+      "difficulty": "easy",
+      "content": "친구들과 함께한 추억 중 가장 즐거웠던 것은?",
+      "order": 5
+    },
+    {
+      "id": 66,
+      "categoryId": "experience",
+      "categoryName": "나의 경험",
+      "difficulty": "easy",
+      "content": "새로운 것을 배우면서 재미있었던 경험이 있나요?",
+      "order": 6
+    },
+    {
+      "id": 67,
+      "categoryId": "experience",
+      "categoryName": "나의 경험",
+      "difficulty": "easy",
+      "content": "예상치 못한 좋은 일이 생겼던 적이 있나요?",
+      "order": 7
+    },
+    {
+      "id": 68,
+      "categoryId": "experience",
+      "categoryName": "나의 경험",
+      "difficulty": "easy",
+      "content": "가족과의 추억 중 가장 따뜻했던 순간은?",
+      "order": 8
+    },
+    {
+      "id": 69,
+      "categoryId": "experience",
+      "categoryName": "나의 경험",
+      "difficulty": "medium",
+      "content": "인생에서 가장 도전적이었던 경험은 무엇인가요?",
+      "order": 9
+    },
+    {
+      "id": 70,
+      "categoryId": "experience",
+      "categoryName": "나의 경험",
+      "difficulty": "medium",
+      "content": "실패했지만 값진 교훈을 얻었던 경험이 있나요?",
+      "order": 10
+    },
+    {
+      "id": 71,
+      "categoryId": "experience",
+      "categoryName": "나의 경험",
+      "difficulty": "medium",
+      "content": "타인의 도움으로 어려움을 극복했던 경험은?",
+      "order": 11
+    },
+    {
+      "id": 72,
+      "categoryId": "experience",
+      "categoryName": "나의 경험",
+      "difficulty": "medium",
+      "content": "가장 좋아하는 계절과 그 이유는 무엇인가요?",
+      "order": 12
+    },
+    {
+      "id": 73,
+      "categoryId": "experience",
+      "categoryName": "나의 경험",
+      "difficulty": "medium",
+      "content": "예상과 완전히 달랐던 경험이 있나요?",
+      "order": 13
+    },
+    {
+      "id": 74,
+      "categoryId": "experience",
+      "categoryName": "나의 경험",
+      "difficulty": "medium",
+      "content": "다른 문화나 환경에서 새롭게 깨달은 점이 있나요?",
+      "order": 14
+    },
+    {
+      "id": 75,
+      "categoryId": "experience",
+      "categoryName": "나의 경험",
+      "difficulty": "medium",
+      "content": "혼자서 해결해야 했던 중요한 문제가 있었나요?",
+      "order": 15
+    },
+    {
+      "id": 76,
+      "categoryId": "experience",
+      "categoryName": "나의 경험",
+      "difficulty": "medium",
+      "content": "감동받았던 사람과의 만남이나 이야기가 있나요?",
+      "order": 16
+    },
+    {
+      "id": 77,
+      "categoryId": "experience",
+      "categoryName": "나의 경험",
+      "difficulty": "hard",
+      "content": "과거로 돌아간다면 다르게 하고 싶은 선택이 있나요?",
+      "order": 17
+    },
+    {
+      "id": 78,
+      "categoryId": "experience",
+      "categoryName": "나의 경험",
+      "difficulty": "hard",
+      "content": "인생의 전환점이 되었던 경험을 말해주세요.",
+      "order": 18
+    },
+    {
+      "id": 79,
+      "categoryId": "experience",
+      "categoryName": "나의 경험",
+      "difficulty": "hard",
+      "content": "나를 가장 크게 변화시킨 경험은 무엇인가요?",
+      "order": 19
+    },
+    {
+      "id": 80,
+      "categoryId": "experience",
+      "categoryName": "나의 경험",
+      "difficulty": "hard",
+      "content": "후회보다는 감사함을 느끼게 된 어려웠던 경험이 있나요?",
+      "order": 20
+    },
+    {
+      "id": 81,
+      "categoryId": "daily",
+      "categoryName": "나의 일상",
+      "difficulty": "easy",
+      "content": "하루 중 가장 좋아하는 시간대는 언제인가요?",
+      "order": 1
+    },
+    {
+      "id": 82,
+      "categoryId": "daily",
+      "categoryName": "나의 일상",
+      "difficulty": "easy",
+      "content": "아침에 일어나자마자 가장 먼저 하는 일은?",
+      "order": 2
+    },
+    {
+      "id": 83,
+      "categoryId": "daily",
+      "categoryName": "나의 일상",
+      "difficulty": "easy",
+      "content": "주말에 주로 어떻게 시간을 보내나요?",
+      "order": 3
+    },
+    {
+      "id": 84,
+      "categoryId": "daily",
+      "categoryName": "나의 일상",
+      "difficulty": "easy",
+      "content": "하루 일과 중 가장 중요하게 생각하는 시간은?",
+      "order": 4
+    },
+    {
+      "id": 85,
+      "categoryId": "daily",
+      "categoryName": "나의 일상",
+      "difficulty": "easy",
+      "content": "집에서 가장 좋아하는 공간은 어디인가요?",
+      "order": 5
+    },
+    {
+      "id": 86,
+      "categoryId": "daily",
+      "categoryName": "나의 일상",
+      "difficulty": "easy",
+      "content": "일상에서 가장 자주 사용하는 앱이나 서비스는?",
+      "order": 6
+    },
+    {
+      "id": 87,
+      "categoryId": "daily",
+      "categoryName": "나의 일상",
+      "difficulty": "easy",
+      "content": "잠들기 전에 주로 무엇을 하나요?",
+      "order": 7
+    },
+    {
+      "id": 88,
+      "categoryId": "daily",
+      "categoryName": "나의 일상",
+      "difficulty": "easy",
+      "content": "평일과 주말 중 어느 쪽을 더 좋아하나요?",
+      "order": 8
+    },
+    {
+      "id": 89,
+      "categoryId": "daily",
+      "categoryName": "나의 일상",
+      "difficulty": "medium",
+      "content": "스트레스를 해소하는 나만의 방법이 있나요?",
+      "order": 9
+    },
+    {
+      "id": 90,
+      "categoryId": "daily",
+      "categoryName": "나의 일상",
+      "difficulty": "medium",
+      "content": "일상에서 가장 소중하게 지키려는 루틴이 있나요?",
+      "order": 10
+    },
+    {
+      "id": 91,
+      "categoryId": "daily",
+      "categoryName": "나의 일상",
+      "difficulty": "medium",
+      "content": "예상치 못한 일이 생겼을 때 어떻게 대처하나요?",
+      "order": 11
+    },
+    {
+      "id": 92,
+      "categoryId": "daily",
+      "categoryName": "나의 일상",
+      "difficulty": "medium",
+      "content": "바쁜 일상 속에서 나만의 여유를 찾는 방법은?",
+      "order": 12
+    },
+    {
+      "id": 93,
+      "categoryId": "daily",
+      "categoryName": "나의 일상",
+      "difficulty": "medium",
+      "content": "일과 휴식의 균형을 어떻게 맞추려고 노력하나요?",
+      "order": 13
+    },
+    {
+      "id": 94,
+      "categoryId": "daily",
+      "categoryName": "나의 일상",
+      "difficulty": "medium",
+      "content": "혼자 보내는 시간과 사람들과 보내는 시간의 비율은?",
+      "order": 14
+    },
+    {
+      "id": 95,
+      "categoryId": "daily",
+      "categoryName": "나의 일상",
+      "difficulty": "medium",
+      "content": "일상에서 감사함을 느끼는 순간들이 있나요?",
+      "order": 15
+    },
+    {
+      "id": 96,
+      "categoryId": "daily",
+      "categoryName": "나의 일상",
+      "difficulty": "medium",
+      "content": "건강을 위해 일상에서 실천하는 것들이 있나요?",
+      "order": 16
+    },
+    {
+      "id": 97,
+      "categoryId": "daily",
+      "categoryName": "나의 일상",
+      "difficulty": "hard",
+      "content": "현재의 일상에서 가장 바꾸고 싶은 것은 무엇인가요?",
+      "order": 17
+    },
+    {
+      "id": 98,
+      "categoryId": "daily",
+      "categoryName": "나의 일상",
+      "difficulty": "hard",
+      "content": "이상적인 하루 일과를 설계한다면 어떨까요?",
+      "order": 18
+    },
+    {
+      "id": 99,
+      "categoryId": "daily",
+      "categoryName": "나의 일상",
+      "difficulty": "hard",
+      "content": "일상의 반복이 주는 의미나 가치를 어떻게 생각하나요?",
+      "order": 19
+    },
+    {
+      "id": 100,
+      "categoryId": "daily",
+      "categoryName": "나의 일상",
+      "difficulty": "hard",
+      "content": "바쁜 일상 속에서 놓치고 있는 것이 있다고 생각하나요?",
+      "order": 20
+    },
+    {
+      "id": 101,
+      "categoryId": "direction",
+      "categoryName": "나의 방향성",
+      "difficulty": "easy",
+      "content": "올해 이루고 싶은 목표가 있나요?",
+      "order": 1
+    },
+    {
+      "id": 102,
+      "categoryId": "direction",
+      "categoryName": "나의 방향성",
+      "difficulty": "easy",
+      "content": "새롭게 시작해보고 싶은 일이 있나요?",
+      "order": 2
+    },
+    {
+      "id": 103,
+      "categoryId": "direction",
+      "categoryName": "나의 방향성",
+      "difficulty": "easy",
+      "content": "10년 전과 비교해서 어떤 점이 가장 많이 변했나요?",
+      "order": 3
+    },
+    {
+      "id": 104,
+      "categoryId": "direction",
+      "categoryName": "나의 방향성",
+      "difficulty": "easy",
+      "content": "꼭 가보고 싶은 여행지가 있나요?",
+      "order": 4
+    },
+    {
+      "id": 105,
+      "categoryId": "direction",
+      "categoryName": "나의 방향성",
+      "difficulty": "easy",
+      "content": "배우고 싶은 새로운 기술이나 지식이 있나요?",
+      "order": 5
+    },
+    {
+      "id": 106,
+      "categoryId": "direction",
+      "categoryName": "나의 방향성",
+      "difficulty": "easy",
+      "content": "미래의 나에게 하고 싶은 말이 있다면?",
+      "order": 6
+    },
+    {
+      "id": 107,
+      "categoryId": "direction",
+      "categoryName": "나의 방향성",
+      "difficulty": "easy",
+      "content": "은퇴 후에 하고 싶은 일이 있나요?",
+      "order": 7
+    },
+    {
+      "id": 108,
+      "categoryId": "direction",
+      "categoryName": "나의 방향성",
+      "difficulty": "easy",
+      "content": "내년에는 어떤 새로운 도전을 해보고 싶나요?",
+      "order": 8
+    },
+    {
+      "id": 109,
+      "categoryId": "direction",
+      "categoryName": "나의 방향성",
+      "difficulty": "medium",
+      "content": "5년 후 자신의 모습을 어떻게 그려보나요?",
+      "order": 9
+    },
+    {
+      "id": 110,
+      "categoryId": "direction",
+      "categoryName": "나의 방향성",
+      "difficulty": "medium",
+      "content": "현재 가장 집중하고 있는 개인적 성장 분야는?",
+      "order": 10
+    },
+    {
+      "id": 111,
+      "categoryId": "direction",
+      "categoryName": "나의 방향성",
+      "difficulty": "medium",
+      "content": "이루고 싶은 꿈을 위해 현재 어떤 노력을 하고 있나요?",
+      "order": 11
+    },
+    {
+      "id": 112,
+      "categoryId": "direction",
+      "categoryName": "나의 방향성",
+      "difficulty": "medium",
+      "content": "인생에서 가장 중요한 우선순위는 무엇인가요?",
+      "order": 12
+    },
+    {
+      "id": 113,
+      "categoryId": "direction",
+      "categoryName": "나의 방향성",
+      "difficulty": "medium",
+      "content": "변화하고 싶은 자신의 모습이 있나요?",
+      "order": 13
+    },
+    {
+      "id": 114,
+      "categoryId": "direction",
+      "categoryName": "나의 방향성",
+      "difficulty": "medium",
+      "content": "미래에 대한 불안과 기대 중 어느 것이 더 큰가요?",
+      "order": 14
+    },
+    {
+      "id": 115,
+      "categoryId": "direction",
+      "categoryName": "나의 방향성",
+      "difficulty": "medium",
+      "content": "내가 세상에 남기고 싶은 흔적이나 영향은?",
+      "order": 15
+    },
+    {
+      "id": 116,
+      "categoryId": "direction",
+      "categoryName": "나의 방향성",
+      "difficulty": "medium",
+      "content": "지금의 길이 맞는지 의문이 들 때가 있나요?",
+      "order": 16
+    },
+    {
+      "id": 117,
+      "categoryId": "direction",
+      "categoryName": "나의 방향성",
+      "difficulty": "hard",
+      "content": "인생에서 꼭 이루고 싶은 궁극적인 목표는 무엇인가요?",
+      "order": 17
+    },
+    {
+      "id": 118,
+      "categoryId": "direction",
+      "categoryName": "나의 방향성",
+      "difficulty": "hard",
+      "content": "죽기 전에 반드시 해야 할 일들의 목록이 있나요?",
+      "order": 18
+    },
+    {
+      "id": 119,
+      "categoryId": "direction",
+      "categoryName": "나의 방향성",
+      "difficulty": "hard",
+      "content": "현재의 선택들이 미래의 나를 어떻게 만들어갈까요?",
+      "order": 19
+    },
+    {
+      "id": 120,
+      "categoryId": "direction",
+      "categoryName": "나의 방향성",
+      "difficulty": "hard",
+      "content": "인생의 의미나 목적에 대해 어떻게 생각하나요?",
+      "order": 20
+    }
+  ]
+}
