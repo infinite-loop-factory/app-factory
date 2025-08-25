@@ -24,9 +24,12 @@ import { env } from "@/constants/env";
 import "@/features/location/location-task";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useNetworkState } from "expo-network";
+import { useRef } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { startLocationTask } from "@/features/location/location-permission";
+import { flushLocationQueueIfAny } from "@/features/location/location-task";
 
 const navigationIntegration = Sentry.reactNavigationIntegration({
   enableTimeToInitialDisplay: !isRunningInExpoGo(),
@@ -42,7 +45,17 @@ Sentry.init({
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000, // 5 minutes
+      gcTime: 30 * 60 * 1000, // 30 minutes
+      retry: 1,
+      refetchOnReconnect: true,
+      refetchOnWindowFocus: false, // RN/web hybrid: disable focus refetch
+    },
+  },
+});
 
 function RootLayout() {
   const navigationRef = useNavigationContainerRef();
@@ -50,6 +63,8 @@ function RootLayout() {
   const [loaded] = useFonts({
     SpaceMono: require("@/assets/fonts/SpaceMono-Regular.ttf"),
   });
+  const net = useNetworkState();
+  const wasConnectedRef = useRef(false);
 
   useEffect(() => {
     if (navigationRef) {
@@ -71,14 +86,25 @@ function RootLayout() {
     startLocationTask();
   }, []);
 
+  useEffect(() => {
+    const connected =
+      Boolean(net.isConnected) && net.isInternetReachable !== false;
+    if (connected && !wasConnectedRef.current) {
+      flushLocationQueueIfAny().catch((e) =>
+        Sentry.captureMessage(`queue flush on reconnect failed: ${String(e)}`),
+      );
+    }
+    wasConnectedRef.current = connected;
+  }, [net.isConnected, net.isInternetReachable]);
+
   if (!loaded) {
     return null;
   }
 
   return (
-    <SafeAreaProvider>
-      <QueryClientProvider client={queryClient}>
-        <JotaiProvider store={store}>
+    <JotaiProvider store={store}>
+      <SafeAreaProvider>
+        <QueryClientProvider client={queryClient}>
           <GluestackUIProvider mode={savedTheme}>
             <GestureHandlerRootView style={{ flex: 1 }}>
               <ThemeProvider
@@ -90,9 +116,9 @@ function RootLayout() {
               </ThemeProvider>
             </GestureHandlerRootView>
           </GluestackUIProvider>
-        </JotaiProvider>
-      </QueryClientProvider>
-    </SafeAreaProvider>
+        </QueryClientProvider>
+      </SafeAreaProvider>
+    </JotaiProvider>
   );
 }
 

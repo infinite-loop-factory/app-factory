@@ -18,6 +18,7 @@ import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
+import { QUERY_KEYS } from "@/constants/query-keys";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import i18n from "@/libs/i18n";
 import supabase from "@/libs/supabase";
@@ -40,11 +41,11 @@ export default function HomeScreen() {
     DateTime.fromISO(isoDate).toFormat("yyyy-MM-dd");
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["visited-countries", searchText],
+    queryKey: QUERY_KEYS.visitedCountries(searchText),
     queryFn: async () => {
       const { data: userData } = await supabase.auth.getUser();
       const user = userData?.user;
-      if (!user) return [];
+      if (!user) return [] as CountryItem[];
       return await fetchVisitedCountries(user.id);
     },
     select: (allCountries) =>
@@ -103,6 +104,7 @@ export default function HomeScreen() {
           style={{ backgroundColor: inputBg, borderColor }}
         >
           <InputField
+            accessibilityLabel={i18n.t("home.search-a11y")}
             className="placeholder-gray-500"
             onChangeText={handleSearch}
             onSubmitEditing={() => handleSearch(searchText)}
@@ -110,7 +112,10 @@ export default function HomeScreen() {
             style={{ color: textColor }}
             value={searchText}
           />
-          <InputSlot onPress={() => handleSearch(searchText)}>
+          <InputSlot
+            accessibilityLabel={i18n.t("home.search-button-a11y")}
+            onPress={() => handleSearch(searchText)}
+          >
             <InputIcon as={() => <Search color={textColor} />} />
           </InputSlot>
         </Input>
@@ -122,7 +127,7 @@ export default function HomeScreen() {
         {isError ? (
           <Box className="flex-1 items-center justify-center p-6">
             <Text className="text-lg" style={{ color: textColor }}>
-              Error loading countries.
+              {i18n.t("home.error-loading")}
             </Text>
           </Box>
         ) : (

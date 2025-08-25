@@ -16,8 +16,9 @@ export async function getCountryByLatLng(
 ): Promise<ReverseGeoResult> {
   const round = (v: number) => Math.round(v * 100) / 100;
   const key = `${round(lat)},${round(lng)}`;
-  if (pendingPromises[key]) {
-    return pendingPromises[key];
+  const existing = pendingPromises[key];
+  if (existing) {
+    return existing;
   }
 
   if (Platform.OS === "web") {
@@ -39,7 +40,10 @@ export async function getCountryByLatLng(
         return { country: "Unknown", countryCode: "" };
       }
     })();
-    return pendingPromises[key];
+    const created = pendingPromises[key];
+    if (created) return created;
+    // Fallback (should not happen)
+    return { country: "Unknown", countryCode: "" };
   }
 
   try {

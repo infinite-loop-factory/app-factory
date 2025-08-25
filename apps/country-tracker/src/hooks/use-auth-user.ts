@@ -1,8 +1,8 @@
 import type { User } from "@supabase/supabase-js";
 
-import supabase from "@/libs/supabase";
 import { get } from "es-toolkit/compat";
 import { useEffect, useRef, useState } from "react";
+import supabase from "@/libs/supabase";
 
 export function useAuthUser() {
   const [user, setUser] = useState<User | null>(null);
@@ -29,7 +29,7 @@ export function useAuthUser() {
   }, []);
 
   useEffect(() => {
-    if (!user || prevUserId.current === user.id) return;
+    if (!user?.id || prevUserId.current === user.id) return;
     prevUserId.current = user.id;
     const upsertUser = async () => {
       try {

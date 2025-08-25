@@ -5,6 +5,7 @@ import * as TaskManager from "expo-task-manager";
 import { DateTime } from "luxon";
 import { Platform } from "react-native";
 import { LOCATION_TASK_NAME } from "@/constants/location";
+import { LAST_LOCATION_STORAGE_KEY } from "@/constants/storage-keys";
 import supabase from "@/libs/supabase";
 import { getCountryByLatLng } from "@/utils/reverse-geo";
 
@@ -21,7 +22,7 @@ async function handleWebLocationInsert(user: User, pos: GeolocationPosition) {
     longitude,
   );
 
-  const storageKey = "country-tracker-last-location";
+  const storageKey = LAST_LOCATION_STORAGE_KEY;
   let last: { ts: string; lat: number; lon: number } | null = null;
   try {
     const raw = localStorage.getItem(storageKey);
@@ -112,7 +113,19 @@ export async function startLocationTask() {
   if (!isTaskDefined) {
     await Location.startLocationUpdatesAsync(LOCATION_TASK_NAME, {
       accuracy: Location.Accuracy.Balanced,
+      // reduce battery & duplicates: at least 300m or 1 hour
+      distanceInterval: 300,
       timeInterval: 60 * 60 * 1000,
+      pausesUpdatesAutomatically: true,
+      // foreground service config for Android
+      foregroundService: {
+        notificationTitle: "Location Tracking",
+        notificationBody: "Tracking your location to update visited countries.",
+      },
+      // defer updates when device is in low power/idle where available
+      deferredUpdatesInterval: 10 * 60 * 1000,
+      deferredUpdatesDistance: 500,
+      showsBackgroundLocationIndicator: false,
     });
   }
 }

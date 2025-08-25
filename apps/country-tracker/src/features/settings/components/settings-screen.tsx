@@ -21,6 +21,7 @@ import {
   ToastTitle,
   useToast,
 } from "@/components/ui/toast";
+import { stopLocationTask } from "@/features/location/location-permission";
 import { useAuthUser } from "@/hooks/use-auth-user";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import i18n from "@/libs/i18n";
@@ -84,6 +85,7 @@ export default function SettingsScreen() {
   };
 
   const handleLogout = async () => {
+    await stopLocationTask();
     await supabase.auth.signOut();
     router.replace("/login");
   };
@@ -158,12 +160,10 @@ export default function SettingsScreen() {
             )}
           </View>
           <Switch
-            activeThumbColor={highlightColor}
             ios_backgroundColor={switchBgColor}
             onValueChange={toggleTheme}
             thumbColor={highlightColor}
             trackColor={{ false: switchBgColor, true: switchBgColor }}
-            // @ts-expect-error
             value={theme === "dark"}
           />
         </View>

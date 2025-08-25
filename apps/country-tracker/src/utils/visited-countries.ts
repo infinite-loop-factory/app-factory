@@ -2,9 +2,8 @@ import type { CountryItem } from "@/features/home/types/country";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { DateTime } from "luxon";
+import { DENYLIST_STORAGE_KEY } from "@/constants/storage-keys";
 import supabase from "@/libs/supabase";
-
-const DENYLIST_STORAGE_KEY = "denylisted_countries";
 
 function countryCodeToFlagEmoji(countryCode: string): string {
   return countryCode

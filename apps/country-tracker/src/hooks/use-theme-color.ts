@@ -1,6 +1,6 @@
+import { useAtomValue } from "jotai";
 import { themeAtom } from "@/atoms/theme.atom";
 import { TOKENS } from "@/constants/color-tokens";
-import { useAtomValue } from "jotai";
 
 type ColorToken = keyof typeof TOKENS.light;
 type ColorTokenName = ColorToken extends `--color-${infer R}` ? R : never;

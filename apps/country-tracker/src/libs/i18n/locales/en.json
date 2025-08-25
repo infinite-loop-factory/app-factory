@@ -5,6 +5,9 @@
     "tab": "Home",
     "title": "Visited Countries",
     "search": "Search",
+    "search-a11y": "Search countries",
+    "search-button-a11y": "Execute search",
+    "error-loading": "Failed to load visited countries.",
     "no-visited-countries": "No Visited Countries Yet",
     "no-visited-countries-description": "Start your journey and see your visited countries here!"
   },
@@ -12,7 +15,9 @@
   "map": {
     "tab": "Map",
     "countries": "Countries",
-    "search-placeholder": "Search for a country"
+    "search-placeholder": "Search for a country",
+    "web-disclaimer": "3D globe is available on iOS. This is a 2D web view.",
+    "download-app": "Download the app"
   },
 
   "settings": {
@@ -33,7 +38,8 @@
     },
 
     "denylist": {
-      "description": "Select countries to exclude from your visited list. This will hide them from the home screen and map."
+      "description": "Select countries to exclude from your visited list. This will hide them from the home screen and map.",
+      "switch-a11y": "Toggle to exclude or include this country"
     },
 
     "license": {
