@@ -5,7 +5,7 @@
 //   KR: require('@/assets/geodata/countries/KR.json'),
 // Ensure files exist under this directory.
 
-export type CountryPolygon = any; // Shape depends on your GeoJSON structure
+export type CountryPolygon = unknown; // Shape depends on your GeoJSON structure
 
 const COUNTRY_POLYGONS: Record<string, CountryPolygon> = {
   // Populate with actual country code -> JSON module mappings.
