@@ -2,7 +2,7 @@
  * 질문 데이터 로딩 및 필터링 관련 커스텀 훅
  */
 
-import type { DifficultyLevel, FilteredQuestionSet, Question } from "../types";
+import type { DifficultyLevel, FilteredQuestionSet, Question } from "@/types";
 
 import { useCallback, useEffect, useState } from "react";
 

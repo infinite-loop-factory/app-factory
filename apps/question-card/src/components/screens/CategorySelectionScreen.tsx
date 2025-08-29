@@ -20,8 +20,8 @@ import {
   neutralColors,
   spacing,
   typography,
-} from "../../constants/designSystem";
-import { useAppActions, useAppState } from "../../context/AppContext";
+} from "@/constants/designSystem";
+import { useAppActions, useAppState } from "@/context/AppContext";
 
 export default function CategorySelectionScreen() {
   const router = useRouter();

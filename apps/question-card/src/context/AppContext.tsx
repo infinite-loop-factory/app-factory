@@ -14,7 +14,7 @@ import type {
   FilteredQuestionSet,
   Question,
   QuestionMode,
-} from "../types";
+} from "@/types";
 
 import {
   createContext,
@@ -23,7 +23,7 @@ import {
   useEffect,
   useReducer,
 } from "react";
-import { categories, difficulties } from "../constants/designSystem";
+import { categories, difficulties } from "@/constants/designSystem";
 
 // 초기 상태
 const initialState: AppState = {

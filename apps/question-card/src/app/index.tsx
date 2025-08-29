@@ -1,1 +1,1 @@
-export { default } from "../components/screens/IndexScreen";
+export { default } from "@/components/screens/IndexScreen";

@@ -2,7 +2,7 @@
  * 4가지 질문 모드 알고리즘 구현
  */
 
-import type { Question, QuestionMode } from "../types";
+import type { Question, QuestionMode } from "@/types";
 
 // 배열 셔플 유틸리티 함수 (Fisher-Yates 알고리즘)
 export function shuffleArray<T>(array: T[]): T[] {

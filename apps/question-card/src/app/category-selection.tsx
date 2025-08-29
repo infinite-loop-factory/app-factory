@@ -1,1 +1,1 @@
-export { default } from "../components/screens/CategorySelectionScreen";
+export { default } from "@/components/screens/CategorySelectionScreen";

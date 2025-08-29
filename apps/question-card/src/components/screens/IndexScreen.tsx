@@ -6,12 +6,12 @@
 import { useRouter } from "expo-router";
 import { useEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
+import { useAppState } from "@/context/AppContext";
 import {
   neutralColors,
   spacing,
   typography,
 } from "../../constants/designSystem";
-import { useAppState } from "../../context/AppContext";
 
 export default function IndexScreen() {
   const router = useRouter();

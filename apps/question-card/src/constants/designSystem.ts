@@ -3,7 +3,7 @@
  * v0/Lovable 스타일 기반 Clean & Modern 디자인
  */
 
-import type { Category, Difficulty, DifficultyLevel } from "../types";
+import type { Category, Difficulty, DifficultyLevel } from "@/types";
 
 // 카테고리 색상 팔레트 (v0/Lovable 스타일)
 export const categoryColors = {
