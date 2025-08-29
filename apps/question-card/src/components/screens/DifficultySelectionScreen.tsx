@@ -69,8 +69,7 @@ export default function DifficultySelectionScreen() {
 
     // 선택 상태 저장 후 다음 화면으로 이동
     selectDifficulties(selectedDifficulties);
-    // TODO: Phase 2에서 question-main 화면 구현 후 라우트 변경
-    router.push("/");
+    router.push("/question-main");
   };
 
   const allSelected = selectedDifficulties.length === difficulties.length;
