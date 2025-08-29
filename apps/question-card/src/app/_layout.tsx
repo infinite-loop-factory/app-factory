@@ -47,7 +47,8 @@ export default function RootLayout() {
               presentation: "card",
             }}
           />
-          <Stack.Screen
+          {/* TODO: Uncomment when implementing Phase 2 screens */}
+          {/* <Stack.Screen
             name="difficulty-selection"
             options={{
               title: "난이도 선택",
@@ -81,7 +82,7 @@ export default function RootLayout() {
               title: "질문 카드",
               presentation: "card",
             }}
-          />
+          /> */}
           <Stack.Screen name="+not-found" />
         </Stack>
       </ThemeProvider>
