@@ -65,8 +65,7 @@ export default function QuestionMainScreen() {
       router.push("/");
     } else {
       // 모드 1,2,3: 연속 카드 화면
-      // TODO: Phase 2에서 continuous-card 화면 구현 후 라우트 변경
-      router.push("/");
+      router.push("/continuous-card");
     }
   };
 

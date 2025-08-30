@@ -62,14 +62,14 @@ export default function RootLayout() {
               presentation: "card",
             }}
           />
-          {/* <Stack.Screen
+          <Stack.Screen
             name="continuous-card"
             options={{
               title: "질문 카드",
               presentation: "card",
             }}
           />
-          <Stack.Screen
+          {/* <Stack.Screen
             name="question-list"
             options={{
               title: "질문 목록",
