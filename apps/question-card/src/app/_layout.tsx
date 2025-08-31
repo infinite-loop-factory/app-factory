@@ -14,8 +14,8 @@ import "react-native-reanimated";
 
 import "@/i18n";
 
+import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
 import { AppProvider } from "@/context/AppContext";
-import { GluestackUIProvider } from "../../components/ui/gluestack-ui-provider";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();

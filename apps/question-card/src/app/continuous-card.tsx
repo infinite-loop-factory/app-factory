@@ -1,3 +1,1 @@
-import ContinuousCardScreen from "@/components/screens/ContinuousCardScreen";
-
-export default ContinuousCardScreen;
+export { default } from "@/components/screens/ContinuousCardScreen";
