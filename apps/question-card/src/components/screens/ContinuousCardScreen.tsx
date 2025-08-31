@@ -8,33 +8,17 @@ import type { Question } from "@/types";
 
 import { useRouter } from "expo-router";
 import { useCallback, useEffect, useRef, useState } from "react";
-import {
-  Alert,
-  Animated,
-  Dimensions,
-  StatusBar,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Alert, Animated, Dimensions, StatusBar } from "react-native";
 import {
   PanGestureHandler,
   type PanGestureHandlerGestureEvent,
   State,
 } from "react-native-gesture-handler";
-import { SafeAreaView } from "react-native-safe-area-context";
-import {
-  layout,
-  neutralColors,
-  spacing,
-  typography,
-} from "@/constants/designSystem";
+import { Box, Card, Pressable, Progress, Text } from "@/components/ui";
 import { useAppState } from "@/context/AppContext";
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
+const { width: SCREEN_WIDTH } = Dimensions.get("window");
 const SWIPE_THRESHOLD = SCREEN_WIDTH * 0.3;
-const CARD_HEIGHT = SCREEN_HEIGHT * 0.6;
 
 export default function ContinuousCardScreen() {
   const router = useRouter();
@@ -225,137 +209,127 @@ export default function ContinuousCardScreen() {
   // 로딩 상태
   if (questions.length === 0) {
     return (
-      <SafeAreaView style={styles.container}>
-        <View style={styles.loadingContainer}>
-          <Text style={styles.loadingText}>질문을 준비하고 있습니다...</Text>
-        </View>
-      </SafeAreaView>
+      <Box className="flex-1 bg-gray-50">
+        <Box className="flex-1 items-center justify-center">
+          <Text className="text-gray-600 text-lg">
+            질문을 준비하고 있습니다...
+          </Text>
+        </Box>
+      </Box>
     );
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <Box className="flex-1 bg-gray-50">
       <StatusBar backgroundColor="#ffffff" barStyle="dark-content" />
 
       {/* 헤더 */}
-      <View style={styles.header}>
-        <TouchableOpacity
-          activeOpacity={0.7}
+      <Box className="flex-row items-center justify-between border-gray-200 border-b bg-white px-5 py-4">
+        <Pressable
+          className="flex-1 justify-start"
           onPress={() => router.back()}
-          style={styles.backButton}
         >
-          <Text style={styles.backButtonText}>← 뒤로</Text>
-        </TouchableOpacity>
+          <Text className="font-medium text-base text-blue-600">← 뒤로</Text>
+        </Pressable>
 
-        <View style={styles.progressContainer}>
-          <Text style={styles.progressText}>
+        <Box className="flex-2 items-center">
+          <Text className="mb-1 text-gray-600 text-sm">
             {currentIndex + 1} / {questions.length}
           </Text>
-          <View style={styles.progressBar}>
-            <View
-              style={[styles.progressFill, { width: `${progress * 100}%` }]}
-            />
-          </View>
-        </View>
+          <Progress className="h-1 w-32" value={progress * 100} />
+        </Box>
 
-        <TouchableOpacity
-          activeOpacity={0.7}
-          onPress={showCompletionAlert}
-          style={styles.menuButton}
-        >
-          <Text style={styles.menuButtonText}>⋯</Text>
-        </TouchableOpacity>
-      </View>
+        <Pressable className="flex-1 items-end" onPress={showCompletionAlert}>
+          <Text className="font-bold text-gray-600 text-lg">⋯</Text>
+        </Pressable>
+      </Box>
 
       {/* 카드 영역 */}
-      <View style={styles.cardContainer}>
+      <Box className="flex-1 items-center justify-center px-5">
         <PanGestureHandler
           onGestureEvent={onGestureEvent}
           onHandlerStateChange={onHandlerStateChange}
         >
-          <Animated.View style={[styles.card, cardAnimatedStyle]}>
-            {/* 카테고리 정보 */}
-            <View style={styles.cardHeader}>
-              <Text style={styles.categoryName}>
-                {currentQuestion?.categoryName}
-              </Text>
-              <View
-                style={[
-                  styles.difficultyBadge,
-                  {
-                    backgroundColor: getDifficultyColor(
-                      currentQuestion?.difficulty,
-                    ),
-                  },
-                ]}
-              >
-                <Text style={styles.difficultyText}>
-                  {getDifficultyLabel(currentQuestion?.difficulty)}
-                </Text>
-              </View>
-            </View>
+          <Animated.View
+            style={[{ width: SCREEN_WIDTH - 40 }, cardAnimatedStyle]}
+          >
+            <Card className="rounded-xl bg-white p-6 shadow-lg">
+              <Box className="space-y-6">
+                {/* 카테고리 정보 */}
+                <Box className="flex-row items-center justify-between border-gray-100 border-b pb-4">
+                  <Text className="font-medium text-base text-gray-700">
+                    {currentQuestion?.categoryName}
+                  </Text>
+                  <Box
+                    className={`rounded-xl px-3 py-1 ${getDifficultyBadgeClass(currentQuestion?.difficulty)}`}
+                  >
+                    <Text className="font-medium text-sm text-white">
+                      {getDifficultyLabel(currentQuestion?.difficulty)}
+                    </Text>
+                  </Box>
+                </Box>
 
-            {/* 질문 내용 */}
-            <View style={styles.cardContent}>
-              <Text style={styles.questionText}>
-                {currentQuestion?.content}
-              </Text>
-            </View>
+                {/* 질문 내용 */}
+                <Box className="flex-1 items-center justify-center py-8">
+                  <Text className="text-center font-medium text-gray-800 text-xl leading-relaxed">
+                    {currentQuestion?.content}
+                  </Text>
+                </Box>
 
-            {/* 힌트 텍스트 */}
-            <View style={styles.cardFooter}>
-              <Text style={styles.hintText}>← 이전 질문 | 다음 질문 →</Text>
-            </View>
+                {/* 힌트 텍스트 */}
+                <Box className="border-gray-100 border-t pt-4">
+                  <Text className="text-center text-gray-500 text-sm">
+                    ← 이전 질문 | 다음 질문 →
+                  </Text>
+                </Box>
+              </Box>
+            </Card>
           </Animated.View>
         </PanGestureHandler>
-      </View>
+      </Box>
 
       {/* 하단 버튼들 */}
-      <View style={styles.bottomControls}>
-        <TouchableOpacity
-          activeOpacity={0.7}
+      <Box className="flex-row space-x-4 border-gray-200 border-t bg-white px-5 py-4">
+        <Pressable
+          className={`h-12 flex-1 items-center justify-center rounded-lg border border-gray-300 ${
+            currentIndex === 0 ? "opacity-50" : ""
+          }`}
           disabled={currentIndex === 0}
           onPress={goToPrevious}
-          style={[
-            styles.controlButton,
-            currentIndex === 0 && styles.controlButtonDisabled,
-          ]}
         >
           <Text
-            style={[
-              styles.controlButtonText,
-              currentIndex === 0 && styles.controlButtonTextDisabled,
-            ]}
+            className={`font-medium text-base ${
+              currentIndex === 0 ? "text-gray-400" : "text-gray-700"
+            }`}
           >
             이전
           </Text>
-        </TouchableOpacity>
+        </Pressable>
 
-        <TouchableOpacity
-          activeOpacity={0.7}
+        <Pressable
+          className="h-12 flex-1 items-center justify-center rounded-lg bg-blue-600"
           onPress={goToNext}
-          style={styles.controlButton}
         >
-          <Text style={styles.controlButtonText}>
+          <Text className="font-medium text-base text-white">
             {currentIndex === questions.length - 1 ? "완료" : "다음"}
           </Text>
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+        </Pressable>
+      </Box>
+    </Box>
   );
 }
 
-// 난이도 색상 반환
-function getDifficultyColor(difficulty?: string): string {
+// 난이도 뱃지 클래스 반환
+function getDifficultyBadgeClass(difficulty?: string): string {
   switch (difficulty) {
     case "easy":
-      return "#2ECC71";
+      return "bg-green-500";
     case "medium":
-      return "#F39C12";
+      return "bg-yellow-500";
     case "hard":
-      return "#E74C3C";
+      return "bg-red-500";
     default:
-      return neutralColors[400];
+      return "bg-gray-400";
   }
 }
 
@@ -372,163 +346,3 @@ function getDifficultyLabel(difficulty?: string): string {
       return "기본";
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#f8f9fa",
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  loadingText: {
-    fontSize: typography.fontSize.lg,
-    color: neutralColors[600],
-  },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: layout.screenPadding,
-    paddingVertical: spacing.md,
-    backgroundColor: "#ffffff",
-    borderBottomWidth: 1,
-    borderBottomColor: neutralColors[200],
-  },
-  backButton: {
-    flex: 1,
-  },
-  backButtonText: {
-    fontSize: typography.fontSize.base,
-    color: "#3b82f6",
-    fontWeight: typography.fontWeight.medium,
-  },
-  progressContainer: {
-    flex: 2,
-    alignItems: "center",
-  },
-  progressText: {
-    fontSize: typography.fontSize.sm,
-    color: neutralColors[600],
-    marginBottom: spacing.xs,
-  },
-  progressBar: {
-    width: 120,
-    height: 4,
-    backgroundColor: neutralColors[200],
-    borderRadius: 2,
-    overflow: "hidden",
-  },
-  progressFill: {
-    height: "100%",
-    backgroundColor: "#3b82f6",
-    borderRadius: 2,
-  },
-  menuButton: {
-    flex: 1,
-    alignItems: "flex-end",
-  },
-  menuButtonText: {
-    fontSize: 18,
-    color: neutralColors[600],
-    fontWeight: typography.fontWeight.bold,
-  },
-  cardContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    paddingHorizontal: layout.screenPadding,
-  },
-  card: {
-    width: SCREEN_WIDTH - layout.screenPadding * 2,
-    height: CARD_HEIGHT,
-    backgroundColor: "#ffffff",
-    borderRadius: 20,
-    padding: layout.cardPadding * 1.5,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.15,
-    shadowRadius: 12,
-    elevation: 8,
-  },
-  cardHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: spacing.lg,
-    paddingBottom: spacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: neutralColors[100],
-  },
-  categoryName: {
-    fontSize: typography.fontSize.base,
-    fontWeight: typography.fontWeight.medium,
-    color: neutralColors[700],
-  },
-  difficultyBadge: {
-    paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.xs,
-    borderRadius: 12,
-  },
-  difficultyText: {
-    fontSize: typography.fontSize.sm,
-    color: "#ffffff",
-    fontWeight: typography.fontWeight.medium,
-  },
-  cardContent: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  questionText: {
-    fontSize: typography.fontSize.xl,
-    fontWeight: typography.fontWeight.medium,
-    color: neutralColors[800],
-    textAlign: "center",
-    lineHeight: typography.fontSize.xl * typography.lineHeight.relaxed,
-  },
-  cardFooter: {
-    marginTop: spacing.lg,
-    paddingTop: spacing.md,
-    borderTopWidth: 1,
-    borderTopColor: neutralColors[100],
-  },
-  hintText: {
-    fontSize: typography.fontSize.sm,
-    color: neutralColors[500],
-    textAlign: "center",
-  },
-  bottomControls: {
-    flexDirection: "row",
-    paddingHorizontal: layout.screenPadding,
-    paddingVertical: spacing.md,
-    backgroundColor: "#ffffff",
-    borderTopWidth: 1,
-    borderTopColor: neutralColors[200],
-    gap: spacing.md,
-  },
-  controlButton: {
-    flex: 1,
-    height: layout.buttonHeight,
-    backgroundColor: "#3b82f6",
-    borderRadius: 8,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  controlButtonDisabled: {
-    backgroundColor: neutralColors[300],
-  },
-  controlButtonText: {
-    fontSize: typography.fontSize.base,
-    fontWeight: typography.fontWeight.medium,
-    color: "#ffffff",
-  },
-  controlButtonTextDisabled: {
-    color: neutralColors[500],
-  },
-});

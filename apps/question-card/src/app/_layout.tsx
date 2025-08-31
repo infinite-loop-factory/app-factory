@@ -12,6 +12,8 @@ import { useColorScheme } from "nativewind";
 import { useEffect } from "react";
 import "react-native-reanimated";
 
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+
 import "@/i18n";
 
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
@@ -37,60 +39,62 @@ export default function RootLayout() {
   }
 
   return (
-    <AppProvider>
-      <GluestackUIProvider mode={colorScheme}>
-        <ThemeProvider
-          value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
-        >
-          <Stack>
-            <Stack.Screen name="index" options={{ headerShown: false }} />
-            <Stack.Screen
-              name="category-selection"
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <AppProvider>
+        <GluestackUIProvider mode={colorScheme}>
+          <ThemeProvider
+            value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+          >
+            <Stack>
+              <Stack.Screen name="index" options={{ headerShown: false }} />
+              <Stack.Screen
+                name="category-selection"
+                options={{
+                  title: "카테고리 선택",
+                  presentation: "card",
+                }}
+              />
+              {/* TODO: Uncomment when implementing Phase 2 screens */}
+              <Stack.Screen
+                name="difficulty-selection"
+                options={{
+                  title: "난이도 선택",
+                  presentation: "card",
+                }}
+              />
+              <Stack.Screen
+                name="question-main"
+                options={{
+                  title: "질문 시작",
+                  presentation: "card",
+                }}
+              />
+              <Stack.Screen
+                name="continuous-card"
+                options={{
+                  title: "질문 카드",
+                  presentation: "card",
+                }}
+              />
+              {/* <Stack.Screen
+              name="question-list"
               options={{
-                title: "카테고리 선택",
+                title: "질문 목록",
                 presentation: "card",
               }}
             />
-            {/* TODO: Uncomment when implementing Phase 2 screens */}
             <Stack.Screen
-              name="difficulty-selection"
-              options={{
-                title: "난이도 선택",
-                presentation: "card",
-              }}
-            />
-            <Stack.Screen
-              name="question-main"
-              options={{
-                title: "질문 시작",
-                presentation: "card",
-              }}
-            />
-            <Stack.Screen
-              name="continuous-card"
+              name="individual-card"
               options={{
                 title: "질문 카드",
                 presentation: "card",
               }}
-            />
-            {/* <Stack.Screen
-            name="question-list"
-            options={{
-              title: "질문 목록",
-              presentation: "card",
-            }}
-          />
-          <Stack.Screen
-            name="individual-card"
-            options={{
-              title: "질문 카드",
-              presentation: "card",
-            }}
-          /> */}
-            <Stack.Screen name="+not-found" />
-          </Stack>
-        </ThemeProvider>
-      </GluestackUIProvider>
-    </AppProvider>
+            /> */}
+              <Stack.Screen name="+not-found" />
+            </Stack>
+          </ThemeProvider>
+        </GluestackUIProvider>
+      </AppProvider>
+    </GestureHandlerRootView>
   );
 }

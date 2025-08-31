@@ -24,6 +24,7 @@ import {
   useReducer,
 } from "react";
 import { categories, difficulties } from "@/constants/designSystem";
+import { useQuestionData } from "@/hooks/useQuestions";
 
 // 초기 상태
 const initialState: AppState = {
@@ -224,6 +225,9 @@ interface AppProviderProps {
 export function AppProvider({ children }: AppProviderProps) {
   const [state, dispatch] = useReducer(appReducer, initialState);
 
+  // 질문 데이터 로딩 훅 사용
+  const { questions, isLoading, error } = useQuestionData();
+
   // 앱 초기화
   const initializeApp = useCallback(
     async (data: {
@@ -349,18 +353,33 @@ export function AppProvider({ children }: AppProviderProps) {
     },
   };
 
-  // 앱 초기화 (처음 마운트 시)
+  // 데이터 로딩 상태 관리
   useEffect(() => {
-    if (!state.isInitialized) {
-      // 질문 데이터를 로드해야 함 (추후 구현)
-      // 여기서는 빈 데이터로 초기화
+    dispatch({ type: "SET_LOADING", payload: isLoading });
+  }, [isLoading]);
+
+  // 에러 상태 관리
+  useEffect(() => {
+    if (error) {
+      const appError: AppError = {
+        code: "DATA_LOADING_FAILED",
+        message: "질문 데이터 로딩에 실패했습니다.",
+        details: error,
+      };
+      dispatch({ type: "SET_ERROR", payload: appError });
+    }
+  }, [error]);
+
+  // 앱 초기화 (질문 데이터 로딩 완료 후)
+  useEffect(() => {
+    if (!state.isInitialized && questions.length > 0) {
       initializeApp({
         categories,
         difficulties,
-        questions: [], // 추후 실제 데이터로 교체
+        questions,
       });
     }
-  }, [state.isInitialized, initializeApp]);
+  }, [state.isInitialized, questions, initializeApp]);
 
   return (
     <AppContext.Provider value={contextValue}>{children}</AppContext.Provider>
