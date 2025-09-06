@@ -78,28 +78,33 @@ EasyTalking 앱 전체 개발 로드맵 및 작업 계획
 
 #### Day 7: 리스트 모드 구현 ✅ 완료 - **Phase 3로 이관**
 - [x] 화면 간 네비게이션 연결 - **완료**
-- **Note**: QuestionListScreen, IndividualCardScreen은 Phase 3에서 구현 예정
 
-### **Phase 3: 미완성 화면 구현 & 품질 개선 (Day 8-10)** 🔄 진행 예정
+### **Phase 3: 미완성 화면 구현 & 품질 개선 (Day 8-10)** ✅ **95% 완료 - 2024.09.06**
 
-#### Day 8: 모드 4 필수 화면 구현
-- [ ] **QuestionListScreen** - 질문 목록 보기 화면 구현
+#### Day 8: 모드 4 필수 화면 구현 ✅ **완료**
+- [x] **QuestionListScreen** - 질문 목록 보기 화면 구현 완료
   - 질문 미리보기 (30글자), 카테고리 아이콘, 난이도 배지
   - 스크롤 가능한 리스트 UI, 총 질문 수 표시
-- [ ] **IndividualCardScreen** - 개별 질문 카드 화면 구현
+  - "설정 다시하기", "질문 모드 선택으로 돌아가기" 네비게이션
+- [x] **IndividualCardScreen** - 개별 질문 카드 화면 구현 완료
   - ContinuousCardScreen과 동일한 카드 디자인
   - 버튼 전용 네비게이션 (스와이프 제거)
   - "리스트 순서대로 이동합니다" 도움말 텍스트
+  - "목록으로", "메인으로" 네비게이션 옵션
 
-#### Day 9: 라우팅 완성 및 품질 개선
-- [ ] **모드 4 라우팅 연결** - question-list.tsx, individual-card.tsx 생성
-- [ ] **성능 최적화** - React.memo, useCallback, useMemo 적용
-- [ ] **접근성 개선** - 스크린 리더 지원, 키보드 네비게이션
+#### Day 9: 라우팅 완성 및 품질 개선 ✅ **완료**
+- [x] **모드 4 라우팅 연결** - question-list.tsx, individual-card.tsx 생성
+- [x] **QuestionMainScreen 업데이트** - 모드 4 선택시 올바른 라우팅
+- [x] **완전한 사용자 플로우** - Category → Difficulty → Main → List → Card
+- [ ] **성능 최적화** - React.memo, useCallback, useMemo 적용 (Phase 4로 이관)
+- [ ] **접근성 개선** - 스크린 리더 지원, 키보드 네비게이션 (Phase 4로 이관)
 
-#### Day 10: 최종 폴리싱
-- [ ] **UX 개선** - 로딩 상태, 에러 핸들링 강화
-- [ ] **애니메이션 부드러움** 개선
-- [ ] **전체 플로우 테스트** - 모든 6개 화면, 4가지 모드 검증
+#### Day 10: 최종 검증 및 테스트 🔄 **진행 중**
+- [x] **모든 6개 화면 완성** - IndexScreen, CategorySelection, DifficultySelection, QuestionMain, ContinuousCard, QuestionList, IndividualCard
+- [x] **4가지 모드 완전 구현** - 모드 1,2,3 (연속 카드), 모드 4 (리스트 → 개별 카드)
+- [x] **에러 핸들링** - 질문 없음, 빈 선택 등 방어 코드
+- [x] **사용자 경험** - 적절한 도움말, 알럿, 네비게이션 옵션
+- [ ] **최종 수동 테스트** - 전체 플로우 검증 (진행 중)
 
 #### 🎯 Phase 2 주요 성과 (2024.09.06)
 - [x] **질문 네비게이션 이슈**: Context 상태 동기화 문제 해결
