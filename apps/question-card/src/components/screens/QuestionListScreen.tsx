@@ -125,18 +125,10 @@ export default function QuestionListScreen() {
       // Context에 현재 질문 인덱스 설정
       setCurrentQuestionIndex(index);
 
-      // 개별 카드 화면으로 이동 (커밋2에서 구현 예정)
-      // TODO: IndividualCardScreen 구현 후 활성화
-      // router.push("/individual-card");
-
-      // 임시로 알럿 표시
-      Alert.alert(
-        "개발 중",
-        `${index + 1}번째 질문을 선택했습니다.\n개별 카드 화면은 다음 커밋에서 구현됩니다.`,
-        [{ text: "확인" }],
-      );
+      // 개별 카드 화면으로 이동
+      router.push("/individual-card");
     },
-    [setCurrentQuestionIndex],
+    [setCurrentQuestionIndex, router],
   );
 
   // 메인으로 돌아가기
