@@ -15,19 +15,23 @@ import {
   State,
 } from "react-native-gesture-handler";
 import { Box, Card, Pressable, Progress, Text } from "@/components/ui";
-import { useAppState } from "@/context/AppContext";
+import { useAppActions, useAppState } from "@/context/AppContext";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 const SWIPE_THRESHOLD = SCREEN_WIDTH * 0.3;
 
 export default function ContinuousCardScreen() {
   const router = useRouter();
-  const { filteredQuestions } = useAppState();
+  const { filteredQuestions, progress } = useAppState();
+  const { goToNextQuestion, goToPreviousQuestion } = useAppActions();
 
-  // 현재 질문 상태
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [questions, setQuestions] = useState<Question[]>([]);
+  // 로컬 상태 (Context 상태 사용으로 대체 예정)
+  const [_questions, setQuestions] = useState<Question[]>([]);
   const [_isCompleted, setIsCompleted] = useState(false);
+
+  // Context에서 관리하는 현재 인덱스와 질문 사용
+  const currentIndex = progress.currentIndex;
+  const currentQuestion = progress.currentQuestion;
 
   // 애니메이션 상태
   const translateX = useRef(new Animated.Value(0)).current;
@@ -35,10 +39,11 @@ export default function ContinuousCardScreen() {
   const rotate = useRef(new Animated.Value(0)).current;
   const scale = useRef(new Animated.Value(1)).current;
 
-  // 컴포넌트 마운트시 질문 데이터 설정
+  // 컴포넌트 마운트시 질문 데이터 설정 (null 안전성 추가)
   useEffect(() => {
-    if (filteredQuestions.questions.length > 0) {
-      setQuestions(filteredQuestions.questions);
+    const questionsArray = filteredQuestions.questions || [];
+    if (questionsArray.length > 0) {
+      setQuestions(questionsArray);
     }
   }, [filteredQuestions.questions]);
 
@@ -73,7 +78,8 @@ export default function ContinuousCardScreen() {
         {
           text: "처음부터 다시",
           onPress: () => {
-            setCurrentIndex(0);
+            // 처음으로 리셋 (Context Actions 사용)
+            // TODO: Context에서 resetProgress 함수 구현 필요
             setIsCompleted(false);
             resetCardPosition();
           },
@@ -88,29 +94,35 @@ export default function ContinuousCardScreen() {
     );
   }, [router, resetCardPosition]);
 
-  // 현재 질문
-  const currentQuestion = questions[currentIndex];
-  const progress =
-    questions.length > 0 ? (currentIndex + 1) / questions.length : 0;
+  // 진행률 계산
+  const progressPercentage =
+    filteredQuestions.totalCount > 0
+      ? (currentIndex + 1) / filteredQuestions.totalCount
+      : 0;
 
-  // 다음 질문으로 이동
+  // 다음 질문으로 이동 (Context Actions 사용)
   const goToNext = useCallback(() => {
-    if (currentIndex < questions.length - 1) {
-      setCurrentIndex(currentIndex + 1);
+    if (progress.canGoForward) {
+      goToNextQuestion();
       resetCardPosition();
     } else {
       setIsCompleted(true);
       showCompletionAlert();
     }
-  }, [currentIndex, questions.length, resetCardPosition, showCompletionAlert]);
+  }, [
+    progress.canGoForward,
+    goToNextQuestion,
+    resetCardPosition,
+    showCompletionAlert,
+  ]);
 
-  // 이전 질문으로 이동
+  // 이전 질문으로 이동 (Context Actions 사용)
   const goToPrevious = useCallback(() => {
-    if (currentIndex > 0) {
-      setCurrentIndex(currentIndex - 1);
+    if (progress.canGoBack) {
+      goToPreviousQuestion();
       resetCardPosition();
     }
-  }, [currentIndex, resetCardPosition]);
+  }, [progress.canGoBack, goToPreviousQuestion, resetCardPosition]);
 
   // 제스처 핸들러
   const onGestureEvent = Animated.event(
@@ -206,8 +218,8 @@ export default function ContinuousCardScreen() {
     ],
   };
 
-  // 로딩 상태
-  if (questions.length === 0) {
+  // 로딩 상태 - filteredQuestions 기준으로 변경
+  if (filteredQuestions.totalCount === 0) {
     return (
       <Box className="flex-1 bg-gray-50">
         <Box className="flex-1 items-center justify-center">
@@ -234,9 +246,9 @@ export default function ContinuousCardScreen() {
 
         <Box className="flex-2 items-center">
           <Text className="mb-1 text-gray-600 text-sm">
-            {currentIndex + 1} / {questions.length}
+            {currentIndex + 1} / {filteredQuestions.totalCount}
           </Text>
-          <Progress className="h-1 w-32" value={progress * 100} />
+          <Progress className="h-1 w-32" value={progressPercentage * 100} />
         </Box>
 
         <Pressable className="flex-1 items-end" onPress={showCompletionAlert}>
@@ -270,7 +282,7 @@ export default function ContinuousCardScreen() {
                 </Box>
 
                 {/* 질문 내용 */}
-                <Box className="flex-1 items-center justify-center py-8">
+                <Box className="flex items-center justify-center py-8">
                   <Text className="text-center font-medium text-gray-800 text-xl leading-relaxed">
                     {currentQuestion?.content}
                   </Text>
@@ -292,14 +304,14 @@ export default function ContinuousCardScreen() {
       <Box className="flex-row space-x-4 border-gray-200 border-t bg-white px-5 py-4">
         <Pressable
           className={`h-12 flex-1 items-center justify-center rounded-lg border border-gray-300 ${
-            currentIndex === 0 ? "opacity-50" : ""
+            !progress.canGoBack ? "opacity-50" : ""
           }`}
-          disabled={currentIndex === 0}
+          disabled={!progress.canGoBack}
           onPress={goToPrevious}
         >
           <Text
             className={`font-medium text-base ${
-              currentIndex === 0 ? "text-gray-400" : "text-gray-700"
+              !progress.canGoBack ? "text-gray-400" : "text-gray-700"
             }`}
           >
             이전
@@ -311,7 +323,7 @@ export default function ContinuousCardScreen() {
           onPress={goToNext}
         >
           <Text className="font-medium text-base text-white">
-            {currentIndex === questions.length - 1 ? "완료" : "다음"}
+            {!progress.canGoForward ? "완료" : "다음"}
           </Text>
         </Pressable>
       </Box>
