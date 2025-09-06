@@ -61,8 +61,7 @@ export default function QuestionMainScreen() {
     // 모드에 따라 다른 화면으로 이동
     if (mode === 4) {
       // 모드 4: 질문 리스트 화면
-      // TODO: Phase 2에서 question-list 화면 구현 후 라우트 변경
-      router.push("/");
+      router.push("/question-list");
     } else {
       // 모드 1,2,3: 연속 카드 화면
       router.push("/continuous-card");
