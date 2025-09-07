@@ -1,1 +1,1 @@
-pnpm test
+pnpm exec tsx scripts/pre-push.ts
