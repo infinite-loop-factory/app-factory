@@ -1,6 +1,3 @@
-import CustomSafeAreaView from "@/components/CustomSafeAriaView";
-import CourseCard from "@/components/card/CourseCard";
-import ReviewCard from "@/components/card/ReviewCard";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import {
@@ -10,44 +7,15 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { useFindPopularCourses } from "@/api/reactQuery/course/useFindPopularCourses";
+import CustomSafeAreaView from "@/components/CustomSafeAriaView";
+import CourseCard from "@/components/card/CourseCard";
+import ReviewCard from "@/components/card/ReviewCard";
 
 export default function HomeScreen() {
   const router = useRouter();
 
-  const recommededCourse = [
-    {
-      id: "1",
-      title: "도시 공원 코스 1",
-      image: "http://via.placeholder.com/280",
-      distance: 2.1,
-      totalTime: 21,
-      address: "강남구 삼성동",
-    },
-    {
-      id: "2",
-      title: "도시 공원 코스 2",
-      image: "http://via.placeholder.com/280",
-      distance: 2.1,
-      totalTime: 21,
-      address: "강남구 삼성동",
-    },
-    {
-      id: "3",
-      title: "도시 공원 코스 3",
-      image: "http://via.placeholder.com/280",
-      distance: 2.1,
-      totalTime: 21,
-      address: "강남구 삼성동",
-    },
-    {
-      id: "4",
-      title: "도시 공원 코스 4",
-      image: "http://via.placeholder.com/280",
-      distance: 2.1,
-      totalTime: 21,
-      address: "강남구 삼성동",
-    },
-  ];
+  const { data: recommededCourse } = useFindPopularCourses();
 
   const latestReviews = [
     {
@@ -92,7 +60,7 @@ export default function HomeScreen() {
           onPress={() => router.push("/search")}
         >
           <View className="flex h-full flex-row items-center">
-            <Ionicons name="search" className="pr-2" />
+            <Ionicons className="pr-2" name="search" />
             <Text className="text-slate-500 text-sm">산책 코스 검색하기</Text>
           </View>
         </TouchableOpacity>
@@ -106,19 +74,19 @@ export default function HomeScreen() {
             >
               <View className="flex flex-row items-center ">
                 <Text className="text-slate-500 text-sm">전체보기</Text>
-                <Ionicons name="arrow-forward" className="pl-2" />
+                <Ionicons className="pl-2" name="arrow-forward" />
               </View>
             </TouchableOpacity>
           </View>
           <View>
             <FlatList
-              data={recommededCourse}
-              renderItem={CourseCard}
-              keyExtractor={(item) => item.id}
-              horizontal
-              nestedScrollEnabled={true}
-              showsHorizontalScrollIndicator={false}
               contentContainerStyle={{ gap: 16 }}
+              data={recommededCourse}
+              horizontal
+              keyExtractor={(item) => `popular_course_${item.id}`}
+              nestedScrollEnabled={true}
+              renderItem={CourseCard}
+              showsHorizontalScrollIndicator={false}
             />
           </View>
         </View>
@@ -131,13 +99,13 @@ export default function HomeScreen() {
             >
               <View className="flex flex-row items-center ">
                 <Text className="text-slate-500 text-sm">전체보기</Text>
-                <Ionicons name="arrow-forward" className="pl-2" />
+                <Ionicons className="pl-2" name="arrow-forward" />
               </View>
             </TouchableOpacity>
           </View>
           <View>
             {latestReviews.map((item) => {
-              return <ReviewCard key={item.id} item={item} />;
+              return <ReviewCard item={item} key={item.id} />;
             })}
           </View>
         </View>
