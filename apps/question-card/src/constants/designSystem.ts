@@ -1,14 +1,23 @@
 /**
- * EasyTalking 디자인 시스템
- * NativeWind 기반 Vibrant Orange (Modified Quantum Rose) 테마
+ * EasyTalking 디자인 시스템 - Modern Refined Orange v2.0
+ * NativeWind 기반 현대적이고 세련된 디자인 시스템
  *
- * 테마: 따뜻하고 에너지 넘치는 오렌지 계열 디자인
- * 기본 색상: #FF6B35 (hsl(14, 100%, 60%))
+ * 디자인 철학: 미니멀 + 포인트
+ * - 그레이 톤 베이스 + 오렌지 포인트 컬러
+ * - 현대적 우아함: 과도한 색상 사용 지양
+ * - 계층적 시각화: 색상이 아닌 크기, 간격, 타이포그래피로 구조화
+ *
+ * 색상 사용 원칙:
+ * - 오렌지: 브랜드 색상으로만 사용 (로고, 포인트 라인, 테두리)
+ * - 그레이: 베이스 색상 (텍스트, 배경, 카드, 아이콘)
+ * - 화이트: 청정함과 공간감을 위한 주요 배경색
  *
  * 스타일링 우선순위:
  * 1. NativeWind (Tailwind CSS for React Native) - 주요 스타일링
  * 2. Gluestack-ui 컴포넌트 - 적합한 경우 사용
  * 3. React Native StyleSheet - NativeWind 한계가 있을 때만 사용
+ *
+ * 참고 문서: docs/design-system-modern-refined.md
  */
 
 import type { Category, Difficulty, DifficultyLevel } from "@/types";
@@ -559,8 +568,50 @@ export const getDifficultyTailwindClass = (
   return difficultyTailwindClasses[difficulty][type];
 };
 
-// 컴포넌트 스타일링 예제 (Vibrant Orange 테마 적용)
+// 컴포넌트 스타일링 예제 (Modern Refined Orange v2.0 적용)
 export const styleExamples = {
+  // 🆕 Modern Refined 스타일 (v2.0)
+  modern: {
+    // 태그 (Tag) - Pill 스타일
+    tag: "text-sm text-gray-700 rounded-full border border-orange-200 bg-white px-3 py-1.5",
+
+    // 카드 - 미니멀 디자인
+    card: "flex-row items-center rounded-xl border border-gray-200 bg-white p-5 shadow-sm hover:shadow-md transition-shadow",
+
+    // 아이콘 컨테이너 - 중성적 배경
+    iconContainer:
+      "h-10 w-10 items-center justify-center rounded-full bg-gray-50",
+
+    // 화살표 - 미니멀 스타일
+    arrow: "h-6 w-6 items-center justify-center",
+    arrowText: "text-lg text-gray-400 opacity-60",
+
+    // 숫자 강조 - 세련된 디스플레이
+    numberDisplay: {
+      container: "items-center",
+      label: "text-sm text-gray-400 mb-1",
+      numberContainer: "flex-row items-end",
+      number: "text-3xl font-bold text-gray-900",
+      unit: "text-lg font-medium text-gray-400 ml-1 mb-1",
+      accent: "h-1 w-12 rounded-full bg-orange-500 mt-2 opacity-60",
+    },
+
+    // 텍스트 색상
+    text: {
+      primary: "text-gray-900", // 주요 텍스트
+      secondary: "text-gray-700", // 일반 텍스트
+      muted: "text-gray-400", // 보조 텍스트
+      brand: "text-orange-500", // 브랜드 컬러
+    },
+
+    // 버튼 - 현대적 스타일
+    button: {
+      primary:
+        "bg-orange-500 text-white px-6 py-4 rounded-lg font-medium shadow-sm",
+      secondary: "bg-orange-100 text-gray-700 px-6 py-4 rounded-lg font-medium",
+      ghost: "text-gray-700 px-6 py-4 rounded-lg font-medium hover:bg-gray-50",
+    },
+  },
   // 테마 기반 기본 스타일
   theme: {
     // 화면 배경
