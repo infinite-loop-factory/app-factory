@@ -1,42 +1,48 @@
-import { Ionicons } from "@expo/vector-icons";
-import { Image, Text, View } from "react-native";
+import type { CourseRow } from "@/types/course";
 
-type TCourseCardProp = {
-  item: {
-    id: string;
-    title: string;
-    image: string;
-    distance: number;
-    totalTime: number;
-    address: string;
-  };
-};
+import { router } from "expo-router";
+import { MapIcon } from "lucide-react-native";
+import { Image, Text, TouchableOpacity } from "react-native";
+import Images from "@/assets/images";
+import { formatDistanceKm } from "@/utils/number";
+import { HStack } from "../ui/hstack";
+import { Icon } from "../ui/icon";
+import { VStack } from "../ui/vstack";
 
-export default function CourseCard({ item }: TCourseCardProp) {
-  const { title, distance, totalTime, address } = item;
+export default function CourseCard({ item }: { item: CourseRow }) {
+  const { id, start_name, end_name, total_distance, total_time, image_url } =
+    item;
 
   return (
-    <View className=" flex w-72 flex-column overflow-hidden rounded-lg border border-slate-200">
-      <Image
-        source={require("../../assets/images/walking-main-3.png")}
-        className="h-40 w-72"
-      />
-      <View className="flex p-4">
-        <Text className="mb-2 font-semibold text-md">{title}</Text>
-        <View className="flex flex-row">
-          <Text className="mr-2 mb-2 text-slate-500 text-sm">
-            거리 : {distance}km
+    <TouchableOpacity
+      activeOpacity={0.8}
+      onPress={() => {
+        router.push({ pathname: "/(screens)/detail/[id]", params: { id } });
+      }}
+    >
+      <VStack className="w-72 overflow-hidden rounded-lg border border-slate-200">
+        <Image
+          className="h-40 w-72"
+          source={image_url ? { uri: image_url } : Images.walkingMainImage3}
+        />
+        <VStack className="gap-2 p-4">
+          <Text className="text-ellipsis font-semibold" numberOfLines={1}>
+            {start_name} 출발
           </Text>
-          <Text className="mb-2 text-slate-500 text-sm">
-            소요 시간 : {totalTime}분
-          </Text>
-        </View>
-        <View className="flex flex-row items-center ">
-          <Ionicons name="map-outline" className="mr-2" color={"#6DBE6E"} />
-          {/* FIXME: 컬러 팔레트 정리하기 */}
-          <Text className="text-[#6DBE6E] text-sm">{address}</Text>
-        </View>
-      </View>
-    </View>
+          <HStack className="gap-2">
+            <Text className="text-slate-500 text-sm">
+              거리 : {formatDistanceKm(total_distance)}km
+            </Text>
+            <Text className="text-slate-500 text-sm">
+              소요 시간 : {Math.round(total_time / 60)}분
+            </Text>
+          </HStack>
+          <HStack className="items-center gap-2">
+            <Icon as={MapIcon} className="text-primary-500" />
+            <Text className="text-primary-500 text-sm">{end_name}</Text>
+          </HStack>
+        </VStack>
+      </VStack>
+    </TouchableOpacity>
   );
 }

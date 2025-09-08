@@ -10,5 +10,7 @@ export const queryKeys = {
   },
   course: {
     findCourse: "course",
+    findNearbyCourses: "nearby-courses",
+    findPopularCourses: "popular-courses",
   },
 };
