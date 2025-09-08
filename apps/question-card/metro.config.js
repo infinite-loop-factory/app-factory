@@ -17,6 +17,11 @@ const config = withTurborepoManagedCache(
 // https://github.com/expo/expo/issues/26926
 config.resolver.unstable_enablePackageExports = true;
 
+// Add path alias configuration to resolve TypeScript paths
+config.resolver.alias = {
+  "@": path.resolve(__dirname, "src"),
+};
+
 module.exports = config;
 
 /**
