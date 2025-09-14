@@ -4,7 +4,7 @@ import {
   NaverMapMarkerOverlay,
   NaverMapView,
 } from "@mj-studio/react-native-naver-map";
-import { useRef, useState } from "react";
+import { useMemo, useRef } from "react";
 import { Image } from "react-native";
 import Images from "@/assets/images";
 
@@ -21,15 +21,14 @@ export default function NaverMap({
 }: INaverMapProps) {
   const mapRef = useRef(null);
 
-  const [camera, _setCamera] = useState<{
-    latitude: number;
-    longitude: number;
-    zoom: number;
-  }>({
-    latitude: Number(latitude ?? 37.5665),
-    longitude: Number(longitude ?? 126.978),
-    zoom: 16,
-  });
+  const camera = useMemo(
+    () => ({
+      latitude: Number(latitude ?? 37.5665),
+      longitude: Number(longitude ?? 126.978),
+      zoom: 16,
+    }),
+    [latitude, longitude],
+  );
 
   return (
     <NaverMapView
