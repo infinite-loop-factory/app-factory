@@ -2,7 +2,7 @@ import * as ImagePicker from "expo-image-picker";
 import { Camera } from "lucide-react-native";
 import { useState } from "react";
 import { Image, TouchableOpacity, View } from "react-native";
-import ImageOptionsSheet from "../actionsheet/ImageOptionsSheet";
+import ImageOptionsActionsheet from "../actionsheet/ImageOptionsActionsheet";
 import { HStack } from "../ui/hstack";
 import { Icon } from "../ui/icon";
 import { Text } from "../ui/text";
@@ -71,7 +71,7 @@ export default function ImagePickerGroup({
         </TouchableOpacity>
       )}
       {/* NOTE: MODAL ==> */}
-      <ImageOptionsSheet
+      <ImageOptionsActionsheet
         handleDelete={() => {
           setShowImageOptionActionsheet(false);
           setImages((prev) => {
