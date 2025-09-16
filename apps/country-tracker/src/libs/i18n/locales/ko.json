@@ -54,7 +54,13 @@
     "countries": "국가",
     "search-placeholder": "국가 검색",
     "web-disclaimer": "3D 지구본은 iOS에서만 지원됩니다. 현재는 2D 웹 보기입니다.",
-    "download-app": "앱 다운로드"
+    "download-app": "앱 다운로드",
+    "alert": {
+      "country-not-found": {
+        "title": "국가를 찾을 수 없어요",
+        "message": "다른 이름으로 검색하거나 철자를 다시 확인해주세요."
+      }
+    }
   },
 
   "login": {

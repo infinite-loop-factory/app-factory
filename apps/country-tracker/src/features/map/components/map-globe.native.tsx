@@ -1,4 +1,5 @@
 import type { Region } from "react-native-maps";
+import type { CountryPolygon } from "@/assets/geodata/countries";
 
 import { useQuery } from "@tanstack/react-query";
 import * as Location from "expo-location";
@@ -66,7 +67,7 @@ const MapGlobe = forwardRef<MapGlobeRef>((_, ref) => {
     longitudeDelta: 75,
   });
 
-  const { data: countryPolygons } = useQuery({
+  const { data: countryPolygons } = useQuery<CountryPolygon[]>({
     queryKey: QUERY_KEYS.countryPolygons(user?.id ?? null),
     queryFn: async () => {
       if (!user) return [];
@@ -221,7 +222,7 @@ const MapGlobe = forwardRef<MapGlobeRef>((_, ref) => {
       style={{ flex: 1 }}
     >
       {countryPolygons?.map((polygonData) =>
-        polygonData.coordinates.map((coords: number[][], index: number) => (
+        polygonData.coordinates.map((coords, index) => (
           <Polygon
             coordinates={coords
               .filter(
