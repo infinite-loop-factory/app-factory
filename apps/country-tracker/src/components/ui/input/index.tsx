@@ -1,12 +1,13 @@
 "use client";
-import { PrimitiveIcon, UIIcon } from "@gluestack-ui/icon";
-import { createInput } from "@gluestack-ui/input";
-import type { VariantProps } from "@gluestack-ui/nativewind-utils";
-import { tva } from "@gluestack-ui/nativewind-utils/tva";
+import type { VariantProps } from "@gluestack-ui/utils/nativewind-utils";
+
+import { PrimitiveIcon, UIIcon } from "@gluestack-ui/core/icon/creator";
+import { createInput } from "@gluestack-ui/core/input/creator";
 import {
+  tva,
   useStyleContext,
   withStyleContext,
-} from "@gluestack-ui/nativewind-utils/withStyleContext";
+} from "@gluestack-ui/utils/nativewind-utils";
 import { cssInterop } from "nativewind";
 import React from "react";
 import { Pressable, TextInput, View } from "react-native";
@@ -141,9 +142,7 @@ const InputIcon = React.forwardRef<
         size={size}
       />
     );
-  }
-
-  if (
+  } else if (
     (props.height !== undefined || props.width !== undefined) &&
     size === undefined
   ) {
@@ -155,7 +154,6 @@ const InputIcon = React.forwardRef<
       />
     );
   }
-
   return (
     <UIInput.Icon
       ref={ref}

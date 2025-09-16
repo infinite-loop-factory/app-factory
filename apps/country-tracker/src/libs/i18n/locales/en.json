@@ -8,8 +8,7 @@
     "search-a11y": "Search countries",
     "search-button-a11y": "Execute search",
     "error-loading": "Failed to load visited countries.",
-    "no-visited-countries": "No Visited Countries Yet",
-    "no-visited-countries-description": "Start your journey and see your visited countries here!"
+    "no-visited-countries": "No visited countries yet"
   },
 
   "map": {

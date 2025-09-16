@@ -1,16 +1,17 @@
 "use client";
-import { PrimitiveIcon, UIIcon } from "@gluestack-ui/icon";
-import type { VariantProps } from "@gluestack-ui/nativewind-utils";
-import { tva } from "@gluestack-ui/nativewind-utils/tva";
+import type { VariantProps } from "@gluestack-ui/utils/nativewind-utils";
+
+import { PrimitiveIcon, UIIcon } from "@gluestack-ui/core/icon/creator";
 import {
+  tva,
   useStyleContext,
   withStyleContext,
-} from "@gluestack-ui/nativewind-utils/withStyleContext";
+} from "@gluestack-ui/utils/nativewind-utils";
 import { cssInterop } from "nativewind";
 import React from "react";
 import { Text, View } from "react-native";
+import { Svg } from "react-native-svg";
 
-import type { Svg } from "react-native-svg";
 const SCOPE = "BADGE";
 
 const badgeStyle = tva({
@@ -145,7 +146,6 @@ const BadgeText = React.forwardRef<
   const { size: parentSize, action: parentAction } = useStyleContext(SCOPE);
   return (
     <Text
-      ref={ref}
       className={badgeTextStyle({
         parentVariants: {
           size: parentSize,
@@ -154,6 +154,7 @@ const BadgeText = React.forwardRef<
         size,
         class: className,
       })}
+      ref={ref}
       {...props}
     >
       {children}
@@ -179,8 +180,7 @@ const BadgeIcon = React.forwardRef<
         size={size}
       />
     );
-  }
-  if (
+  } else if (
     (props?.height !== undefined || props?.width !== undefined) &&
     size === undefined
   ) {

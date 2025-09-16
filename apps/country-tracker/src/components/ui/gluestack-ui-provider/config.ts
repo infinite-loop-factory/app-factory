@@ -1,6 +1,7 @@
 "use client";
-import { TOKENS } from "@/constants/color-tokens";
+
 import { vars } from "nativewind";
+import { TOKENS } from "@/constants/color-tokens";
 
 type ColorMap = {
   [key in `--${string}`]: string;

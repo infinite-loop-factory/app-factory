@@ -8,8 +8,7 @@
     "search-a11y": "국가 검색 입력",
     "search-button-a11y": "검색 실행",
     "error-loading": "방문 국가 목록을 불러오지 못했어요.",
-    "no-visited-countries": "아직 방문한 국가가 없어요",
-    "no-visited-countries-description": "여행을 시작하고 방문한 국가들을 확인해보세요!"
+    "no-visited-countries": "아직 방문한 국가가 없어요"
   },
 
   "settings": {
