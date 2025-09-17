@@ -1,4 +1,5 @@
-import type { Geometry } from "geojson";
+import type { Feature, FeatureCollection, Geometry } from "geojson";
+import type { GeometryCollection, Topology } from "topojson-specification";
 
 import countries from "i18n-iso-countries";
 import { feature } from "topojson-client";
@@ -11,11 +12,7 @@ export type CountryPolygon = {
   coordinates: number[][][]; // list of polygon rings (lon, lat)
 };
 
-type TopologyFeature = {
-  id?: string | number;
-  properties?: { name?: string };
-  geometry: Geometry;
-};
+type CountryFeature = Feature<Geometry, { name?: string }>;
 
 const NAME_OVERRIDES: Record<string, string> = {
   "W. Sahara": "EH",
@@ -46,7 +43,7 @@ function normalizeGeometry(geometry: Geometry): number[][][] {
   return [];
 }
 
-function toIsoCode(featureItem: TopologyFeature): string | null {
+function toIsoCode(featureItem: CountryFeature): string | null {
   const { id, properties } = featureItem;
   if (id !== undefined) {
     const padded = String(id).padStart(3, "0");
@@ -58,19 +55,30 @@ function toIsoCode(featureItem: TopologyFeature): string | null {
 
   const name = properties?.name;
   if (name) {
-    if (NAME_OVERRIDES[name]) {
-      return NAME_OVERRIDES[name];
+    const override = NAME_OVERRIDES[name];
+    if (override) {
+      return override;
     }
     const alpha2 = countries.getAlpha2Code(name, "en");
-    if (alpha2) {
+    if (typeof alpha2 === "string") {
       return alpha2.toUpperCase();
     }
   }
   return null;
 }
 
-const topologyFeatures = feature(worldTopo, worldTopo.objects.countries)
-  .features as TopologyFeature[];
+type WorldTopology = Topology<{
+  countries: GeometryCollection<{ name?: string }>;
+}>;
+
+const worldTopology = worldTopo as unknown as WorldTopology;
+
+const countriesCollection = feature(
+  worldTopology,
+  worldTopology.objects.countries,
+) as FeatureCollection<Geometry, { name?: string }>;
+
+const topologyFeatures: CountryFeature[] = countriesCollection.features ?? [];
 
 const COUNTRY_POLYGONS: Record<string, CountryPolygon> = {};
 

@@ -114,6 +114,16 @@ const actionsheetItemStyle = tva({
   base: "w-full flex-row items-center p-3 rounded-sm data-[disabled=true]:opacity-40 data-[disabled=true]:web:pointer-events-auto data-[disabled=true]:web:cursor-not-allowed hover:bg-background-50 active:bg-background-100 data-[focus=true]:bg-background-100 web:data-[focus-visible=true]:bg-background-100 web:data-[focus-visible=true]:outline-indicator-primary gap-2",
 });
 
+const createVariantResolver = <const T extends readonly string[]>(
+  values: T,
+) => {
+  const allowed = new Set<string>(values);
+  return (value: unknown): T[number] | undefined =>
+    typeof value === "string" && allowed.has(value)
+      ? (value as T[number])
+      : undefined;
+};
+
 const actionsheetItemTextStyle = tva({
   base: "text-typography-700 font-normal font-body",
   variants: {
@@ -144,6 +154,20 @@ const actionsheetItemTextStyle = tva({
     },
   },
 });
+
+const resolveItemTextSize = createVariantResolver([
+  "2xs",
+  "xs",
+  "sm",
+  "md",
+  "lg",
+  "xl",
+  "2xl",
+  "3xl",
+  "4xl",
+  "5xl",
+  "6xl",
+] as const);
 
 const actionsheetDragIndicatorStyle = tva({
   base: "w-16 h-1 bg-background-400 rounded-full",
@@ -215,6 +239,18 @@ const actionsheetSectionHeaderTextStyle = tva({
   },
 });
 
+const resolveSectionHeaderSize = createVariantResolver([
+  "5xl",
+  "4xl",
+  "3xl",
+  "2xl",
+  "xl",
+  "lg",
+  "md",
+  "sm",
+  "xs",
+] as const);
+
 const actionsheetIconStyle = tva({
   base: "text-background-500 fill-none",
   variants: {
@@ -228,6 +264,15 @@ const actionsheetIconStyle = tva({
     },
   },
 });
+
+const resolveIconSize = createVariantResolver([
+  "2xs",
+  "xs",
+  "sm",
+  "md",
+  "lg",
+  "xl",
+] as const);
 
 type IActionsheetProps = VariantProps<typeof actionsheetStyle> &
   React.ComponentPropsWithoutRef<typeof UIActionsheet>;
@@ -349,6 +394,7 @@ const ActionsheetItemText = React.forwardRef<
   },
   ref,
 ) {
+  const variantSize = resolveItemTextSize(size);
   return (
     <UIActionsheet.ItemText
       className={actionsheetItemTextStyle({
@@ -357,7 +403,7 @@ const ActionsheetItemText = React.forwardRef<
         bold: Boolean(bold),
         underline: Boolean(underline),
         strikeThrough: Boolean(strikeThrough),
-        size,
+        size: variantSize,
       })}
       ref={ref}
       {...props}
@@ -497,6 +543,7 @@ const ActionsheetSectionHeaderText = React.forwardRef<
   },
   ref,
 ) {
+  const variantSize = resolveSectionHeaderSize(size);
   return (
     <UIActionsheet.SectionHeaderText
       className={actionsheetSectionHeaderTextStyle({
@@ -505,7 +552,7 @@ const ActionsheetSectionHeaderText = React.forwardRef<
         bold: Boolean(bold),
         underline: Boolean(underline),
         strikeThrough: Boolean(strikeThrough),
-        size,
+        size: variantSize,
         sub: Boolean(sub),
         italic: Boolean(italic),
         highlight: Boolean(highlight),
@@ -520,6 +567,7 @@ const ActionsheetIcon = React.forwardRef<
   React.ComponentRef<typeof UIActionsheet.Icon>,
   IActionsheetIconProps
 >(function ActionsheetIcon({ className, size = "sm", ...props }, ref) {
+  const variantSize = resolveIconSize(size);
   if (typeof size === "number") {
     return (
       <UIActionsheet.Icon
@@ -545,7 +593,7 @@ const ActionsheetIcon = React.forwardRef<
     <UIActionsheet.Icon
       className={actionsheetIconStyle({
         class: className,
-        size,
+        size: variantSize,
       })}
       ref={ref}
       {...props}

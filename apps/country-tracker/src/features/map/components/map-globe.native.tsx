@@ -67,10 +67,12 @@ const MapGlobe = forwardRef<MapGlobeRef>((_, ref) => {
     longitudeDelta: 75,
   });
 
-  const { data: countryPolygons } = useQuery<CountryPolygon[]>({
+  const { data: countryPolygons = [] } = useQuery<CountryPolygon[]>({
     queryKey: QUERY_KEYS.countryPolygons(user?.id ?? null),
-    queryFn: async () => {
-      if (!user) return [];
+    queryFn: async (): Promise<CountryPolygon[]> => {
+      if (!user) {
+        return [];
+      }
       const visited = await fetchVisitedCountries(user.id);
       const countryCodes = visited.map((v) => v.country_code);
       const polygons = countryCodes.map((code) => {
@@ -81,7 +83,9 @@ const MapGlobe = forwardRef<MapGlobeRef>((_, ref) => {
           return null;
         }
       });
-      return polygons.filter(Boolean);
+      return polygons.filter(
+        (polygon): polygon is CountryPolygon => polygon !== null,
+      );
     },
     enabled: !!user,
   });
@@ -221,7 +225,7 @@ const MapGlobe = forwardRef<MapGlobeRef>((_, ref) => {
       showsCompass={false}
       style={{ flex: 1 }}
     >
-      {countryPolygons?.map((polygonData) =>
+      {countryPolygons.map((polygonData) =>
         polygonData.coordinates.map((coords, index) => (
           <Polygon
             coordinates={coords
