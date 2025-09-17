@@ -10,7 +10,7 @@ import {
 import { cssInterop } from "nativewind";
 import React from "react";
 import { Text, View } from "react-native";
-import { Svg } from "react-native-svg";
+import { createVariantResolver } from "@/utils/variant-resolver";
 
 const SCOPE = "BADGE";
 
@@ -96,6 +96,10 @@ const badgeIconStyle = tva({
   },
 });
 
+const resolveBadgeTextSize = createVariantResolver(["sm", "md", "lg"] as const);
+
+const resolveBadgeIconSize = createVariantResolver(["sm", "md", "lg"] as const);
+
 const ContextView = withStyleContext(View, SCOPE);
 
 cssInterop(PrimitiveIcon, {
@@ -144,6 +148,7 @@ const BadgeText = React.forwardRef<
   IBadgeTextProps
 >(function BadgeText({ children, className, size, ...props }, ref) {
   const { size: parentSize, action: parentAction } = useStyleContext(SCOPE);
+  const variantSize = resolveBadgeTextSize(size);
   return (
     <Text
       className={badgeTextStyle({
@@ -151,7 +156,7 @@ const BadgeText = React.forwardRef<
           size: parentSize,
           action: parentAction,
         },
-        size,
+        size: variantSize,
         class: className,
       })}
       ref={ref}
@@ -162,36 +167,47 @@ const BadgeText = React.forwardRef<
   );
 });
 
-type IBadgeIconProps = React.ComponentPropsWithoutRef<typeof PrimitiveIcon> &
-  VariantProps<typeof badgeIconStyle>;
+type IBadgeIconProps = VariantProps<typeof badgeIconStyle> &
+  React.ComponentPropsWithoutRef<typeof UIIcon> & {
+    height?: number;
+    width?: number;
+  };
 
 const BadgeIcon = React.forwardRef<
-  React.ComponentRef<typeof Svg>,
+  React.ElementRef<typeof UIIcon>,
   IBadgeIconProps
->(function BadgeIcon({ className, size, ...props }, ref) {
+>(function BadgeIcon(
+  { className, size: sizeProp, height, width, ...props },
+  ref,
+) {
   const { size: parentSize, action: parentAction } = useStyleContext(SCOPE);
 
-  if (typeof size === "number") {
+  if (typeof sizeProp === "number") {
     return (
       <UIIcon
         ref={ref}
         {...props}
         className={badgeIconStyle({ class: className })}
-        size={size}
+        height={height}
+        size={sizeProp}
+        width={width}
       />
     );
   } else if (
-    (props?.height !== undefined || props?.width !== undefined) &&
-    size === undefined
+    (height !== undefined || width !== undefined) &&
+    sizeProp === undefined
   ) {
     return (
       <UIIcon
         ref={ref}
         {...props}
         className={badgeIconStyle({ class: className })}
+        height={height}
+        width={width}
       />
     );
   }
+  const variantSize = resolveBadgeIconSize(sizeProp);
   return (
     <UIIcon
       className={badgeIconStyle({
@@ -199,11 +215,14 @@ const BadgeIcon = React.forwardRef<
           size: parentSize,
           action: parentAction,
         },
-        size,
+        size: variantSize,
         class: className,
       })}
       {...props}
+      height={height}
       ref={ref}
+      size={sizeProp}
+      width={width}
     />
   );
 });

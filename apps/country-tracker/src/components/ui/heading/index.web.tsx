@@ -1,7 +1,20 @@
 import type { VariantProps } from "@gluestack-ui/utils/nativewind-utils";
 
 import React, { forwardRef, memo } from "react";
+import { createVariantResolver } from "@/utils/variant-resolver";
 import { headingStyle } from "./styles";
+
+const resolveHeadingSize = createVariantResolver([
+  "5xl",
+  "4xl",
+  "3xl",
+  "2xl",
+  "xl",
+  "lg",
+  "md",
+  "sm",
+  "xs",
+] as const);
 
 type IHeadingProps = VariantProps<typeof headingStyle> &
   React.ComponentPropsWithoutRef<"h1"> & {
@@ -24,136 +37,38 @@ const MappedHeading = memo(
     },
     ref,
   ) {
-    switch (size) {
+    const variantSize = resolveHeadingSize(size);
+    const effectiveSize = variantSize ?? "lg";
+    const computedClass = headingStyle({
+      size: variantSize,
+      isTruncated: Boolean(isTruncated),
+      bold: Boolean(bold),
+      underline: Boolean(underline),
+      strikeThrough: Boolean(strikeThrough),
+      sub: Boolean(sub),
+      italic: Boolean(italic),
+      highlight: Boolean(highlight),
+      class: className,
+    });
+
+    switch (effectiveSize) {
       case "5xl":
       case "4xl":
       case "3xl":
-        return (
-          <h1
-            className={headingStyle({
-              size,
-              isTruncated: isTruncated as boolean,
-              bold: bold as boolean,
-              underline: underline as boolean,
-              strikeThrough: strikeThrough as boolean,
-              sub: sub as boolean,
-              italic: italic as boolean,
-              highlight: highlight as boolean,
-              class: className,
-            })}
-            {...props}
-            ref={ref}
-          />
-        );
+        return <h1 className={computedClass} {...props} ref={ref} />;
       case "2xl":
-        return (
-          <h2
-            className={headingStyle({
-              size,
-              isTruncated: isTruncated as boolean,
-              bold: bold as boolean,
-              underline: underline as boolean,
-              strikeThrough: strikeThrough as boolean,
-              sub: sub as boolean,
-              italic: italic as boolean,
-              highlight: highlight as boolean,
-              class: className,
-            })}
-            {...props}
-            ref={ref}
-          />
-        );
+        return <h2 className={computedClass} {...props} ref={ref} />;
       case "xl":
-        return (
-          <h3
-            className={headingStyle({
-              size,
-              isTruncated: isTruncated as boolean,
-              bold: bold as boolean,
-              underline: underline as boolean,
-              strikeThrough: strikeThrough as boolean,
-              sub: sub as boolean,
-              italic: italic as boolean,
-              highlight: highlight as boolean,
-              class: className,
-            })}
-            {...props}
-            ref={ref}
-          />
-        );
+        return <h3 className={computedClass} {...props} ref={ref} />;
       case "lg":
-        return (
-          <h4
-            className={headingStyle({
-              size,
-              isTruncated: isTruncated as boolean,
-              bold: bold as boolean,
-              underline: underline as boolean,
-              strikeThrough: strikeThrough as boolean,
-              sub: sub as boolean,
-              italic: italic as boolean,
-              highlight: highlight as boolean,
-              class: className,
-            })}
-            {...props}
-            ref={ref}
-          />
-        );
+        return <h4 className={computedClass} {...props} ref={ref} />;
       case "md":
-        return (
-          <h5
-            className={headingStyle({
-              size,
-              isTruncated: isTruncated as boolean,
-              bold: bold as boolean,
-              underline: underline as boolean,
-              strikeThrough: strikeThrough as boolean,
-              sub: sub as boolean,
-              italic: italic as boolean,
-              highlight: highlight as boolean,
-              class: className,
-            })}
-            {...props}
-            ref={ref}
-          />
-        );
+        return <h5 className={computedClass} {...props} ref={ref} />;
       case "sm":
       case "xs":
-        return (
-          <h6
-            className={headingStyle({
-              size,
-              isTruncated: isTruncated as boolean,
-              bold: bold as boolean,
-              underline: underline as boolean,
-              strikeThrough: strikeThrough as boolean,
-              sub: sub as boolean,
-              italic: italic as boolean,
-              highlight: highlight as boolean,
-              class: className,
-            })}
-            {...props}
-            ref={ref}
-          />
-        );
+        return <h6 className={computedClass} {...props} ref={ref} />;
       default:
-        return (
-          <h4
-            className={headingStyle({
-              size,
-              isTruncated: isTruncated as boolean,
-              bold: bold as boolean,
-              underline: underline as boolean,
-              strikeThrough: strikeThrough as boolean,
-              sub: sub as boolean,
-              italic: italic as boolean,
-              highlight: highlight as boolean,
-              class: className,
-            })}
-            {...props}
-            ref={ref}
-          />
-        );
+        return <h4 className={computedClass} {...props} ref={ref} />;
     }
   }),
 );
@@ -163,6 +78,7 @@ const Heading = memo(
     { className, size = "lg", as: AsComp, ...props },
     ref,
   ) {
+    const variantSize = resolveHeadingSize(size) ?? "lg";
     const {
       isTruncated,
       bold,
@@ -177,14 +93,14 @@ const Heading = memo(
       return (
         <AsComp
           className={headingStyle({
-            size,
-            isTruncated: isTruncated as boolean,
-            bold: bold as boolean,
-            underline: underline as boolean,
-            strikeThrough: strikeThrough as boolean,
-            sub: sub as boolean,
-            italic: italic as boolean,
-            highlight: highlight as boolean,
+            size: variantSize,
+            isTruncated: Boolean(isTruncated),
+            bold: Boolean(bold),
+            underline: Boolean(underline),
+            strikeThrough: Boolean(strikeThrough),
+            sub: Boolean(sub),
+            italic: Boolean(italic),
+            highlight: Boolean(highlight),
             class: className,
           })}
           {...props}
@@ -194,7 +110,12 @@ const Heading = memo(
     }
 
     return (
-      <MappedHeading className={className} ref={ref} size={size} {...props} />
+      <MappedHeading
+        className={className}
+        ref={ref}
+        size={variantSize}
+        {...props}
+      />
     );
   }),
 );

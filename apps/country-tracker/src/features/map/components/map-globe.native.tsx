@@ -14,6 +14,11 @@ import { Animated, Easing, Platform } from "react-native";
 import MapView, { Polygon } from "react-native-maps";
 import { getCountryPolygon } from "@/assets/geodata/countries";
 import { QUERY_KEYS } from "@/constants/query-keys";
+import {
+  addAlphaToColor,
+  calculateLongitudeDifference,
+  normalizeLongitude,
+} from "@/features/map/utils/globe-helpers";
 import { useAuthUser } from "@/hooks/use-auth-user";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { fetchVisitedCountries } from "@/utils/visited-countries";
@@ -29,37 +34,15 @@ export interface MapGlobeRef {
 
 const MAX_ZOOM_LEVEL = 100;
 
-// 경도를 -180 ~ 180 범위로 정규화하는 함수
-const normalizeLongitude = (lngParam: number): number => {
-  let lng = lngParam % 360;
-  if (lng > 180) {
-    lng = lng - 360;
-  }
-  if (lng < -180) {
-    lng = lng + 360;
-  }
-  return lng;
-};
-
-// 두 경도 사이의 최단 거리를 계산하는 함수 (항상 -180 ~ 180 범위의 결과 반환)
-const calculateLongitudeDifference = (start: number, end: number): number => {
-  const directDiff = normalizeLongitude(end - start);
-
-  // 최단 경로 계산 (왼쪽 또는 오른쪽 중 더 가까운 쪽)
-  if (Math.abs(directDiff) > 180) {
-    // 180도 이상 차이나면 반대 방향으로 이동하는 것이 더 가까움
-    return directDiff > 0
-      ? directDiff - 360 // 동쪽 방향이면 서쪽으로 이동
-      : directDiff + 360; // 서쪽 방향이면 동쪽으로 이동
-  }
-
-  return directDiff; // 180도 이하면 직접 이동
-};
-
 const MapGlobe = forwardRef<MapGlobeRef>((_, ref) => {
   const mapRef = useRef<MapView>(null);
   const { user } = useAuthUser();
   const [primaryColor] = useThemeColor(["primary-500"]);
+  const polygonFillColor = addAlphaToColor(
+    primaryColor,
+    0.2,
+    "rgba(0, 0, 0, 0.2)",
+  );
   const [region, setRegion] = useState<Region>({
     latitude: 37.7749,
     longitude: -122.4194,
@@ -237,7 +220,7 @@ const MapGlobe = forwardRef<MapGlobeRef>((_, ref) => {
                 latitude: latitude as number,
                 longitude: longitude as number,
               }))}
-            fillColor={`${primaryColor}80`}
+            fillColor={polygonFillColor}
             key={`${polygonData.country_code}_${index}`}
             strokeColor={primaryColor}
             strokeWidth={1}

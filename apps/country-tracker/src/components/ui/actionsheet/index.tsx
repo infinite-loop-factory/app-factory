@@ -24,6 +24,7 @@ import {
   ViewStyle,
   VirtualizedList,
 } from "react-native";
+import { createVariantResolver } from "@/utils/variant-resolver";
 
 const ItemWrapper = React.forwardRef<
   React.ComponentRef<typeof Pressable>,
@@ -113,16 +114,6 @@ const actionsheetContentStyle = tva({
 const actionsheetItemStyle = tva({
   base: "w-full flex-row items-center p-3 rounded-sm data-[disabled=true]:opacity-40 data-[disabled=true]:web:pointer-events-auto data-[disabled=true]:web:cursor-not-allowed hover:bg-background-50 active:bg-background-100 data-[focus=true]:bg-background-100 web:data-[focus-visible=true]:bg-background-100 web:data-[focus-visible=true]:outline-indicator-primary gap-2",
 });
-
-const createVariantResolver = <const T extends readonly string[]>(
-  values: T,
-) => {
-  const allowed = new Set<string>(values);
-  return (value: unknown): T[number] | undefined =>
-    typeof value === "string" && allowed.has(value)
-      ? (value as T[number])
-      : undefined;
-};
 
 const actionsheetItemTextStyle = tva({
   base: "text-typography-700 font-normal font-body",

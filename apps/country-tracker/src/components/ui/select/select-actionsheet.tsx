@@ -24,6 +24,7 @@ import {
   ViewStyle,
   VirtualizedList,
 } from "react-native";
+import { createVariantResolver } from "@/utils/variant-resolver";
 
 type IAnimatedPressableProps = React.ComponentProps<typeof Pressable> &
   MotionComponentProps<typeof Pressable, ViewStyle, unknown, unknown, unknown>;
@@ -140,6 +141,20 @@ const actionsheetItemTextStyle = tva({
   },
 });
 
+const resolveItemTextSize = createVariantResolver([
+  "2xs",
+  "xs",
+  "sm",
+  "md",
+  "lg",
+  "xl",
+  "2xl",
+  "3xl",
+  "4xl",
+  "5xl",
+  "6xl",
+] as const);
+
 const actionsheetDragIndicatorStyle = tva({
   base: "w-16 h-1 bg-background-400 rounded-full",
 });
@@ -210,6 +225,18 @@ const actionsheetSectionHeaderTextStyle = tva({
   },
 });
 
+const resolveSectionHeaderSize = createVariantResolver([
+  "5xl",
+  "4xl",
+  "3xl",
+  "2xl",
+  "xl",
+  "lg",
+  "md",
+  "sm",
+  "xs",
+] as const);
+
 const actionsheetIconStyle = tva({
   base: "text-typography-900",
   variants: {
@@ -223,6 +250,15 @@ const actionsheetIconStyle = tva({
     },
   },
 });
+
+const resolveIconSize = createVariantResolver([
+  "2xs",
+  "xs",
+  "sm",
+  "md",
+  "lg",
+  "xl",
+] as const);
 
 type IActionsheetProps = VariantProps<typeof actionsheetStyle> &
   React.ComponentProps<typeof UIActionsheet> & { className?: string };
@@ -346,15 +382,16 @@ const ActionsheetItemText = React.forwardRef<
   { className, isTruncated, bold, underline, strikeThrough, size, ...props },
   ref,
 ) {
+  const variantSize = resolveItemTextSize(size);
   return (
     <UIActionsheet.ItemText
       className={actionsheetItemTextStyle({
         class: className,
-        isTruncated: isTruncated as boolean,
-        bold: bold as boolean,
-        underline: underline as boolean,
-        strikeThrough: strikeThrough as boolean,
-        size,
+        isTruncated: Boolean(isTruncated),
+        bold: Boolean(bold),
+        underline: Boolean(underline),
+        strikeThrough: Boolean(strikeThrough),
+        size: variantSize,
       })}
       ref={ref}
       {...props}
@@ -494,18 +531,19 @@ const ActionsheetSectionHeaderText = React.forwardRef<
   },
   ref,
 ) {
+  const variantSize = resolveSectionHeaderSize(size);
   return (
     <UIActionsheet.SectionHeaderText
       className={actionsheetSectionHeaderTextStyle({
         class: className,
-        isTruncated: isTruncated as boolean,
-        bold: bold as boolean,
-        underline: underline as boolean,
-        strikeThrough: strikeThrough as boolean,
-        size,
-        sub: sub as boolean,
-        italic: italic as boolean,
-        highlight: highlight as boolean,
+        isTruncated: Boolean(isTruncated),
+        bold: Boolean(bold),
+        underline: Boolean(underline),
+        strikeThrough: Boolean(strikeThrough),
+        size: variantSize,
+        sub: Boolean(sub),
+        italic: Boolean(italic),
+        highlight: Boolean(highlight),
       })}
       ref={ref}
       {...props}
@@ -520,12 +558,13 @@ const ActionsheetIcon = React.forwardRef<
   { className, as: AsComp, size = "sm", ...props },
   ref,
 ) {
+  const variantSize = resolveIconSize(size);
   if (AsComp) {
     return (
       <AsComp
         className={actionsheetIconStyle({
           class: className,
-          size,
+          size: variantSize,
         })}
         ref={ref}
         {...props}
@@ -536,9 +575,10 @@ const ActionsheetIcon = React.forwardRef<
     <UIActionsheet.Icon
       className={actionsheetIconStyle({
         class: className,
-        size,
+        size: variantSize,
       })}
       ref={ref}
+      size={size}
       {...props}
     />
   );

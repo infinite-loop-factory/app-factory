@@ -11,6 +11,7 @@ import {
 import { cssInterop } from "nativewind";
 import React from "react";
 import { Pressable, Text, View, ViewStyle } from "react-native";
+import { createVariantResolver } from "@/utils/variant-resolver";
 
 type IMotionViewProps = React.ComponentProps<typeof View> &
   MotionComponentProps<typeof View, ViewStyle, unknown, unknown, unknown>;
@@ -75,6 +76,20 @@ const menuItemLabelStyle = tva({
     },
   },
 });
+
+const resolveMenuItemLabelSize = createVariantResolver([
+  "2xs",
+  "xs",
+  "sm",
+  "md",
+  "lg",
+  "xl",
+  "2xl",
+  "3xl",
+  "4xl",
+  "5xl",
+  "6xl",
+] as const);
 
 const BackdropPressable = React.forwardRef<
   React.ComponentRef<typeof Pressable>,
@@ -190,17 +205,18 @@ const MenuItemLabel = React.forwardRef<
   },
   ref,
 ) {
+  const variantSize = resolveMenuItemLabelSize(size);
   return (
     <UIMenu.ItemLabel
       className={menuItemLabelStyle({
-        isTruncated: isTruncated as boolean,
-        bold: bold as boolean,
-        underline: underline as boolean,
-        strikeThrough: strikeThrough as boolean,
-        size,
-        sub: sub as boolean,
-        italic: italic as boolean,
-        highlight: highlight as boolean,
+        isTruncated: Boolean(isTruncated),
+        bold: Boolean(bold),
+        underline: Boolean(underline),
+        strikeThrough: Boolean(strikeThrough),
+        size: variantSize,
+        sub: Boolean(sub),
+        italic: Boolean(italic),
+        highlight: Boolean(highlight),
         class: className,
       })}
       ref={ref}

@@ -3,7 +3,20 @@ import type { VariantProps } from "@gluestack-ui/utils/nativewind-utils";
 import { H1, H2, H3, H4, H5, H6 } from "@expo/html-elements";
 import { cssInterop } from "nativewind";
 import React, { forwardRef, memo } from "react";
+import { createVariantResolver } from "@/utils/variant-resolver";
 import { headingStyle } from "./styles";
+
+const resolveHeadingSize = createVariantResolver([
+  "5xl",
+  "4xl",
+  "3xl",
+  "2xl",
+  "xl",
+  "lg",
+  "md",
+  "sm",
+  "xs",
+] as const);
 
 type IHeadingProps = VariantProps<typeof headingStyle> &
   React.ComponentPropsWithoutRef<typeof H1> & {
@@ -34,23 +47,27 @@ const MappedHeading = memo(
       },
       ref,
     ) {
-      switch (size) {
+      const variantSize = resolveHeadingSize(size);
+      const effectiveSize = variantSize ?? "lg";
+      const computedClass = headingStyle({
+        size: variantSize,
+        isTruncated: Boolean(isTruncated),
+        bold: Boolean(bold),
+        underline: Boolean(underline),
+        strikeThrough: Boolean(strikeThrough),
+        sub: Boolean(sub),
+        italic: Boolean(italic),
+        highlight: Boolean(highlight),
+        class: className,
+      });
+
+      switch (effectiveSize) {
         case "5xl":
         case "4xl":
         case "3xl":
           return (
             <H1
-              className={headingStyle({
-                size,
-                isTruncated: isTruncated as boolean,
-                bold: bold as boolean,
-                underline: underline as boolean,
-                strikeThrough: strikeThrough as boolean,
-                sub: sub as boolean,
-                italic: italic as boolean,
-                highlight: highlight as boolean,
-                class: className,
-              })}
+              className={computedClass}
               {...props}
               // @ts-expect-error : type issue
               ref={ref}
@@ -59,17 +76,7 @@ const MappedHeading = memo(
         case "2xl":
           return (
             <H2
-              className={headingStyle({
-                size,
-                isTruncated: isTruncated as boolean,
-                bold: bold as boolean,
-                underline: underline as boolean,
-                strikeThrough: strikeThrough as boolean,
-                sub: sub as boolean,
-                italic: italic as boolean,
-                highlight: highlight as boolean,
-                class: className,
-              })}
+              className={computedClass}
               {...props}
               // @ts-expect-error : type issue
               ref={ref}
@@ -78,17 +85,7 @@ const MappedHeading = memo(
         case "xl":
           return (
             <H3
-              className={headingStyle({
-                size,
-                isTruncated: isTruncated as boolean,
-                bold: bold as boolean,
-                underline: underline as boolean,
-                strikeThrough: strikeThrough as boolean,
-                sub: sub as boolean,
-                italic: italic as boolean,
-                highlight: highlight as boolean,
-                class: className,
-              })}
+              className={computedClass}
               {...props}
               // @ts-expect-error : type issue
               ref={ref}
@@ -97,17 +94,7 @@ const MappedHeading = memo(
         case "lg":
           return (
             <H4
-              className={headingStyle({
-                size,
-                isTruncated: isTruncated as boolean,
-                bold: bold as boolean,
-                underline: underline as boolean,
-                strikeThrough: strikeThrough as boolean,
-                sub: sub as boolean,
-                italic: italic as boolean,
-                highlight: highlight as boolean,
-                class: className,
-              })}
+              className={computedClass}
               {...props}
               // @ts-expect-error : type issue
               ref={ref}
@@ -116,17 +103,7 @@ const MappedHeading = memo(
         case "md":
           return (
             <H5
-              className={headingStyle({
-                size,
-                isTruncated: isTruncated as boolean,
-                bold: bold as boolean,
-                underline: underline as boolean,
-                strikeThrough: strikeThrough as boolean,
-                sub: sub as boolean,
-                italic: italic as boolean,
-                highlight: highlight as boolean,
-                class: className,
-              })}
+              className={computedClass}
               {...props}
               // @ts-expect-error : type issue
               ref={ref}
@@ -136,17 +113,7 @@ const MappedHeading = memo(
         case "xs":
           return (
             <H6
-              className={headingStyle({
-                size,
-                isTruncated: isTruncated as boolean,
-                bold: bold as boolean,
-                underline: underline as boolean,
-                strikeThrough: strikeThrough as boolean,
-                sub: sub as boolean,
-                italic: italic as boolean,
-                highlight: highlight as boolean,
-                class: className,
-              })}
+              className={computedClass}
               {...props}
               // @ts-expect-error : type issue
               ref={ref}
@@ -155,17 +122,7 @@ const MappedHeading = memo(
         default:
           return (
             <H4
-              className={headingStyle({
-                size,
-                isTruncated: isTruncated as boolean,
-                bold: bold as boolean,
-                underline: underline as boolean,
-                strikeThrough: strikeThrough as boolean,
-                sub: sub as boolean,
-                italic: italic as boolean,
-                highlight: highlight as boolean,
-                class: className,
-              })}
+              className={computedClass}
               {...props}
               // @ts-expect-error : type issue
               ref={ref}
@@ -181,6 +138,7 @@ const Heading = memo(
     { className, size = "lg", as: AsComp, ...props },
     ref,
   ) {
+    const variantSize = resolveHeadingSize(size) ?? "lg";
     const {
       isTruncated,
       bold,
@@ -195,14 +153,14 @@ const Heading = memo(
       return (
         <AsComp
           className={headingStyle({
-            size,
-            isTruncated: isTruncated as boolean,
-            bold: bold as boolean,
-            underline: underline as boolean,
-            strikeThrough: strikeThrough as boolean,
-            sub: sub as boolean,
-            italic: italic as boolean,
-            highlight: highlight as boolean,
+            size: variantSize,
+            isTruncated: Boolean(isTruncated),
+            bold: Boolean(bold),
+            underline: Boolean(underline),
+            strikeThrough: Boolean(strikeThrough),
+            sub: Boolean(sub),
+            italic: Boolean(italic),
+            highlight: Boolean(highlight),
             class: className,
           })}
           {...props}
@@ -211,7 +169,12 @@ const Heading = memo(
     }
 
     return (
-      <MappedHeading className={className} ref={ref} size={size} {...props} />
+      <MappedHeading
+        className={className}
+        ref={ref}
+        size={variantSize}
+        {...props}
+      />
     );
   }),
 );

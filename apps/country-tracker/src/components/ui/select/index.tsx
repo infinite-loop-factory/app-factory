@@ -12,6 +12,7 @@ import {
 import { cssInterop } from "nativewind";
 import React from "react";
 import { Pressable, TextInput, View } from "react-native";
+import { createVariantResolver } from "@/utils/variant-resolver";
 import {
   Actionsheet,
   ActionsheetBackdrop,
@@ -48,6 +49,15 @@ const selectIconStyle = tva({
   },
 });
 
+const resolveSelectIconSize = createVariantResolver([
+  "2xs",
+  "xs",
+  "sm",
+  "md",
+  "lg",
+  "xl",
+] as const);
+
 const selectStyle = tva({
   base: "",
 });
@@ -72,6 +82,19 @@ const selectTriggerStyle = tva({
   },
 });
 
+const resolveSelectTriggerSize = createVariantResolver([
+  "xl",
+  "lg",
+  "md",
+  "sm",
+] as const);
+
+const resolveSelectTriggerVariant = createVariantResolver([
+  "underlined",
+  "outline",
+  "rounded",
+] as const);
+
 const selectInputStyle = tva({
   base: "px-3 placeholder:text-typography-500 web:w-full h-full text-typography-900 pointer-events-none web:outline-none ios:leading-[0px] py-0",
   parentVariants: {
@@ -88,6 +111,19 @@ const selectInputStyle = tva({
     },
   },
 });
+
+const resolveSelectInputSize = createVariantResolver([
+  "xl",
+  "lg",
+  "md",
+  "sm",
+] as const);
+
+const resolveSelectInputVariant = createVariantResolver([
+  "underlined",
+  "outline",
+  "rounded",
+] as const);
 
 const UISelect = createSelect(
   {
@@ -159,14 +195,19 @@ const SelectTrigger = React.forwardRef<
   { className, size = "md", variant = "outline", ...props },
   ref,
 ) {
+  const variantSize = resolveSelectTriggerSize(size);
+  const variantStyle = resolveSelectTriggerVariant(variant);
   return (
     <UISelect.Trigger
       className={selectTriggerStyle({
         class: className,
-        size,
-        variant,
+        size: variantSize,
+        variant: variantStyle,
       })}
-      context={{ size, variant }}
+      context={{
+        size: variantSize ?? size,
+        variant: variantStyle ?? variant,
+      }}
       ref={ref}
       {...props}
     />
@@ -181,13 +222,15 @@ const SelectInput = React.forwardRef<
   ISelectInputProps
 >(function SelectInput({ className, ...props }, ref) {
   const { size: parentSize, variant: parentVariant } = useStyleContext();
+  const resolvedParentSize = resolveSelectInputSize(parentSize);
+  const resolvedParentVariant = resolveSelectInputVariant(parentVariant);
   return (
     <UISelect.Input
       className={selectInputStyle({
         class: className,
         parentVariants: {
-          size: parentSize,
-          variant: parentVariant,
+          size: resolvedParentSize,
+          variant: resolvedParentVariant,
         },
       })}
       ref={ref}
@@ -197,12 +240,16 @@ const SelectInput = React.forwardRef<
 });
 
 type ISelectIcon = VariantProps<typeof selectIconStyle> &
-  React.ComponentProps<typeof UISelect.Icon> & { className?: string };
+  React.ComponentProps<typeof UISelect.Icon> & {
+    className?: string;
+    height?: number;
+    width?: number;
+  };
 
 const SelectIcon = React.forwardRef<
   React.ComponentRef<typeof UISelect.Icon>,
   ISelectIcon
->(function SelectIcon({ className, size, ...props }, ref) {
+>(function SelectIcon({ className, size, height, width, ...props }, ref) {
   const { size: parentSize } = useStyleContext();
   if (typeof size === "number") {
     return (
@@ -210,12 +257,13 @@ const SelectIcon = React.forwardRef<
         ref={ref}
         {...props}
         className={selectIconStyle({ class: className })}
+        height={height}
         size={size}
+        width={width}
       />
     );
   } else if (
-    //@ts-expect-error : web only
-    (props?.height !== undefined || props?.width !== undefined) &&
+    (height !== undefined || width !== undefined) &&
     size === undefined
   ) {
     return (
@@ -223,19 +271,26 @@ const SelectIcon = React.forwardRef<
         ref={ref}
         {...props}
         className={selectIconStyle({ class: className })}
+        height={height}
+        width={width}
       />
     );
   }
+  const variantSize = resolveSelectIconSize(size);
+  const parentVariantSize = resolveSelectIconSize(parentSize);
   return (
     <UISelect.Icon
       className={selectIconStyle({
         class: className,
-        size,
+        size: variantSize,
         parentVariants: {
-          size: parentSize,
+          size: parentVariantSize,
         },
       })}
+      height={height}
       ref={ref}
+      size={size}
+      width={width}
       {...props}
     />
   );

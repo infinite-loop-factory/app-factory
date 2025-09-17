@@ -11,6 +11,7 @@ import {
 import { cssInterop } from "nativewind";
 import React from "react";
 import { Pressable, Text } from "react-native";
+import { createVariantResolver } from "@/utils/variant-resolver";
 
 const SCOPE = "FAB";
 const Root = withStyleContext(Pressable, SCOPE);
@@ -32,6 +33,39 @@ cssInterop(PrimitiveIcon, {
     },
   },
 });
+
+const resolveFabSize = createVariantResolver(["sm", "md", "lg"] as const);
+const resolveFabPlacement = createVariantResolver([
+  "top right",
+  "top left",
+  "bottom right",
+  "bottom left",
+  "top center",
+  "bottom center",
+] as const);
+
+const resolveFabLabelSize = createVariantResolver([
+  "2xs",
+  "xs",
+  "sm",
+  "md",
+  "lg",
+  "xl",
+  "2xl",
+  "3xl",
+  "4xl",
+  "5xl",
+  "6xl",
+] as const);
+
+const resolveFabIconSize = createVariantResolver([
+  "2xs",
+  "xs",
+  "sm",
+  "md",
+  "lg",
+  "xl",
+] as const);
 
 const fabStyle = tva({
   base: "group/fab bg-primary-500 rounded-full z-20 p-4 flex-row items-center justify-center absolute hover:bg-primary-600 active:bg-primary-700 disabled:opacity-40 disabled:pointer-events-all disabled:cursor-not-allowed data-[focus=true]:web:outline-none data-[focus-visible=true]:web:ring-2 data-[focus-visible=true]:web:ring-indicator-info shadow-hard-2",
@@ -116,17 +150,23 @@ const fabIconStyle = tva({
 type IFabProps = Omit<React.ComponentPropsWithoutRef<typeof UIFab>, "context"> &
   VariantProps<typeof fabStyle>;
 
-const Fab = React.forwardRef<React.ComponentRef<typeof UIFab>, IFabProps>(
+const Fab = React.forwardRef<React.ElementRef<typeof UIFab>, IFabProps>(
   function Fab(
     { size = "md", placement = "bottom right", className, ...props },
     ref,
   ) {
+    const variantSize = resolveFabSize(size);
+    const variantPlacement = resolveFabPlacement(placement);
     return (
       <UIFab
         ref={ref}
         {...props}
-        className={fabStyle({ size, placement, class: className })}
-        context={{ size }}
+        className={fabStyle({
+          size: variantSize,
+          placement: variantPlacement,
+          class: className,
+        })}
+        context={{ size: variantSize ?? size }}
       />
     );
   },
@@ -136,7 +176,7 @@ type IFabLabelProps = React.ComponentPropsWithoutRef<typeof UIFab.Label> &
   VariantProps<typeof fabLabelStyle>;
 
 const FabLabel = React.forwardRef<
-  React.ComponentRef<typeof UIFab.Label>,
+  React.ElementRef<typeof UIFab.Label>,
   IFabLabelProps
 >(function FabLabel(
   {
@@ -151,6 +191,7 @@ const FabLabel = React.forwardRef<
   ref,
 ) {
   const { size: parentSize } = useStyleContext(SCOPE);
+  const variantSize = resolveFabLabelSize(size);
   return (
     <UIFab.Label
       ref={ref}
@@ -159,7 +200,7 @@ const FabLabel = React.forwardRef<
         parentVariants: {
           size: parentSize,
         },
-        size,
+        size: variantSize,
         isTruncated,
         bold,
         underline,
@@ -171,15 +212,12 @@ const FabLabel = React.forwardRef<
 });
 
 type IFabIconProps = React.ComponentPropsWithoutRef<typeof UIFab.Icon> &
-  VariantProps<typeof fabIconStyle> & {
-    height?: number;
-    width?: number;
-  };
+  VariantProps<typeof fabIconStyle> & { height?: number; width?: number };
 
 const FabIcon = React.forwardRef<
-  React.ComponentRef<typeof UIFab.Icon>,
+  React.ElementRef<typeof UIFab.Icon>,
   IFabIconProps
->(function FabIcon({ size, className, ...props }, ref) {
+>(function FabIcon({ size, className, height, width, ...props }, ref) {
   const { size: parentSize } = useStyleContext(SCOPE);
 
   if (typeof size === "number") {
@@ -188,11 +226,13 @@ const FabIcon = React.forwardRef<
         ref={ref}
         {...props}
         className={fabIconStyle({ class: className })}
+        height={height}
         size={size}
+        width={width}
       />
     );
   } else if (
-    (props.height !== undefined || props.width !== undefined) &&
+    (height !== undefined || width !== undefined) &&
     size === undefined
   ) {
     return (
@@ -200,9 +240,12 @@ const FabIcon = React.forwardRef<
         ref={ref}
         {...props}
         className={fabIconStyle({ class: className })}
+        height={height}
+        width={width}
       />
     );
   }
+  const variantSize = resolveFabIconSize(size);
   return (
     <UIFab.Icon
       ref={ref}
@@ -211,9 +254,12 @@ const FabIcon = React.forwardRef<
         parentVariants: {
           size: parentSize,
         },
-        size,
+        size: variantSize,
         class: className,
       })}
+      height={height}
+      size={size}
+      width={width}
     />
   );
 });
