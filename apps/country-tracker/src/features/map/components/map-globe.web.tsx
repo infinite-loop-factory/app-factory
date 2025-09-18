@@ -10,10 +10,6 @@ import {
   Graticule,
   Sphere,
 } from "react-simple-maps";
-import {
-  getCountryPolygon,
-  normalizeCountryCode,
-} from "@/assets/geodata/countries";
 import worldTopo from "@/assets/geodata/world/countries-110m.json";
 import { ThemedView } from "@/components/themed-view";
 import { Text } from "@/components/ui/text";
@@ -23,6 +19,10 @@ import {
   VISITED_FILL_OPACITY,
   VISITED_STROKE_WIDTH_WEB,
 } from "@/features/map/constants/style";
+import {
+  getCountryPolygon,
+  normalizeCountryCode,
+} from "@/features/map/geodata/countries/polygons";
 import { useAuthUser } from "@/hooks/use-auth-user";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import i18n from "@/libs/i18n";

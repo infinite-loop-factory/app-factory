@@ -3,9 +3,7 @@ import type { GeometryCollection, Topology } from "topojson-specification";
 
 import { feature } from "topojson-client";
 import worldTopo from "@/assets/geodata/world/countries-110m.json";
-import { numericToAlpha2 } from "./iso-numeric-to-alpha2";
-
-// Locale is registered in the shim to avoid Metro dynamic requires
+import { numericToAlpha2 } from "@/features/map/geodata/countries/iso-numeric-to-alpha2";
 
 export type CountryPolygon = {
   country_code: string;

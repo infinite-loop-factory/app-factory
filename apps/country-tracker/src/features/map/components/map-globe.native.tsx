@@ -1,5 +1,5 @@
 import type { Region } from "react-native-maps";
-import type { CountryPolygon } from "@/assets/geodata/countries";
+import type { CountryPolygon } from "@/features/map/geodata/countries/polygons";
 
 import { useQuery } from "@tanstack/react-query";
 import * as Location from "expo-location";
@@ -12,12 +12,12 @@ import {
 } from "react";
 import { Animated, Easing, Platform } from "react-native";
 import MapView, { Polygon } from "react-native-maps";
-import { getCountryPolygon } from "@/assets/geodata/countries";
 import { QUERY_KEYS } from "@/constants/query-keys";
 import {
   VISITED_FILL_OPACITY,
   VISITED_STROKE_WIDTH_NATIVE,
 } from "@/features/map/constants/style";
+import { getCountryPolygon } from "@/features/map/geodata/countries/polygons";
 import {
   addAlphaToColor,
   calculateLongitudeDifference,
@@ -213,7 +213,7 @@ const MapGlobe = forwardRef<MapGlobeRef>((_, ref) => {
       style={{ flex: 1 }}
     >
       {countryPolygons.map((polygonData) =>
-        polygonData.coordinates.map((coords, index) => (
+        polygonData.coordinates.map((coords: number[][], index: number) => (
           <Polygon
             coordinates={coords
               .filter(
