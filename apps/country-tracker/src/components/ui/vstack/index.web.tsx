@@ -4,10 +4,7 @@ import React from "react";
 import { createVariantResolver } from "@/utils/variant-resolver";
 import { vstackStyle } from "./styles";
 
-type IVStackProps = React.ComponentProps<"div"> &
-  VariantProps<typeof vstackStyle>;
-
-const resolveStackSpace = createVariantResolver([
+const resolveVstackSpace = createVariantResolver([
   "xs",
   "sm",
   "md",
@@ -18,14 +15,16 @@ const resolveStackSpace = createVariantResolver([
   "4xl",
 ] as const);
 
+type IVStackProps = React.ComponentProps<"div"> &
+  VariantProps<typeof vstackStyle>;
+
 const VStack = React.forwardRef<React.ComponentRef<"div">, IVStackProps>(
   function VStack({ className, space, reversed, ...props }, ref) {
-    const variantSpace = resolveStackSpace(space);
     return (
       <div
         className={vstackStyle({
-          space: variantSpace,
-          reversed: reversed ? true : undefined,
+          space: resolveVstackSpace(space),
+          reversed: reversed as boolean,
           class: className,
         })}
         {...props}
