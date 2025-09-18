@@ -11,12 +11,14 @@ export async function openLanguageSetting() {
 
   try {
     if (Platform.OS === "ios") {
-      await Linking.openSettings();
-    } else {
-      await IntentLauncher.startActivityAsync(
-        IntentLauncher.ActivityAction.LOCALE_SETTINGS,
-      );
+      // iOS requires the user to change language from the Settings app manually.
+      // Return false so the caller can surface guidance instead of attempting to
+      // deep-link, which has been unstable in the dev client.
+      return false;
     }
+    await IntentLauncher.startActivityAsync(
+      IntentLauncher.ActivityAction.LOCALE_SETTINGS,
+    );
 
     return true;
   } catch (_error) {

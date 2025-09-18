@@ -1,20 +1,20 @@
 import type { Config } from "tailwindcss";
 
-import gluestackPlugin from "@gluestack-ui/nativewind-utils/tailwind-plugin";
 // @ts-expect-error - no types
 import nativewind from "nativewind/preset";
 
 export default {
-  darkMode: "class",
+  darkMode: process.env.DARK_MODE ? process.env.DARK_MODE : "class",
   content: ["./src/**/*.{ts,tsx}"],
   presets: [nativewind],
+  important: "html",
   safelist: [
     {
       pattern:
         /(bg|border|text|stroke|fill)-(primary|secondary|tertiary|error|success|warning|info|typography|outline|background)-(0|50|100|200|300|400|500|600|700|800|900|950|white|gray|black|error|warning|muted|success|info|light|dark)/,
     },
   ],
-  plugins: [gluestackPlugin],
+  plugins: [],
   theme: {
     extend: {
       colors: {

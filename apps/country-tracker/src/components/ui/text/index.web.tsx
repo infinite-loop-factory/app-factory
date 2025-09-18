@@ -1,13 +1,27 @@
-import type { VariantProps } from "@gluestack-ui/nativewind-utils";
-import type { ComponentProps, ElementRef } from "react";
+import type { VariantProps } from "@gluestack-ui/utils/nativewind-utils";
 
-import { forwardRef } from "react";
+import React from "react";
+import { createVariantResolver } from "@/utils/variant-resolver";
 import { textStyle } from "./styles";
 
-type ITextProps = ComponentProps<"span"> & VariantProps<typeof textStyle>;
+type ITextProps = React.ComponentProps<"span"> & VariantProps<typeof textStyle>;
 
-const Text = forwardRef<ElementRef<"span">, ITextProps>(
-  (
+const resolveTextSize = createVariantResolver([
+  "2xs",
+  "xs",
+  "sm",
+  "md",
+  "lg",
+  "xl",
+  "2xl",
+  "3xl",
+  "4xl",
+  "5xl",
+  "6xl",
+] as const);
+
+const Text = React.forwardRef<React.ComponentRef<"span">, ITextProps>(
+  function Text(
     {
       className,
       isTruncated,
@@ -21,18 +35,19 @@ const Text = forwardRef<ElementRef<"span">, ITextProps>(
       ...props
     }: { className?: string } & ITextProps,
     ref,
-  ) => {
+  ) {
+    const variantSize = resolveTextSize(size);
     return (
       <span
         className={textStyle({
-          isTruncated,
-          bold,
-          underline,
-          strikeThrough,
-          size,
-          sub,
-          italic,
-          highlight,
+          isTruncated: Boolean(isTruncated),
+          bold: Boolean(bold),
+          underline: Boolean(underline),
+          strikeThrough: Boolean(strikeThrough),
+          size: variantSize,
+          sub: Boolean(sub),
+          italic: Boolean(italic),
+          highlight: Boolean(highlight),
           class: className,
         })}
         {...props}

@@ -1,13 +1,13 @@
-import { useColorScheme } from "nativewind";
 import type { PropsWithChildren, ReactElement } from "react";
+
+import { useColorScheme } from "nativewind";
 import Animated, {
   interpolate,
   useAnimatedRef,
   useAnimatedStyle,
   useScrollViewOffset,
 } from "react-native-reanimated";
-
-import { ThemedView } from "@/components/ThemedView";
+import { ThemedView } from "@/components/themed-view";
 
 const HEADER_HEIGHT = 250;
 
@@ -51,8 +51,8 @@ export default function ParallaxScrollView({
     <ThemedView className="flex-1">
       <Animated.ScrollView ref={scrollRef} scrollEventThrottle={16}>
         <Animated.View
-          style={headerAnimatedStyle} // 애니메이션 스타일과 배경색을 함께 적용
-          className="h-[250px] overflow-hidden"
+          className="h-[250px] overflow-hidden" // 애니메이션 스타일과 배경색을 함께 적용
+          style={headerAnimatedStyle}
         >
           {headerImage}
         </Animated.View>

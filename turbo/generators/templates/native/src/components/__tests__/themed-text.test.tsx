@@ -1,9 +1,8 @@
 import { render } from "@testing-library/react-native";
-
-import { Text } from "@/components/ui/text";
+import { ThemedText } from "@/components/themed-text";
 
 it("renders correctly", () => {
-  const tree = render(<Text>Snapshot test!</Text>);
+  const tree = render(<ThemedText>Snapshot test!</ThemedText>);
 
   expect(tree).toMatchSnapshot();
 });
