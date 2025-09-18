@@ -15,6 +15,10 @@ import MapView, { Polygon } from "react-native-maps";
 import { getCountryPolygon } from "@/assets/geodata/countries";
 import { QUERY_KEYS } from "@/constants/query-keys";
 import {
+  VISITED_FILL_OPACITY,
+  VISITED_STROKE_WIDTH_NATIVE,
+} from "@/features/map/constants/style";
+import {
   addAlphaToColor,
   calculateLongitudeDifference,
   normalizeLongitude,
@@ -40,8 +44,8 @@ const MapGlobe = forwardRef<MapGlobeRef>((_, ref) => {
   const [primaryColor] = useThemeColor(["primary-500"]);
   const polygonFillColor = addAlphaToColor(
     primaryColor,
-    0.2,
-    "rgba(0, 0, 0, 0.2)",
+    VISITED_FILL_OPACITY,
+    `rgba(0, 0, 0, ${VISITED_FILL_OPACITY})`,
   );
   const [region, setRegion] = useState<Region>({
     latitude: 37.7749,
@@ -223,7 +227,7 @@ const MapGlobe = forwardRef<MapGlobeRef>((_, ref) => {
             fillColor={polygonFillColor}
             key={`${polygonData.country_code}_${index}`}
             strokeColor={primaryColor}
-            strokeWidth={1}
+            strokeWidth={VISITED_STROKE_WIDTH_NATIVE}
           />
         )),
       )}

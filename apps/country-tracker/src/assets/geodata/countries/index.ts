@@ -1,11 +1,11 @@
 import type { Feature, FeatureCollection, Geometry } from "geojson";
 import type { GeometryCollection, Topology } from "topojson-specification";
 
-import countries from "i18n-iso-countries";
 import { feature } from "topojson-client";
 import worldTopo from "@/assets/geodata/world/countries-110m.json";
+import { numericToAlpha2 } from "./iso-numeric-to-alpha2";
 
-countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
+// Locale is registered in the shim to avoid Metro dynamic requires
 
 export type CountryPolygon = {
   country_code: string;
@@ -32,6 +32,51 @@ const NAME_OVERRIDES: Record<string, string> = {
   "S. Sudan": "SS",
 };
 
+// Minimal alpha-3 to alpha-2 map for common cases.
+// Extend if your dataset stores alpha-3 codes for more countries.
+const ALPHA3_TO_ALPHA2: Record<string, string> = {
+  USA: "US",
+  GBR: "GB",
+  RUS: "RU",
+  CHN: "CN",
+  AUS: "AU",
+  KOR: "KR",
+  PRK: "KP",
+  DEU: "DE",
+  FRA: "FR",
+  ITA: "IT",
+  ESP: "ES",
+  CAN: "CA",
+  MEX: "MX",
+  JPN: "JP",
+  IND: "IN",
+  BRA: "BR",
+  ARG: "AR",
+  ZAF: "ZA",
+};
+
+export function normalizeCountryCode(
+  code: string | null | undefined,
+): string | null {
+  if (!code) return null;
+  const raw = String(code).trim();
+  if (!raw) return null;
+  const upper = raw.toUpperCase();
+  // alpha-2
+  if (/^[A-Z]{2}$/.test(upper)) return upper;
+  // numeric (3-digit)
+  if (/^\d{1,3}$/.test(upper)) {
+    const mapped = numericToAlpha2(upper);
+    return mapped ? mapped.toUpperCase() : null;
+  }
+  // alpha-3
+  if (/^[A-Z]{3}$/.test(upper)) {
+    const mapped = ALPHA3_TO_ALPHA2[upper];
+    return mapped ? mapped.toUpperCase() : null;
+  }
+  return null;
+}
+
 function normalizeGeometry(geometry: Geometry): number[][][] {
   if (geometry.type === "Polygon") {
     return (geometry.coordinates as number[][][]).map((ring) => ring.slice());
@@ -47,7 +92,7 @@ function toIsoCode(featureItem: CountryFeature): string | null {
   const { id, properties } = featureItem;
   if (id !== undefined) {
     const padded = String(id).padStart(3, "0");
-    const code = countries.numericToAlpha2(padded);
+    const code = numericToAlpha2(padded);
     if (code) {
       return code.toUpperCase();
     }
@@ -59,10 +104,25 @@ function toIsoCode(featureItem: CountryFeature): string | null {
     if (override) {
       return override;
     }
-    const alpha2 = countries.getAlpha2Code(name, "en");
-    if (typeof alpha2 === "string") {
-      return alpha2.toUpperCase();
-    }
+    // Fallback: simple heuristic for common names that differ from ISO entry names.
+    // For robustness, keep only a few safe mappings here; avoid dynamic locale packages.
+    const COMMON_NAME_MAP: Record<string, string> = {
+      "United States": "US",
+      "United Kingdom": "GB",
+      Russia: "RU",
+      "South Korea": "KR",
+      "North Korea": "KP",
+      Iran: "IR",
+      Syria: "SY",
+      Laos: "LA",
+      "Czech Republic": "CZ",
+      Bolivia: "BO",
+      Venezuela: "VE",
+      Tanzania: "TZ",
+      Macedonia: "MK",
+    };
+    const byCommon = COMMON_NAME_MAP[name];
+    if (byCommon) return byCommon;
   }
   return null;
 }
@@ -100,13 +160,13 @@ const MANUAL_CODES: Record<string, CountryPolygon> = {
 Object.assign(COUNTRY_POLYGONS, MANUAL_CODES);
 
 export function getCountryPolygon(code: string): CountryPolygon | null {
-  if (!code) return null;
-  const key = code.toUpperCase();
+  const key = normalizeCountryCode(code);
+  if (!key) return null;
   return COUNTRY_POLYGONS[key] ?? null;
 }
 
 export function hasCountryPolygon(code: string): boolean {
-  if (!code) return false;
-  const key = code.toUpperCase();
+  const key = normalizeCountryCode(code);
+  if (!key) return false;
   return Boolean(COUNTRY_POLYGONS[key]);
 }
