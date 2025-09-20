@@ -7,7 +7,7 @@ import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Alert, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { getCategoryColor } from "@/constants/designSystem";
+// getCategoryColor import removed as it's no longer used
 import { useAppActions, useAppState } from "@/context/AppContext";
 
 export default function CategorySelectionScreen() {
@@ -80,7 +80,6 @@ export default function CategorySelectionScreen() {
         <View className="gap-4 p-5">
           {categories.map((category) => {
             const isSelected = selectedCategories.includes(category.id);
-            const _categoryColor = getCategoryColor(category.id, 500);
 
             return (
               <TouchableOpacity
