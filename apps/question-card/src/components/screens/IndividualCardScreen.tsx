@@ -113,7 +113,7 @@ export default function IndividualCardScreen() {
   // 현재 질문이 없으면 로딩 화면
   if (!currentQuestion) {
     return (
-      <Box className="flex-1 items-center justify-center bg-neutral-50">
+      <Box className="flex-1 items-center justify-center bg-orange-50">
         <Text className="text-base text-neutral-500">
           질문을 불러오는 중...
         </Text>
@@ -128,7 +128,7 @@ export default function IndividualCardScreen() {
   );
 
   return (
-    <Box className="flex-1 bg-neutral-50">
+    <Box className="flex-1 bg-orange-50">
       <StatusBar backgroundColor="#fafafa" barStyle="dark-content" />
 
       {/* 헤더 */}
@@ -225,7 +225,7 @@ export default function IndividualCardScreen() {
             className={`flex-1 rounded-xl border px-6 py-3 ${
               progress.canGoBack
                 ? "border-blue-500 bg-white"
-                : "border-neutral-300 bg-neutral-100"
+                : "border-gray-300 bg-gray-100"
             }`}
             disabled={!progress.canGoBack}
             onPress={goToPrevious}
@@ -242,7 +242,7 @@ export default function IndividualCardScreen() {
           {/* 다음 버튼 */}
           <Pressable
             className={`flex-1 rounded-xl px-6 py-3 ${
-              progress.canGoForward ? "bg-blue-500" : "bg-green-500"
+              progress.canGoForward ? "bg-orange-500" : "bg-green-500"
             }`}
             onPress={goToNext}
           >

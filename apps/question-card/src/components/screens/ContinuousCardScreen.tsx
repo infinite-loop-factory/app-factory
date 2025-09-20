@@ -221,7 +221,7 @@ export default function ContinuousCardScreen() {
   // 로딩 상태 - filteredQuestions 기준으로 변경
   if (filteredQuestions.totalCount === 0) {
     return (
-      <Box className="flex-1 bg-gray-50">
+      <Box className="flex-1 bg-orange-50">
         <Box className="flex-1 items-center justify-center">
           <Text className="text-gray-600 text-lg">
             질문을 준비하고 있습니다...
@@ -232,7 +232,7 @@ export default function ContinuousCardScreen() {
   }
 
   return (
-    <Box className="flex-1 bg-gray-50">
+    <Box className="flex-1 bg-orange-50">
       <StatusBar backgroundColor="#ffffff" barStyle="dark-content" />
 
       {/* 헤더 */}
@@ -241,7 +241,7 @@ export default function ContinuousCardScreen() {
           className="flex-1 justify-start"
           onPress={() => router.back()}
         >
-          <Text className="font-medium text-base text-blue-600">← 뒤로</Text>
+          <Text className="font-medium text-base text-orange-600">← 뒤로</Text>
         </Pressable>
 
         <Box className="flex-2 items-center">
@@ -265,15 +265,20 @@ export default function ContinuousCardScreen() {
           <Animated.View
             style={[{ width: SCREEN_WIDTH - 40 }, cardAnimatedStyle]}
           >
-            <Card className="rounded-xl bg-white p-6 shadow-lg">
+            <Card className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
               <Box className="space-y-6">
                 {/* 카테고리 정보 */}
                 <Box className="flex-row items-center justify-between border-gray-100 border-b pb-4">
-                  <Text className="font-medium text-base text-gray-700">
-                    {currentQuestion?.categoryName}
-                  </Text>
+                  <Box className="flex-row items-center">
+                    <Box className="mr-3 h-8 w-8 items-center justify-center rounded-full bg-gray-50">
+                      <Text className="text-base">📝</Text>
+                    </Box>
+                    <Text className="font-medium text-base text-gray-900">
+                      {currentQuestion?.categoryName}
+                    </Text>
+                  </Box>
                   <Box
-                    className={`rounded-xl px-3 py-1 ${getDifficultyBadgeClass(currentQuestion?.difficulty)}`}
+                    className={`rounded-full px-3 py-1.5 ${getDifficultyBadgeClass(currentQuestion?.difficulty)}`}
                   >
                     <Text className="font-medium text-sm text-white">
                       {getDifficultyLabel(currentQuestion?.difficulty)}
@@ -283,15 +288,15 @@ export default function ContinuousCardScreen() {
 
                 {/* 질문 내용 */}
                 <Box className="flex items-center justify-center py-8">
-                  <Text className="text-center font-medium text-gray-800 text-xl leading-relaxed">
+                  <Text className="text-center font-medium text-gray-900 text-xl leading-relaxed">
                     {currentQuestion?.content}
                   </Text>
                 </Box>
 
                 {/* 힌트 텍스트 */}
                 <Box className="border-gray-100 border-t pt-4">
-                  <Text className="text-center text-gray-500 text-sm">
-                    ← 이전 질문 | 다음 질문 →
+                  <Text className="text-center text-gray-400 text-sm">
+                    스와이프로도 넘길 수 있어요
                   </Text>
                 </Box>
               </Box>
@@ -303,8 +308,8 @@ export default function ContinuousCardScreen() {
       {/* 하단 버튼들 */}
       <Box className="flex-row space-x-4 border-gray-200 border-t bg-white px-5 py-4">
         <Pressable
-          className={`h-12 flex-1 items-center justify-center rounded-lg border border-gray-300 ${
-            !progress.canGoBack ? "opacity-50" : ""
+          className={`h-12 flex-1 items-center justify-center rounded-lg border-2 border-gray-200 ${
+            !progress.canGoBack ? "opacity-50" : "bg-white"
           }`}
           disabled={!progress.canGoBack}
           onPress={goToPrevious}
@@ -319,7 +324,7 @@ export default function ContinuousCardScreen() {
         </Pressable>
 
         <Pressable
-          className="h-12 flex-1 items-center justify-center rounded-lg bg-blue-600"
+          className="h-12 flex-1 items-center justify-center rounded-lg bg-orange-500"
           onPress={goToNext}
         >
           <Text className="font-medium text-base text-white">
@@ -331,17 +336,17 @@ export default function ContinuousCardScreen() {
   );
 }
 
-// 난이도 뱃지 클래스 반환
+// 난이도 뱃지 클래스 반환 - Modern Refined 스타일
 function getDifficultyBadgeClass(difficulty?: string): string {
   switch (difficulty) {
     case "easy":
-      return "bg-green-500";
+      return "bg-green-500 border border-green-200";
     case "medium":
-      return "bg-yellow-500";
+      return "bg-yellow-500 border border-yellow-200";
     case "hard":
-      return "bg-red-500";
+      return "bg-red-500 border border-red-200";
     default:
-      return "bg-gray-400";
+      return "bg-gray-400 border border-gray-200";
   }
 }
 

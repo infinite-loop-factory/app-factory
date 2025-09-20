@@ -8,15 +8,7 @@ import type { Question } from "@/types";
 import { useRouter } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
 import { Alert, FlatList } from "react-native";
-import {
-  Badge,
-  Box,
-  Card,
-  HStack,
-  Pressable,
-  Text,
-  VStack,
-} from "@/components/ui";
+import { Box, Card, HStack, Pressable, Text, VStack } from "@/components/ui";
 import { useAppActions, useAppState } from "@/context/AppContext";
 
 interface QuestionListItemProps {
@@ -30,7 +22,7 @@ function QuestionListItem({ question, index, onPress }: QuestionListItemProps) {
 
   // 카테고리 정보 찾기
   const category = categories.find((c) => c.id === question.categoryId);
-  const difficulty = difficulties.find((d) => d.id === question.difficulty);
+  const _difficulty = difficulties.find((d) => d.id === question.difficulty);
 
   // 질문 내용 미리보기 (30자 제한)
   const preview =
@@ -43,48 +35,42 @@ function QuestionListItem({ question, index, onPress }: QuestionListItemProps) {
   }, [question, index, onPress]);
 
   return (
-    <Card className="mx-4 mb-3 border border-neutral-100 bg-white p-4">
+    <Card className="mx-4 mb-3 rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
       <Pressable onPress={handlePress}>
         <VStack space="sm">
           {/* 헤더: 카테고리 + 난이도 */}
           <HStack className="items-center justify-between">
             <HStack className="items-center" space="xs">
               {/* 카테고리 아이콘 및 이름 */}
-              <Text className="text-base">{category?.icon || "📝"}</Text>
-              <Text
-                className="font-medium text-sm"
-                style={{ color: category?.color || "#666" }}
-              >
+              <Box className="mr-2 h-6 w-6 items-center justify-center rounded-full bg-gray-50">
+                <Text className="text-sm">{category?.icon || "📝"}</Text>
+              </Box>
+              <Text className="font-medium text-gray-900 text-sm">
                 {category?.name || question.categoryName}
               </Text>
             </HStack>
 
             {/* 난이도 배지 */}
-            <Badge
-              className="rounded-full px-2 py-1"
-              style={{ backgroundColor: `${difficulty?.color || "#999"}20` }}
-              variant="solid"
+            <Box
+              className={`rounded-full px-2 py-1 ${getDifficultyBadgeStyle(question.difficulty)}`}
             >
               <Text
-                className="font-medium text-xs"
-                style={{ color: difficulty?.color || "#666" }}
+                className={`font-medium text-xs ${getDifficultyTextStyle(question.difficulty)}`}
               >
-                {difficulty?.name || question.difficulty}
+                {getDifficultyLabel(question.difficulty)}
               </Text>
-            </Badge>
+            </Box>
           </HStack>
 
           {/* 질문 미리보기 */}
-          <Text className="text-base text-neutral-700 leading-relaxed">
+          <Text className="text-base text-gray-700 leading-relaxed">
             {preview}
           </Text>
 
           {/* 순서 표시 */}
           <HStack className="items-center justify-between">
-            <Text className="text-neutral-500 text-xs">
-              {index + 1}번째 질문
-            </Text>
-            <Text className="text-blue-500 text-xs">자세히 보기 →</Text>
+            <Text className="text-gray-500 text-xs">{index + 1}번째 질문</Text>
+            <Text className="text-orange-500 text-xs">자세히 보기 →</Text>
           </HStack>
         </VStack>
       </Pressable>
@@ -160,27 +146,36 @@ export default function QuestionListScreen() {
   );
 
   return (
-    <Box className="flex-1 bg-neutral-50">
+    <Box className="flex-1 bg-orange-50">
       {/* 헤더 */}
-      <Box className="border-neutral-200 border-b bg-white pt-12 pb-4">
-        <VStack className="px-4" space="sm">
+      <Box className="border-gray-200 border-b bg-white pt-12 pb-4">
+        <VStack className="px-5" space="sm">
           {/* 제목 */}
           <HStack className="items-center justify-between">
-            <Text className="font-bold text-neutral-900 text-xl">
+            <Text className="font-semibold text-gray-900 text-xl">
               질문 목록
             </Text>
             <Pressable onPress={handleResetSettings}>
-              <Text className="text-blue-500 text-sm">설정 다시하기</Text>
+              <Text className="text-orange-500 text-sm">설정 다시하기</Text>
             </Pressable>
           </HStack>
 
-          {/* 총 질문 수 */}
-          <Text className="text-neutral-600 text-sm">
-            총 {questions.length}개의 질문이 있습니다
-          </Text>
+          {/* 총 질문 수 - Modern Refined 스타일 */}
+          <Box className="items-center">
+            <Text className="mb-1 text-gray-600 text-sm">총 질문 개수</Text>
+            <HStack className="items-end">
+              <Text className="font-bold text-2xl text-gray-900">
+                {questions.length}
+              </Text>
+              <Text className="mb-1 ml-1 font-medium text-gray-400 text-lg">
+                개
+              </Text>
+            </HStack>
+            <Box className="mt-1 h-1 w-8 rounded-full bg-orange-500 opacity-60" />
+          </Box>
 
           {/* 도움말 */}
-          <Text className="text-neutral-500 text-xs">
+          <Text className="text-center text-gray-500 text-xs">
             질문을 선택하면 카드 형태로 볼 수 있습니다
           </Text>
         </VStack>
@@ -193,7 +188,7 @@ export default function QuestionListScreen() {
         keyExtractor={(item) => `question-${item.id}`}
         ListEmptyComponent={
           <Box className="flex-1 items-center justify-center py-20">
-            <Text className="text-center text-base text-neutral-500">
+            <Text className="text-center text-base text-gray-500">
               질문이 없습니다.{"\n"}
               설정을 다시 확인해주세요.
             </Text>
@@ -204,9 +199,9 @@ export default function QuestionListScreen() {
       />
 
       {/* 하단 버튼 */}
-      <Box className="border-neutral-200 border-t bg-white p-4">
+      <Box className="border-gray-200 border-t bg-white p-5">
         <Pressable
-          className="rounded-xl bg-blue-500 px-6 py-3"
+          className="h-12 items-center justify-center rounded-lg bg-orange-500 px-6 py-3"
           onPress={handleBackToMain}
         >
           <Text className="text-center font-medium text-white">
@@ -216,4 +211,44 @@ export default function QuestionListScreen() {
       </Box>
     </Box>
   );
+}
+
+// 난이도별 뱃지 스타일 - Modern Refined
+function getDifficultyBadgeStyle(difficulty: string): string {
+  switch (difficulty) {
+    case "easy":
+      return "bg-green-50 border border-green-200";
+    case "medium":
+      return "bg-yellow-50 border border-yellow-200";
+    case "hard":
+      return "bg-red-50 border border-red-200";
+    default:
+      return "bg-gray-50 border border-gray-200";
+  }
+}
+
+function getDifficultyTextStyle(difficulty: string): string {
+  switch (difficulty) {
+    case "easy":
+      return "text-green-700";
+    case "medium":
+      return "text-yellow-700";
+    case "hard":
+      return "text-red-700";
+    default:
+      return "text-gray-700";
+  }
+}
+
+function getDifficultyLabel(difficulty: string): string {
+  switch (difficulty) {
+    case "easy":
+      return "쉬움";
+    case "medium":
+      return "보통";
+    case "hard":
+      return "어려움";
+    default:
+      return "기본";
+  }
 }
