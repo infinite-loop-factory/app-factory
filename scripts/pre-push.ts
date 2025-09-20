@@ -63,8 +63,15 @@ async function getDefaultMergeBase(local: string): Promise<string> {
 }
 
 function runPnpm(args: string[]): Promise<number> {
-  return new Promise((resolve) => {
-    const child = spawn("pnpm", args, { stdio: "inherit" });
+  const isWindow = process.platform === "win32";
+  const cmd = isWindow ? "pnpm.cmd" : "pnpm";
+
+  return new Promise((resolve, reject) => {
+    const child = spawn(cmd, args, { stdio: "inherit", shell: isWindow });
+
+    child.on("error", (err) => {
+      reject(err);
+    });
     child.on("close", (code) => resolve(code ?? 1));
   });
 }
