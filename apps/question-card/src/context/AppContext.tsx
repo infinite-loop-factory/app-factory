@@ -25,6 +25,7 @@ import {
 } from "react";
 import { categories, difficulties } from "@/constants/designSystem";
 import { useQuestionData } from "@/hooks/useQuestions";
+import { applyQuestionMode } from "@/utils/questionModes";
 
 // 초기 상태
 const initialState: AppState = {
@@ -278,20 +279,26 @@ export function AppProvider({ children }: AppProviderProps) {
     dispatch({ type: "SET_QUESTION_MODE", payload: mode });
   }, []);
 
-  // 질문 필터링
+  // 질문 필터링 및 모드별 정렬/랜덤화 적용
   const filterQuestions = useCallback(() => {
-    const { selectedCategories, selectedDifficulties } = state.selection;
+    const { selectedCategories, selectedDifficulties, currentMode } =
+      state.selection;
 
     if (selectedCategories.length === 0 || selectedDifficulties.length === 0) {
       return;
     }
 
     // 선택된 조건에 맞는 질문들 필터링
-    const filtered = state.allQuestions.filter(
+    let filtered = state.allQuestions.filter(
       (question) =>
         selectedCategories.includes(question.categoryId) &&
         selectedDifficulties.includes(question.difficulty),
     );
+
+    // 모드가 선택되었으면 모드별 정렬/랜덤화 적용
+    if (currentMode) {
+      filtered = applyQuestionMode(filtered, currentMode);
+    }
 
     const filteredQuestionSet: FilteredQuestionSet = {
       questions: filtered,

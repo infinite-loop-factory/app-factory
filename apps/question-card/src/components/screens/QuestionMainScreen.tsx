@@ -48,16 +48,23 @@ export default function QuestionMainScreen() {
 
   // 모드 선택 핸들러
   const handleModeSelect = (mode: QuestionMode) => {
+    // 모드 설정
     setQuestionMode(mode);
 
-    // 모드에 따라 다른 화면으로 이동
-    if (mode === 4) {
-      // 모드 4: 질문 리스트 화면
-      router.push("/question-list");
-    } else {
-      // 모드 1,2,3: 연속 카드 화면
-      router.push("/continuous-card");
-    }
+    // 모드가 설정된 후 질문 재처리 (랜덤화/정렬 적용)
+    // useEffect로 처리하기 위해 약간의 지연 추가
+    setTimeout(() => {
+      filterQuestions();
+
+      // 모드에 따라 다른 화면으로 이동
+      if (mode === 4) {
+        // 모드 4: 질문 리스트 화면
+        router.push("/question-list");
+      } else {
+        // 모드 1,2,3: 연속 카드 화면
+        router.push("/continuous-card");
+      }
+    }, 100);
   };
 
   return (
