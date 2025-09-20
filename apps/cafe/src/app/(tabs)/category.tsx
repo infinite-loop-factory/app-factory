@@ -1,10 +1,12 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+import { useState } from "react";
 import {
   FlatList,
   Image,
   type ImageSourcePropType,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -100,28 +102,52 @@ const CategoryItem = ({ item }: { item: CategoryItem }) => {
       className="flex-row items-center border-gray-200 border-b p-4"
       onPress={() => router.push(`/category/${item.id}`)}
     >
-      <Image source={item.icon} className="resize-contain mr-4 h-10 w-10" />
+      <Image className="resize-contain mr-4 h-10 w-10" source={item.icon} />
       <View className="flex-1">
         <Text className="mb-1 font-medium text-base">{item.title}</Text>
         <Text className="text-gray-600 text-xs">카페 {item.count}개</Text>
       </View>
-      <Ionicons name="chevron-forward" size={20} color="#ccc" />
+      <Ionicons color="#ccc" name="chevron-forward" size={20} />
     </TouchableOpacity>
   );
 };
 
 export default function CategoryScreen() {
+  const [query, setQuery] = useState("");
+  const filtered = allCategories.filter((c) =>
+    c.title.toLowerCase().includes(query.trim().toLowerCase()),
+  );
+
   return (
     <SafeAreaView className="flex-1 bg-white" edges={["right", "left"]}>
       <View className="border-gray-200 border-b p-4">
-        <Text className="font-bold text-lg">카테고리</Text>
+        <Text className="mb-2 font-bold text-lg">카테고리</Text>
+        <View className="flex-row items-center rounded-md border border-gray-300 px-3 py-2">
+          <Ionicons color="#9ca3af" name="search" size={16} />
+          <TextInput
+            className="ml-2 flex-1 text-base"
+            onChangeText={setQuery}
+            placeholder="카테고리 검색"
+            value={query}
+          />
+          {query.length > 0 && (
+            <TouchableOpacity onPress={() => setQuery("")}>
+              <Ionicons color="#9ca3af" name="close-circle" size={18} />
+            </TouchableOpacity>
+          )}
+        </View>
       </View>
 
       <FlatList
-        data={allCategories}
-        renderItem={({ item }) => <CategoryItem item={item} />}
-        keyExtractor={(item) => item.id}
         className="py-2"
+        data={filtered}
+        keyExtractor={(item) => item.id}
+        ListEmptyComponent={() => (
+          <View className="items-center justify-center p-6">
+            <Text className="text-gray-500">검색 결과가 없습니다.</Text>
+          </View>
+        )}
+        renderItem={({ item }) => <CategoryItem item={item} />}
       />
     </SafeAreaView>
   );

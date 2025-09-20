@@ -26,9 +26,8 @@ function execOut(cmd: string, args: string[]): Promise<string> {
 async function getFirstCommit(sha: string): Promise<string> {
   const out = await execOut("git", ["rev-list", "--max-parents=0", sha]);
   const lines = out.split(/\r?\n/).filter(Boolean);
-  return lines[lines.length - 1];
+  return lines?.[lines.length - 1] ?? sha;
 }
-
 async function getChangedFiles(base: string, head: string): Promise<string[]> {
   const out = await execOut("git", ["diff", "--name-only", base, head]);
   return out ? out.split(/\r?\n/).filter(Boolean) : [];
@@ -63,8 +62,15 @@ async function getDefaultMergeBase(local: string): Promise<string> {
 }
 
 function runPnpm(args: string[]): Promise<number> {
-  return new Promise((resolve) => {
-    const child = spawn("pnpm", args, { stdio: "inherit" });
+  const isWindow = process.platform === "win32";
+  const cmd = isWindow ? "pnpm.cmd" : "pnpm";
+
+  return new Promise((resolve, reject) => {
+    const child = spawn(cmd, args, { stdio: "inherit", shell: isWindow });
+
+    child.on("error", (err) => {
+      reject(err);
+    });
     child.on("close", (code) => resolve(code ?? 1));
   });
 }
@@ -98,6 +104,16 @@ function readRefLinesFromStdin(timeoutMs = 500): Promise<RefLine[]> {
       const parts = line.trim().split(/\s+/);
       if (parts.length >= 4) {
         const [localRef, localSha, remoteRef, remoteSha] = parts;
+
+        if (!(localRef && localSha && remoteRef && remoteSha)) {
+          console.log(
+            chalk.gray(
+              "Invalid git reference format. Expected format: <localRef> <localSha> <remoteRef> <remoteSha>",
+            ),
+          );
+          process.exit(0);
+        }
+
         lines.push({ localRef, localSha, remoteRef, remoteSha });
       }
     });
