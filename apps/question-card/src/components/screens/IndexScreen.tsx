@@ -4,6 +4,7 @@
  */
 
 import { useRouter } from "expo-router";
+import { Sprout } from "lucide-react-native";
 import { useEffect } from "react";
 import { Text, View } from "react-native";
 import { styleExamples, themeTailwindClasses } from "@/constants/designSystem";
@@ -51,7 +52,9 @@ export default function IndexScreen() {
     >
       <View className="items-center px-8">
         {/* 앱 로고/타이틀 */}
-        <Text className="mb-6 text-8xl">🌱</Text>
+        <View className="mb-6 h-24 w-24 items-center justify-center">
+          <Sprout color="#8B5A2B" size={80} strokeWidth={1.5} />
+        </View>
         <Text
           className={`font-bold text-3xl ${themeTailwindClasses.foreground} mb-1 text-center`}
         >
