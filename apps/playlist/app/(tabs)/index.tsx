@@ -12,10 +12,12 @@ import Button from "@/components/Buttons";
 import CircleButton from "@/components/CircleButton";
 import IconButton from "@/components/IconButton";
 import ImageViewer from "@/components/ImageViewer";
+import { usePlayer } from "@/contexts/PlayerContext";
 
 const ARTISTS = ["Jennie", "Lisa", "Rosé", "Jisoo", "IU"];
 
 export default function Index() {
+  const { playTrack } = usePlayer();
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedArtist, setSelectedArtist] = useState("Jennie");
   const [showArtistOptions, setShowArtistOptions] = useState(false);
@@ -192,24 +194,9 @@ export default function Index() {
               renderItem={({ item }) => (
                 <TouchableOpacity
                   className="mb-2 rounded bg-gray-800 p-3"
-                  onPress={async () => {
-                    try {
-                      if (sound) {
-                        await sound.stopAsync();
-                        await sound.unloadAsync();
-                      }
-                      const { sound: newSound } = await Audio.Sound.createAsync(
-                        item.file as AVPlaybackSource,
-                      );
-                      setSound(newSound);
-                      setCurrentArtist(selectedArtist);
-                      await newSound.playAsync();
-                      setIsPlaying(true);
-                      setQueueModalVisible(false);
-                    } catch (error) {
-                      console.error("Error playing track:", error);
-                    }
-                  }}
+                  onPress={() =>
+                    playTrack(selectedArtist, item.title, item.file)
+                  }
                 >
                   <Text className="text-white">{item.title}</Text>
                 </TouchableOpacity>
