@@ -3,13 +3,36 @@
  * 모든 UI 컴포넌트를 중앙에서 export
  */
 
+// 플로팅 UI 타입 exports
+export type {
+  FloatingActionButtonPosition,
+  FloatingActionButtonProps,
+  FloatingActionButtonStyle,
+} from "./FloatingActionButton";
+export type {
+  FloatingBackButtonPosition,
+  FloatingBackButtonProps,
+  FloatingBackButtonStyle,
+} from "./FloatingBackButton";
+export type {
+  FloatingMenuButtonPosition,
+  FloatingMenuButtonProps,
+  FloatingMenuButtonStyle,
+} from "./FloatingMenuButton";
+export type { ProgressIndicatorProps } from "./ProgressIndicator";
+
 export { Badge } from "./badge";
 export { Box } from "./box";
 export { Button } from "./button";
 export { Card } from "./card";
 export { Center } from "./center";
+// 플로팅 UI 컴포넌트
+export { FloatingActionButton } from "./FloatingActionButton";
+export { FloatingBackButton } from "./FloatingBackButton";
+export { FloatingMenuButton } from "./FloatingMenuButton";
 export { GluestackUIProvider } from "./gluestack-ui-provider";
 export { HStack } from "./hstack";
+export { ProgressIndicator } from "./ProgressIndicator";
 export { Pressable } from "./pressable";
 export { Progress } from "./progress";
 export { Text } from "./text";
