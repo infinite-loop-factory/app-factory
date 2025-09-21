@@ -194,9 +194,10 @@ export default function Index() {
               renderItem={({ item }) => (
                 <TouchableOpacity
                   className="mb-2 rounded bg-gray-800 p-3"
-                  onPress={() =>
-                    playTrack(selectedArtist, item.title, item.file)
-                  }
+                  onPress={() => {
+                    playTrack(selectedArtist, item.title, item.file);
+                    setQueueModalVisible(false);
+                  }}
                 >
                   <Text className="text-white">{item.title}</Text>
                 </TouchableOpacity>
