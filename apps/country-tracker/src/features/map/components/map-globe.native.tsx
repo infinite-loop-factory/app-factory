@@ -1,4 +1,5 @@
 import type { Region } from "react-native-maps";
+import type { CountryPolygon } from "@/features/map/geodata/countries/polygons";
 
 import { useQuery } from "@tanstack/react-query";
 import * as Location from "expo-location";
@@ -11,8 +12,17 @@ import {
 } from "react";
 import { Animated, Easing, Platform } from "react-native";
 import MapView, { Polygon } from "react-native-maps";
-import { getCountryPolygon } from "@/assets/geodata/countries";
 import { QUERY_KEYS } from "@/constants/query-keys";
+import {
+  VISITED_FILL_OPACITY,
+  VISITED_STROKE_WIDTH_NATIVE,
+} from "@/features/map/constants/style";
+import { getCountryPolygon } from "@/features/map/geodata/countries/polygons";
+import {
+  addAlphaToColor,
+  calculateLongitudeDifference,
+  normalizeLongitude,
+} from "@/features/map/utils/globe-helpers";
 import { useAuthUser } from "@/hooks/use-auth-user";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { fetchVisitedCountries } from "@/utils/visited-countries";
@@ -28,37 +38,15 @@ export interface MapGlobeRef {
 
 const MAX_ZOOM_LEVEL = 100;
 
-// 경도를 -180 ~ 180 범위로 정규화하는 함수
-const normalizeLongitude = (lngParam: number): number => {
-  let lng = lngParam % 360;
-  if (lng > 180) {
-    lng = lng - 360;
-  }
-  if (lng < -180) {
-    lng = lng + 360;
-  }
-  return lng;
-};
-
-// 두 경도 사이의 최단 거리를 계산하는 함수 (항상 -180 ~ 180 범위의 결과 반환)
-const calculateLongitudeDifference = (start: number, end: number): number => {
-  const directDiff = normalizeLongitude(end - start);
-
-  // 최단 경로 계산 (왼쪽 또는 오른쪽 중 더 가까운 쪽)
-  if (Math.abs(directDiff) > 180) {
-    // 180도 이상 차이나면 반대 방향으로 이동하는 것이 더 가까움
-    return directDiff > 0
-      ? directDiff - 360 // 동쪽 방향이면 서쪽으로 이동
-      : directDiff + 360; // 서쪽 방향이면 동쪽으로 이동
-  }
-
-  return directDiff; // 180도 이하면 직접 이동
-};
-
 const MapGlobe = forwardRef<MapGlobeRef>((_, ref) => {
   const mapRef = useRef<MapView>(null);
   const { user } = useAuthUser();
   const [primaryColor] = useThemeColor(["primary-500"]);
+  const polygonFillColor = addAlphaToColor(
+    primaryColor,
+    VISITED_FILL_OPACITY,
+    `rgba(0, 0, 0, ${VISITED_FILL_OPACITY})`,
+  );
   const [region, setRegion] = useState<Region>({
     latitude: 37.7749,
     longitude: -122.4194,
@@ -66,10 +54,12 @@ const MapGlobe = forwardRef<MapGlobeRef>((_, ref) => {
     longitudeDelta: 75,
   });
 
-  const { data: countryPolygons } = useQuery({
+  const { data: countryPolygons = [] } = useQuery<CountryPolygon[]>({
     queryKey: QUERY_KEYS.countryPolygons(user?.id ?? null),
-    queryFn: async () => {
-      if (!user) return [];
+    queryFn: async (): Promise<CountryPolygon[]> => {
+      if (!user) {
+        return [];
+      }
       const visited = await fetchVisitedCountries(user.id);
       const countryCodes = visited.map((v) => v.country_code);
       const polygons = countryCodes.map((code) => {
@@ -80,7 +70,9 @@ const MapGlobe = forwardRef<MapGlobeRef>((_, ref) => {
           return null;
         }
       });
-      return polygons.filter(Boolean);
+      return polygons.filter(
+        (polygon): polygon is CountryPolygon => polygon !== null,
+      );
     },
     enabled: !!user,
   });
@@ -220,7 +212,7 @@ const MapGlobe = forwardRef<MapGlobeRef>((_, ref) => {
       showsCompass={false}
       style={{ flex: 1 }}
     >
-      {countryPolygons?.map((polygonData) =>
+      {countryPolygons.map((polygonData) =>
         polygonData.coordinates.map((coords: number[][], index: number) => (
           <Polygon
             coordinates={coords
@@ -232,10 +224,10 @@ const MapGlobe = forwardRef<MapGlobeRef>((_, ref) => {
                 latitude: latitude as number,
                 longitude: longitude as number,
               }))}
-            fillColor={`${primaryColor}80`}
+            fillColor={polygonFillColor}
             key={`${polygonData.country_code}_${index}`}
             strokeColor={primaryColor}
-            strokeWidth={1}
+            strokeWidth={VISITED_STROKE_WIDTH_NATIVE}
           />
         )),
       )}

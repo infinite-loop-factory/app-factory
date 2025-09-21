@@ -1,3 +1,4 @@
+// This is a Next.js 15 compatible version of the GluestackUIProvider
 "use client";
 
 import { OverlayProvider } from "@gluestack-ui/core/overlay/creator";
@@ -6,8 +7,6 @@ import { setFlushStyles } from "@gluestack-ui/utils/nativewind-utils";
 import React, { useEffect, useLayoutEffect } from "react";
 import { config } from "./config";
 import { script } from "./script";
-
-export type ModeType = "light" | "dark" | "system";
 
 const variableStyleTagId = "nativewind-style";
 const createStyle = (styleTagId: string) => {
@@ -24,7 +23,7 @@ export function GluestackUIProvider({
   mode = "light",
   ...props
 }: {
-  mode?: ModeType;
+  mode?: "light" | "dark" | "system";
   children?: React.ReactNode;
 }) {
   let cssVariablesWithMode = ``;
@@ -82,16 +81,8 @@ export function GluestackUIProvider({
   }, []);
 
   return (
-    <>
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `(${script.toString()})('${mode}')`,
-        }}
-        suppressHydrationWarning
-      />
-      <OverlayProvider>
-        <ToastProvider>{props.children}</ToastProvider>
-      </OverlayProvider>
-    </>
+    <OverlayProvider>
+      <ToastProvider>{props.children}</ToastProvider>
+    </OverlayProvider>
   );
 }

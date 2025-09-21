@@ -1,15 +1,17 @@
 "use client";
-import { createMenu } from "@gluestack-ui/menu";
-import type { VariantProps } from "@gluestack-ui/nativewind-utils";
-import { tva } from "@gluestack-ui/nativewind-utils/tva";
+import type { VariantProps } from "@gluestack-ui/utils/nativewind-utils";
+
+import { createMenu } from "@gluestack-ui/core/menu/creator";
+import { tva } from "@gluestack-ui/utils/nativewind-utils";
 import {
   AnimatePresence,
   Motion,
-  type MotionComponentProps,
+  MotionComponentProps,
 } from "@legendapp/motion";
 import { cssInterop } from "nativewind";
 import React from "react";
-import { Pressable, Text, View, type ViewStyle } from "react-native";
+import { Pressable, Text, View, ViewStyle } from "react-native";
+import { createVariantResolver } from "@/utils/variant-resolver";
 
 type IMotionViewProps = React.ComponentProps<typeof View> &
   MotionComponentProps<typeof View, ViewStyle, unknown, unknown, unknown>;
@@ -75,6 +77,20 @@ const menuItemLabelStyle = tva({
   },
 });
 
+const resolveMenuItemLabelSize = createVariantResolver([
+  "2xs",
+  "xs",
+  "sm",
+  "md",
+  "lg",
+  "xl",
+  "2xl",
+  "3xl",
+  "4xl",
+  "5xl",
+  "6xl",
+] as const);
+
 const BackdropPressable = React.forwardRef<
   React.ComponentRef<typeof Pressable>,
   React.ComponentPropsWithoutRef<typeof Pressable> &
@@ -82,10 +98,10 @@ const BackdropPressable = React.forwardRef<
 >(function BackdropPressable({ className, ...props }, ref) {
   return (
     <Pressable
-      ref={ref}
       className={menuBackdropStyle({
         class: className,
       })}
+      ref={ref}
       {...props}
     />
   );
@@ -101,10 +117,10 @@ const Item = React.forwardRef<
 >(function Item({ className, ...props }, ref) {
   return (
     <Pressable
-      ref={ref}
       className={menuItemStyle({
         class: className,
       })}
+      ref={ref}
       {...props}
     />
   );
@@ -117,8 +133,8 @@ const Separator = React.forwardRef<
 >(function Separator({ className, ...props }, ref) {
   return (
     <View
-      ref={ref}
       className={menuSeparatorStyle({ class: className })}
+      ref={ref}
       {...props}
     />
   );
@@ -143,26 +159,26 @@ const Menu = React.forwardRef<React.ComponentRef<typeof UIMenu>, IMenuProps>(
   function Menu({ className, ...props }, ref) {
     return (
       <UIMenu
-        ref={ref}
-        initial={{
-          opacity: 0,
-          scale: 0.8,
-        }}
         animate={{
           opacity: 1,
           scale: 1,
         }}
+        className={menuStyle({
+          class: className,
+        })}
         exit={{
           opacity: 0,
           scale: 0.8,
         }}
+        initial={{
+          opacity: 0,
+          scale: 0.8,
+        }}
+        ref={ref}
         transition={{
           type: "timing",
           duration: 100,
         }}
-        className={menuStyle({
-          class: className,
-        })}
         {...props}
       />
     );
@@ -189,20 +205,21 @@ const MenuItemLabel = React.forwardRef<
   },
   ref,
 ) {
+  const variantSize = resolveMenuItemLabelSize(size);
   return (
     <UIMenu.ItemLabel
-      ref={ref}
       className={menuItemLabelStyle({
-        isTruncated,
-        bold,
-        underline,
-        strikeThrough,
-        size,
-        sub,
-        italic,
-        highlight,
+        isTruncated: Boolean(isTruncated),
+        bold: Boolean(bold),
+        underline: Boolean(underline),
+        strikeThrough: Boolean(strikeThrough),
+        size: variantSize,
+        sub: Boolean(sub),
+        italic: Boolean(italic),
+        highlight: Boolean(highlight),
         class: className,
       })}
+      ref={ref}
       {...props}
     />
   );
