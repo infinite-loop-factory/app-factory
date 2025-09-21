@@ -68,7 +68,7 @@ export default function DifficultySelectionScreen() {
   return (
     <SafeAreaView className="flex-1 bg-orange-50">
       {/* 플로팅 뒤로 버튼 */}
-      <FloatingBackButton onPress={() => router.back()} />
+      <FloatingBackButton onPress={() => router.push("/category-selection")} />
 
       {/* 오렌지 톤 헤더 */}
       <OrangeHeader title="난이도 선택" />

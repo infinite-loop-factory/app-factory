@@ -71,7 +71,9 @@ export default function QuestionMainScreen() {
   return (
     <SafeAreaView className={styleExamples.layouts.screen}>
       {/* 플로팅 뒤로 버튼 */}
-      <FloatingBackButton onPress={() => router.back()} />
+      <FloatingBackButton
+        onPress={() => router.push("/difficulty-selection")}
+      />
 
       {/* 오렌지 톤 헤더 */}
       <OrangeHeader title="질문 시작" />
@@ -205,7 +207,7 @@ export default function QuestionMainScreen() {
         <TouchableOpacity
           activeOpacity={0.8}
           className="items-center justify-center rounded-lg bg-orange-100 px-6 py-4"
-          onPress={() => router.back()}
+          onPress={() => router.push("/difficulty-selection")}
         >
           <Text
             className={`font-medium text-base ${themeTailwindClasses.mutedText}`}
