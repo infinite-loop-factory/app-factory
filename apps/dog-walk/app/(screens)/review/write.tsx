@@ -1,6 +1,8 @@
+import type { PostgrestError } from "@supabase/supabase-js";
 import type * as ImagePicker from "expo-image-picker";
 
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
+import { useAtomValue } from "jotai";
 import { useState } from "react";
 import {
   Keyboard,
@@ -11,8 +13,11 @@ import {
 } from "react-native";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { useFindCourse } from "@/api/reactQuery/course/useFindCourse";
+import { useInsertReview } from "@/api/reactQuery/review/useInsertReview";
+import { userAtom } from "@/atoms/userAtom";
 import RatingSelector from "@/components/atoms/RatingSelector";
 import CustomSafeAreaView from "@/components/CustomSafeAriaView";
+import { getGlobalHandleToast } from "@/components/CustomToast";
 import CoursePreviewCard from "@/components/card/CoursePreviewCard";
 import HeaderBar from "@/components/HeaderBar";
 import GuideSection from "@/components/molecules/GuideSection";
@@ -21,9 +26,12 @@ import TextareaField from "@/components/molecules/TextareaField";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
+import { useUploadImages } from "@/hooks/useUploadImages";
 
 export default function ReviewWriteScreen() {
   const { courseId } = useLocalSearchParams();
+
+  const userInfo = useAtomValue(userAtom);
 
   const { data } = useFindCourse(Number(courseId));
 
@@ -34,6 +42,34 @@ export default function ReviewWriteScreen() {
   const [reviewImages, setReviewImages] = useState<
     ImagePicker.ImagePickerAsset[]
   >([]);
+
+  const { handleUploadImages } = useUploadImages();
+  const { mutateAsync: insertReview } = useInsertReview();
+
+  const handleReviewSubmit = async () => {
+    const { uploadedUrls } = await handleUploadImages(reviewImages);
+
+    try {
+      const reviewId = await insertReview({
+        userId: userInfo.id,
+        courseId: Number(courseId),
+        rate,
+        content: reviewText,
+        images: uploadedUrls,
+      });
+
+      if (reviewId) {
+        router.back();
+        getGlobalHandleToast("리뷰 등록이 완료되었습니다.");
+      }
+    } catch (error) {
+      if ((error as PostgrestError).code === "23505") {
+        getGlobalHandleToast("이미 작성하신 리뷰이므로 등록할 수 없습니다.");
+      } else {
+        getGlobalHandleToast("리뷰 등록에 실패했습니다.");
+      }
+    }
+  };
 
   return (
     <CustomSafeAreaView>
@@ -102,6 +138,7 @@ export default function ReviewWriteScreen() {
         <Button
           className="rounded-xl"
           isDisabled={reviewText.trim().length < 10}
+          onPress={handleReviewSubmit}
           size="xl"
         >
           <ButtonText>리뷰 등록하기</ButtonText>
