@@ -1,4 +1,3 @@
-import { Audio, type AVPlaybackSource } from "expo-av";
 import { useState } from "react";
 import {
   FlatList,
@@ -17,13 +16,11 @@ import { usePlayer } from "@/contexts/PlayerContext";
 const ARTISTS = ["Jennie", "Lisa", "Rosé", "Jisoo", "IU"];
 
 export default function Index() {
-  const { playTrack } = usePlayer();
+  const { isPlaying, playTrack, togglePlayPause, currentTrack, artist } =
+    usePlayer();
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedArtist, setSelectedArtist] = useState("Jennie");
   const [showArtistOptions, setShowArtistOptions] = useState(false);
-  const [currentArtist, setCurrentArtist] = useState<string | null>(null);
-  const [sound, setSound] = useState<Audio.Sound | null>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
   const [queueModalVisible, setQueueModalVisible] = useState(false);
 
   const images: Record<string, ImageSourcePropType> = {
@@ -32,14 +29,6 @@ export default function Index() {
     Rosé: require("../../assets/images/rose.png"),
     Jisoo: require("../../assets/images/jisoo.png"),
     IU: require("../../assets/images/iu.png"),
-  };
-
-  const audioFiles: Record<string, number> = {
-    Jennie: require("../../assets/sounds/jennie.mp3"),
-    Lisa: require("../../assets/sounds/jennie.mp3"),
-    Rosé: require("../../assets/sounds/jennie.mp3"),
-    Jisoo: require("../../assets/sounds/jennie.mp3"),
-    IU: require("../../assets/sounds/jennie.mp3"),
   };
 
   const artistTracks: Record<string, { title: string; file: number }[]> = {
@@ -77,36 +66,6 @@ export default function Index() {
     setShowArtistOptions(false);
   };
 
-  const onPlay = async () => {
-    try {
-      if (sound && currentArtist !== selectedArtist) {
-        await sound.stopAsync();
-        await sound.unloadAsync();
-        setSound(null);
-        setIsPlaying(false);
-      }
-
-      if (isPlaying && currentArtist === selectedArtist) {
-        await sound?.pauseAsync();
-        setIsPlaying(false);
-      } else {
-        if (!sound || currentArtist !== selectedArtist) {
-          const { sound: newSound } = await Audio.Sound.createAsync(
-            audioFiles[selectedArtist] as AVPlaybackSource,
-          );
-          setSound(newSound);
-          setCurrentArtist(selectedArtist);
-          await newSound.playAsync();
-        } else {
-          await sound.playAsync();
-        }
-        setIsPlaying(true);
-      }
-    } catch (error) {
-      console.error("Audio playback error:", error);
-    }
-  };
-
   const onShowQueue = () => {
     setQueueModalVisible(true);
   };
@@ -128,12 +87,25 @@ export default function Index() {
           <View className="flex-row">
             <IconButton icon="refresh" label="Reset" onPress={onReset} />
             <CircleButton
-              iconName={
-                isPlaying && currentArtist === selectedArtist
-                  ? "pause"
-                  : "play-arrow"
-              }
-              onPress={onPlay}
+              iconName={isPlaying ? "pause" : "play-arrow"}
+              onPress={() => {
+                const tracks = artistTracks[selectedArtist];
+                if (!tracks || tracks.length === 0) return;
+
+                if (artist === selectedArtist && currentTrack) {
+                  togglePlayPause();
+                } else {
+                  const firstTrack = tracks[0];
+
+                  if (firstTrack) {
+                    playTrack(
+                      selectedArtist,
+                      firstTrack.title,
+                      firstTrack.file,
+                    );
+                  }
+                }
+              }}
             />
 
             <IconButton
