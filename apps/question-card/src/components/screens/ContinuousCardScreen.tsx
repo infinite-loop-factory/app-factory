@@ -14,7 +14,14 @@ import {
   type PanGestureHandlerGestureEvent,
   State,
 } from "react-native-gesture-handler";
-import { Box, Card, Pressable, Progress, Text } from "@/components/ui";
+import {
+  Box,
+  Card,
+  FloatingBackButton,
+  Pressable,
+  Progress,
+  Text,
+} from "@/components/ui";
 import { useAppActions, useAppState } from "@/context/AppContext";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
@@ -235,14 +242,12 @@ export default function ContinuousCardScreen() {
     <Box className="flex-1 bg-orange-50">
       <StatusBar backgroundColor="#ffffff" barStyle="dark-content" />
 
-      {/* 헤더 */}
-      <Box className="flex-row items-center justify-between border-gray-200 border-b bg-white px-5 py-4">
-        <Pressable
-          className="flex-1 justify-start"
-          onPress={() => router.back()}
-        >
-          <Text className="font-medium text-base text-orange-600">← 뒤로</Text>
-        </Pressable>
+      {/* 플로팅 뒤로 버튼 */}
+      <FloatingBackButton onPress={() => router.back()} />
+
+      {/* 오렌지 톤 헤더 */}
+      <Box className="flex-row items-center justify-between border-orange-200 border-b px-5 py-4">
+        <Box className="flex-1" />
 
         <Box className="flex-2 items-center">
           <Text className="mb-1 text-gray-600 text-sm">

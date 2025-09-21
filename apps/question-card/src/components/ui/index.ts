@@ -19,6 +19,7 @@ export type {
   FloatingMenuButtonProps,
   FloatingMenuButtonStyle,
 } from "./FloatingMenuButton";
+export type { OrangeHeaderProps } from "./OrangeHeader";
 export type { ProgressIndicatorProps } from "./ProgressIndicator";
 
 export { Badge } from "./badge";
@@ -32,6 +33,7 @@ export { FloatingBackButton } from "./FloatingBackButton";
 export { FloatingMenuButton } from "./FloatingMenuButton";
 export { GluestackUIProvider } from "./gluestack-ui-provider";
 export { HStack } from "./hstack";
+export { OrangeHeader } from "./OrangeHeader";
 export { ProgressIndicator } from "./ProgressIndicator";
 export { Pressable } from "./pressable";
 export { Progress } from "./progress";

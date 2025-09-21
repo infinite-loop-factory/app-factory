@@ -9,6 +9,7 @@ import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { FloatingBackButton, OrangeHeader } from "@/components/ui";
 import {
   categories,
   difficulties,
@@ -69,14 +70,11 @@ export default function QuestionMainScreen() {
 
   return (
     <SafeAreaView className={styleExamples.layouts.screen}>
-      {/* 헤더 */}
-      <View className="border-orange-200 border-b px-5 py-4">
-        <Text
-          className={`font-semibold text-xl ${themeTailwindClasses.foreground} text-center`}
-        >
-          질문 시작
-        </Text>
-      </View>
+      {/* 플로팅 뒤로 버튼 */}
+      <FloatingBackButton onPress={() => router.back()} />
+
+      {/* 오렌지 톤 헤더 */}
+      <OrangeHeader title="질문 시작" />
 
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         {/* 선택 조건 요약 */}

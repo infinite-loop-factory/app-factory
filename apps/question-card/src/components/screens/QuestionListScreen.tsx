@@ -8,7 +8,16 @@ import type { Question } from "@/types";
 import { useRouter } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
 import { Alert, FlatList } from "react-native";
-import { Box, Card, HStack, Pressable, Text, VStack } from "@/components/ui";
+import {
+  Box,
+  Card,
+  FloatingBackButton,
+  HStack,
+  OrangeHeader,
+  Pressable,
+  Text,
+  VStack,
+} from "@/components/ui";
 import { useAppActions, useAppState } from "@/context/AppContext";
 
 interface QuestionListItemProps {
@@ -147,13 +156,18 @@ export default function QuestionListScreen() {
 
   return (
     <Box className="flex-1 bg-orange-50">
-      {/* 헤더 */}
-      <Box className="border-gray-200 border-b bg-white pt-12 pb-4">
-        <VStack className="px-5" space="sm">
-          {/* 제목 */}
+      {/* 플로팅 뒤로 버튼 */}
+      <FloatingBackButton onPress={handleBackToMain} />
+
+      {/* 오렌지 톤 헤더 */}
+      <OrangeHeader title="질문 목록" />
+
+      {/* 상단 요약 */}
+      <Box className="border-gray-200 border-b bg-white px-5 py-4">
+        <VStack space="sm">
           <HStack className="items-center justify-between">
-            <Text className="font-semibold text-gray-900 text-xl">
-              질문 목록
+            <Text className="font-medium text-base text-gray-900">
+              총 {questions.length}개 질문
             </Text>
             <Pressable onPress={handleResetSettings}>
               <Text className="text-orange-500 text-sm">설정 다시하기</Text>

@@ -7,6 +7,11 @@ import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Alert, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import {
+  FloatingActionButton,
+  FloatingBackButton,
+  OrangeHeader,
+} from "@/components/ui";
 // getCategoryColor import removed as it's no longer used
 import { useAppActions, useAppState } from "@/context/AppContext";
 
@@ -60,24 +65,30 @@ export default function CategorySelectionScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-orange-50">
-      {/* 헤더 */}
-      <View className="flex-row items-center justify-between border-gray-200 border-b bg-white px-5 py-4">
-        <Text className="font-semibold text-gray-900 text-xl">
-          카테고리 선택
-        </Text>
-        <TouchableOpacity
-          className="rounded-lg bg-gray-100 px-4 py-2"
-          onPress={toggleAllCategories}
-        >
-          <Text className="font-medium text-gray-700 text-sm">
-            {allSelected ? "전체해제" : "전체선택"}
-          </Text>
-        </TouchableOpacity>
-      </View>
+      {/* 플로팅 뒤로 버튼 */}
+      <FloatingBackButton onPress={() => router.back()} />
+
+      {/* 오렌지 톤 헤더 */}
+      <OrangeHeader title="카테고리 선택" />
+
+      {/* 플로팅 전체선택 FAB */}
+      <FloatingActionButton
+        icon={allSelected ? "↻" : "✓"}
+        label={allSelected ? "해제" : "전체"}
+        onPress={toggleAllCategories}
+        position="bottom-right"
+        style="primary"
+      />
 
       {/* 카테고리 목록 */}
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         <View className="gap-4 p-5">
+          {/* 안내 텍스트 */}
+          <View className="mb-4">
+            <Text className="text-center text-gray-600 text-sm">
+              관심 있는 카테고리를 선택하세요
+            </Text>
+          </View>
           {categories.map((category) => {
             const isSelected = selectedCategories.includes(category.id);
 

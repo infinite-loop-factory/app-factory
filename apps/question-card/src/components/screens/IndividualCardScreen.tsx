@@ -12,7 +12,9 @@ import { Alert, StatusBar } from "react-native";
 import {
   Box,
   Card,
+  FloatingBackButton,
   HStack,
+  OrangeHeader,
   Pressable,
   Progress,
   Text,
@@ -129,38 +131,37 @@ export default function IndividualCardScreen() {
 
   return (
     <Box className="flex-1 bg-orange-50">
-      <StatusBar backgroundColor="#fafafa" barStyle="dark-content" />
+      <StatusBar backgroundColor="#ffffff" barStyle="dark-content" />
 
-      {/* 헤더 */}
-      <Box className="border-neutral-200 border-b bg-white pt-12 pb-4">
-        <VStack className="px-4" space="sm">
-          {/* 상단 네비게이션 */}
-          <HStack className="items-center justify-between">
-            <Pressable onPress={handleBackToList}>
-              <Text className="text-blue-500 text-sm">← 목록으로</Text>
-            </Pressable>
-            <Pressable onPress={handleBackToMain}>
-              <Text className="text-neutral-600 text-sm">메인으로</Text>
-            </Pressable>
-          </HStack>
+      {/* 플로팅 뒤로 버튼 */}
+      <FloatingBackButton onPress={handleBackToList} />
 
+      {/* 오렌지 톤 헤더 */}
+      <OrangeHeader title="질문 카드" />
+
+      {/* 진행률 및 네비게이션 */}
+      <Box className="border-gray-200 border-b bg-white px-5 py-4">
+        <VStack space="sm">
           {/* 진행률 표시 */}
           <VStack space="xs">
             <HStack className="items-center justify-between">
-              <Text className="font-medium text-neutral-700 text-sm">
-                진행률
-              </Text>
-              <Text className="text-neutral-600 text-sm">
+              <Text className="font-medium text-gray-700 text-sm">진행률</Text>
+              <Text className="text-gray-600 text-sm">
                 {currentIndex + 1} / {filteredQuestions.totalCount}
               </Text>
             </HStack>
             <Progress className="h-2" value={progressPercentage * 100} />
           </VStack>
 
-          {/* 도움말 */}
-          <Text className="text-center text-neutral-500 text-xs">
-            리스트 순서대로 이동합니다
-          </Text>
+          {/* 네비게이션 및 도움말 */}
+          <HStack className="items-center justify-between">
+            <Text className="text-gray-500 text-xs">
+              리스트 순서대로 이동합니다
+            </Text>
+            <Pressable onPress={handleBackToMain}>
+              <Text className="text-orange-500 text-sm">메인으로</Text>
+            </Pressable>
+          </HStack>
         </VStack>
       </Box>
 
