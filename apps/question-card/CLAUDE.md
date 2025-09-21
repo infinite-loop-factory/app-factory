@@ -312,6 +312,14 @@ spacing: {
   - Modern Refined 스타일: 깔끔하고 세련된 UI/UX
   - 모든 화면 일관된 디자인 패턴 적용
 
+**🔄 Phase 3.5: 플로팅 UI 전환 - 2024.09.21** (현재 진행 중)
+- ✅ **플로팅 UI 컴포넌트 생성**: FloatingBackButton, ProgressIndicator, FloatingMenuButton, FloatingActionButton
+- 🔄 **헤더 제거 작업**: 기존 헤더 완전 제거하고 플로팅 UI로 대체
+  - ⚠️ **현재 이슈**: CategorySelectionScreen, DifficultySelectionScreen에서 헤더가 여전히 표시됨
+  - **해결 필요**: 상단 하얀 배경 헤더 완전 제거 (SafeAreaView, StatusBar 설정 조정 필요)
+- 📋 **작업 계획**: 6개 화면 모두 헤더 제거 + 플로팅 UI 적용
+- 📚 **가이드 추가**: `docs/header-removal-guide.md` 생성으로 작업 연속성 확보
+
 **🚀 Phase 4: 성능 최적화 & 최종 배포 준비 (다음 단계)**
 1. **성능 최적화**: React.memo, useCallback, useMemo 적용
 2. **접근성 개선**: 스크린 리더 지원, 키보드 네비게이션
@@ -649,6 +657,7 @@ const currentQuestion = progress.currentQuestion;
 - `docs/biome-lint-guide.md` - Practical lint error troubleshooting and solutions
 - `docs/design-system.md` - Legacy design system specifications (Vibrant Orange v1.0)
 - `docs/design-system-modern-refined.md` - **🆕 Modern Refined Orange v2.0 디자인 가이드** - 현대적이고 세련된 UI 스타일
+- `docs/header-removal-guide.md` - **🆕 헤더 제거 및 플로팅 UI 구현 가이드** - 현재 작업 진행 상황 및 해결 방법
 - `docs/development-plan.md` - Complete development roadmap and implementation strategy
 - `docs/component-architecture.md` - Component structure and organization guide
 - `docs/troubleshooting.md` - 주요 이슈 해결 방법 및 예방 가이드
