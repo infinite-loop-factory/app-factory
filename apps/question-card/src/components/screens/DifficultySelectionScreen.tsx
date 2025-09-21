@@ -75,7 +75,7 @@ export default function DifficultySelectionScreen() {
 
       {/* 플로팅 전체선택 FAB */}
       <FloatingActionButton
-        icon={allSelected ? "↻" : "✓"}
+        icon={allSelected ? "reset" : "check"}
         label={allSelected ? "해제" : "전체"}
         onPress={toggleAllDifficulties}
         position="bottom-right"

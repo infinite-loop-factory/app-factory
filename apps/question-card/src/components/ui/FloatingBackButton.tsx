@@ -3,8 +3,9 @@
  * 헤더 제거 후 네비게이션을 위한 플로팅 UI
  */
 
+import { ArrowLeft } from "lucide-react-native";
 import React from "react";
-import { Pressable, Text } from "@/components/ui";
+import { Pressable } from "@/components/ui";
 
 export type FloatingBackButtonPosition = "top-left" | "top-right";
 export type FloatingBackButtonStyle = "dark" | "light" | "primary";
@@ -13,18 +14,18 @@ export interface FloatingBackButtonProps {
   onPress: () => void;
   position?: FloatingBackButtonPosition;
   style?: FloatingBackButtonStyle;
-  icon?: string;
+  size?: number;
   disabled?: boolean;
 }
 
 const positionClasses: Record<FloatingBackButtonPosition, string> = {
-  "top-left": "top-12 left-4",
-  "top-right": "top-12 right-4",
+  "top-left": "top-2 left-2",
+  "top-right": "top-2 right-2",
 };
 
 const styleClasses: Record<FloatingBackButtonStyle, string> = {
-  dark: "bg-black/20",
-  light: "bg-white/80 border border-gray-200",
+  dark: "bg-black/30",
+  light: "bg-white/90 border border-gray-300/50",
   primary: "bg-orange-500",
 };
 
@@ -38,14 +39,16 @@ export function FloatingBackButton({
   onPress,
   position = "top-left",
   style = "dark",
-  icon = "←",
+  size = 20,
   disabled = false,
 }: FloatingBackButtonProps) {
   const baseClasses =
-    "absolute z-10 h-10 w-10 items-center justify-center rounded-full backdrop-blur-sm shadow-lg";
+    "absolute z-10 h-11 w-11 items-center justify-center rounded-full backdrop-blur-sm shadow-xl";
   const positionClass = positionClasses[position];
   const styleClass = styleClasses[style];
-  const textClass = textClasses[style];
+  const iconColor = textClasses[style].includes("white")
+    ? "#ffffff"
+    : "#374151";
 
   const buttonClasses = `${baseClasses} ${positionClass} ${styleClass} ${
     disabled ? "opacity-50" : ""
@@ -53,7 +56,7 @@ export function FloatingBackButton({
 
   return (
     <Pressable className={buttonClasses} disabled={disabled} onPress={onPress}>
-      <Text className={`${textClass} text-lg font-medium`}>{icon}</Text>
+      <ArrowLeft color={iconColor} size={size} strokeWidth={2.5} />
     </Pressable>
   );
 }

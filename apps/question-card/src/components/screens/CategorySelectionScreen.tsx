@@ -73,7 +73,7 @@ export default function CategorySelectionScreen() {
 
       {/* 플로팅 전체선택 FAB */}
       <FloatingActionButton
-        icon={allSelected ? "↻" : "✓"}
+        icon={allSelected ? "reset" : "check"}
         label={allSelected ? "해제" : "전체"}
         onPress={toggleAllCategories}
         position="bottom-right"

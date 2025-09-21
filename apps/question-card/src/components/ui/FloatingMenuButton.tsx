@@ -3,6 +3,7 @@
  * 우측 상단에 표시되는 메뉴/설정 버튼
  */
 
+import { MoreHorizontal } from "lucide-react-native";
 import React from "react";
 import { Pressable, Text } from "@/components/ui";
 
@@ -17,7 +18,6 @@ export interface FloatingMenuButtonProps {
   onPress: () => void;
   position?: FloatingMenuButtonPosition;
   style?: FloatingMenuButtonStyle;
-  icon?: string;
   label?: string;
   disabled?: boolean;
   size?: "sm" | "md" | "lg";
@@ -49,16 +49,15 @@ const sizeClasses = {
 };
 
 const iconSizeClasses = {
-  sm: "text-sm",
-  md: "text-lg",
-  lg: "text-xl",
+  sm: 16,
+  md: 20,
+  lg: 24,
 };
 
 export function FloatingMenuButton({
   onPress,
   position = "top-right",
   style = "dark",
-  icon = "⋯",
   label,
   disabled = false,
   size = "md",
@@ -69,7 +68,7 @@ export function FloatingMenuButton({
   const styleClass = styleClasses[style];
   const textClass = textClasses[style];
   const sizeClass = sizeClasses[size];
-  const iconSizeClass = iconSizeClasses[size];
+  const iconSize = iconSizeClasses[size];
 
   // 라벨이 있으면 둥근 모서리 사각형, 없으면 원형
   const shapeClass = label ? "rounded-full px-3" : "rounded-full";
@@ -78,14 +77,14 @@ export function FloatingMenuButton({
     disabled ? "opacity-50" : ""
   }`;
 
+  const iconColor = textClass.includes("white") ? "#ffffff" : "#374151";
+
   return (
     <Pressable className={buttonClasses} disabled={disabled} onPress={onPress}>
       {label ? (
         <Text className={`${textClass} text-xs font-medium`}>{label}</Text>
       ) : (
-        <Text className={`${textClass} ${iconSizeClass} font-medium`}>
-          {icon}
-        </Text>
+        <MoreHorizontal color={iconColor} size={iconSize} strokeWidth={2.5} />
       )}
     </Pressable>
   );
