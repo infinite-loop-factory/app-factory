@@ -1,0 +1,5 @@
+{
+  "extends": "@infinite-loop-factory/config-typescript/base.json",
+  "include": ["src"],
+  "exclude": ["node_modules"]
+}
