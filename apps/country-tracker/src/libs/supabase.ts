@@ -1,7 +1,9 @@
 import "react-native-url-polyfill/auto";
-import { env } from "@/constants/env";
-import { type SupportedStorage, createClient } from "@supabase/supabase-js";
+import type { SupportedStorage } from "@supabase/supabase-js";
+
+import { createClient } from "@supabase/supabase-js";
 import { AppState, Platform } from "react-native";
+import { env } from "@/constants/env";
 
 let storage: SupportedStorage | undefined;
 const isWeb = Platform.OS === "web";

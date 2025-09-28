@@ -16,7 +16,6 @@ import { useEffect } from "react";
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
 import { store } from "@/libs/jotai";
 import "react-native-reanimated";
-import "@/libs/i18n";
 
 import { themeAtom } from "@/atoms/theme.atom";
 import WebviewLayout from "@/components/web-view-layout";
@@ -28,6 +27,8 @@ import { useNetworkState } from "expo-network";
 import { useRef } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { LocationPermissionDeniedToast } from "@/components/toasts/location-permission-denied";
+import { useToast } from "@/components/ui/toast";
 import { startLocationTask } from "@/features/location/location-permission";
 import { flushLocationQueueIfAny } from "@/features/location/location-task";
 
@@ -65,6 +66,7 @@ function RootLayout() {
   });
   const net = useNetworkState();
   const wasConnectedRef = useRef(false);
+  const toast = useToast();
 
   useEffect(() => {
     if (navigationRef) {
@@ -83,8 +85,15 @@ function RootLayout() {
   }, [savedTheme]);
 
   useEffect(() => {
-    startLocationTask();
-  }, []);
+    startLocationTask({
+      onPermissionDenied: () => {
+        toast.show({
+          duration: 3000,
+          render: LocationPermissionDeniedToast,
+        });
+      },
+    });
+  }, [toast]);
 
   useEffect(() => {
     const connected =

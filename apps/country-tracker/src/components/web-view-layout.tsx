@@ -1,5 +1,9 @@
 import type { PropsWithChildren } from "react";
 
+import { MenuIcon } from "lucide-react-native";
+import { useEffect, useState } from "react";
+import { Image, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { Fab, FabIcon } from "@/components/ui/fab";
 import { Menu, MenuItem } from "@/components/ui/menu";
 import {
@@ -14,10 +18,6 @@ import {
   SelectPortal,
   SelectTrigger,
 } from "@/components/ui/select";
-import { MenuIcon } from "lucide-react-native";
-import { useEffect, useState } from "react";
-import { Image, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 type appType = { name: string };
 
@@ -43,8 +43,8 @@ export default function WebviewLayout({ children }: PropsWithChildren) {
         <View className="hidden min-w-[500px] flex-[9] flex-row items-center justify-center text-center md:block">
           <Image
             className="mx-auto"
-            style={{ width: 150, height: 150 }}
             source={require("@/assets/images/il.png")}
+            style={{ width: 150, height: 150 }}
           />
           <Text className="block text-center text-[45px]">무한루프</Text>
           <Text className="block text-center font-bold text-[45px]">
@@ -53,10 +53,10 @@ export default function WebviewLayout({ children }: PropsWithChildren) {
           <View className={" flex items-center justify-center p-3"}>
             <Select
               className={"w-[350px] "}
-              selectedValue={location.pathname.split("/")[0]}
               onValueChange={(d) => {
                 location.href = `${baseURL}${d}`;
               }}
+              selectedValue={location.pathname.split("/")[0]}
             >
               <SelectTrigger
                 className={
@@ -64,10 +64,10 @@ export default function WebviewLayout({ children }: PropsWithChildren) {
                 }
               >
                 <SelectInput
-                  placeholder="Select App"
                   className={
                     "!hover:border-black border-black text-center font-bold text-[33px]"
                   }
+                  placeholder="Select App"
                 />
                 <SelectIcon className="mr-3" />
               </SelectTrigger>
@@ -105,8 +105,8 @@ export default function WebviewLayout({ children }: PropsWithChildren) {
         <View className="hidden flex-[4] md:block" />
       </View>
       <Menu
-        placement="top"
         offset={5}
+        placement="top"
         trigger={({ ...triggerProps }) => (
           <Fab {...triggerProps}>
             <FabIcon as={MenuIcon} />

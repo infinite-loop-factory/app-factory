@@ -5,7 +5,6 @@ import { Motion } from "@legendapp/motion";
 import { useQuery } from "@tanstack/react-query";
 import { useAtomValue } from "jotai";
 import { Search } from "lucide-react-native";
-import { DateTime } from "luxon";
 import { useState } from "react";
 import { FlatList, View } from "react-native";
 import { themeAtom } from "@/atoms/theme.atom";
@@ -18,11 +17,12 @@ import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
-import { QUERY_KEYS } from "@/constants/query-keys";
+import { locationQueryKeys } from "@/features/location/apis/query-keys";
+import { fetchVisitedCountries } from "@/features/map/apis/fetch-visited-countries";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import i18n from "@/libs/i18n";
 import supabase from "@/libs/supabase";
-import { fetchVisitedCountries } from "@/utils/visited-countries";
+import { formatIsoDate } from "@/utils/format-date";
 
 export default function HomeScreen() {
   const [searchText, setSearchText] = useState("");
@@ -37,11 +37,8 @@ export default function HomeScreen() {
       "typography",
     ]);
 
-  const formatDate = (isoDate: string) =>
-    DateTime.fromISO(isoDate).toFormat("yyyy-MM-dd");
-
   const { data, isLoading, isError } = useQuery({
-    queryKey: QUERY_KEYS.visitedCountries(searchText),
+    queryKey: locationQueryKeys.visitedCountries(searchText),
     queryFn: async () => {
       const { data: userData } = await supabase.auth.getUser();
       const user = userData?.user;
@@ -80,7 +77,7 @@ export default function HomeScreen() {
         </Box>
         <Box className="flex flex-row items-center gap-2">
           <Text className="font-mono" style={{ color: textColor }}>
-            {formatDate(item.endDate)}
+            {formatIsoDate(item.endDate)}
           </Text>
           {item.stayDays > 0 && (
             <Badge size="sm">
