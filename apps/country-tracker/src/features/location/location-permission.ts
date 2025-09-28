@@ -8,16 +8,10 @@ import { Platform } from "react-native";
 import { LOCATION_TASK_NAME } from "@/constants/location";
 import { LAST_LOCATION_STORAGE_KEY } from "@/constants/storage-keys";
 import supabase from "@/libs/supabase";
+import { normalizeTimestamp } from "@/utils/normalize-timestamp";
 import { getCountryByLatLng } from "@/utils/reverse-geo";
 
 type LastLocation = { ts: string | number; lat: number; lon: number };
-
-function toIsoString(value: string | number): string {
-  if (typeof value === "string") {
-    return value;
-  }
-  return new Date(value).toISOString();
-}
 
 async function getAuthedUser(): Promise<User | null> {
   const { data } = await supabase.auth.getUser();
@@ -31,7 +25,7 @@ function shouldRecordLocation(
 ): boolean {
   if (!last) return true;
   const diff = DateTime.now().diff(
-    DateTime.fromISO(toIsoString(last.ts)),
+    DateTime.fromISO(normalizeTimestamp(last.ts)),
     "hours",
   ).hours;
   // Insert if the last entry is older than an hour or the coordinates changed.
@@ -88,9 +82,14 @@ async function requestLocationPermissions(): Promise<boolean> {
 }
 
 async function ensureBackgroundUpdatesRegistered() {
-  const isTaskDefined =
-    await TaskManager.isTaskRegisteredAsync(LOCATION_TASK_NAME);
-  if (!isTaskDefined) {
+  let hasStarted = false;
+  try {
+    hasStarted =
+      await Location.hasStartedLocationUpdatesAsync(LOCATION_TASK_NAME);
+  } catch {
+    hasStarted = await TaskManager.isTaskRegisteredAsync(LOCATION_TASK_NAME);
+  }
+  if (!hasStarted) {
     await Location.startLocationUpdatesAsync(LOCATION_TASK_NAME, {
       accuracy: Location.Accuracy.Balanced,
       // reduce battery & duplicates: at least 300m or 1 hour
@@ -129,12 +128,13 @@ async function recordForegroundLocation(user: User) {
       return;
     }
 
+    const resolvedTimestamp = normalizeTimestamp(timestamp);
     const { error } = await supabase.from("locations").insert([
       {
         user_id: user.id,
         latitude,
         longitude,
-        timestamp: new Date(timestamp ?? Date.now()),
+        timestamp: resolvedTimestamp,
         country,
         country_code: countryCode,
       },
@@ -152,7 +152,7 @@ async function recordForegroundLocation(user: User) {
     }
 
     await writeLastLocation({
-      ts: new Date().toISOString(),
+      ts: resolvedTimestamp,
       lat: latitude,
       lon: longitude,
     });
@@ -187,12 +187,13 @@ async function handleWebLocationInsert(user: User, pos: GeolocationPosition) {
     return;
   }
 
+  const resolvedTimestamp = normalizeTimestamp(timestamp);
   const { error } = await supabase.from("locations").insert([
     {
       user_id: user.id,
       latitude,
       longitude,
-      timestamp: new Date(pos.timestamp),
+      timestamp: resolvedTimestamp,
       country,
       country_code: countryCode,
     },
@@ -202,10 +203,7 @@ async function handleWebLocationInsert(user: User, pos: GeolocationPosition) {
     localStorage.setItem(
       storageKey,
       JSON.stringify({
-        ts:
-          typeof timestamp === "number"
-            ? new Date(timestamp).toISOString()
-            : timestamp,
+        ts: resolvedTimestamp,
         lat: latitude,
         lon: longitude,
       }),
