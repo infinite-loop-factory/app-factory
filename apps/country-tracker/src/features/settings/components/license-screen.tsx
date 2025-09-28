@@ -1,3 +1,5 @@
+import { ExternalLink } from "lucide-react-native";
+import { Linking, TouchableOpacity } from "react-native";
 import licensesData from "@/assets/licenses.json";
 import ParallaxScrollView from "@/components/parallax-scroll-view";
 import { Badge, BadgeText } from "@/components/ui/badge";
@@ -6,8 +8,6 @@ import { Heading } from "@/components/ui/heading";
 import { Text } from "@/components/ui/text";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import i18n from "@/libs/i18n";
-import { ExternalLink } from "lucide-react-native";
-import { Linking, TouchableOpacity } from "react-native";
 
 interface LicenseItem {
   name: string;
@@ -52,10 +52,10 @@ export default function LicenseScreen() {
 
     return (
       <TouchableOpacity
-        key={item.name}
         className={`p-4 ${!isLast ? "border-b" : ""}`}
-        style={{ borderBottomColor: borderColor }}
+        key={item.name}
         onPress={() => openPackagePage(item)}
+        style={{ borderBottomColor: borderColor }}
       >
         <Box className="flex-row items-start justify-between">
           <Box className="mr-3 flex-1">
@@ -106,7 +106,7 @@ export default function LicenseScreen() {
             )}
           </Box>
 
-          <ExternalLink size={16} color={linkColor} />
+          <ExternalLink color={linkColor} size={16} />
         </Box>
       </TouchableOpacity>
     );

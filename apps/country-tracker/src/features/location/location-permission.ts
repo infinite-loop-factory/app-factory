@@ -16,11 +16,16 @@ import {
   LOCATION_SHOWS_BACKGROUND_INDICATOR,
   LOCATION_TIME_INTERVAL_MS,
 } from "@/features/location/constants";
+import i18n from "@/libs/i18n";
 import supabase from "@/libs/supabase";
 import { normalizeTimestamp } from "@/utils/normalize-timestamp";
 import { getCountryByLatLng } from "@/utils/reverse-geo";
 
 type LastLocation = { ts: string | number; lat: number; lon: number };
+
+export type StartLocationTaskOptions = {
+  onPermissionDenied?: () => void;
+};
 
 async function getAuthedUser(): Promise<User | null> {
   const { data } = await supabase.auth.getUser();
@@ -37,7 +42,7 @@ function shouldRecordLocation(
     DateTime.fromISO(normalizeTimestamp(last.ts)),
     "hours",
   ).hours;
-  // Insert if the last entry is older than an hour or the coordinates changed.
+  // Insert if the last entry is older than the configured interval or the coordinates changed.
   return (
     diff >= LOCATION_MIN_RECORDING_INTERVAL_HOURS ||
     last.lat !== latitude ||
@@ -65,14 +70,18 @@ async function writeLastLocation(record: LastLocation) {
   }
 }
 
-function startWebLocationTracking(user: User) {
+function startWebLocationTracking(
+  user: User,
+  options?: StartLocationTaskOptions,
+) {
   if (typeof navigator === "undefined") return;
 
   navigator.geolocation.getCurrentPosition(
     (pos) => handleWebLocationInsert(user, pos),
     (err) => {
       if (err.code === 1) {
-        console.error("위치 권한이 거부되었습니다.");
+        console.error("Location permission denied by the user.");
+        options?.onPermissionDenied?.();
       } else if (err.code === 2) {
         console.error("위치 정보를 사용할 수 없습니다.");
       } else if (err.code === 3) {
@@ -90,15 +99,15 @@ async function requestLocationPermissions(): Promise<boolean> {
   if (foreground.status !== "granted") {
     return false;
   }
+
   const background = await Location.requestBackgroundPermissionsAsync();
   return background.status === "granted";
 }
 
 async function ensureBackgroundUpdatesRegistered() {
   const foregroundService = {
-    // TODO: inject localized strings once i18n wiring is available
-    notificationTitle: "Location Tracking",
-    notificationBody: "Tracking your location to update visited countries.",
+    notificationTitle: i18n.t("location.foregroundService.title"),
+    notificationBody: i18n.t("location.foregroundService.body"),
   } as const;
 
   let hasStarted = false;
@@ -229,15 +238,19 @@ async function handleWebLocationInsert(user: User, pos: GeolocationPosition) {
   }
 }
 
-export async function startLocationTask() {
+export async function startLocationTask(options?: StartLocationTaskOptions) {
   const permissionsGranted = await requestLocationPermissions();
-  if (!permissionsGranted) return;
+  if (!permissionsGranted) {
+    return;
+  }
 
   const user = await getAuthedUser();
-  if (!user) return;
+  if (!user) {
+    return;
+  }
 
   if (Platform.OS === "web" && typeof window !== "undefined") {
-    startWebLocationTracking(user);
+    startWebLocationTracking(user, options);
     return;
   }
 
@@ -253,6 +266,7 @@ export async function stopLocationTask() {
   if (Platform.OS === "web" && typeof window !== "undefined") {
     return;
   }
+
   if (!(await TaskManager.isAvailableAsync())) {
     return;
   }

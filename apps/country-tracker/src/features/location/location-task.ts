@@ -131,7 +131,10 @@ async function flushQueueWith(
     ...row,
     timestamp: normalizeTimestamp(row.timestamp),
   }));
-  if (payload.length === 0) return { ok: true } as const;
+  if (payload.length === 0) {
+    return { ok: true } as const;
+  }
+
   const { error: insertErr } = await supabase.from("locations").insert(payload);
   if (!insertErr) {
     await AsyncStorage.removeItem(LOCATION_QUEUE_STORAGE_KEY);

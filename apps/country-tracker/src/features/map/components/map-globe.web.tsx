@@ -31,7 +31,7 @@ import {
   VISITED_FILL_OPACITY,
   VISITED_STROKE_WIDTH_WEB,
 } from "@/features/map/constants/style";
-import { useVisitedCountrySummariesQuery } from "@/features/map/hooks/useVisitedCountrySummariesQuery";
+import { useVisitedCountrySummariesQuery } from "@/features/map/hooks/use-visited-country-summaries";
 import {
   getCountryPolygon,
   normalizeCountryCode,

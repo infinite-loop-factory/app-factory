@@ -82,5 +82,17 @@
     "description": "Login is required to use this service.",
     "google": "Login with Google",
     "github": "Login with GitHub"
+  },
+  "location": {
+    "foregroundService": {
+      "title": "Location Tracking",
+      "body": "Tracking your location to update visited countries."
+    },
+    "permission": {
+      "denied": {
+        "title": "Permission needed",
+        "message": "Allow location access in your browser to keep tracking in the background."
+      }
+    }
   }
 }

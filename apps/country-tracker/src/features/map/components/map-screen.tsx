@@ -20,7 +20,7 @@ import { Heading } from "@/components/ui/heading";
 import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
 import { Text } from "@/components/ui/text";
 import MapGlobe from "@/features/map/components/map-globe";
-import { useVisitedCountrySummariesQuery } from "@/features/map/hooks/useVisitedCountrySummariesQuery";
+import { useVisitedCountrySummariesQuery } from "@/features/map/hooks/use-visited-country-summaries";
 import {
   findCountryLocation,
   findCountryLocationByCode,
