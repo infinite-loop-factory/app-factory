@@ -17,6 +17,20 @@
     "search-placeholder": "Search for a country",
     "web-disclaimer": "3D globe is available on iOS. This is a 2D web view.",
     "download-app": "Download the app",
+    "summary": {
+      "latest-visit": "Last stay: %{date}",
+      "no-visit": "No stays recorded",
+      "days": "%{count} days",
+      "visits": "%{count} visits",
+      "no-results-search": "No countries matched \"%{search}\" this year.",
+      "no-results-year": "No stays recorded in %{year}.",
+      "total-days-year": "Total %{count} days",
+      "total-days-selected": "%{country}: %{count} days this year",
+      "loading": "Syncing stays...",
+      "view-details": "View details",
+      "year-label": "%{year}",
+      "error": "We couldn't load your stays. Pull to refresh."
+    },
     "alert": {
       "country-not-found": {
         "title": "Country not found",

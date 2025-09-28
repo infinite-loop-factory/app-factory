@@ -245,8 +245,3 @@ export const ISO_NUMERIC_TO_ALPHA2: Record<string, string> = {
   "887": "YE",
   "894": "ZM",
 };
-
-export function numericToAlpha2(numeric: number | string): string | undefined {
-  const key = String(numeric).padStart(3, "0");
-  return ISO_NUMERIC_TO_ALPHA2[key];
-}

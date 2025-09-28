@@ -43,8 +43,8 @@ export default function SettingsScreen() {
     errorColor, // 에러 타이틀
     headingColor, // 헤딩 텍스트
     textColor, // 일반 텍스트
-    highlightColor, // 스위치 OFF일 때 트랙
-    switchBgColor, // iOS 전용 스위치 배경
+    highlightColor, // 스위치 ON일 때 트랙
+    switchBgColor, // 스위치 OFF일 때 트랙 (iOS 배경)
   ] = useThemeColor([
     "background",
     "error-600",
@@ -160,7 +160,7 @@ export default function SettingsScreen() {
             )}
           </View>
           <Switch
-            ios_backgroundColor={switchBgColor}
+            activeThumbColor={highlightColor}
             onValueChange={toggleTheme}
             thumbColor={highlightColor}
             trackColor={{ false: switchBgColor, true: switchBgColor }}
