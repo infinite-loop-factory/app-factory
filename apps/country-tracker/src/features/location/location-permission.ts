@@ -7,6 +7,15 @@ import { DateTime } from "luxon";
 import { Platform } from "react-native";
 import { LOCATION_TASK_NAME } from "@/constants/location";
 import { LAST_LOCATION_STORAGE_KEY } from "@/constants/storage-keys";
+import {
+  LOCATION_DEFERRED_DISTANCE_METERS,
+  LOCATION_DEFERRED_UPDATES_INTERVAL_MS,
+  LOCATION_DISTANCE_INTERVAL_METERS,
+  LOCATION_MIN_RECORDING_INTERVAL_HOURS,
+  LOCATION_PAUSES_UPDATES_AUTOMATICALLY,
+  LOCATION_SHOWS_BACKGROUND_INDICATOR,
+  LOCATION_TIME_INTERVAL_MS,
+} from "@/features/location/constants";
 import supabase from "@/libs/supabase";
 import { normalizeTimestamp } from "@/utils/normalize-timestamp";
 import { getCountryByLatLng } from "@/utils/reverse-geo";
@@ -29,7 +38,11 @@ function shouldRecordLocation(
     "hours",
   ).hours;
   // Insert if the last entry is older than an hour or the coordinates changed.
-  return diff >= 1 || last.lat !== latitude || last.lon !== longitude;
+  return (
+    diff >= LOCATION_MIN_RECORDING_INTERVAL_HOURS ||
+    last.lat !== latitude ||
+    last.lon !== longitude
+  );
 }
 
 async function readLastLocation(): Promise<LastLocation | null> {
@@ -82,6 +95,12 @@ async function requestLocationPermissions(): Promise<boolean> {
 }
 
 async function ensureBackgroundUpdatesRegistered() {
+  const foregroundService = {
+    // TODO: inject localized strings once i18n wiring is available
+    notificationTitle: "Location Tracking",
+    notificationBody: "Tracking your location to update visited countries.",
+  } as const;
+
   let hasStarted = false;
   try {
     hasStarted =
@@ -93,18 +112,15 @@ async function ensureBackgroundUpdatesRegistered() {
     await Location.startLocationUpdatesAsync(LOCATION_TASK_NAME, {
       accuracy: Location.Accuracy.Balanced,
       // reduce battery & duplicates: at least 300m or 1 hour
-      distanceInterval: 300,
-      timeInterval: 60 * 60 * 1000,
-      pausesUpdatesAutomatically: true,
+      distanceInterval: LOCATION_DISTANCE_INTERVAL_METERS,
+      timeInterval: LOCATION_TIME_INTERVAL_MS,
+      pausesUpdatesAutomatically: LOCATION_PAUSES_UPDATES_AUTOMATICALLY,
       // foreground service config for Android
-      foregroundService: {
-        notificationTitle: "Location Tracking",
-        notificationBody: "Tracking your location to update visited countries.",
-      },
+      foregroundService,
       // defer updates when device is in low power/idle where available
-      deferredUpdatesInterval: 10 * 60 * 1000,
-      deferredUpdatesDistance: 500,
-      showsBackgroundLocationIndicator: false,
+      deferredUpdatesInterval: LOCATION_DEFERRED_UPDATES_INTERVAL_MS,
+      deferredUpdatesDistance: LOCATION_DEFERRED_DISTANCE_METERS,
+      showsBackgroundLocationIndicator: LOCATION_SHOWS_BACKGROUND_INDICATOR,
     });
   }
 }

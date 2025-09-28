@@ -10,6 +10,7 @@ import {
   LAST_LOCATION_STORAGE_KEY,
   LOCATION_QUEUE_STORAGE_KEY,
 } from "@/constants/storage-keys";
+import { LOCATION_MIN_RECORDING_INTERVAL_HOURS } from "@/features/location/constants";
 import supabase from "@/libs/supabase";
 import { normalizeTimestamp } from "@/utils/normalize-timestamp";
 import { getCountryByLatLng } from "@/utils/reverse-geo";
@@ -99,7 +100,8 @@ function dedupeRows(
         previousLon === null ||
         previousLat !== row.latitude ||
         previousLon !== row.longitude;
-      const shouldKeep = diffHours >= 1 || changedPosition;
+      const shouldKeep =
+        diffHours >= LOCATION_MIN_RECORDING_INTERVAL_HOURS || changedPosition;
       if (shouldKeep) {
         previousTs = rowTs;
         previousLat = row.latitude;
