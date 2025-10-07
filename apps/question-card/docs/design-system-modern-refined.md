@@ -175,28 +175,50 @@ export const modernClasses = {
 
 ## 🔤 타이포그래피
 
+### 폰트 패밀리 - IBM Plex Sans KR
+
+**선정 폰트**: IBM Plex Sans KR
+**제공 Weight**: Regular(400), Medium(500), SemiBold(600), Bold(700)
+
+**선정 이유**:
+- ✨ **전문성**: IBM의 기업용 폰트로 신뢰감과 전문성
+- 🎨 **현대적**: 깔끔하고 세련된 현대적 디자인
+- 📱 **가독성**: UI/UX에 최적화된 뛰어난 가독성
+- 🌏 **한글 지원**: 완벽한 한글 지원 (Latin + Hangul)
+- 📝 **OFL 라이선스**: 상업적 사용 가능
+
+```typescript
+export const fontFamily = {
+  regular: "font-sans",        // IBMPlexSansKR-Regular (400)
+  medium: "font-medium",       // IBMPlexSansKR-Medium (500)
+  semibold: "font-semibold",   // IBMPlexSansKR-SemiBold (600)
+  bold: "font-bold",           // IBMPlexSansKR-Bold (700)
+};
+```
+
 ### 텍스트 크기 체계
 ```typescript
 export const textSizes = {
   // 제목
-  title: "text-xl font-semibold",          // 20px, 섹션 제목
-  cardTitle: "text-lg font-semibold",      // 18px, 카드 제목
-  
+  title: "text-xl font-semibold",          // 20px, IBMPlexSansKR-SemiBold
+  cardTitle: "text-lg font-semibold",      // 18px, IBMPlexSansKR-SemiBold
+
   // 본문
-  body: "text-base",                       // 16px, 일반 텍스트
-  small: "text-sm",                        // 14px, 보조 텍스트
-  tiny: "text-xs",                         // 12px, 주석
-  
+  body: "text-base font-sans",             // 16px, IBMPlexSansKR-Regular
+  bodyMedium: "text-base font-medium",     // 16px, IBMPlexSansKR-Medium
+  small: "text-sm font-sans",              // 14px, IBMPlexSansKR-Regular
+  tiny: "text-xs font-sans",               // 12px, IBMPlexSansKR-Regular
+
   // 강조
-  number: "text-3xl font-bold",            // 30px, 숫자 강조
-  unit: "text-lg font-medium",             // 18px, 단위
+  number: "text-3xl font-bold",            // 30px, IBMPlexSansKR-Bold
+  unit: "text-lg font-medium",             // 18px, IBMPlexSansKR-Medium
 };
 ```
 
 ### 텍스트 색상 체계
 - **주요 텍스트**: `text-gray-900` (가장 진함)
 - **일반 텍스트**: `text-gray-700`
-- **보조 텍스트**: `text-gray-400`  
+- **보조 텍스트**: `text-gray-400`
 - **브랜드 텍스트**: `text-orange-500` (제한적 사용)
 
 ## ✅ Do's and Don'ts
