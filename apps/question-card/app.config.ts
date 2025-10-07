@@ -10,6 +10,11 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   icon: "./src/assets/images/icon.png",
   userInterfaceStyle: "automatic",
   newArchEnabled: true,
+  extra: {
+    eas: {
+      projectId: "6513cdb9-4250-4484-bc8d-71f3306e9e12",
+    },
+  },
   splash: {
     image: "./src/assets/images/splash.png",
     resizeMode: "contain",
@@ -19,10 +24,13 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     supportsTablet: true,
   },
   android: {
+    package: "com.infiniteloop.easytalking",
+    versionCode: 1,
     adaptiveIcon: {
       foregroundImage: "./src/assets/images/adaptive-icon.png",
-      backgroundColor: "#ffffff",
+      backgroundColor: "#FF6B35",
     },
+    permissions: [],
   },
   web: {
     bundler: "metro",

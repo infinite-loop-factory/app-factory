@@ -6,6 +6,8 @@
   "main": "index.ts",
   "scripts": {
     "android": "expo start --android",
+    "build:android": "eas build --platform android --profile preview",
+    "build:android:prod": "eas build --platform android --profile production",
     "clean": "git clean -xdf .cache .expo .turbo android ios node_modules",
     "ios": "expo start --ios",
     "lint": "biome lint --fix --unsafe --no-errors-on-unmatched",
