@@ -1048,6 +1048,9 @@ importers:
 
   apps/question-card:
     dependencies:
+      '@expo-google-fonts/ibm-plex-sans-kr':
+        specifier: ^0.2.3
+        version: 0.2.3
       '@expo/html-elements':
         specifier: ^0.10.1
         version: 0.10.1
@@ -2579,6 +2582,9 @@ packages:
     engines: {node: '>=18'}
     cpu: [x64]
     os: [win32]
+
+  '@expo-google-fonts/ibm-plex-sans-kr@0.2.3':
+    resolution: {integrity: sha512-/EZmJm+tWQTO0C9tbYCk9Ngb/9v6sBkou+Wshui/fQ5wXyCm3pJ0ZdTnq0YeTS0FoUVeUVvvFIDpmHCbLeKqEA==}
 
   '@expo/bunyan@4.0.1':
     resolution: {integrity: sha512-+Lla7nYSiHZirgK+U/uYzsLv/X+HaJienbD5AKX1UQZHYfWaP+9uuQluRB4GrEVWF0GZ7vEVp/jzaOT9k/SQlg==}
@@ -11679,6 +11685,8 @@ snapshots:
 
   '@esbuild/win32-x64@0.25.8':
     optional: true
+
+  '@expo-google-fonts/ibm-plex-sans-kr@0.2.3': {}
 
   '@expo/bunyan@4.0.1':
     dependencies:

@@ -1,6 +1,12 @@
 import "../global.css";
 
 import {
+  IBMPlexSansKR_400Regular,
+  IBMPlexSansKR_500Medium,
+  IBMPlexSansKR_600SemiBold,
+  IBMPlexSansKR_700Bold,
+} from "@expo-google-fonts/ibm-plex-sans-kr";
+import {
   DarkTheme,
   DefaultTheme,
   ThemeProvider,
@@ -25,7 +31,10 @@ SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
   const { colorScheme } = useColorScheme();
   const [loaded] = useFonts({
-    SpaceMono: require("@/assets/fonts/SpaceMono-Regular.ttf"),
+    "IBMPlexSansKR-Regular": IBMPlexSansKR_400Regular,
+    "IBMPlexSansKR-Medium": IBMPlexSansKR_500Medium,
+    "IBMPlexSansKR-SemiBold": IBMPlexSansKR_600SemiBold,
+    "IBMPlexSansKR-Bold": IBMPlexSansKR_700Bold,
   });
 
   useEffect(() => {

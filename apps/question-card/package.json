@@ -19,6 +19,7 @@
     "web:publish": "tsx web-publish.ts"
   },
   "dependencies": {
+    "@expo-google-fonts/ibm-plex-sans-kr": "^0.2.3",
     "@expo/html-elements": "^0.10.1",
     "@expo/vector-icons": "^14.0.4",
     "@gluestack-ui/core": "^3.0.2",
