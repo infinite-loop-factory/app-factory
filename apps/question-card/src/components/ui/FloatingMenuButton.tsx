@@ -5,7 +5,8 @@
 
 import { MoreHorizontal } from "lucide-react-native";
 import React from "react";
-import { Pressable, Text } from "@/components/ui";
+import { Pressable } from "@/components/ui/pressable";
+import { Text } from "@/components/ui/text";
 
 export type FloatingMenuButtonPosition =
   | "top-left"
