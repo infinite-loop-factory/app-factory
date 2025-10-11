@@ -49,32 +49,20 @@ export default function RootLayout() {
               <Stack.Screen name="index" options={{ headerShown: false }} />
               <Stack.Screen
                 name="category-selection"
-                options={{
-                  title: "카테고리 선택",
-                  presentation: "card",
-                }}
+                options={{ headerShown: false }}
               />
               {/* TODO: Uncomment when implementing Phase 2 screens */}
               <Stack.Screen
                 name="difficulty-selection"
-                options={{
-                  title: "난이도 선택",
-                  presentation: "card",
-                }}
+                options={{ headerShown: false }}
               />
               <Stack.Screen
                 name="question-main"
-                options={{
-                  title: "질문 시작",
-                  presentation: "card",
-                }}
+                options={{ headerShown: false }}
               />
               <Stack.Screen
                 name="continuous-card"
-                options={{
-                  title: "질문 카드",
-                  presentation: "card",
-                }}
+                options={{ headerShown: false }}
               />
               {/* <Stack.Screen
               name="question-list"

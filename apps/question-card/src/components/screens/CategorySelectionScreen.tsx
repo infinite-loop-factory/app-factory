@@ -5,22 +5,14 @@
 
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import {
-  Alert,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Alert, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
-  getCategoryColor,
-  layout,
-  neutralColors,
-  spacing,
-  typography,
-} from "@/constants/designSystem";
+  FloatingActionButton,
+  FloatingBackButton,
+  OrangeHeader,
+} from "@/components/ui";
+// getCategoryColor import removed as it's no longer used
 import { useAppActions, useAppState } from "@/context/AppContext";
 
 export default function CategorySelectionScreen() {
@@ -72,72 +64,75 @@ export default function CategorySelectionScreen() {
   const allSelected = selectedCategories.length === categories.length;
 
   return (
-    <SafeAreaView style={styles.container}>
-      {/* 헤더 */}
-      <View style={styles.header}>
-        <Text style={styles.title}>카테고리 선택</Text>
-        <TouchableOpacity
-          onPress={toggleAllCategories}
-          style={styles.selectAllButton}
-        >
-          <Text style={styles.selectAllText}>
-            {allSelected ? "전체해제" : "전체선택"}
-          </Text>
-        </TouchableOpacity>
-      </View>
+    <SafeAreaView className="flex-1 bg-orange-50">
+      {/* 플로팅 뒤로 버튼 */}
+      <FloatingBackButton onPress={() => router.push("/")} />
+
+      {/* 오렌지 톤 헤더 */}
+      <OrangeHeader title="카테고리 선택" />
+
+      {/* 플로팅 전체선택 FAB */}
+      <FloatingActionButton
+        icon={allSelected ? "reset" : "check"}
+        label={allSelected ? "해제" : "전체"}
+        onPress={toggleAllCategories}
+        position="bottom-right"
+        style="primary"
+      />
 
       {/* 카테고리 목록 */}
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        style={styles.scrollView}
-      >
-        <View style={styles.categoryList}>
+      <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
+        <View className="gap-4 p-5">
+          {/* 안내 텍스트 */}
+          <View className="mb-4">
+            <Text className="text-center text-gray-600 text-sm">
+              관심 있는 카테고리를 선택하세요
+            </Text>
+          </View>
           {categories.map((category) => {
             const isSelected = selectedCategories.includes(category.id);
-            const categoryColor = getCategoryColor(category.id, 500);
 
             return (
               <TouchableOpacity
                 activeOpacity={0.7}
+                className={`flex-row items-center rounded-xl border-2 bg-white p-5 shadow-sm ${
+                  isSelected
+                    ? "border-orange-200 bg-orange-50"
+                    : "border-gray-200"
+                }`}
                 key={category.id}
                 onPress={() => toggleCategory(category.id)}
-                style={[
-                  styles.categoryItem,
-                  isSelected && [
-                    styles.categoryItemSelected,
-                    { borderColor: categoryColor },
-                  ],
-                ]}
               >
-                <View style={styles.categoryContent}>
-                  <View style={styles.categoryHeader}>
-                    <Text style={styles.categoryIcon}>{category.icon}</Text>
+                <View className="flex-1">
+                  <View className="mb-2 flex-row items-center">
+                    <View className="mr-3 h-10 w-10 items-center justify-center rounded-full bg-gray-50">
+                      <Text className="text-lg">{category.icon}</Text>
+                    </View>
                     <Text
-                      style={[
-                        styles.categoryName,
-                        isSelected && { color: categoryColor },
-                      ]}
+                      className={`font-medium text-lg ${
+                        isSelected ? "text-orange-600" : "text-gray-900"
+                      }`}
                     >
                       {category.name}
                     </Text>
                   </View>
 
-                  <Text style={styles.categoryDescription}>
+                  <Text className="text-gray-600 text-sm leading-5">
                     {category.description}
                   </Text>
                 </View>
 
                 {/* 체크박스 */}
                 <View
-                  style={[
-                    styles.checkbox,
-                    isSelected && [
-                      styles.checkboxSelected,
-                      { backgroundColor: categoryColor },
-                    ],
-                  ]}
+                  className={`ml-4 h-6 w-6 items-center justify-center rounded border-2 ${
+                    isSelected
+                      ? "border-orange-500 bg-orange-500"
+                      : "border-gray-300 bg-white"
+                  }`}
                 >
-                  {isSelected && <Text style={styles.checkmark}>✓</Text>}
+                  {isSelected && (
+                    <Text className="font-bold text-sm text-white">✓</Text>
+                  )}
                 </View>
               </TouchableOpacity>
             );
@@ -146,24 +141,31 @@ export default function CategorySelectionScreen() {
       </ScrollView>
 
       {/* 선택 요약 및 다음 버튼 */}
-      <View style={styles.footer}>
-        <Text style={styles.selectionSummary}>
-          {selectedCategories.length}개 카테고리 선택됨
-        </Text>
+      <View className="border-gray-200 border-t bg-white p-5">
+        <View className="mb-3 items-center">
+          <Text className="mb-1 text-gray-600 text-sm">선택된 카테고리</Text>
+          <View className="flex-row items-end">
+            <Text className="font-bold text-3xl text-gray-900">
+              {selectedCategories.length}
+            </Text>
+            <Text className="mb-1 ml-1 font-medium text-gray-400 text-lg">
+              개
+            </Text>
+          </View>
+          <View className="mt-2 h-1 w-12 rounded-full bg-orange-500 opacity-60" />
+        </View>
 
         <TouchableOpacity
           activeOpacity={0.8}
+          className={`h-12 items-center justify-center rounded-lg ${
+            selectedCategories.length === 0 ? "bg-gray-300" : "bg-orange-500"
+          }`}
           onPress={handleNext}
-          style={[
-            styles.nextButton,
-            selectedCategories.length === 0 && styles.nextButtonDisabled,
-          ]}
         >
           <Text
-            style={[
-              styles.nextButtonText,
-              selectedCategories.length === 0 && styles.nextButtonTextDisabled,
-            ]}
+            className={`font-medium text-base ${
+              selectedCategories.length === 0 ? "text-gray-500" : "text-white"
+            }`}
           >
             다음 단계
           </Text>
@@ -172,130 +174,3 @@ export default function CategorySelectionScreen() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#ffffff",
-  },
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingHorizontal: layout.screenPadding,
-    paddingVertical: spacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: neutralColors[200],
-  },
-  title: {
-    fontSize: typography.fontSize.xl,
-    fontWeight: typography.fontWeight.semibold,
-    color: neutralColors[800],
-  },
-  selectAllButton: {
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.xs,
-    backgroundColor: neutralColors[100],
-    borderRadius: 6,
-  },
-  selectAllText: {
-    fontSize: typography.fontSize.sm,
-    fontWeight: typography.fontWeight.medium,
-    color: neutralColors[700],
-  },
-  scrollView: {
-    flex: 1,
-  },
-  categoryList: {
-    padding: layout.screenPadding,
-    gap: spacing.md,
-  },
-  categoryItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    padding: layout.cardPadding,
-    backgroundColor: "#ffffff",
-    borderRadius: 12,
-    borderWidth: 2,
-    borderColor: neutralColors[200],
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 2,
-  },
-  categoryItemSelected: {
-    backgroundColor: neutralColors[50],
-  },
-  categoryContent: {
-    flex: 1,
-  },
-  categoryHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: spacing.xs,
-  },
-  categoryIcon: {
-    fontSize: layout.iconSize.md,
-    marginRight: spacing.sm,
-  },
-  categoryName: {
-    fontSize: typography.fontSize.lg,
-    fontWeight: typography.fontWeight.medium,
-    color: neutralColors[800],
-  },
-  categoryDescription: {
-    fontSize: typography.fontSize.sm,
-    color: neutralColors[600],
-    lineHeight: typography.fontSize.sm * typography.lineHeight.normal,
-  },
-  checkbox: {
-    width: layout.checkboxSize,
-    height: layout.checkboxSize,
-    borderRadius: 4,
-    borderWidth: 2,
-    borderColor: neutralColors[300],
-    backgroundColor: "#ffffff",
-    justifyContent: "center",
-    alignItems: "center",
-    marginLeft: spacing.md,
-  },
-  checkboxSelected: {
-    borderColor: "transparent",
-  },
-  checkmark: {
-    color: "#ffffff",
-    fontSize: 14,
-    fontWeight: typography.fontWeight.bold,
-  },
-  footer: {
-    padding: layout.screenPadding,
-    borderTopWidth: 1,
-    borderTopColor: neutralColors[200],
-    backgroundColor: "#ffffff",
-  },
-  selectionSummary: {
-    fontSize: typography.fontSize.sm,
-    color: neutralColors[600],
-    textAlign: "center",
-    marginBottom: spacing.md,
-  },
-  nextButton: {
-    height: layout.buttonHeight,
-    backgroundColor: "#3b82f6",
-    borderRadius: 8,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  nextButtonDisabled: {
-    backgroundColor: neutralColors[300],
-  },
-  nextButtonText: {
-    fontSize: typography.fontSize.base,
-    fontWeight: typography.fontWeight.medium,
-    color: "#ffffff",
-  },
-  nextButtonTextDisabled: {
-    color: neutralColors[500],
-  },
-});
