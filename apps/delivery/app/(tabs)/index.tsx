@@ -1,5 +1,3 @@
-import { Input, InputField, InputSlot } from "@/components/ui/input";
-import { useColorToken } from "@/features/shared/hooks/useThemeColor";
 import { Ionicons } from "@expo/vector-icons";
 import { cn } from "@infinite-loop-factory/common";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
@@ -7,6 +5,8 @@ import { shuffle } from "es-toolkit";
 import { useMemo, useState } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Input, InputField, InputSlot } from "@/components/ui/input";
+import { useColorToken } from "@/features/shared/hooks/useThemeColor";
 
 export default function HomeScreen() {
   const { typography, primary } = useColorToken({
@@ -59,29 +59,29 @@ export default function HomeScreen() {
             className={"flex flex-row items-center justify-center gap-1"}
           >
             <Text className="title-3">서초구 효령로 321</Text>
-            <Ionicons name={"chevron-down"} size={20} color={typography} />
+            <Ionicons color={typography} name={"chevron-down"} size={20} />
           </TouchableOpacity>
           <View className="flex flex-row items-center gap-5">
-            <Ionicons name={"calculator"} size={24} color={typography} />
-            <Ionicons name={"search"} size={24} color={typography} />
-            <Ionicons name={"cart-outline"} size={24} color={typography} />
+            <Ionicons color={typography} name={"calculator"} size={24} />
+            <Ionicons color={typography} name={"search"} size={24} />
+            <Ionicons color={typography} name={"cart-outline"} size={24} />
           </View>
         </View>
 
-        <View className="px-5 ">
+        <View className="px-5">
           {/* input */}
           <View>
             <Input
-              className={" border-primary px-5"}
-              variant={"rounded"}
+              className={"border-primary px-5"}
               size={"lg"}
+              variant={"rounded"}
             >
               <InputField
-                placeholder="순대볶음 나와라 뚞딲!!"
                 className={"label-3 p-0"}
+                placeholder="순대볶음 나와라 뚞딲!!"
               />
               <InputSlot>
-                <Ionicons name={"search"} size={24} color={primary} />
+                <Ionicons color={primary} name={"search"} size={24} />
               </InputSlot>
             </Input>
           </View>
@@ -101,9 +101,9 @@ export default function HomeScreen() {
         <View className={"rounded-t-[20px] bg-background-0 shadow-main-top"}>
           <View>
             <ScrollView
+              className={"border-outline-50 border-b"}
               horizontal
               showsHorizontalScrollIndicator={false}
-              className={"border-outline-50 border-b"}
             >
               <View
                 className={
@@ -111,14 +111,14 @@ export default function HomeScreen() {
                 }
               >
                 {categories.map((d) => (
-                  <TouchableOpacity onPress={() => setCurrentMenu(d)} key={d}>
+                  <TouchableOpacity key={d} onPress={() => setCurrentMenu(d)}>
                     <View
                       className={cn("h-full py-2 font-extrabold", {
                         "!text-typography-0 border-typography-0 border-b-2":
                           d === currentMenu,
                       })}
                     >
-                      <Text className={"title-3 "}>{d}</Text>
+                      <Text className={"title-3"}>{d}</Text>
                     </View>
                   </TouchableOpacity>
                 ))}
@@ -130,14 +130,14 @@ export default function HomeScreen() {
             {menu.map((d) => {
               return (
                 <TouchableOpacity
-                  key={`${d.name}`}
                   className={
-                    "flex flex-1 basis-1/5 flex-col items-center justify-center gap-[8px] "
+                    "flex flex-1 basis-1/5 flex-col items-center justify-center gap-[8px]"
                   }
+                  key={`${d.name}`}
                 >
                   <View
                     className={
-                      "flex h-[50px] w-[50px] items-center justify-center rounded-2xl bg-background-100 "
+                      "flex h-[50px] w-[50px] items-center justify-center rounded-2xl bg-background-100"
                     }
                   >
                     <Text className={"text-[23px]"}>{d.icon}</Text>
@@ -165,7 +165,7 @@ export default function HomeScreen() {
         </View>
 
         {/*footer*/}
-        <View className={"mt-4 flex w-full flex-row bg-background-0 "}>
+        <View className={"mt-4 flex w-full flex-row bg-background-0"}>
           {stores.map((d) => {
             return (
               <TouchableOpacity
@@ -194,7 +194,7 @@ export default function HomeScreen() {
           <TouchableOpacity
             className={"flex h-[120px] items-center justify-center"}
           >
-            <Text className={"body-2 "}>AD 영역</Text>
+            <Text className={"body-2"}>AD 영역</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
