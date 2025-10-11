@@ -43,6 +43,8 @@
     "axios": "^1.8.4",
     "base64-arraybuffer": "^1.0.2",
     "clsx": "^2.1.1",
+    "dayjs": "^1.11.18",
+    "dayjs-plugin-utc": "^0.1.2",
     "expo": "~52.0.47",
     "expo-build-properties": "~0.13.3",
     "expo-constants": "~17.0.8",

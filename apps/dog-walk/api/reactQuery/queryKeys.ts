@@ -13,4 +13,7 @@ export const queryKeys = {
     findNearbyCourses: "nearby-courses",
     findPopularCourses: "popular-courses",
   },
+  reviews: {
+    findLatestReviews: "latest-reviews",
+  },
 };
