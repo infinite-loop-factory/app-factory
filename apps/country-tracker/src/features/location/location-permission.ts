@@ -241,6 +241,7 @@ async function handleWebLocationInsert(user: User, pos: GeolocationPosition) {
 export async function startLocationTask(options?: StartLocationTaskOptions) {
   const permissionsGranted = await requestLocationPermissions();
   if (!permissionsGranted) {
+    options?.onPermissionDenied?.();
     return;
   }
 
