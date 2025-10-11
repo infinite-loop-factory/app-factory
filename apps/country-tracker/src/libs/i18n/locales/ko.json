@@ -55,6 +55,20 @@
     "search-placeholder": "국가 검색",
     "web-disclaimer": "3D 지구본은 iOS에서만 지원됩니다. 현재는 2D 웹 보기입니다.",
     "download-app": "앱 다운로드",
+    "summary": {
+      "latest-visit": "최근 머문 날: %{date}",
+      "no-visit": "올해 머문 기록이 없어요",
+      "days": "%{count}일",
+      "visits": "방문 %{count}회",
+      "no-results-search": "올해 \"%{search}\"에 해당하는 기록이 없어요.",
+      "no-results-year": "%{year}년에 머문 기록이 없어요.",
+      "total-days-year": "총 %{count}일 머물렀어요",
+      "total-days-selected": "%{country}에서 총 %{count}일 머물렀어요",
+      "loading": "방문 데이터를 불러오는 중...",
+      "view-details": "자세히 보기",
+      "year-label": "%{year}년",
+      "error": "방문 기록을 불러오지 못했어요. 새로고침 해주세요."
+    },
     "alert": {
       "country-not-found": {
         "title": "국가를 찾을 수 없어요",
@@ -68,5 +82,17 @@
     "description": "로그인 후 이용 가능합니다.",
     "google": "구글 로그인",
     "github": "깃허브 로그인"
+  },
+  "location": {
+    "foregroundService": {
+      "title": "위치 추적 중",
+      "body": "방문한 국가를 업데이트하기 위해 현재 위치를 기록하고 있어요."
+    },
+    "permission": {
+      "denied": {
+        "title": "위치 권한이 필요해요",
+        "message": "브라우저 설정에서 위치 접근을 허용하면 백그라운드 추적이 계속됩니다."
+      }
+    }
   }
 }

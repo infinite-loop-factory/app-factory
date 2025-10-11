@@ -1,7 +1,7 @@
 import type { Region } from "react-native-maps";
-import type { CountryPolygon } from "@/features/map/geodata/countries/polygons";
+import type { CountryPolygon } from "@/features/map/types/country-polygon";
+import type { MapGlobeRef } from "@/features/map/types/map-globe";
 
-import { useQuery } from "@tanstack/react-query";
 import * as Location from "expo-location";
 import {
   forwardRef,
@@ -12,12 +12,15 @@ import {
 } from "react";
 import { Animated, Easing, Platform } from "react-native";
 import MapView, { Polygon } from "react-native-maps";
-import { QUERY_KEYS } from "@/constants/query-keys";
 import {
   VISITED_FILL_OPACITY,
   VISITED_STROKE_WIDTH_NATIVE,
 } from "@/features/map/constants/style";
-import { getCountryPolygon } from "@/features/map/geodata/countries/polygons";
+import { useVisitedCountrySummariesQuery } from "@/features/map/hooks/use-visited-country-summaries";
+import {
+  getCountryPolygon,
+  normalizeCountryCode,
+} from "@/features/map/utils/country-polygons";
 import {
   addAlphaToColor,
   calculateLongitudeDifference,
@@ -25,20 +28,14 @@ import {
 } from "@/features/map/utils/globe-helpers";
 import { useAuthUser } from "@/hooks/use-auth-user";
 import { useThemeColor } from "@/hooks/use-theme-color";
-import { fetchVisitedCountries } from "@/utils/visited-countries";
-
-export interface MapGlobeRef {
-  globeRotationAnimation: (
-    targetLatitude: number,
-    targetLongitude: number,
-    duration?: number,
-    zoomLevel?: number,
-  ) => void;
-}
 
 const MAX_ZOOM_LEVEL = 100;
 
-const MapGlobe = forwardRef<MapGlobeRef>((_, ref) => {
+type MapGlobeProps = {
+  year: number;
+};
+
+const MapGlobe = forwardRef<MapGlobeRef, MapGlobeProps>(({ year }, ref) => {
   const mapRef = useRef<MapView>(null);
   const { user } = useAuthUser();
   const [primaryColor] = useThemeColor(["primary-500"]);
@@ -54,27 +51,27 @@ const MapGlobe = forwardRef<MapGlobeRef>((_, ref) => {
     longitudeDelta: 75,
   });
 
-  const { data: countryPolygons = [] } = useQuery<CountryPolygon[]>({
-    queryKey: QUERY_KEYS.countryPolygons(user?.id ?? null),
-    queryFn: async (): Promise<CountryPolygon[]> => {
-      if (!user) {
-        return [];
-      }
-      const visited = await fetchVisitedCountries(user.id);
-      const countryCodes = visited.map((v) => v.country_code);
-      const polygons = countryCodes.map((code) => {
-        try {
-          const data = getCountryPolygon(code);
-          return data ? { ...data, country_code: code } : null;
-        } catch {
-          return null;
-        }
-      });
-      return polygons.filter(
-        (polygon): polygon is CountryPolygon => polygon !== null,
-      );
+  const { data: countryPolygons = [] } = useVisitedCountrySummariesQuery<
+    CountryPolygon[]
+  >({
+    userId: user?.id ?? null,
+    year,
+    select: (summaries) => {
+      const uniqueCodes = Array.from(
+        new Set(
+          summaries.map((summary) => summary.countryCode).filter(Boolean),
+        ),
+      ) as string[];
+
+      return uniqueCodes
+        .map((raw) => {
+          const normalized = normalizeCountryCode(raw);
+          if (!normalized) return null;
+          const polygon = getCountryPolygon(normalized);
+          return polygon ? { ...polygon, country_code: normalized } : null;
+        })
+        .filter((polygon): polygon is CountryPolygon => polygon !== null);
     },
-    enabled: !!user,
   });
 
   // 애니메이션 값 생성
