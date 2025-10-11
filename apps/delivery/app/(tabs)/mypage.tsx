@@ -1,12 +1,12 @@
+import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { Box } from "@/components/ui/box";
 import { Button, ButtonText } from "@/components/ui/button";
 import { HStack } from "@/components/ui/hstack";
 import { Text } from "@/components/ui/text";
 import { useColorToken } from "@/features/shared/hooks/useThemeColor";
 import { useUserStore } from "@/features/user/store/user.store";
-import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function MyPage() {
   const { user, logout } = useUserStore();
@@ -18,7 +18,7 @@ export default function MyPage() {
   const router = useRouter();
 
   return (
-    <SafeAreaView className={"flex-1 "}>
+    <SafeAreaView className={"flex-1"}>
       {/*header*/}
       <Box className={"flex flex-row items-center justify-between p-[16px]"}>
         <Box>
@@ -26,8 +26,8 @@ export default function MyPage() {
         </Box>
 
         <Box className="flex flex-row items-center gap-5">
-          <Ionicons name={"notifications"} size={24} color={typography} />
-          <Ionicons name={"settings"} size={24} color={typography} />
+          <Ionicons color={typography} name={"notifications"} size={24} />
+          <Ionicons color={typography} name={"settings"} size={24} />
         </Box>
       </Box>
 

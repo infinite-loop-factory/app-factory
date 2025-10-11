@@ -33,7 +33,7 @@ export default function OrderArticle() {
       <View className={"flex flex-row gap-1"}>
         <TouchableOpacity>
           <View
-            className={" h-[170px] w-[170px] rounded-xl bg-primary-50 p-2"}
+            className={"h-[170px] w-[170px] rounded-xl bg-primary-50 p-2"}
           />
         </TouchableOpacity>
       </View>

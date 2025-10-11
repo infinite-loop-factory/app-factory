@@ -1,3 +1,8 @@
+import type { ReactNode } from "react";
+
+import { useEffect, useState } from "react";
+import { Image, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import {
   Select,
   SelectBackdrop,
@@ -11,10 +16,6 @@ import {
   SelectTrigger,
 } from "@/components/ui/select";
 import { Colors } from "@/constants/Colors";
-import type { ReactNode } from "react";
-import { useEffect, useState } from "react";
-import { Image, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 type appType = { name: string };
 export default function WebviewLayout({ children }: { children: ReactNode }) {
@@ -43,37 +44,37 @@ export default function WebviewLayout({ children }: { children: ReactNode }) {
         >
           <Image
             className={"mx-auto"}
-            style={{ width: 150, height: 150 }}
             source={require("@/assets/images/il.png")}
+            style={{ width: 150, height: 150 }}
           />
 
           <Text className={"block text-center text-[45px]"}>{"무한루프"}</Text>
           <Text className={"block text-center font-bold text-[45px]"}>
             {"앱 공장 "}
           </Text>
-          <View className={" flex items-center justify-center p-3"}>
+          <View className={"flex items-center justify-center p-3"}>
             <Select
-              className={"w-[350px] "}
-              selectedValue={location.href.replace(baseURl, "").split("/")[0]}
+              className={"w-[350px]"}
               onValueChange={(d) => {
                 location.href = `${baseURl}${d}`;
               }}
+              selectedValue={location.href.replace(baseURl, "").split("/")[0]}
             >
               <SelectTrigger
                 className={
-                  "h-[90px] rounded-full !hover:border-black border-[3px] border-black bg-[#f9f9fb] "
+                  "h-[90px] rounded-full !hover:border-black border-[3px] border-black bg-[#f9f9fb]"
                 }
               >
                 <SelectInput
-                  placeholder="Select App"
                   className={
                     "!hover:border-black border-black text-center font-bold text-[33px]"
                   }
+                  placeholder="Select App"
                 />
                 <SelectIcon className="mr-3" />
               </SelectTrigger>
               <SelectPortal className={"text-[33px] text-red"}>
-                <SelectBackdrop className={" text-red"} />
+                <SelectBackdrop className={"text-red"} />
                 <SelectContent className={"p-[100px] text-red"}>
                   <SelectDragIndicatorWrapper>
                     <SelectDragIndicator />
@@ -90,7 +91,7 @@ export default function WebviewLayout({ children }: { children: ReactNode }) {
         {/* 내용 */}
         <View
           className={
-            "h-full flex-[4] overflow-hidden md:h-[70%] md:min-w-[400px] md:max-w-[400px] "
+            "h-full flex-[4] overflow-hidden md:h-[70%] md:min-w-[400px] md:max-w-[400px]"
           }
           style={{
             shadowColor: "#000",

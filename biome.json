@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.1.1/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.2.5/schema.json",
   "assist": {
     "actions": {
       "source": {
@@ -54,6 +54,7 @@
         "useSimplifiedLogicExpression": "error"
       },
       "correctness": {
+        "noNestedComponentDefinitions": "warn",
         "noUnusedFunctionParameters": "error",
         "noUnusedImports": "error",
         "noUnusedVariables": "error",
@@ -79,6 +80,12 @@
         "useAsConstAssertion": "error",
         "useDefaultParameterLast": "error",
         "useEnumInitializers": "error",
+        "useFilenamingConvention": {
+          "level": "warn",
+          "options": {
+            "filenameCases": ["kebab-case"]
+          }
+        },
         "useImportType": "error",
         "useNumberNamespace": "error",
         "useSelfClosingElements": "error",
@@ -92,6 +99,7 @@
           }
         },
         "noEmptyBlockStatements": "error",
+        "noUnknownAtRules": "off",
         "useAwait": "error",
         "useErrorMessage": "error"
       }

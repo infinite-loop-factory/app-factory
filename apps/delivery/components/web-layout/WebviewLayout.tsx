@@ -42,7 +42,7 @@ export default function WebviewLayout({ children }: { children: ReactNode }) {
     : apps[0]?.name;
 
   return (
-    <SafeAreaView className={"flex-1 bg-primary-50 "}>
+    <SafeAreaView className={"flex-1 bg-primary-50"}>
       <View className={"flex-1 flex-row items-center justify-center"}>
         {/* 좌측 메타 정보 */}
         <View
@@ -63,9 +63,9 @@ export default function WebviewLayout({ children }: { children: ReactNode }) {
           <View className={"flex items-center justify-center"}>
             <DarkModeToggle />
           </View>
-          <View className={" flex items-center justify-center p-3"}>
+          <View className={"flex items-center justify-center p-3"}>
             <Select
-              className={"w-[350px] "}
+              className={"w-[350px]"}
               onValueChange={(d) => {
                 location.href = `${baseURl}${d}`;
               }}
@@ -73,7 +73,7 @@ export default function WebviewLayout({ children }: { children: ReactNode }) {
             >
               <SelectTrigger
                 className={
-                  "h-[90px] rounded-full !hover:border-black border-[3px] border-black bg-background-50 "
+                  "h-[90px] rounded-full !hover:border-black border-[3px] border-black bg-background-50"
                 }
               >
                 <SelectInput
@@ -102,7 +102,7 @@ export default function WebviewLayout({ children }: { children: ReactNode }) {
         {/* 내용 */}
         <View
           className={
-            "h-full flex-[4] overflow-hidden md:h-[70%] md:min-w-[400px] md:max-w-[400px] "
+            "h-full flex-[4] overflow-hidden md:h-[70%] md:min-w-[400px] md:max-w-[400px]"
           }
           style={{
             elevation: 8,

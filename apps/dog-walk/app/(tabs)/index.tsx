@@ -26,7 +26,7 @@ export default function HomeScreen() {
     <CustomSafeAreaView>
       <ScrollView className="flex-1 px-4" showsVerticalScrollIndicator={false}>
         <View className="py-4">
-          <Text className=" text-slate-600 text-sm">안녕하세요 👋</Text>
+          <Text className="text-slate-600 text-sm">안녕하세요 👋</Text>
           <Text className="font-bold text-2xl">댕댕이와 산책해요</Text>
         </View>
         <TouchableOpacity
@@ -46,7 +46,7 @@ export default function HomeScreen() {
               className=""
               onPress={() => router.push("/search")}
             >
-              <View className="flex flex-row items-center ">
+              <View className="flex flex-row items-center">
                 <Text className="text-slate-500 text-sm">전체보기</Text>
                 <Ionicons className="pl-2" name="arrow-forward" />
               </View>
@@ -71,7 +71,7 @@ export default function HomeScreen() {
               className=""
               onPress={() => router.push("/search")}
             >
-              <View className="flex flex-row items-center ">
+              <View className="flex flex-row items-center">
                 <Text className="text-slate-500 text-sm">전체보기</Text>
                 <Ionicons className="pl-2" name="arrow-forward" />
               </View>

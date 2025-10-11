@@ -25,7 +25,7 @@ export default function ReviewCard({ item }: { item: ReviewDataType }) {
           <Text className="mb-2 font-semibold text-md">
             {maskName(users.name)}
           </Text>
-          <Text className=" text-slate-500 text-sm">
+          <Text className="text-slate-500 text-sm">
             {dayjs(created_at).format("YYYY-MM-DD HH:mm")}
           </Text>
         </View>
