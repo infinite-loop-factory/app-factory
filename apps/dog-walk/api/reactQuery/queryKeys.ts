@@ -15,5 +15,7 @@ export const queryKeys = {
   },
   reviews: {
     findLatestReviews: "latest-reviews",
+    findLatestCourseReviews: "latest-course-reviews",
+    hasUserReviewed: "user-review",
   },
 };
