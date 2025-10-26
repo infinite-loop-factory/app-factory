@@ -8,8 +8,7 @@
     "search-a11y": "Search countries",
     "search-button-a11y": "Execute search",
     "error-loading": "Failed to load visited countries.",
-    "no-visited-countries": "No Visited Countries Yet",
-    "no-visited-countries-description": "Start your journey and see your visited countries here!"
+    "no-visited-countries": "No visited countries yet"
   },
 
   "map": {
@@ -17,7 +16,27 @@
     "countries": "Countries",
     "search-placeholder": "Search for a country",
     "web-disclaimer": "3D globe is available on iOS. This is a 2D web view.",
-    "download-app": "Download the app"
+    "download-app": "Download the app",
+    "summary": {
+      "latest-visit": "Last stay: %{date}",
+      "no-visit": "No stays recorded",
+      "days": "%{count} days",
+      "visits": "%{count} visits",
+      "no-results-search": "No countries matched \"%{search}\" this year.",
+      "no-results-year": "No stays recorded in %{year}.",
+      "total-days-year": "Total %{count} days",
+      "total-days-selected": "%{country}: %{count} days this year",
+      "loading": "Syncing stays...",
+      "view-details": "View details",
+      "year-label": "%{year}",
+      "error": "We couldn't load your stays. Pull to refresh."
+    },
+    "alert": {
+      "country-not-found": {
+        "title": "Country not found",
+        "message": "Try another name or check the spelling."
+      }
+    }
   },
 
   "settings": {
@@ -63,5 +82,17 @@
     "description": "Login is required to use this service.",
     "google": "Login with Google",
     "github": "Login with GitHub"
+  },
+  "location": {
+    "foregroundService": {
+      "title": "Location Tracking",
+      "body": "Tracking your location to update visited countries."
+    },
+    "permission": {
+      "denied": {
+        "title": "Permission needed",
+        "message": "Allow location access in your browser to keep tracking in the background."
+      }
+    }
   }
 }

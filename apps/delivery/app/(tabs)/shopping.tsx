@@ -1,15 +1,14 @@
 import { Ionicons } from "@expo/vector-icons";
+import { cn } from "@infinite-loop-factory/common";
+import { useRouter } from "expo-router";
+import { useMemo, useState } from "react";
 import { ScrollView, TouchableOpacity } from "react-native";
-
+import { SafeAreaView } from "react-native-safe-area-context";
 import ShoppingArticle from "@/components/shopping/shopping.article";
 import { Box } from "@/components/ui/box";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
 import { useColorToken } from "@/features/shared/hooks/useThemeColor";
-import { cn } from "@infinite-loop-factory/common";
-import { useRouter } from "expo-router";
-import { useMemo, useState } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Shopping() {
   const router = useRouter();
@@ -33,31 +32,31 @@ export default function Shopping() {
             className={"flex flex-row items-center justify-center gap-1"}
           >
             <Text className="title-3">서초구 효령로 321</Text>
-            <Ionicons name={"chevron-down"} size={20} color={typography} />
+            <Ionicons color={typography} name={"chevron-down"} size={20} />
           </TouchableOpacity>
           <Box className="flex flex-row gap-5">
-            <Ionicons name={"calculator"} size={24} color={typography} />
-            <Ionicons name={"search"} size={24} color={typography} />
-            <Ionicons name={"cart-outline"} size={24} color={typography} />
+            <Ionicons color={typography} name={"calculator"} size={24} />
+            <Ionicons color={typography} name={"search"} size={24} />
+            <Ionicons color={typography} name={"cart-outline"} size={24} />
           </Box>
         </Box>
 
         <ScrollView
+          className={"border-outline-50 border-b"}
           horizontal
           showsHorizontalScrollIndicator={false}
-          className={" border-outline-50 border-b"}
         >
           <Box
             className={"flex w-full flex-row gap-[15px] space-x-3 px-5 pt-2"}
           >
             {categories.map((d) => (
               <TouchableOpacity
-                onPress={() => setCurrentMenu(d)}
-                key={d}
                 className={"min-w-[60px]"}
+                key={d}
+                onPress={() => setCurrentMenu(d)}
               >
                 <Box
-                  className={cn(" py-1 font-extrabold", {
+                  className={cn("py-1 font-extrabold", {
                     "!text-typography-0 border-typography-0 border-b-2":
                       d === currentMenu,
                   })}
@@ -70,9 +69,9 @@ export default function Shopping() {
         </ScrollView>
 
         <ScrollView
+          className={"border-outline-50 border-b"}
           horizontal
           showsHorizontalScrollIndicator={false}
-          className={"border-outline-50 border-b"}
         >
           <Box
             className={
@@ -118,11 +117,11 @@ export default function Shopping() {
             {[...Array(10)].map((_d, i) => {
               return (
                 <Box
-                  key={String(i)}
                   className={cn(
                     "border-outline-50 border-b last:border-b-0",
                     "mb-1 py-4 last:py-0",
                   )}
+                  key={String(i)}
                 >
                   <ShoppingArticle />
                 </Box>

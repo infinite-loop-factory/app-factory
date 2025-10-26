@@ -2,7 +2,13 @@
 * @infinite-loop-factory/app-factory
 
 # apps
+/apps/cafe @ckrbqja
 /apps/country-tracker @gracefullight
+/apps/delivery @ckrbqja
+/apps/dog-walk @Lim-Ji-Hyeon
+/apps/playlist @gaa0
+/apps/question-card @JAM-PARK
+/apps/reaction-speed-test @JAM-PARK
 
 # packages
 

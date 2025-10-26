@@ -4,6 +4,7 @@ import {
   NaverMapMarkerOverlay,
   NaverMapView,
 } from "@mj-studio/react-native-naver-map";
+import { router } from "expo-router";
 import { useMemo, useRef } from "react";
 import { Image } from "react-native";
 import Images from "@/assets/images";
@@ -58,6 +59,14 @@ export default function NaverMap({
           key={`location_data_${item.id}`}
           latitude={item.start_lat}
           longitude={item.start_lng}
+          onTap={() => {
+            router.push({
+              pathname: "/(screens)/detail/[id]",
+              params: {
+                id: item.id,
+              },
+            });
+          }}
           width={40}
         >
           <Image className="h-full w-full" source={Images.mapPinIcon} />

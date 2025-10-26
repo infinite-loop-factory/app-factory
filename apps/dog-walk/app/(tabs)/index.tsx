@@ -1,3 +1,5 @@
+import type { ReviewDataType } from "@/types/review";
+
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import {
@@ -8,6 +10,7 @@ import {
   View,
 } from "react-native";
 import { useFindPopularCourses } from "@/api/reactQuery/course/useFindPopularCourses";
+import { useFindLatestReviews } from "@/api/reactQuery/review/useFindLatestReviews";
 import CustomSafeAreaView from "@/components/CustomSafeAriaView";
 import CourseCard from "@/components/card/CourseCard";
 import ReviewCard from "@/components/card/ReviewCard";
@@ -17,42 +20,13 @@ export default function HomeScreen() {
 
   const { data: recommededCourse } = useFindPopularCourses();
 
-  const latestReviews = [
-    {
-      id: "review_1",
-      image: "http://via.placeholder.com/280",
-      name: "사용자1",
-      review: "이 코스는 정말 좋았어요! 강아지와 함께 걷고 경치도 너무 예뻐요.",
-      createdAt: "2024-12-01 12:00",
-    },
-    {
-      id: "review_2",
-      image: "http://via.placeholder.com/280",
-      name: "사용자2",
-      review: "이 코스는 정말 좋았어요! 강아지와 함께 걷고 경치도 너무 예뻐요.",
-      createdAt: "2024-11-30 12:00",
-    },
-    {
-      id: "review_3",
-      image: "http://via.placeholder.com/280",
-      name: "사용자3",
-      review: "이 코스는 정말 좋았어요! 강아지와 함께 걷고 경치도 너무 예뻐요.",
-      createdAt: "2024-11-15 12:00",
-    },
-    {
-      id: "review_4",
-      image: "http://via.placeholder.com/280",
-      name: "사용자4",
-      review: "이 코스는 정말 좋았어요! 강아지와 함께 걷고 경치도 너무 예뻐요.",
-      createdAt: "2024-10-31 12:00",
-    },
-  ];
+  const { data: latestReview = [] } = useFindLatestReviews();
 
   return (
     <CustomSafeAreaView>
       <ScrollView className="flex-1 px-4" showsVerticalScrollIndicator={false}>
         <View className="py-4">
-          <Text className=" text-slate-600 text-sm">안녕하세요 👋</Text>
+          <Text className="text-slate-600 text-sm">안녕하세요 👋</Text>
           <Text className="font-bold text-2xl">댕댕이와 산책해요</Text>
         </View>
         <TouchableOpacity
@@ -72,7 +46,7 @@ export default function HomeScreen() {
               className=""
               onPress={() => router.push("/search")}
             >
-              <View className="flex flex-row items-center ">
+              <View className="flex flex-row items-center">
                 <Text className="text-slate-500 text-sm">전체보기</Text>
                 <Ionicons className="pl-2" name="arrow-forward" />
               </View>
@@ -97,16 +71,16 @@ export default function HomeScreen() {
               className=""
               onPress={() => router.push("/search")}
             >
-              <View className="flex flex-row items-center ">
+              <View className="flex flex-row items-center">
                 <Text className="text-slate-500 text-sm">전체보기</Text>
                 <Ionicons className="pl-2" name="arrow-forward" />
               </View>
             </TouchableOpacity>
           </View>
           <View>
-            {latestReviews.map((item) => {
-              return <ReviewCard item={item} key={item.id} />;
-            })}
+            {latestReview.map((item: ReviewDataType) => (
+              <ReviewCard item={item} key={item.id} />
+            ))}
           </View>
         </View>
       </ScrollView>

@@ -1,7 +1,7 @@
-"use client";
-import { createImage } from "@gluestack-ui/image";
-import type { VariantProps } from "@gluestack-ui/nativewind-utils";
-import { tva } from "@gluestack-ui/nativewind-utils/tva";
+import type { VariantProps } from "@gluestack-ui/utils/nativewind-utils";
+
+import { createImage } from "@gluestack-ui/core/image/creator";
+import { tva } from "@gluestack-ui/utils/nativewind-utils";
 import React from "react";
 import { Platform, Image as RNImage } from "react-native";
 

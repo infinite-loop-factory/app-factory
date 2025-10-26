@@ -4,8 +4,7 @@ import type { CountryItem } from "@/features/home/types/country";
 import { Motion } from "@legendapp/motion";
 import { useQuery } from "@tanstack/react-query";
 import { useAtomValue } from "jotai";
-import { Map as MapIcon, Search } from "lucide-react-native";
-import { DateTime } from "luxon";
+import { Search } from "lucide-react-native";
 import { useState } from "react";
 import { FlatList, View } from "react-native";
 import { themeAtom } from "@/atoms/theme.atom";
@@ -18,11 +17,12 @@ import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
-import { QUERY_KEYS } from "@/constants/query-keys";
+import { locationQueryKeys } from "@/features/location/apis/query-keys";
+import { fetchVisitedCountries } from "@/features/map/apis/fetch-visited-countries";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import i18n from "@/libs/i18n";
 import supabase from "@/libs/supabase";
-import { fetchVisitedCountries } from "@/utils/visited-countries";
+import { formatIsoDate } from "@/utils/format-date";
 
 export default function HomeScreen() {
   const [searchText, setSearchText] = useState("");
@@ -37,11 +37,8 @@ export default function HomeScreen() {
       "typography",
     ]);
 
-  const formatDate = (isoDate: string) =>
-    DateTime.fromISO(isoDate).toFormat("yyyy-MM-dd");
-
   const { data, isLoading, isError } = useQuery({
-    queryKey: QUERY_KEYS.visitedCountries(searchText),
+    queryKey: locationQueryKeys.visitedCountries(searchText),
     queryFn: async () => {
       const { data: userData } = await supabase.auth.getUser();
       const user = userData?.user;
@@ -80,7 +77,7 @@ export default function HomeScreen() {
         </Box>
         <Box className="flex flex-row items-center gap-2">
           <Text className="font-mono" style={{ color: textColor }}>
-            {formatDate(item.endDate)}
+            {formatIsoDate(item.endDate)}
           </Text>
           {item.stayDays > 0 && (
             <Badge size="sm">
@@ -133,19 +130,12 @@ export default function HomeScreen() {
         ) : (
           <Skeleton className="h-[300px] w-full" isLoaded={!isLoading}>
             {!data || data?.length === 0 ? (
-              <View className="flex-1 items-center justify-center p-10">
-                <MapIcon color={textColor} size={48} />
+              <View className="w-full items-center justify-center px-6 py-10">
                 <Text
-                  className="mt-4 text-center text-lg"
+                  className="text-center font-semibold text-lg"
                   style={{ color: textColor }}
                 >
                   {i18n.t("home.no-visited-countries")}
-                </Text>
-                <Text
-                  className="mt-2 text-center text-sm"
-                  style={{ color: textColor }}
-                >
-                  {i18n.t("home.no-visited-countries-description")}
                 </Text>
               </View>
             ) : (

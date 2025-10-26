@@ -7,8 +7,8 @@ import { Box } from "@/components/ui/box";
 import { Divider } from "@/components/ui/divider";
 import { Switch } from "@/components/ui/switch";
 import { Text } from "@/components/ui/text";
-import { QUERY_KEYS } from "@/constants/query-keys";
 import { DENYLIST_STORAGE_KEY } from "@/constants/storage-keys";
+import { locationQueryKeys } from "@/features/location/apis/query-keys";
 import { useAuthUser } from "@/hooks/use-auth-user";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import i18n from "@/libs/i18n";
@@ -69,7 +69,7 @@ export default function DenylistScreen() {
     ]);
 
   const { data: allCountries, isLoading: isLoadingCountries } = useQuery({
-    queryKey: QUERY_KEYS.allUniqueCountries(user?.id ?? null),
+    queryKey: locationQueryKeys.allUniqueCountries(user?.id ?? null),
     queryFn: async () => {
       if (!user) return [] as AllCountry[];
       return await fetchAllUniqueCountries(user.id);
@@ -99,10 +99,10 @@ export default function DenylistScreen() {
 
     // Invalidate queries to refetch
     await queryClient.invalidateQueries({
-      queryKey: QUERY_KEYS.visitedCountries(null),
+      queryKey: ["location", "visited-countries"],
     });
     await queryClient.invalidateQueries({
-      queryKey: QUERY_KEYS.countryPolygons(user?.id ?? null),
+      queryKey: ["map", "visited-countries"],
     });
   };
 

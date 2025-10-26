@@ -1,3 +1,7 @@
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "expo-router";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 import { Button, ButtonSpinner, ButtonText } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
@@ -5,10 +9,6 @@ import useGlobalToast from "@/features/shared/hooks/useGlobalToast";
 import { FormInput } from "@/features/shared/ui/FormInput";
 import { useUserStore } from "@/features/user/store/user.store";
 import { supabase } from "@/supabase/utils/supabase";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "expo-router";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 
 const schema = z.object({
   email: z.string().email("이메일 형식으로 입력해주세요").default(""),
@@ -31,18 +31,18 @@ export default function Signin() {
 
   return (
     <VStack space={"md"}>
-      <Text size={"xl"} className={"mx-auto"}>
+      <Text className={"mx-auto"} size={"xl"}>
         로그인
       </Text>
 
       <FormInput
-        name={"email"}
         label={"이메일을 입력하세요"}
+        name={"email"}
         {...formInputProps}
       />
       <FormInput
-        name={"password"}
         label={"페스워드를 입력하세요"}
+        name={"password"}
         {...formInputProps}
       />
 

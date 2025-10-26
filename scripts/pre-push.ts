@@ -218,7 +218,10 @@ async function main() {
     args.push("--filter", `./${t}`);
   }
   // Use --if-present to avoid failing on packages without a test script
-  args.push("test", "--if-present");
+  // Important: pass --if-present to pnpm (before the script name),
+  // otherwise it will be forwarded to the underlying script (e.g. Jest)
+  // and cause "Unrecognized option \"if-present\"" errors.
+  args.push("run", "--if-present", "test");
 
   const code = await runPnpm(args);
   process.exit(code);

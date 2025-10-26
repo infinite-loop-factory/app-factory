@@ -1,12 +1,13 @@
 "use client";
-import type { ReactNode } from "react";
 
-import { setFlushStyles } from "@gluestack-ui/nativewind-utils/flush";
-import { OverlayProvider } from "@gluestack-ui/overlay";
-import { ToastProvider } from "@gluestack-ui/toast";
-import { useCallback, useEffect, useLayoutEffect } from "react";
+import { OverlayProvider } from "@gluestack-ui/core/overlay/creator";
+import { ToastProvider } from "@gluestack-ui/core/toast/creator";
+import { setFlushStyles } from "@gluestack-ui/utils/nativewind-utils";
+import React, { useEffect, useLayoutEffect } from "react";
 import { config } from "./config";
 import { script } from "./script";
+
+export type ModeType = "light" | "dark" | "system";
 
 const variableStyleTagId = "nativewind-style";
 const createStyle = (styleTagId: string) => {
@@ -23,24 +24,25 @@ export function GluestackUIProvider({
   mode = "light",
   ...props
 }: {
-  mode?: "light" | "dark" | "system";
-  children?: ReactNode;
+  mode?: ModeType;
+  children?: React.ReactNode;
 }) {
-  let cssVariablesWithMode = "";
-  for (const configKey of Object.keys(config)) {
+  let cssVariablesWithMode = ``;
+  Object.keys(config).forEach((configKey) => {
     cssVariablesWithMode +=
-      configKey === "dark" ? "\n .dark {\n " : "\n:root {\n";
+      configKey === "dark" ? `\n .dark {\n ` : `\n:root {\n`;
     const cssVariables = Object.keys(
       config[configKey as keyof typeof config],
     ).reduce((acc: string, curr: string) => {
-      return `${acc}${curr}:${config[configKey as keyof typeof config][curr]}; `;
+      acc += `${curr}:${config[configKey as keyof typeof config][curr]}; `;
+      return acc;
     }, "");
-    cssVariablesWithMode += `${cssVariables}\n}`;
-  }
+    cssVariablesWithMode += `${cssVariables} \n}`;
+  });
 
   setFlushStyles(cssVariablesWithMode);
 
-  const handleMediaQuery = useCallback((e: MediaQueryListEvent) => {
+  const handleMediaQuery = React.useCallback((e: MediaQueryListEvent) => {
     script(e.matches ? "dark" : "light");
   }, []);
 
@@ -59,9 +61,9 @@ export function GluestackUIProvider({
     if (mode !== "system") return;
     const media = window.matchMedia("(prefers-color-scheme: dark)");
 
-    media.addEventListener("change", handleMediaQuery);
+    media.addListener(handleMediaQuery);
 
-    return () => media.removeEventListener("change", handleMediaQuery);
+    return () => media.removeListener(handleMediaQuery);
   }, [handleMediaQuery]);
 
   useSafeLayoutEffect(() => {
@@ -82,11 +84,10 @@ export function GluestackUIProvider({
   return (
     <>
       <script
-        suppressHydrationWarning
-        // biome-ignore lint/security/noDangerouslySetInnerHtml: gluestack-ui
         dangerouslySetInnerHTML={{
           __html: `(${script.toString()})('${mode}')`,
         }}
+        suppressHydrationWarning
       />
       <OverlayProvider>
         <ToastProvider>{props.children}</ToastProvider>

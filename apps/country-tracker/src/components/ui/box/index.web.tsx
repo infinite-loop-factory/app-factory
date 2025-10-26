@@ -1,31 +1,17 @@
+import type { VariantProps } from "@gluestack-ui/utils/nativewind-utils";
+
 import React from "react";
-import type { LayoutChangeEvent } from "react-native";
 import { boxStyle } from "./styles";
 
-import type { VariantProps } from "@gluestack-ui/nativewind-utils";
-
 type IBoxProps = React.ComponentPropsWithoutRef<"div"> &
-  VariantProps<typeof boxStyle> & {
-    className?: string;
-    onLayout?: (event: LayoutChangeEvent) => void;
-  };
+  VariantProps<typeof boxStyle> & { className?: string };
 
 const Box = React.forwardRef<HTMLDivElement, IBoxProps>(function Box(
-  { className, style, onLayout, ...props },
+  { className, ...props },
   ref,
 ) {
-  // style이 배열이면 객체로 병합
-  const mergedStyle = Array.isArray(style)
-    ? Object.assign({}, ...style)
-    : style;
-  // onLayout은 웹에서 무시
   return (
-    <div
-      ref={ref}
-      className={boxStyle({ class: className })}
-      style={mergedStyle}
-      {...props}
-    />
+    <div className={boxStyle({ class: className })} ref={ref} {...props} />
   );
 });
 

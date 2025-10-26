@@ -1,19 +1,12 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Image, Text, TouchableOpacity, View } from "react-native";
+import { usePlayer } from "@/contexts/PlayerContext";
 
-interface MiniPlayerProps {
-  currentTrack: string;
-  artist: string;
-  isPlaying: boolean;
-  onPlayPause: () => void;
-}
+export default function MiniPlayer() {
+  const { currentTrack, artist, isPlaying, togglePlayPause } = usePlayer();
 
-export default function MiniPlayer({
-  currentTrack,
-  artist,
-  isPlaying,
-  onPlayPause,
-}: MiniPlayerProps) {
+  if (!(currentTrack && artist)) return null;
+
   return (
     <View className="absolute right-0 bottom-0 left-0 mx-3 flex-row items-center justify-between rounded-xl bg-[#1a1a1a] p-3 shadow-lg">
       <View className="flex-row items-center">
@@ -27,7 +20,7 @@ export default function MiniPlayer({
         </View>
       </View>
 
-      <TouchableOpacity onPress={onPlayPause}>
+      <TouchableOpacity onPress={togglePlayPause}>
         <Ionicons color="white" name={isPlaying ? "pause" : "play"} size={25} />
       </TouchableOpacity>
     </View>
