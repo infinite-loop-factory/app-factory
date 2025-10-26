@@ -17,5 +17,6 @@ export const queryKeys = {
     findLatestReviews: "latest-reviews",
     findLatestCourseReviews: "latest-course-reviews",
     hasUserReviewed: "user-review",
+    findCourseReviewsInfinite: "course-reviews-infinite",
   },
 };
