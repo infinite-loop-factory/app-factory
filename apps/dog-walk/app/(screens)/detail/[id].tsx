@@ -80,7 +80,7 @@ export default function DetailScreen() {
           />
         );
       case TabKeyType.REVIEW:
-        return <Reviews courseId={Number(id)} />;
+        return <Reviews courseId={Number(id)} rate={average_rating} />;
       default:
         return null;
     }
