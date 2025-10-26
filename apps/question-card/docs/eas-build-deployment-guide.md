@@ -364,32 +364,31 @@ eas build --platform android --profile production --auto-submit
 
 ## 📋 체크리스트
 
-### Phase 1: 초기 설정
-- [ ] EAS CLI 로그인 완료
-- [ ] `eas.json` 생성 완료
-- [ ] `app.config.ts` Android 설정 추가
-- [ ] Android package name 설정
+### Phase 1: 초기 설정 ✅ (완료)
+- [x] EAS CLI 로그인 완료
+- [x] `eas.json` 생성 완료
+- [x] `app.config.ts` Android 설정 추가
+- [x] Android package name 설정
 
-### Phase 2: 에셋 준비
-- [ ] 앱 아이콘 생성 (1024x1024)
-- [ ] Adaptive 아이콘 생성 (1024x1024)
-- [ ] 스플래시 스크린 생성 (1284x2778)
-- [ ] Favicon 생성 (48x48)
-- [ ] 모든 이미지 올바른 경로에 배치
+### Phase 2: 에셋 준비 🔄 (진행중)
+- [x] 앱 아이콘 생성 (1024x1024)
+- [x] Adaptive 아이콘 생성 (1024x1024)
+- [x] 스플래시 스크린 생성
+- [x] Favicon 생성
 
-### Phase 3: 빌드 실행
-- [ ] Preview 빌드 실행
-- [ ] 빌드 완료 대기 및 모니터링
-- [ ] 빌드 성공 확인
-- [ ] APK 다운로드 링크 확보
+### Phase 3: 빌드 실행 ✅ (완료)
+- [x] Preview 빌드 실행
+- [x] 빌드 완료 대기 및 모니터링
+- [x] 빌드 성공 확인
+- [x] APK 다운로드 링크 확보
 
-### Phase 4: 설치 및 테스트
-- [ ] APK 다운로드 완료
-- [ ] Android 기기에 설치 성공
-- [ ] 앱 실행 확인
-- [ ] 전체 플로우 테스트 (6개 화면)
-- [ ] 4가지 모드 모두 작동 확인
-- [ ] 크래시/에러 없음 확인
+### Phase 4: 설치 및 테스트 ✅ (완료)
+- [x] APK 다운로드 완료
+- [x] Android 기기에 설치 성공
+- [x] 앱 실행 확인
+- [x] 전체 플로우 테스트 (6개 화면)
+- [x] 4가지 모드 모두 작동 확인
+- [x] 크래시/에러 없음 확인
 
 ### Phase 5: 최적화 (선택)
 - [ ] APK 크기 확인
