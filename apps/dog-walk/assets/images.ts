@@ -5,6 +5,7 @@ const Images = {
   startPinIcon: require("@/assets/images/start-pin-icon.png"),
   endPinIcon: require("@/assets/images/end-pin-icon.png"),
   currentLocationPinIcon: require("@/assets/images/current-location-pin-icon.png"),
+  defaultProfileImage: require("@/assets/images/blank-image.png"),
 };
 
 export default Images;
