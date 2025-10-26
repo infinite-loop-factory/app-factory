@@ -22,7 +22,9 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import "@/i18n";
 
+import mobileAds from "react-native-google-mobile-ads";
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
+import { logAdEnvironment } from "@/constants/admob";
 import { AppProvider } from "@/context/AppContext";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -42,6 +44,26 @@ export default function RootLayout() {
       SplashScreen.hideAsync();
     }
   }, [loaded]);
+
+  // AdMob SDK 초기화
+  useEffect(() => {
+    mobileAds()
+      .initialize()
+      .then(() => {
+        logAdEnvironment();
+      })
+      .catch((error) => {
+        console.error("[AdMob] Initialization failed:", error);
+      });
+
+    // 개발 모드에서 테스트 디바이스 설정
+    if (__DEV__) {
+      mobileAds().setRequestConfiguration({
+        testDeviceIdentifiers: ["EMULATOR"], // 에뮬레이터 자동 인식
+      });
+      // .then(() => {});
+    }
+  }, []);
 
   if (!loaded) {
     return null;
