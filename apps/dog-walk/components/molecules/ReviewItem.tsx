@@ -1,7 +1,7 @@
 import type { ReviewDataType } from "@/types/review";
 
 import { Star } from "lucide-react-native";
-import { Image } from "react-native";
+import { Image, TouchableOpacity } from "react-native";
 import Images from "@/assets/images";
 import dayjs from "@/library/dayjs";
 import { maskName } from "@/utils/string";
@@ -13,11 +13,17 @@ import { VStack } from "../ui/vstack";
 interface ReviewItemProps {
   reviewData: ReviewDataType;
   starIconColor: string;
+  setReviewImages: React.Dispatch<React.SetStateAction<string[]>>;
+  setShowImageModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setSelectedImageIndex: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export default function ReviewItem({
   reviewData,
   starIconColor,
+  setReviewImages,
+  setShowImageModal,
+  setSelectedImageIndex,
 }: ReviewItemProps) {
   const images = reviewData.images ? JSON.parse(reviewData.images) : [];
 
@@ -56,12 +62,20 @@ export default function ReviewItem({
       </Text>
       {images.length > 0 ? (
         <HStack className="gap-2">
-          {images.map((image: string) => (
-            <Image
-              className="h-20 w-20 rounded-lg object-cover"
+          {images.map((image: string, index: number) => (
+            <TouchableOpacity
               key={`review_image_${image}`}
-              src={image || "/placeholder.svg"}
-            />
+              onPress={() => {
+                setShowImageModal(true);
+                setReviewImages(() => images);
+                setSelectedImageIndex(index);
+              }}
+            >
+              <Image
+                className="h-20 w-20 rounded-lg object-cover"
+                src={image || "/placeholder.svg"}
+              />
+            </TouchableOpacity>
           ))}
         </HStack>
       ) : null}
