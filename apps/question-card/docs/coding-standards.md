@@ -295,7 +295,7 @@ npm test
 
 ### 1. Map/Set에서 non-null assertion
 ```typescript
-// ❌ 
+// ❌
 const item = map.get(key)!;
 
 // ✅
@@ -346,5 +346,159 @@ if (hasValidConditions && isValidItem) {
   // ...
 }
 ```
+
+---
+
+## 📋 Biome Lint 트러블슈팅
+
+### 빠른 체크리스트
+**커밋 전 필수 체크**:
+```bash
+npm run lint        # 에러 없이 통과해야 함
+npm run type-check  # TypeScript 에러 없이 통과해야 함
+```
+
+### 자주 발생하는 lint 오류 해결법
+
+#### 1. `noExcessiveCognitiveComplexity` - 복잡도 초과 (15 이상)
+**문제**: 함수가 너무 복잡함
+**해결책**: 함수를 작은 단위로 분리
+
+```typescript
+// ❌ 에러 발생 (복잡도 > 15)
+function validateQuestion(question: unknown): boolean {
+  if (!question) return false;
+  if (typeof question !== 'object') return false;
+  const q = question as Record<string, unknown>;
+  if (!q.id) return false;
+  if (typeof q.id !== 'string' && typeof q.id !== 'number') return false;
+  // ... 많은 조건들
+  return true;
+}
+
+// ✅ 올바른 수정 (함수 분리)
+function validateQuestionStructure(question: unknown): boolean {
+  return question && typeof question === 'object';
+}
+
+function validateQuestionFields(q: Record<string, unknown>): boolean {
+  if (!q.id || (typeof q.id !== 'string' && typeof q.id !== 'number')) {
+    return false;
+  }
+  if (!q.content || typeof q.content !== 'string') {
+    return false;
+  }
+  return true;
+}
+
+function validateQuestion(question: unknown): boolean {
+  if (!validateQuestionStructure(question)) return false;
+  const q = question as Record<string, unknown>;
+  return validateQuestionFields(q);
+}
+```
+
+#### 2. Import/Export 정렬 오류
+**문제**: import/export가 잘못된 순서
+**해결책**: 알파벳순으로 정렬
+
+```typescript
+// ❌ 에러 발생 (잘못된 순서)
+import type React from 'react';
+import { createContext } from 'react';
+import type { AppState } from '../types';
+import { categories } from '../constants';
+
+// ✅ 올바른 수정 (정렬된 순서)
+import { createContext } from 'react';
+import type React from 'react';
+import { categories } from '../constants';
+import type { AppState } from '../types';
+```
+
+### 유용한 패턴
+
+#### Map/Set 안전 접근 패턴
+```typescript
+// 패턴: map.get()을 안전하게 사용
+const getValue = (map: Map<string, Item>, key: string): Item | null => {
+  return map.get(key) ?? null;
+};
+
+// 패턴: forEach에서 안전 접근
+map.forEach((value, key) => {
+  // value는 이미 존재함이 보장됨
+  processValue(value);
+});
+
+// 패턴: 조건부 처리
+categories.forEach(categoryId => {
+  const questions = grouped.get(categoryId);
+  if (questions) {
+    // 안전하게 사용
+    processQuestions(questions);
+  }
+});
+```
+
+#### 타입 가드 패턴
+```typescript
+// 패턴: 타입 가드 함수
+function isValidQuestion(data: unknown): data is Question {
+  return (
+    typeof data === 'object' &&
+    data !== null &&
+    'id' in data &&
+    'content' in data
+  );
+}
+
+// 패턴: 사용
+function processQuestion(data: unknown) {
+  if (isValidQuestion(data)) {
+    // data는 이제 Question 타입
+    console.log(data.content);
+  }
+}
+```
+
+#### 에러 처리 패턴
+```typescript
+// 패턴: 안전한 JSON 파싱
+function safeJsonParse<T>(json: string, fallback: T): T {
+  try {
+    const parsed = JSON.parse(json);
+    return parsed as T;
+  } catch (error) {
+    const err = error instanceof Error ? error : new Error('JSON parse failed');
+    console.error('JSON parsing failed:', err.message);
+    return fallback;
+  }
+}
+```
+
+### lint 오류 해결 전략
+
+**단계별 접근**:
+```bash
+# 1. 현재 오류 확인
+npm run lint
+
+# 2. 하나씩 수정하며 진행
+npm run lint 2>&1 | head -20  # 처음 20줄만 보기
+
+# 3. 타입 체크도 함께 실행
+npm run type-check
+```
+
+---
+
+## 🔗 관련 문서
+
+- [Biome 공식 문서](https://biomejs.dev/)
+- [문제 해결 가이드](./troubleshooting.md) - Context API, Flexbox 레이아웃 이슈
+- TypeScript 엄격 모드 가이드
+
+---
 
 이 문서를 참조하여 일관된 코드 품질을 유지하고 Biome lint 오류를 사전에 방지할 수 있습니다.

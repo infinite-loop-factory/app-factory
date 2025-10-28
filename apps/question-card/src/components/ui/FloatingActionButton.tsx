@@ -5,7 +5,9 @@
 
 import { Check, RotateCcw } from "lucide-react-native";
 import React from "react";
-import { Pressable, Text, VStack } from "@/components/ui";
+import { Pressable } from "@/components/ui/pressable";
+import { Text } from "@/components/ui/text";
+import { VStack } from "@/components/ui/vstack";
 
 export type FloatingActionButtonPosition = "bottom-left" | "bottom-right";
 export type FloatingActionButtonStyle =

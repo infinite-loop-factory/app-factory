@@ -5,7 +5,7 @@
 
 import React from "react";
 import { View } from "react-native";
-import { Box } from "@/components/ui";
+import { Box } from "@/components/ui/box";
 
 export interface ProgressIndicatorProps {
   progress: number; // 0-100 범위의 진행률

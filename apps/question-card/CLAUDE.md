@@ -2,23 +2,32 @@
 
 EasyTalking (이지토킹) - 디지털 질문 카드 앱: React Native + Expo로 구축된 자기성찰 및 대화용 앱
 
-## 🚀 **Project Status: Phase 3.5 완료 (2024.09.21)**
+## 🚀 **Project Status: Phase 3.5 완료 (2025.01.26)**
 - ✅ **6개 화면 완전 구현**: 모든 필수 사용자 플로우 완성
 - ✅ **4가지 모드 완전 동작**: 모드 1,2,3 (연속 카드) + 모드 4 (리스트 → 개별 카드)
 - ✅ **Modern Refined Orange v2.0**: 현대적 디자인 시스템 완전 적용
 - ✅ **플로팅 UI + OrangeHeader**: 헤더 제거 및 일관된 플로팅 UI 시스템
+- ✅ **IBM Plex Sans KR 폰트**: 4가지 굵기 (400, 500, 600, 700) 완전 적용
+- ✅ **통일된 화면 설정**: 모든 화면 headerShown: false로 일관성 유지
 
 ## ⚡ **핵심 명령어**
 ```bash
 npm start              # Expo 개발 서버 시작
 npm run lint           # Biome 린트 (커밋 전 필수)
 npm run type-check     # TypeScript 타입 체크
+
+# EAS Build (Android APK 배포)
+eas login              # EAS CLI 로그인
+eas build:configure    # EAS 초기 설정
+eas build -p android --profile preview  # Android APK 빌드
+eas build:download -p android           # APK 다운로드
 ```
 
 ## 🏗️ **기술 스택**
 - **Framework**: React Native + Expo SDK 52
 - **Styling**: NativeWind (주요) > Gluestack-ui v2 (적합시) > StyleSheet (제거됨)
 - **Navigation**: Expo Router (file-based routing)
+- **Typography**: IBM Plex Sans KR (400, 500, 600, 700)
 - **Design**: Modern Refined Orange v2.0 (Gray 기본 + Orange 포인트)
 - **State**: Context API
 - **Quality**: Biome lint, TypeScript strict
@@ -90,8 +99,23 @@ npm run type-check  # TypeScript 검증
 - ✅ NativeWind 우선 → Flexbox 패턴: `flex` (콘텐츠), `flex-1` (공간 채우기)
 - ✅ Context API 일관성 → 로컬 state와 혼재 금지
 
+## 📦 **EAS Build 배포**
+**Android APK 빌드 및 배포**: `docs/eas-build-deployment-guide.md`
+
+**빠른 시작**:
+1. EAS 로그인: `eas login`
+2. EAS 설정: `eas build:configure`
+3. APK 빌드: `eas build -p android --profile preview`
+4. APK 다운로드 및 설치
+
+**상세 가이드**: Expo 공식 문서 기준 단계별 배포 프로세스 문서화
+
 ## 📚 **참고 문서**
-- `docs/coding-standards.md` - 코드 품질 가이드라인
+- `docs/PROJECT_STATUS.md` - 프로젝트 현황 종합 보고서 (완료 기능, 파일 구조, 최근 커밋, 남은 작업)
+- `docs/requirements.md` - 프로젝트 요구사항 및 완료 현황 (체크리스트)
+- `docs/coding-standards.md` - 코드 품질 가이드라인 (Biome lint 트러블슈팅 포함)
 - `docs/design-system-modern-refined.md` - Modern Refined Orange v2.0 디자인 가이드
 - `docs/component-architecture.md` - 컴포넌트 구조 가이드
+- `docs/eas-build-deployment-guide.md` - EAS Build Android 배포 가이드 (Expo 공식 문서 기준)
 - `docs/pr-workflow-guide.md` - PR 작성 및 리뷰 프로세스
+- `docs/troubleshooting.md` - 프로젝트 트러블슈팅 가이드
