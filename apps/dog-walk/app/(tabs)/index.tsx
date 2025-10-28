@@ -65,18 +65,7 @@ export default function HomeScreen() {
           </View>
         </View>
         <View>
-          <View className="flex w-full flex-row items-center justify-between py-4">
-            <Text className="font-bold text-lg">최근 리뷰</Text>
-            <TouchableOpacity
-              className=""
-              onPress={() => router.push("/search")}
-            >
-              <View className="flex flex-row items-center">
-                <Text className="text-slate-500 text-sm">전체보기</Text>
-                <Ionicons className="pl-2" name="arrow-forward" />
-              </View>
-            </TouchableOpacity>
-          </View>
+          <Text className="flex-start py-4 font-bold text-lg">최근 리뷰</Text>
           <View>
             {latestReview.map((item: ReviewDataType) => (
               <ReviewCard item={item} key={item.id} />
