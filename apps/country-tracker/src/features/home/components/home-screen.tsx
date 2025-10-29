@@ -1,16 +1,18 @@
 import type { ListRenderItem } from "react-native";
-import type { CountryItem } from "@/features/home/types/country";
+import type { CountryItem } from "@/types/country-item";
 
 import { Motion } from "@legendapp/motion";
 import { useQuery } from "@tanstack/react-query";
+import { Link } from "expo-router";
 import { useAtomValue } from "jotai";
-import { Search } from "lucide-react-native";
+import { Plus, Search } from "lucide-react-native";
 import { useState } from "react";
 import { FlatList, View } from "react-native";
 import { themeAtom } from "@/atoms/theme.atom";
 import ParallaxScrollView from "@/components/parallax-scroll-view";
 import { Badge, BadgeText } from "@/components/ui/badge";
 import { Box } from "@/components/ui/box";
+import { Button, ButtonIcon, ButtonText } from "@/components/ui/button";
 import { Divider } from "@/components/ui/divider";
 import { Heading } from "@/components/ui/heading";
 import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
@@ -116,6 +118,12 @@ export default function HomeScreen() {
             <InputIcon as={() => <Search color={textColor} />} />
           </InputSlot>
         </Input>
+        <Link asChild href="/add-visit">
+          <Button action="primary" className="self-end" size="md">
+            <ButtonIcon as={Plus} />
+            <ButtonText>{i18n.t("home.add-visit.button")}</ButtonText>
+          </Button>
+        </Link>
       </VStack>
       <Box
         className="mx-1 mb-2 overflow-hidden rounded-lg border bg-background-50 shadow-xs"
