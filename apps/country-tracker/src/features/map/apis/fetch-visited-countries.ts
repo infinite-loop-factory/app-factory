@@ -1,4 +1,4 @@
-import type { CountryItem } from "@/features/home/types/country";
+import type { CountryItem } from "@/types/country-item";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { DateTime } from "luxon";

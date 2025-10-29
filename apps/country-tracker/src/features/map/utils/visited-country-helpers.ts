@@ -1,4 +1,4 @@
-import type { CountryItem } from "@/features/home/types/country";
+import type { CountryItem } from "@/types/country-item";
 
 import { DateTime } from "luxon";
 import { normalizeCountryCode } from "@/features/map/utils/normalize-country-code";
