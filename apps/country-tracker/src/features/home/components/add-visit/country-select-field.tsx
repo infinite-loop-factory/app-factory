@@ -27,8 +27,8 @@ export const CountrySelectField = withForm({
   ...addVisitFormOptions,
   render: ({ form }) => (
     <form.AppField name="selectedCountry">
-      {(field) => {
-        const selectedCountry = field.state.value ?? null;
+      {() => {
+        const selectedCountry = form.state.values.selectedCountry ?? null;
         const selectedOption = selectedCountry
           ? COUNTRY_OPTION_MAP.get(selectedCountry)
           : undefined;
@@ -44,7 +44,9 @@ export const CountrySelectField = withForm({
               </FormControlLabelText>
             </FormControlLabel>
             <Select
-              onValueChange={(country) => field.setValue(country)}
+              onValueChange={(country) =>
+                form.setFieldValue("selectedCountry", country)
+              }
               selectedValue={selectedCountry ?? undefined}
             >
               <SelectTrigger
