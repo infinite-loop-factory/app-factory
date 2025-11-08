@@ -8,6 +8,8 @@ import type { Question } from "@/types";
 import { useRouter } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
 import { Alert, FlatList } from "react-native";
+import { BannerAdSize } from "react-native-google-mobile-ads";
+import { BannerAdComponent } from "@/components/ads/BannerAd";
 import {
   Box,
   Card,
@@ -211,6 +213,11 @@ export default function QuestionListScreen() {
         renderItem={renderQuestionItem}
         showsVerticalScrollIndicator={false}
       />
+
+      {/* 하단 광고 영역 */}
+      <Box className="border-gray-200 border-t bg-white px-5 py-3">
+        <BannerAdComponent size={BannerAdSize.BANNER} />
+      </Box>
 
       {/* 하단 버튼 */}
       <Box className="border-gray-200 border-t bg-white p-5">
