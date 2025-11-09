@@ -17,7 +17,6 @@
       "country-placeholder": "국가 선택",
       "country-helper": "국가명을 검색하거나 자동 채우기를 이용해 보세요.",
       "from-photo": "사진에서 가져오기",
-      "from-photo-helper": "EXIF 정보를 읽어 국가와 날짜를 채워요.",
       "from-location": "현재 위치 사용",
       "from-location-helper": "GPS를 새로 확인해 자동으로 국가를 제안해요.",
       "import-title": "가져오기",

@@ -46,17 +46,17 @@ export const DateRangeSection = withForm({
       "typography-500",
       "typography-900",
     ]);
-
     const [activePicker, setActivePicker] = useState<PickerField | null>(null);
 
-    const startDate = form.getFieldValue("startDate");
-    const endDate = form.getFieldValue("endDate");
-    const sameDay = form.getFieldValue("sameDay");
-
-    const stayLength = isInvalidIsoRange(startDate, endDate)
+    const stayLength = isInvalidIsoRange(
+      form.getFieldValue("startDate"),
+      form.getFieldValue("endDate"),
+    )
       ? 0
-      : (countInclusiveDays(startDate, endDate) as number) ||
-        DEFAULT_RANGE_DAYS;
+      : (countInclusiveDays(
+          form.getFieldValue("startDate"),
+          form.getFieldValue("endDate"),
+        ) as number) || DEFAULT_RANGE_DAYS;
 
     const applySyncedDates = (field: PickerField, iso: string) => {
       if (field === "start") {
@@ -66,23 +66,23 @@ export const DateRangeSection = withForm({
         }
         return;
       }
-
       form.setFieldValue("endDate", iso);
     };
 
     const handleDateChange =
-      (field: PickerField) => (_event: DateTimePickerEvent, date?: Date) => {
+      (field: PickerField) => (_e: DateTimePickerEvent, date?: Date) => {
         setActivePicker(null);
         if (!date) return;
-
         const iso = DateTime.fromJSDate(date).toISODate();
         if (!iso) return;
-
         applySyncedDates(field, iso);
       };
 
     const handleShowPicker = (field: PickerField) => {
-      const currentValue = field === "start" ? startDate : endDate;
+      const currentValue =
+        field === "start"
+          ? form.getFieldValue("startDate")
+          : form.getFieldValue("endDate");
       const currentDate = DateTime.fromISO(currentValue).isValid
         ? DateTime.fromISO(currentValue).toJSDate()
         : new Date();
@@ -93,43 +93,30 @@ export const DateRangeSection = withForm({
       }
     };
 
-    const handleDateInputChange =
-      (field: PickerField) => (iso: string | undefined) => {
-        if (!iso) return;
-        applySyncedDates(field, iso);
-      };
-
-    const desktopInput = (
-      value: string,
-      label: string,
-      onChange: (iso: string) => void,
-      disabled = false,
-    ) => (
-      <View className="flex-1">
-        <input
-          className="w-full rounded-2xl border border-outline-200 bg-background-50 px-4 py-3 text-sm text-typography outline-none transition focus:border-primary-500 focus:ring-2 focus:ring-primary-200 disabled:opacity-50"
-          disabled={disabled}
-          lang="en-CA"
-          onChange={(event) => onChange(event.target.value)}
-          placeholder="YYYY-MM-DD"
-          type="date"
-          value={value}
-        />
-        <Text className="mt-1 text-xs" style={{ color: mutedTextColor }}>
-          {label}
-        </Text>
-      </View>
-    );
-
     const renderStartDateInput = () => {
       if (Platform.OS === "web") {
-        return desktopInput(
-          startDate,
-          i18n.t("home.add-visit.start-label") ?? "",
-          handleDateInputChange("start"),
+        return (
+          <form.Field name="startDate">
+            {(field) => (
+              <View className="flex-1">
+                <input
+                  className="w-full rounded-2xl border border-outline-200 bg-background-50 px-4 py-3 text-sm text-typography outline-none transition focus:border-primary-500 focus:ring-2 focus:ring-primary-200 disabled:opacity-50"
+                  onChange={(e) => field.handleChange(e.target.value)}
+                  placeholder="YYYY-MM-DD"
+                  type="date"
+                  value={field.state.value}
+                />
+                <Text
+                  className="mt-1 text-xs"
+                  style={{ color: mutedTextColor }}
+                >
+                  {i18n.t("home.add-visit.start-label") ?? ""}
+                </Text>
+              </View>
+            )}
+          </form.Field>
         );
       }
-
       return (
         <Pressable
           className="flex-1"
@@ -143,7 +130,7 @@ export const DateRangeSection = withForm({
             <InputField
               editable={false}
               placeholder={i18n.t("home.add-visit.start-label") ?? ""}
-              value={formatDisplayDate(startDate)}
+              value={formatDisplayDate(form.getFieldValue("startDate"))}
             />
             <InputSlot className="pr-2">
               <InputIcon as={() => <Calendar color={textColor} size={18} />} />
@@ -158,18 +145,33 @@ export const DateRangeSection = withForm({
 
     const renderEndDateInput = () => {
       if (Platform.OS === "web") {
-        return desktopInput(
-          endDate,
-          i18n.t("home.add-visit.end-label") ?? "",
-          handleDateInputChange("end"),
-          sameDay,
+        return (
+          <form.Field name="endDate">
+            {(field) => (
+              <View className="flex-1">
+                <input
+                  className="w-full rounded-2xl border border-outline-200 bg-background-50 px-4 py-3 text-sm text-typography outline-none transition focus:border-primary-500 focus:ring-2 focus:ring-primary-200 disabled:opacity-50"
+                  disabled={form.getFieldValue("sameDay")}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                  placeholder="YYYY-MM-DD"
+                  type="date"
+                  value={field.state.value}
+                />
+                <Text
+                  className="mt-1 text-xs"
+                  style={{ color: mutedTextColor }}
+                >
+                  {i18n.t("home.add-visit.end-label") ?? ""}
+                </Text>
+              </View>
+            )}
+          </form.Field>
         );
       }
-
       return (
         <Pressable
           className="flex-1"
-          disabled={sameDay}
+          disabled={form.getFieldValue("sameDay")}
           onPress={() => handleShowPicker("end")}
           style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
         >
@@ -181,9 +183,11 @@ export const DateRangeSection = withForm({
               editable={false}
               placeholder={i18n.t("home.add-visit.end-label") ?? ""}
               style={{
-                color: sameDay ? mutedTextColor : textColor,
+                color: form.getFieldValue("sameDay")
+                  ? mutedTextColor
+                  : textColor,
               }}
-              value={formatDisplayDate(endDate)}
+              value={formatDisplayDate(form.getFieldValue("endDate"))}
             />
             <InputSlot className="pr-2">
               <InputIcon as={() => <Calendar color={textColor} size={18} />} />
@@ -215,17 +219,16 @@ export const DateRangeSection = withForm({
             mode="date"
             onChange={handleDateChange(activePicker)}
             value={DateTime.fromISO(
-              activePicker === "start" ? startDate : endDate,
+              activePicker === "start"
+                ? form.getFieldValue("startDate")
+                : form.getFieldValue("endDate"),
             ).toJSDate()}
           />
         )}
 
         <View
           className="flex-row items-center justify-between rounded-3xl border px-5 py-4"
-          style={{
-            borderColor: borderColor,
-            backgroundColor: cardBackground,
-          }}
+          style={{ borderColor: borderColor, backgroundColor: cardBackground }}
         >
           <View className="flex-1 pr-4">
             <Text
@@ -248,7 +251,7 @@ export const DateRangeSection = withForm({
                 form.setFieldValue("endDate", form.getFieldValue("startDate"));
               }
             }}
-            value={sameDay}
+            value={form.getFieldValue("sameDay")}
           />
         </View>
         <FormControlHelper>

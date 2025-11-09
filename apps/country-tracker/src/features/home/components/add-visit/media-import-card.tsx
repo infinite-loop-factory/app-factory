@@ -137,12 +137,6 @@ export const MediaImportCard = withForm({
                 {i18n.t("home.add-visit.from-photo") ?? ""}
               </ButtonText>
             </Button>
-            <Text
-              className="mt-1 text-xs leading-4"
-              style={{ color: mutedTextColor }}
-            >
-              {i18n.t("home.add-visit.from-photo-helper") ?? ""}
-            </Text>
           </View>
           <View>
             <Button
