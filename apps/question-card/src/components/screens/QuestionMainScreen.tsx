@@ -8,7 +8,9 @@ import type { QuestionMode } from "@/types";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { BannerAdSize } from "react-native-google-mobile-ads";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { BannerAdComponent } from "@/components/ads/BannerAd";
 import { FloatingBackButton, OrangeHeader } from "@/components/ui";
 import {
   categories,
@@ -201,6 +203,11 @@ export default function QuestionMainScreen() {
           </View>
         </View>
       </ScrollView>
+
+      {/* 하단 광고 영역 */}
+      <View className="border-orange-200 border-t bg-white px-5 py-3">
+        <BannerAdComponent size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER} />
+      </View>
 
       {/* 하단 버튼 */}
       <View className="border-orange-200 border-t bg-white p-5">

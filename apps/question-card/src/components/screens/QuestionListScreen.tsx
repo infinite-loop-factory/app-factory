@@ -216,7 +216,7 @@ export default function QuestionListScreen() {
 
       {/* 하단 광고 영역 */}
       <Box className="border-gray-200 border-t bg-white px-5 py-3">
-        <BannerAdComponent size={BannerAdSize.BANNER} />
+        <BannerAdComponent size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER} />
       </Box>
 
       {/* 하단 버튼 */}

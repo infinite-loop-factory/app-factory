@@ -8,7 +8,9 @@ import type { DifficultyLevel } from "@/types";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Alert, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { BannerAdSize } from "react-native-google-mobile-ads";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { BannerAdComponent } from "@/components/ads/BannerAd";
 import {
   FloatingActionButton,
   FloatingBackButton,
@@ -165,6 +167,11 @@ export default function DifficultySelectionScreen() {
           })}
         </View>
       </ScrollView>
+
+      {/* 하단 광고 영역 */}
+      <View className="border-gray-200 border-t bg-white px-5 py-3">
+        <BannerAdComponent size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER} />
+      </View>
 
       {/* 선택 요약 및 다음 버튼 */}
       <View className="border-gray-200 border-t bg-white p-5">

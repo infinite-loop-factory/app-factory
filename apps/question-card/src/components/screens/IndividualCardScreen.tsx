@@ -9,6 +9,8 @@ import type { Question } from "@/types";
 import { useRouter } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
 import { Alert, StatusBar } from "react-native";
+import { BannerAdSize } from "react-native-google-mobile-ads";
+import { BannerAdComponent } from "@/components/ads/BannerAd";
 import {
   Box,
   Card,
@@ -216,6 +218,11 @@ export default function IndividualCardScreen() {
             </Box>
           </VStack>
         </Card>
+      </Box>
+
+      {/* 하단 광고 영역 */}
+      <Box className="border-gray-200 border-t bg-white px-5 py-3">
+        <BannerAdComponent size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER} />
       </Box>
 
       {/* 하단 네비게이션 버튼 */}
