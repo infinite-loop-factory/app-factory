@@ -1,3 +1,4 @@
+import "dotenv/config";
 import type { ConfigContext, ExpoConfig } from "expo/config";
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
@@ -33,5 +34,11 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     tsconfigPaths: true,
     typedRoutes: true,
     baseUrl: "/app-factory/cafe",
+  },
+  extra: {
+    NAVER_CLIENT_ID: process.env.NAVER_CLIENT_ID,
+    NAVER_CLIENT_SECRET: process.env.NAVER_CLIENT_SECRET,
+    SUPABASE_URL: process.env.EXPO_PUBLIC_SUPABASE_URL,
+    SUPABASE_ANON_KEY: process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY,
   },
 });
