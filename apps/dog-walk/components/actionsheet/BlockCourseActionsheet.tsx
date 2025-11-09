@@ -38,15 +38,19 @@ export default function BlockCourseActionsheet({
   };
 
   const handleBlock = async () => {
-    const id = await insertBlockedCourse({
-      courseId,
-      userId: userInfo.id,
-    });
+    try {
+      const id = await insertBlockedCourse({
+        courseId,
+        userId: userInfo.id,
+      });
 
-    if (id) {
-      setShowActionsheet(false);
-      getGlobalHandleToast("차단이 완료되었습니다.");
-      router.back();
+      if (id) {
+        setShowActionsheet(false);
+        getGlobalHandleToast("차단이 완료되었습니다.");
+        router.back();
+      }
+    } catch {
+      getGlobalHandleToast("차단에 실패했습니다.");
     }
   };
 
