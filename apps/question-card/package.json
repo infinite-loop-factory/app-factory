@@ -6,6 +6,8 @@
   "main": "index.ts",
   "scripts": {
     "android": "expo start --android",
+    "build:android": "eas build --platform android --profile preview",
+    "build:android:prod": "eas build --platform android --profile production",
     "clean": "git clean -xdf .cache .expo .turbo android ios node_modules",
     "ios": "expo start --ios",
     "lint": "biome lint --fix --unsafe --no-errors-on-unmatched",
@@ -17,6 +19,7 @@
     "web:publish": "tsx web-publish.ts"
   },
   "dependencies": {
+    "@expo-google-fonts/ibm-plex-sans-kr": "^0.2.3",
     "@expo/html-elements": "^0.10.1",
     "@expo/vector-icons": "^14.0.4",
     "@gluestack-ui/core": "^3.0.2",

@@ -1,6 +1,12 @@
 import "../global.css";
 
 import {
+  IBMPlexSansKR_400Regular,
+  IBMPlexSansKR_500Medium,
+  IBMPlexSansKR_600SemiBold,
+  IBMPlexSansKR_700Bold,
+} from "@expo-google-fonts/ibm-plex-sans-kr";
+import {
   DarkTheme,
   DefaultTheme,
   ThemeProvider,
@@ -25,7 +31,10 @@ SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
   const { colorScheme } = useColorScheme();
   const [loaded] = useFonts({
-    SpaceMono: require("@/assets/fonts/SpaceMono-Regular.ttf"),
+    "IBMPlexSansKR-Regular": IBMPlexSansKR_400Regular,
+    "IBMPlexSansKR-Medium": IBMPlexSansKR_500Medium,
+    "IBMPlexSansKR-SemiBold": IBMPlexSansKR_600SemiBold,
+    "IBMPlexSansKR-Bold": IBMPlexSansKR_700Bold,
   });
 
   useEffect(() => {
@@ -51,7 +60,6 @@ export default function RootLayout() {
                 name="category-selection"
                 options={{ headerShown: false }}
               />
-              {/* TODO: Uncomment when implementing Phase 2 screens */}
               <Stack.Screen
                 name="difficulty-selection"
                 options={{ headerShown: false }}
@@ -64,20 +72,14 @@ export default function RootLayout() {
                 name="continuous-card"
                 options={{ headerShown: false }}
               />
-              {/* <Stack.Screen
-              name="question-list"
-              options={{
-                title: "질문 목록",
-                presentation: "card",
-              }}
-            />
-            <Stack.Screen
-              name="individual-card"
-              options={{
-                title: "질문 카드",
-                presentation: "card",
-              }}
-            /> */}
+              <Stack.Screen
+                name="question-list"
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="individual-card"
+                options={{ headerShown: false }}
+              />
               <Stack.Screen name="+not-found" />
             </Stack>
           </ThemeProvider>

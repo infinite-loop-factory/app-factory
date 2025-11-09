@@ -1,0 +1,46 @@
+{
+  "cli": {
+    "version": ">= 13.2.0",
+    "appVersionSource": "remote"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "node": "22.17.1",
+      "pnpm": "10.12.1",
+      "android": {
+        "buildType": "apk"
+      },
+      "ios": {
+        "simulator": true
+      }
+    },
+    "preview": {
+      "distribution": "internal",
+      "node": "22.17.1",
+      "pnpm": "10.12.1",
+      "android": {
+        "buildType": "apk"
+      }
+    },
+    "production": {
+      "node": "22.17.1",
+      "pnpm": "10.12.1",
+      "android": {
+        "buildType": "app-bundle"
+      },
+      "ios": {
+        "buildConfiguration": "Release"
+      }
+    }
+  },
+  "submit": {
+    "production": {
+      "android": {
+        "serviceAccountKeyPath": "./service-account-file.json",
+        "track": "internal"
+      }
+    }
+  }
+}
