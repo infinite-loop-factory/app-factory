@@ -100,7 +100,11 @@ export default function DetailScreen() {
 
   return (
     <CustomSafeAreaView>
-      <DetailHeaderBar isFavorite={isFavorite} setIsFavorite={setIsFavorite} />
+      <DetailHeaderBar
+        courseId={Number(id)}
+        isFavorite={isFavorite}
+        setIsFavorite={setIsFavorite}
+      />
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         <VStack className="flex-1 px-4">
           <Image
