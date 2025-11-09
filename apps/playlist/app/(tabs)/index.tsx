@@ -102,6 +102,7 @@ export default function Index() {
                       selectedArtist,
                       firstTrack.title,
                       firstTrack.file,
+                      images[selectedArtist],
                     );
                   }
                 }
@@ -167,7 +168,12 @@ export default function Index() {
                 <TouchableOpacity
                   className="mb-2 rounded bg-gray-800 p-3"
                   onPress={() => {
-                    playTrack(selectedArtist, item.title, item.file);
+                    playTrack(
+                      selectedArtist,
+                      item.title,
+                      item.file,
+                      images[selectedArtist],
+                    );
                     setQueueModalVisible(false);
                   }}
                 >
