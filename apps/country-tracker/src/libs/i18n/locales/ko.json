@@ -8,7 +8,49 @@
     "search-a11y": "국가 검색 입력",
     "search-button-a11y": "검색 실행",
     "error-loading": "방문 국가 목록을 불러오지 못했어요.",
-    "no-visited-countries": "아직 방문한 국가가 없어요"
+    "no-visited-countries": "아직 방문한 국가가 없어요",
+    "add-visit": {
+      "button": "방문 기록 추가",
+      "title": "새 방문 기록 추가",
+      "description": "방문 목록에 새 국가를 추가하세요.",
+      "country-label": "국가",
+      "country-placeholder": "국가 선택",
+      "country-helper": "국가명을 검색하거나 자동 채우기를 이용해 보세요.",
+      "from-photo": "사진에서 가져오기",
+      "from-location": "현재 위치 사용",
+      "from-location-helper": "GPS를 새로 확인해 자동으로 국가를 제안해요.",
+      "import-title": "가져오기",
+      "import-subtitle": "사진 메타데이터나 현재 위치로 국가 정보를 제안해 드립니다.",
+      "date-range": "기간",
+      "start-label": "시작일",
+      "end-label": "종료일",
+      "close-picker": "닫기",
+      "same-day": "하루만 머물렀어요",
+      "same-day-hint": "해제하면 다른 종료일을 선택할 수 있어요.",
+      "stay-length": "%{count}일 선택됨",
+      "cancel": "취소",
+      "submit": "등록",
+      "errors": {
+        "location-denied": "국가를 자동으로 채우려면 위치 권한이 필요해요.",
+        "location-failed": "현재 위치를 불러오지 못했어요. 잠시 후 다시 시도해주세요.",
+        "photo-permission": "EXIF 정보를 읽으려면 사진 접근을 허용해주세요.",
+        "photo-no-location": "해당 사진에는 위치 정보가 없어요.",
+        "photo-failed": "사진 메타데이터를 읽지 못했어요.",
+        "no-user": "로그인 후에 기록을 추가할 수 있어요.",
+        "no-country": "먼저 국가를 선택해주세요.",
+        "no-dates": "시작일과 종료일을 모두 선택해주세요.",
+        "invalid-range": "시작일은 종료일보다 늦을 수 없어요.",
+        "duplicates-only": "선택한 날짜는 이미 해당 국가에 기록되어 있어요."
+      },
+      "toast": {
+        "success-title": "기록 완료",
+        "success-description": "%{count}일이 등록됐어요.",
+        "partial-title": "일부 날짜 건너뜀",
+        "partial-description": "%{count}일은 이미 기록되어 건너뛰었어요.",
+        "error-title": "등록에 실패했어요",
+        "error-description": "기록을 저장하지 못했어요. 다시 시도해주세요."
+      }
+    }
   },
 
   "settings": {

@@ -8,7 +8,51 @@
     "search-a11y": "Search countries",
     "search-button-a11y": "Execute search",
     "error-loading": "Failed to load visited countries.",
-    "no-visited-countries": "No visited countries yet"
+    "no-visited-countries": "No visited countries yet",
+    "add-visit": {
+      "button": "Add a New Visit",
+      "title": "Add a New Visit",
+      "description": "Add a new country to your visited list.",
+      "country-label": "Country",
+      "country-placeholder": "Select a country",
+      "country-helper": "Search by name or let smart fill suggest it for you.",
+      "from-photo": "From photo",
+      "from-location": "Use current location",
+      "from-location-helper": "Refresh your GPS position to suggest a country automatically.",
+      "media-import-title": "Import from photo or location",
+      "media-import-subtitle": "We can fill in country and date from your photo or location.",
+      "import-title": "Import",
+      "import-subtitle": "Let us suggest details from your photo or location.",
+      "date-range": "Date range",
+      "start-label": "Start",
+      "end-label": "End",
+      "close-picker": "Close picker",
+      "same-day": "Stayed one day",
+      "same-day-hint": "Turn off to pick a different end date.",
+      "stay-length": "Selected %{count} day(s)",
+      "cancel": "Cancel",
+      "submit": "Register",
+      "errors": {
+        "location-denied": "We need location permission to prefill your country.",
+        "location-failed": "Could not read your current location. Try again later.",
+        "photo-permission": "Allow photo access to read EXIF data.",
+        "photo-no-location": "That photo does not contain location data.",
+        "photo-failed": "We couldn't read the photo metadata.",
+        "no-user": "You need to be signed in to add a stay.",
+        "no-country": "Select a country first.",
+        "no-dates": "Select both start and end dates.",
+        "invalid-range": "Start date must be on or before the end date.",
+        "duplicates-only": "All of the selected dates are already recorded for this country."
+      },
+      "toast": {
+        "success-title": "Stay saved",
+        "success-description": "Registered %{count} day(s).",
+        "partial-title": "Some days skipped",
+        "partial-description": "Skipped %{count} duplicate day(s).",
+        "error-title": "Something went wrong",
+        "error-description": "We couldn't save that stay. Please try again."
+      }
+    }
   },
 
   "map": {
