@@ -6,7 +6,7 @@
 import type { Question } from "@/types";
 
 import { useRouter } from "expo-router";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Alert, FlatList } from "react-native";
 import { BannerAdSize } from "react-native-google-mobile-ads";
 import { BannerAdComponent } from "@/components/ads/BannerAd";
@@ -21,6 +21,11 @@ import {
   VStack,
 } from "@/components/ui";
 import { useAppActions, useAppState } from "@/context/AppContext";
+
+// 리스트 아이템 타입 정의 (질문 또는 광고)
+type ListItem =
+  | { type: "question"; data: Question; questionIndex: number }
+  | { type: "ad"; id: string };
 
 interface QuestionListItemProps {
   question: Question;
@@ -116,6 +121,31 @@ export default function QuestionListScreen() {
     }
   }, [filteredQuestions, router]);
 
+  // 8개 항목마다 광고를 삽입한 리스트 생성
+  const listItemsWithAds = useMemo(() => {
+    const items: ListItem[] = [];
+    const AD_INTERVAL = 8; // 8개 질문마다 광고 삽입
+
+    questions.forEach((question, index) => {
+      // 질문 항목 추가
+      items.push({
+        type: "question",
+        data: question,
+        questionIndex: index,
+      });
+
+      // 8개마다 광고 삽입 (마지막 항목 이후에는 광고 추가 안함)
+      if ((index + 1) % AD_INTERVAL === 0 && index < questions.length - 1) {
+        items.push({
+          type: "ad",
+          id: `ad-${index}`,
+        });
+      }
+    });
+
+    return items;
+  }, [questions]);
+
   // 질문 선택 처리
   const handleQuestionSelect = useCallback(
     (_question: Question, index: number) => {
@@ -144,15 +174,27 @@ export default function QuestionListScreen() {
     ]);
   }, [router]);
 
-  // 질문 리스트 렌더링
-  const renderQuestionItem = useCallback(
-    ({ item, index }: { item: Question; index: number }) => (
-      <QuestionListItem
-        index={index}
-        onPress={handleQuestionSelect}
-        question={item}
-      />
-    ),
+  // 리스트 아이템 렌더링 (질문 또는 광고)
+  const renderListItem = useCallback(
+    ({ item }: { item: ListItem }) => {
+      if (item.type === "ad") {
+        // 인라인 광고 렌더링
+        return (
+          <Box className="my-4 px-4">
+            <BannerAdComponent size={BannerAdSize.LARGE_BANNER} />
+          </Box>
+        );
+      }
+
+      // 질문 항목 렌더링
+      return (
+        <QuestionListItem
+          index={item.questionIndex}
+          onPress={handleQuestionSelect}
+          question={item.data}
+        />
+      );
+    },
     [handleQuestionSelect],
   );
 
@@ -197,11 +239,13 @@ export default function QuestionListScreen() {
         </VStack>
       </Box>
 
-      {/* 질문 목록 */}
+      {/* 질문 목록 (인라인 광고 포함) */}
       <FlatList
         contentContainerStyle={{ paddingVertical: 16 }}
-        data={questions}
-        keyExtractor={(item) => `question-${item.id}`}
+        data={listItemsWithAds}
+        keyExtractor={(item) =>
+          item.type === "question" ? `question-${item.data.id}` : item.id
+        }
         ListEmptyComponent={
           <Box className="flex-1 items-center justify-center py-20">
             <Text className="text-center text-base text-gray-500">
@@ -210,7 +254,7 @@ export default function QuestionListScreen() {
             </Text>
           </Box>
         }
-        renderItem={renderQuestionItem}
+        renderItem={renderListItem}
         showsVerticalScrollIndicator={false}
       />
 
