@@ -53,10 +53,10 @@ export const DateRangeSection = withForm({
       form.getFieldValue("endDate"),
     )
       ? 0
-      : (countInclusiveDays(
+      : countInclusiveDays(
           form.getFieldValue("startDate"),
           form.getFieldValue("endDate"),
-        ) as number) || DEFAULT_RANGE_DAYS;
+        ) || DEFAULT_RANGE_DAYS;
 
     const applySyncedDates = (field: PickerField, iso: string) => {
       if (field === "start") {
@@ -104,7 +104,7 @@ export const DateRangeSection = withForm({
                   onChange={(e) => field.handleChange(e.target.value)}
                   placeholder="YYYY-MM-DD"
                   type="date"
-                  value={field.state.value}
+                  value={String(field.state.value ?? "")}
                 />
                 <Text
                   className="mt-1 text-xs"
@@ -155,7 +155,7 @@ export const DateRangeSection = withForm({
                   onChange={(e) => field.handleChange(e.target.value)}
                   placeholder="YYYY-MM-DD"
                   type="date"
-                  value={field.state.value}
+                  value={String(field.state.value ?? "")}
                 />
                 <Text
                   className="mt-1 text-xs"

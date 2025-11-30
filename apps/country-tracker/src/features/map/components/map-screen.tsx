@@ -3,17 +3,27 @@ import type { MapGlobeRef } from "@/features/map/types/map-globe";
 import type { CountryYearSummary } from "@/features/map/types/map-summary";
 
 import BottomSheet, { BottomSheetFlatList } from "@gorhom/bottom-sheet";
+import * as FileSystem from "expo-file-system";
+import * as Sharing from "expo-sharing";
 import {
   ChevronLeft,
   ChevronRight,
   Info,
   Search,
-  Share,
+  Share as ShareIcon,
   XCircle,
 } from "lucide-react-native";
 import { DateTime } from "luxon";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ActivityIndicator, Alert, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  Alert,
+  PixelRatio,
+  Platform,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { captureRef } from "react-native-view-shot";
 import { ThemedView } from "@/components/themed-view";
 import { Button, ButtonIcon, ButtonText } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
@@ -30,6 +40,7 @@ import { useAuthUser } from "@/hooks/use-auth-user";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import i18n from "@/libs/i18n";
 import { countryCodeToFlagEmoji } from "@/utils/country-code-to-flag-emoji";
+import { downloadBlobAsFile } from "@/utils/download-utils";
 import { formatIsoDate } from "@/utils/format-date";
 
 const GLOBE_ANIMATION_DURATION = 3500;
@@ -40,6 +51,7 @@ export default function MapScreen() {
 
   const bottomSheetRef = useRef<BottomSheet>(null);
   const mapGlobeRef = useRef<MapGlobeRef>(null);
+  const globeContainerRef = useRef<View>(null);
 
   const [searchText, setSearchText] = useState("");
   const [selectedCountry, setSelectedCountry] =
@@ -67,7 +79,7 @@ export default function MapScreen() {
 
   const currentYear = DateTime.local().year;
 
-  const overlayBackgroundColor = addAlphaToColor(backgroundColor, 0.9);
+  const _overlayBackgroundColor = addAlphaToColor(backgroundColor, 0.95);
 
   const resetSearchState = () => {
     setSearchText("");
@@ -133,9 +145,100 @@ export default function MapScreen() {
     console.log("handleSheetChanges", index);
   };
 
-  const handleShare = () => {
-    // biome-ignore lint/suspicious/noConsole: 테스트
-    console.log("handleShare");
+  const handleShareWeb = async (pixels: number) => {
+    // Web: Use base64 and Web Share API or download
+    const imageUri = await captureRef(globeContainerRef, {
+      result: "base64",
+      height: pixels,
+      width: pixels,
+      quality: 1,
+      format: "png",
+    });
+
+    const base64Data = imageUri.replace(/^data:image\/png;base64,/, "");
+    const blob = await fetch(`data:image/png;base64,${base64Data}`).then(
+      (res) => res.blob(),
+    );
+    const file = new File([blob], "globe-map.png", { type: "image/png" });
+
+    // Try Web Share API first
+    if (navigator.share && navigator.canShare?.({ files: [file] })) {
+      try {
+        await navigator.share({
+          title: i18n.t("share.title"),
+          files: [file],
+        });
+        return;
+      } catch (shareError) {
+        // User cancelled or share failed, fall through to download
+        if (shareError instanceof Error && shareError.name !== "AbortError") {
+          // Only log non-cancellation errors
+          // biome-ignore lint/suspicious/noConsole: Error logging
+          console.warn("Web Share API failed:", shareError);
+        }
+        // Fall through to download
+      }
+    }
+
+    // Fallback: Download the image
+    downloadBlobAsFile(blob, "globe-map.png");
+  };
+
+  const handleShareNative = async (pixels: number) => {
+    // Native: Use tmpfile and expo-sharing
+    const isAvailable = await Sharing.isAvailableAsync();
+    if (!isAvailable) {
+      Alert.alert(i18n.t("share.error"), i18n.t("share.not-available"));
+      return;
+    }
+
+    const imageUri = await captureRef(globeContainerRef, {
+      result: "tmpfile",
+      height: pixels,
+      width: pixels,
+      quality: 1,
+      format: "png",
+    });
+
+    // Share the image
+    const shareTitle = i18n.t("share.title");
+
+    await Sharing.shareAsync(imageUri, {
+      dialogTitle: shareTitle,
+      mimeType: "image/png",
+    });
+
+    // Clean up the temporary file after sharing
+    try {
+      await FileSystem.deleteAsync(imageUri, { idempotent: true });
+    } catch {
+      // Ignore cleanup errors
+    }
+  };
+
+  const handleShare = async () => {
+    try {
+      if (!globeContainerRef.current) {
+        Alert.alert(i18n.t("share.error"), i18n.t("share.error"));
+        return;
+      }
+
+      // Capture the globe view as an image
+      const targetPixelCount = 1080; // Full HD quality
+      const pixelRatio = PixelRatio.get();
+      const pixels = targetPixelCount / pixelRatio;
+
+      if (Platform.OS === "web") {
+        await handleShareWeb(pixels);
+      } else {
+        await handleShareNative(pixels);
+      }
+    } catch (error) {
+      Alert.alert(
+        i18n.t("share.error"),
+        error instanceof Error ? error.message : i18n.t("share.error"),
+      );
+    }
   };
 
   const handleSearch = (text: string) => {
@@ -290,7 +393,7 @@ export default function MapScreen() {
         </Heading>
         <View className="flex flex-row">
           <Button className="mr-1" onPress={handleShare} variant="link">
-            <ButtonIcon as={Share} />
+            <ButtonIcon as={ShareIcon} />
           </Button>
         </View>
       </View>
@@ -370,7 +473,9 @@ export default function MapScreen() {
 
   return (
     <ThemedView className="flex-1">
-      <MapGlobe ref={mapGlobeRef} year={selectedYear} />
+      <View className="flex-1" ref={globeContainerRef}>
+        <MapGlobe ref={mapGlobeRef} year={selectedYear} />
+      </View>
 
       <View
         className="absolute right-0 left-0 z-10"
@@ -379,13 +484,13 @@ export default function MapScreen() {
         <View
           className="flex-row items-center justify-between rounded-full border px-4 py-2"
           style={{
-            backgroundColor: overlayBackgroundColor,
+            backgroundColor: inputBackgroundColor,
             borderColor,
           }}
         >
           <Button
             action="secondary"
-            className="border border-outline-200 bg-transparent"
+            className="border-outline-200 bg-transparent data-[active=true]:bg-transparent data-[hover=true]:bg-background-50"
             onPress={handleYearDecrease}
             size="sm"
             variant="outline"
@@ -400,7 +505,7 @@ export default function MapScreen() {
           </Text>
           <Button
             action="secondary"
-            className="border border-outline-200 bg-transparent"
+            className="border-outline-200 bg-transparent data-[active=true]:bg-transparent data-[hover=true]:bg-background-50"
             disabled={isNextYearDisabled}
             onPress={handleYearIncrease}
             size="sm"
