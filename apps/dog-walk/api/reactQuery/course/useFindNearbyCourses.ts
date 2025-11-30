@@ -2,6 +2,7 @@ import type { CourseRow } from "@/types/course";
 
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/api/supabaseClient";
+import { getBlockedCourseIds } from "@/api/utils/applyBlockFilter";
 import { queryKeys } from "../queryKeys";
 
 // NOTE: 지구 반지름
@@ -27,17 +28,27 @@ function haversineMeters(a: Point, b: Point) {
 const findNearbyCourses = async ({
   latitude,
   longitude,
+  userId,
 }: {
   latitude: number;
   longitude: number;
+  userId?: string;
 }) => {
   if (!(latitude && longitude)) throw new Error("현재 위치 정보가 없음");
 
-  const { data, error } = await supabase
+  const blockedIds = await getBlockedCourseIds(userId);
+
+  let query = supabase
     .from("walking_courses")
     .select(
       "id,start_lat,start_lng,image_url,start_name,end_name,total_distance,total_time,average_rating",
     );
+
+  if (blockedIds.length > 0) {
+    query = query.not("id", "in", `(${blockedIds.join(",")})`);
+  }
+
+  const { data, error } = await query;
 
   if (error) throw error;
 
@@ -59,13 +70,19 @@ const findNearbyCourses = async ({
 export const useFindNearbyCourses = ({
   latitude,
   longitude,
+  userId,
 }: {
   latitude: number;
   longitude: number;
+  userId?: string;
 }) => {
   return useQuery({
-    queryKey: [queryKeys.course.findNearbyCourses, latitude, longitude],
-    queryFn: () => findNearbyCourses({ latitude, longitude }),
+    queryKey: [queryKeys.course.findNearbyCourses, latitude, longitude, userId],
+    queryFn: () => findNearbyCourses({ latitude, longitude, userId }),
     enabled: !!latitude && !!longitude,
+    staleTime: 0,
+    gcTime: 0,
+    refetchOnMount: "always",
+    refetchOnWindowFocus: true,
   });
 };
