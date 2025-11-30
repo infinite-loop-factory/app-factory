@@ -138,5 +138,16 @@
         "message": "Allow location access in your browser to keep tracking in the background."
       }
     }
+  },
+  "error": {
+    "title": "Something went wrong",
+    "message": "An unexpected error occurred. Please try again.",
+    "retry": "Try Again"
+  },
+  "share": {
+    "title": "Share My Travels",
+    "message": "Check out my visited countries in %{year}!",
+    "error": "Unable to share. Please try again.",
+    "not-available": "Sharing is not available on this device."
   }
 }

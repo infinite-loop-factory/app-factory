@@ -18,6 +18,7 @@ import { store } from "@/libs/jotai";
 import "react-native-reanimated";
 
 import { themeAtom } from "@/atoms/theme.atom";
+import { ErrorBoundary } from "@/components/error-boundary";
 import WebviewLayout from "@/components/web-view-layout";
 import { env } from "@/constants/env";
 import "@/features/location/location-task";
@@ -111,23 +112,25 @@ function RootLayout() {
   }
 
   return (
-    <JotaiProvider store={store}>
-      <SafeAreaProvider>
-        <QueryClientProvider client={queryClient}>
-          <GluestackUIProvider mode={savedTheme}>
-            <GestureHandlerRootView style={{ flex: 1 }}>
-              <ThemeProvider
-                value={savedTheme === "dark" ? DarkTheme : DefaultTheme}
-              >
-                <WebviewLayout>
-                  <Slot />
-                </WebviewLayout>
-              </ThemeProvider>
-            </GestureHandlerRootView>
-          </GluestackUIProvider>
-        </QueryClientProvider>
-      </SafeAreaProvider>
-    </JotaiProvider>
+    <ErrorBoundary>
+      <JotaiProvider store={store}>
+        <SafeAreaProvider>
+          <QueryClientProvider client={queryClient}>
+            <GluestackUIProvider mode={savedTheme}>
+              <GestureHandlerRootView style={{ flex: 1 }}>
+                <ThemeProvider
+                  value={savedTheme === "dark" ? DarkTheme : DefaultTheme}
+                >
+                  <WebviewLayout>
+                    <Slot />
+                  </WebviewLayout>
+                </ThemeProvider>
+              </GestureHandlerRootView>
+            </GluestackUIProvider>
+          </QueryClientProvider>
+        </SafeAreaProvider>
+      </JotaiProvider>
+    </ErrorBoundary>
   );
 }
 
