@@ -9,8 +9,7 @@ import type { Question } from "@/types";
 import { useRouter } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
 import { Alert, StatusBar } from "react-native";
-import { BannerAdSize } from "react-native-google-mobile-ads";
-import { BannerAdComponent } from "@/components/ads/BannerAd";
+import { BannerAdComponent, BannerAdSize } from "@/components/ads/BannerAd";
 import {
   Box,
   Card,

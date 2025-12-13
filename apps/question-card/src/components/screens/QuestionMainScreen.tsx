@@ -8,9 +8,8 @@ import type { QuestionMode } from "@/types";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { BannerAdSize } from "react-native-google-mobile-ads";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { BannerAdComponent } from "@/components/ads/BannerAd";
+import { BannerAdComponent, BannerAdSize } from "@/components/ads/BannerAd";
 import { FloatingBackButton, OrangeHeader } from "@/components/ui";
 import {
   categories,

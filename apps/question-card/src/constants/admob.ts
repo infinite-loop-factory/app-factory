@@ -1,5 +1,30 @@
+import Constants from "expo-constants";
 import { Platform } from "react-native";
-import { TestIds } from "react-native-google-mobile-ads";
+
+/**
+ * Expo Go 실행 여부 감지
+ * - Expo Go: Constants.appOwnership === "expo"
+ * - Development Build / EAS Build: "standalone" 또는 null
+ */
+export const isExpoGo = Constants.appOwnership === "expo";
+
+// Expo Go가 아닐 때만 TestIds 로드 (네이티브 모듈 필요)
+let TestIds: {
+  BANNER: string;
+  INTERSTITIAL: string;
+  REWARDED: string;
+  APP_OPEN: string;
+} = {
+  BANNER: "test-banner-expo-go",
+  INTERSTITIAL: "test-interstitial-expo-go",
+  REWARDED: "test-rewarded-expo-go",
+  APP_OPEN: "test-app-open-expo-go",
+};
+
+if (!isExpoGo) {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  TestIds = require("react-native-google-mobile-ads").TestIds;
+}
 
 /**
  * ===================================================

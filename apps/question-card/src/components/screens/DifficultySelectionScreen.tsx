@@ -8,9 +8,8 @@ import type { DifficultyLevel } from "@/types";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Alert, ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { BannerAdSize } from "react-native-google-mobile-ads";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { BannerAdComponent } from "@/components/ads/BannerAd";
+import { BannerAdComponent, BannerAdSize } from "@/components/ads/BannerAd";
 import {
   FloatingActionButton,
   FloatingBackButton,

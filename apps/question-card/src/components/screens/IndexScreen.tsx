@@ -7,8 +7,7 @@ import { useRouter } from "expo-router";
 import { Sprout } from "lucide-react-native";
 import { useEffect } from "react";
 import { Text, View } from "react-native";
-import { BannerAdSize } from "react-native-google-mobile-ads";
-import { BannerAdComponent } from "@/components/ads/BannerAd";
+import { BannerAdComponent, BannerAdSize } from "@/components/ads/BannerAd";
 import { styleExamples, themeTailwindClasses } from "@/constants/designSystem";
 import { useAppState } from "@/context/AppContext";
 
