@@ -191,23 +191,8 @@ export default function ContinuousCardScreen() {
         // 임계값 미달이거나 첫 번째 질문에서 왼쪽 스와이프: 원래 위치로 복귀
         resetCardPosition();
       }
-
-      // 회전 애니메이션 업데이트
-      const rotation = tx / SCREEN_WIDTH;
-      Animated.timing(rotate, {
-        toValue: rotation * 0.3,
-        duration: 100,
-        useNativeDriver: true,
-      }).start();
     },
-    [
-      currentIndex,
-      goToNext,
-      goToPrevious,
-      resetCardPosition,
-      rotate,
-      animateSwipeExit,
-    ],
+    [currentIndex, goToNext, goToPrevious, resetCardPosition, animateSwipeExit],
   );
 
   // 카드 애니메이션 스타일
@@ -301,7 +286,7 @@ export default function ContinuousCardScreen() {
                 {/* 힌트 텍스트 */}
                 <Box className="border-gray-100 border-t pt-4">
                   <Text className="text-center text-gray-400 text-sm">
-                    스와이프로도 넘길 수 있어요
+                    카드를 옆으로 밀어서 넘길 수도 있어요
                   </Text>
                 </Box>
               </Box>
