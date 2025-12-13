@@ -4,7 +4,7 @@
  * 모드 1, 2, 3에서 사용
  */
 
-import type { Question } from "@/types";
+import type { HintType, Question } from "@/types";
 
 import { useRouter } from "expo-router";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -13,10 +13,13 @@ import {
   PanGestureHandler,
   type PanGestureHandlerGestureEvent,
   State,
+  TapGestureHandler,
+  type TapGestureHandlerStateChangeEvent,
 } from "react-native-gesture-handler";
 import {
   Box,
   Card,
+  FlipCard,
   FloatingBackButton,
   Pressable,
   Progress,
@@ -35,6 +38,7 @@ export default function ContinuousCardScreen() {
   // 로컬 상태 (Context 상태 사용으로 대체 예정)
   const [_questions, setQuestions] = useState<Question[]>([]);
   const [_isCompleted, setIsCompleted] = useState(false);
+  const [isFlipped, setIsFlipped] = useState(false); // 카드 뒤집기 상태
 
   // Context에서 관리하는 현재 인덱스와 질문 사용
   const currentIndex = progress.currentIndex;
@@ -45,6 +49,10 @@ export default function ContinuousCardScreen() {
   const translateY = useRef(new Animated.Value(0)).current;
   const rotate = useRef(new Animated.Value(0)).current;
   const scale = useRef(new Animated.Value(1)).current;
+
+  // 제스처 핸들러 refs (탭 + 스와이프 동시 인식용)
+  const panRef = useRef(null);
+  const tapRef = useRef(null);
 
   // 컴포넌트 마운트시 질문 데이터 설정 (null 안전성 추가)
   useEffect(() => {
@@ -75,6 +83,39 @@ export default function ContinuousCardScreen() {
       }),
     ]).start();
   }, [translateX, translateY, rotate, scale]);
+
+  // 카드 뒤집기 토글
+  const handleFlip = useCallback(() => {
+    setIsFlipped((prev) => !prev);
+  }, []);
+
+  // 탭 제스처 핸들러 (카드 뒤집기 전용)
+  const onTapStateChange = useCallback(
+    (event: TapGestureHandlerStateChangeEvent) => {
+      if (event.nativeEvent.state === State.ACTIVE) {
+        handleFlip();
+      }
+    },
+    [handleFlip],
+  );
+
+  // 힌트 유형 라벨 반환
+  const getHintTypeLabel = useCallback((type: HintType): string => {
+    switch (type) {
+      case "keyword":
+        return "키워드";
+      case "example":
+        return "예시 답변";
+      case "thinking":
+        return "생각 포인트";
+      case "related":
+        return "관련 질문";
+      case "situation":
+        return "상황 예시";
+      default:
+        return "힌트";
+    }
+  }, []);
 
   // 완료 알림 표시
   const showCompletionAlert = useCallback(() => {
@@ -110,6 +151,7 @@ export default function ContinuousCardScreen() {
   // 다음 질문으로 이동 (Context Actions 사용)
   const goToNext = useCallback(() => {
     if (progress.canGoForward) {
+      setIsFlipped(false); // 카드 뒤집기 상태 리셋
       goToNextQuestion();
       resetCardPosition();
     } else {
@@ -126,6 +168,7 @@ export default function ContinuousCardScreen() {
   // 이전 질문으로 이동 (Context Actions 사용)
   const goToPrevious = useCallback(() => {
     if (progress.canGoBack) {
+      setIsFlipped(false); // 카드 뒤집기 상태 리셋
       goToPreviousQuestion();
       resetCardPosition();
     }
@@ -169,7 +212,7 @@ export default function ContinuousCardScreen() {
     [translateX, rotate, scale],
   );
 
-  // 제스처 상태 변화 핸들러
+  // 스와이프 제스처 상태 변화 핸들러 (카드 넘기기 전용)
   const onHandlerStateChange = useCallback(
     (event: PanGestureHandlerGestureEvent) => {
       const { state, translationX: tx, velocityX } = event.nativeEvent;
@@ -251,46 +294,125 @@ export default function ContinuousCardScreen() {
         <PanGestureHandler
           onGestureEvent={onGestureEvent}
           onHandlerStateChange={onHandlerStateChange}
+          ref={panRef}
+          simultaneousHandlers={tapRef}
         >
           <Animated.View
             style={[{ width: SCREEN_WIDTH - 40 }, cardAnimatedStyle]}
           >
-            <Card className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-              <Box className="space-y-6">
-                {/* 카테고리 정보 */}
-                <Box className="flex-row items-center justify-between border-gray-100 border-b pb-4">
-                  <Box className="flex-row items-center">
-                    <Box className="mr-3 h-8 w-8 items-center justify-center rounded-full bg-gray-50">
-                      <Text className="text-base">📝</Text>
-                    </Box>
-                    <Text className="font-medium text-base text-gray-900">
-                      {currentQuestion?.categoryName}
-                    </Text>
-                  </Box>
-                  <Box
-                    className={`rounded-full px-3 py-1.5 ${getDifficultyBadgeClass(currentQuestion?.difficulty)}`}
-                  >
-                    <Text className="font-medium text-sm text-white">
-                      {getDifficultyLabel(currentQuestion?.difficulty)}
-                    </Text>
-                  </Box>
-                </Box>
+            <TapGestureHandler
+              onHandlerStateChange={onTapStateChange}
+              ref={tapRef}
+              simultaneousHandlers={panRef}
+            >
+              <Animated.View>
+                <FlipCard
+                  backContent={
+                    <Card className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+                      <Box className="space-y-4">
+                        {/* 힌트 헤더 */}
+                        <Box className="flex-row items-center justify-center border-gray-100 border-b pb-4">
+                          <Text className="text-lg">💡</Text>
+                          <Text className="ml-2 font-medium text-base text-gray-700">
+                            힌트
+                          </Text>
+                        </Box>
 
-                {/* 질문 내용 */}
-                <Box className="flex items-center justify-center py-8">
-                  <Text className="text-center font-medium text-gray-900 text-xl leading-relaxed">
-                    {currentQuestion?.content}
-                  </Text>
-                </Box>
+                        {/* 힌트 내용 */}
+                        {currentQuestion?.hints &&
+                        currentQuestion.hints.length > 0 ? (
+                          <>
+                            {/* 힌트 1 */}
+                            {currentQuestion.hints[0] && (
+                              <Box className="border-gray-100 border-b py-3">
+                                <Text className="mb-1 font-medium text-orange-600 text-xs">
+                                  {getHintTypeLabel(
+                                    currentQuestion.hints[0].type,
+                                  )}
+                                </Text>
+                                <Text className="text-base text-gray-800 leading-relaxed">
+                                  {currentQuestion.hints[0].content}
+                                </Text>
+                              </Box>
+                            )}
 
-                {/* 힌트 텍스트 */}
-                <Box className="border-gray-100 border-t pt-4">
-                  <Text className="text-center text-gray-400 text-sm">
-                    카드를 옆으로 밀어서 넘길 수도 있어요
-                  </Text>
-                </Box>
-              </Box>
-            </Card>
+                            {/* 힌트 2 */}
+                            {currentQuestion.hints[1] && (
+                              <Box className="py-3">
+                                <Text className="mb-1 font-medium text-blue-600 text-xs">
+                                  {getHintTypeLabel(
+                                    currentQuestion.hints[1].type,
+                                  )}
+                                </Text>
+                                <Text className="text-base text-gray-800 leading-relaxed">
+                                  {currentQuestion.hints[1].content}
+                                </Text>
+                              </Box>
+                            )}
+                          </>
+                        ) : (
+                          <Box className="flex items-center justify-center py-8">
+                            <Text className="text-center text-base text-gray-500">
+                              이 질문에는 힌트가 없습니다
+                            </Text>
+                          </Box>
+                        )}
+
+                        {/* 되돌리기 안내 */}
+                        <Box className="border-gray-100 border-t pt-4">
+                          <Text className="text-center text-gray-400 text-sm">
+                            다시 터치하면 질문으로 돌아가요
+                          </Text>
+                        </Box>
+                      </Box>
+                    </Card>
+                  }
+                  frontContent={
+                    <Card className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+                      <Box className="space-y-6">
+                        {/* 카테고리 정보 */}
+                        <Box className="flex-row items-center justify-between border-gray-100 border-b pb-4">
+                          <Box className="flex-row items-center">
+                            <Box className="mr-3 h-8 w-8 items-center justify-center rounded-full bg-gray-50">
+                              <Text className="text-base">📝</Text>
+                            </Box>
+                            <Text className="font-medium text-base text-gray-900">
+                              {currentQuestion?.categoryName}
+                            </Text>
+                          </Box>
+                          <Box
+                            className={`rounded-full px-3 py-1.5 ${getDifficultyBadgeClass(currentQuestion?.difficulty)}`}
+                          >
+                            <Text className="font-medium text-sm text-white">
+                              {getDifficultyLabel(currentQuestion?.difficulty)}
+                            </Text>
+                          </Box>
+                        </Box>
+
+                        {/* 질문 내용 */}
+                        <Box className="flex items-center justify-center py-8">
+                          <Text className="text-center font-medium text-gray-900 text-xl leading-relaxed">
+                            {currentQuestion?.content}
+                          </Text>
+                        </Box>
+
+                        {/* 힌트 텍스트 */}
+                        <Box className="border-gray-100 border-t pt-4">
+                          <Text className="text-center text-gray-400 text-sm">
+                            카드를 터치하면 힌트를 볼 수 있어요
+                          </Text>
+                          <Text className="text-center text-gray-400 text-sm">
+                            카드를 옆으로 밀어서 넘길 수도 있어요
+                          </Text>
+                        </Box>
+                      </Box>
+                    </Card>
+                  }
+                  isFlipped={isFlipped}
+                  key={currentQuestion?.id}
+                />
+              </Animated.View>
+            </TapGestureHandler>
           </Animated.View>
         </PanGestureHandler>
       </Box>

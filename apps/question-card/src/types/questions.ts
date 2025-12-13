@@ -2,6 +2,20 @@
  * EasyTalking 앱의 핵심 데이터 타입 정의
  */
 
+// 힌트 유형 정의
+export type HintType =
+  | "keyword"
+  | "example"
+  | "thinking"
+  | "related"
+  | "situation";
+
+// 질문 힌트 구조
+export interface QuestionHint {
+  type: HintType;
+  content: string;
+}
+
 // 기본 질문 데이터 구조
 export interface Question {
   id: number;
@@ -10,6 +24,7 @@ export interface Question {
   difficulty: DifficultyLevel;
   content: string;
   order: number;
+  hints?: QuestionHint[]; // 2개의 서로 다른 유형 힌트
 }
 
 // 카테고리 정보
