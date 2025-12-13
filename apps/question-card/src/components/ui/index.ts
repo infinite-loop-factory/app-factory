@@ -20,6 +20,7 @@ export type {
   FloatingMenuButtonProps,
   FloatingMenuButtonStyle,
 } from "./FloatingMenuButton";
+export type { FullscreenToggleButtonProps } from "./FullscreenToggleButton";
 export type { OrangeHeaderProps } from "./OrangeHeader";
 export type { ProgressIndicatorProps } from "./ProgressIndicator";
 
@@ -33,6 +34,7 @@ export { FlipCard } from "./FlipCard";
 export { FloatingActionButton } from "./FloatingActionButton";
 export { FloatingBackButton } from "./FloatingBackButton";
 export { FloatingMenuButton } from "./FloatingMenuButton";
+export { FullscreenToggleButton } from "./FullscreenToggleButton";
 export { GluestackUIProvider } from "./gluestack-ui-provider";
 export { HStack } from "./hstack";
 export { OrangeHeader } from "./OrangeHeader";
