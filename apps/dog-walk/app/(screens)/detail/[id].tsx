@@ -1,8 +1,10 @@
 import { useLocalSearchParams } from "expo-router";
+import { useAtomValue } from "jotai";
 import { memo, useMemo, useState } from "react";
 import { Dimensions, FlatList, Image, ScrollView, View } from "react-native";
 import { useFindCourse } from "@/api/reactQuery/course/useFindCourse";
 import Images from "@/assets/images";
+import { userAtom } from "@/atoms/userAtom";
 import IconText from "@/components/atoms/IconText";
 import CustomSafeAreaView from "@/components/CustomSafeAriaView";
 import DetailDescription from "@/components/organisms/DetailDescription";
@@ -18,6 +20,8 @@ import { IconTextType, TabKeyType } from "@/types/displayType";
 import { formatDistanceKm } from "@/utils/number";
 
 export default function DetailScreen() {
+  const userInfo = useAtomValue(userAtom);
+
   const screenWidth = Dimensions.get("window").width - 32;
 
   const { id } = useLocalSearchParams();
@@ -26,7 +30,7 @@ export default function DetailScreen() {
 
   const [isFavorite, setIsFavorite] = useState(false);
 
-  const { data } = useFindCourse(Number(id));
+  const { data } = useFindCourse(Number(id), userInfo.id);
 
   const {
     total_time = 0,
@@ -100,7 +104,11 @@ export default function DetailScreen() {
 
   return (
     <CustomSafeAreaView>
-      <DetailHeaderBar isFavorite={isFavorite} setIsFavorite={setIsFavorite} />
+      <DetailHeaderBar
+        courseId={Number(id)}
+        isFavorite={isFavorite}
+        setIsFavorite={setIsFavorite}
+      />
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         <VStack className="flex-1 px-4">
           <Image
