@@ -225,44 +225,35 @@ export default function IndividualCardScreen() {
       </Box>
 
       {/* 하단 네비게이션 버튼 */}
-      <Box className="border-neutral-200 border-t bg-white p-4">
-        <HStack className="justify-between" space="md">
-          {/* 이전 버튼 */}
-          <Pressable
-            className={`flex-1 rounded-xl border px-6 py-3 ${
-              progress.canGoBack
-                ? "border-blue-500 bg-white"
-                : "border-gray-300 bg-gray-100"
+      <Box className="flex-row gap-4 border-gray-200 border-t bg-white px-5 py-4">
+        {/* 이전 버튼 */}
+        <Pressable
+          className={`h-12 flex-1 items-center justify-center rounded-lg border-2 border-gray-200 ${
+            !progress.canGoBack ? "opacity-50" : "bg-white"
+          }`}
+          disabled={!progress.canGoBack}
+          onPress={goToPrevious}
+        >
+          <Text
+            className={`font-medium text-base ${
+              !progress.canGoBack ? "text-gray-400" : "text-gray-700"
             }`}
-            disabled={!progress.canGoBack}
-            onPress={goToPrevious}
           >
-            <Text
-              className={`text-center font-medium ${
-                progress.canGoBack ? "text-blue-500" : "text-neutral-400"
-              }`}
-            >
-              ← 이전
-            </Text>
-          </Pressable>
+            이전
+          </Text>
+        </Pressable>
 
-          {/* 다음 버튼 */}
-          <Pressable
-            className={`flex-1 rounded-xl px-6 py-3 ${
-              progress.canGoForward ? "bg-orange-500" : "bg-green-500"
-            }`}
-            onPress={goToNext}
-          >
-            <Text className="text-center font-medium text-white">
-              {progress.canGoForward ? "다음 →" : "완료"}
-            </Text>
-          </Pressable>
-        </HStack>
-
-        {/* 버튼 설명 */}
-        <Text className="mt-2 text-center text-neutral-500 text-xs">
-          버튼으로 질문을 탐색하세요
-        </Text>
+        {/* 다음 버튼 */}
+        <Pressable
+          className={`h-12 flex-1 items-center justify-center rounded-lg ${
+            progress.canGoForward ? "bg-orange-500" : "bg-green-500"
+          }`}
+          onPress={goToNext}
+        >
+          <Text className="font-medium text-base text-white">
+            {progress.canGoForward ? "다음" : "완료"}
+          </Text>
+        </Pressable>
       </Box>
     </Box>
   );

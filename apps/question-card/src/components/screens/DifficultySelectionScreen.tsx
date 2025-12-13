@@ -11,9 +11,11 @@ import { Alert, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { BannerAdComponent, BannerAdSize } from "@/components/ads/BannerAd";
 import {
+  Box,
   FloatingActionButton,
   FloatingBackButton,
   OrangeHeader,
+  Pressable,
 } from "@/components/ui";
 import { difficulties } from "@/constants/designSystem";
 import { useAppActions, useAppState } from "@/context/AppContext";
@@ -168,27 +170,26 @@ export default function DifficultySelectionScreen() {
       </ScrollView>
 
       {/* 하단 광고 영역 */}
-      <View className="border-gray-200 border-t bg-white px-5 py-3">
+      <Box className="border-gray-200 border-t bg-white px-5 py-3">
         <BannerAdComponent size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER} />
-      </View>
+      </Box>
 
       {/* 선택 요약 및 다음 버튼 */}
-      <View className="border-gray-200 border-t bg-white p-5">
-        <View className="mb-3 items-center">
+      <Box className="border-gray-200 border-t bg-white px-5 py-4">
+        <Box className="mb-3 items-center">
           <Text className="mb-1 text-gray-600 text-sm">선택된 난이도</Text>
-          <View className="flex-row items-end">
+          <Box className="flex-row items-end">
             <Text className="font-bold text-3xl text-gray-900">
               {selectedDifficulties.length}
             </Text>
             <Text className="mb-1 ml-1 font-medium text-gray-400 text-lg">
               개
             </Text>
-          </View>
-          <View className="mt-2 h-1 w-12 rounded-full bg-orange-500 opacity-60" />
-        </View>
+          </Box>
+          <Box className="mt-2 h-1 w-12 rounded-full bg-orange-500 opacity-60" />
+        </Box>
 
-        <TouchableOpacity
-          activeOpacity={0.8}
+        <Pressable
           className={`h-12 items-center justify-center rounded-lg ${
             selectedDifficulties.length === 0 ? "bg-gray-300" : "bg-orange-500"
           }`}
@@ -201,8 +202,8 @@ export default function DifficultySelectionScreen() {
           >
             다음 단계
           </Text>
-        </TouchableOpacity>
-      </View>
+        </Pressable>
+      </Box>
     </SafeAreaView>
   );
 }

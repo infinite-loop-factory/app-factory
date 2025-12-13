@@ -311,7 +311,7 @@ export default function ContinuousCardScreen() {
       </Box>
 
       {/* 하단 버튼들 */}
-      <Box className="flex-row space-x-4 border-gray-200 border-t bg-white px-5 py-4">
+      <Box className="flex-row gap-4 space-x-4 border-gray-200 border-t bg-white px-5 py-4">
         <Pressable
           className={`h-12 flex-1 items-center justify-center rounded-lg border-2 border-gray-200 ${
             !progress.canGoBack ? "opacity-50" : "bg-white"

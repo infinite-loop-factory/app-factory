@@ -263,12 +263,12 @@ export default function QuestionListScreen() {
       </Box>
 
       {/* 하단 버튼 */}
-      <Box className="border-gray-200 border-t bg-white p-5">
+      <Box className="border-gray-200 border-t bg-white px-5 py-4">
         <Pressable
-          className="h-12 items-center justify-center rounded-lg bg-orange-500 px-6 py-3"
+          className="h-12 items-center justify-center rounded-lg bg-orange-500"
           onPress={handleBackToMain}
         >
-          <Text className="text-center font-medium text-white">
+          <Text className="font-medium text-base text-white">
             질문 모드 선택으로 돌아가기
           </Text>
         </Pressable>
