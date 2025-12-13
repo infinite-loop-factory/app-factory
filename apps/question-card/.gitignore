@@ -12,3 +12,14 @@ web-build/
 
 expo-env.d.ts
 # @end expo-cli
+
+# ===================================================
+# Environment Variables (AdMob 보안)
+# ===================================================
+# .env.production - 실제 AdMob Unit IDs 포함 (절대 커밋 금지)
+.env.production
+.env.local
+.env*.local
+
+# .env.development, .env.example은 커밋 허용 (테스트 ID만 포함)
+# ===================================================

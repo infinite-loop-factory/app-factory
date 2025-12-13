@@ -7,6 +7,8 @@ import { useRouter } from "expo-router";
 import { Sprout } from "lucide-react-native";
 import { useEffect } from "react";
 import { Text, View } from "react-native";
+import { BannerAdSize } from "react-native-google-mobile-ads";
+import { BannerAdComponent } from "@/components/ads/BannerAd";
 import { styleExamples, themeTailwindClasses } from "@/constants/designSystem";
 import { useAppState } from "@/context/AppContext";
 
@@ -90,6 +92,11 @@ export default function IndexScreen() {
             </Text>
           </View>
         )}
+      </View>
+
+      {/* 하단 광고 (절대 위치) */}
+      <View className="absolute bottom-8 w-full px-5">
+        <BannerAdComponent size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER} />
       </View>
     </View>
   );

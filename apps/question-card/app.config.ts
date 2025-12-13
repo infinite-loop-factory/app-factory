@@ -37,7 +37,22 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     output: "static",
     favicon: "./src/assets/images/favicon.png",
   },
-  plugins: ["expo-router", "expo-localization", "expo-font"],
+  plugins: [
+    "expo-router",
+    "expo-localization",
+    "expo-font",
+    [
+      "react-native-google-mobile-ads",
+      {
+        // TODO: Replace with actual AdMob App IDs from Google AdMob dashboard
+        // Get IDs from: https://apps.admob.com/
+        androidAppId: "ca-app-pub-3940256099942544~3347511713", // Test App ID
+        iosAppId: "ca-app-pub-3940256099942544~1458002511", // Test App ID
+        // iOS 14+ App Tracking Transparency message
+        userTrackingUsageDescription: "맞춤형 광고를 제공하기 위해 사용됩니다.",
+      },
+    ],
+  ],
   experiments: {
     tsconfigPaths: true,
     typedRoutes: true,
