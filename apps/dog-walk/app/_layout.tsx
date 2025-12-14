@@ -18,6 +18,7 @@ import "@/i18n";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { configureGoogleSignin } from "@/config/google";
+import { AuthProvider } from "@/contexts/AuthProvider";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -26,8 +27,25 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       gcTime: 1000 * 60 * 60,
-      retry: 1,
+      retry: (failureCount, error: unknown) => {
+        // 인증 에러는 재시도하지 않음
+        const err = error as { code?: string; message?: string };
+        if (err?.code === "PGRST301" || err?.message?.includes("JWT")) {
+          return false;
+        }
+        return failureCount < 1;
+      },
       staleTime: 1000 * 60 * 10,
+    },
+    mutations: {
+      retry: (failureCount, error: unknown) => {
+        // 인증 에러는 재시도하지 않음
+        const err = error as { code?: string; message?: string };
+        if (err?.code === "PGRST301" || err?.message?.includes("JWT")) {
+          return false;
+        }
+        return failureCount < 1;
+      },
     },
   },
 });
@@ -59,11 +77,16 @@ export default function RootLayout() {
           value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
         >
           <QueryClientProvider client={queryClient}>
-            <Stack>
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-              <Stack.Screen name="(screens)" options={{ headerShown: false }} />
-              <Stack.Screen name="+not-found" />
-            </Stack>
+            <AuthProvider>
+              <Stack>
+                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                <Stack.Screen
+                  name="(screens)"
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen name="+not-found" />
+              </Stack>
+            </AuthProvider>
           </QueryClientProvider>
         </ThemeProvider>
       </GestureHandlerRootView>
