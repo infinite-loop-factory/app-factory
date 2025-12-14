@@ -1,5 +1,6 @@
 export type CourseRow = {
   id: number;
+  created_at: string;
   start_lat: number;
   start_lng: number;
   end_lat: number;
