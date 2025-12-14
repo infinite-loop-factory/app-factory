@@ -12,3 +12,12 @@ export function formatDistanceKm(distance: number): string {
 
   return rounded.toFixed(1);
 }
+
+/**
+ * 초 단위 시간을 분 단위로 변환
+ * @param time 초 단위 시간
+ * @returns 변환된 분 단위 시간 (number)
+ */
+export function convertSecondsToMinutes(time: number): number {
+  return Math.round(time / 60);
+}
