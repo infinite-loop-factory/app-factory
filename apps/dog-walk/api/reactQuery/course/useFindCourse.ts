@@ -8,7 +8,11 @@ const fetchCourse = async (id: number, userId?: string) => {
 
   const blockedIds = await getBlockedCourseIds(userId);
 
-  let query = supabase.from("walking_courses").select("*").eq("id", id);
+  let query = supabase
+    .from("walking_courses")
+    .select("*")
+    .eq("id", id)
+    .is("deleted_at", null);
 
   if (blockedIds.length > 0) {
     query = query.not("id", "in", `(${blockedIds.join(",")})`);
