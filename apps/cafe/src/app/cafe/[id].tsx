@@ -1,10 +1,11 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { Star } from "lucide-react-native";
+import { Heart, Star } from "lucide-react-native";
 import { useState } from "react";
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { NaverMapView } from "../../components/NaverMapView";
 import { ReviewForm } from "../../components/ReviewForm";
+import { useFavorites } from "../../hooks/use-favorites";
 
 // Mock data for cafe details
 const cafeDetails = {
@@ -105,6 +106,7 @@ export default function CafeDetailScreen() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("메뉴");
   const [showReviewForm, setShowReviewForm] = useState(false);
+  const { isFavorite, toggleFavorite } = useFavorites();
   const [reviews, setReviews] = useState<
     Array<{
       id: string;
@@ -147,6 +149,20 @@ export default function CafeDetailScreen() {
             onPress={() => router.back()}
           >
             <Text className="text-white">←</Text>
+          </TouchableOpacity>
+
+          {/* Favorite button */}
+          <TouchableOpacity
+            className="absolute top-4 right-4 flex h-9 w-9 items-center justify-center rounded-full bg-black/50"
+            onPress={() => {
+              toggleFavorite(cafe.id);
+            }}
+          >
+            <Heart
+              color="#fff"
+              fill={isFavorite(cafe.id) ? "#ef4444" : "transparent"}
+              size={20}
+            />
           </TouchableOpacity>
         </View>
 

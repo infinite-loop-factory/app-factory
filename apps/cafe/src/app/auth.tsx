@@ -17,6 +17,13 @@ export default function AuthCallback() {
       setMessage("코드가 없습니다. 이 탭을 닫아주세요.");
       return;
     }
+
+    // Check if supabase is configured
+    if (!supabase) {
+      setMessage("Supabase가 설정되지 않았습니다. 환경 변수를 확인해주세요.");
+      return;
+    }
+
     (async () => {
       try {
         const { data, error } =

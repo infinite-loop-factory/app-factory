@@ -17,13 +17,6 @@ const supabaseAnonKey = String(
     "",
 );
 
-if (!(supabaseUrl && supabaseAnonKey)) {
-  // Avoid passing empty strings to createClient (causes runtime error)
-  throw new Error(
-    "[Supabase] Missing env. Configure EXPO_PUBLIC_SUPABASE_URL and EXPO_PUBLIC_SUPABASE_ANON_KEY in .env and ensure apps/cafe/app.config.ts injects them into extra. Restart Expo (expo start -c).",
-  );
-}
-
 // SSR-safe in-memory storage (used when window is unavailable on web SSR)
 const memoryStorage = (() => {
   const store = new Map<string, string>();
@@ -66,12 +59,16 @@ if (Platform.OS === "web") {
   storage = AsyncStorage;
 }
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-  auth: {
-    storage,
-    autoRefreshToken: true,
-    persistSession: true,
-    // On web, allow Supabase to parse code from URL. We still keep /auth route for explicit flows.
-    detectSessionInUrl: Platform.OS === "web",
-  },
-});
+// Only create client if we have valid credentials
+export const supabase =
+  supabaseUrl && supabaseAnonKey
+    ? createClient(supabaseUrl, supabaseAnonKey, {
+        auth: {
+          storage,
+          autoRefreshToken: true,
+          persistSession: true,
+          // On web, allow Supabase to parse code from URL. We still keep /auth route for explicit flows.
+          detectSessionInUrl: Platform.OS === "web",
+        },
+      })
+    : null;

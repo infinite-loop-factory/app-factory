@@ -42,6 +42,15 @@ export function SupabaseAuthProvider({
   });
 
   useEffect(() => {
+    // If supabase is not configured, skip auth
+    if (!supabase) {
+      setState({
+        isLoading: false,
+        isSignedIn: false,
+      });
+      return;
+    }
+
     // Restore session on mount
     supabase.auth.getSession().then(({ data }) => {
       const session = data.session;
@@ -71,6 +80,9 @@ export function SupabaseAuthProvider({
   }, []);
 
   const signIn = useCallback(async (email: string, password: string) => {
+    if (!supabase) {
+      return;
+    }
     setState((s) => ({ ...s, isLoading: true }));
     const { error, data } = await supabase.auth.signInWithPassword({
       email,
@@ -89,6 +101,9 @@ export function SupabaseAuthProvider({
   }, []);
 
   const signUp = useCallback(async (email: string, password: string) => {
+    if (!supabase) {
+      return;
+    }
     setState((s) => ({ ...s, isLoading: true }));
     const { error, data } = await supabase.auth.signUp({ email, password });
     if (error) {
@@ -104,6 +119,9 @@ export function SupabaseAuthProvider({
   }, []);
 
   const signOut = useCallback(async () => {
+    if (!supabase) {
+      return;
+    }
     setState((s) => ({ ...s, isLoading: true }));
     const { error } = await supabase.auth.signOut();
     if (error) {

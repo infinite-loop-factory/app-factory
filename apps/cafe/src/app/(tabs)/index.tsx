@@ -10,6 +10,7 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useFavorites } from "../../hooks/use-favorites";
 
 interface RecommendedCafe {
   id: string;
@@ -255,9 +256,9 @@ const RecommendedCafeItem = ({ item }: RecommendedCafeItemProps) => {
     >
       <View className="relative h-32 w-full items-center justify-center overflow-hidden rounded-lg bg-gray-200">
         <Image
-          source={item.image}
           className="h-full w-full"
           resizeMode="center"
+          source={item.image}
         />
         <View className="absolute top-2 right-2 rounded bg-black/60 px-2 py-1">
           <Text className="text-white text-xs">{item.tag}</Text>
@@ -271,7 +272,7 @@ const RecommendedCafeItem = ({ item }: RecommendedCafeItemProps) => {
 
 const CategoryItem = ({ item }: CategoryItemProps) => (
   <TouchableOpacity className="mx-auto flex w-full flex-grow items-center">
-    <Image source={item.icon} className="h-10 w-10" resizeMode="contain" />
+    <Image className="h-10 w-10" resizeMode="contain" source={item.icon} />
     <Text className="mt-2 text-xs">{item.title}</Text>
   </TouchableOpacity>
 );
@@ -284,7 +285,7 @@ const PostItem = ({ item }: PostItemProps) => {
       className="flex-row border-gray-200 border-b p-4"
       onPress={() => router.push(`/cafe/${item.id}`)}
     >
-      <Image source={item.image} className="h-15 w-15 rounded bg-gray-200" />
+      <Image className="h-15 w-15 rounded bg-gray-200" source={item.image} />
       <View className="ml-3 flex-1 flex-row justify-between">
         <View>
           <Text className="mb-1 font-semibold text-base">{item.title}</Text>
@@ -299,8 +300,8 @@ const PostItem = ({ item }: PostItemProps) => {
 
 const TabButton = ({ title, isActive, onPress }: TabButtonProps) => (
   <TouchableOpacity
-    onPress={onPress}
     className={`flex-1 items-center py-3 ${isActive ? "border-black border-b-2" : ""}`}
+    onPress={onPress}
   >
     <Text
       className={`${isActive ? "font-semibold text-black" : "text-gray-400"}`}
@@ -311,7 +312,15 @@ const TabButton = ({ title, isActive, onPress }: TabButtonProps) => (
 );
 
 export default function HomeScreen() {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState("인기 카페");
+  const { favorites } = useFavorites();
+
+  // Filter cafes based on active tab
+  const filteredCafes =
+    activeTab === "즐겨찾기 카페"
+      ? recommendedCafes.filter((cafe) => favorites.includes(cafe.id))
+      : recommendedCafes;
 
   return (
     <SafeAreaView className="flex-1 bg-gray-100" edges={["right", "left"]}>
@@ -324,52 +333,92 @@ export default function HomeScreen() {
 
       <ScrollView showsVerticalScrollIndicator={false}>
         <FlatList
-          data={[...recommendedCafes]}
-          renderItem={({ item }) => <RecommendedCafeItem item={item} />}
-          keyExtractor={(item) => item.id}
-          horizontal
-          showsHorizontalScrollIndicator={false}
           contentContainerStyle={{ paddingLeft: 16, alignItems: "center" }}
+          data={[...recommendedCafes]}
+          horizontal
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => <RecommendedCafeItem item={item} />}
+          showsHorizontalScrollIndicator={false}
         />
 
         <View className="mt-4 px-4">
           <Text className="mb-3 font-bold text-base">카테고리</Text>
           <FlatList
-            data={categories}
-            renderItem={({ item }) => <CategoryItem item={item} />}
-            keyExtractor={(item) => item.id}
-            horizontal
-            showsHorizontalScrollIndicator={false}
             contentContainerStyle={{
               paddingVertical: 8,
               flexGrow: 1,
               justifyContent: "space-between",
             }}
+            data={categories}
+            horizontal
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => <CategoryItem item={item} />}
+            showsHorizontalScrollIndicator={false}
           />
         </View>
 
         <View className="mt-6 flex-row border-gray-200 border-b">
           <TabButton
-            title="인기 카페"
             isActive={activeTab === "인기 카페"}
             onPress={() => setActiveTab("인기 카페")}
+            title="인기 카페"
           />
           <TabButton
-            title="새로운 카페"
             isActive={activeTab === "새로운 카페"}
             onPress={() => setActiveTab("새로운 카페")}
+            title="새로운 카페"
           />
           <TabButton
-            title="가입한 카페"
             isActive={activeTab === "가입한 카페"}
             onPress={() => setActiveTab("가입한 카페")}
+            title="가입한 카페"
+          />
+          <TabButton
+            isActive={activeTab === "즐겨찾기 카페"}
+            onPress={() => setActiveTab("즐겨찾기 카페")}
+            title="즐겨찾기 카페"
           />
         </View>
 
         <View className="mt-4">
-          {posts.map((post) => (
-            <PostItem key={post.id} item={post} />
-          ))}
+          {activeTab === "즐겨찾기 카페" ? (
+            filteredCafes.length > 0 ? (
+              filteredCafes.map((cafe) => (
+                <TouchableOpacity
+                  className="flex-row border-gray-200 border-b p-4"
+                  key={cafe.id}
+                  onPress={() => router.push(`/cafe/${cafe.id}`)}
+                >
+                  <Image
+                    className="h-15 w-15 rounded bg-gray-200"
+                    source={cafe.image}
+                  />
+                  <View className="ml-3 flex-1">
+                    <Text className="mb-1 font-semibold text-base">
+                      {cafe.title}
+                    </Text>
+                    <Text className="mb-1 text-gray-600 text-sm">
+                      {cafe.members}
+                    </Text>
+                    <View className="self-start rounded bg-gray-100 px-2 py-1">
+                      <Text className="text-xs">{cafe.tag}</Text>
+                    </View>
+                  </View>
+                </TouchableOpacity>
+              ))
+            ) : (
+              <View className="items-center justify-center py-12">
+                <Text className="text-base text-gray-500">
+                  즐겨찾기한 카페가 없습니다.
+                </Text>
+                <Text className="mt-2 text-gray-400 text-sm">
+                  마음에 드는 카페를 즐겨찾기에 추가해보세요!
+                </Text>
+              </View>
+            )
+          ) : (
+            posts.map((post) => <PostItem item={post} key={post.id} />)
+          )}
         </View>
         <View className="border-gray-200 border-b p-4">
           <View className="mb-2 flex-row items-center">
