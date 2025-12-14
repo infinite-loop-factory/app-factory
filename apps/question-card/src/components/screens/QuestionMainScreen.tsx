@@ -8,10 +8,14 @@ import type { QuestionMode } from "@/types";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { BannerAdSize } from "react-native-google-mobile-ads";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { BannerAdComponent } from "@/components/ads/BannerAd";
-import { FloatingBackButton, OrangeHeader } from "@/components/ui";
+import { BannerAdComponent, BannerAdSize } from "@/components/ads/BannerAd";
+import {
+  Box,
+  FloatingBackButton,
+  OrangeHeader,
+  Pressable,
+} from "@/components/ui";
 import {
   categories,
   difficulties,
@@ -205,24 +209,21 @@ export default function QuestionMainScreen() {
       </ScrollView>
 
       {/* 하단 광고 영역 */}
-      <View className="border-orange-200 border-t bg-white px-5 py-3">
+      <Box className="border-gray-200 border-t bg-white px-5 py-3">
         <BannerAdComponent size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER} />
-      </View>
+      </Box>
 
       {/* 하단 버튼 */}
-      <View className="border-orange-200 border-t bg-white p-5">
-        <TouchableOpacity
-          activeOpacity={0.8}
-          className="items-center justify-center rounded-lg bg-orange-100 px-6 py-4"
+      <Box className="border-gray-200 border-t bg-white px-5 py-4">
+        <Pressable
+          className="h-12 items-center justify-center rounded-lg bg-orange-500"
           onPress={() => router.push("/difficulty-selection")}
         >
-          <Text
-            className={`font-medium text-base ${themeTailwindClasses.mutedText}`}
-          >
+          <Text className="font-medium text-base text-white">
             설정 다시하기
           </Text>
-        </TouchableOpacity>
-      </View>
+        </Pressable>
+      </Box>
     </SafeAreaView>
   );
 }

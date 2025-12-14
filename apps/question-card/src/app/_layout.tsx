@@ -22,9 +22,8 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import "@/i18n";
 
-import mobileAds from "react-native-google-mobile-ads";
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
-import { logAdEnvironment } from "@/constants/admob";
+import { isExpoGo, logAdEnvironment } from "@/constants/admob";
 import { AppProvider } from "@/context/AppContext";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -45,26 +44,36 @@ export default function RootLayout() {
     }
   }, [loaded]);
 
-  // AdMob SDK 초기화
+  // AdMob SDK 초기화 (Expo Go에서는 스킵)
   useEffect(() => {
-    mobileAds()
-      .initialize()
-      .then(() => {
-        logAdEnvironment();
+    if (isExpoGo) {
+      return;
+    }
 
-        // ⚠️ 테스트용: 항상 테스트 디바이스 설정
-        // EAS Build APK에서도 테스트 광고가 표시되도록 설정
-        mobileAds().setRequestConfiguration({
-          testDeviceIdentifiers: [
-            "EMULATOR", // 에뮬레이터 자동 인식
-            // TODO: 실제 디바이스 ID 추가 (adb logcat | grep "GADMobileAds"에서 확인)
-            // 예: "33BE2250B43518CCDA7DE426D04EE231"
-          ],
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const mobileAds = require("react-native-google-mobile-ads").default;
+      mobileAds()
+        .initialize()
+        .then(() => {
+          logAdEnvironment();
+
+          // ⚠️ 테스트용: 항상 테스트 디바이스 설정
+          // EAS Build APK에서도 테스트 광고가 표시되도록 설정
+          mobileAds().setRequestConfiguration({
+            testDeviceIdentifiers: [
+              "EMULATOR", // 에뮬레이터 자동 인식
+              // TODO: 실제 디바이스 ID 추가 (adb logcat | grep "GADMobileAds"에서 확인)
+              // 예: "33BE2250B43518CCDA7DE426D04EE231"
+            ],
+          });
+        })
+        .catch((error: unknown) => {
+          console.error("[AdMob] Initialization failed:", error);
         });
-      })
-      .catch((error) => {
-        console.error("[AdMob] Initialization failed:", error);
-      });
+    } catch (_error) {
+      // Expo Go에서는 네이티브 모듈 없음 - 정상 동작
+    }
   }, []);
 
   if (!loaded) {

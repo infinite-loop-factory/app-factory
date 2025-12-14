@@ -1,8 +1,8 @@
 # EasyTalking 프로젝트 현황 리포트
 
-**분석 일자**: 2025-10-26
+**분석 일자**: 2025-01-26
 **프로젝트 버전**: 1.0.0
-**현재 Phase**: Phase 3.5 완료
+**현재 Phase**: Phase 4 완료 (AdMob 통합)
 
 ---
 
@@ -22,7 +22,7 @@
 
 ## ✅ 완료된 주요 작업
 
-### 1. 핵심 기능 (Phase 3.5 - 2024.09.21 완료)
+### 1. 핵심 기능 (Phase 3.5 - 2025.01.26 완료)
 - ✅ **6개 화면 완전 구현**
   - CategorySelectionScreen
   - DifficultySelectionScreen
@@ -65,7 +65,25 @@
   - splash.png
   - favicon.png
 
-### 4. 개발 환경 (완료)
+### 4. Google AdMob 통합 (Phase 4 - 2025.01.26 완료)
+- ✅ **AdMob SDK 통합**
+  - react-native-google-mobile-ads v15.8.3
+  - 환경변수 기반 테스트/프로덕션 분리
+  - `.env.development` / `.env.production`
+
+- ✅ **5개 화면 광고 배치 (71% 노출률)**
+  - IndexScreen (Footer)
+  - DifficultySelectionScreen (Footer)
+  - QuestionMainScreen (Footer)
+  - QuestionListScreen (Footer + Inline)
+  - IndividualCardScreen (Footer)
+
+- ✅ **문서화**
+  - ADMOB_GUIDE.md (통합 가이드)
+  - ADMOB_PLACEMENT.md (배치 전략)
+  - ADMOB_STATUS.md (구현 현황)
+
+### 5. 개발 환경 (완료)
 - ✅ **코드 품질 관리**
   - Biome lint 설정
   - TypeScript strict 모드
@@ -94,12 +112,14 @@ apps/question-card/
 │   │   └── individual-card.tsx
 │   ├── components/
 │   │   ├── screens/           # 화면 컴포넌트 (6개)
+│   │   ├── ads/               # AdMob 광고 컴포넌트
 │   │   └── ui/                # 재사용 UI 컴포넌트
 │   ├── context/
 │   │   └── AppContext.tsx     # 전역 상태 관리
 │   ├── types/                 # TypeScript 타입 정의
 │   ├── constants/
-│   │   └── designSystem.ts   # 디자인 토큰
+│   │   ├── designSystem.ts   # 디자인 토큰
+│   │   └── admob.ts          # AdMob 설정 (환경변수 기반)
 │   ├── utils/
 │   │   └── questionModes.ts  # 4가지 모드 알고리즘
 │   └── assets/
@@ -118,19 +138,19 @@ apps/question-card/
 ## 🎯 최근 작업 (커밋 히스토리)
 
 ```
-237b8cf - feat: 🎨 앱 아이콘 이미지 업데이트 (adaptive icon 투명 배경)
-6274f7a - fix: 🐛 순환참조 해결
-6ae91e9 - feat: ✨ IBM Plex Sans KR 폰트 적용
-82d84a0 - docs: 📚️ IBM Plex Sans KR 폰트 적용 계획 수립
-20a2de8 - feat: ✨ EAS Build Android 배포 설정 추가
-7f6bdb4 - docs: 📚️ add EAS Build deployment guide
+26932a5 - docs: 📚️ AdMob 문서 통합 및 환경 설정 정리
+7b9eaff - feat: ✨ Phase 4 - QuestionListScreen 인라인 광고 구현
+c01b958 - feat: ✨ AdMob Phase 2-3 구현
+1d50cb6 - feat: ✨ Phase 1 구현, AdMob 관련 문서 추가
+b5ad6c3 - feat: ✨ Google AdMob 개발 환경 통합
+237b8cf - feat: 🎨 앱 아이콘 이미지 업데이트
 ```
 
 ---
 
 ## 📚 문서 현황
 
-### ✅ 필수 유지 문서 (5개)
+### ✅ 필수 유지 문서 (8개)
 
 1. **eas-build-deployment-guide.md** ⭐ 최신
    - EAS Build Android 배포 완벽 가이드
@@ -152,130 +172,72 @@ apps/question-card/
    - Re-export 패턴 설명
    - 상태: 유효함, 유지
 
-5. **requirements.md** 🔄 업데이트 필요
+5. **requirements.md** ✅ 최신
    - 기능 요구사항 정의
-   - 상태: 진행도 반영 필요
+   - 상태: 완료 항목 체크 반영됨
+
+6. **ADMOB_GUIDE.md** ⭐ 최신
+   - AdMob 통합 가이드 (설치, 설정, 구현)
+   - 환경변수 기반 테스트/프로덕션 분리
+   - 상태: ✅ 완료, 최신 유지
+
+7. **ADMOB_PLACEMENT.md** ⭐ 최신
+   - 화면별 광고 배치 전략
+   - 수익 vs UX 분석
+   - 상태: ✅ 완료, 최신 유지
+
+8. **ADMOB_STATUS.md** ⭐ 최신
+   - AdMob 구현 현황 (Phase 0-4)
+   - 다음 단계 가이드
+   - 상태: ✅ 완료, 최신 유지
 
 ### 🔄 선택적 유지 문서 (2개)
 
-6. **font-implementation-guide.md**
-   - IBM Plex Sans KR 적용 계획
-   - 상태: ✅ 작업 완료 → 아카이브 고려
-
-7. **pr-workflow-guide.md** ✅ 유효
+9. **pr-workflow-guide.md** ✅ 유효
    - PR 작성 및 워크플로우
    - 상태: 유효함, 유지
 
-### 📦 중복/통합 고려 문서 (4개)
-
-8. **biome-lint-guide.md**
-   - Biome lint 트러블슈팅
-   - 중복: `coding-standards.md`와 내용 유사
-   - 제안: `coding-standards.md`에 통합
-
-9. **troubleshooting.md** ✅ 유용
-   - 실제 이슈 해결 사례
-   - 상태: 유용함, 유지 권장
-
-10. **user-flow.md**
-    - 사용자 플로우 설명
-    - 중복: `requirements.md`와 일부 중복
-    - 제안: `requirements.md`에 간단히 통합 또는 유지
-
-11. **wireframes.md**
-    - 화면별 와이어프레임
-    - 상태: 구현 완료로 참고용
-    - 제안: 아카이브 또는 삭제
+10. **troubleshooting.md** ✅ 유용
+    - 실제 이슈 해결 사례
+    - 상태: 유용함, 유지 권장
 
 ---
 
 ## 🎯 남은 작업 (TODO)
 
-### 우선순위 1: 문서 정리
+### 우선순위 1: 실기기 테스트 (즉시 필요)
 
-#### 1.1 requirements.md 업데이트
-**현재 상태**: 대부분 항목이 미완료(☐)로 표시되어 있지만 실제로는 완료됨
-
-**업데이트 필요 항목**:
-```markdown
-### 1. 질문 데이터 관리
-- [x] 120개 질문 구성
-- [x] 카테고리 분류
-- [x] 난이도 분류
-- [x] JSON 구조
-- [x] 메타데이터
-
-### 2. 선택 시스템
-- [x] 카테고리 선택 (완전 구현)
-- [x] 난이도 선택 (완전 구현)
-
-### 3. 질문 진행 모드
-- [x] 모드 1: 전체 랜덤 진행
-- [x] 모드 2: 카테고리별 랜덤 진행
-- [x] 모드 3: 카테고리별 정렬 순서
-- [x] 모드 4: 전체 목록에서 개별 확인
-
-### 4. 카드 UI 시스템
-- [x] 질문 카드 컴포넌트
-- [x] 네비게이션 (이전/다음 버튼, 스와이프)
-- [x] 진행상황 표시
-
-### 5. 화면 구성
-- [x] 6개 화면 모두 구현 완료
+```bash
+eas build -p android --profile preview
+eas build:download -p android
 ```
 
-#### 1.2 문서 통합 및 정리
+**검증 항목**:
+- [ ] 5개 화면 광고 표시 확인
+- [ ] QuestionListScreen 인라인 광고 UX 테스트
+- [ ] 모든 네비게이션 흐름 정상 동작
+- [ ] 앱 시작 시간 <3초, 화면 전환 <1초
 
-**통합 계획**:
-1. `biome-lint-guide.md` → `coding-standards.md`에 통합
-2. `user-flow.md` → `requirements.md`에 간단히 통합 또는 독립 유지
-3. `wireframes.md` → 아카이브 또는 삭제 (구현 완료)
-4. `font-implementation-guide.md` → 아카이브 (작업 완료)
+### 우선순위 2: UX 모니터링 (14일)
 
-**최종 문서 구조** (7개 유지):
-```
-docs/
-├── requirements.md              # 기능 요구사항 (업데이트됨)
-├── design-system-modern-refined.md
-├── coding-standards.md          # Biome lint 가이드 통합
-├── component-architecture.md
-├── eas-build-deployment-guide.md
-├── pr-workflow-guide.md
-└── troubleshooting.md
-```
+**성공 기준**:
+- Day 1 리텐션 ≥ 60%
+- Day 7 리텐션 ≥ 30%
+- 평균 세션 길이 ≥ 3분
 
-### 우선순위 2: CLAUDE.md 업데이트
+### 우선순위 3: 프로덕션 배포 준비
 
-**업데이트 필요 항목**:
-1. 현재 상태를 "Phase 3.5 완료" 반영
-2. IBM Plex Sans KR 폰트 정보 추가
-3. 앱 아이콘 업데이트 내역 반영
-4. EAS Build 배포 완료 상태 명시
+**AdMob 설정**:
+- [ ] AdMob 계정 생성 (https://admob.google.com)
+- [ ] 실제 App ID 및 Ad Unit ID 발급
+- [ ] `.env.production` 실제 IDs 입력
+- [ ] `app.config.ts` 실제 App ID 교체
 
-### 우선순위 3: 기능 개선 (선택사항)
-
-#### _layout.tsx의 주석 처리된 화면 활성화
-**현재** (src/app/_layout.tsx:76-89):
-```tsx
-{/* <Stack.Screen
-  name="question-list"
-  options={{
-    title: "질문 목록",
-    presentation: "card",
-  }}
-/>
-<Stack.Screen
-  name="individual-card"
-  options={{
-    title: "질문 카드",
-    presentation: "card",
-  }}
-/> */}
-```
-
-**제안**:
-- 모드 4가 완전 구현되었으므로 주석 해제 고려
-- 또는 불필요하다면 완전 삭제
+**Play Store 준비**:
+- [ ] Google Play Console 계정 설정
+- [ ] 스크린샷 (최소 2개)
+- [ ] 앱 설명 및 소개
+- [ ] 개인정보 처리방침 URL
 
 ---
 
@@ -318,10 +280,11 @@ docs/
 ## 🎉 프로젝트 성과
 
 ### 완성도
-- ✅ **핵심 기능**: 100% 완료
+- ✅ **핵심 기능**: 100% 완료 (6개 화면, 4가지 모드)
 - ✅ **UI/UX**: Modern Refined Orange v2.0 완전 적용
 - ✅ **배포 준비**: Android APK 빌드 및 테스트 완료
 - ✅ **코드 품질**: Biome lint + TypeScript strict 적용
+- ✅ **수익화**: Google AdMob 통합 (5개 화면, 71% 노출률)
 
 ### 기술 성취
 - ✅ React Native 0.76.9 최신 버전 사용
@@ -329,14 +292,17 @@ docs/
 - ✅ EAS Build 성공적 설정
 - ✅ NativeWind + Gluestack-ui 조화로운 사용
 - ✅ Context API 전역 상태 관리
+- ✅ react-native-google-mobile-ads 통합
+- ✅ 환경변수 기반 테스트/프로덕션 분리
 
 ### 문서화 수준
-- ✅ 상세한 개발 가이드 (11개 문서)
+- ✅ 상세한 개발 가이드 (10개 문서)
 - ✅ 코드 품질 표준 확립
 - ✅ 디자인 시스템 문서화
 - ✅ 배포 가이드 완성
+- ✅ AdMob 통합 가이드 완성
 
 ---
 
 **이 프로젝트는 배포 가능한 MVP 상태입니다.**
-**다음 단계: 문서 정리 → Google Play Store 배포 준비**
+**다음 단계: 실기기 테스트 → Google Play Store 배포 준비**
