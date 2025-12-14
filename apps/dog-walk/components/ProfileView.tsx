@@ -1,14 +1,14 @@
-import { useFindDogs } from "@/api/reactQuery/dogs/useFindDogs";
-import { userAtom } from "@/atoms/userAtom";
 import { router, useFocusEffect } from "expo-router";
 import { useAtomValue } from "jotai/react";
 import { Dog, PlusCircle } from "lucide-react-native";
 import { useCallback, useMemo } from "react";
 import { ScrollView, View } from "react-native";
-import ProfileMenuItem from "./ProfileMenuItem";
-import SectionTitle from "./SectionTitle";
+import { useFindDogs } from "@/api/reactQuery/dogs/useFindDogs";
+import { userAtom } from "@/atoms/userAtom";
 import DogInfoCard from "./card/DogInfoCard";
 import WalkingHistoryCard from "./card/WalikingHistoryCard";
+import ProfileMenuItem from "./ProfileMenuItem";
+import SectionTitle from "./SectionTitle";
 import { Avatar, AvatarImage } from "./ui/avatar";
 import { Button, ButtonIcon, ButtonText } from "./ui/button";
 import { Heading } from "./ui/heading";
@@ -70,7 +70,7 @@ export default function ProfileView() {
           </Avatar>
           <View>
             <Heading className="font-semibold">{userInfo.name}</Heading>
-            <Text size={"sm"} className="text-slate-500">
+            <Text className="text-slate-500" size={"sm"}>
               {userInfo.email}
             </Text>
           </View>
@@ -79,12 +79,12 @@ export default function ProfileView() {
         {(dogsData ?? []).length === 0 && (
           <VStack className="mt-6 gap-4 rounded-xl bg-primary-500/10 p-6">
             <HStack className="items-center justify-between">
-              <Text size={"lg"} className="font-semibold text-500">
+              <Text className="font-semibold text-500" size={"lg"}>
                 반려견 등록
               </Text>
               <Icon as={Dog} className="h-6 w-6 text-primary-500" />
             </HStack>
-            <Text size="sm" className="text-slate-600">
+            <Text className="text-slate-600" size="sm">
               아직 등록된 반려견이 없어요. 반려견을 등록해 보세요!
             </Text>
             <Button
@@ -101,15 +101,15 @@ export default function ProfileView() {
         {(dogsData ?? []).length > 0 && (
           <VStack className="mt-6 gap-4">
             <HStack className="items-center justify-between">
-              <Text size="lg" className="font-semibold">
+              <Text className="font-semibold" size="lg">
                 내 반려견
               </Text>
               <Button
-                variant="outline"
-                size="sm"
                 onPress={() => {
                   router.push("/(screens)/dog/register");
                 }}
+                size="sm"
+                variant="outline"
               >
                 <ButtonIcon as={PlusCircle} />
                 <ButtonText>추가하기</ButtonText>
@@ -118,12 +118,12 @@ export default function ProfileView() {
 
             {dogsData?.map((data) => (
               <DogInfoCard
-                key={data.id}
-                imageUrl={data.image_url}
-                name={data.name}
-                breed={data.breed}
                 birthdate={data.birthdate}
+                breed={data.breed}
                 gender={data.gender}
+                imageUrl={data.image_url}
+                key={data.id}
+                name={data.name}
               />
             ))}
           </VStack>
@@ -140,9 +140,21 @@ export default function ProfileView() {
 
         <SectionTitle title={"활동 내역"}>
           <View className="gap-4">
-            <ProfileMenuItem title="내가 등록한 산책 코스" iconType="MAP" />
-            <ProfileMenuItem title="내가 저장한 산책 코스" iconType="STAR" />
-            <ProfileMenuItem title="설정" iconType="BELL" />
+            <ProfileMenuItem
+              iconType="MAP"
+              onPress={() => {
+                router.push("/(screens)/my/walking-courses");
+              }}
+              title="내가 등록한 산책 코스"
+            />
+            <ProfileMenuItem iconType="STAR" title="내가 저장한 산책 코스" />
+            <ProfileMenuItem
+              iconType="SETTINGS"
+              onPress={() => {
+                router.push("/(screens)/settings");
+              }}
+              title="설정"
+            />
           </View>
         </SectionTitle>
       </View>
