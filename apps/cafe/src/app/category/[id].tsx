@@ -1,6 +1,13 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
-import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import {
+  Image,
+  type ImageSourcePropType,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 // Mock data for categories
@@ -111,8 +118,7 @@ interface ICafe {
   address: string;
   rating: string;
   reviews: string;
-  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-  image: any;
+  image: ImageSourcePropType;
 }
 
 // Cafe item component
@@ -122,9 +128,9 @@ const CafeItem = ({ item, onPress }: { item: ICafe; onPress: () => void }) => (
     onPress={onPress}
   >
     <Image
-      source={item.image}
       className="h-20 w-20 rounded-md bg-gray-200"
       resizeMode="cover"
+      source={item.image}
     />
     <View className="ml-3 flex-1 justify-center">
       <Text className="font-bold text-base">{item.title}</Text>
@@ -165,9 +171,9 @@ export default function CategoryDetailScreen() {
         {/* Header with back button */}
         <View className="relative">
           <Image
-            source={category.image}
             className="h-48 w-full"
             resizeMode="cover"
+            source={category.image}
           />
           <TouchableOpacity
             className="absolute top-4 left-4 flex h-7 w-7 items-center justify-center rounded-full bg-black/50 p-2"
@@ -214,8 +220,8 @@ export default function CategoryDetailScreen() {
           <Text className="mb-4 font-bold text-lg">카페 목록</Text>
           {category.cafes.map((cafe) => (
             <CafeItem
-              key={cafe.id}
               item={cafe}
+              key={cafe.id}
               onPress={() => router.push(`/cafe/${cafe.id}`)}
             />
           ))}
