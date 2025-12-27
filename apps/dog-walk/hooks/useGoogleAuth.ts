@@ -1,6 +1,6 @@
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { useInsertUser } from "@/api/reactQuery/users/useInsertUser";
 import { supabase } from "@/api/supabaseClient";
-import { GoogleSignin } from "@react-native-google-signin/google-signin";
 
 export const useGoogleAuth = () => {
   const { mutateAsync: insertUser } = useInsertUser();

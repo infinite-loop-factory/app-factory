@@ -1,7 +1,7 @@
-import { useColorSchemaStore } from "@/features/shared/store/colorScheme.store";
 import { cn } from "@infinite-loop-factory/common";
 import { Cloud, Moon, Star, Sun } from "lucide-react-native";
 import { Pressable, View } from "react-native";
+import { useColorSchemaStore } from "@/features/shared/store/colorScheme.store";
 
 interface DarkModeToggleProps {
   className?: string;
@@ -13,13 +13,13 @@ export default function DarkModeToggle({ className }: DarkModeToggleProps) {
 
   return (
     <Pressable
-      onPress={toggleColorScheme}
       className={cn(
         `relative h-12 w-24 rounded-full p-2 transition-colors duration-500 ease-in-out ${
           darkMode ? "bg-indigo-900" : "bg-blue-300"
         }`,
         className,
       )}
+      onPress={toggleColorScheme}
     >
       {/* 아이콘 컨테이너 */}
       <View className="absolute inset-0 flex-row items-center justify-between px-2">

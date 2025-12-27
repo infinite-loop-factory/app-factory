@@ -1,0 +1,14 @@
+diff --git a/lib/ToastList.jsx b/lib/ToastList.jsx
+index c73a5258d06eacef7ecb5ab2e5a9ebb1c7cbb33c..fd2e50b3f1c386fa07985a6ef0378b07a345a428 100644
+--- a/lib/ToastList.jsx
++++ b/lib/ToastList.jsx
+@@ -2,7 +2,8 @@
+ import { useKeyboardBottomInset } from '@gluestack-ui/hooks';
+ import { Overlay } from '@gluestack-ui/overlay';
+ import React from 'react';
+-import { Platform, SafeAreaView, View } from 'react-native';
++import { Platform, View } from 'react-native';
++import { SafeAreaView } from 'react-native-safe-area-context';
+ import { OverlayAnimatePresence } from './OverlayAnimatePresence';
+ import { ToastContext } from './ToastContext';
+ const initialAnimationOffset = 24;

@@ -279,10 +279,7 @@ function ensureResolverDeclarations(
           varStatement.getParentIfKind(SyntaxKind.Block);
         if (parent) {
           const statements = parent.getStatements();
-          const insertIndex = Math.max(
-            statements.findIndex((s) => s === varStatement) + 1,
-            0,
-          );
+          const insertIndex = Math.max(statements.indexOf(varStatement) + 1, 0);
           return { parent, insertIndex } as const;
         }
       }

@@ -151,12 +151,16 @@ async function collectChangedFiles(
         baseSha = remoteSha;
       }
       const files = await getChangedFiles(baseSha, localSha);
-      files.forEach((f) => changed.add(f));
+      files.forEach((f) => {
+        changed.add(f);
+      });
     }
   } else {
     const base = await getUpstreamMergeBaseOrRoot();
     const files = await getChangedFiles(base, "HEAD");
-    files.forEach((f) => changed.add(f));
+    files.forEach((f) => {
+      changed.add(f);
+    });
   }
   return changed;
 }
@@ -175,7 +179,9 @@ async function main() {
   if (relevantChanged.length === 0) {
     console.log(chalk.dim("- (none)"));
   } else {
-    relevantChanged.forEach((f) => console.log(chalk.dim(`- ${f}`)));
+    relevantChanged.forEach((f) => {
+      console.log(chalk.dim(`- ${f}`));
+    });
   }
   if (ignoredCount > 0) {
     console.log(
@@ -211,7 +217,9 @@ async function main() {
   }
 
   console.log(chalk.cyan("Running tests for filtered packages:"));
-  targets.forEach((t) => console.log(chalk.dim(`- ${t}`)));
+  targets.forEach((t) => {
+    console.log(chalk.dim(`- ${t}`));
+  });
 
   const args: string[] = [];
   for (const t of targets) {

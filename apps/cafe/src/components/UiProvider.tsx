@@ -1,5 +1,6 @@
-import { useColorSchemaStore } from "@/features/shared/store/colorScheme.store";
 import type { ReactNode } from "react";
+
+import { useColorSchemaStore } from "@/features/shared/store/colorScheme.store";
 import { GluestackUIProvider } from "./ui/gluestack-ui-provider";
 
 export default function UiProvider({ children }: { children: ReactNode }) {

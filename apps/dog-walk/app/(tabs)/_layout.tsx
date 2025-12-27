@@ -1,6 +1,5 @@
 import { Tabs } from "expo-router";
 import { useColorScheme } from "nativewind";
-
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
 import { Colors } from "@/constants/Colors";
 
@@ -20,8 +19,8 @@ export default function TabLayout() {
           title: "홈",
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
-              name={focused ? "home" : "home-outline"}
               color={color}
+              name={focused ? "home" : "home-outline"}
             />
           ),
         }}
@@ -31,7 +30,7 @@ export default function TabLayout() {
         options={{
           title: "검색",
           tabBarIcon: ({ color }) => (
-            <TabBarIcon name={"search"} color={color} />
+            <TabBarIcon color={color} name={"search"} />
           ),
         }}
       />
@@ -39,7 +38,7 @@ export default function TabLayout() {
         name="add"
         options={{
           title: "코스 추가",
-          tabBarIcon: ({ color }) => <TabBarIcon name={"add"} color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon color={color} name={"add"} />,
         }}
       />
       <Tabs.Screen
@@ -47,7 +46,7 @@ export default function TabLayout() {
         options={{
           title: "프로필",
           tabBarIcon: ({ color }) => (
-            <TabBarIcon name={"person"} color={color} />
+            <TabBarIcon color={color} name={"person"} />
           ),
         }}
       />

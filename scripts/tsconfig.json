@@ -1,5 +1,10 @@
 {
   "extends": "@infinite-loop-factory/config-typescript/base.json",
-  "include": ["src"],
+  "compilerOptions": {
+    "types": ["node"],
+    "lib": ["ES2022"],
+    "typeRoots": ["../node_modules/@types", "../node_modules"]
+  },
+  "include": ["*.ts"],
   "exclude": ["node_modules"]
 }

@@ -21,15 +21,15 @@ export default function ProfileMenuItem({
 }: IProfileMenuItemProp) {
   const transIcon = useCallback(() => {
     if (iconType === "MAP") {
-      return <Icon className="h-6 w-6 text-primary-400" as={MapPin} />;
+      return <Icon as={MapPin} className="h-6 w-6 text-primary-400" />;
     }
 
     if (iconType === "STAR") {
-      return <Icon className="h-6 w-6 text-primary-400" as={Star} />;
+      return <Icon as={Star} className="h-6 w-6 text-primary-400" />;
     }
 
     if (iconType === "BELL") {
-      return <Icon className="h-6 w-6 text-primary-400" as={Bell} />;
+      return <Icon as={Bell} className="h-6 w-6 text-primary-400" />;
     }
   }, [iconType]);
 
@@ -41,7 +41,7 @@ export default function ProfileMenuItem({
       <View className="flex flex-row items-center justify-between gap-4">
         {transIcon()}
         <Text className="flex-1">{title}</Text>
-        <Icon className="h-6 w-6 text-slate-400" as={ChevronRight} />
+        <Icon as={ChevronRight} className="h-6 w-6 text-slate-400" />
       </View>
     </TouchableOpacity>
   );

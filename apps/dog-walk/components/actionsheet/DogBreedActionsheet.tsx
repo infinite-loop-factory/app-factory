@@ -1,6 +1,7 @@
-import { dogBreeds } from "@/constants/DogBreeds";
 import type { Option } from "@/types/option";
+
 import { View } from "react-native";
+import { dogBreeds } from "@/constants/DogBreeds";
 import {
   Actionsheet,
   ActionsheetBackdrop,
@@ -57,7 +58,7 @@ export default function DogBreedActionsheet({
           <ActionsheetDragIndicator />
         </ActionsheetDragIndicatorWrapper>
         <View className="w-full border-neutral-200 border-b p-3">
-          <Text size="lg" className="font-semibold">
+          <Text className="font-semibold" size="lg">
             견종 선택
           </Text>
         </View>
@@ -66,8 +67,8 @@ export default function DogBreedActionsheet({
           keyExtractor={(item) => (item as Option).value}
           renderItem={({ item }) => (
             <DogBreedItem
-              label={(item as Option).label}
               isFocused={dogBreed === (item as Option).label}
+              label={(item as Option).label}
             />
           )}
         />
