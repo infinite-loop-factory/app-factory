@@ -1,5 +1,5 @@
-import { calculateAge } from "@/utils/date";
 import { Image } from "react-native";
+import { calculateAge } from "@/utils/date";
 import { HStack } from "../ui/hstack";
 import { Text } from "../ui/text";
 import { VStack } from "../ui/vstack";
@@ -21,7 +21,7 @@ export default function DogInfoCard({
 }: TDogInfoCardProp) {
   return (
     <HStack className="items-center gap-4 rounded-xl border border-slate-200 p-4">
-      <Image src={imageUrl} className="h-14 w-14 rounded-full" />
+      <Image className="h-14 w-14 rounded-full" src={imageUrl} />
       <VStack className="flex-1 gap-1">
         <Text className="font-semibold">{name}</Text>
         <HStack className="gap-1">

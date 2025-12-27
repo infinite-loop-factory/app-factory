@@ -1,5 +1,5 @@
-import { supabase } from "@/api/supabaseClient";
 import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/api/supabaseClient";
 import { queryKeys } from "../queryKeys";
 
 const fetchDogs = async (userId: string) => {

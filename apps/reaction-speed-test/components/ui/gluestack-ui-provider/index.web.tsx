@@ -82,11 +82,11 @@ export function GluestackUIProvider({
   return (
     <>
       <script
-        suppressHydrationWarning
-        // biome-ignore lint/security/noDangerouslySetInnerHtml: gluestack-ui
         dangerouslySetInnerHTML={{
           __html: `(${script.toString()})('${mode}')`,
         }}
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: gluestack-ui
+        suppressHydrationWarning
       />
       <OverlayProvider>
         <ToastProvider>{props.children}</ToastProvider>

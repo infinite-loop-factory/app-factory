@@ -1,8 +1,8 @@
+import type { VariantProps } from "@gluestack-ui/nativewind-utils";
+
 import React from "react";
 // biome-ignore lint/style/useImportType: <explanation>
 import { View, ViewProps } from "react-native";
-
-import type { VariantProps } from "@gluestack-ui/nativewind-utils";
 import { boxStyle } from "./styles";
 
 type IBoxProps = ViewProps &

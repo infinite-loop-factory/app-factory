@@ -35,15 +35,15 @@ export default function DatePicker({ date, setDate }: IDatePickerProps) {
       <HStack className="w-full items-center justify-between rounded-xl bg-slate-50 p-3">
         <HStack className="items-center">
           <Icon as={CalendarIcon} className="h-5 w-5 text-primary-400" />
-          <Text size="md" className="ml-2 text-slate-600">
+          <Text className="ml-2 text-slate-600" size="md">
             {showPicker && Platform.OS === "android" && (
               <RNDateTimePicker
+                display="spinner"
+                is24Hour={true}
+                mode={"date"}
+                onChange={onChangeDatePicker}
                 testID="dateTimePicker"
                 value={date}
-                mode={"date"}
-                is24Hour={true}
-                onChange={onChangeDatePicker}
-                display="spinner"
               />
             )}
             {!showPicker && (
@@ -55,7 +55,7 @@ export default function DatePicker({ date, setDate }: IDatePickerProps) {
             )}
           </Text>
         </HStack>
-        <Text size={"sm"} className="text-slate-400">
+        <Text className="text-slate-400" size={"sm"}>
           선택하기
         </Text>
       </HStack>

@@ -1,7 +1,6 @@
 import type { ListRenderItem } from "react-native";
 import type { CountryItem } from "@/types/country-item";
 
-import { Motion } from "@legendapp/motion";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "expo-router";
 import { useAtomValue } from "jotai";
@@ -59,12 +58,8 @@ export default function HomeScreen() {
     setSearchText(text);
   };
 
-  const renderItem: ListRenderItem<CountryItem> = ({ item, index }) => (
-    <Motion.View
-      animate={{ opacity: 1, y: 0 }}
-      initial={{ opacity: 0, y: 20 }}
-      transition={{ type: "timing", duration: 300, delay: index * 50 }}
-    >
+  const renderItem: ListRenderItem<CountryItem> = ({ item }) => (
+    <View>
       <Box
         className="flex flex-row justify-between p-4 transition-colors duration-200 hover:bg-gray-50"
         style={{ backgroundColor: background }}
@@ -88,7 +83,7 @@ export default function HomeScreen() {
           )}
         </Box>
       </Box>
-    </Motion.View>
+    </View>
   );
 
   return (

@@ -1,6 +1,7 @@
 "use client";
-import { PrimitiveIcon, UIIcon } from "@gluestack-ui/icon";
 import type { VariantProps } from "@gluestack-ui/nativewind-utils";
+
+import { PrimitiveIcon, UIIcon } from "@gluestack-ui/icon";
 import { tva } from "@gluestack-ui/nativewind-utils/tva";
 import {
   useStyleContext,
@@ -103,8 +104,8 @@ const Radio = React.forwardRef<React.ComponentRef<typeof UIRadio>, IRadioProps>(
       <UIRadio
         className={radioStyle({ class: className, size })}
         {...props}
-        ref={ref}
         context={{ size }}
+        ref={ref}
       />
     );
   },

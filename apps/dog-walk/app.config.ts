@@ -14,6 +14,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     resizeMode: "contain",
     backgroundColor: "#ffffff",
   },
+  newArchEnabled: true,
   ios: {
     bundleIdentifier: "com.dog.walk",
     supportsTablet: true,
@@ -26,7 +27,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       backgroundColor: "#ffffff",
     },
     googleServicesFile: "./google-services.json",
-    newArchEnabled: true,
   },
   web: {
     bundler: "metro",
@@ -82,7 +82,12 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     [
       "expo-build-properties",
       {
+        ios: {
+          // newArchEnabled moved to root
+          useFrameworks: "static",
+        },
         android: {
+          // newArchEnabled moved to root
           googleServicesFile: "./google-services.json",
           gradleProperties: {
             "android.useAndroidX": "true",

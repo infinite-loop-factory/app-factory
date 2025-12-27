@@ -46,6 +46,20 @@ config.resolver.unstable_enablePackageExports = false;
 
 config.resolver.unstable_conditionNames = ["require", "default", "browser"];
 
+// Prevent duplicate react-native-svg registration in monorepo
+// Force ALL imports of react-native-svg to resolve to this project's version
+const svgPath = path.resolve(__dirname, "../../node_modules/react-native-svg");
+config.resolver.extraNodeModules = {
+  ...config.resolver.extraNodeModules,
+  "react-native-svg": svgPath,
+};
+config.resolver.blockList = [
+  ...(Array.isArray(config.resolver.blockList)
+    ? config.resolver.blockList
+    : []),
+  /node_modules\/.*\/node_modules\/react-native-svg\/.*/,
+];
+
 module.exports = config;
 
 /**

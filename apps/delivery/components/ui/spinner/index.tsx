@@ -1,4 +1,5 @@
 "use client";
+
 import { tva } from "@gluestack-ui/nativewind-utils/tva";
 import { cssInterop } from "nativewind";
 import React from "react";
@@ -26,12 +27,12 @@ const Spinner = React.forwardRef<
   ) => {
     return (
       <ActivityIndicator
-        ref={ref}
-        focusable={focusable}
         aria-label={ariaLabel}
+        focusable={focusable}
+        ref={ref}
         {...props}
-        color={color}
         className={spinnerStyle({ class: className })}
+        color={color}
       />
     );
   },

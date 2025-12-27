@@ -2,7 +2,6 @@
 import type { VariantProps } from "@gluestack-ui/utils/nativewind-utils";
 
 import { createFab } from "@gluestack-ui/core/fab/creator";
-import { PrimitiveIcon, UIIcon } from "@gluestack-ui/core/icon/creator";
 import {
   tva,
   useStyleContext,
@@ -11,6 +10,7 @@ import {
 import { cssInterop } from "nativewind";
 import React from "react";
 import { Pressable, Text } from "react-native";
+import { PrimitiveIcon, UIIcon } from "@/components/ui/icon";
 import { createVariantResolver } from "@/utils/variant-resolver";
 
 const SCOPE = "FAB";

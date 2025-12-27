@@ -46,7 +46,7 @@
     "autoprefixer": "^10.4.20",
     "postcss-loader": "^8.1.1",
     "react-native-css-interop": "catalog:",
-    "react-native-reanimated": "^3.16.1",
+    "react-native-reanimated": "~4.1.1",
     "storybook": "^8.4.1",
     "type-fest": "catalog:",
     "typescript": "catalog:"

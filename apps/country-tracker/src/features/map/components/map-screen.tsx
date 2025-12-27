@@ -23,6 +23,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { captureRef } from "react-native-view-shot";
 import { ThemedView } from "@/components/themed-view";
 import { Button, ButtonIcon, ButtonText } from "@/components/ui/button";
@@ -48,6 +49,7 @@ const GLOBE_ANIMATION_ZOOM = 15;
 
 export default function MapScreen() {
   const { user } = useAuthUser();
+  const insets = useSafeAreaInsets();
 
   const bottomSheetRef = useRef<BottomSheet>(null);
   const mapGlobeRef = useRef<MapGlobeRef>(null);
@@ -479,7 +481,7 @@ export default function MapScreen() {
 
       <View
         className="absolute right-0 left-0 z-10"
-        style={{ top: 20, paddingHorizontal: 20 }}
+        style={{ top: 20 + insets.top, paddingHorizontal: 20 }}
       >
         <View
           className="flex-row items-center justify-between rounded-full border px-4 py-2"
@@ -528,7 +530,7 @@ export default function MapScreen() {
         <BottomSheetFlatList
           contentContainerStyle={{ paddingHorizontal: 24, paddingBottom: 32 }}
           data={filteredSummaries}
-          keyExtractor={(item) =>
+          keyExtractor={(item: CountryYearSummary) =>
             `${selectedYear}-${item.countryCode || item.country}`
           }
           ListEmptyComponent={renderEmptyState}

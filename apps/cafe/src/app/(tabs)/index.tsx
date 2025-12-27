@@ -381,44 +381,46 @@ export default function HomeScreen() {
         </View>
 
         <View className="mt-4">
-          {activeTab === "즐겨찾기 카페" ? (
-            filteredCafes.length > 0 ? (
-              filteredCafes.map((cafe) => (
-                <TouchableOpacity
-                  className="flex-row border-gray-200 border-b p-4"
-                  key={cafe.id}
-                  onPress={() => router.push(`/cafe/${cafe.id}`)}
-                >
-                  <Image
-                    className="h-15 w-15 rounded bg-gray-200"
-                    source={cafe.image}
-                  />
-                  <View className="ml-3 flex-1">
-                    <Text className="mb-1 font-semibold text-base">
-                      {cafe.title}
-                    </Text>
-                    <Text className="mb-1 text-gray-600 text-sm">
-                      {cafe.members}
-                    </Text>
-                    <View className="self-start rounded bg-gray-100 px-2 py-1">
-                      <Text className="text-xs">{cafe.tag}</Text>
+          {(() => {
+            if (activeTab === "즐겨찾기 카페") {
+              if (filteredCafes.length > 0) {
+                return filteredCafes.map((cafe) => (
+                  <TouchableOpacity
+                    className="flex-row border-gray-200 border-b p-4"
+                    key={cafe.id}
+                    onPress={() => router.push(`/cafe/${cafe.id}`)}
+                  >
+                    <Image
+                      className="h-15 w-15 rounded bg-gray-200"
+                      source={cafe.image}
+                    />
+                    <View className="ml-3 flex-1">
+                      <Text className="mb-1 font-semibold text-base">
+                        {cafe.title}
+                      </Text>
+                      <Text className="mb-1 text-gray-600 text-sm">
+                        {cafe.members}
+                      </Text>
+                      <View className="self-start rounded bg-gray-100 px-2 py-1">
+                        <Text className="text-xs">{cafe.tag}</Text>
+                      </View>
                     </View>
-                  </View>
-                </TouchableOpacity>
-              ))
-            ) : (
-              <View className="items-center justify-center py-12">
-                <Text className="text-base text-gray-500">
-                  즐겨찾기한 카페가 없습니다.
-                </Text>
-                <Text className="mt-2 text-gray-400 text-sm">
-                  마음에 드는 카페를 즐겨찾기에 추가해보세요!
-                </Text>
-              </View>
-            )
-          ) : (
-            posts.map((post) => <PostItem item={post} key={post.id} />)
-          )}
+                  </TouchableOpacity>
+                ));
+              }
+              return (
+                <View className="items-center justify-center py-12">
+                  <Text className="text-base text-gray-500">
+                    즐겨찾기한 카페가 없습니다.
+                  </Text>
+                  <Text className="mt-2 text-gray-400 text-sm">
+                    마음에 드는 카페를 즐겨찾기에 추가해보세요!
+                  </Text>
+                </View>
+              );
+            }
+            return posts.map((post) => <PostItem item={post} key={post.id} />);
+          })()}
         </View>
         <View className="border-gray-200 border-b p-4">
           <View className="mb-2 flex-row items-center">

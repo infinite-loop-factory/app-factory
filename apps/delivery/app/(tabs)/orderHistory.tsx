@@ -1,8 +1,7 @@
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
-
-import OrderArticle from "@/components/order/OrderArticle";
 import { cn } from "@infinite-loop-factory/common";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import OrderArticle from "@/components/order/OrderArticle";
 
 export default function TabTwoScreen() {
   return (
@@ -18,9 +17,9 @@ export default function TabTwoScreen() {
         </View>
 
         <ScrollView
+          className={"border-outline-50 border-b py-[10px]"}
           horizontal
           showsHorizontalScrollIndicator={false}
-          className={"border-outline-50 border-b py-[10px]"}
         >
           <View
             className={
@@ -63,11 +62,11 @@ export default function TabTwoScreen() {
             {[...Array(10)].map((_d, i) => {
               return (
                 <View
-                  key={String(i)}
                   className={cn(
                     "border-outline-50 border-b last:border-b-0",
                     "mb-1 py-4 last:py-0",
                   )}
+                  key={String(i)}
                 >
                   <OrderArticle />
                 </View>

@@ -1,7 +1,7 @@
-import ShoppingImage from "@/components/shopping/shopping.image";
-import { HStack } from "@/components/ui/hstack";
 import { CircleDollarSign, Info, Star } from "lucide-react-native";
 import { ScrollView, Text, View } from "react-native";
+import ShoppingImage from "@/components/shopping/shopping.image";
+import { HStack } from "@/components/ui/hstack";
 
 export default function ShoppingArticle() {
   return (
@@ -22,7 +22,7 @@ export default function ShoppingArticle() {
           <View className={"flex flex-row gap-2"}>
             <Text className={"body-4"}>갈비후라이의꿈</Text>
             <View className={"flex flex-row gap-1"}>
-              <Star width={14} color={"yellow"} fill={"yellow"} />
+              <Star color={"yellow"} fill={"yellow"} width={14} />
               <Text className={"body-4"}>4.9</Text>
             </View>
           </View>
@@ -34,7 +34,7 @@ export default function ShoppingArticle() {
 
         <View className={"flex flex-row gap-2"}>
           <View className={"flex flex-row gap-1"}>
-            <CircleDollarSign width={14} color={"white"} fill={"blue"} />
+            <CircleDollarSign color={"white"} fill={"blue"} width={14} />
             <Text className={"label-6"}>30~45분</Text>
           </View>
           <Text className={"label-6 text-nowrap"}>배달팁 1,440~2,940</Text>

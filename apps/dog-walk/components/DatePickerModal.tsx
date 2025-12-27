@@ -47,34 +47,34 @@ export default function DatePickerModal({
       <ModalBackdrop />
       <ModalContent>
         <ModalHeader>
-          <Heading size="md" className="text-typography-950">
+          <Heading className="text-typography-950" size="md">
             날짜 선택
           </Heading>
           <ModalCloseButton>
             <Icon
               as={CloseIcon}
-              size="md"
               className="stroke-background-400 group-[:active]/modal-close-button:stroke-background-900 group-[:focus-visible]/modal-close-button:stroke-background-900 group-[:hover]/modal-close-button:stroke-background-700"
+              size="md"
             />
           </ModalCloseButton>
         </ModalHeader>
         <ModalBody>
           <RNDateTimePicker
+            display="spinner"
+            is24Hour={true}
+            mode={"date"}
+            onChange={onChange}
             testID="dateTimePicker"
             value={date}
-            mode={"date"}
-            is24Hour={true}
-            onChange={onChange}
-            display="spinner"
           />
         </ModalBody>
         <ModalFooter>
           <Button
-            variant="outline"
             action="secondary"
             onPress={() => {
               setShowModal(false);
             }}
+            variant="outline"
           >
             <ButtonText>취소</ButtonText>
           </Button>

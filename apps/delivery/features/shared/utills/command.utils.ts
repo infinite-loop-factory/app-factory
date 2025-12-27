@@ -1,5 +1,6 @@
-import { execSync } from "node:child_process";
 import type { ExecSyncOptionsWithBufferEncoding } from "node:child_process";
+
+import { execSync } from "node:child_process";
 
 export const runCommand = (
   command: string,

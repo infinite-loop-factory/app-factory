@@ -1,5 +1,6 @@
 "use client";
 import type { VariantProps } from "@gluestack-ui/nativewind-utils";
+
 import { tva } from "@gluestack-ui/nativewind-utils/tva";
 import {
   useStyleContext,
@@ -158,9 +159,9 @@ const Toast = React.forwardRef<React.ElementRef<typeof Root>, IToastProps>(
   ({ className, variant = "solid", action = "muted", ...props }, ref) => {
     return (
       <Root
-        ref={ref}
         className={toastStyle({ variant, action, class: className })}
         context={{ variant, action }}
+        ref={ref}
         {...props}
       />
     );
@@ -186,10 +187,8 @@ const ToastTitle = React.forwardRef<
   return (
     <Text
       {...props}
-      ref={ref}
-      aria-live="assertive"
       aria-atomic="true"
-      role="alert"
+      aria-live="assertive"
       className={toastTitleStyle({
         size,
         class: className,
@@ -198,6 +197,8 @@ const ToastTitle = React.forwardRef<
           action: parentAction,
         },
       })}
+      ref={ref}
+      role="alert"
     >
       {children}
     </Text>

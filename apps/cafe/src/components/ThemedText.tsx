@@ -1,7 +1,8 @@
-import { useThemeColor } from "@/hooks/useThemeColor";
-import clsx from "clsx";
 import type { TextProps } from "react-native";
+
+import clsx from "clsx";
 import { Text } from "react-native";
+import { useThemeColor } from "@/hooks/useThemeColor";
 
 export type ThemedTextProps = TextProps & {
   lightColor?: string;
@@ -20,7 +21,6 @@ export function ThemedText({
 
   return (
     <Text
-      style={[{ color }, style]}
       className={clsx({
         "text-base leading-6": type === "default",
         "font-bold text-4xl leading-8": type === "title",
@@ -28,6 +28,7 @@ export function ThemedText({
         "font-bold text-xl": type === "subtitle",
         "text-[#0a7ea4] text-base leading-7": type === "link",
       })}
+      style={[{ color }, style]}
       {...rest}
     />
   );

@@ -1,8 +1,9 @@
+import type { ReactNode } from "react";
+import type { ViewProps } from "react-native";
+
 import { OverlayProvider } from "@gluestack-ui/overlay";
 import { ToastProvider } from "@gluestack-ui/toast";
 import { colorScheme as colorSchemeNW } from "nativewind";
-import type { ReactNode } from "react";
-import type { ViewProps } from "react-native";
 import { View } from "react-native";
 import { config } from "./config";
 

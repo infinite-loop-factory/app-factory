@@ -5,8 +5,6 @@ import {
   DefaultTheme,
   ThemeProvider,
 } from "@react-navigation/native";
-import * as Sentry from "@sentry/react-native";
-import { isRunningInExpoGo } from "expo";
 import { useFonts } from "expo-font";
 import { Slot, useNavigationContainerRef } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
@@ -20,7 +18,6 @@ import "react-native-reanimated";
 import { themeAtom } from "@/atoms/theme.atom";
 import { ErrorBoundary } from "@/components/error-boundary";
 import WebviewLayout from "@/components/web-view-layout";
-import { env } from "@/constants/env";
 import "@/features/location/location-task";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -33,7 +30,8 @@ import { useToast } from "@/components/ui/toast";
 import { startLocationTask } from "@/features/location/location-permission";
 import { flushLocationQueueIfAny } from "@/features/location/location-task";
 
-const navigationIntegration = Sentry.reactNavigationIntegration({
+const navigationIntegration = null;
+/* Sentry.reactNavigationIntegration({
   enableTimeToInitialDisplay: !isRunningInExpoGo(),
 });
 
@@ -42,7 +40,7 @@ Sentry.init({
   tracesSampleRate: 1.0,
   integrations: [navigationIntegration],
   enableNativeFramesTracking: !isRunningInExpoGo(),
-});
+}); */
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -70,8 +68,8 @@ function RootLayout() {
   const toast = useToast();
 
   useEffect(() => {
-    if (navigationRef) {
-      navigationIntegration.registerNavigationContainer(navigationRef);
+    if (navigationRef && navigationIntegration) {
+      // navigationIntegration.registerNavigationContainer(navigationRef);
     }
   }, [navigationRef]);
 
@@ -100,9 +98,9 @@ function RootLayout() {
     const connected =
       Boolean(net.isConnected) && net.isInternetReachable !== false;
     if (connected && !wasConnectedRef.current) {
-      flushLocationQueueIfAny().catch((e) =>
-        Sentry.captureMessage(`queue flush on reconnect failed: ${String(e)}`),
-      );
+      flushLocationQueueIfAny().catch((_e) => {
+        /* ignore error */
+      });
     }
     wasConnectedRef.current = connected;
   }, [net.isConnected, net.isInternetReachable]);
@@ -134,4 +132,4 @@ function RootLayout() {
   );
 }
 
-export default Sentry.wrap(RootLayout);
+export default RootLayout; // Sentry.wrap(RootLayout);

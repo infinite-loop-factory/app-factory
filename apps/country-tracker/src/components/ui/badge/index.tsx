@@ -1,7 +1,6 @@
 "use client";
 import type { VariantProps } from "@gluestack-ui/utils/nativewind-utils";
 
-import { PrimitiveIcon, UIIcon } from "@gluestack-ui/core/icon/creator";
 import {
   tva,
   useStyleContext,
@@ -10,6 +9,7 @@ import {
 import { cssInterop } from "nativewind";
 import React from "react";
 import { Text, View } from "react-native";
+import { PrimitiveIcon, UIIcon } from "@/components/ui/icon";
 import { createVariantResolver } from "@/utils/variant-resolver";
 
 const SCOPE = "BADGE";
@@ -193,10 +193,8 @@ const BadgeIcon = React.forwardRef<
         width={width}
       />
     );
-  } else if (
-    (height !== undefined || width !== undefined) &&
-    sizeProp === undefined
-  ) {
+  }
+  if ((height !== undefined || width !== undefined) && sizeProp === undefined) {
     return (
       <UIIcon
         ref={ref}
