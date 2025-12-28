@@ -1,12 +1,11 @@
 import { router, useFocusEffect } from "expo-router";
 import { useAtomValue } from "jotai/react";
 import { Dog, PlusCircle } from "lucide-react-native";
-import { useCallback, useMemo } from "react";
+import { useCallback } from "react";
 import { ScrollView, View } from "react-native";
 import { useFindDogs } from "@/api/reactQuery/dogs/useFindDogs";
 import { userAtom } from "@/atoms/userAtom";
 import DogInfoCard from "./card/DogInfoCard";
-import WalkingHistoryCard from "./card/WalikingHistoryCard";
 import ProfileMenuItem from "./ProfileMenuItem";
 import SectionTitle from "./SectionTitle";
 import { Avatar, AvatarImage } from "./ui/avatar";
@@ -21,32 +20,6 @@ export default function ProfileView() {
   const userInfo = useAtomValue(userAtom);
 
   const { data: dogsData, refetch: refetchDogsData } = useFindDogs(userInfo.id);
-
-  const latestWalking = useMemo(() => {
-    return [
-      {
-        id: "1",
-        image: require("../assets/images/walking-main-1.png"),
-        address: "몽마르뜨 공원 (서초구)",
-        distance: 2,
-        duration: 60,
-      },
-      {
-        id: "2",
-        image: require("../assets/images/walking-main-2.png"),
-        address: "하늘공원 메타세콰이어길 (마포구)",
-        distance: 0.9,
-        duration: 21,
-      },
-      {
-        id: "3",
-        image: require("../assets/images/walking-main-3.png"),
-        address: "경춘선 숲길 (노원구)",
-        distance: 6.3,
-        duration: 120,
-      },
-    ];
-  }, []);
 
   useFocusEffect(
     useCallback(() => {
@@ -130,13 +103,6 @@ export default function ProfileView() {
         )}
 
         {/* NOTE: <== 강아지 프로필 */}
-        <SectionTitle title={"최근 산책"}>
-          <View className="gap-4">
-            {latestWalking.map((data) => (
-              <WalkingHistoryCard item={data} key={data.id} />
-            ))}
-          </View>
-        </SectionTitle>
 
         <SectionTitle title={"활동 내역"}>
           <View className="gap-4">
@@ -147,7 +113,13 @@ export default function ProfileView() {
               }}
               title="내가 등록한 산책 코스"
             />
-            <ProfileMenuItem iconType="STAR" title="내가 저장한 산책 코스" />
+            <ProfileMenuItem
+              iconType="STAR"
+              onPress={() => {
+                router.push("/(screens)/like/walking-courses");
+              }}
+              title="내가 찜한 산책 코스"
+            />
             <ProfileMenuItem
               iconType="SETTINGS"
               onPress={() => {
