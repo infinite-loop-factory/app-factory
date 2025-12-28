@@ -20,4 +20,8 @@ export const queryKeys = {
     hasUserReviewed: "user-review",
     findCourseReviewsInfinite: "course-reviews-infinite",
   },
+  likes: {
+    findLikedCourse: "liked-course",
+    findLikedCoursesInfinite: "liked-courses-infinite",
+  },
 };
