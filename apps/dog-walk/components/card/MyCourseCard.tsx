@@ -12,7 +12,7 @@ import { convertSecondsToMinutes, formatDistanceKm } from "@/utils/number";
 
 interface MyCourseCardProps {
   item: CourseRow;
-  onPressOptions: () => void;
+  onPressOptions?: () => void;
 }
 
 export default function MyCourseCard({
@@ -44,9 +44,11 @@ export default function MyCourseCard({
             >
               {item.start_name} 출발
             </Text>
-            <TouchableOpacity onPress={onPressOptions}>
-              <Icon as={MoreVertical} className="h-4 w-4 text-slate-400" />
-            </TouchableOpacity>
+            {onPressOptions && (
+              <TouchableOpacity onPress={onPressOptions}>
+                <Icon as={MoreVertical} className="h-4 w-4 text-slate-400" />
+              </TouchableOpacity>
+            )}
           </HStack>
 
           <HStack className={hstackItemsClass}>
@@ -67,9 +69,11 @@ export default function MyCourseCard({
             </Text>
           </HStack>
 
-          <Text className={textSecondaryClass} size="sm">
-            {dayjs(item.created_at).format("YYYY-MM-DD HH:mm")}
-          </Text>
+          {onPressOptions && (
+            <Text className={textSecondaryClass} size="sm">
+              {dayjs(item.created_at).format("YYYY-MM-DD HH:mm")}
+            </Text>
+          )}
         </VStack>
       </HStack>
     </Pressable>
