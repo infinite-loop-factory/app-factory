@@ -1,14 +1,14 @@
 import type { ReactNode } from "react";
 
-import * as Sentry from "@sentry/react-native";
+// import * as Sentry from "@sentry/react-native";
 import { ErrorFallback } from "@/components/error-fallback";
 
 interface ErrorBoundaryProps {
   readonly children: ReactNode;
-  readonly fallback?: ReactNode;
+  readonly _fallback?: ReactNode;
 }
 
-function createFallbackComponent(fallback: ReactNode | undefined) {
+function _createFallbackComponent(fallback: ReactNode | undefined) {
   if (fallback) {
     return () => <>{fallback}</>;
   }
@@ -25,15 +25,6 @@ function createFallbackComponent(fallback: ReactNode | undefined) {
  *
  * @see https://docs.sentry.io/platforms/react-native/user-guide/react-integration/
  */
-export function ErrorBoundary({ children, fallback }: ErrorBoundaryProps) {
-  return (
-    <Sentry.ErrorBoundary
-      beforeCapture={(scope) => {
-        scope.setTag("error_boundary", "root");
-      }}
-      fallback={createFallbackComponent(fallback)}
-    >
-      {children}
-    </Sentry.ErrorBoundary>
-  );
+export function ErrorBoundary({ children, _fallback }: ErrorBoundaryProps) {
+  return <>{children}</>;
 }

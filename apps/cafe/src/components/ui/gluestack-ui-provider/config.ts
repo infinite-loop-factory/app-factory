@@ -1,8 +1,8 @@
 "use client";
 
+import { vars } from "nativewind";
 import { darkSchema } from "@/components/ui/design-token/dark.schema";
 import { lightSchema } from "@/components/ui/design-token/light.schema";
-import { vars } from "nativewind";
 
 export const config = {
   light: vars(rgbCovertNumber(lightSchema.token)),

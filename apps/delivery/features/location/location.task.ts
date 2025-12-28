@@ -1,9 +1,9 @@
-import { useOrderStore } from "@/features/order/store/order.store";
-import { supabase } from "@/supabase/utils/supabase";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { isEmpty } from "es-toolkit/compat";
 import * as Location from "expo-location";
 import * as TaskManager from "expo-task-manager";
+import { useOrderStore } from "@/features/order/store/order.store";
+import { supabase } from "@/supabase/utils/supabase";
 
 const LOCATION_TASK_NAME = "background-location-task";
 

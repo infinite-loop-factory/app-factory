@@ -2,7 +2,6 @@
 import type { VariantProps } from "tailwind-variants";
 
 import { createButton } from "@gluestack-ui/core/button/creator";
-import { PrimitiveIcon, UIIcon } from "@gluestack-ui/core/icon/creator";
 import {
   tva,
   useStyleContext,
@@ -11,6 +10,7 @@ import {
 import { cssInterop } from "nativewind";
 import React from "react";
 import { ActivityIndicator, Pressable, Text, View } from "react-native";
+import { PrimitiveIcon, UIIcon } from "@/components/ui/icon";
 import { createVariantResolver } from "@/utils/variant-resolver";
 
 const SCOPE = "BUTTON";

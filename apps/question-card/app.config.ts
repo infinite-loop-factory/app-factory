@@ -22,6 +22,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   ios: {
     supportsTablet: true,
+    bundleIdentifier: "com.infiniteloop.easytalking",
   },
   android: {
     package: "com.infiniteloop.easytalking",

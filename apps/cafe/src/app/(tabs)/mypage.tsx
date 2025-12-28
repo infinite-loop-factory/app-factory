@@ -512,7 +512,7 @@ const FavoritesModal = ({
                       style={{ backgroundColor: "#f3f4f6" }}
                     />
                     <ThemedView
-                      className="-top-2 -left-2 absolute h-6 w-6 items-center justify-center rounded-full"
+                      className="absolute -top-2 -left-2 h-6 w-6 items-center justify-center rounded-full"
                       style={{ backgroundColor: "#fbbf24" }}
                     >
                       <ThemedText className="font-bold text-white text-xs">

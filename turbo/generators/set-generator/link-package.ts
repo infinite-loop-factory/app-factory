@@ -1,7 +1,8 @@
-import { execSync } from "node:child_process";
-import { readFile, readdir, stat, writeFile } from "node:fs/promises";
-import { join } from "node:path";
 import type { PlopTypes } from "@turbo/gen";
+
+import { execSync } from "node:child_process";
+import { readdir, readFile, stat, writeFile } from "node:fs/promises";
+import { join } from "node:path";
 
 export default function linkPackageToApps(plop: PlopTypes.NodePlopAPI) {
   // 패키지 또는 앱 디렉토리 경로 반환

@@ -2,7 +2,6 @@
 
 import type { VariantProps } from "@gluestack-ui/utils/nativewind-utils";
 
-import { PrimitiveIcon, UIIcon } from "@gluestack-ui/core/icon/creator";
 import { createSelect } from "@gluestack-ui/core/select/creator";
 import {
   tva,
@@ -12,6 +11,7 @@ import {
 import { cssInterop } from "nativewind";
 import React from "react";
 import { Pressable, TextInput, View } from "react-native";
+import { PrimitiveIcon, UIIcon } from "@/components/ui/icon";
 import { createVariantResolver } from "@/utils/variant-resolver";
 import {
   Actionsheet,

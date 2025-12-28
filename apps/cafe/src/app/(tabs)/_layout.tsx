@@ -1,6 +1,5 @@
 import { Tabs } from "expo-router";
 import { useColorScheme } from "nativewind";
-
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
 import { COLORS } from "@/constants/colors";
 import i18n from "@/i18n";
@@ -21,8 +20,8 @@ export default function TabLayout() {
           title: i18n.t("home"),
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
-              name={focused ? "home" : "home-outline"}
               color={color}
+              name={focused ? "home" : "home-outline"}
             />
           ),
         }}
@@ -34,8 +33,8 @@ export default function TabLayout() {
           title: "마이페이지",
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
-              name={focused ? "person" : "person-outline"}
               color={color}
+              name={focused ? "person" : "person-outline"}
             />
           ),
         }}
@@ -47,8 +46,8 @@ export default function TabLayout() {
           title: "카테고리",
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
-              name={focused ? "grid" : "grid-outline"}
               color={color}
+              name={focused ? "grid" : "grid-outline"}
             />
           ),
         }}

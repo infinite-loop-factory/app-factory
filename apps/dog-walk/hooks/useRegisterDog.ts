@@ -1,9 +1,10 @@
+import type * as ImagePicker from "expo-image-picker";
+
+import { decode } from "base64-arraybuffer";
+import { router } from "expo-router";
 import { useInsertDog } from "@/api/reactQuery/dogs/useInsertDog";
 import { supabase } from "@/api/supabaseClient";
 import { getGlobalHandleToast } from "@/components/CustomToast";
-import { decode } from "base64-arraybuffer";
-import type * as ImagePicker from "expo-image-picker";
-import { router } from "expo-router";
 
 export function useRegisterDog() {
   const { mutateAsync: insertDog } = useInsertDog();

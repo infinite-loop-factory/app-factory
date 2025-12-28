@@ -1,7 +1,7 @@
-import { useColorToken } from "@/features/shared/hooks/useThemeColor";
 import { Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 import { Text, View } from "react-native";
+import { useColorToken } from "@/features/shared/hooks/useThemeColor";
 
 type TabScreensType = {
   name: string;
@@ -50,7 +50,7 @@ export default function TabLayout() {
             title,
             tabBarIcon: ({ color }) => (
               <View className={"mt-[-5px] flex items-center justify-center"}>
-                <Ionicons name={icon} size={24} color={color} />
+                <Ionicons color={color} name={icon} size={24} />
                 <Text
                   className={
                     "flex items-center justify-center whitespace-nowrap text-center font-bold text-[12px] text-gray-400"

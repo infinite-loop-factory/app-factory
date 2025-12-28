@@ -1,8 +1,9 @@
+import type { Control, FieldErrors, FieldValues, Path } from "react-hook-form";
+
+import { Controller } from "react-hook-form";
 import { Box } from "@/components/ui/box";
 import { Input, InputField } from "@/components/ui/input";
 import { Text } from "@/components/ui/text";
-import { Controller } from "react-hook-form";
-import type { Control, FieldErrors, FieldValues, Path } from "react-hook-form";
 
 type useFormInputProps<T extends FieldValues> = {
   control: Control<T>;
@@ -23,7 +24,7 @@ export function FormInput<T extends FieldValues>({
 }: useFormInputProps<T> & FormInputProps<T>) {
   return (
     <Box>
-      <Text size={"md"} bold={true}>
+      <Text bold={true} size={"md"}>
         {label}
       </Text>
 
@@ -35,14 +36,14 @@ export function FormInput<T extends FieldValues>({
         render={({ field: { onChange, value } }) => (
           <Input>
             <InputField
+              onChangeText={onChange}
               type={name === "password" ? "password" : type}
               value={value ?? ""}
-              onChangeText={onChange}
             />
           </Input>
         )}
       />
-      <Text size={"md"} className={"text-error-500"}>
+      <Text className={"text-error-500"} size={"md"}>
         {(errors?.[name]?.message as string) ?? ""}
       </Text>
     </Box>

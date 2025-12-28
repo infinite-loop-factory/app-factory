@@ -1,7 +1,8 @@
-import { H1, H2, H3, H4, H5, H6 } from "@expo/html-elements";
 import type { VariantProps } from "@gluestack-ui/nativewind-utils";
-import { cssInterop } from "nativewind";
 import type React from "react";
+
+import { H1, H2, H3, H4, H5, H6 } from "@expo/html-elements";
+import { cssInterop } from "nativewind";
 import { forwardRef, memo } from "react";
 import { headingStyle } from "./styles";
 
@@ -211,7 +212,7 @@ const Heading = memo(
     }
 
     return (
-      <MappedHeading className={className} size={size} ref={ref} {...props} />
+      <MappedHeading className={className} ref={ref} size={size} {...props} />
     );
   }),
 );

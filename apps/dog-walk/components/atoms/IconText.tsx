@@ -1,6 +1,6 @@
-import { IconTextType } from "@/types/displayType";
 import { Clock, MapPin, Star } from "lucide-react-native";
 import { useCallback } from "react";
+import { IconTextType } from "@/types/displayType";
 import { HStack } from "../ui/hstack";
 import { Icon } from "../ui/icon";
 import { Text } from "../ui/text";
@@ -25,7 +25,7 @@ export default function IconText({ type, content }: IIconTextProps) {
   return (
     <HStack className="items-center gap-1">
       <Icon as={renderIcon()} className="h-4 w-4 text-primary-500" />
-      <Text size={"sm"} className="text-slate-500">
+      <Text className="text-slate-500" size={"sm"}>
         {content}
       </Text>
     </HStack>

@@ -1,6 +1,6 @@
 import type { UserConfig } from "@commitlint/types";
 
-import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { parse } from "yaml";
 

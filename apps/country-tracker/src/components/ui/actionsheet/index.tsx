@@ -3,7 +3,6 @@ import type { VariantProps } from "@gluestack-ui/utils/nativewind-utils";
 
 import { H4 } from "@expo/html-elements";
 import { createActionsheet } from "@gluestack-ui/core/actionsheet/creator";
-import { PrimitiveIcon, UIIcon } from "@gluestack-ui/core/icon/creator";
 import { tva } from "@gluestack-ui/utils/nativewind-utils";
 import {
   AnimatePresence,
@@ -24,6 +23,7 @@ import {
   ViewStyle,
   VirtualizedList,
 } from "react-native";
+import { PrimitiveIcon, UIIcon } from "@/components/ui/icon";
 import { createVariantResolver } from "@/utils/variant-resolver";
 
 const ItemWrapper = React.forwardRef<

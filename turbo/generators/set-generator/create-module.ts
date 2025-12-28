@@ -1,9 +1,10 @@
+import type { PlopTypes } from "@turbo/gen";
+import type { PackageJson } from "type-fest";
+
 import { execSync } from "node:child_process";
 import { access, readdir, rename } from "node:fs/promises";
 import { join, resolve } from "node:path";
-import type { PlopTypes } from "@turbo/gen";
 import { kebabCase } from "es-toolkit/string";
-import type { PackageJson } from "type-fest";
 
 export default function createModule(plop: PlopTypes.NodePlopAPI) {
   const getTemplates = async () => {

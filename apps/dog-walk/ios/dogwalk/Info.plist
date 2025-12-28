@@ -34,7 +34,7 @@
       <dict>
         <key>CFBundleURLSchemes</key>
         <array>
-          <string>com.googleusercontent.apps.879670825164-7iisu8g9t6l97pje8qkaakoh2btj418b</string>
+          <string>com.googleusercontent.apps.dummy-client-id</string>
         </array>
       </dict>
       <dict>
@@ -46,7 +46,7 @@
       <dict>
         <key>CFBundleURLSchemes</key>
         <array>
-          <string>com.googleusercontent.apps.879670825164-7iisu8g9t6l97pje8qkaakoh2btj418b.apps.googleusercontent.com</string>
+          <string>com.googleusercontent.apps.undefined</string>
         </array>
       </dict>
     </array>
@@ -68,7 +68,12 @@
     <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
     <string>Allow '산책 with 댕댕' to use your location.</string>
     <key>NSLocationAlwaysUsageDescription</key>
-    <string>Allow $(PRODUCT_NAME) to access your location</string>
+    <string>앱 사용 중 현재 위치를 기반으로 맞춤형 정보를 제공하기 위해 위치 접근이 필요합니다.</string>
+    <key>NSLocationTemporaryUsageDescriptionDictionary</key>
+    <dict>
+      <key>dog-walk</key>
+      <string>주변에 있는 산책 코스 추천을 위해 현재 위치 정보가 필요합니다.</string>
+    </dict>
     <key>NSLocationWhenInUseUsageDescription</key>
     <string>Allow $(PRODUCT_NAME) to access your location</string>
     <key>NSMicrophoneUsageDescription</key>
@@ -79,6 +84,8 @@
     <array>
       <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
     </array>
+    <key>RCTNewArchEnabled</key>
+    <true/>
     <key>UILaunchStoryboardName</key>
     <string>SplashScreen</string>
     <key>UIRequiredDeviceCapabilities</key>

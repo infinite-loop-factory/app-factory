@@ -12,28 +12,41 @@
   },
   "devDependencies": {
     "@biomejs/biome": "catalog:",
-    "@commitlint/cli": "^20.1.0",
-    "@commitlint/config-conventional": "^20.0.0",
-    "@commitlint/types": "^20.0.0",
+    "@commitlint/cli": "^20.2.0",
+    "@commitlint/config-conventional": "^20.2.0",
+    "@commitlint/types": "^20.2.0",
     "@infinite-loop-factory/config-typescript": "workspace:^",
     "@turbo/gen": "^2.5.8",
+    "@types/node": "^24",
     "chalk": "^5.6.2",
     "devmoji": "^2.3.0",
     "es-toolkit": "catalog:",
     "husky": "^9.1.7",
-    "inquirer": "^12.9.6",
-    "lint-staged": "^16.2.4",
-    "sort-package-json": "^3.4.0",
-    "ts-morph": "^27.0.0",
-    "tsx": "^4.20.6",
-    "turbo": "^2.5.8",
+    "inquirer": "^13.1.0",
+    "lint-staged": "^16.2.7",
+    "sort-package-json": "^3.6.0",
+    "ts-morph": "^27.0.2",
+    "tsx": "^4.21.0",
+    "turbo": "^2.7.2",
     "type-fest": "catalog:",
     "typescript": "catalog:",
-    "yaml": "^2.8.1"
+    "yaml": "^2.8.2"
   },
   "packageManager": "pnpm@10.12.1",
   "engines": {
-    "node": ">=22",
+    "node": ">=24",
     "pnpm": ">=10"
+  },
+  "pnpm": {
+    "peerDependencyRules": {
+      "allowedVersions": {
+        "react": "19.x",
+        "react-dom": "19.x",
+        "react-native-safe-area-context": "5.x"
+      }
+    },
+    "patchedDependencies": {
+      "@gluestack-ui/toast": "patches/@gluestack-ui__toast.patch"
+    }
   }
 }

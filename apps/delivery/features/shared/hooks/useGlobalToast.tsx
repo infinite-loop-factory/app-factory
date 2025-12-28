@@ -1,11 +1,12 @@
+import type { ComponentProps } from "react";
+
+import { useThrottleFn } from "@reactuses/core";
 import {
   Toast,
   ToastDescription,
   ToastTitle,
   useToast,
 } from "@/components/ui/toast";
-import { useThrottleFn } from "@reactuses/core";
-import type { ComponentProps } from "react";
 
 type globalToastProps = { duration?: number };
 type RenderFn = (params: {
@@ -27,10 +28,10 @@ export default function useGlobalToast(
         placement: "top",
         render: ({ id }) => (
           <Toast
-            nativeID={`toast-${id}`}
             action={action ?? "success"}
-            variant="solid"
             className={"min-w-[100px] items-center"}
+            nativeID={`toast-${id}`}
+            variant="solid"
           >
             <ToastTitle>{title}</ToastTitle>
             <ToastDescription>{description}</ToastDescription>
