@@ -12,30 +12,12 @@ catalogs:
     es-toolkit:
       specifier: ^1.43.0
       version: 1.43.0
-    lucide-react-native:
-      specifier: ^0.562.0
-      version: 0.562.0
-    nativewind:
-      specifier: 4.2.1
-      version: 4.2.1
-    react-native-css-interop:
-      specifier: ^0.2.1
-      version: 0.2.1
-    react-native-svg:
-      specifier: ^15.15.1
-      version: 15.15.1
-    tailwindcss:
-      specifier: 3.4.19
-      version: 3.4.19
     type-fest:
       specifier: ^5.3.1
       version: 5.3.1
     typescript:
       specifier: ^5.9.3
       version: 5.9.3
-    zod:
-      specifier: ^4.2.1
-      version: 4.2.1
 
 patchedDependencies:
   '@gluestack-ui/toast':
@@ -61,6 +43,9 @@ importers:
       '@infinite-loop-factory/config-typescript':
         specifier: workspace:^
         version: link:packages/config-typescript
+      '@inquirer/prompts':
+        specifier: ^8.1.0
+        version: 8.1.0(@types/node@24.0.15)
       '@turbo/gen':
         specifier: ^2.5.8
         version: 2.5.8(@types/node@24.0.15)(typescript@5.9.3)
@@ -79,9 +64,6 @@ importers:
       husky:
         specifier: ^9.1.7
         version: 9.1.7
-      inquirer:
-        specifier: ^13.1.0
-        version: 13.1.0(@types/node@24.0.15)
       lint-staged:
         specifier: ^16.2.7
         version: 16.2.7
@@ -1486,7 +1468,7 @@ importers:
         version: 8.1.1(postcss@8.5.6)(typescript@5.9.3)(webpack@5.100.2(esbuild@0.25.8))
       react-native-css-interop:
         specifier: 'catalog:'
-        version: 0.2.1(react-native-reanimated@4.1.6(@babel/core@7.28.0)(react-native-worklets@0.7.1(@babel/core@7.28.0)(react-native@0.81.5(@babel/core@7.28.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native@0.81.5(@babel/core@7.28.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native-safe-area-context@5.6.2(react-native@0.81.5(@babel/core@7.28.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native-svg@15.12.1(react-native@0.81.5(@babel/core@7.28.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native@0.81.5(@babel/core@7.28.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(tailwindcss@3.4.19(ts-node@10.9.2(@types/node@24.0.15)(typescript@5.9.3)))
+        version: 0.2.1(react-native-reanimated@4.1.6(@babel/core@7.28.0)(react-native-worklets@0.7.1(@babel/core@7.28.0)(react-native@0.81.5(@babel/core@7.28.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native@0.81.5(@babel/core@7.28.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native-safe-area-context@5.6.2(react-native@0.81.5(@babel/core@7.28.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native-svg@15.15.1(react-native@0.81.5(@babel/core@7.28.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native@0.81.5(@babel/core@7.28.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(tailwindcss@3.4.19(ts-node@10.9.2(@types/node@24.0.15)(typescript@5.9.3)))
       react-native-reanimated:
         specifier: ~4.1.1
         version: 4.1.6(@babel/core@7.28.0)(react-native-worklets@0.7.1(@babel/core@7.28.0)(react-native@0.81.5(@babel/core@7.28.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native@0.81.5(@babel/core@7.28.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)
@@ -7743,15 +7725,6 @@ packages:
   inline-style-prefixer@7.0.1:
     resolution: {integrity: sha512-lhYo5qNTQp3EvSSp3sRvXMbVQTLrvGV6DycRMJ5dm2BLMiJ30wpXKdDdgX+GmJZ5uQMucwRKHamXSst3Sj/Giw==}
 
-  inquirer@13.1.0:
-    resolution: {integrity: sha512-4vv4GS/9HLnn0radvmHlXUXiNkd2gYCBQ4U1rxZWBJDisu2Z06bzUM9CFU8pcu1vwuAQjo6O+CFiqCYNsEi6qQ==}
-    engines: {node: '>=23.5.0 || ^22.13.0 || ^21.7.0 || ^20.12.0'}
-    peerDependencies:
-      '@types/node': '>=18'
-    peerDependenciesMeta:
-      '@types/node':
-        optional: true
-
   inquirer@7.3.3:
     resolution: {integrity: sha512-JG3eIAj5V9CwcGvuOmoo6LB9kbAYT8HXffUl6memuszlwDC/qvFAJw49XJ5NROSFNPxp3iQg1GqkFhaY/CR0IA==}
     engines: {node: '>=8.0.0'}
@@ -9939,10 +9912,6 @@ packages:
 
   run-async@2.4.1:
     resolution: {integrity: sha512-tvVnVv01b8c1RrA6Ep7JkStj85Guv/YrMcwqYQnwjsAS2cTmmPGBBjAjpCW7RrSodNSoE2/qg9O4bceNvUuDgQ==}
-    engines: {node: '>=0.12.0'}
-
-  run-async@4.0.6:
-    resolution: {integrity: sha512-IoDlSLTs3Yq593mb3ZoKWKXMNu3UpObxhgA/Xuid5p4bbfi2jdY1Hj0m1K+0/tEuQTxIGMhQDqGjKb7RuxGpAQ==}
     engines: {node: '>=0.12.0'}
 
   run-parallel@1.2.0:
@@ -19646,18 +19615,6 @@ snapshots:
     dependencies:
       css-in-js-utils: 3.1.0
 
-  inquirer@13.1.0(@types/node@24.0.15):
-    dependencies:
-      '@inquirer/ansi': 2.0.2
-      '@inquirer/core': 11.1.0(@types/node@24.0.15)
-      '@inquirer/prompts': 8.1.0(@types/node@24.0.15)
-      '@inquirer/type': 4.0.2(@types/node@24.0.15)
-      mute-stream: 3.0.0
-      run-async: 4.0.6
-      rxjs: 7.8.2
-    optionalDependencies:
-      '@types/node': 24.0.15
-
   inquirer@7.3.3:
     dependencies:
       ansi-escapes: 4.3.2
@@ -22681,8 +22638,6 @@ snapshots:
   rtl-detect@1.1.2: {}
 
   run-async@2.4.1: {}
-
-  run-async@4.0.6: {}
 
   run-parallel@1.2.0:
     dependencies:

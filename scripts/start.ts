@@ -1,8 +1,8 @@
 import { execSync } from "node:child_process";
 import fs from "node:fs/promises";
 import path from "node:path";
+import { select } from "@inquirer/prompts";
 import chalk from "chalk";
-import inquirer from "inquirer";
 
 const appsDir = path.join(process.cwd(), "apps");
 const PLATFORMS = ["ios", "android", "web"] as const;
@@ -30,15 +30,10 @@ type Platform = (typeof PLATFORMS)[number];
         }
       }
 
-      const { chosenApp } = await inquirer.prompt([
-        {
-          type: "list",
-          name: "chosenApp",
-          message: chalk.blue("Which app would you like to start?"),
-          choices: apps,
-        },
-      ]);
-      selectedApp = chosenApp;
+      selectedApp = await select({
+        message: chalk.blue("Which app would you like to start?"),
+        choices: apps.map((app) => ({ name: app, value: app })),
+      });
     }
 
     // 플랫폼 및 플래그 파싱
