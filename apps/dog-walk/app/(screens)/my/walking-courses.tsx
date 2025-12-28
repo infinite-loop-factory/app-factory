@@ -12,7 +12,7 @@ import { getGlobalHandleToast } from "@/components/CustomToast";
 import MyCourseCard from "@/components/card/MyCourseCard";
 import MyCourseCardSkeleton from "@/components/card/MyCourseCardSkeleton";
 import HeaderBar from "@/components/HeaderBar";
-import EmptyCourse from "@/components/molecules/EmptyCourse";
+import EmptyData from "@/components/molecules/EmptyData";
 import { VStack } from "@/components/ui/vstack";
 
 export default function MyWalkingCoursesScreen() {
@@ -75,10 +75,19 @@ export default function MyWalkingCoursesScreen() {
           </VStack>
         ) : (
           <FlatList
-            contentContainerStyle={{ padding: 16, gap: 16 }}
+            contentContainerStyle={{ padding: 16, gap: 16, flex: 1 }}
             data={courses}
             keyExtractor={(item) => `my_walking_courses_${item.id}}`}
-            ListEmptyComponent={<EmptyCourse size="md" />}
+            ListEmptyComponent={
+              <View className="flex-1 items-center justify-center">
+                <EmptyData
+                  description={
+                    "아직 등록한 산책 코스가 없습니다.\n마음에 드는 코스를 등록해보세요!"
+                  }
+                  title="등록한 코스가 없습니다"
+                />
+              </View>
+            }
             ListFooterComponent={renderFooter}
             onEndReached={() => {
               if (hasNextPage) fetchNextPage();
