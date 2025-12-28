@@ -1,12 +1,17 @@
-import { tva } from "@gluestack-ui/nativewind-utils/tva";
 import { router } from "expo-router";
+import { useAtomValue } from "jotai";
 import {
   ChevronLeft,
   EllipsisVertical,
   Heart,
   Share2,
 } from "lucide-react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDeleteLikedCourse } from "@/api/reactQuery/like/useDeleteLikedCourse";
+import { useFindLikedCourse } from "@/api/reactQuery/like/useFindLikedCourse";
+import { useInsertLikedCourse } from "@/api/reactQuery/like/useInsertLikedCourse";
+import { userAtom } from "@/atoms/userAtom";
+import { useThemeColor } from "@/hooks/useThemeColor";
 import BlockCourseActionsheet from "../actionsheet/BlockCourseActionsheet";
 import OptionsActionsheet from "../actionsheet/OptionsActionsheet";
 import { getGlobalHandleToast } from "../CustomToast";
@@ -14,29 +19,49 @@ import { Button } from "../ui/button";
 import { HStack } from "../ui/hstack";
 import { Icon } from "../ui/icon";
 
-interface IDetailHeaderBar {
+interface DetailHeaderBarProps {
   courseId: number;
-  isFavorite: boolean;
-  setIsFavorite: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function DetailHeaderBar({
-  courseId,
-  isFavorite,
-  setIsFavorite,
-}: IDetailHeaderBar) {
+export default function DetailHeaderBar({ courseId }: DetailHeaderBarProps) {
+  const userInfo = useAtomValue(userAtom);
+
+  const error500Color = useThemeColor({}, "--color-error-500");
+
+  const { data: likeData } = useFindLikedCourse({
+    userId: userInfo.id,
+    courseId,
+  });
+
+  const { id } = likeData || {};
+
+  const { mutateAsync: insertLikeCourse } = useInsertLikedCourse();
+  const { mutateAsync: deleteLikeCourse } = useDeleteLikedCourse();
+
   const [showOptionsActionsheet, setShowOptionsActionsheet] = useState(false);
   const [showBlockCourseActionsheet, setShowBlockCourseActionsheet] =
     useState(false);
+  const [isLikeCourse, setIsLikeCourse] = useState(!!id);
 
-  const HeartIconStyle = tva({
-    variants: {
-      variant: {
-        default: "h-5 w-5 text-red-500",
-        isFavorite: "h-5 w-5 text-red-500 fill-red-500",
-      },
-    },
-  });
+  useEffect(() => {
+    setIsLikeCourse(!!id);
+  }, [id]);
+
+  const handleLike = async () => {
+    try {
+      if (!isLikeCourse) {
+        await insertLikeCourse({ userId: userInfo.id, courseId });
+        setIsLikeCourse(true);
+        getGlobalHandleToast("산책 코스를 찜했습니다❤️");
+      } else {
+        await deleteLikeCourse({ userId: userInfo.id, courseId });
+        setIsLikeCourse(false);
+        getGlobalHandleToast("찜 목록에서 뺐습니다");
+      }
+    } catch {
+      getGlobalHandleToast("좋아요 처리에 실패했습니다.");
+    }
+  };
 
   return (
     <HStack className="w-full items-center justify-between px-4 py-3">
@@ -54,14 +79,13 @@ export default function DetailHeaderBar({
         <Button
           action={"default"}
           className="w-1 rounded-full border-white"
-          onPress={() => setIsFavorite((prev) => !prev)}
+          onPress={handleLike}
           variant={"outline"}
         >
           <Icon
             as={Heart}
-            className={HeartIconStyle({
-              variant: isFavorite ? "isFavorite" : "default",
-            })}
+            className={'"h-5 w-5 text-error-500'}
+            fill={isLikeCourse ? `rgb(${error500Color})` : "transparent"}
           />
         </Button>
         <Button
@@ -87,7 +111,7 @@ export default function DetailHeaderBar({
       </HStack>
       {/* NOTE: MODAL ==> */}
       <OptionsActionsheet
-        onPressBlock={() => {
+        onPressOption={() => {
           setShowOptionsActionsheet(false);
           setShowBlockCourseActionsheet(true);
         }}
