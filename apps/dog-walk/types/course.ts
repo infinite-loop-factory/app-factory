@@ -1,5 +1,6 @@
 export type CourseRow = {
   id: number;
+  deleted_at: string;
   created_at: string;
   start_lat: number;
   start_lng: number;
@@ -13,3 +14,8 @@ export type CourseRow = {
   average_rating: number;
   distance_m?: number;
 };
+
+export interface CoursePayload {
+  courseId: number;
+  userId: string;
+}
