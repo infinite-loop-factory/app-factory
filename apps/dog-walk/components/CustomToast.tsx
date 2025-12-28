@@ -1,9 +1,9 @@
 import type React from "react";
+
 import { useState } from "react";
 import { Platform } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { HStack } from "./ui/hstack";
-import { HelpCircleIcon, Icon } from "./ui/icon";
 import { Text } from "./ui/text";
 import { Toast, useToast } from "./ui/toast";
 
@@ -20,9 +20,8 @@ export const CustomToast: React.FC = () => {
   };
 
   const ToastContent = ({ id, message }: { id: string; message: string }) => (
-    <Toast nativeID={`toast-${id}`} action="muted" variant="solid">
-      <HStack space="md" className="items-center">
-        <Icon as={HelpCircleIcon} className="h-4 w-4 text-background-0" />
+    <Toast action="muted" nativeID={`toast-${id}`} variant="solid">
+      <HStack className="items-center" space="md">
         <Text className="text-typography-0">{message}</Text>
       </HStack>
     </Toast>
