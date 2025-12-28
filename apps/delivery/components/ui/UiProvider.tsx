@@ -1,9 +1,10 @@
+import type { ReactNode } from "react";
+
+import { ThemeProvider } from "@react-navigation/native";
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
 import WebviewLayout from "@/components/web-layout/WebviewLayout";
 import { useColorToken } from "@/features/shared/hooks/useThemeColor";
 import { useColorSchemaStore } from "@/features/shared/store/colorScheme.store";
-import { ThemeProvider } from "@react-navigation/native";
-import type { ReactNode } from "react";
 
 export default function UiProvider({ children }: { children: ReactNode }) {
   const { colorScheme } = useColorSchemaStore();

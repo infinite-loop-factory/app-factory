@@ -9,6 +9,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   orientation: "portrait",
   icon: "./src/assets/images/icon.png",
   userInterfaceStyle: "automatic",
+  newArchEnabled: true,
   splash: {
     image: "./src/assets/images/splash.png",
     resizeMode: "contain",
@@ -16,6 +17,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   ios: {
     supportsTablet: true,
+    bundleIdentifier: "com.infinite-loop-factory.{{ dashCase title }}",
   },
   android: {
     adaptiveIcon: {

@@ -1,5 +1,5 @@
-import { supabase } from "@/supabase/utils/supabase";
 import { create } from "zustand";
+import { supabase } from "@/supabase/utils/supabase";
 
 type UserType = {
   id: string;

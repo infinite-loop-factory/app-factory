@@ -1,7 +1,7 @@
 import type { LocationObject } from "expo-location";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import * as Sentry from "@sentry/react-native";
+// import * as Sentry from "@sentry/react-native";
 import * as Network from "expo-network";
 import * as TaskManager from "expo-task-manager";
 import { DateTime } from "luxon";
@@ -164,7 +164,7 @@ TaskManager.defineTask<LocationTaskData>(
   async ({ data, error }) => {
     if (error) {
       console.error("Location task error:", error);
-      Sentry.captureException(error);
+      console.error(error);
       return;
     }
 
@@ -199,11 +199,11 @@ TaskManager.defineTask<LocationTaskData>(
       const res = await flushQueueWith(filtered);
       if (!res.ok) {
         console.error("Failed to insert locations:", res.error);
-        Sentry.captureMessage("Failed to insert locations (background)");
+        console.error("Failed to insert locations (background)");
       }
     } catch (err) {
       console.error("Unexpected error during location insert:", err);
-      Sentry.captureException(err);
+      console.error(err);
     }
   },
 );

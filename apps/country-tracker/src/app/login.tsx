@@ -1,6 +1,6 @@
 import type { Provider } from "@supabase/supabase-js";
 
-import * as Sentry from "@sentry/react-native";
+// import * as Sentry from "@sentry/react-native";
 import clsx from "clsx";
 import { makeRedirectUri } from "expo-auth-session";
 import * as QueryParams from "expo-auth-session/build/QueryParams";
@@ -75,9 +75,9 @@ export default function LoginPage() {
   useEffect(() => {
     if (user) {
       // best-effort: flush any queued background locations after auth
-      flushLocationQueueIfAny().catch((e) =>
-        Sentry.captureMessage(`queue flush failed: ${String(e)}`),
-      );
+      flushLocationQueueIfAny().catch((_e) => {
+        /* ignore error */
+      });
       router.replace("/");
     }
   }, [user, router]);

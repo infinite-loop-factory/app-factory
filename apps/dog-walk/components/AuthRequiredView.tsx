@@ -1,12 +1,12 @@
+import { GoogleSigninButton } from "@react-native-google-signin/google-signin";
+import { useAtom } from "jotai/react";
+import { PawPrint } from "lucide-react-native";
+import { View } from "react-native";
 import { useFindUserById } from "@/api/reactQuery/users/useFindUserById";
 import { userAtom } from "@/atoms/userAtom";
 import { Icon } from "@/components/ui/icon";
 import { Text } from "@/components/ui/text";
 import { useGoogleAuth } from "@/hooks/useGoogleAuth";
-import { GoogleSigninButton } from "@react-native-google-signin/google-signin";
-import { useAtom } from "jotai/react";
-import { PawPrint } from "lucide-react-native";
-import { View } from "react-native";
 
 export default function AuthRequiredView() {
   const [userInfo, setUserInfo] = useAtom(userAtom);
@@ -41,7 +41,7 @@ export default function AuthRequiredView() {
       <View className="w-full max-w-md">
         <View className="flex flex-col items-center px-6 pt-6 pb-8 text-center">
           <View className="mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-primary-500/10">
-            <Icon className="h-12 w-12 text-primary-500" as={PawPrint} />
+            <Icon as={PawPrint} className="h-12 w-12 text-primary-500" />
           </View>
           <Text className="mb-2 font-bold" size="2xl">
             로그인이 필요합니다
@@ -51,9 +51,9 @@ export default function AuthRequiredView() {
             나만의 산책 코스를 만들고 관리할 수 있어요!
           </Text>
           <GoogleSigninButton
-            size={GoogleSigninButton.Size.Wide}
             color={GoogleSigninButton.Color.Dark}
             onPress={onPressGoogleLogin}
+            size={GoogleSigninButton.Size.Wide}
           />
         </View>
       </View>

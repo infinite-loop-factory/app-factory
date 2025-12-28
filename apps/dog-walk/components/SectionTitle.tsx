@@ -9,7 +9,7 @@ interface ISectionTitle {
 export default function SectionTitle({ title, children }: ISectionTitle) {
   return (
     <View className="py-6">
-      <Text size={"lg"} className="mb-4 font-bold">
+      <Text className="mb-4 font-bold" size={"lg"}>
         {title}
       </Text>
       {children}

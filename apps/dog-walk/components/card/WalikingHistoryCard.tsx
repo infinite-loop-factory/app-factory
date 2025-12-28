@@ -24,16 +24,16 @@ export default function WalkingHistoryCard({ item }: TCourseCardProp) {
     <TouchableOpacity>
       <View className="flex flex-row items-center justify-between rounded-xl bg-slate-50 p-4">
         <View className="flex flex-row items-center gap-4">
-          <Image source={image} className="h-20 w-20 rounded-xl" />
+          <Image className="h-20 w-20 rounded-xl" source={image} />
           <View className="flex flex-1 gap-2">
             <Heading
-              size={"sm"}
               className="text-ellipsis font-semibold"
               numberOfLines={1}
+              size={"sm"}
             >
               {address}
             </Heading>
-            <Text size={"sm"} className="text-slate-500">
+            <Text className="text-slate-500" size={"sm"}>
               {distance}km • {duration}분
             </Text>
           </View>

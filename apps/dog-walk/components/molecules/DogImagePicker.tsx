@@ -32,7 +32,7 @@ export default function DogImagePicker({
   return (
     <TouchableOpacity onPress={onPickImage}>
       {!!dogImage.length && (
-        <Image src={dogImage[0]?.uri} className="h-28 w-28 rounded-full" />
+        <Image className="h-28 w-28 rounded-full" src={dogImage[0]?.uri} />
       )}
       {!dogImage.length && (
         <View className="relative">

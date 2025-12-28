@@ -13,6 +13,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     resizeMode: "contain",
     backgroundColor: "#ffffff",
   },
+  newArchEnabled: true,
   ios: {
     supportsTablet: true,
   },
@@ -63,6 +64,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     [
       "expo-build-properties",
       {
+        ios: {},
         android: {
           extraMavenRepos: ["https://repository.map.naver.com/archive/maven"],
         },

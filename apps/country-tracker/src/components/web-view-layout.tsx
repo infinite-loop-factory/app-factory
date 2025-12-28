@@ -2,7 +2,7 @@ import type { PropsWithChildren } from "react";
 
 import { MenuIcon } from "lucide-react-native";
 import { useEffect, useState } from "react";
-import { Image, Text, View } from "react-native";
+import { Image, Platform, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Fab, FabIcon } from "@/components/ui/fab";
 import { Menu, MenuItem } from "@/components/ui/menu";
@@ -34,6 +34,9 @@ export default function WebviewLayout({ children }: PropsWithChildren) {
     })();
   }, []);
 
+  // On native platforms (iOS/Android), just return children directly
+  if (Platform.OS !== "web") return <>{children}</>;
+  // On web, if window exists, also return children directly
   if (typeof window !== "undefined") return <>{children}</>;
 
   return (

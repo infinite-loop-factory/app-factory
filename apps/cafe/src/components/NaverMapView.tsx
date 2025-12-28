@@ -26,9 +26,9 @@ export function NaverMapView({
   return (
     <View className="my-2">
       <TouchableOpacity
+        className="overflow-hidden rounded-lg"
         onPress={openNaverMap}
         style={{ width, height }}
-        className="overflow-hidden rounded-lg"
       >
         <View className="h-full w-full items-center justify-center bg-gray-200 p-3">
           <Text className="mb-2 text-center text-gray-700">{address}</Text>

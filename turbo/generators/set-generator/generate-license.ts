@@ -2,7 +2,7 @@ import type { PlopTypes } from "@turbo/gen";
 import type { PackageJson } from "type-fest";
 
 import { execSync } from "node:child_process";
-import { mkdir, readFile, readdir, writeFile } from "node:fs/promises";
+import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import { join, resolve } from "node:path";
 
 interface LicenseInfo {

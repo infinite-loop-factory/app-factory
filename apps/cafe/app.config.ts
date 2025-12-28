@@ -15,8 +15,10 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     resizeMode: "contain",
     backgroundColor: "#ffffff",
   },
+  newArchEnabled: true,
   ios: {
     supportsTablet: true,
+    bundleIdentifier: "com.infiniteloop.cafe",
   },
   android: {
     adaptiveIcon: {
@@ -29,7 +31,22 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     output: "static",
     favicon: "./src/assets/images/favicon.png",
   },
-  plugins: ["expo-router", "expo-localization", "expo-font"],
+  plugins: [
+    "expo-router",
+    "expo-localization",
+    "expo-font",
+    [
+      "expo-build-properties",
+      {
+        ios: {
+          // newArchEnabled moved to root
+        },
+        android: {
+          // newArchEnabled moved to root
+        },
+      },
+    ],
+  ],
   experiments: {
     tsconfigPaths: true,
     typedRoutes: true,

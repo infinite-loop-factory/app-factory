@@ -1,6 +1,7 @@
 "use client";
-import { createModal } from "@gluestack-ui/modal";
 import type { VariantProps } from "@gluestack-ui/nativewind-utils";
+
+import { createModal } from "@gluestack-ui/modal";
 import { tva } from "@gluestack-ui/nativewind-utils/tva";
 import {
   useStyleContext,
@@ -8,8 +9,8 @@ import {
 } from "@gluestack-ui/nativewind-utils/withStyleContext";
 import {
   AnimatePresence,
-  Motion,
   createMotionAnimatedComponent,
+  Motion,
 } from "@legendapp/motion";
 import { cssInterop } from "nativewind";
 import React from "react";
@@ -104,9 +105,9 @@ const Modal = React.forwardRef<React.ElementRef<typeof UIModal>, IModalProps>(
     <UIModal
       ref={ref}
       {...props}
-      pointerEvents="box-none"
       className={modalStyle({ size, class: className })}
       context={{ size }}
+      pointerEvents="box-none"
     />
   ),
 );
@@ -117,16 +118,16 @@ const ModalBackdrop = React.forwardRef<
 >(({ className, ...props }, ref) => {
   return (
     <UIModal.Backdrop
-      ref={ref}
-      initial={{
-        opacity: 0,
-      }}
       animate={{
         opacity: 0.5,
       }}
       exit={{
         opacity: 0,
       }}
+      initial={{
+        opacity: 0,
+      }}
+      ref={ref}
       transition={{
         type: "spring",
         damping: 18,
@@ -152,11 +153,6 @@ const ModalContent = React.forwardRef<
 
   return (
     <UIModal.Content
-      ref={ref}
-      initial={{
-        opacity: 0,
-        scale: 0.9,
-      }}
       animate={{
         opacity: 1,
         scale: 1,
@@ -164,6 +160,11 @@ const ModalContent = React.forwardRef<
       exit={{
         opacity: 0,
       }}
+      initial={{
+        opacity: 0,
+        scale: 0.9,
+      }}
+      ref={ref}
       transition={{
         type: "spring",
         damping: 18,
