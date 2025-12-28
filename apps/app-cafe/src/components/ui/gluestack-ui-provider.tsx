@@ -3,6 +3,8 @@ import { ToastProvider } from "@gluestack-ui/core/toast/creator";
 import { useColorScheme } from "nativewind";
 import React, { useEffect } from "react";
 import { View, ViewProps } from "react-native";
+import { useThemeStore } from "@/hooks/use-theme";
+import { useLanguageStore } from "@/hooks/use-language";
 import { config } from "./config";
 
 export type ModeType = "light" | "dark" | "system";
@@ -16,17 +18,23 @@ export function GluestackUIProvider({
   style?: ViewProps["style"];
 }) {
   const { colorScheme, setColorScheme } = useColorScheme();
+  const themeMode = useThemeStore((state) => state.mode);
+  const language = useLanguageStore((state) => state.language);
 
   useEffect(() => {
-    setColorScheme(mode);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mode]);
+    setColorScheme(themeMode === "system" ? mode : themeMode);
+  }, [themeMode, mode, language]);
 
   return (
     <View
       style={[
         config[colorScheme!],
-        { flex: 1, height: "100%", width: "100%" },
+        {
+          flex: 1,
+          height: "100%",
+          width: "100%",
+          fontSize: 16,
+        },
         props.style,
       ]}
     >

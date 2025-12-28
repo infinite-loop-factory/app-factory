@@ -4,17 +4,10 @@ import type { Config } from "tailwindcss";
 import nativewind from "nativewind/preset";
 
 export default {
-  darkMode: process.env.DARK_MODE ? process.env.DARK_MODE : "class",
+  darkMode: "class",
   content: ["./src/**/*.{ts,tsx}"],
   presets: [nativewind],
   important: "html",
-  safelist: [
-    {
-      pattern:
-        /(bg|border|text|stroke|fill)-(primary|secondary|tertiary|error|success|warning|info|typography|outline|background)-(0|50|100|200|300|400|500|600|700|800|900|950|white|gray|black|error|warning|muted|success|info|light|dark)/,
-    },
-  ],
-  plugins: [],
   theme: {
     extend: {
       colors: {
@@ -174,16 +167,39 @@ export default {
         },
       },
       fontFamily: {
-        heading: [],
-        body: [],
-        mono: ["SpaceMono"],
-        roboto: ["Roboto", "sans-serif"],
+        jakarta: ["var(--font-plus-jakarta-sans)"],
+        roboto: ["var(--font-roboto)"],
+        code: ["var(--font-source-code-pro)"],
+        inter: ["var(--font-inter)"],
+        "space-mono": ["var(--font-space-mono)"],
       },
       fontWeight: {
         extrablack: "950",
       },
       fontSize: {
         "2xs": "10px",
+        xs: "12px",
+        sm: "14px",
+        base: "16px",
+        lg: "18px",
+        xl: "20px",
+        "2xl": "24px",
+        "3xl": "30px",
+        "4xl": "36px",
+        "5xl": "48px",
+      },
+      spacing: {
+        1: "4px",
+        2: "8px",
+        3: "12px",
+        4: "16px",
+        5: "20px",
+        6: "24px",
+        7: "28px",
+        8: "32px",
+        10: "40px",
+        12: "48px",
+        16: "64px",
       },
       boxShadow: {
         "hard-1": "-2px 2px 8px 0px rgba(38, 38, 38, 0.20)",
@@ -198,4 +214,5 @@ export default {
       },
     },
   },
+  plugins: [],
 } satisfies Config;
