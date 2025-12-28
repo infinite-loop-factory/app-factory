@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import { endPointAtom, startPointAtom } from "@/atoms/pointAtom";
 import { userAtom } from "@/atoms/userAtom";
+import AuthRequiredView from "@/components/AuthRequiredView";
 import CustomSafeAreaView from "@/components/CustomSafeAriaView";
 import DatePickerModal from "@/components/DatePickerModal";
 import HeaderBar from "@/components/HeaderBar";
@@ -24,6 +25,7 @@ import { useRegisterWalkingCourse } from "@/hooks/useRegisterWalkingCourse";
 
 export default function AddScreen() {
   const userInfo = useAtomValue(userAtom);
+  const isLoggedIn = Boolean(userInfo.accessToken);
 
   const [startPoint, setStartPoint] = useAtom(startPointAtom);
   const [endPoint, setEndPoint] = useAtom(endPointAtom);
@@ -89,6 +91,16 @@ export default function AddScreen() {
       recommendReason: description,
     });
   };
+
+  // NOTE: 로그인하지 않은 경우 로그인 화면 표시
+  if (!isLoggedIn) {
+    return (
+      <CustomSafeAreaView>
+        <HeaderBar title={"산책 코스 등록"} />
+        <AuthRequiredView />
+      </CustomSafeAreaView>
+    );
+  }
 
   return (
     <CustomSafeAreaView>

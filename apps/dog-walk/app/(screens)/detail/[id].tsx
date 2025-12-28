@@ -28,8 +28,6 @@ export default function DetailScreen() {
 
   const [selectedTab, setSelectedTab] = useState<TabKeyType>(TabKeyType.INFO);
 
-  const [isFavorite, setIsFavorite] = useState(false);
-
   const { data } = useFindCourse(Number(id), userInfo.id);
 
   const {
@@ -104,11 +102,7 @@ export default function DetailScreen() {
 
   return (
     <CustomSafeAreaView>
-      <DetailHeaderBar
-        courseId={Number(id)}
-        isFavorite={isFavorite}
-        setIsFavorite={setIsFavorite}
-      />
+      <DetailHeaderBar courseId={Number(id)} />
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         <VStack className="flex-1 px-4">
           <Image

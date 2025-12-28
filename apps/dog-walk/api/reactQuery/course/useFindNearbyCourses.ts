@@ -42,7 +42,8 @@ const findNearbyCourses = async ({
     .from("walking_courses")
     .select(
       "id,start_lat,start_lng,image_url,start_name,end_name,total_distance,total_time,average_rating",
-    );
+    )
+    .is("deleted_at", null);
 
   if (blockedIds.length > 0) {
     query = query.not("id", "in", `(${blockedIds.join(",")})`);
