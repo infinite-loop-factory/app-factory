@@ -11,8 +11,8 @@
     "lint": "biome lint --fix --no-errors-on-unmatched",
     "start": "expo start",
     "supabase-type": "tsx supabase/utils/supabase-type-gen.ts",
-    "test": "jest",
-    "test:watch": "jest --watchAll",
+    "test": "jest --passWithNoTests",
+    "test:watch": "jest --watchAll --passWithNoTests",
     "type-check": "tsc --noEmit",
     "web": "expo start --web",
     "web:publish": "tsx web-publish.ts"
