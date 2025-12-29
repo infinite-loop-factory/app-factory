@@ -3,10 +3,42 @@
 
   "home": {
     "tab": "Home",
-    "title": "Visited Countries",
-    "search": "Search",
-    "search-a11y": "Search countries",
+    "title": "My Travels",
+    "subtitle": "Welcome back, %{name}",
+    "default-name": "Explorer",
+    "search": "Search destination...",
+    "search-a11y": "Search destinations",
     "search-button-a11y": "Execute search",
+    "filter-button-a11y": "Open filter options",
+    "actions": {
+      "view-map": "View Map",
+      "add": "Add"
+    },
+    "stats": {
+      "countries": "Countries",
+      "days-tracked": "Days Tracked"
+    },
+    "filters": {
+      "recent": "Recent",
+      "most-days": "Most Days",
+      "europe": "Europe",
+      "asia": "Asia",
+      "americas": "Americas",
+      "africa": "Africa",
+      "oceania": "Oceania"
+    },
+    "filter-sheet": {
+      "title": "Filter visited countries",
+      "subtitle": "Choose how to sort and filter your stays.",
+      "sort": "Sort",
+      "region": "Region",
+      "apply": "Apply",
+      "cancel": "Cancel"
+    },
+    "list": {
+      "last-visit": "%{date}",
+      "stay-days": "%{count} Days"
+    },
     "error-loading": "Failed to load visited countries.",
     "no-visited-countries": "No visited countries yet",
     "add-visit": {

@@ -1,5 +1,6 @@
 import "@/global.css";
 
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import {
   DarkTheme,
   DefaultTheme,
@@ -116,13 +117,15 @@ function RootLayout() {
           <QueryClientProvider client={queryClient}>
             <GluestackUIProvider mode={savedTheme}>
               <GestureHandlerRootView style={{ flex: 1 }}>
-                <ThemeProvider
-                  value={savedTheme === "dark" ? DarkTheme : DefaultTheme}
-                >
-                  <WebviewLayout>
-                    <Slot />
-                  </WebviewLayout>
-                </ThemeProvider>
+                <BottomSheetModalProvider>
+                  <ThemeProvider
+                    value={savedTheme === "dark" ? DarkTheme : DefaultTheme}
+                  >
+                    <WebviewLayout>
+                      <Slot />
+                    </WebviewLayout>
+                  </ThemeProvider>
+                </BottomSheetModalProvider>
               </GestureHandlerRootView>
             </GluestackUIProvider>
           </QueryClientProvider>
