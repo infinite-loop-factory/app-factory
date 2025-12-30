@@ -1,22 +1,20 @@
 import { Tabs } from "expo-router";
-import { useColorScheme } from "nativewind";
 import { TabBarIcon } from "@/components/navigation/tab-bar-icon";
-import { COLORS } from "@/constants/colors";
-import i18n from "@/i18n";
-import { useLanguageStore } from "@/hooks/use-language";
+import { useThemeStore } from "@/hooks/use-theme";
+import { useTranslation } from "@/hooks/use-translation";
 
 export default function TabLayout() {
-  const { colorScheme } = useColorScheme();
-  const { language } = useLanguageStore();
+  const mode = useThemeStore((state) => state.mode);
+  const { t } = useTranslation();
 
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: COLORS[colorScheme ?? "light"].tint,
+        tabBarActiveTintColor: mode === "dark" ? "#B9AEA5" : "#5E564D",
         tabBarInactiveTintColor: "#9CA3AF",
         tabBarStyle: {
-          backgroundColor: colorScheme === "dark" ? "#151718" : "#FFFFFF",
+          backgroundColor: mode === "dark" ? "#1A1614" : "#FFFFFF",
           borderTopWidth: 0,
           elevation: 0,
           shadowColor: "transparent",
@@ -29,6 +27,7 @@ export default function TabLayout() {
           fontSize: 10,
           fontWeight: "700",
           marginTop: 4,
+          lineHeight: 12,
         },
         tabBarIconStyle: {
           marginBottom: 0,
@@ -39,7 +38,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: i18n.t("home"),
+          title: t("home"),
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
               color={color}
@@ -51,7 +50,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="search"
         options={{
-          title: i18n.t("search"),
+          title: t("search"),
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
               color={color}
@@ -63,7 +62,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="favorites"
         options={{
-          title: i18n.t("favorites"),
+          title: t("favorites"),
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
               color={color}
@@ -75,7 +74,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="profile"
         options={{
-          title: i18n.t("profile"),
+          title: t("profile"),
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
               color={color}

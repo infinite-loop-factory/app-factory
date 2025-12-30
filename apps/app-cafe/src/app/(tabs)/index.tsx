@@ -2,12 +2,12 @@ import { router } from "expo-router";
 import { ScrollView, Text, View } from "react-native";
 import { CafeCard } from "@/components/cafe-card";
 import { ThemeToggle } from "@/components/theme-toggle";
-import i18n from "@/i18n";
+import { useTranslation } from "@/hooks/use-translation";
 
 const MOCK_CAFES = [
   {
     id: "1",
-    name: "커피 브루",
+    name: "커피 블루",
     description: "수제 로스팅의 최상급 에스프레소",
     rating: 4.8,
     reviewCount: 234,
@@ -30,7 +30,7 @@ const MOCK_CAFES = [
   {
     id: "3",
     name: "카페 루미",
-    description: "특별한 레시피의 시그니처 음료",
+    description: "특별한 라떼아트의 시그니처 음료",
     rating: 4.7,
     reviewCount: 189,
     location: "서울 용산구",
@@ -41,18 +41,20 @@ const MOCK_CAFES = [
 ];
 
 export default function HomeScreen() {
+  const { t } = useTranslation();
+
   return (
     <ScrollView
-      className="flex-1 bg-gray-50 dark:bg-gray-900"
+      className="flex-1 bg-background-100"
       contentContainerStyle={{ paddingBottom: 20 }}
     >
       <View className="flex-row items-center justify-between px-4 pt-4">
         <View>
-          <Text className="mb-1 font-bold text-2xl text-gray-900 dark:text-white">
-            {i18n.t("findCafesTitle")}
+          <Text className="mb-1 font-bold text-2xl text-typography-100">
+            {t("findCafesTitle")}
           </Text>
-          <Text className="mb-5 text-xs text-gray-600 dark:text-gray-400">
-            {i18n.t("findCafesSubtitle")}
+          <Text className="mb-5 text-typography-300 text-xs">
+            {t("findCafesSubtitle")}
           </Text>
         </View>
         <View className={"flex h-full items-center justify-center"}>
@@ -61,8 +63,8 @@ export default function HomeScreen() {
       </View>
 
       <View className="mb-10 px-4">
-        <Text className="mb-3 font-semibold text-lg text-gray-900 dark:text-white">
-          {i18n.t("popularCafes")}
+        <Text className="mb-3 font-semibold text-lg text-typography-0">
+          {t("popularCafes")}
         </Text>
         <ScrollView
           className="p-2"
@@ -83,8 +85,8 @@ export default function HomeScreen() {
       </View>
 
       <View className="px-4">
-        <Text className="mb-3 font-semibold text-lg text-gray-900 dark:text-white">
-          {i18n.t("allCafes")}
+        <Text className="mb-3 font-semibold text-lg text-typography-0">
+          {t("allCafes")}
         </Text>
         {MOCK_CAFES.map((cafe) => (
           <View className="mb-4" key={cafe.id}>

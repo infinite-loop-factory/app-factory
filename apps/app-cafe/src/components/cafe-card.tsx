@@ -22,7 +22,7 @@ interface CafeCardProps {
 export function CafeCard({ cafe, onPress }: CafeCardProps) {
   return (
     <Pressable
-      className="min-w-[300px] overflow-hidden rounded-2xl bg-white shadow-sm dark:bg-gray-800"
+      className="min-w-[300px] overflow-hidden rounded-2xl bg-background-0 shadow-sm"
       onPress={onPress}
     >
       <Image
@@ -32,36 +32,34 @@ export function CafeCard({ cafe, onPress }: CafeCardProps) {
       />
       <View className="p-4">
         <View className="mb-2 flex-row items-center justify-between">
-          <Text className="flex-1 font-bold text-lg text-gray-900 dark:text-white">
+          <Text className="flex-1 font-bold text-lg text-typography-0">
             {cafe.name}
           </Text>
           <View className="flex-row items-center gap-1">
-            <Star className="fill-yellow-500 text-yellow-500" size={16} />
-            <Text className="font-semibold text-sm text-gray-900 dark:text-white">
+            <Star className="fill-warning-400 text-warning-400" size={16} />
+            <Text className="font-semibold text-sm text-typography-0">
               {cafe.rating}
             </Text>
-            <Text className="text-xs text-gray-500 dark:text-gray-400">
+            <Text className="text-typography-300 text-xs">
               ({cafe.reviewCount})
             </Text>
           </View>
         </View>
-        <Text className="mb-3 text-sm text-gray-600 dark:text-gray-400">
+        <Text className="mb-3 text-sm text-typography-300">
           {cafe.description}
         </Text>
         <View className="mb-2 flex-row items-center gap-1">
-          <MapPin className="text-gray-400 dark:text-gray-500" size={14} />
-          <Text className="text-sm text-gray-500 dark:text-gray-400">
-            {cafe.location}
-          </Text>
+          <MapPin className="text-outline-400" size={14} />
+          <Text className="text-sm text-typography-300">{cafe.location}</Text>
         </View>
         <View className="mb-3 flex-row items-center gap-1">
           <Clock
-            className={cafe.isOpen ? "text-green-500" : "text-red-500"}
+            className={cafe.isOpen ? "text-success-300" : "text-error-300"}
             size={14}
           />
           <Text
             className={`font-medium text-xs ${
-              cafe.isOpen ? "text-green-500" : "text-red-500"
+              cafe.isOpen ? "text-success-300" : "text-error-300"
             }`}
           >
             {cafe.isOpen ? "영업 중" : "영업 종료"}
@@ -70,13 +68,8 @@ export function CafeCard({ cafe, onPress }: CafeCardProps) {
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           <View className="flex-row flex-nowrap gap-2">
             {cafe.tags.map((tag) => (
-              <View
-                className="rounded-full bg-gray-100 px-3 py-1 dark:bg-gray-700"
-                key={tag}
-              >
-                <Text className="text-xs text-gray-700 dark:text-gray-300">
-                  #{tag}
-                </Text>
+              <View className="rounded-full bg-primary-50 px-3 py-1" key={tag}>
+                <Text className="text-primary-900 text-xs">#{tag}</Text>
               </View>
             ))}
           </View>

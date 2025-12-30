@@ -1,6 +1,5 @@
 import type { PropsWithChildren, ReactElement } from "react";
 
-import { useColorScheme } from "nativewind";
 import Animated, {
   interpolate,
   useAnimatedRef,
@@ -13,7 +12,7 @@ const HEADER_HEIGHT = 250;
 
 type Props = PropsWithChildren<{
   headerImage: ReactElement;
-  headerBackgroundColor: { dark: string; light: string };
+  headerBackgroundColor: string;
 }>;
 
 export default function ParallaxScrollView({
@@ -21,7 +20,6 @@ export default function ParallaxScrollView({
   headerImage,
   headerBackgroundColor,
 }: Props) {
-  const { colorScheme = "light" } = useColorScheme();
   const scrollRef = useAnimatedRef<Animated.ScrollView>();
   const scrollOffset = useScrollViewOffset(scrollRef);
 
@@ -43,7 +41,7 @@ export default function ParallaxScrollView({
           ),
         },
       ],
-      backgroundColor: headerBackgroundColor[colorScheme],
+      backgroundColor: headerBackgroundColor,
     };
   });
 

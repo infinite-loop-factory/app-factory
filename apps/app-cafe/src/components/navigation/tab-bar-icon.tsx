@@ -1,9 +1,12 @@
+import type { ViewStyle } from "react-native";
+
 import {
-  Home,
-  Search,
   Heart,
-  User,
+  Home,
   House as HomeOutline,
+  type LucideIconProps,
+  Search,
+  User,
 } from "lucide-react-native";
 
 export function TabBarIcon({
@@ -15,9 +18,9 @@ export function TabBarIcon({
   name: string;
   color?: string;
   size?: number;
-  style?: any;
+  style?: ViewStyle;
 }) {
-  const icons: Record<string, React.ElementType<any>> = {
+  const icons: Record<string, React.ElementType<LucideIconProps>> = {
     home: Home,
     "home-outline": HomeOutline,
     search: Search,
@@ -30,5 +33,5 @@ export function TabBarIcon({
 
   const Icon = icons[name] || Home;
 
-  return <Icon size={size} color={color} style={style} />;
+  return <Icon color={color} size={size} style={style} />;
 }

@@ -1,19 +1,19 @@
 import type { PropsWithChildren } from "react";
 
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { useColorScheme } from "nativewind";
 import { useState } from "react";
 import { TouchableOpacity } from "react-native";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { COLORS } from "@/constants/colors";
+import { useThemeStore } from "@/hooks/use-theme";
 
 export function Collapsible({
   children,
   title,
 }: PropsWithChildren & { title: string }) {
   const [isOpen, setIsOpen] = useState(false);
-  const { colorScheme = "light" } = useColorScheme();
+  const mode = useThemeStore((state) => state.mode);
 
   return (
     <ThemedView>
@@ -23,7 +23,7 @@ export function Collapsible({
         onPress={() => setIsOpen((value) => !value)}
       >
         <Ionicons
-          color={colorScheme === "light" ? COLORS.light.icon : COLORS.dark.icon}
+          color={COLORS[mode].icon}
           name={isOpen ? "chevron-down" : "chevron-forward-outline"}
           size={18}
         />

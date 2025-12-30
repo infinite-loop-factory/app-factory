@@ -1,8 +1,9 @@
 import { Image } from "expo-image";
+import { useNavigation } from "expo-router";
 import { Clock, MapPin, Phone, Star } from "lucide-react-native";
 import { useLayoutEffect } from "react";
 import { ScrollView, Text, View } from "react-native";
-import { useNavigation } from "expo-router";
+import { useThemeStore } from "@/hooks/use-theme";
 
 const MOCK_CAFE_DETAIL = {
   id: "1",
@@ -46,6 +47,7 @@ const MOCK_CAFE_DETAIL = {
 export default function CafeDetailScreen() {
   const cafe = MOCK_CAFE_DETAIL;
   const navigation = useNavigation();
+  const mode = useThemeStore((state) => state.mode);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -53,39 +55,45 @@ export default function CafeDetailScreen() {
       headerTitleStyle: {
         fontWeight: "bold",
       },
+      headerStyle: {
+        backgroundColor: mode === "dark" ? "#1A1614" : "#FFFFFF",
+      },
     });
-  }, [navigation, cafe.name]);
+  }, [navigation, cafe.name, mode]);
 
   return (
-    <View className="flex-1 bg-gray-50 dark:bg-gray-900">
+    <View className="flex-1 bg-background-100">
       <ScrollView>
-        <Image
-          className="h-72 w-full"
-          contentFit="cover"
-          source={{ uri: cafe.image }}
-        />
-        <View className="-mt-8 overflow-hidden rounded-t-3xl bg-white dark:bg-gray-800">
+        <View className="relative">
+          <Image
+            className="h-72 w-full"
+            contentFit="cover"
+            source={{ uri: cafe.image }}
+          />
+          <View className="absolute right-0 bottom-0 left-0 h-24 bg-gradient-to-t from-background-100 to-transparent" />
+        </View>
+        <View className="-mt-8 overflow-hidden rounded-t-3xl bg-background-0">
           <View className="p-4">
             <View className="mb-4 flex-row items-start justify-between">
               <View className="flex-1">
-                <Text className="mb-2 font-bold text-2xl text-gray-900 dark:text-white">
+                <Text className="mb-2 font-bold text-2xl text-typography-0">
                   {cafe.name}
                 </Text>
                 <View className="mb-2 flex-row items-center gap-1">
-                  <Star className="fill-yellow-500 text-yellow-500" size={16} />
-                  <Text className="font-semibold text-gray-900 dark:text-white">
+                  <Star
+                    className="fill-warning-500 text-warning-500"
+                    size={16}
+                  />
+                  <Text className="font-semibold text-typography-0">
                     {cafe.rating}
                   </Text>
-                  <Text className="text-sm text-gray-500 dark:text-gray-400">
+                  <Text className="text-sm text-typography-300">
                     ({cafe.reviewCount} 리뷰)
                   </Text>
                 </View>
                 <View className="flex-row items-center gap-1">
-                  <MapPin
-                    className="text-gray-400 dark:text-gray-500"
-                    size={14}
-                  />
-                  <Text className="text-sm text-gray-600 dark:text-gray-400">
+                  <MapPin className="text-outline-400" size={14} />
+                  <Text className="text-sm text-typography-300">
                     {cafe.location}
                   </Text>
                 </View>
@@ -93,73 +101,63 @@ export default function CafeDetailScreen() {
             </View>
 
             <View className="mb-6">
-              <Text className="mb-3 font-semibold text-base text-gray-900 dark:text-white">
+              <Text className="mb-3 font-semibold text-base text-typography-0">
                 소개
               </Text>
-              <Text className="text-gray-700 dark:text-gray-300">
-                {cafe.description}
-              </Text>
+              <Text className="text-typography-700">{cafe.description}</Text>
             </View>
 
             <View className="mb-6">
-              <Text className="mb-3 font-semibold text-base text-gray-900 dark:text-white">
+              <Text className="mb-3 font-semibold text-base text-typography-0">
                 영업정보
               </Text>
               <View className="space-y-2">
                 <View className="flex-row items-center gap-2">
                   <Clock
-                    className={cafe.isOpen ? "text-green-500" : "text-red-500"}
+                    className={
+                      cafe.isOpen ? "text-success-500" : "text-error-500"
+                    }
                     size={18}
                   />
                   <Text
                     className={`font-medium ${
-                      cafe.isOpen ? "text-green-500" : "text-red-500"
+                      cafe.isOpen ? "text-success-500" : "text-error-500"
                     }`}
                   >
                     {cafe.isOpen ? "영업 중" : "영업 종료"}
                   </Text>
                 </View>
                 <View className="flex-row items-start gap-2">
-                  <Clock
-                    className="mt-1 text-gray-400 dark:text-gray-500"
-                    size={18}
-                  />
-                  <Text className="text-gray-700 dark:text-gray-300">
-                    {cafe.hours}
-                  </Text>
+                  <Clock className="mt-1 text-outline-400" size={18} />
+                  <Text className="text-typography-700">{cafe.hours}</Text>
                 </View>
                 <View className="flex-row items-center gap-2">
-                  <Phone
-                    className="text-gray-400 dark:text-gray-500"
-                    size={18}
-                  />
-                  <Text className="text-gray-700 dark:text-gray-300">
-                    {cafe.phone}
-                  </Text>
+                  <Phone className="text-outline-400" size={18} />
+                  <Text className="text-typography-700">{cafe.phone}</Text>
                 </View>
               </View>
             </View>
 
             <View className="mb-6">
-              <Text className="mb-3 font-semibold text-base text-gray-900 dark:text-white">
+              <Text className="mb-3 font-semibold text-base text-typography-0">
                 메뉴
               </Text>
               <View className="space-y-3">
                 {cafe.menu.map((item) => (
                   <View
-                    className="rounded-xl border border-gray-100 p-4 dark:border-gray-700"
+                    className="rounded-xl border border-outline-100 p-4"
                     key={item.name}
                   >
                     <View className="flex-row items-center justify-between">
                       <View className="flex-1">
-                        <Text className="font-bold text-gray-900 dark:text-white">
+                        <Text className="font-bold text-typography-0">
                           {item.name}
                         </Text>
-                        <Text className="text-sm text-gray-500 dark:text-gray-400">
+                        <Text className="text-sm text-typography-300">
                           {item.description}
                         </Text>
                       </View>
-                      <Text className="font-bold text-gray-900 dark:text-white">
+                      <Text className="font-bold text-typography-0">
                         {item.price}
                       </Text>
                     </View>
@@ -169,7 +167,7 @@ export default function CafeDetailScreen() {
             </View>
 
             <View className="mb-6">
-              <Text className="mb-3 font-semibold text-base text-gray-900 dark:text-white">
+              <Text className="mb-3 font-semibold text-base text-typography-0">
                 사진
               </Text>
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -185,33 +183,33 @@ export default function CafeDetailScreen() {
             </View>
 
             <View>
-              <Text className="mb-3 font-semibold text-base text-gray-900 dark:text-white">
+              <Text className="mb-3 font-semibold text-base text-typography-0">
                 리뷰 ({cafe.reviews.length})
               </Text>
               <View className="space-y-4">
                 {cafe.reviews.map((review) => (
                   <View
-                    className="rounded-xl border border-gray-100 p-4 dark:border-gray-700"
+                    className="rounded-xl border border-outline-100 p-4"
                     key={review.date}
                   >
                     <View className="mb-2 flex-row items-center justify-between">
-                      <Text className="font-semibold text-gray-900 dark:text-white">
+                      <Text className="font-semibold text-typography-0">
                         {review.author}
                       </Text>
                       <View className="flex-row items-center gap-1">
                         <Star
-                          className="fill-yellow-500 text-yellow-500"
+                          className="fill-warning-500 text-warning-500"
                           size={14}
                         />
-                        <Text className="font-semibold text-sm text-gray-900 dark:text-white">
+                        <Text className="font-semibold text-sm text-typography-0">
                           {review.rating}
                         </Text>
                       </View>
                     </View>
-                    <Text className="text-gray-700 dark:text-gray-300">
+                    <Text className="text-typography-700">
                       {review.comment}
                     </Text>
-                    <Text className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                    <Text className="mt-2 text-typography-300 text-xs">
                       {review.date}
                     </Text>
                   </View>
