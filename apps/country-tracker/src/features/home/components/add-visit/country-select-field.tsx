@@ -127,10 +127,11 @@ export const CountrySelectField = withForm({
                         keyExtractor={(item) => item.code}
                         renderItem={({ item }) => (
                           <Pressable
-                            className={`flex-row items-center justify-between border-slate-100 border-b px-4 py-3 active:bg-slate-50 dark:border-slate-800 dark:active:bg-slate-800 ${selectedCountry === item.code
-                              ? "bg-primary-50 dark:bg-primary-900/20"
-                              : ""
-                              }`}
+                            className={`flex-row items-center justify-between border-slate-100 border-b px-4 py-3 active:bg-slate-50 dark:border-slate-800 dark:active:bg-slate-800 ${
+                              selectedCountry === item.code
+                                ? "bg-primary-50 dark:bg-primary-900/20"
+                                : ""
+                            }`}
                             onPress={() => handleSelect(item.code)}
                           >
                             <Text className="text-base text-slate-900 dark:text-white">
