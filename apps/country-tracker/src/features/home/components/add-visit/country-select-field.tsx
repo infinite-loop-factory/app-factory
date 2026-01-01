@@ -54,10 +54,11 @@ export const CountrySelectField = withForm({
                   onPress={() => setIsModalVisible(true)}
                 >
                   <Text
-                    className={`flex-1 text-base ${selectedOption
-                      ? "text-slate-900 dark:text-white"
-                      : "text-slate-400 dark:text-slate-500"
-                      }`}
+                    className={`flex-1 text-base ${
+                      selectedOption
+                        ? "text-slate-900 dark:text-white"
+                        : "text-slate-400 dark:text-slate-500"
+                    }`}
                   >
                     {selectedOption
                       ? `${selectedOption.flag} ${selectedOption.label}`
