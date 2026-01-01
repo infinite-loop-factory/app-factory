@@ -1,14 +1,7 @@
 import type { GeoCoordinates } from "@/features/home/utils/exif";
 
 import { Image as ImageIcon, MapPin } from "lucide-react-native";
-import { View } from "react-native";
-import { Box } from "@/components/ui/box";
-import {
-  Button,
-  ButtonIcon,
-  ButtonSpinner,
-  ButtonText,
-} from "@/components/ui/button";
+import { ActivityIndicator, Pressable, View } from "react-native";
 import { Text } from "@/components/ui/text";
 import { addVisitFormOptions } from "@/features/home/constants/add-visit-form";
 import { useHydrateFromPhotoMutation } from "@/features/home/hooks/use-hydrate-from-photo";
@@ -16,20 +9,11 @@ import { usePrefillLocationMutation } from "@/features/home/hooks/use-prefill-lo
 import { resolveCountryFromCoordinates } from "@/features/home/utils/resolve-country";
 import { withForm } from "@/hooks/create-app-form";
 import { useGlobalToast } from "@/hooks/use-global-toast";
-import { useThemeColor } from "@/hooks/use-theme-color";
 import i18n from "@/libs/i18n";
 
 export const MediaImportCard = withForm({
   ...addVisitFormOptions,
   render: ({ form }) => {
-    const [cardBackground, borderColor, headingColor, mutedTextColor] =
-      useThemeColor([
-        "background-50",
-        "outline-200",
-        "typography-900",
-        "typography-500",
-      ]);
-
     const { showToast } = useGlobalToast();
     const { mutateAsync: hydrateMutateAsync, isPending: hydrateIsPending } =
       useHydrateFromPhotoMutation();
@@ -37,6 +21,7 @@ export const MediaImportCard = withForm({
       usePrefillLocationMutation();
 
     const isLoading = Boolean(hydrateIsPending) || Boolean(prefillIsPending);
+    const brandColor = "#FFA31A";
 
     const applyCoordinatesToForm = async (nextCoords: GeoCoordinates) => {
       form.setFieldValue("coords", nextCoords);
@@ -107,60 +92,57 @@ export const MediaImportCard = withForm({
     };
 
     return (
-      <Box
-        className="rounded-3xl border px-5 py-5"
-        style={{ backgroundColor: cardBackground, borderColor }}
-      >
-        <Text
-          className="font-semibold text-base"
-          style={{ color: headingColor }}
-        >
-          {i18n.t("home.add-visit.media-import-title") ?? ""}
-        </Text>
-        <Text
-          className="mt-1 text-sm leading-5"
-          style={{ color: mutedTextColor }}
-        >
-          {i18n.t("home.add-visit.media-import-subtitle") ?? ""}
-        </Text>
-        <View className="mt-4 gap-3">
-          <View>
-            <Button
-              action="primary"
-              className="w-full justify-center"
-              disabled={isLoading}
-              onPress={handlePickPhoto}
-              size="lg"
-            >
-              {isLoading ? <ButtonSpinner /> : <ButtonIcon as={ImageIcon} />}
-              <ButtonText>
-                {i18n.t("home.add-visit.from-photo") ?? ""}
-              </ButtonText>
-            </Button>
-          </View>
-          <View>
-            <Button
-              action="secondary"
-              className="w-full justify-center"
-              disabled={isLoading}
-              onPress={handlePrefill}
-              size="lg"
-              variant="outline"
-            >
-              {isLoading ? <ButtonSpinner /> : <ButtonIcon as={MapPin} />}
-              <ButtonText>
-                {i18n.t("home.add-visit.from-location") ?? ""}
-              </ButtonText>
-            </Button>
-            <Text
-              className="mt-1 text-xs leading-4"
-              style={{ color: mutedTextColor }}
-            >
-              {i18n.t("home.add-visit.from-location-helper") ?? ""}
-            </Text>
-          </View>
+      <View className="flex flex-col gap-4 rounded-2xl border border-slate-100 bg-background-helper p-5 shadow-sm dark:border-slate-800 dark:bg-slate-800">
+        <View className="flex flex-col gap-1">
+          <Text className="font-bold text-slate-900 text-base dark:text-white">
+            {i18n.t("home.add-visit.media-import-title") ??
+              "How would you like to add your visit?"}
+          </Text>
+          <Text className="text-slate-500 text-xs leading-relaxed dark:text-slate-400">
+            {i18n.t("home.add-visit.media-import-subtitle") ??
+              "We can fill in country and date from your photo or location."}
+          </Text>
         </View>
-      </Box>
+        <View className="flex flex-col gap-3">
+          <Pressable
+            className="h-12 w-full flex-row items-center justify-center gap-2 rounded-xl border border-primary-300 bg-white active:bg-slate-50 dark:active:bg-slate-700/50"
+            disabled={isLoading}
+            onPress={handlePickPhoto}
+          >
+            {isLoading ? (
+              <ActivityIndicator color={brandColor} />
+            ) : (
+              <>
+                <ImageIcon color={brandColor} size={20} />
+                <Text className="font-bold text-primary-300">
+                  {i18n.t("home.add-visit.from-photo") ?? "From photo"}
+                </Text>
+              </>
+            )}
+          </Pressable>
+          <Pressable
+            className="h-12 w-full flex-row items-center justify-center gap-2 rounded-xl border border-primary-300 bg-transparent active:bg-slate-50 dark:active:bg-slate-700/50"
+            disabled={isLoading}
+            onPress={handlePrefill}
+          >
+            {isLoading ? (
+              <ActivityIndicator color={brandColor} />
+            ) : (
+              <>
+                <MapPin color={brandColor} size={20} />
+                <Text className="font-bold text-primary-300">
+                  {i18n.t("home.add-visit.from-location") ??
+                    "Use current location"}
+                </Text>
+              </>
+            )}
+          </Pressable>
+        </View>
+        <Text className="text-center text-[10px] text-slate-400 dark:text-slate-500">
+          {i18n.t("home.add-visit.from-location-helper") ??
+            "Refresh your GPS position to suggest a country automatically."}
+        </Text>
+      </View>
     );
   },
 });

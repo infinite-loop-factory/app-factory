@@ -1,4 +1,8 @@
 {
+  "common": {
+    "cancel": "Cancel",
+    "done": "Done"
+  },
   "welcome": "Welcome",
 
   "home": {
@@ -45,9 +49,23 @@
       "button": "Add a New Visit",
       "title": "Add a New Visit",
       "description": "Add a new country to your visited list.",
-      "country-label": "Country",
+      "country-label": "Which country did you visit?",
       "country-placeholder": "Select a country",
       "country-helper": "Search by name or let smart fill suggest it for you.",
+      "media-import-title": "How would you like to add your visit?",
+      "media-import-subtitle": "We can fill in country and date from your photo or location.",
+      "from-photo": "From photo",
+      "from-location": "Use current location",
+      "from-location-helper": "Refresh your GPS position to suggest a country automatically.",
+      "date-label": "When did you arrive and depart?",
+      "same-day-label": "Stayed one day",
+      "same-day-helper": "Turn off to pick a different end date.",
+      "cancel": "Cancel",
+      "submit": "Register",
+      "errors": {
+        "photo-failed": "Failed to load photo.",
+        "location-failed": "Failed to get location."
+      },
       "from-photo": "From photo",
       "from-location": "Use current location",
       "from-location-helper": "Refresh your GPS position to suggest a country automatically.",
@@ -63,6 +81,7 @@
       "same-day-hint": "Turn off to pick a different end date.",
       "stay-length": "Selected %{count} day(s)",
       "cancel": "Cancel",
+      "search-country": "Search country...",
       "submit": "Register",
       "errors": {
         "location-denied": "We need location permission to prefill your country.",

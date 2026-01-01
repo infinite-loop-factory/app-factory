@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Add a New Visit</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">tailwind.config = {darkMode: "class", theme: {extend: {colors: {primary: "#FFA31A", "background-light": "#f8f7f5", "background-dark": "#231b0f", "helper-gray": "#F4F6F9"}, fontFamily: {display: "Plus Jakarta Sans"}, borderRadius: {DEFAULT: "0.25rem", lg: "0.5rem", xl: "0.75rem", full: "9999px"}}}};</script>
+<style>
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #475569;
+        }
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-display antialiased text-slate-900 dark:text-white bg-background-light dark:bg-background-dark transition-colors duration-200">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden group/design-root max-w-md mx-auto shadow-2xl bg-background-light dark:bg-background-dark border-x border-slate-200 dark:border-slate-800">
+<header class="flex items-center px-4 py-4 justify-between bg-background-light dark:bg-background-dark sticky top-0 z-10">
+<button aria-label="Back" class="flex size-10 shrink-0 items-center justify-center rounded-full bg-white dark:bg-slate-800 shadow-sm border border-slate-100 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors text-slate-900 dark:text-white">
+<span class="material-symbols-outlined text-[20px]">chevron_left</span>
+</button>
+<h2 class="text-slate-900 dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] text-center">
+                Add a New Visit
+            </h2>
+<div class="size-10"></div>
+</header>
+<main class="flex-1 px-4 py-2 flex flex-col gap-6">
+<div class="bg-helper-gray dark:bg-slate-800 rounded-2xl p-5 shadow-sm flex flex-col gap-4">
+<div class="flex flex-col gap-1">
+<h3 class="text-sm font-bold text-slate-900 dark:text-white">How would you like to add your visit?</h3>
+<p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">We can fill in country and date from your photo or location.</p>
+</div>
+<div class="flex flex-col gap-3">
+<button class="flex items-center justify-center gap-2 w-full rounded-xl bg-white border border-primary text-primary font-bold h-12 shadow-sm hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+<span class="material-symbols-outlined text-xl">image</span>
+<span>From photo</span>
+</button>
+<button class="flex items-center justify-center gap-2 w-full rounded-xl bg-transparent border border-primary text-primary font-bold h-12 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+<span class="material-symbols-outlined text-xl">location_on</span>
+<span>Use current location</span>
+</button>
+</div>
+<p class="text-[10px] text-center text-slate-400 dark:text-slate-500">
+                    Refresh your GPS position to suggest a country automatically.
+                </p>
+</div>
+<div class="flex flex-col gap-5">
+<div class="flex flex-col gap-2">
+<label class="text-sm font-bold text-slate-900 dark:text-white">Which country did you visit?</label>
+<div class="relative">
+<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-slate-500 dark:text-slate-400">
+<span class="text-lg">🇺🇸</span>
+</div>
+<select class="form-select w-full appearance-none rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white h-12 pl-12 pr-10 text-base focus:border-primary focus:ring-primary shadow-sm transition-colors cursor-pointer">
+<option selected="" value="us">United States of America</option>
+<option value="fr">France 🇫🇷</option>
+<option value="jp">Japan 🇯🇵</option>
+<option value="it">Italy 🇮🇹</option>
+<option value="br">Brazil 🇧🇷</option>
+</select>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4 text-slate-500 dark:text-slate-400">
+<span class="material-symbols-outlined">expand_more</span>
+</div>
+</div>
+<p class="text-xs text-slate-400 dark:text-slate-500 pl-1">Search by name or let smart fill suggest it for you.</p>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-sm font-bold text-slate-900 dark:text-white">When did you arrive and depart?</label>
+<div class="grid grid-cols-2 gap-3">
+<div class="flex flex-col gap-1">
+<div class="relative">
+<input class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white h-12 pl-4 pr-10 text-base focus:border-primary focus:ring-primary shadow-sm placeholder-slate-400 dark:[color-scheme:dark]" type="date" value="2025-12-30"/>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-slate-400">
+<span class="material-symbols-outlined text-lg">calendar_today</span>
+</div>
+</div>
+<span class="text-xs text-slate-400 pl-1">Start</span>
+</div>
+<div class="flex flex-col gap-1">
+<div class="relative">
+<input class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white h-12 pl-4 pr-10 text-base focus:border-primary focus:ring-primary shadow-sm placeholder-slate-400 dark:[color-scheme:dark]" type="date" value="2025-12-30"/>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-slate-400">
+<span class="material-symbols-outlined text-lg">event</span>
+</div>
+</div>
+<span class="text-xs text-slate-400 pl-1">End</span>
+</div>
+</div>
+</div>
+<div class="bg-slate-100 dark:bg-slate-800/50 rounded-2xl p-4 flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-bold text-slate-900 dark:text-white text-sm">Stayed one day</span>
+<span class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Turn off to pick a different end date.</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-slate-300 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary/20 dark:peer-focus:ring-primary/40 rounded-full peer dark:bg-slate-600 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-500"></div>
+</label>
+</div>
+<p class="text-xs text-slate-400 dark:text-slate-500 pl-1">Selected 1 day(s)</p>
+</div>
+</main>
+<footer class="p-4 bg-background-light dark:bg-background-dark sticky bottom-0 pb-8 pt-4 border-t border-slate-200 dark:border-slate-800/50">
+<div class="flex gap-3">
+<button class="flex-1 flex items-center justify-center rounded-xl border border-slate-300 dark:border-slate-600 bg-transparent px-5 py-3.5 text-slate-700 dark:text-slate-200 text-base font-bold leading-normal hover:bg-slate-50 dark:hover:bg-slate-800 active:scale-[0.98] transition-all">
+                    Cancel
+                </button>
+<button class="flex-[1.5] flex items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3.5 text-white text-base font-bold leading-normal shadow-lg shadow-primary/20 hover:bg-blue-600 active:scale-[0.98] transition-all">
+<span class="material-symbols-outlined text-xl">add</span>
+<span>Register</span>
+</button>
+</div>
+</footer>
+</div>
+</body></html>

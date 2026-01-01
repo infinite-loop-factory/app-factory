@@ -164,8 +164,9 @@ export default {
           muted: "rgb(var(--color-background-muted)/<alpha-value>)",
           success: "rgb(var(--color-background-success)/<alpha-value>)",
           info: "rgb(var(--color-background-info)/<alpha-value>)",
-          light: "#FBFBFB",
-          dark: "#181719",
+          light: "rgb(var(--color-background-light)/<alpha-value>)",
+          dark: "rgb(var(--color-background-dark)/<alpha-value>)",
+          helper: "rgb(var(--color-background-helper)/<alpha-value>)",
         },
         indicator: {
           primary: "rgb(var(--color-indicator-primary)/<alpha-value>)",

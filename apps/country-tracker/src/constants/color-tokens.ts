@@ -150,6 +150,10 @@ export const TOKENS = {
     "--color-indicator-primary": "rgb(55 55 55)",
     "--color-indicator-info": "rgb(83 153 236)",
     "--color-indicator-error": "rgb(185 28 28)",
+
+    "--color-background-light": "rgb(248 247 245)",
+    "--color-background-dark": "rgb(35 27 15)",
+    "--color-background-helper": "rgb(244 246 249)",
   },
 
   dark: {
@@ -302,5 +306,9 @@ export const TOKENS = {
     "--color-indicator-primary": "rgb(247 247 247)",
     "--color-indicator-info": "rgb(161 199 245)",
     "--color-indicator-error": "rgb(232 70 69)",
+
+    "--color-background-light": "rgb(248 247 245)",
+    "--color-background-dark": "rgb(35 27 15)",
+    "--color-background-helper": "rgb(244 246 249)",
   },
 };

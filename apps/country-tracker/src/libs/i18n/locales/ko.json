@@ -1,4 +1,8 @@
 {
+  "common": {
+    "cancel": "취소",
+    "done": "완료"
+  },
   "welcome": "환영합니다",
 
   "home": {
@@ -61,6 +65,7 @@
       "same-day-hint": "해제하면 다른 종료일을 선택할 수 있어요.",
       "stay-length": "%{count}일 선택됨",
       "cancel": "취소",
+      "search-country": "국가 검색...",
       "submit": "등록",
       "errors": {
         "location-denied": "국가를 자동으로 채우려면 위치 권한이 필요해요.",
