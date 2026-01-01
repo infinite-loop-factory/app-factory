@@ -62,15 +62,6 @@
       "same-day-helper": "Turn off to pick a different end date.",
       "cancel": "Cancel",
       "submit": "Register",
-      "errors": {
-        "photo-failed": "Failed to load photo.",
-        "location-failed": "Failed to get location."
-      },
-      "from-photo": "From photo",
-      "from-location": "Use current location",
-      "from-location-helper": "Refresh your GPS position to suggest a country automatically.",
-      "media-import-title": "Import from photo or location",
-      "media-import-subtitle": "We can fill in country and date from your photo or location.",
       "import-title": "Import",
       "import-subtitle": "Let us suggest details from your photo or location.",
       "date-range": "Date range",
@@ -80,9 +71,7 @@
       "same-day": "Stayed one day",
       "same-day-hint": "Turn off to pick a different end date.",
       "stay-length": "Selected %{count} day(s)",
-      "cancel": "Cancel",
       "search-country": "Search country...",
-      "submit": "Register",
       "errors": {
         "location-denied": "We need location permission to prefill your country.",
         "location-failed": "Could not read your current location. Try again later.",

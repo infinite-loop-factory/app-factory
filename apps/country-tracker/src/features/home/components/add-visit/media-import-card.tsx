@@ -94,7 +94,7 @@ export const MediaImportCard = withForm({
     return (
       <View className="flex flex-col gap-4 rounded-2xl border border-slate-100 bg-background-helper p-5 shadow-sm dark:border-slate-800 dark:bg-slate-800">
         <View className="flex flex-col gap-1">
-          <Text className="font-bold text-slate-900 text-base dark:text-white">
+          <Text className="font-bold text-base text-slate-900 dark:text-white">
             {i18n.t("home.add-visit.media-import-title") ??
               "How would you like to add your visit?"}
           </Text>

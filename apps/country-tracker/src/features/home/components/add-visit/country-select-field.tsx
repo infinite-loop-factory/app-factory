@@ -1,12 +1,6 @@
 import { ChevronDown, Search, X } from "lucide-react-native";
 import { useState } from "react";
-import {
-  FlatList,
-  Modal,
-  Pressable,
-  TextInput,
-  View,
-} from "react-native";
+import { FlatList, Modal, Pressable, TextInput, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Text } from "@/components/ui/text";
 import { addVisitFormOptions } from "@/features/home/constants/add-visit-form";
@@ -54,11 +48,10 @@ export const CountrySelectField = withForm({
                   onPress={() => setIsModalVisible(true)}
                 >
                   <Text
-                    className={`flex-1 text-base ${
-                      selectedOption
+                    className={`flex-1 text-base ${selectedOption
                         ? "text-slate-900 dark:text-white"
                         : "text-slate-400 dark:text-slate-500"
-                    }`}
+                      }`}
                   >
                     {selectedOption
                       ? `${selectedOption.flag} ${selectedOption.label}`
@@ -85,7 +78,7 @@ export const CountrySelectField = withForm({
                       className="mt-auto h-[75%] w-full rounded-t-3xl bg-white dark:bg-slate-900"
                       onPress={(e) => e.stopPropagation()}
                     >
-                      <View className="flex-row items-center gap-3 border-slate-200 border-b px-4 pb-4 pt-5 dark:border-slate-800">
+                      <View className="flex-row items-center gap-3 border-slate-200 border-b px-4 pt-5 pb-4 dark:border-slate-800">
                         <View className="flex-1 flex-row items-center gap-2 rounded-xl bg-slate-100 px-3 py-2 dark:bg-slate-800">
                           <Search
                             className="text-slate-500 dark:text-slate-400"
@@ -127,11 +120,10 @@ export const CountrySelectField = withForm({
                         keyExtractor={(item) => item.code}
                         renderItem={({ item }) => (
                           <Pressable
-                            className={`flex-row items-center justify-between border-slate-100 border-b px-4 py-3 active:bg-slate-50 dark:border-slate-800 dark:active:bg-slate-800 ${
-                              selectedCountry === item.code
+                            className={`flex-row items-center justify-between border-slate-100 border-b px-4 py-3 active:bg-slate-50 dark:border-slate-800 dark:active:bg-slate-800 ${selectedCountry === item.code
                                 ? "bg-primary-50 dark:bg-primary-900/20"
                                 : ""
-                            }`}
+                              }`}
                             onPress={() => handleSelect(item.code)}
                           >
                             <Text className="text-base text-slate-900 dark:text-white">
