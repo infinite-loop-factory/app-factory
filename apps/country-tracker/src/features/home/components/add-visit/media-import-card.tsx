@@ -21,7 +21,7 @@ export const MediaImportCard = withForm({
       usePrefillLocationMutation();
 
     const isLoading = Boolean(hydrateIsPending) || Boolean(prefillIsPending);
-    const brandColor = "#FFA31A";
+    const brandColor = "primary-300";
 
     const applyCoordinatesToForm = async (nextCoords: GeoCoordinates) => {
       form.setFieldValue("coords", nextCoords);
