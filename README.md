@@ -4,8 +4,8 @@
 
 ```bash
 brew install mise
-eval "$(mise activate zsh)" > ./zshrc
-source ./zshrc
+eval "$(mise activate zsh)" >> ~/.zshrc
+source ~/.zshrc
 mise install
 ```
 
