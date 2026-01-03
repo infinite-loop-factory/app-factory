@@ -16,7 +16,7 @@ export default function EmptyData({ title, description }: EmptyDataProps) {
         <View className="h-24 w-24 items-center justify-center rounded-full bg-slate-100">
           <Icon as={Inbox} className="h-12 w-12 text-slate-300" />
         </View>
-        <View className="-bottom-1 -right-1 absolute h-8 w-8 items-center justify-center rounded-full border-2 border-slate-100 bg-white">
+        <View className="absolute -right-1 -bottom-1 h-8 w-8 items-center justify-center rounded-full border-2 border-slate-100 bg-white">
           <Text>😢</Text>
         </View>
       </View>

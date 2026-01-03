@@ -5,5 +5,5 @@ export function formatDisplayDate(date: string): string {
   if (!dt.isValid) {
     return date;
   }
-  return dt.toFormat("yyyy.MM.dd");
+  return dt.toFormat("yyyy-MM-dd");
 }

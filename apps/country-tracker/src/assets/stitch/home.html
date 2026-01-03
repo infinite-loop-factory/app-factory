@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Country List Home Screen</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config -->
+<script id="tailwind-config">tailwind.config = {darkMode: "class", theme: {extend: {colors: {primary: "#FFA31A", "background-light": "#f8f7f5", "background-dark": "#231b0f"}, fontFamily: {display: "Plus Jakarta Sans"}, borderRadius: {DEFAULT: "0.25rem", lg: "0.5rem", xl: "0.75rem", full: "9999px"}}}};</script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-filled {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Hide scrollbar for clean horizontal scroll */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white font-display antialiased">
+<div class="relative flex h-full min-h-screen w-full flex-col max-w-md mx-auto bg-background-light dark:bg-background-dark shadow-2xl overflow-hidden pb-20">
+<!-- Top App Bar -->
+<header class="flex items-center justify-between px-5 pt-8 pb-4 bg-background-light dark:bg-background-dark sticky top-0 z-10">
+<div class="flex items-center gap-3">
+<div class="relative">
+<div class="bg-center bg-no-repeat bg-cover rounded-full size-10 ring-2 ring-primary/20" data-alt="User profile picture showing a smiling person" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBivoJpGT4-QTTqam9g7yq5rAksnEYIDdYo-k-Uu3NrqjbbcjacgpKDGfimAY92vQDQNWuXNHtoex6aUIWApI324x9p4JqOuI3rMm94EoX-81592TqUwoAkDDkAL9ePBTSQHKO4e9T-B16lK_x4uiZoRyrJQTUzDbyTSY8CnNdne5F1yqSTKQMMbNslWJoEiFYF8_kfbjYZzlhciFANamLcQ78tEkMEGjDls7aar9tl-pHFmvbrXJM8IuYd8qViMT0LymCEBQQXly48");'>
+</div>
+<div class="absolute bottom-0 right-0 size-3 bg-green-500 rounded-full border-2 border-background-light dark:border-background-dark"></div>
+</div>
+<div>
+<h1 class="text-xl font-bold leading-tight text-slate-900 dark:text-white">My Travels</h1>
+<p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Welcome back, Alex</p>
+</div>
+</div>
+<button class="flex items-center justify-center size-10 rounded-full bg-primary text-white shadow-lg shadow-primary/30 hover:bg-blue-600 transition-colors">
+<span class="material-symbols-outlined text-[24px]">add</span>
+</button>
+</header>
+<!-- Profile Stats -->
+<section class="px-5 py-2">
+<div class="flex gap-4">
+<div class="flex-1 flex flex-col justify-between p-4 rounded-2xl bg-white dark:bg-slate-800 shadow-sm border border-slate-100 dark:border-slate-700/50">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-primary text-[20px]">public</span>
+<p class="text-slate-500 dark:text-slate-400 text-xs font-medium uppercase tracking-wider">Countries</p>
+</div>
+<p class="text-3xl font-bold text-slate-900 dark:text-white">12</p>
+</div>
+<div class="flex-1 flex flex-col justify-between p-4 rounded-2xl bg-white dark:bg-slate-800 shadow-sm border border-slate-100 dark:border-slate-700/50">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-orange-500 text-[20px]">calendar_month</span>
+<p class="text-slate-500 dark:text-slate-400 text-xs font-medium uppercase tracking-wider">Days Tracked</p>
+</div>
+<p class="text-3xl font-bold text-slate-900 dark:text-white">452</p>
+</div>
+</div>
+</section>
+<!-- Search Bar -->
+<section class="px-5 py-3">
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+<span class="material-symbols-outlined text-slate-400 dark:text-slate-500">search</span>
+</div>
+<input class="block w-full p-4 pl-11 text-sm text-slate-900 border border-transparent rounded-2xl bg-white dark:bg-slate-800 focus:ring-2 focus:ring-primary focus:border-transparent placeholder-slate-400 dark:placeholder-slate-500 dark:text-white shadow-sm transition-all" placeholder="Search destination..." type="text"/>
+<div class="absolute inset-y-0 right-0 flex items-center pr-3">
+<button class="p-2 text-slate-400 hover:text-primary transition-colors rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700">
+<span class="material-symbols-outlined">tune</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Sorting Chips -->
+<section class="pl-5 py-2">
+<div class="flex gap-3 overflow-x-auto no-scrollbar pr-5 pb-2">
+<button class="flex shrink-0 items-center justify-center gap-x-2 rounded-full bg-slate-900 dark:bg-white px-5 py-2.5 shadow-md">
+<span class="text-white dark:text-slate-900 text-sm font-semibold leading-normal">Recent</span>
+</button>
+<button class="flex shrink-0 items-center justify-center gap-x-2 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-5 py-2.5">
+<span class="text-slate-600 dark:text-slate-300 text-sm font-medium leading-normal">Most Days</span>
+</button>
+<button class="flex shrink-0 items-center justify-center gap-x-2 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-5 py-2.5">
+<span class="text-slate-600 dark:text-slate-300 text-sm font-medium leading-normal">Europe</span>
+</button>
+<button class="flex shrink-0 items-center justify-center gap-x-2 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-5 py-2.5">
+<span class="text-slate-600 dark:text-slate-300 text-sm font-medium leading-normal">Asia</span>
+</button>
+</div>
+</section>
+<!-- Country List -->
+<section class="flex-1 px-5 flex flex-col gap-4 overflow-y-auto">
+<div class="flex items-center justify-between mt-2 mb-1">
+<h3 class="text-lg font-bold text-slate-900 dark:text-white">Countries</h3>
+<button class="text-sm font-medium text-primary hover:text-blue-600">View Map</button>
+</div>
+<!-- Item 1 -->
+<div class="group relative flex items-center justify-between p-4 bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700/50 shadow-sm hover:shadow-md transition-all cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="bg-center bg-no-repeat bg-cover rounded-xl size-14 shadow-inner" data-alt="Flag of France with blue white and red stripes" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB_or1VqzK3cfcp25WE2HHxRhWPDlsibtlFivIvXnK47wf3pOqGlqe8mXvaxryBhxex2JR8oqxKGac-S-cP3NBF39LmMOITA6AxZ75gYc8ZOgPL3444xodFTyYWH6_Tr5DbxXEh5T3GdKzTaPIdByVvCwFTsFUjbvwDu4soeHEagJ6Jg7CRH_QUK6qVJqsE7uANxWDZgWFoNTJSbfJOjgGZkzbcLSbP_qqds52ZT5WZ3jIz3UnYguYb2IxhH3IjenWyjutPBN-8nyVf");'></div>
+<div class="flex flex-col justify-center">
+<p class="text-slate-900 dark:text-white text-base font-bold leading-tight group-hover:text-primary transition-colors">France</p>
+<div class="flex items-center gap-1 mt-1 text-slate-500 dark:text-slate-400 text-xs">
+<span class="material-symbols-outlined text-[14px]">history</span>
+<span>Oct 2023</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col items-end gap-1">
+<div class="flex items-center justify-center px-3 py-1 bg-primary/10 dark:bg-primary/20 rounded-full">
+<span class="text-primary dark:text-blue-400 text-sm font-bold">90 Days</span>
+</div>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="group relative flex items-center justify-between p-4 bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700/50 shadow-sm hover:shadow-md transition-all cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="bg-center bg-no-repeat bg-cover rounded-xl size-14 shadow-inner" data-alt="Flag of Japan with a red circle on white background" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBligi0yUIzMyL86LzGzCrh2cOBlWkTnrL3D0ujAY5rHHoAjVmyF9LkoGQoqHaa7nI7IxXtsjLVzvVyGPEIJujzIbylgxA6W-XAOUNeuJrosbchW5HtyxaXMrPc7KSV3Ii0wk373Hzqofs9bwXMmpnsOYifzFm-bmd9I2iOkhNS00hvHW5ES9S5DMrpT3KSpNrpi6T8Jd5dSAN7bNvR8D-CwwxtEIJP3fgBzlLPNxvPIZ_tlZZq7E0gvTkyfyK9DonJQbaBndOFuEB-");'></div>
+<div class="flex flex-col justify-center">
+<p class="text-slate-900 dark:text-white text-base font-bold leading-tight group-hover:text-primary transition-colors">Japan</p>
+<div class="flex items-center gap-1 mt-1 text-slate-500 dark:text-slate-400 text-xs">
+<span class="material-symbols-outlined text-[14px]">history</span>
+<span>Aug 2023</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col items-end gap-1">
+<div class="flex items-center justify-center px-3 py-1 bg-slate-100 dark:bg-slate-700 rounded-full">
+<span class="text-slate-700 dark:text-slate-300 text-sm font-bold">14 Days</span>
+</div>
+</div>
+</div>
+<!-- Item 3 -->
+<div class="group relative flex items-center justify-between p-4 bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700/50 shadow-sm hover:shadow-md transition-all cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="bg-center bg-no-repeat bg-cover rounded-xl size-14 shadow-inner" data-alt="Flag of Italy with green white and red stripes" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA6sQG8gStMAyijh_t_7AXjVEj_tHt8aXTdbk_he5UHFXKKw95eKlQsFaEGWKpb3Yt3ckFkfXOLe_8FoD0MA2fHWlCjH_O5ZhmW3-m5jazJXRnB_gUNE4GKnWlLOA9XPsVXhz2T8tO4I6l6iJtbxzQY6NqktE-8plljbjCZAUa1AerimhEvUtbqBRzBKNzMk5TPHKP0UCDdsgZyAk8uKLLmiYqafwBE9IuiTwlUzBMAx2_zNLTwdEMCZrBTb40Z5yhu02sNtrjKfCtn");'></div>
+<div class="flex flex-col justify-center">
+<p class="text-slate-900 dark:text-white text-base font-bold leading-tight group-hover:text-primary transition-colors">Italy</p>
+<div class="flex items-center gap-1 mt-1 text-slate-500 dark:text-slate-400 text-xs">
+<span class="material-symbols-outlined text-[14px]">history</span>
+<span>Jul 2023</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col items-end gap-1">
+<div class="flex items-center justify-center px-3 py-1 bg-slate-100 dark:bg-slate-700 rounded-full">
+<span class="text-slate-700 dark:text-slate-300 text-sm font-bold">21 Days</span>
+</div>
+</div>
+</div>
+<!-- Item 4 -->
+<div class="group relative flex items-center justify-between p-4 bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700/50 shadow-sm hover:shadow-md transition-all cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="bg-center bg-no-repeat bg-cover rounded-xl size-14 shadow-inner" data-alt="Flag of United States with stars and stripes" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBC9btC30jB70gieQP2Pn_oqMFf2BOqgXMsQwmeMPc216ZMuEgm_28A5la7JfJ47tu1zgOCAPyoOtS_VWWNFXRX33DfmT-vglcIhHOrsLMkqAktcwTbCGSUti16L7QJ3TA0VYFZ7w8gsbJcXr4Y7DJF8HvplFHwGjx4Ua1zZmq0QK0qFCROVPiOb0KeoFrqrzqPnpd3JeTa3h_eqyEdlrdXDMU0KbSOnZYIP5IK0lXBe80d8mRrlkEGmSFxZ_TKrSElRySLYYYGbFOt");'></div>
+<div class="flex flex-col justify-center">
+<p class="text-slate-900 dark:text-white text-base font-bold leading-tight group-hover:text-primary transition-colors">United States</p>
+<div class="flex items-center gap-1 mt-1 text-slate-500 dark:text-slate-400 text-xs">
+<span class="material-symbols-outlined text-[14px]">history</span>
+<span>Jan 2023</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col items-end gap-1">
+<div class="flex items-center justify-center px-3 py-1 bg-slate-100 dark:bg-slate-700 rounded-full">
+<span class="text-slate-700 dark:text-slate-300 text-sm font-bold">5 Days</span>
+</div>
+</div>
+</div>
+<!-- Spacer for bottom nav -->
+<div class="h-10"></div>
+</section>
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-around h-[84px] bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 pb-4 max-w-md mx-auto">
+<button class="flex flex-col items-center justify-center w-full h-full gap-1 text-primary">
+<span class="material-symbols-outlined icon-filled">home</span>
+<span class="text-[10px] font-bold">Home</span>
+</button>
+<button class="flex flex-col items-center justify-center w-full h-full gap-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors">
+<span class="material-symbols-outlined">map</span>
+<span class="text-[10px] font-medium">Map</span>
+</button>
+<button class="flex flex-col items-center justify-center w-full h-full gap-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors">
+<span class="material-symbols-outlined">calendar_month</span>
+<span class="text-[10px] font-medium">Timeline</span>
+</button>
+<button class="flex flex-col items-center justify-center w-full h-full gap-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-[10px] font-medium">Settings</span>
+</button>
+</nav>
+</div>
+</body></html>

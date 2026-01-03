@@ -11,8 +11,8 @@
     "ios": "DARK_MODE=media expo run:ios",
     "lint": "biome lint --fix --unsafe --no-errors-on-unmatched",
     "start": "expo start",
-    "test": "jest",
-    "test:watch": "jest --watchAll",
+    "test": "jest --passWithNoTests",
+    "test:watch": "jest --watchAll --passWithNoTests",
     "type-check": "tsc --noEmit",
     "web": "DARK_MODE=media expo start --web",
     "web:publish": "tsx web-publish.ts"

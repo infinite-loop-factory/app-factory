@@ -12,7 +12,5 @@
   "typescript.preferences.preferTypeOnlyAutoImports": true,
   "tailwindCSS.experimental.classRegex": [
     ["([\"'`][^\"'`]*.*?[\"'`])", "[\"'`]([^\"'`]*).*?[\"'`]"]
-  ],
-  "java.compile.nullAnalysis.mode": "automatic",
-  "java.configuration.updateBuildConfiguration": "interactive"
+  ]
 }

@@ -1,26 +1,67 @@
 {
+  "common": {
+    "cancel": "Cancel",
+    "done": "Done"
+  },
   "welcome": "Welcome",
 
   "home": {
     "tab": "Home",
-    "title": "Visited Countries",
-    "search": "Search",
-    "search-a11y": "Search countries",
+    "title": "My Travels",
+    "subtitle": "Welcome back, %{name}",
+    "default-name": "Explorer",
+    "search": "Search destination...",
+    "search-a11y": "Search destinations",
     "search-button-a11y": "Execute search",
+    "filter-button-a11y": "Open filter options",
+    "actions": {
+      "view-map": "View Map",
+      "add": "Add"
+    },
+    "stats": {
+      "countries": "Countries",
+      "days-tracked": "Days Tracked"
+    },
+    "filters": {
+      "recent": "Recent",
+      "most-days": "Most Days",
+      "europe": "Europe",
+      "asia": "Asia",
+      "americas": "Americas",
+      "africa": "Africa",
+      "oceania": "Oceania"
+    },
+    "filter-sheet": {
+      "title": "Filter visited countries",
+      "subtitle": "Choose how to sort and filter your stays.",
+      "sort": "Sort",
+      "region": "Region",
+      "apply": "Apply",
+      "cancel": "Cancel"
+    },
+    "list": {
+      "last-visit": "%{date}",
+      "stay-days": "%{count} Days"
+    },
     "error-loading": "Failed to load visited countries.",
     "no-visited-countries": "No visited countries yet",
     "add-visit": {
       "button": "Add a New Visit",
       "title": "Add a New Visit",
       "description": "Add a new country to your visited list.",
-      "country-label": "Country",
+      "country-label": "Which country did you visit?",
       "country-placeholder": "Select a country",
       "country-helper": "Search by name or let smart fill suggest it for you.",
+      "media-import-title": "How would you like to add your visit?",
+      "media-import-subtitle": "We can fill in country and date from your photo or location.",
       "from-photo": "From photo",
       "from-location": "Use current location",
       "from-location-helper": "Refresh your GPS position to suggest a country automatically.",
-      "media-import-title": "Import from photo or location",
-      "media-import-subtitle": "We can fill in country and date from your photo or location.",
+      "date-label": "When did you arrive and depart?",
+      "same-day-label": "Stayed one day",
+      "same-day-helper": "Turn off to pick a different end date.",
+      "cancel": "Cancel",
+      "submit": "Register",
       "import-title": "Import",
       "import-subtitle": "Let us suggest details from your photo or location.",
       "date-range": "Date range",
@@ -30,8 +71,7 @@
       "same-day": "Stayed one day",
       "same-day-hint": "Turn off to pick a different end date.",
       "stay-length": "Selected %{count} day(s)",
-      "cancel": "Cancel",
-      "submit": "Register",
+      "search-country": "Search country...",
       "errors": {
         "location-denied": "We need location permission to prefill your country.",
         "location-failed": "Could not read your current location. Try again later.",

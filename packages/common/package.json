@@ -9,7 +9,7 @@
     "build": "tsc",
     "clean": "git clean -xdf .cache .turbo dist node_modules",
     "dev": "tsc",
-    "lint": "biome lint --fix --no-errors-on-unmatched",
+    "lint": "biome lint --fix --unsafe --no-errors-on-unmatched",
     "type-check": "tsc --noEmit --emitDeclarationOnly false"
   },
   "dependencies": {
