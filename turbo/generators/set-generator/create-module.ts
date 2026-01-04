@@ -57,6 +57,12 @@ export default function createModule(plop: PlopTypes.NodePlopAPI) {
             const pkg = JSON.parse(content) as PackageJson;
             pkg.name = `@infinite-loop-factory/${kebabTitle}`;
 
+            if (answers?.type === "native") {
+              pkg.scripts = pkg.scripts || {};
+              pkg.scripts["web:publish"] =
+                `tsx ../../scripts/web-publish.ts --app ${kebabTitle}`;
+            }
+
             return JSON.stringify(pkg, null, 2);
           },
         },

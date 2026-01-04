@@ -13,7 +13,7 @@
     "test:watch": "jest --watchAll --passWithNoTests",
     "type-check": "tsc --noEmit",
     "web": "cross-env DARK_MODE=media expo start --web",
-    "web:publish": "tsx web-publish.ts"
+    "web:publish": "tsx ../../scripts/web-publish.ts --app country-tracker"
   },
   "dependencies": {
     "@expo/html-elements": "^0.12.5",

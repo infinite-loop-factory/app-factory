@@ -17,7 +17,7 @@
     "test:watch": "jest --watchAll --passWithNoTests",
     "type-check": "tsc --noEmit",
     "web": "expo start --web",
-    "web:publish": "tsx web-publish.ts"
+    "web:publish": "tsx ../../scripts/web-publish.ts --app question-card"
   },
   "dependencies": {
     "@expo-google-fonts/ibm-plex-sans-kr": "^0.2.3",

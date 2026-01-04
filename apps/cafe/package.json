@@ -14,7 +14,7 @@
     "test:watch": "jest --watchAll --passWithNoTests",
     "type-check": "tsc --noEmit",
     "web": "expo start --web",
-    "web:publish": "tsx web-publish.ts"
+    "web:publish": "tsx ../../scripts/web-publish.ts --app cafe"
   },
   "dependencies": {
     "@expo/metro-runtime": "6.1.2",
