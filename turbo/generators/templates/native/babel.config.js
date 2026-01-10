@@ -11,6 +11,6 @@ module.exports = (api) => {
       ],
       "nativewind/babel",
     ],
-    plugins: ["transform-vite-meta-env", "react-native-reanimated/plugin"],
+    plugins: ["transform-vite-meta-env"],
   };
 };

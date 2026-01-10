@@ -1,29 +1,36 @@
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withRepeat,
-  withSequence,
-  withTiming,
-} from "react-native-reanimated";
+import { useEffect, useRef } from "react";
+import { Animated } from "react-native";
 import { ThemedText } from "@/components/themed-text";
 
 export function HelloWave() {
-  const rotationAnimation = useSharedValue(0);
+  const rotationAnim = useRef(new Animated.Value(0)).current;
 
-  rotationAnimation.value = withRepeat(
-    withSequence(
-      withTiming(25, { duration: 150 }),
-      withTiming(0, { duration: 150 }),
-    ),
-    4, // Run the animation 4 times
-  );
+  useEffect(() => {
+    const animation = Animated.loop(
+      Animated.sequence([
+        Animated.timing(rotationAnim, {
+          toValue: 25,
+          duration: 150,
+          useNativeDriver: true,
+        }),
+        Animated.timing(rotationAnim, {
+          toValue: 0,
+          duration: 150,
+          useNativeDriver: true,
+        }),
+      ]),
+      { iterations: 4 },
+    );
+    animation.start();
+  }, [rotationAnim]);
 
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ rotate: `${rotationAnimation.value}deg` }],
-  }));
+  const rotate = rotationAnim.interpolate({
+    inputRange: [0, 25],
+    outputRange: ["0deg", "25deg"],
+  });
 
   return (
-    <Animated.View style={animatedStyle}>
+    <Animated.View style={{ transform: [{ rotate }] }}>
       <ThemedText className="mt-[-6px] text-[28px] leading-[32px]">
         👋
       </ThemedText>
