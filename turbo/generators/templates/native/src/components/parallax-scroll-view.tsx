@@ -1,15 +1,10 @@
 import type { PropsWithChildren, ReactElement } from "react";
 
 import { useColorScheme } from "nativewind";
-import Animated, {
-  interpolate,
-  useAnimatedRef,
-  useAnimatedStyle,
-  useScrollViewOffset,
-} from "react-native-reanimated";
+import { ScrollView, View } from "react-native";
 import { ThemedView } from "@/components/themed-view";
 
-const HEADER_HEIGHT = 250;
+const _HEADER_HEIGHT = 250;
 
 type Props = PropsWithChildren<{
   headerImage: ReactElement;
@@ -22,44 +17,20 @@ export default function ParallaxScrollView({
   headerBackgroundColor,
 }: Props) {
   const { colorScheme = "light" } = useColorScheme();
-  const scrollRef = useAnimatedRef<Animated.ScrollView>();
-  const scrollOffset = useScrollViewOffset(scrollRef);
-
-  const headerAnimatedStyle = useAnimatedStyle(() => {
-    return {
-      transform: [
-        {
-          translateY: interpolate(
-            scrollOffset.value,
-            [-HEADER_HEIGHT, 0, HEADER_HEIGHT],
-            [-HEADER_HEIGHT / 2, 0, HEADER_HEIGHT * 0.75],
-          ),
-        },
-        {
-          scale: interpolate(
-            scrollOffset.value,
-            [-HEADER_HEIGHT, 0, HEADER_HEIGHT],
-            [2, 1, 1],
-          ),
-        },
-      ],
-      backgroundColor: headerBackgroundColor[colorScheme],
-    };
-  });
 
   return (
     <ThemedView className="flex-1">
-      <Animated.ScrollView ref={scrollRef} scrollEventThrottle={16}>
-        <Animated.View
-          className="h-[250px] overflow-hidden" // 애니메이션 스타일과 배경색을 함께 적용
-          style={headerAnimatedStyle}
+      <ScrollView scrollEventThrottle={16}>
+        <View
+          className="h-[250px] overflow-hidden"
+          style={{ backgroundColor: headerBackgroundColor[colorScheme] }}
         >
           {headerImage}
-        </Animated.View>
+        </View>
         <ThemedView className="flex-1 gap-4 overflow-hidden p-8">
           {children}
         </ThemedView>
-      </Animated.ScrollView>
+      </ScrollView>
     </ThemedView>
   );
 }
