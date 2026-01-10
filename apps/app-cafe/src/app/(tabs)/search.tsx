@@ -1,7 +1,16 @@
 import { Search } from "lucide-react-native";
 import { useState } from "react";
-import { ScrollView, Text, TextInput, View } from "react-native";
-import { CafeCard } from "@/components/cafe-card";
+import { View } from "react-native";
+import { CafeCard } from "@/components/features/cafe/cafe-card";
+import { Input, InputField, InputIcon } from "@/components/ui/common/input";
+import { BaseLayout } from "@/components/ui/layout/base-layout";
+import { ThemedText } from "@/components/ui/themed-text";
+import {
+  UNSPLASH_IMAGE_1,
+  UNSPLASH_IMAGE_2,
+  UNSPLASH_IMAGE_3,
+} from "@/constants/images";
+import { useThemeStore } from "@/hooks/use-theme";
 import { useTranslation } from "@/hooks/use-translation";
 
 const MOCK_CAFES = [
@@ -12,7 +21,7 @@ const MOCK_CAFES = [
     rating: 4.8,
     reviewCount: 234,
     location: "서울 강남구",
-    image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085",
+    image: UNSPLASH_IMAGE_1,
     tags: ["수제", "원두", "분위기"],
     isOpen: true,
   },
@@ -23,18 +32,18 @@ const MOCK_CAFES = [
     rating: 4.6,
     reviewCount: 156,
     location: "서울 마포구",
-    image: "https://images.unsplash.com/photo-1442512595331-e89e73853f31",
+    image: UNSPLASH_IMAGE_2,
     tags: ["모닝", "브런치", "조용"],
     isOpen: true,
   },
   {
     id: "3",
     name: "카페 노엘",
-    description: "특별한 라테아트의 시그니처 음료",
+    description: "특별한 라떼아트의 시그니처 음료",
     rating: 4.7,
     reviewCount: 189,
     location: "서울 용산구",
-    image: "https://images.unsplash.com/photo-1509042239860-f550ce710b93",
+    image: UNSPLASH_IMAGE_3,
     tags: ["시그니처", "디저트", "분위기"],
     isOpen: false,
   },
@@ -42,6 +51,7 @@ const MOCK_CAFES = [
 
 export default function SearchScreen() {
   const { t } = useTranslation();
+  const { mode } = useThemeStore();
   const [searchQuery, setSearchQuery] = useState("");
 
   const filteredCafes = MOCK_CAFES.filter(
@@ -54,37 +64,36 @@ export default function SearchScreen() {
   );
 
   return (
-    <ScrollView
-      className="flex-1 bg-background-100"
-      contentContainerStyle={{ paddingBottom: 20 }}
-    >
-      <View className="px-4 pt-4">
-        <Text className="mb-4 font-bold text-2xl text-typography-0">
-          {t("searchCafes")}
-        </Text>
-
-        <View className="mb-6">
-          <View className="flex-row items-center gap-3 rounded-xl border border-primary-200 bg-primary-50/30 px-4 py-3">
-            <Search className="text-primary-400" size={20} />
-            <TextInput
-              className="flex-1 text-typography-0"
+    <BaseLayout scrollable title={t("search.searchCafes")}>
+      <View className="gap-1 px-4 pb-10">
+        <View className="mb-8">
+          <Input variant={"rounded"}>
+            <InputIcon>
+              <Search size={18} />
+            </InputIcon>
+            <InputField
               onChangeText={setSearchQuery}
-              placeholder={t("searchPlaceholder")}
-              placeholderTextColor="#9CA3AF"
+              placeholder={t("search.searchPlaceholder")}
+              placeholderTextColor={mode === "dark" ? "#9CA3AF" : "#6B7280"}
               value={searchQuery}
             />
-          </View>
+          </Input>
         </View>
 
         <View>
-          <Text className="mb-3 font-semibold text-typography-0 text-xl">
-            {t("searchResults")} ({filteredCafes.length})
-          </Text>
+          <ThemedText
+            className="mb-3 font-semibold text-lg text-typography-0"
+            translationKey="search.searchResults"
+          >
+            {" "}
+            ({filteredCafes.length})
+          </ThemedText>
           {filteredCafes.length === 0 ? (
             <View className="items-center py-12">
-              <Text className="text-typography-300">
-                {t("noSearchResults")}
-              </Text>
+              <ThemedText
+                className="text-typography-300"
+                translationKey="search.noSearchResults"
+              />
             </View>
           ) : (
             filteredCafes.map((cafe) => (
@@ -95,6 +104,6 @@ export default function SearchScreen() {
           )}
         </View>
       </View>
-    </ScrollView>
+    </BaseLayout>
   );
 }
