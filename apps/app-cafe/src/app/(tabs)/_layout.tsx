@@ -1,88 +1,36 @@
+import type { BottomTabNavigationOptions } from "@react-navigation/bottom-tabs";
+
+import { objectKeys } from "@toss/utils";
 import { Tabs } from "expo-router";
-import { TabBarIcon } from "@/components/navigation/tab-bar-icon";
-import { useThemeStore } from "@/hooks/use-theme";
+import { TabBarIcon } from "@/components/features/navigation/tab-bar-icon";
+import { TAB_BAR_ICON } from "@/constants/tab-bar.ts";
+import useTabBarOption from "@/hooks/use-tab-bar-option";
 import { useTranslation } from "@/hooks/use-translation";
 
 export default function TabLayout() {
-  const mode = useThemeStore((state) => state.mode);
   const { t } = useTranslation();
-
+  const tabBarOptions = useTabBarOption();
   return (
     <Tabs
-      screenOptions={{
-        headerShown: false,
-        tabBarActiveTintColor: mode === "dark" ? "#B9AEA5" : "#5E564D",
-        tabBarInactiveTintColor: "#9CA3AF",
-        tabBarStyle: {
-          backgroundColor: mode === "dark" ? "#1A1614" : "#FFFFFF",
-          borderTopWidth: 0,
-          elevation: 0,
-          shadowColor: "transparent",
-          height: 70,
-          // paddingBottom: Platform.OS === "ios" ? 45 : 5,
-          paddingTop: 10,
-          borderTopColor: "transparent",
-        },
-        tabBarLabelStyle: {
-          fontSize: 10,
-          fontWeight: "700",
-          marginTop: 4,
-          lineHeight: 12,
-        },
-        tabBarIconStyle: {
-          marginBottom: 0,
-        },
-        tabBarLabelPosition: "below-icon",
-      }}
+      screenOptions={
+        {
+          ...tabBarOptions,
+          headerShown: false,
+        } as BottomTabNavigationOptions
+      }
     >
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: t("home"),
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon
-              color={color}
-              name={focused ? "home" : "home-outline"}
-            />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="search"
-        options={{
-          title: t("search"),
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon
-              color={color}
-              name={focused ? "search" : "search-outline"}
-            />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="favorites"
-        options={{
-          title: t("favorites"),
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon
-              color={color}
-              name={focused ? "heart" : "heart-outline"}
-            />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="profile"
-        options={{
-          title: t("profile"),
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon
-              color={color}
-              name={focused ? "person" : "person-outline"}
-            />
-          ),
-        }}
-      />
+      {objectKeys(TAB_BAR_ICON).map((name) => (
+        <Tabs.Screen
+          key={name}
+          name={name === "home" ? "index" : name}
+          options={{
+            title: t(`tabs.${name}`),
+            tabBarIcon: ({ focused, color }) => (
+              <TabBarIcon color={color} focused={focused} name={name} />
+            ),
+          }}
+        />
+      ))}
     </Tabs>
   );
 }

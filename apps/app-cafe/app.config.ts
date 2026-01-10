@@ -18,6 +18,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     supportsTablet: true,
   },
   android: {
+    package: "com.anonymous.appcafe",
     adaptiveIcon: {
       foregroundImage: "./src/assets/images/adaptive-icon.png",
       backgroundColor: "#5D4037",
@@ -34,4 +35,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     typedRoutes: true,
     baseUrl: "/app-factory/app-cafe",
   },
+  jsEngine: "hermes",
+  newArchEnabled: true,
 });
