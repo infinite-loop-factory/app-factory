@@ -1,17 +1,37 @@
-import { useEffect, useState } from "react";
-import { useLanguageStore } from "@/hooks/use-language";
-import i18n from "@/i18n";
+import { create } from "zustand";
+import { LANGUAGE_ENUM, type Language } from "@/constants/language";
+import i18n, { type TranslationKey } from "@/i18n";
+
+export { LANGUAGE_ENUM, type Language, type TranslationKey };
+
+interface LanguageStore {
+  language: Language;
+  setLanguage: (language: Language) => void;
+  toggleLanguage: () => void;
+}
+
+export const useLanguageStore = create<LanguageStore>((set) => ({
+  language: i18n.locale as Language,
+  setLanguage: (language) => {
+    i18n.locale = language;
+    set({ language });
+  },
+  toggleLanguage: () =>
+    set((state) => {
+      const newLanguage =
+        state.language === LANGUAGE_ENUM.EN
+          ? LANGUAGE_ENUM.KO
+          : LANGUAGE_ENUM.EN;
+      i18n.locale = newLanguage;
+      return { language: newLanguage };
+    }),
+}));
 
 export function useTranslation() {
   const language = useLanguageStore((state) => state.language);
-  const [, setForceUpdate] = useState(0);
-
-  useEffect(() => {
-    setForceUpdate((prev) => prev + 1);
-  }, []);
 
   return {
-    t: (key: string) => i18n.t(key),
+    t: (key: TranslationKey) => i18n.t(key),
     language,
   };
 }
