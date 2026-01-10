@@ -2,19 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  * {
-    font-size: 16px;
-    transition-property:
-      color, background-color, border-color, text-decoration-color, fill, stroke;
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    transition-duration: 800ms;
-  }
+html {
+  font-family: "Pretendard", sans-serif;
+}
 
-  body {
-    font-size: 16px;
-    line-height: 1.5;
-    @apply text-typography-0;
-    @apply bg-background-0;
-  }
+body {
+  font-family: "Pretendard", sans-serif;
 }

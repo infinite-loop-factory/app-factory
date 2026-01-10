@@ -1,15 +1,10 @@
 {
-  "$schema": "https://gluestack.io/config.schema.json",
-  "plugins": [
-    "@gluestack-ui/actionsheet",
-    "@gluestack-ui/button",
-    "@gluestack-ui/divider",
-    "@gluestack-ui/icon",
-    "@gluestack-ui/image",
-    "@gluestack-ui/input",
-    "@gluestack-ui/overlay",
-    "@gluestack-ui/select",
-    "@gluestack-ui/toast",
-    "@gluestack-ui/themed"
-  ]
+  "tailwind": {
+    "config": "tailwind.config.js",
+    "css": "global.css"
+  },
+  "app": {
+    "entry": "app/_layout.tsx",
+    "components": "components/ui"
+  }
 }

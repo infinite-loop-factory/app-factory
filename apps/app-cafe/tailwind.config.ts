@@ -1,13 +1,24 @@
 import type { Config } from "tailwindcss";
 
-// @ts-expect-error - no types
-import nativewind from "nativewind/preset";
+import gluestackPlugin from "@gluestack-ui/nativewind-utils/tailwind-plugin";
 
 export default {
   darkMode: "class",
-  content: ["./src/**/*.{ts,tsx}"],
-  presets: [nativewind],
+  content: [
+    "./app/**/*.{html,js,jsx,ts,tsx,mdx}",
+    "./components/**/*.{html,js,jsx,ts,tsx,mdx}",
+    "./utils/**/*.{html,js,jsx,ts,tsx,mdx}",
+    "./*.{html,js,jsx,ts,tsx,mdx}",
+    "./src/**/*.{html,js,jsx,ts,tsx,mdx}",
+  ],
+  presets: [require("nativewind/preset")],
   important: "html",
+  safelist: [
+    {
+      pattern:
+        /(bg|border|text|stroke|fill)-(primary|secondary|tertiary|error|success|warning|info|typography|outline|background|indicator)-(0|50|100|200|300|400|500|600|700|800|900|950|white|gray|black|error|warning|muted|success|info|light|dark|primary)/,
+    },
+  ],
   theme: {
     extend: {
       colors: {
@@ -51,6 +62,20 @@ export default {
           800: "rgb(var(--color-tertiary-800)/<alpha-value>)",
           900: "rgb(var(--color-tertiary-900)/<alpha-value>)",
           950: "rgb(var(--color-tertiary-950)/<alpha-value>)",
+        },
+        brown: {
+          0: "rgb(var(--color-brown-0)/<alpha-value>)",
+          50: "rgb(var(--color-brown-50)/<alpha-value>)",
+          100: "rgb(var(--color-brown-100)/<alpha-value>)",
+          200: "rgb(var(--color-brown-200)/<alpha-value>)",
+          300: "rgb(var(--color-brown-300)/<alpha-value>)",
+          400: "rgb(var(--color-brown-400)/<alpha-value>)",
+          500: "rgb(var(--color-brown-500)/<alpha-value>)",
+          600: "rgb(var(--color-brown-600)/<alpha-value>)",
+          700: "rgb(var(--color-brown-700)/<alpha-value>)",
+          800: "rgb(var(--color-brown-800)/<alpha-value>)",
+          900: "rgb(var(--color-brown-900)/<alpha-value>)",
+          950: "rgb(var(--color-brown-950)/<alpha-value>)",
         },
         error: {
           0: "rgb(var(--color-error-0)/<alpha-value>)",
@@ -166,16 +191,6 @@ export default {
           error: "rgb(var(--color-indicator-error)/<alpha-value>)",
         },
       },
-      fontFamily: {
-        jakarta: ["var(--font-plus-jakarta-sans)"],
-        roboto: ["var(--font-roboto)"],
-        code: ["var(--font-source-code-pro)"],
-        inter: ["var(--font-inter)"],
-        "space-mono": ["var(--font-space-mono)"],
-      },
-      fontWeight: {
-        extrablack: "950",
-      },
       fontSize: {
         "2xs": "10px",
         xs: "12px",
@@ -214,5 +229,36 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    gluestackPlugin,
+    // biome-ignore lint/suspicious/noExplicitAny: basics of tailwindcss plugin system
+    ({ addUtilities }: { addUtilities: any }) => {
+      addUtilities({
+        ".font-thin": { fontFamily: "Pretendard-Thin", fontWeight: "normal" },
+        ".font-extralight": {
+          fontFamily: "Pretendard-ExtraLight",
+          fontWeight: "normal",
+        },
+        ".font-light": { fontFamily: "Pretendard-Light", fontWeight: "normal" },
+        ".font-normal": {
+          fontFamily: "Pretendard-Regular",
+          fontWeight: "normal",
+        },
+        ".font-medium": {
+          fontFamily: "Pretendard-Medium",
+          fontWeight: "normal",
+        },
+        ".font-semibold": {
+          fontFamily: "Pretendard-SemiBold",
+          fontWeight: "normal",
+        },
+        ".font-bold": { fontFamily: "Pretendard-Bold", fontWeight: "normal" },
+        ".font-extrabold": {
+          fontFamily: "Pretendard-ExtraBold",
+          fontWeight: "normal",
+        },
+        ".font-black": { fontFamily: "Pretendard-Black", fontWeight: "normal" },
+      });
+    },
+  ],
 } satisfies Config;
