@@ -1,0 +1,96 @@
+name: Deploy Web
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "apps/**"
+      - "packages/**"
+      - "scripts/web-publish.ts"
+      - "package.json"
+      - "pnpm-lock.yaml"
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    name: Deploy to GitHub Pages
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Checkout existing gh-pages
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          path: dist
+          fetch-depth: 1
+        continue-on-error: true
+
+      - name: Determine build targets and build
+        run: |
+          if [ "${{ github.event_name }}" == "push" ]; then
+            BASE_SHA=${{ github.event.before }}
+            if [ "$BASE_SHA" == "0000000000000000000000000000000000000000" ]; then
+              BASE_SHA="HEAD^"
+            fi
+            CHANGED_FILES=$(git diff --name-only $BASE_SHA ${{ github.sha }})
+          else
+            CHANGED_FILES=$(git diff --name-only HEAD^ HEAD)
+          fi
+
+          echo "Changed files:"
+          echo "$CHANGED_FILES"
+
+          if echo "$CHANGED_FILES" | grep -qE "^packages/|^package.json|^pnpm-lock.yaml|^scripts/web-publish.ts"; then
+            echo "Global configuration or shared package changed. Building ALL apps."
+            pnpm tsx scripts/web-publish.ts
+          else
+            CHANGED_APPS=$(echo "$CHANGED_FILES" | grep "^apps/" | cut -d/ -f2 | sort | uniq)
+            
+            if [ -z "$CHANGED_APPS" ]; then
+              echo "No app changes detected. Skipping build."
+              exit 0
+            fi
+
+            BUILD_ARGS=""
+            for app in $CHANGED_APPS; do
+              if [ -d "apps/$app" ] && [ -f "apps/$app/package.json" ]; then
+                echo "Detected change in app: $app"
+                BUILD_ARGS="$BUILD_ARGS --app $app"
+              fi
+            done
+
+            if [ -n "$BUILD_ARGS" ]; then
+              echo "Running build for specific apps..."
+              pnpm tsx scripts/web-publish.ts $BUILD_ARGS
+            else
+              echo "No valid apps to build found in changes."
+            fi
+          fi
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          force_orphan: true
+          user_name: "github-actions[bot]"
+          user_email: "github-actions[bot]@users.noreply.github.com"
