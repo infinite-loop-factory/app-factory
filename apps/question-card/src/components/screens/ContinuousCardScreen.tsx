@@ -41,7 +41,8 @@ const SWIPE_THRESHOLD = SCREEN_WIDTH * 0.3;
 export default function ContinuousCardScreen() {
   const router = useRouter();
   const { filteredQuestions, progress } = useAppState();
-  const { goToNextQuestion, goToPreviousQuestion } = useAppActions();
+  const { goToNextQuestion, goToPreviousQuestion, resetProgress } =
+    useAppActions();
 
   // 로컬 상태 (Context 상태 사용으로 대체 예정)
   const [_questions, setQuestions] = useState<Question[]>([]);
@@ -154,8 +155,8 @@ export default function ContinuousCardScreen() {
     hideCompletionSheet();
     setIsCompleted(false);
     resetCardPosition();
-    // TODO: Context에서 resetProgress 함수 구현 필요
-  }, [hideCompletionSheet, resetCardPosition]);
+    resetProgress();
+  }, [hideCompletionSheet, resetCardPosition, resetProgress]);
 
   // 홈으로 이동 (새 설정)
   const handleGoToHome = useCallback(() => {

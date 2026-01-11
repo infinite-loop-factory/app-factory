@@ -8,7 +8,7 @@
 import { useCallback, useState } from "react";
 import { Dimensions, StatusBar, type ViewStyle } from "react-native";
 import {
-  type AnimatedStyleProp,
+  type AnimatedStyle,
   Easing,
   useAnimatedStyle,
   useSharedValue,
@@ -38,7 +38,7 @@ export interface UseFullscreenModeReturn {
   /** 전체화면 종료 */
   exitFullscreen: () => void;
   /** 전체화면 컨테이너 애니메이션 스타일 */
-  fullscreenAnimatedStyle: AnimatedStyleProp<ViewStyle>;
+  fullscreenAnimatedStyle: AnimatedStyle<ViewStyle>;
   /** 제스처 좌표 변환 (90도 회전 시 X↔Y 스왑) */
   transformGestureCoordinates: (
     gestureX: number,

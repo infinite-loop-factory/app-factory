@@ -43,7 +43,7 @@ const bottomSheetItemStyle = tva({
 
 const BottomSheetContext = createContext<{
   visible: boolean;
-  bottomSheetRef: React.RefObject<GorhomBottomSheet>;
+  bottomSheetRef: React.RefObject<GorhomBottomSheet | null>;
   handleClose: () => void;
   handleOpen: () => void;
 }>({
@@ -65,7 +65,7 @@ export const BottomSheet = ({
   onOpen?: () => void;
   onClose?: () => void;
 }) => {
-  const bottomSheetRef = useRef<GorhomBottomSheet>(null);
+  const bottomSheetRef = useRef<GorhomBottomSheet | null>(null);
 
   const [visible, setVisible] = useState(false);
 
@@ -164,13 +164,13 @@ export const BottomSheetBackdrop = ({
 }: Partial<IBottomSheetBackdrop> & { className?: string }) => {
   return (
     <GorhomBottomSheetBackdrop
-      // @ts-ignore
       appearsOnIndex={appearsOnIndex}
+      disappearsOnIndex={disappearsOnIndex}
+      {...props}
+      // @ts-expect-error - cssInterop adds className support
       className={bottomSheetBackdropStyle({
         className: className,
       })}
-      disappearsOnIndex={disappearsOnIndex}
-      {...props}
     />
   );
 };

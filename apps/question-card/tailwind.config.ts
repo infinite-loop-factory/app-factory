@@ -1,7 +1,6 @@
-// @ts-expect-error - no types
-
 import type { Config } from "tailwindcss";
 
+// @ts-expect-error - nativewind preset types not properly exported
 import nativewind from "nativewind/preset";
 
 export default {
