@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { Animated, StyleSheet } from "react-native";
+import { Animated } from "react-native";
 import { ThemedText } from "@/components/themed-text";
 
 export function HelloWave() {
@@ -29,15 +29,13 @@ export function HelloWave() {
     outputRange: ["0deg", "25deg"],
   });
 
+  const animatedStyle = { transform: [{ rotate }] };
+
   return (
-    <Animated.View style={[styles.container, { transform: [{ rotate }] }]}>
+    <Animated.View style={animatedStyle}>
       <ThemedText className="mt-[-6px] text-[28px] leading-[32px]">
         👋
       </ThemedText>
     </Animated.View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {},
-});

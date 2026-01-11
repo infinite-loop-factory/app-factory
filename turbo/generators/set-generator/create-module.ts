@@ -49,6 +49,9 @@ export default function createModule(plop: PlopTypes.NodePlopAPI) {
           templateFiles: "templates/{{ type }}/**/*",
           destination: `${destinationBase}/${kebabTitle}`,
           base: "templates/{{ type }}",
+          globOptions: {
+            ignore: ["**/tsconfig.json"], // IDE용 tsconfig.json 제외 (tsconfig.json.hbs 사용)
+          },
         },
         {
           type: "modify",
