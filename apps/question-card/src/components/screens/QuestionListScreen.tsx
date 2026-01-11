@@ -5,9 +5,13 @@
 
 import type { Question } from "@/types";
 
+import GorhomBottomSheet, {
+  BottomSheetBackdrop,
+  BottomSheetView,
+} from "@gorhom/bottom-sheet";
 import { useRouter } from "expo-router";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { Alert, FlatList } from "react-native";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { FlatList } from "react-native";
 import { BannerAdComponent, BannerAdSize } from "@/components/ads/BannerAd";
 import {
   Box,
@@ -109,26 +113,54 @@ export default function QuestionListScreen() {
 
   const [questions, setQuestions] = useState<Question[]>([]);
   const [showResetSheet, setShowResetSheet] = useState(false);
+  const [hasError, setHasError] = useState(false);
+
+  // 에러 시트 ref 및 snap points
+  const errorSheetRef = useRef<GorhomBottomSheet>(null);
+  const errorSnapPoints = useMemo(() => ["35%"], []);
 
   // 질문 데이터 초기화
   useEffect(() => {
     const questionsArray = filteredQuestions.questions || [];
     if (questionsArray.length > 0) {
       setQuestions(questionsArray);
+      setHasError(false);
     } else {
-      // 질문이 없으면 메인으로 돌아가기
-      Alert.alert(
-        "질문이 없습니다",
-        "선택된 조건에 맞는 질문이 없습니다. 설정을 다시 확인해주세요.",
-        [
-          {
-            text: "설정 다시하기",
-            onPress: () => router.replace("/category-selection"),
-          },
-        ],
-      );
+      // 질문이 없으면 에러 시트 표시
+      setHasError(true);
     }
-  }, [filteredQuestions, router]);
+  }, [filteredQuestions]);
+
+  // 에러 시트 표시 (hasError가 true일 때)
+  useEffect(() => {
+    if (hasError) {
+      // 약간의 딜레이 후 시트 열기 (컴포넌트 마운트 후)
+      const timer = setTimeout(() => {
+        errorSheetRef.current?.snapToIndex(0);
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [hasError]);
+
+  // 에러 시트에서 설정 다시하기
+  const handleErrorGoToSettings = useCallback(() => {
+    errorSheetRef.current?.close();
+    router.replace("/");
+  }, [router]);
+
+  // 에러 시트 백드롭 렌더링
+  const renderErrorBackdrop = useCallback(
+    (props: React.ComponentProps<typeof BottomSheetBackdrop>) => (
+      <BottomSheetBackdrop
+        {...props}
+        appearsOnIndex={0}
+        disappearsOnIndex={-1}
+        opacity={0.5}
+        pressBehavior="none"
+      />
+    ),
+    [],
+  );
 
   // 8개 항목마다 광고를 삽입한 리스트 생성
   const listItemsWithAds = useMemo(() => {
@@ -314,6 +346,40 @@ export default function QuestionListScreen() {
           </ActionsheetItem>
         </ActionsheetContent>
       </Actionsheet>
+
+      {/* 에러 BottomSheet */}
+      <GorhomBottomSheet
+        backdropComponent={renderErrorBackdrop}
+        enablePanDownToClose={false}
+        index={-1}
+        ref={errorSheetRef}
+        snapPoints={errorSnapPoints}
+      >
+        <BottomSheetView className="flex-1 px-5 pb-8">
+          {/* 헤더 */}
+          <Box className="items-center border-gray-100 border-b pb-4">
+            <Text className="text-2xl">⚠️</Text>
+            <Text className="mt-2 font-semibold text-gray-900 text-lg">
+              질문이 없습니다
+            </Text>
+            <Text className="mt-1 text-center text-gray-500 text-sm">
+              선택된 조건에 맞는 질문이 없습니다.{"\n"}설정을 다시 확인해주세요.
+            </Text>
+          </Box>
+
+          {/* 버튼 */}
+          <Box className="mt-4">
+            <Pressable
+              className="h-12 items-center justify-center rounded-lg bg-orange-500"
+              onPress={handleErrorGoToSettings}
+            >
+              <Text className="font-medium text-base text-white">
+                설정 다시하기
+              </Text>
+            </Pressable>
+          </Box>
+        </BottomSheetView>
+      </GorhomBottomSheet>
     </Box>
   );
 }

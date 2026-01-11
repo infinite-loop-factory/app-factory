@@ -13,7 +13,7 @@ import GorhomBottomSheet, {
 } from "@gorhom/bottom-sheet";
 import { useRouter } from "expo-router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Alert, Dimensions, StatusBar } from "react-native";
+import { Dimensions, StatusBar } from "react-native";
 import {
   State,
   TapGestureHandler,
@@ -61,6 +61,11 @@ export default function IndividualCardScreen() {
   // 완료 시트 ref 및 snap points
   const completionSheetRef = useRef<GorhomBottomSheet>(null);
   const completionSnapPoints = useMemo(() => ["35%"], []);
+
+  // 에러 시트 ref 및 snap points
+  const errorSheetRef = useRef<GorhomBottomSheet>(null);
+  const errorSnapPoints = useMemo(() => ["35%"], []);
+  const [hasError, setHasError] = useState(false);
 
   const { isFullscreen, toggleFullscreen, fullscreenAnimatedStyle } =
     useFullscreenMode({ cardWidth: SCREEN_WIDTH - 32 });
@@ -168,12 +173,43 @@ export default function IndividualCardScreen() {
     const questionsArray = filteredQuestions.questions || [];
     if (questionsArray.length > 0) {
       setQuestions(questionsArray);
+      setHasError(false);
     } else {
-      Alert.alert("질문이 없습니다", "질문 목록으로 돌아갑니다.", [
-        { text: "확인", onPress: () => router.back() },
-      ]);
+      // 질문이 없으면 에러 시트 표시
+      setHasError(true);
     }
-  }, [filteredQuestions, router]);
+  }, [filteredQuestions]);
+
+  // 에러 시트 표시 (hasError가 true일 때)
+  useEffect(() => {
+    if (hasError) {
+      // 약간의 딜레이 후 시트 열기 (컴포넌트 마운트 후)
+      const timer = setTimeout(() => {
+        errorSheetRef.current?.snapToIndex(0);
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [hasError]);
+
+  // 에러 시트에서 목록으로 돌아가기
+  const handleErrorGoBack = useCallback(() => {
+    errorSheetRef.current?.close();
+    router.back();
+  }, [router]);
+
+  // 에러 시트 백드롭 렌더링
+  const renderErrorBackdrop = useCallback(
+    (props: React.ComponentProps<typeof BottomSheetBackdrop>) => (
+      <BottomSheetBackdrop
+        {...props}
+        appearsOnIndex={0}
+        disappearsOnIndex={-1}
+        opacity={0.5}
+        pressBehavior="none"
+      />
+    ),
+    [],
+  );
 
   // 로딩 상태
   if (!currentQuestion) {
@@ -315,6 +351,38 @@ export default function IndividualCardScreen() {
               <Text className="font-medium text-base text-gray-700">
                 새 설정으로 시작
               </Text>
+            </Pressable>
+          </Box>
+        </BottomSheetView>
+      </GorhomBottomSheet>
+
+      {/* 에러 BottomSheet */}
+      <GorhomBottomSheet
+        backdropComponent={renderErrorBackdrop}
+        enablePanDownToClose={false}
+        index={-1}
+        ref={errorSheetRef}
+        snapPoints={errorSnapPoints}
+      >
+        <BottomSheetView className="flex-1 px-5 pb-8">
+          {/* 헤더 */}
+          <Box className="items-center border-gray-100 border-b pb-4">
+            <Text className="text-2xl">⚠️</Text>
+            <Text className="mt-2 font-semibold text-gray-900 text-lg">
+              질문이 없습니다
+            </Text>
+            <Text className="mt-1 text-center text-gray-500 text-sm">
+              질문 목록으로 돌아갑니다.
+            </Text>
+          </Box>
+
+          {/* 버튼 */}
+          <Box className="mt-4">
+            <Pressable
+              className="h-12 items-center justify-center rounded-lg bg-orange-500"
+              onPress={handleErrorGoBack}
+            >
+              <Text className="font-medium text-base text-white">확인</Text>
             </Pressable>
           </Box>
         </BottomSheetView>
