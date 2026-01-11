@@ -7,6 +7,7 @@
 2. [텍스트 렌더링 이슈](#텍스트-렌더링-이슈)
 3. [Flexbox 레이아웃 가이드라인](#flexbox-레이아웃-가이드라인)
 4. [Context API 상태 관리 패턴](#context-api-상태-관리-패턴)
+5. [TypeScript 타입 에러 해결](#typescript-타입-에러-해결)
 
 ---
 
@@ -256,7 +257,105 @@ if (currentQuestion && typeof currentQuestion.content === 'string') {
 
 문제가 해결되지 않는 경우:
 1. 이 문서의 패턴과 비교 분석
-2. 콘솔 로그로 상태 추적  
+2. 콘솔 로그로 상태 추적
 3. Visual debugging으로 레이아웃 확인
 4. 단순한 예제부터 점진적 복잡도 증가
 5. Context DevTools 활용 (개발 환경)
+
+---
+
+## TypeScript 타입 에러 해결
+
+### 🐛 문제 상황
+**발생 날짜**: 2025.01.11
+**증상**: `pnpm run type-check` 실행 시 여러 타입 에러 발생
+
+### 이슈 1: react-native-reanimated AnimatedStyleProp
+
+**문제**: `AnimatedStyleProp` 타입이 더 이상 존재하지 않음
+```tsx
+// ❌ 에러 발생
+import { type AnimatedStyleProp } from "react-native-reanimated";
+// error TS2724: has no exported member named 'AnimatedStyleProp'
+```
+
+**해결**:
+```tsx
+// ✅ AnimatedStyle로 변경
+import { type AnimatedStyle } from "react-native-reanimated";
+
+export interface UseFullscreenModeReturn {
+  fullscreenAnimatedStyle: AnimatedStyle<ViewStyle>;
+}
+```
+
+### 이슈 2: Fisher-Yates 셔플 배열 인덱스 타입
+
+**문제**: 배열 인덱스 접근 시 `T | undefined` 반환
+```tsx
+// ❌ 에러 발생
+const temp = shuffled[i];      // Type 'T | undefined'
+shuffled[i] = shuffled[j];     // Type 'T | undefined'
+shuffled[j] = temp;            // not assignable to type 'T'
+```
+
+**해결**:
+```tsx
+// ✅ Tuple swap + 타입 단언
+[shuffled[i], shuffled[j]] = [shuffled[j] as T, shuffled[i] as T];
+```
+
+### 이슈 3: expo-router Href 타입
+
+**문제**: 외부 URL 문자열이 `Href` 타입과 비호환
+```tsx
+// ❌ 에러 발생
+href={href as Href<string>}  // Type 'string' not assignable
+```
+
+**해결**:
+```tsx
+// ✅ ts-expect-error로 외부 URL 허용
+// @ts-expect-error - external URLs are valid hrefs but not typed
+href={href}
+```
+
+### 이슈 4: nativewind preset 타입
+
+**문제**: nativewind/preset 모듈 타입 정의 없음
+```tsx
+// ❌ 에러 발생
+import nativewind from "nativewind/preset";
+// error TS2306: is not a module
+```
+
+**해결**:
+```tsx
+// ✅ ts-expect-error를 import 위에 배치
+// @ts-expect-error - nativewind preset types not properly exported
+import nativewind from "nativewind/preset";
+```
+
+### 이슈 5: @gorhom/bottom-sheet ref 타입
+
+**문제**: ref에 null 허용 필요
+```tsx
+// ❌ 에러 발생
+const bottomSheetRef = useRef<GorhomBottomSheet>(null);
+// Type 'null' is not assignable to type 'BottomSheetMethods'
+```
+
+**해결**:
+```tsx
+// ✅ null 유니온 타입 추가
+const bottomSheetRef = useRef<GorhomBottomSheet | null>(null);
+
+// Context 타입에도 반영
+bottomSheetRef: React.RefObject<GorhomBottomSheet | null>;
+```
+
+### 📚 교훈
+- **라이브러리 업데이트 주의**: reanimated, expo-router 등 타입 변경 확인
+- **ts-expect-error 활용**: 라이브러리 타입 정의 부재 시 명시적 무시
+- **타입 단언 최소화**: 필요한 경우에만 `as T` 사용
+- **null 안전성**: ref 타입에 `| null` 명시적 추가
