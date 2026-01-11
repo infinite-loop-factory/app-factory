@@ -5,18 +5,25 @@
 
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { Alert, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   FloatingActionButton,
   FloatingBackButton,
   OrangeHeader,
 } from "@/components/ui";
+import {
+  Toast,
+  ToastDescription,
+  ToastTitle,
+  useToast,
+} from "@/components/ui/toast";
 // getCategoryColor import removed as it's no longer used
 import { useAppActions, useAppState } from "@/context/AppContext";
 
 export default function CategorySelectionScreen() {
   const router = useRouter();
+  const toast = useToast();
   const { categories, selection } = useAppState();
   const { selectCategories } = useAppActions();
 
@@ -48,11 +55,18 @@ export default function CategorySelectionScreen() {
   // 다음 단계로 이동
   const handleNext = () => {
     if (selectedCategories.length === 0) {
-      Alert.alert(
-        "카테고리를 선택해 주세요",
-        "적어도 하나 이상의 카테고리를 선택해야 합니다.",
-        [{ text: "확인" }],
-      );
+      toast.show({
+        placement: "top",
+        duration: 3000,
+        render: ({ id }) => (
+          <Toast action="warning" nativeID={id} variant="solid">
+            <ToastTitle>카테고리를 선택해 주세요</ToastTitle>
+            <ToastDescription>
+              적어도 하나 이상의 카테고리를 선택해야 합니다.
+            </ToastDescription>
+          </Toast>
+        ),
+      });
       return;
     }
 
