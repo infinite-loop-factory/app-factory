@@ -30,7 +30,7 @@ export function HelloWave() {
   });
 
   return (
-    <Animated.View style={{ transform: [{ rotate }] }}>
+    <Animated.View style={[{ transform: [{ rotate }] }]}>
       <ThemedText className="mt-[-6px] text-[28px] leading-[32px]">
         👋
       </ThemedText>

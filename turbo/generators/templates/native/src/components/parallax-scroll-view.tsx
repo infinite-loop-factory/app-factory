@@ -23,7 +23,7 @@ export default function ParallaxScrollView({
       <ScrollView scrollEventThrottle={16}>
         <View
           className="h-[250px] overflow-hidden"
-          style={{ backgroundColor: headerBackgroundColor[colorScheme] }}
+          style={[{ backgroundColor: headerBackgroundColor[colorScheme] }]}
         >
           {headerImage}
         </View>
