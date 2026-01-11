@@ -1,7 +1,7 @@
 import type { PropsWithChildren, ReactElement } from "react";
 
 import { useColorScheme } from "nativewind";
-import { ScrollView, View } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import { ThemedView } from "@/components/themed-view";
 
 const _HEADER_HEIGHT = 250;
@@ -23,7 +23,10 @@ export default function ParallaxScrollView({
       <ScrollView scrollEventThrottle={16}>
         <View
           className="h-[250px] overflow-hidden"
-          style={[{ backgroundColor: headerBackgroundColor[colorScheme] }]}
+          style={[
+            styles.header,
+            { backgroundColor: headerBackgroundColor[colorScheme] },
+          ]}
         >
           {headerImage}
         </View>
@@ -34,3 +37,7 @@ export default function ParallaxScrollView({
     </ThemedView>
   );
 }
+
+const styles = StyleSheet.create({
+  header: {},
+});
