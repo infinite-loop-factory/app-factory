@@ -19,6 +19,15 @@ import {
   Text,
   VStack,
 } from "@/components/ui";
+import {
+  Actionsheet,
+  ActionsheetBackdrop,
+  ActionsheetContent,
+  ActionsheetDragIndicator,
+  ActionsheetDragIndicatorWrapper,
+  ActionsheetItem,
+  ActionsheetItemText,
+} from "@/components/ui/actionsheet";
 import { useAppActions, useAppState } from "@/context/AppContext";
 
 // 리스트 아이템 타입 정의 (질문 또는 광고)
@@ -99,6 +108,7 @@ export default function QuestionListScreen() {
   const { setCurrentQuestionIndex } = useAppActions();
 
   const [questions, setQuestions] = useState<Question[]>([]);
+  const [showResetSheet, setShowResetSheet] = useState(false);
 
   // 질문 데이터 초기화
   useEffect(() => {
@@ -162,15 +172,18 @@ export default function QuestionListScreen() {
     router.back();
   }, [router]);
 
-  // 설정 다시하기
-  const handleResetSettings = useCallback(() => {
-    Alert.alert("설정 다시하기", "카테고리 선택부터 다시 시작하시겠습니까?", [
-      { text: "취소", style: "cancel" },
-      {
-        text: "다시 시작",
-        onPress: () => router.replace("/category-selection"),
-      },
-    ]);
+  // 설정 다시하기 Actionsheet
+  const handleOpenResetSheet = useCallback(() => {
+    setShowResetSheet(true);
+  }, []);
+
+  const handleCloseResetSheet = useCallback(() => {
+    setShowResetSheet(false);
+  }, []);
+
+  const handleConfirmReset = useCallback(() => {
+    setShowResetSheet(false);
+    router.replace("/");
   }, [router]);
 
   // 리스트 아이템 렌더링 (질문 또는 광고)
@@ -212,7 +225,7 @@ export default function QuestionListScreen() {
             <Text className="font-medium text-base text-gray-900">
               총 {questions.length}개 질문
             </Text>
-            <Pressable onPress={handleResetSettings}>
+            <Pressable onPress={handleOpenResetSheet}>
               <Text className="text-orange-500 text-sm">설정 다시하기</Text>
             </Pressable>
           </HStack>
@@ -273,6 +286,34 @@ export default function QuestionListScreen() {
           </Text>
         </Pressable>
       </Box>
+
+      {/* 설정 다시하기 Actionsheet */}
+      <Actionsheet isOpen={showResetSheet} onClose={handleCloseResetSheet}>
+        <ActionsheetBackdrop />
+        <ActionsheetContent>
+          <ActionsheetDragIndicatorWrapper>
+            <ActionsheetDragIndicator />
+          </ActionsheetDragIndicatorWrapper>
+          <Box className="w-full px-2 py-4">
+            <Text className="text-center font-semibold text-gray-900 text-lg">
+              설정 다시하기
+            </Text>
+            <Text className="mt-2 text-center text-gray-500 text-sm">
+              카테고리 선택부터 다시 시작하시겠습니까?
+            </Text>
+          </Box>
+          <ActionsheetItem onPress={handleConfirmReset}>
+            <ActionsheetItemText className="text-center text-orange-500">
+              다시 시작
+            </ActionsheetItemText>
+          </ActionsheetItem>
+          <ActionsheetItem onPress={handleCloseResetSheet}>
+            <ActionsheetItemText className="text-center text-gray-500">
+              취소
+            </ActionsheetItemText>
+          </ActionsheetItem>
+        </ActionsheetContent>
+      </Actionsheet>
     </Box>
   );
 }

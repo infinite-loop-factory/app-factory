@@ -25,6 +25,15 @@ import {
   OrangeHeader,
   Text,
 } from "@/components/ui";
+import {
+  Actionsheet,
+  ActionsheetBackdrop,
+  ActionsheetContent,
+  ActionsheetDragIndicator,
+  ActionsheetDragIndicatorWrapper,
+  ActionsheetItem,
+  ActionsheetItemText,
+} from "@/components/ui/actionsheet";
 import { useAppActions, useAppState } from "@/context/AppContext";
 import { useFullscreenMode } from "@/hooks/useFullscreenMode";
 import { CardBackContent } from "./CardBackContent";
@@ -42,6 +51,7 @@ export default function IndividualCardScreen() {
 
   const [_questions, setQuestions] = useState<Question[]>([]);
   const [isFlipped, setIsFlipped] = useState(false);
+  const [showBackToMainSheet, setShowBackToMainSheet] = useState(false);
 
   const { isFullscreen, toggleFullscreen, fullscreenAnimatedStyle } =
     useFullscreenMode({ cardWidth: SCREEN_WIDTH - 32 });
@@ -114,14 +124,16 @@ export default function IndividualCardScreen() {
   const handleBackToList = useCallback(() => router.back(), [router]);
 
   const handleBackToMain = useCallback(() => {
-    Alert.alert(
-      "메인으로 돌아가기",
-      "질문 모드 선택 화면으로 돌아가시겠습니까?",
-      [
-        { text: "취소", style: "cancel" },
-        { text: "메인으로", onPress: () => router.push("/question-main") },
-      ],
-    );
+    setShowBackToMainSheet(true);
+  }, []);
+
+  const handleCloseBackToMainSheet = useCallback(() => {
+    setShowBackToMainSheet(false);
+  }, []);
+
+  const handleConfirmBackToMain = useCallback(() => {
+    setShowBackToMainSheet(false);
+    router.replace("/");
   }, [router]);
 
   // 질문 데이터 초기화
@@ -207,6 +219,37 @@ export default function IndividualCardScreen() {
           onPrevious={goToPrevious}
         />
       )}
+
+      {/* 메인으로 돌아가기 확인 Actionsheet */}
+      <Actionsheet
+        isOpen={showBackToMainSheet}
+        onClose={handleCloseBackToMainSheet}
+      >
+        <ActionsheetBackdrop />
+        <ActionsheetContent>
+          <ActionsheetDragIndicatorWrapper>
+            <ActionsheetDragIndicator />
+          </ActionsheetDragIndicatorWrapper>
+          <Box className="w-full px-2 py-4">
+            <Text className="text-center font-semibold text-gray-900 text-lg">
+              메인으로 돌아가기
+            </Text>
+            <Text className="mt-2 text-center text-gray-500 text-sm">
+              처음부터 다시 시작하시겠습니까?
+            </Text>
+          </Box>
+          <ActionsheetItem onPress={handleConfirmBackToMain}>
+            <ActionsheetItemText className="text-center text-orange-500">
+              처음으로
+            </ActionsheetItemText>
+          </ActionsheetItem>
+          <ActionsheetItem onPress={handleCloseBackToMainSheet}>
+            <ActionsheetItemText className="text-center text-gray-500">
+              취소
+            </ActionsheetItemText>
+          </ActionsheetItem>
+        </ActionsheetContent>
+      </Actionsheet>
     </Box>
   );
 }
