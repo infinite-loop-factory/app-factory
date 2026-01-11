@@ -7,8 +7,12 @@
 
 import type { Question } from "@/types";
 
+import GorhomBottomSheet, {
+  BottomSheetBackdrop,
+  BottomSheetView,
+} from "@gorhom/bottom-sheet";
 import { useRouter } from "expo-router";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Alert, Dimensions, StatusBar } from "react-native";
 import {
   State,
@@ -23,6 +27,7 @@ import {
   FloatingBackButton,
   FullscreenToggleButton,
   OrangeHeader,
+  Pressable,
   Text,
 } from "@/components/ui";
 import {
@@ -52,6 +57,10 @@ export default function IndividualCardScreen() {
   const [_questions, setQuestions] = useState<Question[]>([]);
   const [isFlipped, setIsFlipped] = useState(false);
   const [showBackToMainSheet, setShowBackToMainSheet] = useState(false);
+
+  // 완료 시트 ref 및 snap points
+  const completionSheetRef = useRef<GorhomBottomSheet>(null);
+  const completionSnapPoints = useMemo(() => ["35%"], []);
 
   const { isFullscreen, toggleFullscreen, fullscreenAnimatedStyle } =
     useFullscreenMode({ cardWidth: SCREEN_WIDTH - 32 });
@@ -86,22 +95,40 @@ export default function IndividualCardScreen() {
     [handleFlip],
   );
 
-  // 완료 알림
-  const showCompletionAlert = useCallback(() => {
-    Alert.alert(
-      "질문 탐색 완료!",
-      "모든 질문을 확인했습니다. 어떻게 하시겠습니까?",
-      [
-        { text: "질문 목록으로", onPress: () => router.back() },
-        {
-          text: "메인으로",
-          onPress: () => router.push("/question-main"),
-          style: "cancel",
-        },
-      ],
-      { cancelable: false },
-    );
-  }, [router]);
+  // 완료 시트 표시
+  const showCompletionSheet = useCallback(() => {
+    completionSheetRef.current?.snapToIndex(0);
+  }, []);
+
+  // 완료 시트 닫기
+  const hideCompletionSheet = useCallback(() => {
+    completionSheetRef.current?.close();
+  }, []);
+
+  // 목록으로 돌아가기
+  const handleBackToListFromCompletion = useCallback(() => {
+    hideCompletionSheet();
+    router.back();
+  }, [hideCompletionSheet, router]);
+
+  // 홈으로 이동 (새 설정)
+  const handleGoToHomeFromCompletion = useCallback(() => {
+    hideCompletionSheet();
+    router.replace("/");
+  }, [hideCompletionSheet, router]);
+
+  // 완료 시트 백드롭 렌더링
+  const renderCompletionBackdrop = useCallback(
+    (props: React.ComponentProps<typeof BottomSheetBackdrop>) => (
+      <BottomSheetBackdrop
+        {...props}
+        appearsOnIndex={0}
+        disappearsOnIndex={-1}
+        opacity={0.5}
+      />
+    ),
+    [],
+  );
 
   // 다음/이전 질문 이동
   const goToNext = useCallback(() => {
@@ -109,9 +136,9 @@ export default function IndividualCardScreen() {
       setIsFlipped(false);
       goToNextQuestion();
     } else {
-      showCompletionAlert();
+      showCompletionSheet();
     }
-  }, [progress.canGoForward, goToNextQuestion, showCompletionAlert]);
+  }, [progress.canGoForward, goToNextQuestion, showCompletionSheet]);
 
   const goToPrevious = useCallback(() => {
     if (progress.canGoBack) {
@@ -250,6 +277,48 @@ export default function IndividualCardScreen() {
           </ActionsheetItem>
         </ActionsheetContent>
       </Actionsheet>
+
+      {/* 완료 BottomSheet */}
+      <GorhomBottomSheet
+        backdropComponent={renderCompletionBackdrop}
+        enablePanDownToClose
+        index={-1}
+        ref={completionSheetRef}
+        snapPoints={completionSnapPoints}
+      >
+        <BottomSheetView className="flex-1 px-5 pb-8">
+          {/* 헤더 */}
+          <Box className="items-center border-gray-100 border-b pb-4">
+            <Text className="text-2xl">🎉</Text>
+            <Text className="mt-2 font-semibold text-gray-900 text-lg">
+              질문 탐색 완료!
+            </Text>
+            <Text className="mt-1 text-center text-gray-500 text-sm">
+              모든 질문을 확인했습니다
+            </Text>
+          </Box>
+
+          {/* 버튼들 */}
+          <Box className="mt-4 gap-3">
+            <Pressable
+              className="h-12 items-center justify-center rounded-lg bg-orange-500"
+              onPress={handleBackToListFromCompletion}
+            >
+              <Text className="font-medium text-base text-white">
+                목록으로 돌아가기
+              </Text>
+            </Pressable>
+            <Pressable
+              className="h-12 items-center justify-center rounded-lg border-2 border-gray-200 bg-white"
+              onPress={handleGoToHomeFromCompletion}
+            >
+              <Text className="font-medium text-base text-gray-700">
+                새 설정으로 시작
+              </Text>
+            </Pressable>
+          </Box>
+        </BottomSheetView>
+      </GorhomBottomSheet>
     </Box>
   );
 }

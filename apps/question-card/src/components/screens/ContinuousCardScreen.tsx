@@ -7,9 +7,13 @@
 
 import type { HintType, Question } from "@/types";
 
+import GorhomBottomSheet, {
+  BottomSheetBackdrop,
+  BottomSheetView,
+} from "@gorhom/bottom-sheet";
 import { useRouter } from "expo-router";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { Alert, Animated, Dimensions, StatusBar } from "react-native";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Animated, Dimensions, StatusBar } from "react-native";
 import {
   PanGestureHandler,
   type PanGestureHandlerGestureEvent,
@@ -43,6 +47,10 @@ export default function ContinuousCardScreen() {
   const [_questions, setQuestions] = useState<Question[]>([]);
   const [_isCompleted, setIsCompleted] = useState(false);
   const [isFlipped, setIsFlipped] = useState(false); // 카드 뒤집기 상태
+
+  // 완료 시트 ref 및 snap points
+  const completionSheetRef = useRef<GorhomBottomSheet>(null);
+  const completionSnapPoints = useMemo(() => ["35%"], []);
 
   // 전체화면 모드 훅
   const {
@@ -131,30 +139,42 @@ export default function ContinuousCardScreen() {
     }
   }, []);
 
-  // 완료 알림 표시
-  const showCompletionAlert = useCallback(() => {
-    Alert.alert(
-      "질문 완료!",
-      "모든 질문을 완료했습니다. 어떻게 하시겠습니까?",
-      [
-        {
-          text: "처음부터 다시",
-          onPress: () => {
-            // 처음으로 리셋 (Context Actions 사용)
-            // TODO: Context에서 resetProgress 함수 구현 필요
-            setIsCompleted(false);
-            resetCardPosition();
-          },
-        },
-        {
-          text: "메인으로",
-          onPress: () => router.push("/"),
-          style: "cancel",
-        },
-      ],
-      { cancelable: false },
-    );
-  }, [router, resetCardPosition]);
+  // 완료 시트 표시
+  const showCompletionSheet = useCallback(() => {
+    completionSheetRef.current?.snapToIndex(0);
+  }, []);
+
+  // 완료 시트 닫기
+  const hideCompletionSheet = useCallback(() => {
+    completionSheetRef.current?.close();
+  }, []);
+
+  // 처음부터 다시 시작
+  const handleRestartFromBeginning = useCallback(() => {
+    hideCompletionSheet();
+    setIsCompleted(false);
+    resetCardPosition();
+    // TODO: Context에서 resetProgress 함수 구현 필요
+  }, [hideCompletionSheet, resetCardPosition]);
+
+  // 홈으로 이동 (새 설정)
+  const handleGoToHome = useCallback(() => {
+    hideCompletionSheet();
+    router.replace("/");
+  }, [hideCompletionSheet, router]);
+
+  // 완료 시트 백드롭 렌더링
+  const renderCompletionBackdrop = useCallback(
+    (props: React.ComponentProps<typeof BottomSheetBackdrop>) => (
+      <BottomSheetBackdrop
+        {...props}
+        appearsOnIndex={0}
+        disappearsOnIndex={-1}
+        opacity={0.5}
+      />
+    ),
+    [],
+  );
 
   // 진행률 계산
   const progressPercentage =
@@ -170,13 +190,13 @@ export default function ContinuousCardScreen() {
       resetCardPosition();
     } else {
       setIsCompleted(true);
-      showCompletionAlert();
+      showCompletionSheet();
     }
   }, [
     progress.canGoForward,
     goToNextQuestion,
     resetCardPosition,
-    showCompletionAlert,
+    showCompletionSheet,
   ]);
 
   // 이전 질문으로 이동 (Context Actions 사용)
@@ -347,7 +367,7 @@ export default function ContinuousCardScreen() {
             <Progress className="h-1 w-32" value={progressPercentage * 100} />
           </Box>
 
-          <Pressable className="flex-1 items-end" onPress={showCompletionAlert}>
+          <Pressable className="flex-1 items-end" onPress={showCompletionSheet}>
             <Text className="font-bold text-gray-600 text-lg">⋯</Text>
           </Pressable>
         </Box>
@@ -516,6 +536,48 @@ export default function ContinuousCardScreen() {
           </Pressable>
         </Box>
       )}
+
+      {/* 완료 BottomSheet */}
+      <GorhomBottomSheet
+        backdropComponent={renderCompletionBackdrop}
+        enablePanDownToClose
+        index={-1}
+        ref={completionSheetRef}
+        snapPoints={completionSnapPoints}
+      >
+        <BottomSheetView className="flex-1 px-5 pb-8">
+          {/* 헤더 */}
+          <Box className="items-center border-gray-100 border-b pb-4">
+            <Text className="text-2xl">🎉</Text>
+            <Text className="mt-2 font-semibold text-gray-900 text-lg">
+              질문 완료!
+            </Text>
+            <Text className="mt-1 text-center text-gray-500 text-sm">
+              모든 질문을 완료했습니다
+            </Text>
+          </Box>
+
+          {/* 버튼들 */}
+          <Box className="mt-4 gap-3">
+            <Pressable
+              className="h-12 items-center justify-center rounded-lg bg-orange-500"
+              onPress={handleRestartFromBeginning}
+            >
+              <Text className="font-medium text-base text-white">
+                처음부터 다시
+              </Text>
+            </Pressable>
+            <Pressable
+              className="h-12 items-center justify-center rounded-lg border-2 border-gray-200 bg-white"
+              onPress={handleGoToHome}
+            >
+              <Text className="font-medium text-base text-gray-700">
+                새 설정으로 시작
+              </Text>
+            </Pressable>
+          </Box>
+        </BottomSheetView>
+      </GorhomBottomSheet>
     </Box>
   );
 }
