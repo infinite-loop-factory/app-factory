@@ -29,8 +29,10 @@ export function HelloWave() {
     outputRange: ["0deg", "25deg"],
   });
 
+  const animatedStyle = { transform: [{ rotate }] };
+
   return (
-    <Animated.View style={{ transform: [{ rotate }] }}>
+    <Animated.View style={animatedStyle}>
       <ThemedText className="mt-[-6px] text-[28px] leading-[32px]">
         👋
       </ThemedText>
