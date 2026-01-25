@@ -9,11 +9,14 @@ import { useThemeColor } from "@/hooks/use-theme-color";
 import i18n from "@/lib/i18n";
 
 interface MapHeaderProps {
-  filterMode: "year" | "all";
-  setFilterMode: (mode: "year" | "all") => void;
+  filterMode: "year" | "all" | "range";
+  setFilterMode: (mode: "year" | "all" | "range") => void;
   selectedYear: number;
   onOpenYearPicker: () => void;
+  onOpenDateRangePicker: () => void;
   onLayout?: (event: { nativeEvent: { layout: { height: number } } }) => void;
+  startDate?: string | null;
+  endDate?: string | null;
 }
 
 export function MapHeader({
@@ -21,7 +24,10 @@ export function MapHeader({
   setFilterMode,
   selectedYear,
   onOpenYearPicker,
+  onOpenDateRangePicker,
   onLayout,
+  startDate,
+  endDate,
 }: MapHeaderProps) {
   const insets = useSafeAreaInsets();
   const [accentColor] = useThemeColor(["primary-500"]);
@@ -62,6 +68,7 @@ export function MapHeader({
           horizontal
           showsHorizontalScrollIndicator={false}
         >
+          {/* All Time */}
           <Button
             className={cn(
               "flex-row items-center gap-2 rounded-full pr-3 pl-4",
@@ -87,6 +94,7 @@ export function MapHeader({
             )}
           </Button>
 
+          {/* Year Picker */}
           <Button
             className={cn(
               "flex-row items-center gap-2 rounded-full pr-3 pl-4",
@@ -122,23 +130,41 @@ export function MapHeader({
             />
           </Button>
 
+          {/* Date Range Picker */}
           <Button
-            className="flex-row items-center gap-2 rounded-full bg-background-100 pr-3 pl-4 dark:bg-background-800"
-            onPress={() =>
-              Alert.alert(
-                i18n.t("map.alert.coming-soon.title"),
-                i18n.t("map.alert.coming-soon.message"),
-              )
-            }
+            className={cn(
+              "flex-row items-center gap-2 rounded-full pr-3 pl-4",
+              filterMode === "range"
+                ? "border-0 bg-primary-500"
+                : "bg-background-100 dark:bg-background-800",
+            )}
+            onPress={() => {
+              // setFilterMode("range"); // Don't set immediately, only after selection?
+              // Actually, opening picker is enough. User might cancel.
+              onOpenDateRangePicker();
+            }}
             size="sm"
             variant="solid"
           >
-            <ButtonText className="font-medium text-typography-700 dark:text-typography-300">
-              {i18n.t("map.filters.select-dates")}
+            <ButtonText
+              className={cn(
+                "font-medium",
+                filterMode === "range"
+                  ? "text-typography-0"
+                  : "text-typography-700 dark:text-typography-300",
+              )}
+            >
+              {filterMode === "range" && startDate && endDate
+                ? `${startDate} ~ ${endDate}`
+                : i18n.t("map.filters.select-dates")}
             </ButtonText>
             <ButtonIcon
               as={Calendar}
-              className="text-typography-500"
+              className={
+                filterMode === "range"
+                  ? "text-typography-0"
+                  : "text-typography-500"
+              }
               size="sm"
             />
           </Button>

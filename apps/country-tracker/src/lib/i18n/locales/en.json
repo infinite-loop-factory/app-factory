@@ -140,6 +140,13 @@
         "title": "Coming Soon",
         "message": "Date range selection is currently under development."
       }
+    },
+    "date-range-picker": {
+      "title": "Select Dates",
+      "start-date": "Start Date",
+      "end-date": "End Date",
+      "apply": "Apply",
+      "reset": "Reset"
     }
   },
 

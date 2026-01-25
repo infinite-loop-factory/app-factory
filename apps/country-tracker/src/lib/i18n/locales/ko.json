@@ -172,6 +172,13 @@
       "coming-soon": {
         "title": "준비 중",
         "message": "날짜 범위 선택 기능은 현재 개발 중입니다."
+      },
+      "date-range-picker": {
+        "title": "날짜 선택",
+        "start-date": "시작일",
+        "end-date": "종료일",
+        "apply": "적용",
+        "reset": "초기화"
       }
     }
   },
