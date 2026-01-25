@@ -22,6 +22,7 @@
     "@gluestack-ui/core": "^3.0.12",
     "@gluestack-ui/utils": "^3.0.13",
     "@gluestack/ui-next-adapter": "^3.0.3",
+    "@infinite-loop-factory/common": "workspace:^",
     "@react-navigation/native": "^7.1.14",
     "clsx": "^2.1.1",
     "expo": "~54.0.30",
