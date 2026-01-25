@@ -7,10 +7,10 @@ import {
   ActionsheetDragIndicator,
   ActionsheetDragIndicatorWrapper,
   ActionsheetFlatList,
+  ActionsheetIcon,
   ActionsheetItem,
   ActionsheetItemText,
 } from "@/components/ui/actionsheet";
-import { ButtonIcon } from "@/components/ui/button";
 
 interface YearPickerSheetProps {
   isOpen: boolean;
@@ -52,7 +52,7 @@ export function YearPickerSheet({
                   {year}
                 </ActionsheetItemText>
                 {selectedYear === year && (
-                  <ButtonIcon as={Check} className="text-primary-500" />
+                  <ActionsheetIcon as={Check} className="text-primary-500" />
                 )}
               </ActionsheetItem>
             );
