@@ -7,12 +7,8 @@
 
 import type { HintType, Question } from "@/types";
 
-import GorhomBottomSheet, {
-  BottomSheetBackdrop,
-  BottomSheetView,
-} from "@gorhom/bottom-sheet";
 import { useRouter } from "expo-router";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Animated, Dimensions, StatusBar } from "react-native";
 import {
   PanGestureHandler,
@@ -25,6 +21,7 @@ import Reanimated from "react-native-reanimated";
 import {
   Box,
   Card,
+  CompletionSheet,
   FlipCard,
   FloatingBackButton,
   FullscreenToggleButton,
@@ -33,7 +30,12 @@ import {
   Text,
 } from "@/components/ui";
 import { useAppActions, useAppState } from "@/context/AppContext";
+import { useCompletionSheet } from "@/hooks/useCompletionSheet";
 import { useFullscreenMode } from "@/hooks/useFullscreenMode";
+import {
+  getDifficultyBadgeSolidStyle,
+  getDifficultyLabel,
+} from "@/utils/difficultyStyles";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 const SWIPE_THRESHOLD = SCREEN_WIDTH * 0.3;
@@ -49,9 +51,8 @@ export default function ContinuousCardScreen() {
   const [_isCompleted, setIsCompleted] = useState(false);
   const [isFlipped, setIsFlipped] = useState(false); // 카드 뒤집기 상태
 
-  // 완료 시트 ref 및 snap points
-  const completionSheetRef = useRef<GorhomBottomSheet>(null);
-  const completionSnapPoints = useMemo(() => ["35%"], []);
+  // Custom hooks
+  const completionSheet = useCompletionSheet();
 
   // 전체화면 모드 훅
   const {
@@ -140,42 +141,19 @@ export default function ContinuousCardScreen() {
     }
   }, []);
 
-  // 완료 시트 표시
-  const showCompletionSheet = useCallback(() => {
-    completionSheetRef.current?.snapToIndex(0);
-  }, []);
-
-  // 완료 시트 닫기
-  const hideCompletionSheet = useCallback(() => {
-    completionSheetRef.current?.close();
-  }, []);
-
   // 처음부터 다시 시작
   const handleRestartFromBeginning = useCallback(() => {
-    hideCompletionSheet();
+    completionSheet.hide();
     setIsCompleted(false);
     resetCardPosition();
     resetProgress();
-  }, [hideCompletionSheet, resetCardPosition, resetProgress]);
+  }, [completionSheet.hide, resetCardPosition, resetProgress]);
 
   // 홈으로 이동 (새 설정)
   const handleGoToHome = useCallback(() => {
-    hideCompletionSheet();
+    completionSheet.hide();
     router.replace("/");
-  }, [hideCompletionSheet, router]);
-
-  // 완료 시트 백드롭 렌더링
-  const renderCompletionBackdrop = useCallback(
-    (props: React.ComponentProps<typeof BottomSheetBackdrop>) => (
-      <BottomSheetBackdrop
-        {...props}
-        appearsOnIndex={0}
-        disappearsOnIndex={-1}
-        opacity={0.5}
-      />
-    ),
-    [],
-  );
+  }, [completionSheet.hide, router]);
 
   // 진행률 계산
   const progressPercentage =
@@ -191,13 +169,13 @@ export default function ContinuousCardScreen() {
       resetCardPosition();
     } else {
       setIsCompleted(true);
-      showCompletionSheet();
+      completionSheet.show();
     }
   }, [
     progress.canGoForward,
     goToNextQuestion,
     resetCardPosition,
-    showCompletionSheet,
+    completionSheet.show,
   ]);
 
   // 이전 질문으로 이동 (Context Actions 사용)
@@ -368,7 +346,10 @@ export default function ContinuousCardScreen() {
             <Progress className="h-1 w-32" value={progressPercentage * 100} />
           </Box>
 
-          <Pressable className="flex-1 items-end" onPress={showCompletionSheet}>
+          <Pressable
+            className="flex-1 items-end"
+            onPress={completionSheet.show}
+          >
             <Text className="font-bold text-gray-600 text-lg">⋯</Text>
           </Pressable>
         </Box>
@@ -469,7 +450,7 @@ export default function ContinuousCardScreen() {
                               </Text>
                             </Box>
                             <Box
-                              className={`rounded-full px-3 py-1.5 ${getDifficultyBadgeClass(currentQuestion?.difficulty)}`}
+                              className={`rounded-full px-3 py-1.5 ${getDifficultyBadgeSolidStyle(currentQuestion?.difficulty)}`}
                             >
                               <Text className="font-medium text-sm text-white">
                                 {getDifficultyLabel(
@@ -539,74 +520,21 @@ export default function ContinuousCardScreen() {
       )}
 
       {/* 완료 BottomSheet */}
-      <GorhomBottomSheet
-        backdropComponent={renderCompletionBackdrop}
-        enablePanDownToClose
-        index={-1}
-        ref={completionSheetRef}
-        snapPoints={completionSnapPoints}
-      >
-        <BottomSheetView className="flex-1 px-5 pb-8">
-          {/* 헤더 */}
-          <Box className="items-center border-gray-100 border-b pb-4">
-            <Text className="text-2xl">🎉</Text>
-            <Text className="mt-2 font-semibold text-gray-900 text-lg">
-              질문 완료!
-            </Text>
-            <Text className="mt-1 text-center text-gray-500 text-sm">
-              모든 질문을 완료했습니다
-            </Text>
-          </Box>
-
-          {/* 버튼들 */}
-          <Box className="mt-4 gap-3">
-            <Pressable
-              className="h-12 items-center justify-center rounded-lg bg-orange-500"
-              onPress={handleRestartFromBeginning}
-            >
-              <Text className="font-medium text-base text-white">
-                처음부터 다시
-              </Text>
-            </Pressable>
-            <Pressable
-              className="h-12 items-center justify-center rounded-lg border-2 border-gray-200 bg-white"
-              onPress={handleGoToHome}
-            >
-              <Text className="font-medium text-base text-gray-700">
-                새 설정으로 시작
-              </Text>
-            </Pressable>
-          </Box>
-        </BottomSheetView>
-      </GorhomBottomSheet>
+      <CompletionSheet
+        description="모든 질문을 완료했습니다"
+        primaryAction={{
+          text: "처음부터 다시",
+          onPress: handleRestartFromBeginning,
+        }}
+        renderBackdrop={completionSheet.renderBackdrop}
+        secondaryAction={{
+          text: "새 설정으로 시작",
+          onPress: handleGoToHome,
+        }}
+        sheetRef={completionSheet.sheetRef}
+        snapPoints={completionSheet.snapPoints}
+        title="질문 완료!"
+      />
     </Box>
   );
-}
-
-// 난이도 뱃지 클래스 반환 - Modern Refined 스타일
-function getDifficultyBadgeClass(difficulty?: string): string {
-  switch (difficulty) {
-    case "easy":
-      return "bg-green-500 border border-green-200";
-    case "medium":
-      return "bg-yellow-500 border border-yellow-200";
-    case "hard":
-      return "bg-red-500 border border-red-200";
-    default:
-      return "bg-gray-400 border border-gray-200";
-  }
-}
-
-// 난이도 라벨 반환
-function getDifficultyLabel(difficulty?: string): string {
-  switch (difficulty) {
-    case "easy":
-      return "쉬움";
-    case "medium":
-      return "보통";
-    case "hard":
-      return "어려움";
-    default:
-      return "기본";
-  }
 }

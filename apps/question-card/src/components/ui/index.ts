@@ -41,5 +41,7 @@ export { OrangeHeader } from "./OrangeHeader";
 export { ProgressIndicator } from "./ProgressIndicator";
 export { Pressable } from "./pressable";
 export { Progress } from "./progress";
+// Sheets 컴포넌트
+export { CompletionSheet, ConfirmActionsheet, ErrorSheet } from "./sheets";
 export { Text } from "./text";
 export { VStack } from "./vstack";

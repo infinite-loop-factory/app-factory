@@ -5,17 +5,15 @@
 
 import type { Question } from "@/types";
 
-import GorhomBottomSheet, {
-  BottomSheetBackdrop,
-  BottomSheetView,
-} from "@gorhom/bottom-sheet";
 import { useRouter } from "expo-router";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { FlatList } from "react-native";
 import { BannerAdComponent, BannerAdSize } from "@/components/ads/BannerAd";
 import {
   Box,
   Card,
+  ConfirmActionsheet,
+  ErrorSheet,
   FloatingBackButton,
   HStack,
   OrangeHeader,
@@ -23,16 +21,14 @@ import {
   Text,
   VStack,
 } from "@/components/ui";
-import {
-  Actionsheet,
-  ActionsheetBackdrop,
-  ActionsheetContent,
-  ActionsheetDragIndicator,
-  ActionsheetDragIndicatorWrapper,
-  ActionsheetItem,
-  ActionsheetItemText,
-} from "@/components/ui/actionsheet";
 import { useAppActions, useAppState } from "@/context/AppContext";
+import { useConfirmActionsheet } from "@/hooks/useConfirmActionsheet";
+import { useErrorSheet } from "@/hooks/useErrorSheet";
+import {
+  getDifficultyBadgeStyle,
+  getDifficultyLabel,
+  getDifficultyTextStyle,
+} from "@/utils/difficultyStyles";
 
 // 리스트 아이템 타입 정의 (질문 또는 광고)
 type ListItem =
@@ -112,55 +108,28 @@ export default function QuestionListScreen() {
   const { setCurrentQuestionIndex } = useAppActions();
 
   const [questions, setQuestions] = useState<Question[]>([]);
-  const [showResetSheet, setShowResetSheet] = useState(false);
-  const [hasError, setHasError] = useState(false);
 
-  // 에러 시트 ref 및 snap points
-  const errorSheetRef = useRef<GorhomBottomSheet>(null);
-  const errorSnapPoints = useMemo(() => ["35%"], []);
+  // Custom hooks
+  const errorSheet = useErrorSheet();
+  const resetActionsheet = useConfirmActionsheet();
 
   // 질문 데이터 초기화
   useEffect(() => {
     const questionsArray = filteredQuestions.questions || [];
     if (questionsArray.length > 0) {
       setQuestions(questionsArray);
-      setHasError(false);
+      errorSheet.setHasError(false);
     } else {
       // 질문이 없으면 에러 시트 표시
-      setHasError(true);
+      errorSheet.setHasError(true);
     }
-  }, [filteredQuestions]);
-
-  // 에러 시트 표시 (hasError가 true일 때)
-  useEffect(() => {
-    if (hasError) {
-      // 약간의 딜레이 후 시트 열기 (컴포넌트 마운트 후)
-      const timer = setTimeout(() => {
-        errorSheetRef.current?.snapToIndex(0);
-      }, 100);
-      return () => clearTimeout(timer);
-    }
-  }, [hasError]);
+  }, [filteredQuestions, errorSheet.setHasError]);
 
   // 에러 시트에서 설정 다시하기
   const handleErrorGoToSettings = useCallback(() => {
-    errorSheetRef.current?.close();
+    errorSheet.hide();
     router.replace("/");
-  }, [router]);
-
-  // 에러 시트 백드롭 렌더링
-  const renderErrorBackdrop = useCallback(
-    (props: React.ComponentProps<typeof BottomSheetBackdrop>) => (
-      <BottomSheetBackdrop
-        {...props}
-        appearsOnIndex={0}
-        disappearsOnIndex={-1}
-        opacity={0.5}
-        pressBehavior="none"
-      />
-    ),
-    [],
-  );
+  }, [router, errorSheet.hide]);
 
   // 8개 항목마다 광고를 삽입한 리스트 생성
   const listItemsWithAds = useMemo(() => {
@@ -204,17 +173,8 @@ export default function QuestionListScreen() {
     router.back();
   }, [router]);
 
-  // 설정 다시하기 Actionsheet
-  const handleOpenResetSheet = useCallback(() => {
-    setShowResetSheet(true);
-  }, []);
-
-  const handleCloseResetSheet = useCallback(() => {
-    setShowResetSheet(false);
-  }, []);
-
+  // 설정 다시하기 확인
   const handleConfirmReset = useCallback(() => {
-    setShowResetSheet(false);
     router.replace("/");
   }, [router]);
 
@@ -257,7 +217,7 @@ export default function QuestionListScreen() {
             <Text className="font-medium text-base text-gray-900">
               총 {questions.length}개 질문
             </Text>
-            <Pressable onPress={handleOpenResetSheet}>
+            <Pressable onPress={resetActionsheet.open}>
               <Text className="text-orange-500 text-sm">설정 다시하기</Text>
             </Pressable>
           </HStack>
@@ -320,106 +280,27 @@ export default function QuestionListScreen() {
       </Box>
 
       {/* 설정 다시하기 Actionsheet */}
-      <Actionsheet isOpen={showResetSheet} onClose={handleCloseResetSheet}>
-        <ActionsheetBackdrop />
-        <ActionsheetContent className="bg-white shadow-2xl">
-          <ActionsheetDragIndicatorWrapper>
-            <ActionsheetDragIndicator />
-          </ActionsheetDragIndicatorWrapper>
-          <Box className="w-full px-2 py-4">
-            <Text className="text-center font-semibold text-gray-900 text-lg">
-              설정 다시하기
-            </Text>
-            <Text className="mt-2 text-center text-gray-500 text-sm">
-              카테고리 선택부터 다시 시작하시겠습니까?
-            </Text>
-          </Box>
-          <ActionsheetItem onPress={handleConfirmReset}>
-            <ActionsheetItemText className="text-center text-orange-500">
-              다시 시작
-            </ActionsheetItemText>
-          </ActionsheetItem>
-          <ActionsheetItem onPress={handleCloseResetSheet}>
-            <ActionsheetItemText className="text-center text-gray-500">
-              취소
-            </ActionsheetItemText>
-          </ActionsheetItem>
-        </ActionsheetContent>
-      </Actionsheet>
+      <ConfirmActionsheet
+        confirmText="다시 시작"
+        description="카테고리 선택부터 다시 시작하시겠습니까?"
+        isOpen={resetActionsheet.isOpen}
+        onClose={resetActionsheet.close}
+        onConfirm={handleConfirmReset}
+        title="설정 다시하기"
+      />
 
       {/* 에러 BottomSheet */}
-      <GorhomBottomSheet
-        backdropComponent={renderErrorBackdrop}
-        enablePanDownToClose={false}
-        index={-1}
-        ref={errorSheetRef}
-        snapPoints={errorSnapPoints}
-      >
-        <BottomSheetView className="flex-1 px-5 pb-8">
-          {/* 헤더 */}
-          <Box className="items-center border-gray-100 border-b pb-4">
-            <Text className="text-2xl">⚠️</Text>
-            <Text className="mt-2 font-semibold text-gray-900 text-lg">
-              질문이 없습니다
-            </Text>
-            <Text className="mt-1 text-center text-gray-500 text-sm">
-              선택된 조건에 맞는 질문이 없습니다.{"\n"}설정을 다시 확인해주세요.
-            </Text>
-          </Box>
-
-          {/* 버튼 */}
-          <Box className="mt-4">
-            <Pressable
-              className="h-12 items-center justify-center rounded-lg bg-orange-500"
-              onPress={handleErrorGoToSettings}
-            >
-              <Text className="font-medium text-base text-white">
-                설정 다시하기
-              </Text>
-            </Pressable>
-          </Box>
-        </BottomSheetView>
-      </GorhomBottomSheet>
+      <ErrorSheet
+        buttonText="설정 다시하기"
+        description={
+          "선택된 조건에 맞는 질문이 없습니다.\n설정을 다시 확인해주세요."
+        }
+        onAction={handleErrorGoToSettings}
+        renderBackdrop={errorSheet.renderBackdrop}
+        sheetRef={errorSheet.sheetRef}
+        snapPoints={errorSheet.snapPoints}
+        title="질문이 없습니다"
+      />
     </Box>
   );
-}
-
-// 난이도별 뱃지 스타일 - Modern Refined
-function getDifficultyBadgeStyle(difficulty: string): string {
-  switch (difficulty) {
-    case "easy":
-      return "bg-green-50 border border-green-200";
-    case "medium":
-      return "bg-yellow-50 border border-yellow-200";
-    case "hard":
-      return "bg-red-50 border border-red-200";
-    default:
-      return "bg-gray-50 border border-gray-200";
-  }
-}
-
-function getDifficultyTextStyle(difficulty: string): string {
-  switch (difficulty) {
-    case "easy":
-      return "text-green-700";
-    case "medium":
-      return "text-yellow-700";
-    case "hard":
-      return "text-red-700";
-    default:
-      return "text-gray-700";
-  }
-}
-
-function getDifficultyLabel(difficulty: string): string {
-  switch (difficulty) {
-    case "easy":
-      return "쉬움";
-    case "medium":
-      return "보통";
-    case "hard":
-      return "어려움";
-    default:
-      return "기본";
-  }
 }

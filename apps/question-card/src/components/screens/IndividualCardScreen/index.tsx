@@ -7,12 +7,8 @@
 
 import type { Question } from "@/types";
 
-import GorhomBottomSheet, {
-  BottomSheetBackdrop,
-  BottomSheetView,
-} from "@gorhom/bottom-sheet";
 import { useRouter } from "expo-router";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Dimensions, StatusBar } from "react-native";
 import {
   State,
@@ -23,23 +19,19 @@ import Reanimated from "react-native-reanimated";
 import { BannerAdComponent, BannerAdSize } from "@/components/ads/BannerAd";
 import {
   Box,
+  CompletionSheet,
+  ConfirmActionsheet,
+  ErrorSheet,
   FlipCard,
   FloatingBackButton,
   FullscreenToggleButton,
   OrangeHeader,
-  Pressable,
   Text,
 } from "@/components/ui";
-import {
-  Actionsheet,
-  ActionsheetBackdrop,
-  ActionsheetContent,
-  ActionsheetDragIndicator,
-  ActionsheetDragIndicatorWrapper,
-  ActionsheetItem,
-  ActionsheetItemText,
-} from "@/components/ui/actionsheet";
 import { useAppActions, useAppState } from "@/context/AppContext";
+import { useCompletionSheet } from "@/hooks/useCompletionSheet";
+import { useConfirmActionsheet } from "@/hooks/useConfirmActionsheet";
+import { useErrorSheet } from "@/hooks/useErrorSheet";
 import { useFullscreenMode } from "@/hooks/useFullscreenMode";
 import { CardBackContent } from "./CardBackContent";
 import { CardFrontContent } from "./CardFrontContent";
@@ -56,16 +48,11 @@ export default function IndividualCardScreen() {
 
   const [_questions, setQuestions] = useState<Question[]>([]);
   const [isFlipped, setIsFlipped] = useState(false);
-  const [showBackToMainSheet, setShowBackToMainSheet] = useState(false);
 
-  // 완료 시트 ref 및 snap points
-  const completionSheetRef = useRef<GorhomBottomSheet>(null);
-  const completionSnapPoints = useMemo(() => ["35%"], []);
-
-  // 에러 시트 ref 및 snap points
-  const errorSheetRef = useRef<GorhomBottomSheet>(null);
-  const errorSnapPoints = useMemo(() => ["35%"], []);
-  const [hasError, setHasError] = useState(false);
+  // Custom hooks
+  const completionSheet = useCompletionSheet();
+  const errorSheet = useErrorSheet();
+  const backToMainActionsheet = useConfirmActionsheet();
 
   const { isFullscreen, toggleFullscreen, fullscreenAnimatedStyle } =
     useFullscreenMode({ cardWidth: SCREEN_WIDTH - 32 });
@@ -100,40 +87,17 @@ export default function IndividualCardScreen() {
     [handleFlip],
   );
 
-  // 완료 시트 표시
-  const showCompletionSheet = useCallback(() => {
-    completionSheetRef.current?.snapToIndex(0);
-  }, []);
-
-  // 완료 시트 닫기
-  const hideCompletionSheet = useCallback(() => {
-    completionSheetRef.current?.close();
-  }, []);
-
   // 목록으로 돌아가기
   const handleBackToListFromCompletion = useCallback(() => {
-    hideCompletionSheet();
+    completionSheet.hide();
     router.back();
-  }, [hideCompletionSheet, router]);
+  }, [completionSheet.hide, router]);
 
   // 홈으로 이동 (새 설정)
   const handleGoToHomeFromCompletion = useCallback(() => {
-    hideCompletionSheet();
+    completionSheet.hide();
     router.replace("/");
-  }, [hideCompletionSheet, router]);
-
-  // 완료 시트 백드롭 렌더링
-  const renderCompletionBackdrop = useCallback(
-    (props: React.ComponentProps<typeof BottomSheetBackdrop>) => (
-      <BottomSheetBackdrop
-        {...props}
-        appearsOnIndex={0}
-        disappearsOnIndex={-1}
-        opacity={0.5}
-      />
-    ),
-    [],
-  );
+  }, [completionSheet.hide, router]);
 
   // 다음/이전 질문 이동
   const goToNext = useCallback(() => {
@@ -141,9 +105,9 @@ export default function IndividualCardScreen() {
       setIsFlipped(false);
       goToNextQuestion();
     } else {
-      showCompletionSheet();
+      completionSheet.show();
     }
-  }, [progress.canGoForward, goToNextQuestion, showCompletionSheet]);
+  }, [progress.canGoForward, goToNextQuestion, completionSheet.show]);
 
   const goToPrevious = useCallback(() => {
     if (progress.canGoBack) {
@@ -155,16 +119,7 @@ export default function IndividualCardScreen() {
   // 네비게이션 핸들러
   const handleBackToList = useCallback(() => router.back(), [router]);
 
-  const handleBackToMain = useCallback(() => {
-    setShowBackToMainSheet(true);
-  }, []);
-
-  const handleCloseBackToMainSheet = useCallback(() => {
-    setShowBackToMainSheet(false);
-  }, []);
-
   const handleConfirmBackToMain = useCallback(() => {
-    setShowBackToMainSheet(false);
     router.replace("/");
   }, [router]);
 
@@ -173,43 +128,18 @@ export default function IndividualCardScreen() {
     const questionsArray = filteredQuestions.questions || [];
     if (questionsArray.length > 0) {
       setQuestions(questionsArray);
-      setHasError(false);
+      errorSheet.setHasError(false);
     } else {
       // 질문이 없으면 에러 시트 표시
-      setHasError(true);
+      errorSheet.setHasError(true);
     }
-  }, [filteredQuestions]);
-
-  // 에러 시트 표시 (hasError가 true일 때)
-  useEffect(() => {
-    if (hasError) {
-      // 약간의 딜레이 후 시트 열기 (컴포넌트 마운트 후)
-      const timer = setTimeout(() => {
-        errorSheetRef.current?.snapToIndex(0);
-      }, 100);
-      return () => clearTimeout(timer);
-    }
-  }, [hasError]);
+  }, [filteredQuestions, errorSheet.setHasError]);
 
   // 에러 시트에서 목록으로 돌아가기
   const handleErrorGoBack = useCallback(() => {
-    errorSheetRef.current?.close();
+    errorSheet.hide();
     router.back();
-  }, [router]);
-
-  // 에러 시트 백드롭 렌더링
-  const renderErrorBackdrop = useCallback(
-    (props: React.ComponentProps<typeof BottomSheetBackdrop>) => (
-      <BottomSheetBackdrop
-        {...props}
-        appearsOnIndex={0}
-        disappearsOnIndex={-1}
-        opacity={0.5}
-        pressBehavior="none"
-      />
-    ),
-    [],
-  );
+  }, [router, errorSheet.hide]);
 
   // 로딩 상태
   if (!currentQuestion) {
@@ -236,7 +166,7 @@ export default function IndividualCardScreen() {
       {!isFullscreen && (
         <ProgressHeader
           currentIndex={currentIndex}
-          onBackToMain={handleBackToMain}
+          onBackToMain={backToMainActionsheet.open}
           progressPercentage={progressPercentage}
           totalCount={filteredQuestions.totalCount}
         />
@@ -284,109 +214,42 @@ export default function IndividualCardScreen() {
       )}
 
       {/* 메인으로 돌아가기 확인 Actionsheet */}
-      <Actionsheet
-        isOpen={showBackToMainSheet}
-        onClose={handleCloseBackToMainSheet}
-      >
-        <ActionsheetBackdrop />
-        <ActionsheetContent className="bg-white shadow-2xl">
-          <ActionsheetDragIndicatorWrapper>
-            <ActionsheetDragIndicator />
-          </ActionsheetDragIndicatorWrapper>
-          <Box className="w-full px-2 py-4">
-            <Text className="text-center font-semibold text-gray-900 text-lg">
-              메인으로 돌아가기
-            </Text>
-            <Text className="mt-2 text-center text-gray-500 text-sm">
-              처음부터 다시 시작하시겠습니까?
-            </Text>
-          </Box>
-          <ActionsheetItem onPress={handleConfirmBackToMain}>
-            <ActionsheetItemText className="text-center text-orange-500">
-              처음으로
-            </ActionsheetItemText>
-          </ActionsheetItem>
-          <ActionsheetItem onPress={handleCloseBackToMainSheet}>
-            <ActionsheetItemText className="text-center text-gray-500">
-              취소
-            </ActionsheetItemText>
-          </ActionsheetItem>
-        </ActionsheetContent>
-      </Actionsheet>
+      <ConfirmActionsheet
+        confirmText="처음으로"
+        description="처음부터 다시 시작하시겠습니까?"
+        isOpen={backToMainActionsheet.isOpen}
+        onClose={backToMainActionsheet.close}
+        onConfirm={handleConfirmBackToMain}
+        title="메인으로 돌아가기"
+      />
 
       {/* 완료 BottomSheet */}
-      <GorhomBottomSheet
-        backdropComponent={renderCompletionBackdrop}
-        enablePanDownToClose
-        index={-1}
-        ref={completionSheetRef}
-        snapPoints={completionSnapPoints}
-      >
-        <BottomSheetView className="flex-1 px-5 pb-8">
-          {/* 헤더 */}
-          <Box className="items-center border-gray-100 border-b pb-4">
-            <Text className="text-2xl">🎉</Text>
-            <Text className="mt-2 font-semibold text-gray-900 text-lg">
-              질문 탐색 완료!
-            </Text>
-            <Text className="mt-1 text-center text-gray-500 text-sm">
-              모든 질문을 확인했습니다
-            </Text>
-          </Box>
-
-          {/* 버튼들 */}
-          <Box className="mt-4 gap-3">
-            <Pressable
-              className="h-12 items-center justify-center rounded-lg bg-orange-500"
-              onPress={handleBackToListFromCompletion}
-            >
-              <Text className="font-medium text-base text-white">
-                목록으로 돌아가기
-              </Text>
-            </Pressable>
-            <Pressable
-              className="h-12 items-center justify-center rounded-lg border-2 border-gray-200 bg-white"
-              onPress={handleGoToHomeFromCompletion}
-            >
-              <Text className="font-medium text-base text-gray-700">
-                새 설정으로 시작
-              </Text>
-            </Pressable>
-          </Box>
-        </BottomSheetView>
-      </GorhomBottomSheet>
+      <CompletionSheet
+        description="모든 질문을 확인했습니다"
+        primaryAction={{
+          text: "목록으로 돌아가기",
+          onPress: handleBackToListFromCompletion,
+        }}
+        renderBackdrop={completionSheet.renderBackdrop}
+        secondaryAction={{
+          text: "새 설정으로 시작",
+          onPress: handleGoToHomeFromCompletion,
+        }}
+        sheetRef={completionSheet.sheetRef}
+        snapPoints={completionSheet.snapPoints}
+        title="질문 탐색 완료!"
+      />
 
       {/* 에러 BottomSheet */}
-      <GorhomBottomSheet
-        backdropComponent={renderErrorBackdrop}
-        enablePanDownToClose={false}
-        index={-1}
-        ref={errorSheetRef}
-        snapPoints={errorSnapPoints}
-      >
-        <BottomSheetView className="flex-1 px-5 pb-8">
-          {/* 헤더 */}
-          <Box className="items-center border-gray-100 border-b pb-4">
-            <Text className="text-2xl">⚠️</Text>
-            <Text className="mt-2 font-semibold text-gray-900 text-lg">
-              질문이 없습니다
-            </Text>
-            <Text className="mt-1 text-center text-gray-500 text-sm">
-              질문 목록으로 돌아갑니다.
-            </Text>
-          </Box>
-
-          {/* 버튼 */}
-          <Box className="mt-4">
-            <Pressable
-              className="h-12 items-center justify-center rounded-lg bg-orange-500"
-              onPress={handleErrorGoBack}
-            >
-              <Text className="font-medium text-base text-white">확인</Text>
-            </Pressable>
-          </Box>
-        </BottomSheetView>
-      </GorhomBottomSheet>
+      <ErrorSheet
+        buttonText="확인"
+        description="질문 목록으로 돌아갑니다."
+        onAction={handleErrorGoBack}
+        renderBackdrop={errorSheet.renderBackdrop}
+        sheetRef={errorSheet.sheetRef}
+        snapPoints={errorSheet.snapPoints}
+        title="질문이 없습니다"
+      />
     </Box>
   );
 }

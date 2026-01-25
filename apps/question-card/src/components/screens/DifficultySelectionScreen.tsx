@@ -17,18 +17,13 @@ import {
   OrangeHeader,
   Pressable,
 } from "@/components/ui";
-import {
-  Toast,
-  ToastDescription,
-  ToastTitle,
-  useToast,
-} from "@/components/ui/toast";
 import { difficulties } from "@/constants/designSystem";
 import { useAppActions, useAppState } from "@/context/AppContext";
+import { useWarningToast } from "@/hooks/useWarningToast";
 
 export default function DifficultySelectionScreen() {
   const router = useRouter();
-  const toast = useToast();
+  const { showWarning } = useWarningToast();
   const { selection } = useAppState();
   const { selectDifficulties } = useAppActions();
 
@@ -60,25 +55,10 @@ export default function DifficultySelectionScreen() {
   // 다음 단계로 이동
   const handleNext = () => {
     if (selectedDifficulties.length === 0) {
-      toast.show({
-        placement: "top",
-        duration: 3000,
-        render: ({ id }) => (
-          <Toast
-            action="warning"
-            className="border border-orange-600 bg-orange-500 shadow-lg"
-            nativeID={id}
-            variant="solid"
-          >
-            <ToastTitle className="font-semibold text-white">
-              난이도를 선택해 주세요
-            </ToastTitle>
-            <ToastDescription className="text-orange-50">
-              적어도 하나 이상의 난이도를 선택해야 합니다.
-            </ToastDescription>
-          </Toast>
-        ),
-      });
+      showWarning(
+        "난이도를 선택해 주세요",
+        "적어도 하나 이상의 난이도를 선택해야 합니다.",
+      );
       return;
     }
 
