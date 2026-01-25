@@ -48,10 +48,10 @@ export function MapHeader({
           {/* All Time */}
           <Button
             className={cn(
-              "flex-row items-center gap-2 rounded-full pr-3 pl-4",
+              "flex-row items-center gap-2 rounded-full",
               filterMode === "all"
-                ? "border-0 bg-primary-500"
-                : "bg-background-100 dark:bg-background-800",
+                ? "border-0 bg-primary-500 pr-2 pl-4"
+                : "bg-background-100 px-4 dark:bg-background-800",
             )}
             onPress={() => setFilterMode("all")}
             size="sm"
@@ -74,7 +74,7 @@ export function MapHeader({
           {/* Year Picker */}
           <Button
             className={cn(
-              "flex-row items-center gap-2 rounded-full pr-3 pl-4",
+              "flex-row items-center gap-2 rounded-full pr-2 pl-4",
               filterMode === "year"
                 ? "border-0 bg-primary-500"
                 : "bg-background-100 dark:bg-background-800",
@@ -110,7 +110,7 @@ export function MapHeader({
           {/* Date Range Picker */}
           <Button
             className={cn(
-              "flex-row items-center gap-2 rounded-full pr-3 pl-4",
+              "flex-row items-center gap-2 rounded-full pr-2 pl-4",
               filterMode === "range"
                 ? "border-0 bg-primary-500"
                 : "bg-background-100 dark:bg-background-800",
