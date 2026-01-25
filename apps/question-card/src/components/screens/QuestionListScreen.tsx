@@ -322,7 +322,7 @@ export default function QuestionListScreen() {
       {/* 설정 다시하기 Actionsheet */}
       <Actionsheet isOpen={showResetSheet} onClose={handleCloseResetSheet}>
         <ActionsheetBackdrop />
-        <ActionsheetContent>
+        <ActionsheetContent className="bg-white shadow-2xl">
           <ActionsheetDragIndicatorWrapper>
             <ActionsheetDragIndicator />
           </ActionsheetDragIndicatorWrapper>

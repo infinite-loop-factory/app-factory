@@ -289,7 +289,7 @@ export default function IndividualCardScreen() {
         onClose={handleCloseBackToMainSheet}
       >
         <ActionsheetBackdrop />
-        <ActionsheetContent>
+        <ActionsheetContent className="bg-white shadow-2xl">
           <ActionsheetDragIndicatorWrapper>
             <ActionsheetDragIndicator />
           </ActionsheetDragIndicatorWrapper>

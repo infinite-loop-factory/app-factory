@@ -64,9 +64,16 @@ export default function DifficultySelectionScreen() {
         placement: "top",
         duration: 3000,
         render: ({ id }) => (
-          <Toast action="warning" nativeID={id} variant="solid">
-            <ToastTitle>난이도를 선택해 주세요</ToastTitle>
-            <ToastDescription>
+          <Toast
+            action="warning"
+            className="border border-orange-600 bg-orange-500 shadow-lg"
+            nativeID={id}
+            variant="solid"
+          >
+            <ToastTitle className="font-semibold text-white">
+              난이도를 선택해 주세요
+            </ToastTitle>
+            <ToastDescription className="text-orange-50">
               적어도 하나 이상의 난이도를 선택해야 합니다.
             </ToastDescription>
           </Toast>
