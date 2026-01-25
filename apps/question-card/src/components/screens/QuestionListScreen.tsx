@@ -9,18 +9,10 @@ import { useRouter } from "expo-router";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { FlatList } from "react-native";
 import { BannerAdComponent, BannerAdSize } from "@/components/ads/BannerAd";
-import {
-  Box,
-  Card,
-  ConfirmActionsheet,
-  ErrorSheet,
-  FloatingBackButton,
-  HStack,
-  OrangeHeader,
-  Pressable,
-  Text,
-  VStack,
-} from "@/components/ui";
+import { FloatingBackButton } from "@/components/floating";
+import { OrangeHeader } from "@/components/layout";
+import { ConfirmActionsheet, ErrorSheet } from "@/components/sheets";
+import { Box, Card, HStack, Pressable, Text, VStack } from "@/components/ui";
 import { useAppActions, useAppState } from "@/context/AppContext";
 import { useConfirmActionsheet } from "@/hooks/useConfirmActionsheet";
 import { useErrorSheet } from "@/hooks/useErrorSheet";

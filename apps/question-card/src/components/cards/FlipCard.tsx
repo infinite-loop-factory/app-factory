@@ -4,7 +4,9 @@
  * Reanimated 3 기반 구현
  */
 
-import React, { useEffect } from "react";
+import type React from "react";
+
+import { useEffect } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import Animated, {
   Easing,

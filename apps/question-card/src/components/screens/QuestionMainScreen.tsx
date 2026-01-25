@@ -10,12 +10,9 @@ import { useEffect, useState } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { BannerAdComponent, BannerAdSize } from "@/components/ads/BannerAd";
-import {
-  Box,
-  FloatingBackButton,
-  OrangeHeader,
-  Pressable,
-} from "@/components/ui";
+import { FloatingBackButton } from "@/components/floating";
+import { OrangeHeader } from "@/components/layout";
+import { Box, Pressable } from "@/components/ui";
 import {
   categories,
   difficulties,

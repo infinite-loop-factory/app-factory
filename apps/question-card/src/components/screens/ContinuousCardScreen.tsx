@@ -18,17 +18,13 @@ import {
   type TapGestureHandlerStateChangeEvent,
 } from "react-native-gesture-handler";
 import Reanimated from "react-native-reanimated";
+import { FlipCard } from "@/components/cards";
 import {
-  Box,
-  Card,
-  CompletionSheet,
-  FlipCard,
   FloatingBackButton,
   FullscreenToggleButton,
-  Pressable,
-  Progress,
-  Text,
-} from "@/components/ui";
+} from "@/components/floating";
+import { CompletionSheet } from "@/components/sheets";
+import { Box, Card, Pressable, Progress, Text } from "@/components/ui";
 import { useAppActions, useAppState } from "@/context/AppContext";
 import { useCompletionSheet } from "@/hooks/useCompletionSheet";
 import { useFullscreenMode } from "@/hooks/useFullscreenMode";

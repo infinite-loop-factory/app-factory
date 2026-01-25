@@ -17,17 +17,18 @@ import {
 } from "react-native-gesture-handler";
 import Reanimated from "react-native-reanimated";
 import { BannerAdComponent, BannerAdSize } from "@/components/ads/BannerAd";
+import { FlipCard } from "@/components/cards";
 import {
-  Box,
+  FloatingBackButton,
+  FullscreenToggleButton,
+} from "@/components/floating";
+import { OrangeHeader } from "@/components/layout";
+import {
   CompletionSheet,
   ConfirmActionsheet,
   ErrorSheet,
-  FlipCard,
-  FloatingBackButton,
-  FullscreenToggleButton,
-  OrangeHeader,
-  Text,
-} from "@/components/ui";
+} from "@/components/sheets";
+import { Box, Text } from "@/components/ui";
 import { useAppActions, useAppState } from "@/context/AppContext";
 import { useCompletionSheet } from "@/hooks/useCompletionSheet";
 import { useConfirmActionsheet } from "@/hooks/useConfirmActionsheet";

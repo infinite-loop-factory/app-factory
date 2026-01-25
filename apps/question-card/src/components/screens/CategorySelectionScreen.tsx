@@ -10,8 +10,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import {
   FloatingActionButton,
   FloatingBackButton,
-  OrangeHeader,
-} from "@/components/ui";
+} from "@/components/floating";
+import { OrangeHeader } from "@/components/layout";
 import { useAppActions, useAppState } from "@/context/AppContext";
 import { useWarningToast } from "@/hooks/useWarningToast";
 
