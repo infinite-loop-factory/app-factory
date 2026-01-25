@@ -130,8 +130,6 @@
 
   "map": {
     "tab": "지도",
-    "title": "월드 트래커",
-    "add-trip": "여행 추가",
     "active": "여행 중",
     "view-trips": "상세 보기",
     "stats": {
@@ -178,7 +176,18 @@
         "start-date": "시작일",
         "end-date": "종료일",
         "apply": "적용",
-        "reset": "초기화"
+        "reset": "초기화",
+        "step-start": "시작",
+        "step-end": "종료",
+        "alert": {
+          "title": "날짜 오류",
+          "message": "종료일은 시작일보다 빠를 수 없습니다."
+        },
+        "guide": {
+          "ios-start": "시작일을 선택하면 계속됩니다.",
+          "ios-end": "종료일을 선택하면 적용됩니다.",
+          "android": "위의 박스를 눌러 날짜를 선택하세요."
+        }
       }
     }
   },

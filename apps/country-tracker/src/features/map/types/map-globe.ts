@@ -7,6 +7,7 @@ export interface MapGlobeRef {
   ) => void;
   zoomIn?: () => void;
   zoomOut?: () => void;
+  animateToUserLocation?: () => void;
 }
 
 export type CountryProperties = {

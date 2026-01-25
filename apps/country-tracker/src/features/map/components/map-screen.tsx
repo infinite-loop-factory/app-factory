@@ -10,6 +10,7 @@ import { Box } from "@/components/ui/box";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
 import { CountrySummaryItem } from "@/features/map/components/country-summary-item";
+import { MapDateRangePickerSheet } from "@/features/map/components/map-date-range-picker-sheet";
 import MapGlobe from "@/features/map/components/map-globe";
 import { MapHeader } from "@/features/map/components/map-header";
 import { MapOverlay } from "@/features/map/components/map-overlay";
@@ -36,15 +37,23 @@ export default function MapScreen() {
 
   const [searchText, setSearchText] = useState("");
   const [selectedYear, setSelectedYear] = useState(DateTime.local().year);
-  const [filterMode, setFilterMode] = useState<"year" | "all">("year");
+  const [filterMode, setFilterMode] = useState<"year" | "all" | "range">(
+    "year",
+  );
   const [isYearPickerOpen, setIsYearPickerOpen] = useState(false);
+  const [isDateRangePickerOpen, setIsDateRangePickerOpen] = useState(false);
+
+  // Date Range State
+  const [startDate, setStartDate] = useState<DateTime | null>(null);
+  const [endDate, setEndDate] = useState<DateTime | null>(null);
+
   const [selectedSummaryKey, setSelectedSummaryKey] = useState<string | null>(
     null,
   );
   const [topInset, setTopInset] = useState(0);
   const [headerHeight, setHeaderHeight] = useState(250);
   const snapPoints = useMemo(
-    () => [headerHeight, "50%", "100%"],
+    () => [headerHeight, "50%", "99%"],
     [headerHeight],
   );
 
@@ -64,6 +73,15 @@ export default function MapScreen() {
   } = useVisitedCountrySummariesQuery({
     userId: user?.id ?? null,
     year: filterMode === "year" ? selectedYear : null,
+    // Pass date strings if filterMode is range
+    startDate:
+      filterMode === "range" && startDate
+        ? startDate.toFormat("yyyy-MM-dd")
+        : undefined,
+    endDate:
+      filterMode === "range" && endDate
+        ? endDate.toFormat("yyyy-MM-dd")
+        : undefined,
   });
 
   const countrySummaries = useMemo<CountryYearSummary[]>(() => {
@@ -256,11 +274,14 @@ export default function MapScreen() {
   return (
     <ThemedView className="flex-1">
       <MapHeader
+        endDate={endDate ? endDate.toFormat("yyyy-MM-dd") : null}
         filterMode={filterMode}
         onLayout={(e) => setTopInset(e.nativeEvent.layout.height)}
+        onOpenDateRangePicker={() => setIsDateRangePickerOpen(true)}
         onOpenYearPicker={() => setIsYearPickerOpen(true)}
         selectedYear={selectedYear}
         setFilterMode={setFilterMode}
+        startDate={startDate ? startDate.toFormat("yyyy-MM-dd") : null}
       />
 
       {/* Main Content */}
@@ -272,8 +293,9 @@ export default function MapScreen() {
 
         {/* Map Overlay Controls */}
         <MapOverlay
+          bottomInset={headerHeight}
           onLocateMe={() => {
-            // Ideally trigger locate logic
+            mapGlobeRef.current?.animateToUserLocation?.();
           }}
           onSearchChange={handleSearch}
           onSearchSubmit={handleSearchSubmit}
@@ -313,6 +335,18 @@ export default function MapScreen() {
         onClose={() => setIsYearPickerOpen(false)}
         onSelectYear={setSelectedYear}
         selectedYear={selectedYear}
+      />
+
+      <MapDateRangePickerSheet
+        initialEndDate={endDate}
+        initialStartDate={startDate}
+        isOpen={isDateRangePickerOpen}
+        onApply={(start, end) => {
+          setStartDate(start);
+          setEndDate(end);
+          setFilterMode("range");
+        }}
+        onClose={() => setIsDateRangePickerOpen(false)}
       />
     </ThemedView>
   );

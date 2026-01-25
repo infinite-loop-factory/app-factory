@@ -97,8 +97,6 @@
 
   "map": {
     "tab": "Map",
-    "title": "World Tracker",
-    "add-trip": "Add Trip",
     "active": "Active",
     "view-trips": "View Trips",
     "stats": {
@@ -146,7 +144,18 @@
       "start-date": "Start Date",
       "end-date": "End Date",
       "apply": "Apply",
-      "reset": "Reset"
+      "reset": "Reset",
+      "step-start": "Start",
+      "step-end": "End",
+      "alert": {
+        "title": "Invalid Date",
+        "message": "End date cannot be before start date."
+      },
+      "guide": {
+        "ios-start": "Select start date to continue",
+        "ios-end": "Select end date to apply",
+        "android": "Tap the boxes above to select dates."
+      }
     }
   },
 

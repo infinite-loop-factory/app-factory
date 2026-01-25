@@ -11,23 +11,27 @@ import { mapQueryKeys } from "@/features/map/apis/query-keys";
 interface UseVisitedCountrySummariesQueryParams<T> {
   userId: string | null;
   year: number | null;
+  startDate?: string;
+  endDate?: string;
   select?: (data: CountryYearSummary[]) => T;
 }
 
 export function useVisitedCountrySummariesQuery<T = CountryYearSummary[]>(
   params: UseVisitedCountrySummariesQueryParams<T>,
 ) {
-  const { userId, year, select } = params;
+  const { userId, year, startDate, endDate, select } = params;
 
   return useQuery({
     queryKey: mapQueryKeys.visitedCountrySummaries({
       userId,
       year: year ?? "all",
+      startDate,
+      endDate,
     }),
     enabled: Boolean(userId),
     queryFn: async () => {
       if (!userId) return [] as CountryYearSummary[];
-      const rows = await fetchYearSummaries(userId, year);
+      const rows = await fetchYearSummaries(userId, year, startDate, endDate);
       return rows.map((row) => {
         const countryCode = (row.country_code ?? "").toUpperCase();
         const normalizedRanges: CountryYearRange[] = Array.isArray(row.ranges)

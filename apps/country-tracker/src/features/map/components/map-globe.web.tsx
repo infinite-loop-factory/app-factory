@@ -197,6 +197,9 @@ const MapGlobeComponent = forwardRef<MapGlobeRef, MapGlobeProps>(
         },
         zoomIn: () => setScale((s) => Math.min(s * 1.5, 800)),
         zoomOut: () => setScale((s) => Math.max(s / 1.5, 100)),
+        animateToUserLocation: () => {
+          // Web implementation or stub
+        },
       }),
       [startRotationAnimation],
     );

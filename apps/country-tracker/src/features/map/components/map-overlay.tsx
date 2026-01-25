@@ -11,6 +11,7 @@ interface MapOverlayProps {
   onZoomIn: () => void;
   onZoomOut: () => void;
   onLocateMe?: () => void;
+  bottomInset?: number;
 }
 
 export function MapOverlay({
@@ -20,11 +21,16 @@ export function MapOverlay({
   onZoomIn,
   onZoomOut,
   onLocateMe,
+  bottomInset = 0,
 }: MapOverlayProps) {
   return (
-    <Box className="pointer-events-none absolute inset-0 z-10 flex-col justify-between p-4 pb-64">
+    <Box
+      className="absolute inset-0 z-10 flex-col justify-between p-4"
+      pointerEvents="box-none"
+      style={{ paddingBottom: bottomInset + 16 }}
+    >
       {/* Floating Search Bar */}
-      <Box className="pointer-events-auto mx-auto w-full max-w-md shadow-lg">
+      <Box className="mx-auto w-full max-w-md shadow-lg">
         <Input
           className="h-12 w-full rounded-xl border-0 bg-background-0 shadow-lg dark:bg-background-900"
           size="lg"
@@ -43,7 +49,7 @@ export function MapOverlay({
       </Box>
 
       {/* Zoom Controls (Dummy for UI match) */}
-      <Box className="pointer-events-auto mt-4 flex-col gap-2 self-end">
+      <Box className="mt-4 flex-col gap-2 self-end">
         <Box className="flex-col overflow-hidden rounded-xl bg-background-0 shadow-lg dark:bg-background-900">
           <Button
             className="h-10 w-10 items-center justify-center border-outline-100 border-b p-0 dark:border-outline-700"

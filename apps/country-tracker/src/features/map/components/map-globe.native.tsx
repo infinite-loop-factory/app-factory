@@ -195,9 +195,20 @@ const MapGlobe = forwardRef<MapGlobeRef, MapGlobeProps>(({ year }, ref) => {
     zoomOut: () => {
       setRegion((prev) => ({
         ...prev,
-        latitudeDelta: Math.min(prev.latitudeDelta * 1.5, 100),
         longitudeDelta: Math.min(prev.longitudeDelta * 1.5, 100),
       }));
+    },
+    animateToUserLocation: async () => {
+      const location = await Location.getCurrentPositionAsync();
+      if (location) {
+        const newRegion = {
+          latitude: location.coords.latitude,
+          longitude: normalizeLongitude(location.coords.longitude),
+          latitudeDelta: 25,
+          longitudeDelta: 25,
+        };
+        mapRef.current?.animateToRegion(newRegion, 1000);
+      }
     },
   }));
 
