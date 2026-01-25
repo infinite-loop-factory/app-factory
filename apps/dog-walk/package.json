@@ -33,7 +33,7 @@
     "@gluestack-ui/toast": "^1.0.9",
     "@gorhom/bottom-sheet": "^5",
     "@legendapp/motion": "^2.4.0",
-    "@mj-studio/react-native-naver-map": "2.5.3",
+    "@mj-studio/react-native-naver-map": "2.6.7",
     "@react-native-async-storage/async-storage": "^2.2.0",
     "@react-native-community/datetimepicker": "^8.4.4",
     "@react-native-google-signin/google-signin": "^13.2.0",
