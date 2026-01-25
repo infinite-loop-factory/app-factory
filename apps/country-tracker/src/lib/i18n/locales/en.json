@@ -97,6 +97,20 @@
 
   "map": {
     "tab": "Map",
+    "title": "World Tracker",
+    "add-trip": "Add Trip",
+    "active": "Active",
+    "view-trips": "View Trips",
+    "stats": {
+      "countries": "Countries",
+      "days-abroad": "Days Abroad"
+    },
+    "filters": {
+      "all-time": "All Time",
+      "select-dates": "Select Dates",
+      "recently-visited": "Recently Visited",
+      "view-all": "View All"
+    },
     "countries": "Countries",
     "search-placeholder": "Search for a country",
     "web-disclaimer": "3D globe is available on iOS. This is a 2D web view.",
@@ -108,6 +122,7 @@
       "visits": "%{count} visits",
       "no-results-search": "No countries matched \"%{search}\" this year.",
       "no-results-year": "No stays recorded in %{year}.",
+      "no-results-all": "No stays recorded.",
       "total-days-year": "Total %{count} days",
       "total-days-selected": "%{country}: %{count} days this year",
       "loading": "Syncing stays...",
@@ -119,6 +134,11 @@
       "country-not-found": {
         "title": "Country not found",
         "message": "Try another name or check the spelling."
+      },
+      "not-implemented": "Not implemented yet",
+      "coming-soon": {
+        "title": "Coming Soon",
+        "message": "Date range selection is currently under development."
       }
     }
   },

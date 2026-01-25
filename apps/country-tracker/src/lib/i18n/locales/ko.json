@@ -130,6 +130,20 @@
 
   "map": {
     "tab": "지도",
+    "title": "월드 트래커",
+    "add-trip": "여행 추가",
+    "active": "여행 중",
+    "view-trips": "상세 보기",
+    "stats": {
+      "countries": "국가",
+      "days-abroad": "해외 체류일"
+    },
+    "filters": {
+      "all-time": "전체 기간",
+      "select-dates": "날짜 선택",
+      "recently-visited": "최근 방문 국가",
+      "view-all": "전체 보기"
+    },
     "countries": "국가",
     "search-placeholder": "국가 검색",
     "web-disclaimer": "3D 지구본은 iOS에서만 지원됩니다. 현재는 2D 웹 보기입니다.",
@@ -141,6 +155,7 @@
       "visits": "방문 %{count}회",
       "no-results-search": "올해 \"%{search}\"에 해당하는 기록이 없어요.",
       "no-results-year": "%{year}년에 머문 기록이 없어요.",
+      "no-results-all": "머문 기록이 없어요.",
       "total-days-year": "총 %{count}일 머물렀어요",
       "total-days-selected": "%{country}에서 총 %{count}일 머물렀어요",
       "loading": "방문 데이터를 불러오는 중...",
@@ -152,6 +167,11 @@
       "country-not-found": {
         "title": "국가를 찾을 수 없어요",
         "message": "다른 이름으로 검색하거나 철자를 다시 확인해주세요."
+      },
+      "not-implemented": "아직 구현되지 않았습니다",
+      "coming-soon": {
+        "title": "준비 중",
+        "message": "날짜 범위 선택 기능은 현재 개발 중입니다."
       }
     }
   },

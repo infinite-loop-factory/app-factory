@@ -15,7 +15,7 @@ import { addVisitFormOptions } from "@/features/home/constants/add-visit-form";
 import { formatDisplayDate } from "@/features/home/utils/date-display";
 import { withForm } from "@/hooks/create-app-form";
 import { useThemeColor } from "@/hooks/use-theme-color";
-import i18n from "@/libs/i18n";
+import i18n from "@/lib/i18n";
 import { countInclusiveDays } from "@/utils/date-range";
 
 type PickerField = "start" | "end";

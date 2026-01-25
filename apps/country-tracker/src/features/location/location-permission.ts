@@ -16,8 +16,8 @@ import {
   LOCATION_SHOWS_BACKGROUND_INDICATOR,
   LOCATION_TIME_INTERVAL_MS,
 } from "@/features/location/constants";
-import i18n from "@/libs/i18n";
-import supabase from "@/libs/supabase";
+import i18n from "@/lib/i18n";
+import supabase from "@/lib/supabase";
 import { normalizeTimestamp } from "@/utils/normalize-timestamp";
 import { getCountryByLatLng } from "@/utils/reverse-geo";
 

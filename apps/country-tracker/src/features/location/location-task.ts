@@ -11,7 +11,7 @@ import {
   LOCATION_QUEUE_STORAGE_KEY,
 } from "@/constants/storage-keys";
 import { LOCATION_MIN_RECORDING_INTERVAL_HOURS } from "@/features/location/constants";
-import supabase from "@/libs/supabase";
+import supabase from "@/lib/supabase";
 import { normalizeTimestamp } from "@/utils/normalize-timestamp";
 import { getCountryByLatLng } from "@/utils/reverse-geo";
 

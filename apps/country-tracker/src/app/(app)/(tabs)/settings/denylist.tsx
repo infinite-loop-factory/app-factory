@@ -1,6 +1,6 @@
 import { Stack } from "expo-router";
 import DenylistScreen from "@/features/settings/components/denylist-screen";
-import i18n from "@/libs/i18n";
+import i18n from "@/lib/i18n";
 
 export default function Denylist() {
   return (

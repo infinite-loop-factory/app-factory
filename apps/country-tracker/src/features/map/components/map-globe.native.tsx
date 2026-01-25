@@ -185,6 +185,20 @@ const MapGlobe = forwardRef<MapGlobeRef, MapGlobeProps>(({ year }, ref) => {
         }
       });
     },
+    zoomIn: () => {
+      setRegion((prev) => ({
+        ...prev,
+        latitudeDelta: Math.max(prev.latitudeDelta * 0.5, 0.01),
+        longitudeDelta: Math.max(prev.longitudeDelta * 0.5, 0.01),
+      }));
+    },
+    zoomOut: () => {
+      setRegion((prev) => ({
+        ...prev,
+        latitudeDelta: Math.min(prev.latitudeDelta * 1.5, 100),
+        longitudeDelta: Math.min(prev.longitudeDelta * 1.5, 100),
+      }));
+    },
   }));
 
   useEffect(() => {

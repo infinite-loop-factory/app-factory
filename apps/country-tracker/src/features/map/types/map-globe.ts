@@ -5,6 +5,8 @@ export interface MapGlobeRef {
     duration?: number,
     zoomLevel?: number,
   ) => void;
+  zoomIn?: () => void;
+  zoomOut?: () => void;
 }
 
 export type CountryProperties = {

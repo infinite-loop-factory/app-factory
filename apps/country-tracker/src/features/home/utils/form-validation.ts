@@ -1,6 +1,6 @@
 import type { User } from "@supabase/supabase-js";
 
-import i18n from "@/libs/i18n";
+import i18n from "@/lib/i18n";
 import { buildIsoDateRange } from "@/utils/date-range";
 
 export function ensureValidForm(params: {

@@ -6,7 +6,7 @@ import { Tabs } from "expo-router";
 import { Globe, Home, Settings } from "lucide-react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useThemeColor } from "@/hooks/use-theme-color";
-import i18n from "@/libs/i18n";
+import i18n from "@/lib/i18n";
 
 type TabInfo = {
   name: string;

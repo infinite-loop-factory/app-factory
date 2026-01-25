@@ -3,7 +3,7 @@ import type { FooterActionsProps } from "@/features/home/types/add-visit-screen"
 import { Plus } from "lucide-react-native";
 import { ActivityIndicator, Platform, Pressable, View } from "react-native";
 import { Text } from "@/components/ui/text";
-import i18n from "@/libs/i18n";
+import i18n from "@/lib/i18n";
 
 export function FooterActionBar({
   onCancel,

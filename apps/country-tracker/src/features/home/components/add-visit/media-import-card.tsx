@@ -9,7 +9,7 @@ import { usePrefillLocationMutation } from "@/features/home/hooks/use-prefill-lo
 import { resolveCountryFromCoordinates } from "@/features/home/utils/resolve-country";
 import { withForm } from "@/hooks/create-app-form";
 import { useGlobalToast } from "@/hooks/use-global-toast";
-import i18n from "@/libs/i18n";
+import i18n from "@/lib/i18n";
 
 export const MediaImportCard = withForm({
   ...addVisitFormOptions,

@@ -9,7 +9,7 @@ import {
   COUNTRY_OPTIONS,
 } from "@/features/home/utils/country-options";
 import { withForm } from "@/hooks/create-app-form";
-import i18n from "@/libs/i18n";
+import i18n from "@/lib/i18n";
 
 export const CountrySelectField = withForm({
   ...addVisitFormOptions,

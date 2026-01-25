@@ -1,5 +1,5 @@
 import { Toast, ToastDescription, ToastTitle } from "@/components/ui/toast";
-import i18n from "@/libs/i18n";
+import i18n from "@/lib/i18n";
 
 export function LocationPermissionDeniedToast() {
   return (

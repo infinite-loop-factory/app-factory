@@ -10,7 +10,7 @@ import { mapQueryKeys } from "@/features/map/apis/query-keys";
 
 interface UseVisitedCountrySummariesQueryParams<T> {
   userId: string | null;
-  year: number;
+  year: number | null;
   select?: (data: CountryYearSummary[]) => T;
 }
 
@@ -20,7 +20,10 @@ export function useVisitedCountrySummariesQuery<T = CountryYearSummary[]>(
   const { userId, year, select } = params;
 
   return useQuery({
-    queryKey: mapQueryKeys.visitedCountrySummaries({ userId, year }),
+    queryKey: mapQueryKeys.visitedCountrySummaries({
+      userId,
+      year: year ?? "all",
+    }),
     enabled: Boolean(userId),
     queryFn: async () => {
       if (!userId) return [] as CountryYearSummary[];

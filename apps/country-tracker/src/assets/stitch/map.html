@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Interactive World Map</title>
+<!-- Google Fonts: Plus Jakarta Sans -->
+<script type="text/javascript" nonce="9c841f6eb1854b13acc00343117" src="//local.adguard.org?ts=1769293223044&amp;type=content-script&amp;dmn=contribution.usercontent.google.com&amp;url=https%3A%2F%2Fcontribution.usercontent.google.com%2Fdownload%3Fc%3DCgthaWRhX2NvZGVmeBJ8Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpbCiVodG1sX2RlOGRiMDJmOTVmMTQwMDY4MjQ4NWU3Y2M5ZWJmNWMyEgsSBxD91_Lh6A0YAZIBJAoKcHJvamVjdF9pZBIWQhQxMzI3MzY1MjEzMDE2ODkwMTE2Mw%26filename%3D%26opi%3D89354086&amp;app=com.google.Chrome&amp;css=3&amp;js=1&amp;rel=1&amp;rji=1&amp;sbe=1"></script><script type="text/javascript" nonce="9c841f6eb1854b13acc00343117" src="//local.adguard.org?ts=1769293223044&amp;name=AdGuard%20Extra&amp;type=user-script"></script><link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Configuration -->
+<script id="tailwind-config">tailwind.config = {darkMode: "class", theme: {extend: {colors: {primary: "#FFA31A", "background-light": "#f8f7f5", "background-dark": "#231b0f", "surface-light": "#ffffff", "surface-dark": "#1a2632"}, fontFamily: {display: "Plus Jakarta Sans"}, borderRadius: {DEFAULT: "0.25rem", lg: "0.5rem", xl: "0.75rem", full: "9999px"}}}};</script>
+<style>
+        body {
+            font-family: "Plus Jakarta Sans", sans-serif;
+        }
+        /* Custom scrollbar hiding for chips */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white h-screen flex flex-col overflow-hidden">
+<!-- Top Navigation Bar -->
+<header class="flex items-center justify-between bg-surface-light dark:bg-surface-dark p-4 shadow-sm z-30">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-3xl">public</span>
+</div>
+<h2 class="text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center text-slate-900 dark:text-white">World Tracker</h2>
+<button class="flex items-center justify-end">
+<p class="text-primary text-base font-bold leading-normal tracking-[0.015em] shrink-0">Add Trip</p>
+</button>
+</header>
+<!-- Filters Bar (Chips) -->
+<div class="bg-surface-light dark:bg-surface-dark border-b border-slate-200 dark:border-slate-800 z-20">
+<div class="flex gap-3 px-4 py-3 overflow-x-auto no-scrollbar">
+<button class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-full bg-primary text-white pl-4 pr-3 transition-colors">
+<p class="text-sm font-medium leading-normal">All Time</p>
+<span class="material-symbols-outlined text-[18px]">check</span>
+</button>
+<button class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 pl-4 pr-3 transition-colors">
+<p class="text-slate-700 dark:text-slate-300 text-sm font-medium leading-normal">2023</p>
+<span class="material-symbols-outlined text-slate-500 text-[18px]">expand_more</span>
+</button>
+<button class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 pl-4 pr-3 transition-colors">
+<p class="text-slate-700 dark:text-slate-300 text-sm font-medium leading-normal">Select Dates</p>
+<span class="material-symbols-outlined text-slate-500 text-[18px]">calendar_month</span>
+</button>
+</div>
+</div>
+<!-- Main Content: Map & Bottom Sheet -->
+<main class="relative flex-1 w-full overflow-hidden">
+<!-- Interactive Map Layer -->
+<div class="absolute inset-0 z-0 h-full w-full bg-slate-200 dark:bg-slate-900">
+<!-- Map Image Background -->
+<div class="w-full h-full bg-cover bg-center opacity-90 dark:opacity-80" data-alt="Stylized 3D world map in light tones with blue highlights indicating visited countries" data-location="World Map" style='background-image: url("https://placeholder.pics/svg/300");'></div>
+<!-- Map Overlay Controls -->
+<div class="absolute inset-0 p-4 pointer-events-none flex flex-col justify-between pb-64"> <!-- pb-64 to avoid overlap with bottom sheet -->
+<!-- Floating Search Bar -->
+<div class="pointer-events-auto w-full max-w-md mx-auto shadow-lg rounded-xl">
+<label class="flex flex-col h-12">
+<div class="flex w-full flex-1 items-stretch rounded-xl h-full bg-surface-light dark:bg-surface-dark">
+<div class="flex items-center justify-center pl-4 rounded-l-xl">
+<span class="material-symbols-outlined text-slate-400">search</span>
+</div>
+<input class="flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-slate-900 dark:text-white focus:outline-0 focus:ring-0 border-none bg-transparent h-full placeholder:text-slate-400 px-4 pl-2 text-base font-normal leading-normal" placeholder="Search for a country" value=""/>
+</div>
+</label>
+</div>
+<!-- Zoom Controls -->
+<div class="pointer-events-auto self-end flex flex-col gap-2 mt-4">
+<div class="flex flex-col rounded-xl overflow-hidden shadow-lg bg-surface-light dark:bg-surface-dark">
+<button class="flex size-10 items-center justify-center bg-transparent hover:bg-slate-100 dark:hover:bg-slate-800 border-b border-slate-100 dark:border-slate-700 transition-colors">
+<span class="material-symbols-outlined text-slate-700 dark:text-slate-200">add</span>
+</button>
+<button class="flex size-10 items-center justify-center bg-transparent hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined text-slate-700 dark:text-slate-200">remove</span>
+</button>
+</div>
+<button class="flex size-10 items-center justify-center rounded-xl bg-surface-light dark:bg-surface-dark shadow-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined text-primary">my_location</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Bottom Sheet / Drawer -->
+<div class="absolute bottom-0 left-0 right-0 z-10 flex flex-col justify-end pointer-events-none">
+<!-- Draggable Container -->
+<div class="pointer-events-auto w-full bg-surface-light dark:bg-surface-dark rounded-t-2xl shadow-[0_-4px_24px_rgba(0,0,0,0.15)] ring-1 ring-black/5 dark:ring-white/10 p-4 pb-8 flex flex-col gap-5">
+<!-- Drag Handle -->
+<div class="w-12 h-1.5 bg-slate-300 dark:bg-slate-600 rounded-full mx-auto mb-1"></div>
+<!-- Profile Stats (Summary) -->
+<div class="flex gap-3">
+<div class="flex flex-1 flex-col gap-1 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 p-3 items-center text-center">
+<p class="text-slate-900 dark:text-white tracking-tight text-2xl font-bold leading-tight">12</p>
+<div class="flex items-center gap-1.5 opacity-80">
+<span class="material-symbols-outlined text-primary text-sm">public</span>
+<p class="text-slate-600 dark:text-slate-300 text-xs font-medium uppercase tracking-wide">Countries</p>
+</div>
+</div>
+<div class="flex flex-1 flex-col gap-1 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 p-3 items-center text-center">
+<p class="text-slate-900 dark:text-white tracking-tight text-2xl font-bold leading-tight">45</p>
+<div class="flex items-center gap-1.5 opacity-80">
+<span class="material-symbols-outlined text-primary text-sm">flight_takeoff</span>
+<p class="text-slate-600 dark:text-slate-300 text-xs font-medium uppercase tracking-wide">Days Abroad</p>
+</div>
+</div>
+</div>
+<!-- Selected Country Detail Card -->
+<div class="flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<p class="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider pl-1">Recently Visited</p>
+<button class="text-primary text-xs font-bold hover:underline">View All</button>
+</div>
+<div class="flex items-stretch justify-between gap-4 rounded-xl bg-white dark:bg-slate-800 p-3 shadow-sm border border-slate-100 dark:border-slate-700">
+<div class="flex flex-[2_2_0px] flex-col gap-3 justify-center">
+<div class="flex flex-col gap-0.5">
+<div class="flex items-center gap-2">
+<h3 class="text-slate-900 dark:text-white text-lg font-bold leading-tight">Japan</h3>
+<span class="inline-flex items-center rounded-md bg-green-50 dark:bg-green-900/30 px-2 py-0.5 text-xs font-medium text-green-700 dark:text-green-400 ring-1 ring-inset ring-green-600/20">Active</span>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium leading-normal flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">calendar_today</span>
+                                    14 Days Spent
+                                </p>
+</div>
+<button class="group flex cursor-pointer items-center justify-between overflow-hidden rounded-lg h-9 px-3 bg-primary/10 hover:bg-primary/20 dark:bg-primary/20 dark:hover:bg-primary/30 transition-colors text-primary text-sm font-bold leading-normal w-full mt-1">
+<span class="truncate">View Trips</span>
+<span class="material-symbols-outlined text-[18px] transition-transform group-hover:translate-x-1">arrow_forward</span>
+</button>
+</div>
+<div class="w-24 min-w-[100px] bg-center bg-no-repeat bg-cover rounded-lg" data-alt="Scenic view of Mount Fuji in Japan with cherry blossoms in the foreground" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuARkOANBjY0Vx9KC_2NFdTv_-kAsp0mMGs2uFttrioI5MLvFCpUjVyjxOiJPVYKXgQ_N_4XSsO0JXhFm23XNpyEy3mH5P5G-RqH9ZOVEEslNaqVO0q5Or4NdAc-oFSNUjqpALfJeN87OpHl6Dq4jEWsXSOjefAzwYh0IwzMe0PsE_ZeU5XMYd4KpRLIGZBGciTIIGR4S99GNW5pPxkqIibWTD_-zc7lj-g3o0yek60Qg15N4O1uk_7Dn3VlzSpNSHl2PWyjF75-joz0");'></div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

@@ -1,11 +1,11 @@
 import type { SupabaseYearSummaryRow } from "@/features/map/types/map-summary";
 
 import { DateTime } from "luxon";
-import supabase from "@/libs/supabase";
+import supabase from "@/lib/supabase";
 
 export async function fetchYearSummaries(
   userId: string,
-  year: number,
+  year: number | null,
 ): Promise<SupabaseYearSummaryRow[]> {
   const zone = DateTime.local().zoneName;
   const { data, error } = await supabase.rpc("get_country_year_summaries", {

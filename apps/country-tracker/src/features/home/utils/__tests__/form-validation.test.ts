@@ -4,7 +4,7 @@ import { describe, expect, it, jest } from "@jest/globals";
 import { ensureValidForm } from "@/features/home/utils/form-validation";
 
 // mock i18n default and date-range before importing
-jest.mock("@/libs/i18n", () => ({
+jest.mock("@/lib/i18n", () => ({
   __esModule: true,
   default: { t: (k: string) => k },
 }));

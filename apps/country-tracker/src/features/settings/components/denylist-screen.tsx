@@ -11,8 +11,8 @@ import { DENYLIST_STORAGE_KEY } from "@/constants/storage-keys";
 import { locationQueryKeys } from "@/features/location/apis/query-keys";
 import { useAuthUser } from "@/hooks/use-auth-user";
 import { useThemeColor } from "@/hooks/use-theme-color";
-import i18n from "@/libs/i18n";
-import supabase from "@/libs/supabase";
+import i18n from "@/lib/i18n";
+import supabase from "@/lib/supabase";
 
 type AllCountry = {
   country: string;

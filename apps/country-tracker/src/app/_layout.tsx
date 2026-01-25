@@ -13,7 +13,7 @@ import { Provider as JotaiProvider, useAtomValue } from "jotai";
 import { colorScheme } from "nativewind"; // Directly import colorScheme
 import { useEffect } from "react";
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
-import { store } from "@/libs/jotai";
+import { store } from "@/lib/jotai";
 import "react-native-reanimated";
 
 import { themeAtom } from "@/atoms/theme.atom";

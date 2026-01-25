@@ -12,7 +12,7 @@ import { filterDuplicateDates } from "@/features/home/utils/payload-builder";
 import { getCountryCentroid } from "@/features/map/utils/polygon-centroid";
 import { useAuthUser } from "@/hooks/use-auth-user";
 import { useGlobalToast } from "@/hooks/use-global-toast";
-import i18n from "@/libs/i18n";
+import i18n from "@/lib/i18n";
 import { toUtcBoundaryTimestamp } from "@/utils/date-range";
 
 export type Result = {
