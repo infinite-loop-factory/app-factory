@@ -4,7 +4,6 @@
  */
 
 import { MoreHorizontal } from "lucide-react-native";
-import React from "react";
 import { Pressable } from "@/components/ui/pressable";
 import { Text } from "@/components/ui/text";
 
@@ -83,7 +82,7 @@ export function FloatingMenuButton({
   return (
     <Pressable className={buttonClasses} disabled={disabled} onPress={onPress}>
       {label ? (
-        <Text className={`${textClass} text-xs font-medium`}>{label}</Text>
+        <Text className={`${textClass} font-medium text-xs`}>{label}</Text>
       ) : (
         <MoreHorizontal color={iconColor} size={iconSize} strokeWidth={2.5} />
       )}

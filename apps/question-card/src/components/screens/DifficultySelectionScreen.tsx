@@ -7,21 +7,22 @@ import type { DifficultyLevel } from "@/types";
 
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { Alert, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { BannerAdComponent, BannerAdSize } from "@/components/ads/BannerAd";
 import {
-  Box,
   FloatingActionButton,
   FloatingBackButton,
-  OrangeHeader,
-  Pressable,
-} from "@/components/ui";
+} from "@/components/floating";
+import { OrangeHeader } from "@/components/layout";
+import { Box, Pressable } from "@/components/ui";
 import { difficulties } from "@/constants/designSystem";
 import { useAppActions, useAppState } from "@/context/AppContext";
+import { useWarningToast } from "@/hooks/useWarningToast";
 
 export default function DifficultySelectionScreen() {
   const router = useRouter();
+  const { showWarning } = useWarningToast();
   const { selection } = useAppState();
   const { selectDifficulties } = useAppActions();
 
@@ -53,10 +54,9 @@ export default function DifficultySelectionScreen() {
   // 다음 단계로 이동
   const handleNext = () => {
     if (selectedDifficulties.length === 0) {
-      Alert.alert(
+      showWarning(
         "난이도를 선택해 주세요",
         "적어도 하나 이상의 난이도를 선택해야 합니다.",
-        [{ text: "확인" }],
       );
       return;
     }

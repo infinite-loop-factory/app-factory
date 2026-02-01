@@ -7,19 +7,20 @@ import type { Question } from "@/types";
 
 import { useRouter } from "expo-router";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Alert, FlatList } from "react-native";
+import { FlatList } from "react-native";
 import { BannerAdComponent, BannerAdSize } from "@/components/ads/BannerAd";
-import {
-  Box,
-  Card,
-  FloatingBackButton,
-  HStack,
-  OrangeHeader,
-  Pressable,
-  Text,
-  VStack,
-} from "@/components/ui";
+import { FloatingBackButton } from "@/components/floating";
+import { OrangeHeader } from "@/components/layout";
+import { ConfirmActionsheet, ErrorSheet } from "@/components/sheets";
+import { Box, Card, HStack, Pressable, Text, VStack } from "@/components/ui";
 import { useAppActions, useAppState } from "@/context/AppContext";
+import { useConfirmActionsheet } from "@/hooks/useConfirmActionsheet";
+import { useErrorSheet } from "@/hooks/useErrorSheet";
+import {
+  getDifficultyBadgeStyle,
+  getDifficultyLabel,
+  getDifficultyTextStyle,
+} from "@/utils/difficultyStyles";
 
 // 리스트 아이템 타입 정의 (질문 또는 광고)
 type ListItem =
@@ -100,25 +101,27 @@ export default function QuestionListScreen() {
 
   const [questions, setQuestions] = useState<Question[]>([]);
 
+  // Custom hooks
+  const errorSheet = useErrorSheet();
+  const resetActionsheet = useConfirmActionsheet();
+
   // 질문 데이터 초기화
   useEffect(() => {
     const questionsArray = filteredQuestions.questions || [];
     if (questionsArray.length > 0) {
       setQuestions(questionsArray);
+      errorSheet.setHasError(false);
     } else {
-      // 질문이 없으면 메인으로 돌아가기
-      Alert.alert(
-        "질문이 없습니다",
-        "선택된 조건에 맞는 질문이 없습니다. 설정을 다시 확인해주세요.",
-        [
-          {
-            text: "설정 다시하기",
-            onPress: () => router.replace("/category-selection"),
-          },
-        ],
-      );
+      // 질문이 없으면 에러 시트 표시
+      errorSheet.setHasError(true);
     }
-  }, [filteredQuestions, router]);
+  }, [filteredQuestions, errorSheet.setHasError]);
+
+  // 에러 시트에서 설정 다시하기
+  const handleErrorGoToSettings = useCallback(() => {
+    errorSheet.hide();
+    router.replace("/");
+  }, [router, errorSheet.hide]);
 
   // 8개 항목마다 광고를 삽입한 리스트 생성
   const listItemsWithAds = useMemo(() => {
@@ -162,15 +165,9 @@ export default function QuestionListScreen() {
     router.back();
   }, [router]);
 
-  // 설정 다시하기
-  const handleResetSettings = useCallback(() => {
-    Alert.alert("설정 다시하기", "카테고리 선택부터 다시 시작하시겠습니까?", [
-      { text: "취소", style: "cancel" },
-      {
-        text: "다시 시작",
-        onPress: () => router.replace("/category-selection"),
-      },
-    ]);
+  // 설정 다시하기 확인
+  const handleConfirmReset = useCallback(() => {
+    router.replace("/");
   }, [router]);
 
   // 리스트 아이템 렌더링 (질문 또는 광고)
@@ -212,7 +209,7 @@ export default function QuestionListScreen() {
             <Text className="font-medium text-base text-gray-900">
               총 {questions.length}개 질문
             </Text>
-            <Pressable onPress={handleResetSettings}>
+            <Pressable onPress={resetActionsheet.open}>
               <Text className="text-orange-500 text-sm">설정 다시하기</Text>
             </Pressable>
           </HStack>
@@ -273,46 +270,29 @@ export default function QuestionListScreen() {
           </Text>
         </Pressable>
       </Box>
+
+      {/* 설정 다시하기 Actionsheet */}
+      <ConfirmActionsheet
+        confirmText="다시 시작"
+        description="카테고리 선택부터 다시 시작하시겠습니까?"
+        isOpen={resetActionsheet.isOpen}
+        onClose={resetActionsheet.close}
+        onConfirm={handleConfirmReset}
+        title="설정 다시하기"
+      />
+
+      {/* 에러 BottomSheet */}
+      <ErrorSheet
+        buttonText="설정 다시하기"
+        description={
+          "선택된 조건에 맞는 질문이 없습니다.\n설정을 다시 확인해주세요."
+        }
+        onAction={handleErrorGoToSettings}
+        renderBackdrop={errorSheet.renderBackdrop}
+        sheetRef={errorSheet.sheetRef}
+        snapPoints={errorSheet.snapPoints}
+        title="질문이 없습니다"
+      />
     </Box>
   );
-}
-
-// 난이도별 뱃지 스타일 - Modern Refined
-function getDifficultyBadgeStyle(difficulty: string): string {
-  switch (difficulty) {
-    case "easy":
-      return "bg-green-50 border border-green-200";
-    case "medium":
-      return "bg-yellow-50 border border-yellow-200";
-    case "hard":
-      return "bg-red-50 border border-red-200";
-    default:
-      return "bg-gray-50 border border-gray-200";
-  }
-}
-
-function getDifficultyTextStyle(difficulty: string): string {
-  switch (difficulty) {
-    case "easy":
-      return "text-green-700";
-    case "medium":
-      return "text-yellow-700";
-    case "hard":
-      return "text-red-700";
-    default:
-      return "text-gray-700";
-  }
-}
-
-function getDifficultyLabel(difficulty: string): string {
-  switch (difficulty) {
-    case "easy":
-      return "쉬움";
-    case "medium":
-      return "보통";
-    case "hard":
-      return "어려움";
-    default:
-      return "기본";
-  }
 }

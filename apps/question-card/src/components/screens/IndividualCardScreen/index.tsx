@@ -9,7 +9,7 @@ import type { Question } from "@/types";
 
 import { useRouter } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
-import { Alert, Dimensions, StatusBar } from "react-native";
+import { Dimensions, StatusBar } from "react-native";
 import {
   State,
   TapGestureHandler,
@@ -17,15 +17,22 @@ import {
 } from "react-native-gesture-handler";
 import Reanimated from "react-native-reanimated";
 import { BannerAdComponent, BannerAdSize } from "@/components/ads/BannerAd";
+import { FlipCard } from "@/components/cards";
 import {
-  Box,
-  FlipCard,
   FloatingBackButton,
   FullscreenToggleButton,
-  OrangeHeader,
-  Text,
-} from "@/components/ui";
+} from "@/components/floating";
+import { OrangeHeader } from "@/components/layout";
+import {
+  CompletionSheet,
+  ConfirmActionsheet,
+  ErrorSheet,
+} from "@/components/sheets";
+import { Box, Text } from "@/components/ui";
 import { useAppActions, useAppState } from "@/context/AppContext";
+import { useCompletionSheet } from "@/hooks/useCompletionSheet";
+import { useConfirmActionsheet } from "@/hooks/useConfirmActionsheet";
+import { useErrorSheet } from "@/hooks/useErrorSheet";
 import { useFullscreenMode } from "@/hooks/useFullscreenMode";
 import { CardBackContent } from "./CardBackContent";
 import { CardFrontContent } from "./CardFrontContent";
@@ -42,6 +49,11 @@ export default function IndividualCardScreen() {
 
   const [_questions, setQuestions] = useState<Question[]>([]);
   const [isFlipped, setIsFlipped] = useState(false);
+
+  // Custom hooks
+  const completionSheet = useCompletionSheet();
+  const errorSheet = useErrorSheet();
+  const backToMainActionsheet = useConfirmActionsheet();
 
   const { isFullscreen, toggleFullscreen, fullscreenAnimatedStyle } =
     useFullscreenMode({ cardWidth: SCREEN_WIDTH - 32 });
@@ -76,22 +88,17 @@ export default function IndividualCardScreen() {
     [handleFlip],
   );
 
-  // 완료 알림
-  const showCompletionAlert = useCallback(() => {
-    Alert.alert(
-      "질문 탐색 완료!",
-      "모든 질문을 확인했습니다. 어떻게 하시겠습니까?",
-      [
-        { text: "질문 목록으로", onPress: () => router.back() },
-        {
-          text: "메인으로",
-          onPress: () => router.push("/question-main"),
-          style: "cancel",
-        },
-      ],
-      { cancelable: false },
-    );
-  }, [router]);
+  // 목록으로 돌아가기
+  const handleBackToListFromCompletion = useCallback(() => {
+    completionSheet.hide();
+    router.back();
+  }, [completionSheet.hide, router]);
+
+  // 홈으로 이동 (새 설정)
+  const handleGoToHomeFromCompletion = useCallback(() => {
+    completionSheet.hide();
+    router.replace("/");
+  }, [completionSheet.hide, router]);
 
   // 다음/이전 질문 이동
   const goToNext = useCallback(() => {
@@ -99,9 +106,9 @@ export default function IndividualCardScreen() {
       setIsFlipped(false);
       goToNextQuestion();
     } else {
-      showCompletionAlert();
+      completionSheet.show();
     }
-  }, [progress.canGoForward, goToNextQuestion, showCompletionAlert]);
+  }, [progress.canGoForward, goToNextQuestion, completionSheet.show]);
 
   const goToPrevious = useCallback(() => {
     if (progress.canGoBack) {
@@ -113,15 +120,8 @@ export default function IndividualCardScreen() {
   // 네비게이션 핸들러
   const handleBackToList = useCallback(() => router.back(), [router]);
 
-  const handleBackToMain = useCallback(() => {
-    Alert.alert(
-      "메인으로 돌아가기",
-      "질문 모드 선택 화면으로 돌아가시겠습니까?",
-      [
-        { text: "취소", style: "cancel" },
-        { text: "메인으로", onPress: () => router.push("/question-main") },
-      ],
-    );
+  const handleConfirmBackToMain = useCallback(() => {
+    router.replace("/");
   }, [router]);
 
   // 질문 데이터 초기화
@@ -129,12 +129,18 @@ export default function IndividualCardScreen() {
     const questionsArray = filteredQuestions.questions || [];
     if (questionsArray.length > 0) {
       setQuestions(questionsArray);
+      errorSheet.setHasError(false);
     } else {
-      Alert.alert("질문이 없습니다", "질문 목록으로 돌아갑니다.", [
-        { text: "확인", onPress: () => router.back() },
-      ]);
+      // 질문이 없으면 에러 시트 표시
+      errorSheet.setHasError(true);
     }
-  }, [filteredQuestions, router]);
+  }, [filteredQuestions, errorSheet.setHasError]);
+
+  // 에러 시트에서 목록으로 돌아가기
+  const handleErrorGoBack = useCallback(() => {
+    errorSheet.hide();
+    router.back();
+  }, [router, errorSheet.hide]);
 
   // 로딩 상태
   if (!currentQuestion) {
@@ -161,7 +167,7 @@ export default function IndividualCardScreen() {
       {!isFullscreen && (
         <ProgressHeader
           currentIndex={currentIndex}
-          onBackToMain={handleBackToMain}
+          onBackToMain={backToMainActionsheet.open}
           progressPercentage={progressPercentage}
           totalCount={filteredQuestions.totalCount}
         />
@@ -207,6 +213,44 @@ export default function IndividualCardScreen() {
           onPrevious={goToPrevious}
         />
       )}
+
+      {/* 메인으로 돌아가기 확인 Actionsheet */}
+      <ConfirmActionsheet
+        confirmText="처음으로"
+        description="처음부터 다시 시작하시겠습니까?"
+        isOpen={backToMainActionsheet.isOpen}
+        onClose={backToMainActionsheet.close}
+        onConfirm={handleConfirmBackToMain}
+        title="메인으로 돌아가기"
+      />
+
+      {/* 완료 BottomSheet */}
+      <CompletionSheet
+        description="모든 질문을 확인했습니다"
+        primaryAction={{
+          text: "목록으로 돌아가기",
+          onPress: handleBackToListFromCompletion,
+        }}
+        renderBackdrop={completionSheet.renderBackdrop}
+        secondaryAction={{
+          text: "새 설정으로 시작",
+          onPress: handleGoToHomeFromCompletion,
+        }}
+        sheetRef={completionSheet.sheetRef}
+        snapPoints={completionSheet.snapPoints}
+        title="질문 탐색 완료!"
+      />
+
+      {/* 에러 BottomSheet */}
+      <ErrorSheet
+        buttonText="확인"
+        description="질문 목록으로 돌아갑니다."
+        onAction={handleErrorGoBack}
+        renderBackdrop={errorSheet.renderBackdrop}
+        sheetRef={errorSheet.sheetRef}
+        snapPoints={errorSheet.snapPoints}
+        title="질문이 없습니다"
+      />
     </Box>
   );
 }

@@ -5,18 +5,19 @@
 
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { Alert, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   FloatingActionButton,
   FloatingBackButton,
-  OrangeHeader,
-} from "@/components/ui";
-// getCategoryColor import removed as it's no longer used
+} from "@/components/floating";
+import { OrangeHeader } from "@/components/layout";
 import { useAppActions, useAppState } from "@/context/AppContext";
+import { useWarningToast } from "@/hooks/useWarningToast";
 
 export default function CategorySelectionScreen() {
   const router = useRouter();
+  const { showWarning } = useWarningToast();
   const { categories, selection } = useAppState();
   const { selectCategories } = useAppActions();
 
@@ -48,10 +49,9 @@ export default function CategorySelectionScreen() {
   // 다음 단계로 이동
   const handleNext = () => {
     if (selectedCategories.length === 0) {
-      Alert.alert(
+      showWarning(
         "카테고리를 선택해 주세요",
         "적어도 하나 이상의 카테고리를 선택해야 합니다.",
-        [{ text: "확인" }],
       );
       return;
     }

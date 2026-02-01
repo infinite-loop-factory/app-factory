@@ -3,8 +3,9 @@
  * 주요 액션을 위한 원형 플로팅 버튼
  */
 
+import type React from "react";
+
 import { Check, RotateCcw } from "lucide-react-native";
-import React from "react";
 import { Pressable } from "@/components/ui/pressable";
 import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
@@ -116,7 +117,7 @@ export function FloatingActionButton({
         <VStack className="items-center" space="xs">
           {renderIcon()}
           <Text
-            className={`${textClass} ${labelSizeClass} font-medium text-center`}
+            className={`${textClass} ${labelSizeClass} text-center font-medium`}
           >
             {label}
           </Text>

@@ -3,7 +3,6 @@
  * 상단 가장자리에 표시되는 얇은 진행률 바
  */
 
-import React from "react";
 import { View } from "react-native";
 import { Box } from "@/components/ui/box";
 

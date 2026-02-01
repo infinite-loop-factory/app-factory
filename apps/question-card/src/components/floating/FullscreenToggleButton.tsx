@@ -5,7 +5,6 @@
  */
 
 import { Maximize2, Minimize2 } from "lucide-react-native";
-import React from "react";
 import { Pressable } from "@/components/ui/pressable";
 
 export interface FullscreenToggleButtonProps {

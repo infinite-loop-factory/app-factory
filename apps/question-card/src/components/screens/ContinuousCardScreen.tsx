@@ -9,7 +9,7 @@ import type { HintType, Question } from "@/types";
 
 import { useRouter } from "expo-router";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Alert, Animated, Dimensions, StatusBar } from "react-native";
+import { Animated, Dimensions, StatusBar } from "react-native";
 import {
   PanGestureHandler,
   type PanGestureHandlerGestureEvent,
@@ -18,18 +18,20 @@ import {
   type TapGestureHandlerStateChangeEvent,
 } from "react-native-gesture-handler";
 import Reanimated from "react-native-reanimated";
+import { FlipCard } from "@/components/cards";
 import {
-  Box,
-  Card,
-  FlipCard,
   FloatingBackButton,
   FullscreenToggleButton,
-  Pressable,
-  Progress,
-  Text,
-} from "@/components/ui";
+} from "@/components/floating";
+import { CompletionSheet } from "@/components/sheets";
+import { Box, Card, Pressable, Progress, Text } from "@/components/ui";
 import { useAppActions, useAppState } from "@/context/AppContext";
+import { useCompletionSheet } from "@/hooks/useCompletionSheet";
 import { useFullscreenMode } from "@/hooks/useFullscreenMode";
+import {
+  getDifficultyBadgeSolidStyle,
+  getDifficultyLabel,
+} from "@/utils/difficultyStyles";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 const SWIPE_THRESHOLD = SCREEN_WIDTH * 0.3;
@@ -37,12 +39,16 @@ const SWIPE_THRESHOLD = SCREEN_WIDTH * 0.3;
 export default function ContinuousCardScreen() {
   const router = useRouter();
   const { filteredQuestions, progress } = useAppState();
-  const { goToNextQuestion, goToPreviousQuestion } = useAppActions();
+  const { goToNextQuestion, goToPreviousQuestion, resetProgress } =
+    useAppActions();
 
   // 로컬 상태 (Context 상태 사용으로 대체 예정)
   const [_questions, setQuestions] = useState<Question[]>([]);
   const [_isCompleted, setIsCompleted] = useState(false);
   const [isFlipped, setIsFlipped] = useState(false); // 카드 뒤집기 상태
+
+  // Custom hooks
+  const completionSheet = useCompletionSheet();
 
   // 전체화면 모드 훅
   const {
@@ -131,30 +137,19 @@ export default function ContinuousCardScreen() {
     }
   }, []);
 
-  // 완료 알림 표시
-  const showCompletionAlert = useCallback(() => {
-    Alert.alert(
-      "질문 완료!",
-      "모든 질문을 완료했습니다. 어떻게 하시겠습니까?",
-      [
-        {
-          text: "처음부터 다시",
-          onPress: () => {
-            // 처음으로 리셋 (Context Actions 사용)
-            // TODO: Context에서 resetProgress 함수 구현 필요
-            setIsCompleted(false);
-            resetCardPosition();
-          },
-        },
-        {
-          text: "메인으로",
-          onPress: () => router.push("/"),
-          style: "cancel",
-        },
-      ],
-      { cancelable: false },
-    );
-  }, [router, resetCardPosition]);
+  // 처음부터 다시 시작
+  const handleRestartFromBeginning = useCallback(() => {
+    completionSheet.hide();
+    setIsCompleted(false);
+    resetCardPosition();
+    resetProgress();
+  }, [completionSheet.hide, resetCardPosition, resetProgress]);
+
+  // 홈으로 이동 (새 설정)
+  const handleGoToHome = useCallback(() => {
+    completionSheet.hide();
+    router.replace("/");
+  }, [completionSheet.hide, router]);
 
   // 진행률 계산
   const progressPercentage =
@@ -170,13 +165,13 @@ export default function ContinuousCardScreen() {
       resetCardPosition();
     } else {
       setIsCompleted(true);
-      showCompletionAlert();
+      completionSheet.show();
     }
   }, [
     progress.canGoForward,
     goToNextQuestion,
     resetCardPosition,
-    showCompletionAlert,
+    completionSheet.show,
   ]);
 
   // 이전 질문으로 이동 (Context Actions 사용)
@@ -347,7 +342,10 @@ export default function ContinuousCardScreen() {
             <Progress className="h-1 w-32" value={progressPercentage * 100} />
           </Box>
 
-          <Pressable className="flex-1 items-end" onPress={showCompletionAlert}>
+          <Pressable
+            className="flex-1 items-end"
+            onPress={completionSheet.show}
+          >
             <Text className="font-bold text-gray-600 text-lg">⋯</Text>
           </Pressable>
         </Box>
@@ -448,7 +446,7 @@ export default function ContinuousCardScreen() {
                               </Text>
                             </Box>
                             <Box
-                              className={`rounded-full px-3 py-1.5 ${getDifficultyBadgeClass(currentQuestion?.difficulty)}`}
+                              className={`rounded-full px-3 py-1.5 ${getDifficultyBadgeSolidStyle(currentQuestion?.difficulty)}`}
                             >
                               <Text className="font-medium text-sm text-white">
                                 {getDifficultyLabel(
@@ -516,34 +514,23 @@ export default function ContinuousCardScreen() {
           </Pressable>
         </Box>
       )}
+
+      {/* 완료 BottomSheet */}
+      <CompletionSheet
+        description="모든 질문을 완료했습니다"
+        primaryAction={{
+          text: "처음부터 다시",
+          onPress: handleRestartFromBeginning,
+        }}
+        renderBackdrop={completionSheet.renderBackdrop}
+        secondaryAction={{
+          text: "새 설정으로 시작",
+          onPress: handleGoToHome,
+        }}
+        sheetRef={completionSheet.sheetRef}
+        snapPoints={completionSheet.snapPoints}
+        title="질문 완료!"
+      />
     </Box>
   );
-}
-
-// 난이도 뱃지 클래스 반환 - Modern Refined 스타일
-function getDifficultyBadgeClass(difficulty?: string): string {
-  switch (difficulty) {
-    case "easy":
-      return "bg-green-500 border border-green-200";
-    case "medium":
-      return "bg-yellow-500 border border-yellow-200";
-    case "hard":
-      return "bg-red-500 border border-red-200";
-    default:
-      return "bg-gray-400 border border-gray-200";
-  }
-}
-
-// 난이도 라벨 반환
-function getDifficultyLabel(difficulty?: string): string {
-  switch (difficulty) {
-    case "easy":
-      return "쉬움";
-    case "medium":
-      return "보통";
-    case "hard":
-      return "어려움";
-    default:
-      return "기본";
-  }
 }

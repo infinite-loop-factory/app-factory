@@ -4,7 +4,6 @@
  */
 
 import { ArrowLeft } from "lucide-react-native";
-import React from "react";
 import { Pressable } from "@/components/ui/pressable";
 
 export type FloatingBackButtonPosition = "top-left" | "top-right";

@@ -3,7 +3,6 @@
  * 모든 화면에서 일관된 헤더 디자인을 제공
  */
 
-import React from "react";
 import { Text, View } from "react-native";
 
 export interface OrangeHeaderProps {
