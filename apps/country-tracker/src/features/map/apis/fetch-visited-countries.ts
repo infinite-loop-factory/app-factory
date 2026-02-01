@@ -7,7 +7,7 @@ import {
   groupConsecutiveDatesToItems,
   groupDatesByCountry,
 } from "@/features/map/utils/visited-country-helpers";
-import supabase from "@/libs/supabase";
+import supabase from "@/lib/supabase";
 
 export async function fetchVisitedCountries(
   userId: string,

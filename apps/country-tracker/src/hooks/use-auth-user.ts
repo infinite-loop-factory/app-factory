@@ -2,7 +2,7 @@ import type { User } from "@supabase/supabase-js";
 
 import { get } from "es-toolkit/compat";
 import { useEffect, useRef, useState } from "react";
-import supabase from "@/libs/supabase";
+import supabase from "@/lib/supabase";
 
 export function useAuthUser() {
   const [user, setUser] = useState<User | null>(null);

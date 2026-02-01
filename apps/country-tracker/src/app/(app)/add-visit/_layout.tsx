@@ -1,7 +1,7 @@
 import { router, Stack } from "expo-router";
 import { ChevronLeft } from "lucide-react-native";
 import { TouchableOpacity } from "react-native";
-import i18n from "@/libs/i18n";
+import i18n from "@/lib/i18n";
 
 export default function AddVisitStackLayout() {
   return (

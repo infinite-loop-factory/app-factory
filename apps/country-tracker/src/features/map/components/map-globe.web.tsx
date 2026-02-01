@@ -25,6 +25,8 @@ import {
 } from "react-simple-maps";
 import worldTopo from "@/assets/geodata/world/countries-110m.json";
 import { ThemedView } from "@/components/themed-view";
+import { Box } from "@/components/ui/box";
+import { Button, ButtonText } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
 import { env } from "@/constants/env";
 import {
@@ -38,7 +40,7 @@ import {
 } from "@/features/map/utils/country-polygons";
 import { useAuthUser } from "@/hooks/use-auth-user";
 import { useThemeColor } from "@/hooks/use-theme-color";
-import i18n from "@/libs/i18n";
+import i18n from "@/lib/i18n";
 
 const easeInOut = (t: number) => (t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t);
 
@@ -51,6 +53,7 @@ const MapGlobeComponent = forwardRef<MapGlobeRef, MapGlobeProps>(
     const { user } = useAuthUser();
     const [primary, outline] = useThemeColor(["primary-500", "outline-400"]);
     const [rotate, setRotate] = useState<[number, number, number]>([0, 0, 0]);
+    const [scale, setScale] = useState(220); // Initial scale
     const rotateRef = useRef<[number, number, number]>(rotate);
     useEffect(() => {
       rotateRef.current = rotate;
@@ -192,6 +195,11 @@ const MapGlobeComponent = forwardRef<MapGlobeRef, MapGlobeProps>(
         ) => {
           startRotationAnimation(targetLatitude, targetLongitude, duration);
         },
+        zoomIn: () => setScale((s) => Math.min(s * 1.5, 800)),
+        zoomOut: () => setScale((s) => Math.max(s / 1.5, 100)),
+        animateToUserLocation: () => {
+          // Web implementation or stub
+        },
       }),
       [startRotationAnimation],
     );
@@ -243,14 +251,14 @@ const MapGlobeComponent = forwardRef<MapGlobeRef, MapGlobeProps>(
 
     return (
       <ThemedView className="flex-1">
-        <div className="h-full w-full flex-1">
+        <Box className="h-full w-full flex-1">
           <ComposableMap
             onPointerDown={onPointerDown}
             onPointerLeave={endDrag}
             onPointerMove={onPointerMove}
             onPointerUp={endDrag}
             projection="geoOrthographic"
-            projectionConfig={{ scale: 220, rotate }}
+            projectionConfig={{ scale, rotate }}
             style={{
               width: "100%",
               height: "100%",
@@ -327,9 +335,9 @@ const MapGlobeComponent = forwardRef<MapGlobeRef, MapGlobeProps>(
               }
             </Geographies>
           </ComposableMap>
-        </div>
+        </Box>
 
-        <div className="gap-2 p-4">
+        <Box className="gap-2 p-4">
           <Text className="font-medium text-base">
             {i18n.t("map.countries")}
           </Text>
@@ -344,14 +352,12 @@ const MapGlobeComponent = forwardRef<MapGlobeRef, MapGlobeProps>(
                 "3D globe is available on iOS. This is a 2D web view.",
             })}
           </Text>
-          <button
-            className="mt-2 inline-flex items-center justify-center rounded-md bg-blue-600 px-3 py-2 text-white"
-            onClick={openStore}
-            type="button"
-          >
-            {i18n.t("map.download-app", { defaultValue: "Download the app" })}
-          </button>
-        </div>
+          <Button action="primary" className="mt-2" onPress={openStore}>
+            <ButtonText>
+              {i18n.t("map.download-app", { defaultValue: "Download the app" })}
+            </ButtonText>
+          </Button>
+        </Box>
       </ThemedView>
     );
   },

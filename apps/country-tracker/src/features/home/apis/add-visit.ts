@@ -1,4 +1,4 @@
-import supabase from "@/libs/supabase";
+import supabase from "@/lib/supabase";
 import { formatIsoDate } from "@/utils/format-date";
 
 export async function fetchExistingByDateMap(params: {

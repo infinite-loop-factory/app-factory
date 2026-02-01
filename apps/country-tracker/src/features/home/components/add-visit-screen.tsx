@@ -32,7 +32,7 @@ import { usePrefillLocationMutation } from "@/features/home/hooks/use-prefill-lo
 import { useSubmitVisitMutation } from "@/features/home/hooks/use-submit-visit";
 import { resolveCountryFromCoordinates } from "@/features/home/utils/resolve-country";
 import { useAppForm } from "@/hooks/create-app-form";
-import i18n from "@/libs/i18n";
+import i18n from "@/lib/i18n";
 import { zodOnDynamic } from "@/utils/zod-on-dynamic";
 
 export function AddVisitScreen() {

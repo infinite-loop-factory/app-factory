@@ -4,7 +4,7 @@ import { Heading } from "@/components/ui/heading";
 import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
 import { useThemeColor } from "@/hooks/use-theme-color";
-import i18n from "@/libs/i18n";
+import i18n from "@/lib/i18n";
 
 interface ErrorFallbackProps {
   readonly error: unknown;

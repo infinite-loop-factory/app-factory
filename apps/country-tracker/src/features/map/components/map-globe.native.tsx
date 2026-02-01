@@ -185,6 +185,31 @@ const MapGlobe = forwardRef<MapGlobeRef, MapGlobeProps>(({ year }, ref) => {
         }
       });
     },
+    zoomIn: () => {
+      setRegion((prev) => ({
+        ...prev,
+        latitudeDelta: Math.max(prev.latitudeDelta * 0.5, 0.01),
+        longitudeDelta: Math.max(prev.longitudeDelta * 0.5, 0.01),
+      }));
+    },
+    zoomOut: () => {
+      setRegion((prev) => ({
+        ...prev,
+        longitudeDelta: Math.min(prev.longitudeDelta * 1.5, 100),
+      }));
+    },
+    animateToUserLocation: async () => {
+      const location = await Location.getCurrentPositionAsync();
+      if (location) {
+        const newRegion = {
+          latitude: location.coords.latitude,
+          longitude: normalizeLongitude(location.coords.longitude),
+          latitudeDelta: 25,
+          longitudeDelta: 25,
+        };
+        mapRef.current?.animateToRegion(newRegion, 1000);
+      }
+    },
   }));
 
   useEffect(() => {

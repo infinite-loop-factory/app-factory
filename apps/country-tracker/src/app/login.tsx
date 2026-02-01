@@ -21,8 +21,8 @@ import {
 import { flushLocationQueueIfAny } from "@/features/location/location-task";
 import { useAuthUser } from "@/hooks/use-auth-user";
 import { useThemeColor } from "@/hooks/use-theme-color";
-import i18n from "@/libs/i18n";
-import supabase from "@/libs/supabase";
+import i18n from "@/lib/i18n";
+import supabase from "@/lib/supabase";
 
 WebBrowser.maybeCompleteAuthSession();
 const redirectTo = makeRedirectUri();

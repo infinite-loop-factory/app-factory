@@ -38,8 +38,8 @@ import { VStack } from "@/components/ui/vstack";
 import { locationQueryKeys } from "@/features/location/apis/query-keys";
 import { fetchVisitedCountries } from "@/features/map/apis/fetch-visited-countries";
 import { useThemeColor } from "@/hooks/use-theme-color";
-import i18n from "@/libs/i18n";
-import supabase from "@/libs/supabase";
+import i18n from "@/lib/i18n";
+import supabase from "@/lib/supabase";
 import { getFlagUri, getStayDays, resolveRegion } from "@/utils/country-region";
 import { formatIsoDate } from "@/utils/format-date";
 

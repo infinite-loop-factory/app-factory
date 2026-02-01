@@ -2,7 +2,7 @@ import type { GeoCoordinates } from "@/features/home/utils/exif";
 
 import { useMutation } from "@tanstack/react-query";
 import * as Location from "expo-location";
-import i18n from "@/libs/i18n";
+import i18n from "@/lib/i18n";
 
 export type PrefillResult = {
   coords?: GeoCoordinates;
