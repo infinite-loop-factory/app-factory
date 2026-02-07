@@ -24,7 +24,7 @@
 
 ### Task 0.1: 필수 패키지 설치
 
-- [ ] 다음 패키지들을 설치해주세요:
+- [x] 다음 패키지들을 설치해주세요:
 
 ```bash
 npx expo install expo-sensors expo-location @react-native-async-storage/async-storage
@@ -39,7 +39,7 @@ npx expo install expo-sensors expo-location @react-native-async-storage/async-st
 
 ### Task 0.2: 환경 변수 설정
 
-- [ ] 프로젝트 루트에 `.env` 파일을 생성하고 네이버 API 키를 설정해주세요:
+- [x] 프로젝트 루트에 `.env` 파일을 생성하고 네이버 API 키를 설정해주세요:
 
 ```env
 EXPO_PUBLIC_NAVER_CLIENT_ID=your_naver_client_id
@@ -53,7 +53,7 @@ EXPO_PUBLIC_NAVER_CLIENT_SECRET=your_naver_client_secret
 
 ### Task 0.3: app.config.ts 업데이트
 
-- [ ] `app.config.ts`에 필요한 권한과 플러그인을 추가해주세요:
+- [x] `app.config.ts`에 필요한 권한과 플러그인을 추가해주세요:
 
 **추가할 설정:**
 
