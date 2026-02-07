@@ -67,7 +67,7 @@ EXPO_PUBLIC_NAVER_CLIENT_SECRET=your_naver_client_secret
 
 ### Task 1.1: 폴더 구조 생성
 
-- [ ] 다음 폴더 구조를 생성해주세요:
+- [x] 다음 폴더 구조를 생성해주세요:
 
 ```
 src/
@@ -93,7 +93,7 @@ src/
 
 ### Task 1.2: 타입 정의 작성
 
-- [ ] `src/types/index.ts` 파일을 생성하고 다음 타입들을 정의해주세요:
+- [x] `src/types/index.ts` 파일을 생성하고 다음 타입들을 정의해주세요:
 
 ```typescript
 // 사용자 설정 타입
@@ -144,7 +144,7 @@ export interface Location {
 
 ### Task 1.3: 상수 정의
 
-- [ ] `src/constants/categories.ts`:
+- [x] `src/constants/categories.ts`:
 
 ```typescript
 export const FOOD_CATEGORIES = [
