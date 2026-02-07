@@ -1,5 +1,5 @@
 import Constants from "expo-constants";
-import { useState } from "react";
+import { memo, useState } from "react";
 import { Text, View } from "react-native";
 
 /**
@@ -60,7 +60,7 @@ interface BannerAdComponentProps {
  * <BannerAdComponent size={BannerAdSize.LARGE_BANNER} />
  * ```
  */
-export function BannerAdComponent({
+export const BannerAdComponent = memo(function BannerAdComponent({
   size = BannerAdSize.BANNER,
 }: BannerAdComponentProps) {
   const [adError, setAdError] = useState<string | null>(null);
@@ -129,4 +129,4 @@ export function BannerAdComponent({
       )}
     </View>
   );
-}
+});
