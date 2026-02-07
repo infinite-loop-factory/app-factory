@@ -6,7 +6,7 @@
 import type { Question } from "@/types";
 
 import { useRouter } from "expo-router";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { FlatList } from "react-native";
 import { BannerAdComponent, BannerAdSize } from "@/components/ads/BannerAd";
 import { FloatingBackButton } from "@/components/floating";
@@ -33,7 +33,11 @@ interface QuestionListItemProps {
   onPress: (question: Question, index: number) => void;
 }
 
-function QuestionListItem({ question, index, onPress }: QuestionListItemProps) {
+const QuestionListItem = memo(function QuestionListItem({
+  question,
+  index,
+  onPress,
+}: QuestionListItemProps) {
   const { categories, difficulties } = useAppState();
 
   // 카테고리 정보 찾기
@@ -92,7 +96,7 @@ function QuestionListItem({ question, index, onPress }: QuestionListItemProps) {
       </Pressable>
     </Card>
   );
-}
+});
 
 export default function QuestionListScreen() {
   const router = useRouter();
@@ -126,7 +130,7 @@ export default function QuestionListScreen() {
   // 8개 항목마다 광고를 삽입한 리스트 생성
   const listItemsWithAds = useMemo(() => {
     const items: ListItem[] = [];
-    const AD_INTERVAL = 8; // 8개 질문마다 광고 삽입
+    const AD_INTERVAL = 20; // 8개 질문마다 광고 삽입
 
     questions.forEach((question, index) => {
       // 질문 항목 추가
@@ -239,6 +243,7 @@ export default function QuestionListScreen() {
       <FlatList
         contentContainerStyle={{ paddingVertical: 16 }}
         data={listItemsWithAds}
+        initialNumToRender={10}
         keyExtractor={(item) =>
           item.type === "question" ? `question-${item.data.id}` : item.id
         }
@@ -250,8 +255,11 @@ export default function QuestionListScreen() {
             </Text>
           </Box>
         }
+        maxToRenderPerBatch={5}
+        removeClippedSubviews={true}
         renderItem={renderListItem}
         showsVerticalScrollIndicator={false}
+        windowSize={7}
       />
 
       {/* 하단 광고 영역 */}
