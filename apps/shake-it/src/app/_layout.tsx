@@ -32,13 +32,12 @@ export default function RootLayout() {
     return null;
   }
 
-  const tabScreenOptions = { headerShown: false };
-
   return (
     <GluestackUIProvider mode="light">
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
         <Stack>
-          <Stack.Screen name="(tabs)" options={tabScreenOptions} />
+          <Stack.Screen name="index" options={{ headerShown: false }} />
+          <Stack.Screen name="explore" options={{ headerShown: false }} />
           <Stack.Screen name="+not-found" />
         </Stack>
       </ThemeProvider>
