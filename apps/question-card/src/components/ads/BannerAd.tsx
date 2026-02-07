@@ -95,7 +95,7 @@ export function BannerAdComponent({
   }
 
   // ⚠️ 테스트용: 항상 디버그 정보 표시 (프로덕션 배포 전 false로 변경 필수)
-  const showDebugInfo = true;
+  const showDebugInfo = __DEV__;
 
   return (
     <View className="items-center py-2">
@@ -108,7 +108,9 @@ export function BannerAdComponent({
 
       <RNBannerAd
         onAdFailedToLoad={(error: { message: string }) => {
-          console.error("[AdMob] Banner ad failed to load:", error);
+          if (__DEV__) {
+            console.error("[AdMob] Banner ad failed to load:", error);
+          }
           setAdError(error.message);
         }}
         onAdLoaded={() => {
