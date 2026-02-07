@@ -246,7 +246,7 @@ export const BRAND_COLORS = {
 
 ### Task 3.1: Storage 서비스 구현
 
-- [ ] `src/services/storage.ts` 파일을 생성해주세요:
+- [x] `src/services/storage.ts` 파일을 생성해주세요:
 
 **구현 요구사항:**
 
@@ -259,7 +259,7 @@ export const BRAND_COLORS = {
 
 ### Task 3.2: useSettings 훅 구현
 
-- [ ] `src/hooks/use-settings.ts` 파일을 생성해주세요:
+- [x] `src/hooks/use-settings.ts` 파일을 생성해주세요:
 
 **구현 요구사항:**
 
@@ -287,7 +287,7 @@ export function useSettings() {
 
 ### Task 4.1: 위치 서비스 구현
 
-- [ ] `src/hooks/use-location.ts` 파일을 생성해주세요:
+- [x] `src/hooks/use-location.ts` 파일을 생성해주세요:
 
 **구현 요구사항:**
 
