@@ -112,9 +112,7 @@ export default function SettingsScreen() {
         render: () => {
           return (
             <Toast action="error" variant="outline">
-              <ToastTitle>
-                {i18n.t("settings.toast.language.title")}
-              </ToastTitle>
+              <ToastTitle>{i18n.t("settings.toast.language.title")}</ToastTitle>
               <ToastDescription>
                 {i18n.t("settings.toast.language.description")}
               </ToastDescription>
@@ -133,8 +131,8 @@ export default function SettingsScreen() {
 
   return (
     <ParallaxScrollView>
-      <Box className="-mx-4 mb-5 border-b border-outline-100 px-5 pb-3 pt-2">
-        <Heading className="text-3xl font-bold text-typography-950">
+      <Box className="-mx-4 mb-5 border-outline-100 border-b px-5 pt-2 pb-3">
+        <Heading className="font-bold text-3xl text-typography-950">
           {i18n.t("settings.title")}
         </Heading>
       </Box>
@@ -154,7 +152,10 @@ export default function SettingsScreen() {
               />
             </Box>
             <Box className="flex-1">
-              <Text className="text-xl font-bold text-typography-950" numberOfLines={1}>
+              <Text
+                className="font-bold text-typography-950 text-xl"
+                numberOfLines={1}
+              >
                 {userName}
               </Text>
               <Text className="text-base text-secondary-600" numberOfLines={1}>
@@ -167,17 +168,17 @@ export default function SettingsScreen() {
       </Box>
 
       <Box className="mx-1 mt-3 flex-row items-center justify-between px-4">
-        <Text className="text-sm font-semibold uppercase tracking-wide text-secondary-700">
+        <Text className="font-semibold text-secondary-700 text-sm uppercase tracking-wide">
           {i18n.t("settings.profile.plan")}
         </Text>
         <Badge className="rounded-lg bg-primary-100 px-3 py-1" size="sm">
-          <BadgeText className="text-sm font-bold text-primary-500">
+          <BadgeText className="font-bold text-primary-500 text-sm">
             {i18n.t("settings.profile.pro-member")}
           </BadgeText>
         </Badge>
       </Box>
 
-      <Text className="mx-5 mt-8 mb-3 text-sm font-bold uppercase tracking-wide text-secondary-700">
+      <Text className="mx-5 mt-8 mb-3 font-bold text-secondary-700 text-sm uppercase tracking-wide">
         {i18n.t("settings.preferences.title")}
       </Text>
       <Box className="mx-1 overflow-hidden rounded-2xl border border-outline-100 bg-background-0 shadow-xs">
@@ -190,12 +191,12 @@ export default function SettingsScreen() {
             <Box className="h-8 w-8 items-center justify-center rounded-md bg-secondary-500">
               <Globe2 color={iconColor} size={17} />
             </Box>
-            <Text className="text-base font-medium text-typography-900">
+            <Text className="font-medium text-base text-typography-900">
               {i18n.t("settings.preferences.language")}
             </Text>
           </Box>
           <Box className="flex-row items-center gap-2">
-            <Text className="text-base font-normal text-secondary-600">
+            <Text className="font-normal text-base text-secondary-600">
               {isKorean
                 ? i18n.t("settings.preferences.language-value-ko")
                 : i18n.t("settings.preferences.language-value-en")}
@@ -213,12 +214,12 @@ export default function SettingsScreen() {
             <Box className="h-8 w-8 items-center justify-center rounded-md bg-warning-500">
               <Flag color={iconColor} size={17} />
             </Box>
-            <Text className="text-base font-medium text-typography-900">
+            <Text className="font-medium text-base text-typography-900">
               {i18n.t("settings.preferences.home-country")}
             </Text>
           </Box>
           <Box className="flex-row items-center gap-2">
-            <Text className="text-base font-normal text-secondary-600">
+            <Text className="font-normal text-base text-secondary-600">
               {homeCountryValue}
             </Text>
             <ChevronRight color={chevronColor} size={18} />
@@ -234,12 +235,12 @@ export default function SettingsScreen() {
             <Box className="h-8 w-8 items-center justify-center rounded-md bg-success-500">
               <Wallet color={iconColor} size={17} />
             </Box>
-            <Text className="text-base font-medium text-typography-900">
+            <Text className="font-medium text-base text-typography-900">
               {i18n.t("settings.preferences.currency")}
             </Text>
           </Box>
           <Box className="flex-row items-center gap-2">
-            <Text className="text-base font-normal text-secondary-600">
+            <Text className="font-normal text-base text-secondary-600">
               {currencyValue}
             </Text>
             <ChevronRight color={chevronColor} size={18} />
@@ -247,7 +248,7 @@ export default function SettingsScreen() {
         </Button>
       </Box>
 
-      <Text className="mx-5 mt-8 mb-3 text-sm font-bold uppercase tracking-wide text-secondary-700">
+      <Text className="mx-5 mt-8 mb-3 font-bold text-secondary-700 text-sm uppercase tracking-wide">
         {i18n.t("settings.support.title")}
       </Text>
       <Box className="mx-1 overflow-hidden rounded-2xl border border-outline-100 bg-background-0 shadow-xs">
@@ -260,7 +261,7 @@ export default function SettingsScreen() {
             <Box className="h-8 w-8 items-center justify-center rounded-md bg-info-500">
               <CircleHelp color={iconColor} size={17} />
             </Box>
-            <Text className="text-base font-medium text-typography-900">
+            <Text className="font-medium text-base text-typography-900">
               {i18n.t("settings.support.help-center")}
             </Text>
           </Box>
@@ -274,18 +275,18 @@ export default function SettingsScreen() {
           className="h-14 w-full items-center justify-center rounded-none bg-transparent px-4"
           onPress={() => void handleLogout()}
         >
-          <Text className="text-lg font-medium text-error-600">
+          <Text className="font-medium text-error-600 text-lg">
             {i18n.t("settings.logout")}
           </Text>
         </Button>
       </Box>
 
-      <Box className="mb-10 mt-12 items-center justify-center gap-3">
+      <Box className="mt-12 mb-10 items-center justify-center gap-3">
         <Box className="flex-row items-center gap-2">
           <Box className="h-6 w-6 items-center justify-center rounded-md bg-primary-400">
             <PlaneTakeoff color={iconColor} size={14} />
           </Box>
-          <Text className="text-xl font-bold text-typography-900">
+          <Text className="font-bold text-typography-900 text-xl">
             {i18n.t("settings.footer.app-name")}
           </Text>
         </Box>
