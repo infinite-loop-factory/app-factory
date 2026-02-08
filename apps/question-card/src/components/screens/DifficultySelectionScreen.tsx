@@ -126,6 +126,9 @@ export default function DifficultySelectionScreen() {
 
             return (
               <Pressable
+                accessibilityLabel={difficulty.name}
+                accessibilityRole="checkbox"
+                accessibilityState={{ selected: isSelected }}
                 className={`flex-row items-center rounded-xl border-2 bg-white p-5 shadow-sm ${
                   isSelected
                     ? "border-orange-200 bg-orange-50"
@@ -189,6 +192,8 @@ export default function DifficultySelectionScreen() {
         </Box>
 
         <Pressable
+          accessibilityLabel="다음 단계"
+          accessibilityRole="button"
           className={`h-12 items-center justify-center rounded-lg ${
             selectedDifficulties.length === 0 ? "bg-gray-300" : "bg-orange-500"
           }`}

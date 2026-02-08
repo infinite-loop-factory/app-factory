@@ -95,6 +95,9 @@ export default function CategorySelectionScreen() {
 
             return (
               <Pressable
+                accessibilityLabel={category.name}
+                accessibilityRole="checkbox"
+                accessibilityState={{ selected: isSelected }}
                 className={`flex-row items-center rounded-xl border-2 bg-white p-5 shadow-sm ${
                   isSelected
                     ? "border-orange-200 bg-orange-50"
@@ -156,6 +159,8 @@ export default function CategorySelectionScreen() {
         </Box>
 
         <Pressable
+          accessibilityLabel="다음 단계"
+          accessibilityRole="button"
           className={`h-12 items-center justify-center rounded-lg ${
             selectedCategories.length === 0 ? "bg-gray-300" : "bg-orange-500"
           }`}

@@ -21,6 +21,9 @@ export function NavigationButtons({
     <Box className="flex-row gap-4 border-gray-200 border-t bg-white px-5 py-4">
       {/* 이전 버튼 */}
       <Pressable
+        accessibilityLabel="이전 질문"
+        accessibilityRole="button"
+        accessibilityState={{ disabled: !canGoBack }}
         className={`h-12 flex-1 items-center justify-center rounded-lg border-2 border-gray-200 ${
           !canGoBack ? "opacity-50" : "bg-white"
         }`}
@@ -38,6 +41,8 @@ export function NavigationButtons({
 
       {/* 다음 버튼 */}
       <Pressable
+        accessibilityLabel={canGoForward ? "다음 질문" : "완료"}
+        accessibilityRole="button"
         className="h-12 flex-1 items-center justify-center rounded-lg bg-orange-500"
         onPress={onNext}
       >

@@ -164,6 +164,8 @@ export default function QuestionMainScreen() {
           <Box className="gap-3">
             {questionModes.map((mode) => (
               <Pressable
+                accessibilityLabel={mode.name}
+                accessibilityRole="button"
                 className="flex-row items-center rounded-xl border border-gray-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md"
                 key={mode.id}
                 onPress={() => handleModeSelect(mode.id)}
@@ -209,6 +211,8 @@ export default function QuestionMainScreen() {
       {/* 하단 버튼 */}
       <Box className="border-gray-200 border-t bg-white px-5 py-4">
         <Pressable
+          accessibilityLabel="설정 다시하기"
+          accessibilityRole="button"
           className="h-12 items-center justify-center rounded-lg bg-orange-500"
           onPress={() => router.push("/difficulty-selection")}
         >
