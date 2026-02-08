@@ -88,6 +88,9 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         },
         android: {
           // newArchEnabled moved to root
+          ndkVersion: "27.1.12297006",
+          kotlinVersion: "2.0.0",
+          minSdkVersion: 26,
           googleServicesFile: "./google-services.json",
           gradleProperties: {
             "android.useAndroidX": "true",

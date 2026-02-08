@@ -1,17 +1,29 @@
 import type { ReviewDataType } from "@/types/review";
 
-import { Dimensions, Image, Text, View } from "react-native";
+import { router } from "expo-router";
+import { Dimensions, Image, Text, TouchableOpacity, View } from "react-native";
 import dayjs from "@/library/dayjs";
 import { maskName } from "@/utils/string";
 
 export default function ReviewCard({ item }: { item: ReviewDataType }) {
-  const { content, created_at, users } = item;
+  const { content, created_at, users, course_id } = item;
 
   const screenWidth = Dimensions.get("window").width;
   const calculatedWidth = screenWidth - 110;
 
   return (
-    <View className="mb-4 flex w-full flex-row rounded-lg border border-slate-200 p-4">
+    <TouchableOpacity
+      activeOpacity={0.5}
+      className="mb-4 flex w-full flex-row rounded-lg border border-slate-200 p-4"
+      onPress={() => {
+        router.push({
+          pathname: "/(screens)/review",
+          params: {
+            courseId: course_id,
+          },
+        });
+      }}
+    >
       <Image
         className="mr-4 h-10 w-10 rounded-full"
         source={
@@ -36,6 +48,6 @@ export default function ReviewCard({ item }: { item: ReviewDataType }) {
           </Text>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }
