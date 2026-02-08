@@ -40,7 +40,13 @@ export function FullscreenToggleButton({
   const buttonClasses = `${baseClasses} ${positionClass} ${styleClass} ${disabledClass}`;
 
   return (
-    <Pressable className={buttonClasses} disabled={disabled} onPress={onPress}>
+    <Pressable
+      accessibilityLabel={isFullscreen ? "전체화면 해제" : "전체화면"}
+      accessibilityRole="button"
+      className={buttonClasses}
+      disabled={disabled}
+      onPress={onPress}
+    >
       {isFullscreen ? (
         <Minimize2 color={iconColor} size={iconSize} strokeWidth={2.5} />
       ) : (

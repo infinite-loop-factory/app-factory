@@ -80,7 +80,13 @@ export function FloatingMenuButton({
   const iconColor = textClass.includes("white") ? "#ffffff" : "#374151";
 
   return (
-    <Pressable className={buttonClasses} disabled={disabled} onPress={onPress}>
+    <Pressable
+      accessibilityLabel={label || "메뉴"}
+      accessibilityRole="button"
+      className={buttonClasses}
+      disabled={disabled}
+      onPress={onPress}
+    >
       {label ? (
         <Text className={`${textClass} font-medium text-xs`}>{label}</Text>
       ) : (

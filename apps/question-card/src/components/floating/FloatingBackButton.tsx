@@ -54,7 +54,13 @@ export function FloatingBackButton({
   }`;
 
   return (
-    <Pressable className={buttonClasses} disabled={disabled} onPress={onPress}>
+    <Pressable
+      accessibilityLabel="뒤로 가기"
+      accessibilityRole="button"
+      className={buttonClasses}
+      disabled={disabled}
+      onPress={onPress}
+    >
       <ArrowLeft color={iconColor} size={size} strokeWidth={2.5} />
     </Pressable>
   );
