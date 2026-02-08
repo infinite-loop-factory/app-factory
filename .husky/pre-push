@@ -1,1 +1,1 @@
-pnpm exec tsx scripts/pre-push.ts
+mise exec -- pnpm exec tsx scripts/pre-push.ts

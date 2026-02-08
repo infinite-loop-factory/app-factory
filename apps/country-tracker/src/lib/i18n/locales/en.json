@@ -162,6 +162,29 @@
   "settings": {
     "tab": "Settings",
     "title": "Settings",
+    "profile": {
+      "default-name": "Traveler",
+      "plan": "Plan",
+      "pro-member": "PRO MEMBER"
+    },
+    "preferences": {
+      "title": "Preferences",
+      "language": "Language",
+      "language-value-en": "English",
+      "language-value-ko": "Korean",
+      "home-country": "Home Country",
+      "home-country-value": "USA",
+      "currency": "Currency",
+      "currency-value": "USD ($)"
+    },
+    "support": {
+      "title": "Support",
+      "help-center": "Help Center"
+    },
+    "footer": {
+      "app-name": "Country Tracker",
+      "version-build": "Version %{version} (Build %{build})"
+    },
 
     "appearance": {
       "title": "Appearance",
@@ -200,8 +223,13 @@
   "login": {
     "title": "Country Tracker",
     "description": "Login is required to use this service.",
+    "hero-title": "Start Your Journey",
+    "hero-subtitle": "Sign in to continue to your dashboard",
     "google": "Login with Google",
-    "github": "Login with GitHub"
+    "github": "Login with GitHub",
+    "terms": "Terms of Service",
+    "privacy": "Privacy Policy",
+    "security-note": "OAuth only. No password is stored in app."
   },
   "location": {
     "foregroundService": {

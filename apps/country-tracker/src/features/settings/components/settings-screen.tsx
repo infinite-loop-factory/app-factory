@@ -2,18 +2,24 @@ import {
   openLanguageSetting,
   openStorePage,
 } from "@infinite-loop-factory/common";
-import { get } from "es-toolkit/compat";
+import Constants from "expo-constants";
 import { useRouter } from "expo-router";
-import { useAtom } from "jotai";
-import { ChevronRight, Moon, Sun } from "lucide-react-native";
-import { TouchableOpacity, View } from "react-native";
-import { themeAtom } from "@/atoms/theme.atom";
+import {
+  Ban,
+  ChevronRight,
+  CircleHelp,
+  ExternalLink,
+  FileText,
+  Globe2,
+  PlaneTakeoff,
+} from "lucide-react-native";
 import ParallaxScrollView from "@/components/parallax-scroll-view";
 import { Badge, BadgeText } from "@/components/ui/badge";
 import { Box } from "@/components/ui/box";
+import { Button } from "@/components/ui/button";
+import { Divider } from "@/components/ui/divider";
 import { Heading } from "@/components/ui/heading";
 import { Image } from "@/components/ui/image";
-import { Switch } from "@/components/ui/switch";
 import { Text } from "@/components/ui/text";
 import {
   Toast,
@@ -28,33 +34,27 @@ import i18n from "@/lib/i18n";
 import supabase from "@/lib/supabase";
 
 export default function SettingsScreen() {
-  const [theme, setTheme] = useAtom(themeAtom);
   const toast = useToast();
   const router = useRouter();
   const { user } = useAuthUser();
 
-  const toggleTheme = () => {
-    const nextTheme = theme === "light" ? "dark" : "light";
-    setTheme(nextTheme);
-  };
-
-  const [
-    background, // 카드 배경, 전체 배경
-    errorColor, // 에러 타이틀
-    headingColor, // 헤딩 텍스트
-    textColor, // 일반 텍스트
-    highlightColor, // 스위치 ON일 때 트랙
-    switchBgColor, // 스위치 OFF일 때 트랙 (iOS 배경)
-  ] = useThemeColor([
-    "background",
-    "error-600",
-    "typography-900",
-    "typography",
-    "primary-400",
-    "background-100",
+  const [iconColor, chevronColor] = useThemeColor([
+    "typography-0",
+    "typography-300",
   ]);
 
-  const provider = get(user, "identities.0.provider") as string | undefined;
+  const isKorean = i18n.locale === "ko";
+  const userName =
+    user?.user_metadata?.full_name ??
+    user?.user_metadata?.name ??
+    i18n.t("settings.profile.default-name");
+  const userEmail = user?.email ?? "-";
+  const appVersion = Constants.expoConfig?.version ?? "1.0.0";
+  const appBuild = String(
+    Constants.expoConfig?.ios?.buildNumber ??
+      Constants.expoConfig?.android?.versionCode ??
+      "1",
+  );
 
   const handleLanguageSetting = async () => {
     const openLanguageSettingResult = await openLanguageSetting();
@@ -63,18 +63,9 @@ export default function SettingsScreen() {
         duration: 3000,
         render: () => {
           return (
-            <Toast
-              action="error"
-              className="border-neutral-600"
-              style={{
-                backgroundColor: background,
-              }}
-              variant="outline"
-            >
-              <ToastTitle style={{ color: errorColor }}>
-                {i18n.t("settings.toast.language.title")}
-              </ToastTitle>
-              <ToastDescription style={{ color: textColor }}>
+            <Toast action="error" variant="outline">
+              <ToastTitle>{i18n.t("settings.toast.language.title")}</ToastTitle>
+              <ToastDescription>
                 {i18n.t("settings.toast.language.description")}
               </ToastDescription>
             </Toast>
@@ -92,132 +83,161 @@ export default function SettingsScreen() {
 
   return (
     <ParallaxScrollView>
-      <Box className="mb-4 px-1 pt-2">
-        <Heading className="font-bold text-3xl" style={{ color: headingColor }}>
+      <Box className="-mx-4 mb-5 border-outline-100 border-b px-5 pt-2 pb-3">
+        <Heading className="font-bold text-3xl text-typography-950">
           {i18n.t("settings.title")}
         </Heading>
       </Box>
-      {/* 내 정보 박스 */}
-      <Box className="mx-1 mb-4 flex-row items-center justify-between rounded-lg border border-neutral-600 p-4 shadow-xs">
-        <Box className="flex-row items-center">
-          <Image
-            alt="avatar"
-            className="mr-4 h-12 w-12 rounded-full"
-            source={
-              user?.user_metadata?.avatar_url
-                ? { uri: user.user_metadata.avatar_url }
-                : require("@/assets/images/icon.png")
-            }
-          />
-          <Box>
-            <Text className="font-bold text-lg" style={{ color: headingColor }}>
-              {user?.user_metadata?.name || user?.email || "-"}
-            </Text>
-            <Box className="flex-row items-center">
-              <Text className="text-gray-500 text-sm">{user?.email}</Text>
-              <Badge action="muted" className="ml-2" size="sm">
-                <BadgeText>{provider}</BadgeText>
-              </Badge>
+
+      <Box className="mx-1 rounded-2xl border border-outline-100 bg-background-0 shadow-xs">
+        <Box className="flex-row items-center justify-between px-4 py-4">
+          <Box className="flex-row items-center gap-4">
+            <Box className="h-16 w-16 overflow-hidden rounded-full border border-outline-100">
+              <Image
+                alt="avatar"
+                className="h-full w-full"
+                source={
+                  user?.user_metadata?.avatar_url
+                    ? { uri: user.user_metadata.avatar_url }
+                    : require("@/assets/images/icon.png")
+                }
+              />
+            </Box>
+            <Box className="flex-1">
+              <Text
+                className="font-bold text-typography-950 text-xl"
+                numberOfLines={1}
+              >
+                {userName}
+              </Text>
+              <Text className="text-base text-secondary-600" numberOfLines={1}>
+                {userEmail}
+              </Text>
             </Box>
           </Box>
+          <ChevronRight color={chevronColor} size={22} />
         </Box>
-        <TouchableOpacity onPress={handleLogout}>
-          <Text className="font-bold text-error-600">
-            {i18n.t("settings.logout")}
-          </Text>
-        </TouchableOpacity>
       </Box>
 
-      {/* Appearance 그룹 */}
-      <Box
-        className="mx-1 mb-4 rounded-lg border border-neutral-600 shadow-xs"
-        style={{ backgroundColor: background }}
-      >
-        <Box className="border-b border-b-neutral-600 p-4">
-          <Heading
-            className="font-bold text-xl"
-            style={{ color: headingColor }}
-          >
-            {i18n.t("settings.appearance.title")}
-          </Heading>
-        </Box>
-        <View className="flex-row items-center justify-between border-neutral-600 border-b px-4 android:py-3 ios:py-3 py-4">
-          <View className="flex-row items-center">
-            <Text
-              className="mr-2 font-bold text-base"
-              style={{ color: textColor }}
-            >
-              {i18n.t("settings.appearance.theme")}
-            </Text>
-            {theme === "light" ? (
-              <Sun color={textColor} size={24} style={{ marginLeft: 2 }} />
-            ) : (
-              <Moon
-                color={highlightColor}
-                size={24}
-                style={{ marginLeft: 2 }}
-              />
-            )}
-          </View>
-          <Switch
-            activeThumbColor={highlightColor}
-            onValueChange={toggleTheme}
-            thumbColor={highlightColor}
-            trackColor={{ false: switchBgColor, true: switchBgColor }}
-            value={theme === "dark"}
-          />
-        </View>
-        <TouchableOpacity
-          className="flex-row items-center justify-between p-4"
-          onPress={handleLanguageSetting}
+      <Box className="mx-1 mt-3 flex-row items-center justify-between px-4">
+        <Text className="font-semibold text-secondary-700 text-sm uppercase tracking-wide">
+          {i18n.t("settings.profile.plan")}
+        </Text>
+        <Badge className="rounded-lg bg-primary-100 px-3 py-1" size="sm">
+          <BadgeText className="font-bold text-primary-500 text-sm">
+            {i18n.t("settings.profile.pro-member")}
+          </BadgeText>
+        </Badge>
+      </Box>
+
+      <Text className="mx-5 mt-8 mb-3 font-bold text-secondary-700 text-sm uppercase tracking-wide">
+        {i18n.t("settings.preferences.title")}
+      </Text>
+      <Box className="mx-1 overflow-hidden rounded-2xl border border-outline-100 bg-background-0 shadow-xs">
+        <Button
+          action="default"
+          className="h-14 w-full justify-between rounded-none bg-transparent px-4"
+          onPress={() => void handleLanguageSetting()}
         >
-          <Text className="font-bold text-base" style={{ color: textColor }}>
-            {i18n.t("settings.appearance.language")}
-          </Text>
-          <ChevronRight color={textColor} size={20} />
-        </TouchableOpacity>
-      </Box>
-
-      {/* General 그룹 */}
-      <Box
-        className="mx-1 mb-4 rounded-lg border border-neutral-600 shadow-xs"
-        style={{ backgroundColor: background }}
-      >
-        <Box className="border-b border-b-neutral-600 p-4">
-          <Heading
-            className="font-bold text-xl"
-            style={{ color: headingColor }}
-          >
-            {i18n.t("settings.general.title")}
-          </Heading>
-        </Box>
-        <TouchableOpacity
-          className="flex-row items-center justify-between border-b border-b-neutral-600 p-4"
+          <Box className="flex-row items-center gap-3.5">
+            <Box className="h-8 w-8 items-center justify-center rounded-md bg-secondary-500">
+              <Globe2 color={iconColor} size={17} />
+            </Box>
+            <Text className="font-medium text-base text-typography-900">
+              {i18n.t("settings.preferences.language")}
+            </Text>
+          </Box>
+          <Box className="flex-row items-center gap-2">
+            <Text className="font-normal text-base text-secondary-600">
+              {isKorean
+                ? i18n.t("settings.preferences.language-value-ko")
+                : i18n.t("settings.preferences.language-value-en")}
+            </Text>
+            <ChevronRight color={chevronColor} size={18} />
+          </Box>
+        </Button>
+        <Divider className="bg-outline-100" />
+        <Button
+          action="default"
+          className="h-14 w-full justify-between rounded-none bg-transparent px-4"
           onPress={() => router.push("/settings/denylist")}
         >
-          <Text className="font-bold text-base" style={{ color: textColor }}>
-            {i18n.t("settings.general.denylist")}
-          </Text>
-          <ChevronRight color={textColor} size={20} />
-        </TouchableOpacity>
-        <TouchableOpacity
-          className="flex-row items-center justify-between border-b border-b-neutral-600 p-4"
-          onPress={() => openStorePage({})}
-        >
-          <Text className="font-bold text-base" style={{ color: textColor }}>
-            {i18n.t("settings.general.rate-the-app")}
-          </Text>
-          <ChevronRight color={textColor} size={20} />
-        </TouchableOpacity>
-        <TouchableOpacity
-          className="flex-row items-center justify-between p-4"
+          <Box className="flex-row items-center gap-3.5">
+            <Box className="h-8 w-8 items-center justify-center rounded-md bg-warning-500">
+              <Ban color={iconColor} size={17} />
+            </Box>
+            <Text className="font-medium text-base text-typography-900">
+              {i18n.t("settings.general.denylist")}
+            </Text>
+          </Box>
+          <ChevronRight color={chevronColor} size={18} />
+        </Button>
+        <Divider className="bg-outline-100" />
+        <Button
+          action="default"
+          className="h-14 w-full justify-between rounded-none bg-transparent px-4"
           onPress={() => router.push("/settings/license")}
         >
-          <Text className="font-bold text-base" style={{ color: textColor }}>
-            {i18n.t("settings.general.license")}
+          <Box className="flex-row items-center gap-3.5">
+            <Box className="h-8 w-8 items-center justify-center rounded-md bg-success-500">
+              <FileText color={iconColor} size={17} />
+            </Box>
+            <Text className="font-medium text-base text-typography-900">
+              {i18n.t("settings.general.license")}
+            </Text>
+          </Box>
+          <ChevronRight color={chevronColor} size={18} />
+        </Button>
+      </Box>
+
+      <Text className="mx-5 mt-8 mb-3 font-bold text-secondary-700 text-sm uppercase tracking-wide">
+        {i18n.t("settings.support.title")}
+      </Text>
+      <Box className="mx-1 overflow-hidden rounded-2xl border border-outline-100 bg-background-0 shadow-xs">
+        <Button
+          action="default"
+          className="h-14 w-full justify-between rounded-none bg-transparent px-4"
+          onPress={() => void openStorePage({})}
+        >
+          <Box className="flex-row items-center gap-3.5">
+            <Box className="h-8 w-8 items-center justify-center rounded-md bg-info-500">
+              <CircleHelp color={iconColor} size={17} />
+            </Box>
+            <Text className="font-medium text-base text-typography-900">
+              {i18n.t("settings.support.help-center")}
+            </Text>
+          </Box>
+          <ExternalLink color={chevronColor} size={18} />
+        </Button>
+      </Box>
+
+      <Box className="mx-1 mt-10 overflow-hidden rounded-2xl border border-outline-100 bg-background-0 shadow-xs">
+        <Button
+          action="default"
+          className="h-14 w-full items-center justify-center rounded-none bg-transparent px-4"
+          onPress={() => void handleLogout()}
+        >
+          <Text className="font-medium text-error-600 text-lg">
+            {i18n.t("settings.logout")}
           </Text>
-          <ChevronRight color={textColor} size={20} />
-        </TouchableOpacity>
+        </Button>
+      </Box>
+
+      <Box className="mt-12 mb-10 items-center justify-center gap-3">
+        <Box className="flex-row items-center gap-2">
+          <Box className="h-6 w-6 items-center justify-center rounded-md bg-primary-400">
+            <PlaneTakeoff color={iconColor} size={14} />
+          </Box>
+          <Text className="font-bold text-typography-900 text-xl">
+            {i18n.t("settings.footer.app-name")}
+          </Text>
+        </Box>
+        <Text className="text-sm text-typography-400">
+          {i18n.t("settings.footer.version-build", {
+            build: appBuild,
+            version: appVersion,
+          })}
+        </Text>
       </Box>
     </ParallaxScrollView>
   );
