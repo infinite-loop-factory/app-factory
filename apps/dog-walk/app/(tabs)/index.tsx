@@ -8,7 +8,7 @@ import { FlatList, ScrollView, TouchableOpacity, View } from "react-native";
 import { useFindPopularCourses } from "@/api/reactQuery/course/useFindPopularCourses";
 import { useFindLatestReviews } from "@/api/reactQuery/review/useFindLatestReviews";
 import { userAtom } from "@/atoms/userAtom";
-import CustomSafeAreaView from "@/components/CustomSafeAriaView";
+import CustomSafeAreaView from "@/components/CustomSafeAreaView";
 import CourseCard from "@/components/card/CourseCard";
 import CourseCardSkeleton from "@/components/card/CourseCardSkeleton";
 import ReviewCard from "@/components/card/ReviewCard";

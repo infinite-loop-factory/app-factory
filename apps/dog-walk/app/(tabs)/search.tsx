@@ -7,7 +7,7 @@ import { Alert, Linking, View } from "react-native";
 import { FlatList, GestureHandlerRootView } from "react-native-gesture-handler";
 import { useFindNearbyCourses } from "@/api/reactQuery/course/useFindNearbyCourses";
 import { userAtom } from "@/atoms/userAtom";
-import CustomSafeAreaView from "@/components/CustomSafeAriaView";
+import CustomSafeAreaView from "@/components/CustomSafeAreaView";
 import CourseDetailCard from "@/components/card/CourseDetailCard";
 import EmptyCourse from "@/components/molecules/EmptyCourse";
 import NaverMap from "@/components/NaverMap";

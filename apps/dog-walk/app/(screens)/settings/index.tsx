@@ -1,6 +1,6 @@
 import * as Application from "expo-application";
 import { LogOut } from "lucide-react-native";
-import CustomSafeAreaView from "@/components/CustomSafeAriaView";
+import CustomSafeAreaView from "@/components/CustomSafeAreaView";
 import HeaderBar from "@/components/HeaderBar";
 import { Button, ButtonIcon, ButtonText } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
