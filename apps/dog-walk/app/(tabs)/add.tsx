@@ -17,6 +17,7 @@ import CustomSafeAreaView from "@/components/CustomSafeAriaView";
 import DatePickerModal from "@/components/DatePickerModal";
 import HeaderBar from "@/components/HeaderBar";
 import DatePicker from "@/components/molecules/DatePicker";
+import { TAB_BAR_HEIGHT } from "@/components/organisms/CustomTabBar";
 import SectionTitle from "@/components/SectionTitle";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
@@ -199,7 +200,7 @@ export default function AddScreen() {
           </Textarea>
         </SectionTitle>
       </ScrollView>
-      <View className="p-3">
+      <View className="p-3" style={{ paddingBottom: TAB_BAR_HEIGHT }}>
         <Button
           className="rounded-xl"
           isDisabled={!isRegistrationEnabled}
