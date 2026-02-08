@@ -9,6 +9,7 @@ import type {
   AppError,
   AppState,
   Category,
+  CategoryGroup,
   Difficulty,
   DifficultyLevel,
   FilteredQuestionSet,
@@ -24,13 +25,18 @@ import {
   useMemo,
   useReducer,
 } from "react";
-import { categories, difficulties } from "@/constants/designSystem";
+import {
+  categories,
+  categoryGroups,
+  difficulties,
+} from "@/constants/designSystem";
 import { useQuestionData } from "@/hooks/useQuestions";
 import { applyQuestionMode } from "@/utils/questionModes";
 
 // 초기 상태
 const initialState: AppState = {
   categories: [],
+  categoryGroups: [],
   difficulties: [],
   allQuestions: [],
   selection: {
@@ -62,10 +68,12 @@ const initialState: AppState = {
 function appReducer(state: AppState, action: AppAction): AppState {
   switch (action.type) {
     case "INITIALIZE_APP": {
-      const { categories, difficulties, questions } = action.payload;
+      const { categories, categoryGroups, difficulties, questions } =
+        action.payload;
       return {
         ...state,
         categories,
+        categoryGroups,
         difficulties,
         allQuestions: questions,
         isInitialized: true,
@@ -234,6 +242,7 @@ export function AppProvider({ children }: AppProviderProps) {
   const initializeApp = useCallback(
     (data: {
       categories: Category[];
+      categoryGroups: CategoryGroup[];
       difficulties: Difficulty[];
       questions: Question[];
     }) => {
@@ -393,6 +402,7 @@ export function AppProvider({ children }: AppProviderProps) {
     if (!state.isInitialized && questions.length > 0) {
       initializeApp({
         categories,
+        categoryGroups,
         difficulties,
         questions,
       });

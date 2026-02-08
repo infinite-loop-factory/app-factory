@@ -13,6 +13,7 @@ export type {
 export type {
   AppError,
   Category,
+  CategoryGroup,
   Difficulty,
   DifficultyLevel,
   FilteredQuestionSet,

@@ -5,6 +5,7 @@
 import type {
   AppError,
   Category,
+  CategoryGroup,
   Difficulty,
   DifficultyLevel,
   FilteredQuestionSet,
@@ -18,6 +19,7 @@ import type {
 export interface AppState {
   // 데이터 상태
   categories: Category[];
+  categoryGroups: CategoryGroup[];
   difficulties: Difficulty[];
   allQuestions: Question[];
 
@@ -42,6 +44,7 @@ export type AppAction =
       type: "INITIALIZE_APP";
       payload: {
         categories: Category[];
+        categoryGroups: CategoryGroup[];
         difficulties: Difficulty[];
         questions: Question[];
       };
@@ -62,6 +65,7 @@ export interface AppContextType {
   actions: {
     initializeApp: (data: {
       categories: Category[];
+      categoryGroups: CategoryGroup[];
       difficulties: Difficulty[];
       questions: Question[];
     }) => void;
@@ -88,4 +92,3 @@ export type RootStackParamList = {
   QuestionList: undefined;
   IndividualCard: { questionIndex: number; fromList: boolean };
 };
-
