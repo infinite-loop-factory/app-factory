@@ -3,6 +3,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useEffect, useRef } from "react";
 import { Animated, Easing, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useLocation } from "@/hooks/use-location";
 
 const C = {
   primary: "#3d6bf5",
@@ -243,6 +244,11 @@ function PhoneIllustration() {
 export default function HomeScreen() {
   const pulseStyle = usePulseAnimation();
   const rippleStyle = useRippleAnimation();
+  const { address, refreshLocation } = useLocation();
+
+  useEffect(() => {
+    refreshLocation();
+  }, [refreshLocation]);
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -254,7 +260,7 @@ export default function HomeScreen() {
             className="font-bold text-xl"
             style={{ color: C.textMain, letterSpacing: -0.5 }}
           >
-            강남역
+            {address || "위치 확인 중..."}
           </Text>
           <MaterialIcons
             color={C.textMain}
