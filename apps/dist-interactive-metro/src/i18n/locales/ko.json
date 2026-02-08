@@ -1,4 +1,35 @@
 {
   "welcome": "환영합니다",
-  "home": "홈"
+  "home": "홈",
+  "tabs": {
+    "routeGuide": "경로안내",
+    "notifications": "알림",
+    "favorites": "즐겨찾기",
+    "settings": "설정"
+  },
+  "homeScreen": {
+    "title": "경로 찾기",
+    "subtitle": "출발역과 도착역을 선택하세요",
+    "departure": "출발역",
+    "departurePlaceholder": "출발역 선택",
+    "arrival": "도착역",
+    "arrivalPlaceholder": "도착역 선택",
+    "addVia": "경유 추가",
+    "search": "경로 찾기",
+    "searchAndExtras": "검색 및 부가 기능"
+  },
+  "settings": {
+    "notificationSettings": "알림 설정",
+    "defaultHome": "기본 홈",
+    "defaultHomeDescription": "앱을 열 때 처음 보이는 탭을 선택합니다."
+  },
+  "stationSelect": {
+    "departureTitle": "출발역 선택",
+    "arrivalTitle": "도착역 선택",
+    "departureShort": "출발",
+    "arrivalShort": "도착",
+    "viaTitle": "경유역 추가",
+    "viaShort": "경유",
+    "back": "뒤로"
+  }
 }

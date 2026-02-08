@@ -1,4 +1,35 @@
 {
   "welcome": "Welcome",
-  "home": "Home"
+  "home": "Home",
+  "tabs": {
+    "routeGuide": "Route",
+    "notifications": "Notifications",
+    "favorites": "Favorites",
+    "settings": "Settings"
+  },
+  "homeScreen": {
+    "title": "Find Route",
+    "subtitle": "Select departure and arrival stations",
+    "departure": "Departure",
+    "departurePlaceholder": "Select departure",
+    "arrival": "Arrival",
+    "arrivalPlaceholder": "Select arrival",
+    "addVia": "Add via",
+    "search": "Find route",
+    "searchAndExtras": "Search & more"
+  },
+  "settings": {
+    "notificationSettings": "Notification settings",
+    "defaultHome": "Default home",
+    "defaultHomeDescription": "Choose which tab to show when you open the app."
+  },
+  "stationSelect": {
+    "departureTitle": "Select departure",
+    "arrivalTitle": "Select arrival",
+    "departureShort": "From",
+    "arrivalShort": "To",
+    "viaTitle": "Add via stations",
+    "viaShort": "Via",
+    "back": "Back"
+  }
 }
