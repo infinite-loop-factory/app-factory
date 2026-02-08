@@ -2,7 +2,11 @@
  * 4가지 질문 모드 알고리즘 구현
  */
 
+import { categories } from "@/constants/designSystem";
 import type { Question, QuestionMode } from "@/types";
+
+/** 카테고리 정렬 순서 (designSystem에서 파생) */
+const CATEGORY_ORDER = categories.map((c) => c.id);
 
 // 배열 셔플 유틸리티 함수 (Fisher-Yates 알고리즘)
 export function shuffleArray<T>(array: T[]): T[] {
@@ -48,22 +52,9 @@ export function applyMode2(questions: Question[]): Question[] {
   const result: Question[] = [];
 
   // 카테고리를 orderIndex 기준으로 정렬
-  const sortedCategories = Array.from(grouped.keys()).sort((a, b) => {
-    // 카테고리의 첫 번째 질문의 카테고리 정보를 사용해서 정렬
-    const _questionA = grouped.get(a)?.[0];
-    const _questionB = grouped.get(b)?.[0];
-
-    // 카테고리 순서는 설계된 순서대로 (hobby, talent, values, experience, daily, direction)
-    const categoryOrder = [
-      "hobby",
-      "talent",
-      "values",
-      "experience",
-      "daily",
-      "direction",
-    ];
-    return categoryOrder.indexOf(a) - categoryOrder.indexOf(b);
-  });
+  const sortedCategories = Array.from(grouped.keys()).sort(
+    (a, b) => CATEGORY_ORDER.indexOf(a) - CATEGORY_ORDER.indexOf(b),
+  );
 
   // 각 카테고리별로 질문들을 랜덤하게 섞어서 추가
   sortedCategories.forEach((categoryId) => {
@@ -83,17 +74,9 @@ export function applyMode3(questions: Question[]): Question[] {
   const result: Question[] = [];
 
   // 카테고리를 orderIndex 기준으로 정렬 (모드 2와 동일)
-  const sortedCategories = Array.from(grouped.keys()).sort((a, b) => {
-    const categoryOrder = [
-      "hobby",
-      "talent",
-      "values",
-      "experience",
-      "daily",
-      "direction",
-    ];
-    return categoryOrder.indexOf(a) - categoryOrder.indexOf(b);
-  });
+  const sortedCategories = Array.from(grouped.keys()).sort(
+    (a, b) => CATEGORY_ORDER.indexOf(a) - CATEGORY_ORDER.indexOf(b),
+  );
 
   // 각 카테고리별로 질문들을 order 기준으로 정렬해서 추가
   sortedCategories.forEach((categoryId) => {
@@ -114,17 +97,9 @@ export function applyMode4(questions: Question[]): Question[] {
   const result: Question[] = [];
 
   // 카테고리 순서대로 정렬
-  const sortedCategories = Array.from(grouped.keys()).sort((a, b) => {
-    const categoryOrder = [
-      "hobby",
-      "talent",
-      "values",
-      "experience",
-      "daily",
-      "direction",
-    ];
-    return categoryOrder.indexOf(a) - categoryOrder.indexOf(b);
-  });
+  const sortedCategories = Array.from(grouped.keys()).sort(
+    (a, b) => CATEGORY_ORDER.indexOf(a) - CATEGORY_ORDER.indexOf(b),
+  );
 
   // 각 카테고리별로 정렬된 질문들 추가
   sortedCategories.forEach((categoryId) => {

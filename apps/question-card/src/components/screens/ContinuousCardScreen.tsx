@@ -7,7 +7,7 @@
 
 import { useRouter } from "expo-router";
 import { useCallback, useState } from "react";
-import { Dimensions, StatusBar } from "react-native";
+import { StatusBar, useWindowDimensions } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Reanimated, {
   interpolate,
@@ -34,11 +34,10 @@ import {
 } from "@/utils/difficultyStyles";
 import { getHintTypeLabel } from "@/utils/hintUtils";
 
-const { width: SCREEN_WIDTH } = Dimensions.get("window");
-const SWIPE_THRESHOLD = SCREEN_WIDTH * 0.3;
-
 export default function ContinuousCardScreen() {
   const router = useRouter();
+  const { width: screenWidth } = useWindowDimensions();
+  const swipeThreshold = screenWidth * 0.3;
   const { filteredQuestions, progress } = useAppState();
   const { goToNextQuestion, goToPreviousQuestion, resetProgress } =
     useAppActions();
@@ -55,7 +54,7 @@ export default function ContinuousCardScreen() {
     fullscreenAnimatedStyle,
     transformGestureCoordinates,
   } = useFullscreenMode({
-    cardWidth: SCREEN_WIDTH - 40,
+    cardWidth: screenWidth - 40,
   });
 
   // Context에서 관리하는 현재 인덱스와 질문 사용
@@ -130,7 +129,7 @@ export default function ContinuousCardScreen() {
   const animateSwipeExit = useCallback(
     (direction: "left" | "right", tx: number, onComplete: () => void) => {
       // 전체화면/일반 모두 translateX 사용 (cardAnimatedStyle에서 좌표 변환)
-      const targetX = direction === "right" ? SCREEN_WIDTH : -SCREEN_WIDTH;
+      const targetX = direction === "right" ? screenWidth : -screenWidth;
       translateX.value = withTiming(targetX, { duration: 250 });
       rotate.value = withTiming(tx > 0 ? 0.3 : -0.3, { duration: 250 });
       scale.value = withTiming(0.8, { duration: 250 }, () => {
@@ -156,8 +155,8 @@ export default function ContinuousCardScreen() {
         rawVelocityY,
       );
 
-      const shouldSwipeRight = tx > SWIPE_THRESHOLD || velocityX > 500;
-      const shouldSwipeLeft = tx < -SWIPE_THRESHOLD || velocityX < -500;
+      const shouldSwipeRight = tx > swipeThreshold || velocityX > 500;
+      const shouldSwipeLeft = tx < -swipeThreshold || velocityX < -500;
 
       if (shouldSwipeRight) {
         // 오른쪽 스와이프: 다음 질문
@@ -171,12 +170,12 @@ export default function ContinuousCardScreen() {
       }
     },
     [
-      currentIndex,
-      goToNext,
-      goToPrevious,
-      resetCardPosition,
-      animateSwipeExit,
-      transformGestureCoordinates,
+      currentIndex, 
+      goToNext, 
+      goToPrevious, 
+      resetCardPosition, 
+      animateSwipeExit, 
+      transformGestureCoordinates, swipeThreshold
     ],
   );
 
@@ -284,7 +283,7 @@ export default function ContinuousCardScreen() {
         <Reanimated.View style={fullscreenAnimatedStyle}>
           <GestureDetector gesture={composedGesture}>
             <Reanimated.View
-              style={[{ width: SCREEN_WIDTH - 40 }, cardAnimatedStyle]}
+              style={[{ width: screenWidth - 40 }, cardAnimatedStyle]}
             >
               <FlipCard
                 backContent={

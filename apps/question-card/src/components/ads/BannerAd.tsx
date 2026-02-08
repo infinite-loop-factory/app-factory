@@ -11,21 +11,26 @@ const isExpoGo = Constants.appOwnership === "expo";
  * BannerAdSize enum 정의
  * Expo Go에서는 모의 값 사용, EAS Build에서는 실제 값 로드
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-let RNBannerAd: any = null;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-let AdMobIds: any = { BANNER: "" };
+interface BannerAdNativeProps {
+  onAdFailedToLoad: (error: { message: string }) => void;
+  onAdLoaded: () => void;
+  size: string;
+  unitId: string;
+}
 
-// BannerAdSize는 항상 export해야 하므로 기본값 설정
-export const BannerAdSize = {
-  BANNER: "BANNER" as const,
-  FULL_BANNER: "FULL_BANNER" as const,
-  LARGE_BANNER: "LARGE_BANNER" as const,
-  LEADERBOARD: "LEADERBOARD" as const,
-  MEDIUM_RECTANGLE: "MEDIUM_RECTANGLE" as const,
-  WIDE_SKYSCRAPER: "WIDE_SKYSCRAPER" as const,
-  ANCHORED_ADAPTIVE_BANNER: "ANCHORED_ADAPTIVE_BANNER" as const,
-  INLINE_ADAPTIVE_BANNER: "INLINE_ADAPTIVE_BANNER" as const,
+let RNBannerAd: React.ComponentType<BannerAdNativeProps> | null = null;
+let AdMobIds: { BANNER: string } = { BANNER: "" };
+
+// BannerAdSize 기본값 (Expo Go용)
+let resolvedBannerAdSize = {
+  BANNER: "BANNER",
+  FULL_BANNER: "FULL_BANNER",
+  LARGE_BANNER: "LARGE_BANNER",
+  LEADERBOARD: "LEADERBOARD",
+  MEDIUM_RECTANGLE: "MEDIUM_RECTANGLE",
+  WIDE_SKYSCRAPER: "WIDE_SKYSCRAPER",
+  ANCHORED_ADAPTIVE_BANNER: "ANCHORED_ADAPTIVE_BANNER",
+  INLINE_ADAPTIVE_BANNER: "INLINE_ADAPTIVE_BANNER",
 };
 
 // Expo Go가 아닐 때만 실제 AdMob 모듈 로드
@@ -34,14 +39,16 @@ if (!isExpoGo) {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     const AdMob = require("react-native-google-mobile-ads");
     RNBannerAd = AdMob.BannerAd;
-    // BannerAdSize 값을 실제 값으로 덮어쓰기
-    Object.assign(BannerAdSize, AdMob.BannerAdSize);
+    resolvedBannerAdSize = { ...resolvedBannerAdSize, ...AdMob.BannerAdSize };
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     AdMobIds = require("@/constants/admob").AdMobIds;
   } catch (_error) {
     // Expo Go에서는 네이티브 모듈 없음 - 정상 동작
   }
 }
+
+// 최종 확정된 BannerAdSize export
+export const BannerAdSize = resolvedBannerAdSize;
 
 interface BannerAdComponentProps {
   /** 배너 광고 크기 (기본: BANNER) */

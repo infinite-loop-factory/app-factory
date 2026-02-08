@@ -6,7 +6,7 @@
  */
 
 import { useCallback, useState } from "react";
-import { Dimensions, StatusBar, type ViewStyle } from "react-native";
+import { StatusBar, type ViewStyle, useWindowDimensions } from "react-native";
 import {
   type AnimatedStyle,
   Easing,
@@ -15,7 +15,6 @@ import {
   withTiming,
 } from "react-native-reanimated";
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
 const ANIMATION_DURATION = 400;
 const FULLSCREEN_EASING = Easing.bezier(0.4, 0, 0.2, 1);
 
@@ -55,7 +54,8 @@ export interface UseFullscreenModeReturn {
 export function useFullscreenMode(
   options: UseFullscreenModeOptions = {},
 ): UseFullscreenModeReturn {
-  const { cardWidth = SCREEN_WIDTH - 40, onEnter, onExit } = options;
+  const { width: screenWidth, height: screenHeight } = useWindowDimensions();
+  const { cardWidth = screenWidth - 40, onEnter, onExit } = options;
 
   const [isFullscreen, setIsFullscreen] = useState(false);
 
@@ -70,12 +70,12 @@ export function useFullscreenMode(
   const calculateFullscreenScale = useCallback(() => {
     // 회전 후 카드의 "높이"가 화면 너비가 되므로
     // 화면 높이의 90%를 카드 너비로 채움
-    const availableHeight = SCREEN_HEIGHT * 0.88;
+    const availableHeight = screenHeight * 0.88;
     const targetScale = availableHeight / cardWidth;
 
     // 너무 큰 확대 방지 (최대 1.5배)
     return Math.min(targetScale, 1.5);
-  }, [cardWidth]);
+  }, [cardWidth, screenHeight]);
 
   /**
    * 전체화면 진입
