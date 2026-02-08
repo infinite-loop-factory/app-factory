@@ -40,4 +40,3 @@ export function useQuestionData() {
 
   return { questions, isLoading, error, reload: loadQuestions };
 }
-

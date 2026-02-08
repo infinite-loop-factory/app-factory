@@ -6,7 +6,7 @@
  */
 
 import { useCallback, useState } from "react";
-import { StatusBar, type ViewStyle, useWindowDimensions } from "react-native";
+import { StatusBar, useWindowDimensions, type ViewStyle } from "react-native";
 import {
   type AnimatedStyle,
   Easing,

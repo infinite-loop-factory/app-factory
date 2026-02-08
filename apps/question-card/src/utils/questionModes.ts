@@ -2,8 +2,9 @@
  * 4가지 질문 모드 알고리즘 구현
  */
 
-import { categories } from "@/constants/designSystem";
 import type { Question, QuestionMode } from "@/types";
+
+import { categories } from "@/constants/designSystem";
 
 /** 카테고리 정렬 순서 (designSystem에서 파생) */
 const CATEGORY_ORDER = categories.map((c) => c.id);

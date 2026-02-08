@@ -170,12 +170,13 @@ export default function ContinuousCardScreen() {
       }
     },
     [
-      currentIndex, 
-      goToNext, 
-      goToPrevious, 
-      resetCardPosition, 
-      animateSwipeExit, 
-      transformGestureCoordinates, swipeThreshold
+      currentIndex,
+      goToNext,
+      goToPrevious,
+      resetCardPosition,
+      animateSwipeExit,
+      transformGestureCoordinates,
+      swipeThreshold,
     ],
   );
 
