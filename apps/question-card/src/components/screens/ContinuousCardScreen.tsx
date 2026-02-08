@@ -5,8 +5,6 @@
  * 전체화면 모드: 카드 90도 회전 + 확대로 가로 보기 지원
  */
 
-import type { HintType } from "@/types";
-
 import { useRouter } from "expo-router";
 import { useCallback, useState } from "react";
 import { Dimensions, StatusBar } from "react-native";
@@ -34,6 +32,7 @@ import {
   getDifficultyBadgeSolidStyle,
   getDifficultyLabel,
 } from "@/utils/difficultyStyles";
+import { getHintTypeLabel } from "@/utils/hintUtils";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 const SWIPE_THRESHOLD = SCREEN_WIDTH * 0.3;
@@ -80,24 +79,6 @@ export default function ContinuousCardScreen() {
   // 카드 뒤집기 토글
   const handleFlip = useCallback(() => {
     setIsFlipped((prev) => !prev);
-  }, []);
-
-  // 힌트 유형 라벨 반환
-  const getHintTypeLabel = useCallback((type: HintType): string => {
-    switch (type) {
-      case "keyword":
-        return "키워드";
-      case "example":
-        return "예시 답변";
-      case "thinking":
-        return "생각 포인트";
-      case "related":
-        return "관련 질문";
-      case "situation":
-        return "상황 예시";
-      default:
-        return "힌트";
-    }
   }, []);
 
   // 처음부터 다시 시작
