@@ -5,8 +5,6 @@
  * 전체화면 모드: 카드 90도 회전 + 확대로 가로 보기 지원
  */
 
-import type { Question } from "@/types";
-
 import { useRouter } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
 import { Dimensions, StatusBar } from "react-native";
@@ -48,7 +46,6 @@ export default function IndividualCardScreen() {
     useAppState();
   const { goToNextQuestion, goToPreviousQuestion } = useAppActions();
 
-  const [_questions, setQuestions] = useState<Question[]>([]);
   const [isFlipped, setIsFlipped] = useState(false);
 
   // Custom hooks
@@ -127,15 +124,9 @@ export default function IndividualCardScreen() {
 
   // 질문 데이터 초기화
   useEffect(() => {
-    const questionsArray = filteredQuestions.questions || [];
-    if (questionsArray.length > 0) {
-      setQuestions(questionsArray);
-      errorSheet.setHasError(false);
-    } else {
-      // 질문이 없으면 에러 시트 표시
-      errorSheet.setHasError(true);
-    }
-  }, [filteredQuestions, errorSheet.setHasError]);
+    const hasQuestions = (filteredQuestions.questions?.length ?? 0) > 0;
+    errorSheet.setHasError(!hasQuestions);
+  }, [filteredQuestions.questions, errorSheet.setHasError]);
 
   // 에러 시트에서 목록으로 돌아가기
   const handleErrorGoBack = useCallback(() => {

@@ -21,6 +21,7 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useReducer,
 } from "react";
 import { categories, difficulties } from "@/constants/designSystem";
@@ -350,10 +351,9 @@ export function AppProvider({ children }: AppProviderProps) {
     dispatch({ type: "RESET_PROGRESS" });
   }, []);
 
-  // Context 값
-  const contextValue: AppContextType = {
-    state,
-    actions: {
+  // Context 값 (useMemo로 불필요한 consumer 리렌더 방지)
+  const actions = useMemo(
+    () => ({
       initializeApp,
       setLoading,
       setError,
@@ -366,8 +366,27 @@ export function AppProvider({ children }: AppProviderProps) {
       goToPreviousQuestion,
       resetSelections,
       resetProgress,
-    },
-  };
+    }),
+    [
+      initializeApp,
+      setLoading,
+      setError,
+      selectCategories,
+      selectDifficulties,
+      setQuestionMode,
+      filterQuestions,
+      setCurrentQuestionIndex,
+      goToNextQuestion,
+      goToPreviousQuestion,
+      resetSelections,
+      resetProgress,
+    ],
+  );
+
+  const contextValue: AppContextType = useMemo(
+    () => ({ state, actions }),
+    [state, actions],
+  );
 
   // 데이터 로딩 상태 관리
   useEffect(() => {

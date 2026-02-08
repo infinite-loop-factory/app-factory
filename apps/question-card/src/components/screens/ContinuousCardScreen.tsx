@@ -5,10 +5,10 @@
  * 전체화면 모드: 카드 90도 회전 + 확대로 가로 보기 지원
  */
 
-import type { HintType, Question } from "@/types";
+import type { HintType } from "@/types";
 
 import { useRouter } from "expo-router";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { Dimensions, StatusBar } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Reanimated, {
@@ -44,9 +44,6 @@ export default function ContinuousCardScreen() {
   const { goToNextQuestion, goToPreviousQuestion, resetProgress } =
     useAppActions();
 
-  // 로컬 상태 (Context 상태 사용으로 대체 예정)
-  const [_questions, setQuestions] = useState<Question[]>([]);
-  const [_isCompleted, setIsCompleted] = useState(false);
   const [isFlipped, setIsFlipped] = useState(false); // 카드 뒤집기 상태
 
   // Custom hooks
@@ -71,14 +68,6 @@ export default function ContinuousCardScreen() {
   const translateY = useSharedValue(0);
   const rotate = useSharedValue(0);
   const scale = useSharedValue(1);
-
-  // 컴포넌트 마운트시 질문 데이터 설정 (null 안전성 추가)
-  useEffect(() => {
-    const questionsArray = filteredQuestions.questions || [];
-    if (questionsArray.length > 0) {
-      setQuestions(questionsArray);
-    }
-  }, [filteredQuestions.questions]);
 
   // 카드 위치 리셋
   const resetCardPosition = useCallback(() => {
@@ -114,7 +103,6 @@ export default function ContinuousCardScreen() {
   // 처음부터 다시 시작
   const handleRestartFromBeginning = useCallback(() => {
     completionSheet.hide();
-    setIsCompleted(false);
     resetCardPosition();
     resetProgress();
   }, [completionSheet.hide, resetCardPosition, resetProgress]);
@@ -138,7 +126,6 @@ export default function ContinuousCardScreen() {
       goToNextQuestion();
       resetCardPosition();
     } else {
-      setIsCompleted(true);
       completionSheet.show();
     }
   }, [
