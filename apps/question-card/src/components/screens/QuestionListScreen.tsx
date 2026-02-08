@@ -8,6 +8,7 @@ import type { Question } from "@/types";
 import { useRouter } from "expo-router";
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { FlatList } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { BannerAdComponent, BannerAdSize } from "@/components/ads/BannerAd";
 import { FloatingBackButton } from "@/components/floating";
 import { OrangeHeader } from "@/components/layout";
@@ -199,7 +200,7 @@ export default function QuestionListScreen() {
   );
 
   return (
-    <Box className="flex-1 bg-orange-50">
+    <SafeAreaView className="flex-1 bg-orange-50">
       {/* 플로팅 뒤로 버튼 */}
       <FloatingBackButton onPress={handleBackToMain} />
 
@@ -301,6 +302,6 @@ export default function QuestionListScreen() {
         snapPoints={errorSheet.snapPoints}
         title="질문이 없습니다"
       />
-    </Box>
+    </SafeAreaView>
   );
 }

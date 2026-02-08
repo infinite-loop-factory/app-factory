@@ -19,6 +19,7 @@ import { useEffect } from "react";
 import "react-native-reanimated";
 
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import "@/i18n";
 
@@ -82,42 +83,44 @@ export default function RootLayout() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <AppProvider>
-        <GluestackUIProvider mode={colorScheme}>
-          <ThemeProvider
-            value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
-          >
-            <Stack>
-              <Stack.Screen name="index" options={{ headerShown: false }} />
-              <Stack.Screen
-                name="category-selection"
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="difficulty-selection"
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="question-main"
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="continuous-card"
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="question-list"
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="individual-card"
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen name="+not-found" />
-            </Stack>
-          </ThemeProvider>
-        </GluestackUIProvider>
-      </AppProvider>
+      <SafeAreaProvider>
+        <AppProvider>
+          <GluestackUIProvider mode={colorScheme}>
+            <ThemeProvider
+              value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+            >
+              <Stack>
+                <Stack.Screen name="index" options={{ headerShown: false }} />
+                <Stack.Screen
+                  name="category-selection"
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="difficulty-selection"
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="question-main"
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="continuous-card"
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="question-list"
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="individual-card"
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen name="+not-found" />
+              </Stack>
+            </ThemeProvider>
+          </GluestackUIProvider>
+        </AppProvider>
+      </SafeAreaProvider>
     </GestureHandlerRootView>
   );
 }

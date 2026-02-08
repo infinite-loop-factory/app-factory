@@ -19,6 +19,7 @@ import Reanimated, {
   withSpring,
   withTiming,
 } from "react-native-reanimated";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { FlipCard } from "@/components/cards";
 import {
   FloatingBackButton,
@@ -259,18 +260,20 @@ export default function ContinuousCardScreen() {
   // 로딩 상태 - filteredQuestions 기준으로 변경
   if (filteredQuestions.totalCount === 0) {
     return (
-      <Box className="flex-1 bg-orange-50">
+      <SafeAreaView className="flex-1 bg-orange-50">
         <Box className="flex-1 items-center justify-center">
           <Text className="text-gray-600 text-lg">
             질문을 준비하고 있습니다...
           </Text>
         </Box>
-      </Box>
+      </SafeAreaView>
     );
   }
 
+  const RootWrapper = isFullscreen ? Box : SafeAreaView;
+
   return (
-    <Box className="flex-1 bg-orange-50">
+    <RootWrapper className="flex-1 bg-orange-50">
       {/* StatusBar: 전체화면 모드가 아닐 때만 표시 */}
       {!isFullscreen && (
         <StatusBar backgroundColor="#ffffff" barStyle="dark-content" />
@@ -471,6 +474,6 @@ export default function ContinuousCardScreen() {
         snapPoints={completionSheet.snapPoints}
         title="질문 완료!"
       />
-    </Box>
+    </RootWrapper>
   );
 }

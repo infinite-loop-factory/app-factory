@@ -16,6 +16,7 @@ import {
   type TapGestureHandlerStateChangeEvent,
 } from "react-native-gesture-handler";
 import Reanimated from "react-native-reanimated";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { BannerAdComponent, BannerAdSize } from "@/components/ads/BannerAd";
 import { FlipCard } from "@/components/cards";
 import {
@@ -145,16 +146,18 @@ export default function IndividualCardScreen() {
   // 로딩 상태
   if (!currentQuestion) {
     return (
-      <Box className="flex-1 items-center justify-center bg-orange-50">
+      <SafeAreaView className="flex-1 items-center justify-center bg-orange-50">
         <Text className="text-base text-neutral-500">
           질문을 불러오는 중...
         </Text>
-      </Box>
+      </SafeAreaView>
     );
   }
 
+  const RootWrapper = isFullscreen ? Box : SafeAreaView;
+
   return (
-    <Box className="flex-1 bg-orange-50">
+    <RootWrapper className="flex-1 bg-orange-50">
       {!isFullscreen && (
         <StatusBar backgroundColor="#ffffff" barStyle="dark-content" />
       )}
@@ -251,6 +254,6 @@ export default function IndividualCardScreen() {
         snapPoints={errorSheet.snapPoints}
         title="질문이 없습니다"
       />
-    </Box>
+    </RootWrapper>
   );
 }

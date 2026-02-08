@@ -7,6 +7,7 @@ import { useRouter } from "expo-router";
 import { Sprout } from "lucide-react-native";
 import { useEffect } from "react";
 import { Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { BannerAdComponent, BannerAdSize } from "@/components/ads/BannerAd";
 import { styleExamples, themeTailwindClasses } from "@/constants/designSystem";
 import { useAppState } from "@/context/AppContext";
@@ -28,7 +29,7 @@ export default function IndexScreen() {
 
   if (error) {
     return (
-      <View
+      <SafeAreaView
         className={`${styleExamples.layouts.screen} items-center justify-center`}
       >
         <View className="items-center px-8">
@@ -43,12 +44,12 @@ export default function IndexScreen() {
             {error.message}
           </Text>
         </View>
-      </View>
+      </SafeAreaView>
     );
   }
 
   return (
-    <View
+    <SafeAreaView
       className={`${styleExamples.layouts.screen} items-center justify-center`}
     >
       <View className="items-center px-8">
@@ -97,6 +98,6 @@ export default function IndexScreen() {
       <View className="absolute bottom-8 w-full px-5">
         <BannerAdComponent size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER} />
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
