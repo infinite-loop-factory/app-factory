@@ -23,6 +23,8 @@ import {
   getDifficultyTextStyle,
 } from "@/utils/difficultyStyles";
 
+const FLATLIST_CONTENT_STYLE = { paddingVertical: 16 } as const;
+
 // 리스트 아이템 타입 정의 (질문 또는 광고)
 type ListItem =
   | { type: "question"; data: Question; questionIndex: number }
@@ -242,7 +244,7 @@ export default function QuestionListScreen() {
 
       {/* 질문 목록 (인라인 광고 포함) */}
       <FlatList
-        contentContainerStyle={{ paddingVertical: 16 }}
+        contentContainerStyle={FLATLIST_CONTENT_STYLE}
         data={listItemsWithAds}
         initialNumToRender={10}
         keyExtractor={(item) =>

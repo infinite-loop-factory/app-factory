@@ -167,7 +167,7 @@ export default function IndividualCardScreen() {
 
       {/* 질문 카드 */}
       <Box
-        className={`flex-1 items-center justify-center ${isFullscreen ? "" : "px-4"}`}
+        className={`flex-1 items-center justify-center ${isFullscreen ? "" : "px-5"}`}
       >
         <Reanimated.View style={fullscreenAnimatedStyle}>
           <TapGestureHandler onHandlerStateChange={onTapStateChange}>

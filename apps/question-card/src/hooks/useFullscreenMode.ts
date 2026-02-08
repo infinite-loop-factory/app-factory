@@ -10,6 +10,7 @@ import { StatusBar, type ViewStyle, useWindowDimensions } from "react-native";
 import {
   type AnimatedStyle,
   Easing,
+  runOnJS,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
@@ -91,13 +92,16 @@ export function useFullscreenMode(
       duration: ANIMATION_DURATION,
       easing: FULLSCREEN_EASING,
     });
-    scale.value = withTiming(targetScale, {
-      duration: ANIMATION_DURATION,
-      easing: FULLSCREEN_EASING,
-    });
-
-    setIsFullscreen(true);
-    onEnter?.();
+    scale.value = withTiming(
+      targetScale,
+      { duration: ANIMATION_DURATION, easing: FULLSCREEN_EASING },
+      (finished) => {
+        if (finished) {
+          runOnJS(setIsFullscreen)(true);
+          if (onEnter) runOnJS(onEnter)();
+        }
+      },
+    );
   }, [rotation, scale, calculateFullscreenScale, onEnter]);
 
   /**
@@ -112,13 +116,16 @@ export function useFullscreenMode(
       duration: ANIMATION_DURATION,
       easing: FULLSCREEN_EASING,
     });
-    scale.value = withTiming(1, {
-      duration: ANIMATION_DURATION,
-      easing: FULLSCREEN_EASING,
-    });
-
-    setIsFullscreen(false);
-    onExit?.();
+    scale.value = withTiming(
+      1,
+      { duration: ANIMATION_DURATION, easing: FULLSCREEN_EASING },
+      (finished) => {
+        if (finished) {
+          runOnJS(setIsFullscreen)(false);
+          if (onExit) runOnJS(onExit)();
+        }
+      },
+    );
   }, [rotation, scale, onExit]);
 
   /**

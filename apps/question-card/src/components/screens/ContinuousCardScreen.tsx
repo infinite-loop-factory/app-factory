@@ -247,7 +247,14 @@ export default function ContinuousCardScreen() {
       )}
 
       {/* 플로팅 뒤로 버튼: 전체화면 모드가 아닐 때만 표시 */}
-      {!isFullscreen && <FloatingBackButton onPress={() => router.back()} />}
+      {!isFullscreen && (
+        <FloatingBackButton
+          onPress={() => {
+            resetProgress();
+            router.back();
+          }}
+        />
+      )}
 
       {/* 전체화면 토글 버튼 */}
       <FullscreenToggleButton

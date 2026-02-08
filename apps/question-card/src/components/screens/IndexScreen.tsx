@@ -55,7 +55,7 @@ export default function IndexScreen() {
       <Box className="items-center px-8">
         {/* 앱 로고/타이틀 */}
         <Box className="mb-6 h-24 w-24 items-center justify-center">
-          <Sprout color="#8B5A2B" size={80} strokeWidth={1.5} />
+          <Sprout color="#b45309" size={80} strokeWidth={1.5} />
         </Box>
         <Text
           className={`font-bold text-3xl ${themeTailwindClasses.foreground} mb-1 text-center`}
