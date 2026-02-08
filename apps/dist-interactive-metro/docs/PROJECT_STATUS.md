@@ -128,6 +128,7 @@
 
 ## 📚 관련 문서
 
+- [concept-overview.md](./concept-overview.md) - 앱 개념·구성·아이디어 개요 (상세)
 - [README.md](../README.md) - 프로젝트 개요
 - [requirements.md](./requirements.md) - 기능 요구사항
 - [user-flow.md](./user-flow.md) - 사용자 플로우
@@ -146,3 +147,4 @@
 ---
 
 **마지막 업데이트**: 2026-01-25
+    
