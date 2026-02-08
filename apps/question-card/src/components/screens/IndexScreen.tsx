@@ -6,8 +6,9 @@
 import { useRouter } from "expo-router";
 import { Sprout } from "lucide-react-native";
 import { useEffect } from "react";
-import { Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { BannerAdComponent, BannerAdSize } from "@/components/ads/BannerAd";
+import { Box, Text } from "@/components/ui";
 import { styleExamples, themeTailwindClasses } from "@/constants/designSystem";
 import { useAppState } from "@/context/AppContext";
 
@@ -28,10 +29,10 @@ export default function IndexScreen() {
 
   if (error) {
     return (
-      <View
+      <SafeAreaView
         className={`${styleExamples.layouts.screen} items-center justify-center`}
       >
-        <View className="items-center px-8">
+        <Box className="items-center px-8">
           <Text
             className={`font-semibold text-xl ${themeTailwindClasses.destructiveText} mb-4 text-center`}
           >
@@ -42,20 +43,20 @@ export default function IndexScreen() {
           >
             {error.message}
           </Text>
-        </View>
-      </View>
+        </Box>
+      </SafeAreaView>
     );
   }
 
   return (
-    <View
+    <SafeAreaView
       className={`${styleExamples.layouts.screen} items-center justify-center`}
     >
-      <View className="items-center px-8">
+      <Box className="items-center px-8">
         {/* 앱 로고/타이틀 */}
-        <View className="mb-6 h-24 w-24 items-center justify-center">
-          <Sprout color="#8B5A2B" size={80} strokeWidth={1.5} />
-        </View>
+        <Box className="mb-6 h-24 w-24 items-center justify-center">
+          <Sprout color="#b45309" size={80} strokeWidth={1.5} />
+        </Box>
         <Text
           className={`font-bold text-3xl ${themeTailwindClasses.foreground} mb-1 text-center`}
         >
@@ -68,7 +69,7 @@ export default function IndexScreen() {
         </Text>
 
         {/* 설명 */}
-        <View className="mb-12 items-center">
+        <Box className="mb-12 items-center">
           <Text
             className={`text-base ${themeTailwindClasses.mutedText} text-center leading-relaxed`}
           >
@@ -79,24 +80,24 @@ export default function IndexScreen() {
           >
             디지털 질문카드
           </Text>
-        </View>
+        </Box>
 
         {/* 로딩 표시 */}
         {isLoading && (
-          <View className="mt-8">
+          <Box className="mt-8">
             <Text
               className={`text-sm ${themeTailwindClasses.mutedText} text-center`}
             >
               로딩 중...
             </Text>
-          </View>
+          </Box>
         )}
-      </View>
+      </Box>
 
       {/* 하단 광고 (절대 위치) */}
-      <View className="absolute bottom-8 w-full px-5">
+      <Box className="absolute bottom-8 w-full px-5">
         <BannerAdComponent size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER} />
-      </View>
-    </View>
+      </Box>
+    </SafeAreaView>
   );
 }

@@ -18,7 +18,7 @@ export function CardFrontContent({
   difficulty,
 }: CardFrontContentProps) {
   return (
-    <Card className="w-full border border-neutral-100 bg-white shadow-lg">
+    <Card className="w-full border border-gray-100 bg-white shadow-lg">
       <VStack className="p-6" space="lg">
         {/* 카테고리 헤더 */}
         <HStack className="items-center justify-between">
@@ -28,11 +28,11 @@ export function CardFrontContent({
             <VStack>
               <Text
                 className="font-semibold text-base"
-                style={{ color: category?.color || "#666" }}
+                style={{ color: category?.color || "#6b7280" }}
               >
                 {category?.name || currentQuestion.categoryName}
               </Text>
-              <Text className="text-neutral-500 text-xs">
+              <Text className="text-gray-500 text-xs">
                 {category?.description || ""}
               </Text>
             </VStack>
@@ -42,12 +42,12 @@ export function CardFrontContent({
           <Box
             className="rounded-full px-3 py-1"
             style={{
-              backgroundColor: `${difficulty?.color || "#999"}20`,
+              backgroundColor: `${difficulty?.color || "#9ca3af"}20`,
             }}
           >
             <Text
               className="font-medium text-sm"
-              style={{ color: difficulty?.color || "#666" }}
+              style={{ color: difficulty?.color || "#6b7280" }}
             >
               {difficulty?.name || currentQuestion.difficulty}
             </Text>
@@ -56,7 +56,7 @@ export function CardFrontContent({
 
         {/* 질문 내용 */}
         <Box className="py-4">
-          <Text className="text-center text-lg text-neutral-800 leading-relaxed">
+          <Text className="text-center text-gray-800 text-lg leading-relaxed">
             {currentQuestion.content}
           </Text>
         </Box>
@@ -66,7 +66,7 @@ export function CardFrontContent({
           <Text className="text-center text-gray-400 text-sm">
             카드를 터치하면 힌트를 볼 수 있어요
           </Text>
-          <Text className="mt-2 text-neutral-500 text-sm">
+          <Text className="mt-2 text-gray-500 text-sm">
             질문 #{currentQuestion.order}
           </Text>
         </Box>

@@ -6,8 +6,9 @@
 import type { Question } from "@/types";
 
 import { useRouter } from "expo-router";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { FlatList } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { BannerAdComponent, BannerAdSize } from "@/components/ads/BannerAd";
 import { FloatingBackButton } from "@/components/floating";
 import { OrangeHeader } from "@/components/layout";
@@ -22,6 +23,8 @@ import {
   getDifficultyTextStyle,
 } from "@/utils/difficultyStyles";
 
+const FLATLIST_CONTENT_STYLE = { paddingVertical: 16 } as const;
+
 // 리스트 아이템 타입 정의 (질문 또는 광고)
 type ListItem =
   | { type: "question"; data: Question; questionIndex: number }
@@ -33,7 +36,11 @@ interface QuestionListItemProps {
   onPress: (question: Question, index: number) => void;
 }
 
-function QuestionListItem({ question, index, onPress }: QuestionListItemProps) {
+const QuestionListItem = memo(function QuestionListItem({
+  question,
+  index,
+  onPress,
+}: QuestionListItemProps) {
   const { categories, difficulties } = useAppState();
 
   // 카테고리 정보 찾기
@@ -92,7 +99,7 @@ function QuestionListItem({ question, index, onPress }: QuestionListItemProps) {
       </Pressable>
     </Card>
   );
-}
+});
 
 export default function QuestionListScreen() {
   const router = useRouter();
@@ -126,7 +133,7 @@ export default function QuestionListScreen() {
   // 8개 항목마다 광고를 삽입한 리스트 생성
   const listItemsWithAds = useMemo(() => {
     const items: ListItem[] = [];
-    const AD_INTERVAL = 8; // 8개 질문마다 광고 삽입
+    const AD_INTERVAL = 20; // 8개 질문마다 광고 삽입
 
     questions.forEach((question, index) => {
       // 질문 항목 추가
@@ -195,7 +202,7 @@ export default function QuestionListScreen() {
   );
 
   return (
-    <Box className="flex-1 bg-orange-50">
+    <SafeAreaView className="flex-1 bg-orange-50">
       {/* 플로팅 뒤로 버튼 */}
       <FloatingBackButton onPress={handleBackToMain} />
 
@@ -237,8 +244,9 @@ export default function QuestionListScreen() {
 
       {/* 질문 목록 (인라인 광고 포함) */}
       <FlatList
-        contentContainerStyle={{ paddingVertical: 16 }}
+        contentContainerStyle={FLATLIST_CONTENT_STYLE}
         data={listItemsWithAds}
+        initialNumToRender={10}
         keyExtractor={(item) =>
           item.type === "question" ? `question-${item.data.id}` : item.id
         }
@@ -250,8 +258,11 @@ export default function QuestionListScreen() {
             </Text>
           </Box>
         }
+        maxToRenderPerBatch={5}
+        removeClippedSubviews={true}
         renderItem={renderListItem}
         showsVerticalScrollIndicator={false}
+        windowSize={7}
       />
 
       {/* 하단 광고 영역 */}
@@ -293,6 +304,6 @@ export default function QuestionListScreen() {
         snapPoints={errorSheet.snapPoints}
         title="질문이 없습니다"
       />
-    </Box>
+    </SafeAreaView>
   );
 }

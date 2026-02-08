@@ -2,37 +2,20 @@
  * 카드 뒷면 콘텐츠 (힌트 표시)
  */
 
-import type { HintType, Question, QuestionHint } from "@/types";
+import type { Question, QuestionHint } from "@/types";
 
 import { Box, Card, Text, VStack } from "@/components/ui";
+import { getHintTypeLabel } from "@/utils/hintUtils";
 
 interface CardBackContentProps {
   currentQuestion: Question;
-}
-
-/** 힌트 유형 라벨 반환 */
-function getHintTypeLabel(type: HintType): string {
-  switch (type) {
-    case "keyword":
-      return "키워드";
-    case "example":
-      return "예시 답변";
-    case "thinking":
-      return "생각 포인트";
-    case "related":
-      return "관련 질문";
-    case "situation":
-      return "상황 예시";
-    default:
-      return "힌트";
-  }
 }
 
 export function CardBackContent({ currentQuestion }: CardBackContentProps) {
   const hasHints = currentQuestion?.hints && currentQuestion.hints.length > 0;
 
   return (
-    <Card className="w-full border border-neutral-100 bg-white shadow-lg">
+    <Card className="w-full border border-gray-100 bg-white shadow-lg">
       <VStack className="p-6" space="lg">
         {/* 힌트 헤더 */}
         <Box className="flex-row items-center justify-center border-gray-100 border-b pb-4">

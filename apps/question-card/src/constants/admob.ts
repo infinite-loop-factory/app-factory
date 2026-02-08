@@ -97,6 +97,8 @@ export const isTestAdsEnabled = useTestAds;
  * logAdEnvironment(); // 앱 시작 시 호출
  */
 export const logAdEnvironment = () => {
+  if (!__DEV__) return;
+
   // biome-ignore lint/suspicious/noConsole: Debug function for AdMob environment
   console.log("===== AdMob Environment =====");
   // biome-ignore lint/suspicious/noConsole: Debug function for AdMob environment

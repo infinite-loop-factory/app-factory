@@ -7,12 +7,12 @@ import type { QuestionMode } from "@/types";
 
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { BannerAdComponent, BannerAdSize } from "@/components/ads/BannerAd";
 import { FloatingBackButton } from "@/components/floating";
 import { OrangeHeader } from "@/components/layout";
-import { Box, Pressable } from "@/components/ui";
+import { Box, Pressable, Text } from "@/components/ui";
 import {
   categories,
   difficulties,
@@ -55,20 +55,17 @@ export default function QuestionMainScreen() {
     // 모드 설정
     setQuestionMode(mode);
 
-    // 모드가 설정된 후 질문 재처리 (랜덤화/정렬 적용)
-    // useEffect로 처리하기 위해 약간의 지연 추가
-    setTimeout(() => {
-      filterQuestions();
+    // mode를 직접 전달하여 stale state 문제 방지
+    filterQuestions(mode);
 
-      // 모드에 따라 다른 화면으로 이동
-      if (mode === 4) {
-        // 모드 4: 질문 리스트 화면
-        router.push("/question-list");
-      } else {
-        // 모드 1,2,3: 연속 카드 화면
-        router.push("/continuous-card");
-      }
-    }, 100);
+    // 모드에 따라 다른 화면으로 이동
+    if (mode === 4) {
+      // 모드 4: 질문 리스트 화면
+      router.push("/question-list");
+    } else {
+      // 모드 1,2,3: 연속 카드 화면
+      router.push("/continuous-card");
+    }
   };
 
   return (
@@ -83,37 +80,37 @@ export default function QuestionMainScreen() {
 
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         {/* 선택 조건 요약 */}
-        <View className="border-orange-100 border-b p-5">
+        <Box className="border-orange-100 border-b p-5">
           <Text
             className={`font-semibold text-lg ${themeTailwindClasses.foreground} mb-4`}
           >
             선택한 조건
           </Text>
 
-          <View className="border-orange-100 border-b py-4">
+          <Box className="border-orange-100 border-b py-4">
             <Text
               className={`font-medium text-base ${themeTailwindClasses.mutedText} mb-2`}
             >
               카테고리
             </Text>
-            <View className="flex-row flex-wrap">
+            <Box className="flex-row flex-wrap">
               {selectedCategoryNames.map((name) => (
-                <View className="mr-2 mb-1" key={name}>
+                <Box className="mr-2 mb-1" key={name}>
                   <Text
                     className={`text-sm ${themeTailwindClasses.foreground} rounded-full border border-orange-200 bg-white px-3 py-1.5`}
                   >
                     {name}
                   </Text>
-                </View>
+                </Box>
               ))}
-            </View>
+            </Box>
             <Text className={`text-xs ${themeTailwindClasses.mutedText} mt-2`}>
               {selection.selectedCategories.length}개 선택됨
             </Text>
-          </View>
+          </Box>
 
-          <View className="border-orange-100 border-b py-3">
-            <View className="flex-row items-center justify-between">
+          <Box className="border-orange-100 border-b py-3">
+            <Box className="flex-row items-center justify-between">
               <Text
                 className={`font-medium text-base ${themeTailwindClasses.mutedText}`}
               >
@@ -125,18 +122,18 @@ export default function QuestionMainScreen() {
                 {selectedDifficultyNames.join(", ")} (
                 {selection.selectedDifficulties.length}개)
               </Text>
-            </View>
-          </View>
+            </Box>
+          </Box>
 
-          <View className="py-4">
-            <View className="flex-row items-center justify-center">
-              <View className="items-center">
+          <Box className="py-4">
+            <Box className="flex-row items-center justify-center">
+              <Box className="items-center">
                 <Text
                   className={`font-medium text-sm ${themeTailwindClasses.mutedText} mb-1`}
                 >
                   총 질문 개수
                 </Text>
-                <View className="flex-row items-end">
+                <Box className="flex-row items-end">
                   <Text
                     className={`font-bold text-3xl ${themeTailwindClasses.foreground}`}
                   >
@@ -147,62 +144,63 @@ export default function QuestionMainScreen() {
                   >
                     개
                   </Text>
-                </View>
-                <View
+                </Box>
+                <Box
                   className={`h-1 w-12 rounded-full ${themeTailwindClasses.primary} mt-2 opacity-60`}
                 />
-              </View>
-            </View>
-          </View>
-        </View>
+              </Box>
+            </Box>
+          </Box>
+        </Box>
 
         {/* 모드 선택 */}
-        <View className="p-5">
+        <Box className="p-5">
           <Text
             className={`font-semibold text-lg ${themeTailwindClasses.foreground} mb-4`}
           >
             진행 방식 선택
           </Text>
 
-          <View className="gap-3">
+          <Box className="gap-3">
             {questionModes.map((mode) => (
-              <TouchableOpacity
-                activeOpacity={0.7}
+              <Pressable
+                accessibilityLabel={mode.name}
+                accessibilityRole="button"
                 className="flex-row items-center rounded-xl border border-gray-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md"
                 key={mode.id}
                 onPress={() => handleModeSelect(mode.id)}
               >
                 {/* 아이콘과 내용 */}
-                <View className="flex-1">
-                  <View className="mb-2 flex-row items-center">
-                    <View className="mr-3 h-10 w-10 items-center justify-center rounded-full bg-gray-50">
+                <Box className="flex-1">
+                  <Box className="mb-2 flex-row items-center">
+                    <Box className="mr-3 h-10 w-10 items-center justify-center rounded-full bg-gray-50">
                       <Text className="text-lg">{mode.icon}</Text>
-                    </View>
+                    </Box>
                     <Text
                       className={`font-semibold text-lg ${themeTailwindClasses.foreground}`}
                     >
                       {mode.name}
                     </Text>
-                  </View>
+                  </Box>
                   <Text
                     className={`text-sm ${themeTailwindClasses.mutedText} pl-13 leading-5`}
                   >
                     {mode.description}
                   </Text>
-                </View>
+                </Box>
 
                 {/* 화살표 아이콘 */}
-                <View className="ml-3 h-6 w-6 items-center justify-center">
+                <Box className="ml-3 h-6 w-6 items-center justify-center">
                   <Text
                     className={`text-lg ${themeTailwindClasses.mutedText} opacity-60`}
                   >
                     →
                   </Text>
-                </View>
-              </TouchableOpacity>
+                </Box>
+              </Pressable>
             ))}
-          </View>
-        </View>
+          </Box>
+        </Box>
       </ScrollView>
 
       {/* 하단 광고 영역 */}
@@ -213,6 +211,8 @@ export default function QuestionMainScreen() {
       {/* 하단 버튼 */}
       <Box className="border-gray-200 border-t bg-white px-5 py-4">
         <Pressable
+          accessibilityLabel="설정 다시하기"
+          accessibilityRole="button"
           className="h-12 items-center justify-center rounded-lg bg-orange-500"
           onPress={() => router.push("/difficulty-selection")}
         >

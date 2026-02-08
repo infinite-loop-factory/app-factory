@@ -9,6 +9,7 @@ import type {
   AppError,
   AppState,
   Category,
+  CategoryGroup,
   Difficulty,
   DifficultyLevel,
   FilteredQuestionSet,
@@ -21,15 +22,21 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useReducer,
 } from "react";
-import { categories, difficulties } from "@/constants/designSystem";
+import {
+  categories,
+  categoryGroups,
+  difficulties,
+} from "@/constants/designSystem";
 import { useQuestionData } from "@/hooks/useQuestions";
 import { applyQuestionMode } from "@/utils/questionModes";
 
 // 초기 상태
 const initialState: AppState = {
   categories: [],
+  categoryGroups: [],
   difficulties: [],
   allQuestions: [],
   selection: {
@@ -42,7 +49,7 @@ const initialState: AppState = {
     currentIndex: 0,
     totalQuestions: 0,
     currentQuestion: null,
-    isCompleted: false,
+    isOnLastQuestion: false,
     canGoBack: false,
     canGoForward: false,
   },
@@ -61,10 +68,12 @@ const initialState: AppState = {
 function appReducer(state: AppState, action: AppAction): AppState {
   switch (action.type) {
     case "INITIALIZE_APP": {
-      const { categories, difficulties, questions } = action.payload;
+      const { categories, categoryGroups, difficulties, questions } =
+        action.payload;
       return {
         ...state,
         categories,
+        categoryGroups,
         difficulties,
         allQuestions: questions,
         isInitialized: true,
@@ -144,7 +153,7 @@ function appReducer(state: AppState, action: AppAction): AppState {
           currentIndex: 0,
           totalQuestions: filteredQuestions.totalCount,
           currentQuestion: currentQuestion || null,
-          isCompleted: false,
+          isOnLastQuestion: false,
           canGoBack: false,
           canGoForward: filteredQuestions.totalCount > 1,
         },
@@ -161,7 +170,7 @@ function appReducer(state: AppState, action: AppAction): AppState {
       }
 
       const currentQuestion = questions[currentIndex] || null;
-      const isCompleted = currentIndex === totalQuestions - 1;
+      const isOnLastQuestion = currentIndex === totalQuestions - 1;
       const canGoBack = currentIndex > 0;
       const canGoForward = currentIndex < totalQuestions - 1;
 
@@ -171,7 +180,7 @@ function appReducer(state: AppState, action: AppAction): AppState {
           currentIndex,
           totalQuestions,
           currentQuestion,
-          isCompleted,
+          isOnLastQuestion,
           canGoBack,
           canGoForward,
         },
@@ -203,7 +212,7 @@ function appReducer(state: AppState, action: AppAction): AppState {
           currentIndex: 0,
           totalQuestions: state.filteredQuestions.totalCount,
           currentQuestion: state.filteredQuestions.questions[0] || null,
-          isCompleted: false,
+          isOnLastQuestion: false,
           canGoBack: false,
           canGoForward: state.filteredQuestions.totalCount > 1,
         },
@@ -227,29 +236,18 @@ export function AppProvider({ children }: AppProviderProps) {
   const [state, dispatch] = useReducer(appReducer, initialState);
 
   // 질문 데이터 로딩 훅 사용
-  const { questions, isLoading, error } = useQuestionData();
+  const { questions, error } = useQuestionData();
 
   // 앱 초기화
   const initializeApp = useCallback(
-    async (data: {
+    (data: {
       categories: Category[];
+      categoryGroups: CategoryGroup[];
       difficulties: Difficulty[];
       questions: Question[];
     }) => {
       dispatch({ type: "SET_LOADING", payload: true });
-
-      try {
-        // 시뮬레이션을 위한 짧은 지연
-        await new Promise((resolve) => setTimeout(resolve, 100));
-        dispatch({ type: "INITIALIZE_APP", payload: data });
-      } catch (error) {
-        const appError: AppError = {
-          code: "INITIALIZATION_FAILED",
-          message: "앱 초기화에 실패했습니다.",
-          details: error,
-        };
-        dispatch({ type: "SET_ERROR", payload: appError });
-      }
+      dispatch({ type: "INITIALIZE_APP", payload: data });
     },
     [],
   );
@@ -280,35 +278,44 @@ export function AppProvider({ children }: AppProviderProps) {
   }, []);
 
   // 질문 필터링 및 모드별 정렬/랜덤화 적용
-  const filterQuestions = useCallback(() => {
-    const { selectedCategories, selectedDifficulties, currentMode } =
-      state.selection;
+  const filterQuestions = useCallback(
+    (modeOverride?: QuestionMode) => {
+      const { selectedCategories, selectedDifficulties, currentMode } =
+        state.selection;
 
-    if (selectedCategories.length === 0 || selectedDifficulties.length === 0) {
-      return;
-    }
+      if (
+        selectedCategories.length === 0 ||
+        selectedDifficulties.length === 0
+      ) {
+        return;
+      }
 
-    // 선택된 조건에 맞는 질문들 필터링
-    let filtered = state.allQuestions.filter(
-      (question) =>
-        selectedCategories.includes(question.categoryId) &&
-        selectedDifficulties.includes(question.difficulty),
-    );
+      // modeOverride가 있으면 사용, 없으면 현재 state의 모드 사용
+      const effectiveMode = modeOverride ?? currentMode;
 
-    // 모드가 선택되었으면 모드별 정렬/랜덤화 적용
-    if (currentMode) {
-      filtered = applyQuestionMode(filtered, currentMode);
-    }
+      // 선택된 조건에 맞는 질문들 필터링
+      let filtered = state.allQuestions.filter(
+        (question) =>
+          selectedCategories.includes(question.categoryId) &&
+          selectedDifficulties.includes(question.difficulty),
+      );
 
-    const filteredQuestionSet: FilteredQuestionSet = {
-      questions: filtered,
-      totalCount: filtered.length,
-      categoryCount: selectedCategories.length,
-      difficultyCount: selectedDifficulties.length,
-    };
+      // 모드가 선택되었으면 모드별 정렬/랜덤화 적용
+      if (effectiveMode) {
+        filtered = applyQuestionMode(filtered, effectiveMode);
+      }
 
-    dispatch({ type: "FILTER_QUESTIONS", payload: filteredQuestionSet });
-  }, [state.selection, state.allQuestions]);
+      const filteredQuestionSet: FilteredQuestionSet = {
+        questions: filtered,
+        totalCount: filtered.length,
+        categoryCount: selectedCategories.length,
+        difficultyCount: selectedDifficulties.length,
+      };
+
+      dispatch({ type: "FILTER_QUESTIONS", payload: filteredQuestionSet });
+    },
+    [state.selection, state.allQuestions],
+  );
 
   // 질문 인덱스 설정
   const setCurrentQuestionIndex = useCallback((index: number) => {
@@ -341,10 +348,9 @@ export function AppProvider({ children }: AppProviderProps) {
     dispatch({ type: "RESET_PROGRESS" });
   }, []);
 
-  // Context 값
-  const contextValue: AppContextType = {
-    state,
-    actions: {
+  // Context 값 (useMemo로 불필요한 consumer 리렌더 방지)
+  const actions = useMemo(
+    () => ({
       initializeApp,
       setLoading,
       setError,
@@ -357,13 +363,27 @@ export function AppProvider({ children }: AppProviderProps) {
       goToPreviousQuestion,
       resetSelections,
       resetProgress,
-    },
-  };
+    }),
+    [
+      initializeApp,
+      setLoading,
+      setError,
+      selectCategories,
+      selectDifficulties,
+      setQuestionMode,
+      filterQuestions,
+      setCurrentQuestionIndex,
+      goToNextQuestion,
+      goToPreviousQuestion,
+      resetSelections,
+      resetProgress,
+    ],
+  );
 
-  // 데이터 로딩 상태 관리
-  useEffect(() => {
-    dispatch({ type: "SET_LOADING", payload: isLoading });
-  }, [isLoading]);
+  const contextValue: AppContextType = useMemo(
+    () => ({ state, actions }),
+    [state, actions],
+  );
 
   // 에러 상태 관리
   useEffect(() => {
@@ -382,6 +402,7 @@ export function AppProvider({ children }: AppProviderProps) {
     if (!state.isInitialized && questions.length > 0) {
       initializeApp({
         categories,
+        categoryGroups,
         difficulties,
         questions,
       });
