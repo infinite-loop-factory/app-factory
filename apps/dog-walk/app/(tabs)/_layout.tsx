@@ -1,6 +1,7 @@
 import { Tabs } from "expo-router";
 import { useColorScheme } from "nativewind";
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
+import CustomTabBar from "@/components/organisms/CustomTabBar";
 import { Colors } from "@/constants/Colors";
 
 export default function TabLayout() {
@@ -9,9 +10,12 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
+        tabBarActiveTintColor:
+          Colors[colorScheme ?? "light"]["--color-primary-0"],
         headerShown: false,
+        sceneStyle: { backgroundColor: "white" },
       }}
+      tabBar={(props) => <CustomTabBar {...props} />}
     >
       <Tabs.Screen
         name="index"

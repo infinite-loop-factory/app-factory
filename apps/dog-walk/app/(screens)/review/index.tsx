@@ -4,7 +4,7 @@ import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { FlatList, View } from "react-native";
 import { useFindCourseReviewsInfinite } from "@/api/reactQuery/review/useFindCourseReviewsInfinite";
-import CustomSafeAreaView from "@/components/CustomSafeAriaView";
+import CustomSafeAreaView from "@/components/CustomSafeAreaView";
 import HeaderBar from "@/components/HeaderBar";
 import ImageModal from "@/components/modal/ImageModal";
 import ReviewItem from "@/components/molecules/ReviewItem";
