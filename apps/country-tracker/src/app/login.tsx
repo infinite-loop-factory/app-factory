@@ -8,7 +8,6 @@ import { Stack, useRouter } from "expo-router";
 import * as WebBrowser from "expo-web-browser";
 import { Chrome, Github } from "lucide-react-native";
 import { useEffect, useState } from "react";
-import { Badge, BadgeText } from "@/components/ui/badge";
 import { Box } from "@/components/ui/box";
 import {
   Button,
@@ -199,16 +198,6 @@ export default function LoginPage() {
           <Box className="h-1.5 w-full bg-primary-300" />
 
           <VStack className="items-center px-6 py-8" space="xl">
-            <Badge
-              action="warning"
-              className="rounded-full px-3 py-1"
-              size="sm"
-            >
-              <BadgeText className="font-semibold text-warning-700 text-xs">
-                {i18n.t("login.badge")}
-              </BadgeText>
-            </Badge>
-
             <Box className="h-14 w-14 items-center justify-center rounded-2xl bg-primary-50">
               <Image
                 alt="country tracker logo"

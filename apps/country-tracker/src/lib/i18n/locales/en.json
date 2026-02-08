@@ -223,7 +223,6 @@
   "login": {
     "title": "Country Tracker",
     "description": "Login is required to use this service.",
-    "badge": "Secure login",
     "hero-title": "Start Your Journey",
     "hero-subtitle": "Sign in to continue to your dashboard",
     "google": "Login with Google",
