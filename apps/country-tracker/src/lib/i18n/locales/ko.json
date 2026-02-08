@@ -218,8 +218,14 @@
   "login": {
     "title": "Country Tracker",
     "description": "로그인 후 이용 가능합니다.",
+    "badge": "보안 로그인",
+    "hero-title": "Start Your Journey",
+    "hero-subtitle": "대시보드로 이동하려면 로그인해주세요",
     "google": "구글 로그인",
-    "github": "깃허브 로그인"
+    "github": "깃허브 로그인",
+    "terms": "이용약관",
+    "privacy": "개인정보처리방침",
+    "security-note": "OAuth 로그인만 지원하며 비밀번호는 앱에 저장되지 않습니다."
   },
   "location": {
     "foregroundService": {

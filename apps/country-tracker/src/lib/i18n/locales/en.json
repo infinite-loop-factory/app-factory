@@ -223,8 +223,14 @@
   "login": {
     "title": "Country Tracker",
     "description": "Login is required to use this service.",
+    "badge": "Secure login",
+    "hero-title": "Start Your Journey",
+    "hero-subtitle": "Sign in to continue to your dashboard",
     "google": "Login with Google",
-    "github": "Login with GitHub"
+    "github": "Login with GitHub",
+    "terms": "Terms of Service",
+    "privacy": "Privacy Policy",
+    "security-note": "OAuth only. No password is stored in app."
   },
   "location": {
     "foregroundService": {

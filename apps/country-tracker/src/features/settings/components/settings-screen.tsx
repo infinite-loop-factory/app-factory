@@ -3,18 +3,16 @@ import {
   openStorePage,
 } from "@infinite-loop-factory/common";
 import Constants from "expo-constants";
-import { getLocales } from "expo-localization";
 import { useRouter } from "expo-router";
 import {
+  Ban,
   ChevronRight,
   CircleHelp,
   ExternalLink,
-  Flag,
+  FileText,
   Globe2,
   PlaneTakeoff,
-  Wallet,
 } from "lucide-react-native";
-import { useMemo } from "react";
 import ParallaxScrollView from "@/components/parallax-scroll-view";
 import { Badge, BadgeText } from "@/components/ui/badge";
 import { Box } from "@/components/ui/box";
@@ -46,9 +44,6 @@ export default function SettingsScreen() {
   ]);
 
   const isKorean = i18n.locale === "ko";
-  const deviceLocale = getLocales()[0];
-  const regionCode = deviceLocale?.regionCode?.toUpperCase() ?? null;
-  const currencyCode = deviceLocale?.currencyCode?.toUpperCase() ?? null;
   const userName =
     user?.user_metadata?.full_name ??
     user?.user_metadata?.name ??
@@ -60,49 +55,6 @@ export default function SettingsScreen() {
       Constants.expoConfig?.android?.versionCode ??
       "1",
   );
-  const homeCountryValue = useMemo(() => {
-    if (!regionCode) {
-      return i18n.t("settings.preferences.home-country-value");
-    }
-
-    try {
-      if (typeof Intl.DisplayNames === "function") {
-        const displayNames = new Intl.DisplayNames([i18n.locale], {
-          type: "region",
-        });
-        return displayNames.of(regionCode) ?? regionCode;
-      }
-    } catch {
-      // ignore and fallback to code
-    }
-
-    return regionCode;
-  }, [regionCode]);
-
-  const currencyValue = useMemo(() => {
-    if (!currencyCode) {
-      return i18n.t("settings.preferences.currency-value");
-    }
-
-    try {
-      const symbol = new Intl.NumberFormat(i18n.locale, {
-        style: "currency",
-        currency: currencyCode,
-        currencyDisplay: "narrowSymbol",
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      })
-        .formatToParts(0)
-        .find((part) => part.type === "currency")?.value;
-
-      if (!symbol || symbol === currencyCode) {
-        return currencyCode;
-      }
-      return `${currencyCode} (${symbol})`;
-    } catch {
-      return currencyCode;
-    }
-  }, [currencyCode]);
 
   const handleLanguageSetting = async () => {
     const openLanguageSettingResult = await openLanguageSetting();
@@ -212,18 +164,13 @@ export default function SettingsScreen() {
         >
           <Box className="flex-row items-center gap-3.5">
             <Box className="h-8 w-8 items-center justify-center rounded-md bg-warning-500">
-              <Flag color={iconColor} size={17} />
+              <Ban color={iconColor} size={17} />
             </Box>
             <Text className="font-medium text-base text-typography-900">
-              {i18n.t("settings.preferences.home-country")}
+              {i18n.t("settings.general.denylist")}
             </Text>
           </Box>
-          <Box className="flex-row items-center gap-2">
-            <Text className="font-normal text-base text-secondary-600">
-              {homeCountryValue}
-            </Text>
-            <ChevronRight color={chevronColor} size={18} />
-          </Box>
+          <ChevronRight color={chevronColor} size={18} />
         </Button>
         <Divider className="bg-outline-100" />
         <Button
@@ -233,18 +180,13 @@ export default function SettingsScreen() {
         >
           <Box className="flex-row items-center gap-3.5">
             <Box className="h-8 w-8 items-center justify-center rounded-md bg-success-500">
-              <Wallet color={iconColor} size={17} />
+              <FileText color={iconColor} size={17} />
             </Box>
             <Text className="font-medium text-base text-typography-900">
-              {i18n.t("settings.preferences.currency")}
+              {i18n.t("settings.general.license")}
             </Text>
           </Box>
-          <Box className="flex-row items-center gap-2">
-            <Text className="font-normal text-base text-secondary-600">
-              {currencyValue}
-            </Text>
-            <ChevronRight color={chevronColor} size={18} />
-          </Box>
+          <ChevronRight color={chevronColor} size={18} />
         </Button>
       </Box>
 
