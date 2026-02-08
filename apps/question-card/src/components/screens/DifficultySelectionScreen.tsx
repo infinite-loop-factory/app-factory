@@ -7,7 +7,7 @@ import type { DifficultyLevel } from "@/types";
 
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { BannerAdComponent, BannerAdSize } from "@/components/ads/BannerAd";
 import {
@@ -15,7 +15,7 @@ import {
   FloatingBackButton,
 } from "@/components/floating";
 import { OrangeHeader } from "@/components/layout";
-import { Box, Pressable } from "@/components/ui";
+import { Box, Pressable, Text } from "@/components/ui";
 import { difficulties } from "@/constants/designSystem";
 import { useAppActions, useAppState } from "@/context/AppContext";
 import { useWarningToast } from "@/hooks/useWarningToast";
@@ -87,13 +87,13 @@ export default function DifficultySelectionScreen() {
 
       {/* 난이도 목록 */}
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
-        <View className="gap-4 p-5">
+        <Box className="gap-4 p-5">
           {/* 안내 텍스트 */}
-          <View className="mb-4">
+          <Box className="mb-4">
             <Text className="text-center text-gray-600 text-sm">
               원하는 난이도를 선택하세요
             </Text>
-          </View>
+          </Box>
           {difficulties.map((difficulty) => {
             const isSelected = selectedDifficulties.includes(difficulty.id);
 
@@ -125,8 +125,7 @@ export default function DifficultySelectionScreen() {
             };
 
             return (
-              <TouchableOpacity
-                activeOpacity={0.7}
+              <Pressable
                 className={`flex-row items-center rounded-xl border-2 bg-white p-5 shadow-sm ${
                   isSelected
                     ? "border-orange-200 bg-orange-50"
@@ -135,9 +134,9 @@ export default function DifficultySelectionScreen() {
                 key={difficulty.id}
                 onPress={() => toggleDifficulty(difficulty.id)}
               >
-                <View className="flex-1">
-                  <View className="mb-3 flex-row items-center">
-                    <View
+                <Box className="flex-1">
+                  <Box className="mb-3 flex-row items-center">
+                    <Box
                       className={`rounded-full px-3 py-1.5 ${getDifficultyStyle()}`}
                     >
                       <Text
@@ -145,16 +144,16 @@ export default function DifficultySelectionScreen() {
                       >
                         {difficulty.name}
                       </Text>
-                    </View>
-                  </View>
+                    </Box>
+                  </Box>
 
                   <Text className="text-gray-600 text-sm leading-5">
                     {difficulty.description}
                   </Text>
-                </View>
+                </Box>
 
                 {/* 체크박스 */}
-                <View
+                <Box
                   className={`ml-4 h-6 w-6 items-center justify-center rounded border-2 ${
                     isSelected ? getCheckboxStyle() : "border-gray-300 bg-white"
                   }`}
@@ -162,11 +161,11 @@ export default function DifficultySelectionScreen() {
                   {isSelected && (
                     <Text className="font-bold text-sm text-white">✓</Text>
                   )}
-                </View>
-              </TouchableOpacity>
+                </Box>
+              </Pressable>
             );
           })}
-        </View>
+        </Box>
       </ScrollView>
 
       {/* 하단 광고 영역 */}
