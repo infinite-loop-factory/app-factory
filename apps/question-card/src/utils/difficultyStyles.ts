@@ -11,7 +11,7 @@ export function getDifficultyBadgeStyle(difficulty: string): string {
     case "easy":
       return "bg-green-50 border border-green-200";
     case "medium":
-      return "bg-yellow-50 border border-yellow-200";
+      return "bg-amber-50 border border-amber-200";
     case "hard":
       return "bg-red-50 border border-red-200";
     default:
@@ -27,7 +27,7 @@ export function getDifficultyBadgeSolidStyle(difficulty?: string): string {
     case "easy":
       return "bg-green-500 border border-green-200";
     case "medium":
-      return "bg-yellow-500 border border-yellow-200";
+      return "bg-amber-500 border border-amber-200";
     case "hard":
       return "bg-red-500 border border-red-200";
     default:
@@ -43,7 +43,7 @@ export function getDifficultyTextStyle(difficulty: string): string {
     case "easy":
       return "text-green-700";
     case "medium":
-      return "text-yellow-700";
+      return "text-amber-700";
     case "hard":
       return "text-red-700";
     default:

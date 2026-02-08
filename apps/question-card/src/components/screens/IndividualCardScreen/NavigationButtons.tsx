@@ -38,9 +38,7 @@ export function NavigationButtons({
 
       {/* 다음 버튼 */}
       <Pressable
-        className={`h-12 flex-1 items-center justify-center rounded-lg ${
-          canGoForward ? "bg-orange-500" : "bg-green-500"
-        }`}
+        className="h-12 flex-1 items-center justify-center rounded-lg bg-orange-500"
         onPress={onNext}
       >
         <Text className="font-medium text-base text-white">

@@ -103,7 +103,7 @@ export default function DifficultySelectionScreen() {
                 case "easy":
                   return "border-green-200 bg-green-50 text-green-700";
                 case "medium":
-                  return "border-yellow-200 bg-yellow-50 text-yellow-700";
+                  return "border-amber-200 bg-amber-50 text-amber-700";
                 case "hard":
                   return "border-red-200 bg-red-50 text-red-700";
                 default:
@@ -116,7 +116,7 @@ export default function DifficultySelectionScreen() {
                 case "easy":
                   return "border-green-500 bg-green-500";
                 case "medium":
-                  return "border-yellow-500 bg-yellow-500";
+                  return "border-amber-500 bg-amber-500";
                 case "hard":
                   return "border-red-500 bg-red-500";
                 default:

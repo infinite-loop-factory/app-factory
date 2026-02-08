@@ -138,9 +138,7 @@ export default function IndividualCardScreen() {
   if (!currentQuestion) {
     return (
       <SafeAreaView className="flex-1 items-center justify-center bg-orange-50">
-        <Text className="text-base text-neutral-500">
-          질문을 불러오는 중...
-        </Text>
+        <Text className="text-base text-gray-500">질문을 불러오는 중...</Text>
       </SafeAreaView>
     );
   }
