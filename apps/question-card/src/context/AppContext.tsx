@@ -280,35 +280,44 @@ export function AppProvider({ children }: AppProviderProps) {
   }, []);
 
   // 질문 필터링 및 모드별 정렬/랜덤화 적용
-  const filterQuestions = useCallback(() => {
-    const { selectedCategories, selectedDifficulties, currentMode } =
-      state.selection;
+  const filterQuestions = useCallback(
+    (modeOverride?: QuestionMode) => {
+      const { selectedCategories, selectedDifficulties, currentMode } =
+        state.selection;
 
-    if (selectedCategories.length === 0 || selectedDifficulties.length === 0) {
-      return;
-    }
+      if (
+        selectedCategories.length === 0 ||
+        selectedDifficulties.length === 0
+      ) {
+        return;
+      }
 
-    // 선택된 조건에 맞는 질문들 필터링
-    let filtered = state.allQuestions.filter(
-      (question) =>
-        selectedCategories.includes(question.categoryId) &&
-        selectedDifficulties.includes(question.difficulty),
-    );
+      // modeOverride가 있으면 사용, 없으면 현재 state의 모드 사용
+      const effectiveMode = modeOverride ?? currentMode;
 
-    // 모드가 선택되었으면 모드별 정렬/랜덤화 적용
-    if (currentMode) {
-      filtered = applyQuestionMode(filtered, currentMode);
-    }
+      // 선택된 조건에 맞는 질문들 필터링
+      let filtered = state.allQuestions.filter(
+        (question) =>
+          selectedCategories.includes(question.categoryId) &&
+          selectedDifficulties.includes(question.difficulty),
+      );
 
-    const filteredQuestionSet: FilteredQuestionSet = {
-      questions: filtered,
-      totalCount: filtered.length,
-      categoryCount: selectedCategories.length,
-      difficultyCount: selectedDifficulties.length,
-    };
+      // 모드가 선택되었으면 모드별 정렬/랜덤화 적용
+      if (effectiveMode) {
+        filtered = applyQuestionMode(filtered, effectiveMode);
+      }
 
-    dispatch({ type: "FILTER_QUESTIONS", payload: filteredQuestionSet });
-  }, [state.selection, state.allQuestions]);
+      const filteredQuestionSet: FilteredQuestionSet = {
+        questions: filtered,
+        totalCount: filtered.length,
+        categoryCount: selectedCategories.length,
+        difficultyCount: selectedDifficulties.length,
+      };
+
+      dispatch({ type: "FILTER_QUESTIONS", payload: filteredQuestionSet });
+    },
+    [state.selection, state.allQuestions],
+  );
 
   // 질문 인덱스 설정
   const setCurrentQuestionIndex = useCallback((index: number) => {

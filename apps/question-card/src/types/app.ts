@@ -70,7 +70,7 @@ export interface AppContextType {
     selectCategories: (categoryIds: string[]) => void;
     selectDifficulties: (difficulties: DifficultyLevel[]) => void;
     setQuestionMode: (mode: QuestionMode) => void;
-    filterQuestions: () => void;
+    filterQuestions: (modeOverride?: QuestionMode) => void;
     setCurrentQuestionIndex: (index: number) => void;
     goToNextQuestion: () => void;
     goToPreviousQuestion: () => void;
