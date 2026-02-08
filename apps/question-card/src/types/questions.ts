@@ -24,7 +24,7 @@ export interface Question {
   difficulty: DifficultyLevel;
   content: string;
   order: number;
-  hints?: QuestionHint[]; // 2개의 서로 다른 유형 힌트
+  hints: QuestionHint[]; // 2개의 서로 다른 유형 힌트
 }
 
 // 카테고리 정보
@@ -73,7 +73,7 @@ export interface QuestionProgress {
   currentIndex: number;
   totalQuestions: number;
   currentQuestion: Question | null;
-  isCompleted: boolean;
+  isOnLastQuestion: boolean;
   canGoBack: boolean;
   canGoForward: boolean;
 }

@@ -136,7 +136,7 @@ export default function ContinuousCardScreen() {
         runOnJS(onComplete)();
       });
     },
-    [translateX, rotate, scale],
+    [translateX, rotate, scale, screenWidth],
   );
 
   // 스와이프 제스처 종료 핸들러
@@ -260,7 +260,7 @@ export default function ContinuousCardScreen() {
         <Box className="flex-row items-center justify-between border-orange-200 border-b px-5 py-4">
           <Box className="flex-1" />
 
-          <Box className="flex-2 items-center">
+          <Box className="flex-[2] items-center">
             <Text className="mb-1 text-gray-600 text-sm">
               {currentIndex + 1} / {filteredQuestions.totalCount}
             </Text>

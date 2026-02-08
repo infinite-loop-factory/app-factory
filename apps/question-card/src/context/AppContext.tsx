@@ -43,7 +43,7 @@ const initialState: AppState = {
     currentIndex: 0,
     totalQuestions: 0,
     currentQuestion: null,
-    isCompleted: false,
+    isOnLastQuestion: false,
     canGoBack: false,
     canGoForward: false,
   },
@@ -145,7 +145,7 @@ function appReducer(state: AppState, action: AppAction): AppState {
           currentIndex: 0,
           totalQuestions: filteredQuestions.totalCount,
           currentQuestion: currentQuestion || null,
-          isCompleted: false,
+          isOnLastQuestion: false,
           canGoBack: false,
           canGoForward: filteredQuestions.totalCount > 1,
         },
@@ -162,7 +162,7 @@ function appReducer(state: AppState, action: AppAction): AppState {
       }
 
       const currentQuestion = questions[currentIndex] || null;
-      const isCompleted = currentIndex === totalQuestions - 1;
+      const isOnLastQuestion = currentIndex === totalQuestions - 1;
       const canGoBack = currentIndex > 0;
       const canGoForward = currentIndex < totalQuestions - 1;
 
@@ -172,7 +172,7 @@ function appReducer(state: AppState, action: AppAction): AppState {
           currentIndex,
           totalQuestions,
           currentQuestion,
-          isCompleted,
+          isOnLastQuestion,
           canGoBack,
           canGoForward,
         },
@@ -204,7 +204,7 @@ function appReducer(state: AppState, action: AppAction): AppState {
           currentIndex: 0,
           totalQuestions: state.filteredQuestions.totalCount,
           currentQuestion: state.filteredQuestions.questions[0] || null,
-          isCompleted: false,
+          isOnLastQuestion: false,
           canGoBack: false,
           canGoForward: state.filteredQuestions.totalCount > 1,
         },
@@ -228,29 +228,17 @@ export function AppProvider({ children }: AppProviderProps) {
   const [state, dispatch] = useReducer(appReducer, initialState);
 
   // 질문 데이터 로딩 훅 사용
-  const { questions, isLoading, error } = useQuestionData();
+  const { questions, error } = useQuestionData();
 
   // 앱 초기화
   const initializeApp = useCallback(
-    async (data: {
+    (data: {
       categories: Category[];
       difficulties: Difficulty[];
       questions: Question[];
     }) => {
       dispatch({ type: "SET_LOADING", payload: true });
-
-      try {
-        // 시뮬레이션을 위한 짧은 지연
-        await new Promise((resolve) => setTimeout(resolve, 100));
-        dispatch({ type: "INITIALIZE_APP", payload: data });
-      } catch (error) {
-        const appError: AppError = {
-          code: "INITIALIZATION_FAILED",
-          message: "앱 초기화에 실패했습니다.",
-          details: error,
-        };
-        dispatch({ type: "SET_ERROR", payload: appError });
-      }
+      dispatch({ type: "INITIALIZE_APP", payload: data });
     },
     [],
   );
@@ -387,11 +375,6 @@ export function AppProvider({ children }: AppProviderProps) {
     () => ({ state, actions }),
     [state, actions],
   );
-
-  // 데이터 로딩 상태 관리
-  useEffect(() => {
-    dispatch({ type: "SET_LOADING", payload: isLoading });
-  }, [isLoading]);
 
   // 에러 상태 관리
   useEffect(() => {

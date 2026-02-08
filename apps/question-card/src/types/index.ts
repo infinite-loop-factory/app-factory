@@ -8,9 +8,6 @@ export type {
   AppContextType,
   AppState,
   RootStackParamList,
-  ScreenNavigationProp,
-  ScreenProps,
-  ScreenRouteProp,
 } from "./app";
 // 질문 관련 타입들
 export type {

@@ -89,33 +89,3 @@ export type RootStackParamList = {
   IndividualCard: { questionIndex: number; fromList: boolean };
 };
 
-// 네비게이션 상태 타입
-export interface NavigationState {
-  index: number;
-  routes: Array<{
-    name: keyof RootStackParamList;
-    params?: RootStackParamList[keyof RootStackParamList];
-  }>;
-}
-
-// 네비게이션 prop 타입들
-export type ScreenNavigationProp<_T extends keyof RootStackParamList> = {
-  navigate: (
-    screen: keyof RootStackParamList,
-    params?: RootStackParamList[keyof RootStackParamList],
-  ) => void;
-  goBack: () => void;
-  reset: (state: NavigationState) => void;
-};
-
-export type ScreenRouteProp<T extends keyof RootStackParamList> = {
-  key: string;
-  name: T;
-  params: RootStackParamList[T];
-};
-
-// 공통 스크린 Props
-export interface ScreenProps<T extends keyof RootStackParamList> {
-  navigation: ScreenNavigationProp<T>;
-  route: ScreenRouteProp<T>;
-}
