@@ -91,8 +91,31 @@
   },
 
   "settings": {
-    "tab": "홈",
+    "tab": "설정",
     "title": "설정",
+    "profile": {
+      "default-name": "여행자",
+      "plan": "플랜",
+      "pro-member": "PRO MEMBER"
+    },
+    "preferences": {
+      "title": "기본 설정",
+      "language": "언어",
+      "language-value-en": "영어",
+      "language-value-ko": "한국어",
+      "home-country": "홈 국가",
+      "home-country-value": "대한민국",
+      "currency": "통화",
+      "currency-value": "KRW (₩)"
+    },
+    "support": {
+      "title": "지원",
+      "help-center": "도움말 센터"
+    },
+    "footer": {
+      "app-name": "Country Tracker",
+      "version-build": "버전 %{version} (빌드 %{build})"
+    },
 
     "appearance": {
       "title": "모양",
@@ -195,8 +218,13 @@
   "login": {
     "title": "Country Tracker",
     "description": "로그인 후 이용 가능합니다.",
+    "hero-title": "Start Your Journey",
+    "hero-subtitle": "대시보드로 이동하려면 로그인해주세요",
     "google": "구글 로그인",
-    "github": "깃허브 로그인"
+    "github": "깃허브 로그인",
+    "terms": "이용약관",
+    "privacy": "개인정보처리방침",
+    "security-note": "OAuth 로그인만 지원하며 비밀번호는 앱에 저장되지 않습니다."
   },
   "location": {
     "foregroundService": {
