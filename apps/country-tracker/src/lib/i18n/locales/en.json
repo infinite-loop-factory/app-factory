@@ -162,6 +162,29 @@
   "settings": {
     "tab": "Settings",
     "title": "Settings",
+    "profile": {
+      "default-name": "Traveler",
+      "plan": "Plan",
+      "pro-member": "PRO MEMBER"
+    },
+    "preferences": {
+      "title": "Preferences",
+      "language": "Language",
+      "language-value-en": "English",
+      "language-value-ko": "Korean",
+      "home-country": "Home Country",
+      "home-country-value": "USA",
+      "currency": "Currency",
+      "currency-value": "USD ($)"
+    },
+    "support": {
+      "title": "Support",
+      "help-center": "Help Center"
+    },
+    "footer": {
+      "app-name": "Country Tracker",
+      "version-build": "Version %{version} (Build %{build})"
+    },
 
     "appearance": {
       "title": "Appearance",
