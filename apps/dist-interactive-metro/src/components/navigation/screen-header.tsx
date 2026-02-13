@@ -1,42 +1,49 @@
-"use client";
-
 import { useRouter } from "expo-router";
 import { ChevronLeft } from "lucide-react-native";
+import { useCallback } from "react";
 import { Pressable, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import i18n from "@/i18n";
 
 interface ScreenHeaderProps {
-  title: string
+  title: string;
   /** Optional: custom back handler. Defaults to router.back() */
-  onBack?: () => void
+  onBack?: () => void;
 }
 
 /**
- * 모바일 플로우용 공통 헤더. 첫 화면을 제외한 모든 씬에서 사용.
- * 뒤로가기 버튼 + 제목. 상단 safe area(상태바/노치)를 반영합니다.
+ * Shared header for mobile flows. Used on every screen except the root tab screens.
+ * Back button + title. Respects top safe area (status bar / notch).
  */
 export function ScreenHeader({ title, onBack }: ScreenHeaderProps) {
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const handleBack = onBack ?? (() => router.back());
+  const handleBack = useCallback(() => {
+    if (onBack) {
+      onBack();
+    } else {
+      router.back();
+    }
+  }, [onBack, router]);
 
   return (
     <View
-      className="border-b border-outline-200 bg-background-0"
+      className="border-outline-200 border-b bg-background-0"
       style={{ paddingTop: insets.top }}
     >
       <View className="min-h-[56px] flex-row items-center px-4">
         <Pressable
-          onPress={handleBack}
-          className="-ml-2 mr-2 min-h-[44px] min-w-[44px] items-center justify-center"
-          accessibilityLabel="뒤로"
+          accessibilityLabel={i18n.t("common.back")}
           accessibilityRole="button"
+          className="mr-2 -ml-2 min-h-[44px] min-w-[44px] items-center justify-center"
           hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+          onPress={handleBack}
         >
-          <ChevronLeft size={28} className="text-typography-900" />
+          <ChevronLeft className="text-typography-900" size={28} />
         </Pressable>
         <Text
-          className="flex-1 text-lg font-semibold text-typography-900"
+          accessibilityRole="header"
+          className="flex-1 font-semibold text-lg text-typography-900"
           numberOfLines={1}
         >
           {title}
