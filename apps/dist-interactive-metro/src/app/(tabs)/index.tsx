@@ -1,237 +1,234 @@
-import { cn } from "@infinite-loop-factory/common";
 import { useRouter } from "expo-router";
-import { memo, useCallback, useState } from "react";
-import { Pressable, ScrollView, Text } from "react-native";
-import { RouteSceneLayout } from "@/components/home/route-scene-layout";
-import { StationBlock } from "@/components/home/station-block";
-import { StationListItem } from "@/components/home/station-list-item";
-import { StationSelectPanel } from "@/components/home/station-select-panel";
+import { Circle, MapPin, Navigation } from "lucide-react-native";
+import { useCallback } from "react";
+import { Pressable, ScrollView, Text, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { ElevatedCard } from "@/components/ui/elevated-card";
+import { GradientBackground } from "@/components/ui/gradient-background";
+import { LineBadge } from "@/components/ui/line-badge";
 import { useRouteSearch } from "@/context/route-search-context";
 import i18n from "@/i18n";
 
-type SelectingMode = null | "departure" | "arrival" | "via";
-
-// TODO: Replace with real data source
-const SAMPLE_STATIONS = [
-  { id: "station-101", name: "서울역", lines: "1호선, 4호선" },
-  { id: "station-202", name: "강남역", lines: "2호선, 신분당선" },
-] as const;
-
-const defaultContentContainerStyle = {
-  paddingHorizontal: 24,
-  paddingTop: 24,
-  paddingBottom: 32,
-} as const;
-
 export default function RouteGuideTab() {
   const router = useRouter();
-  const {
-    departure,
-    arrival,
-    viaStations,
-    setDeparture,
-    setArrival,
-    addViaStation,
-    setViaStations,
-    canSearch,
-    canAddVia,
-    maxViaStations,
-  } = useRouteSearch();
+  const insets = useSafeAreaInsets();
+  const { startStation, viaStation, endStation, canSearch } = useRouteSearch();
 
-  const [selectingMode, setSelectingMode] = useState<SelectingMode>(null);
-
-  const showViaField = !!departure || !!arrival;
-
-  const handleDeparturePress = useCallback(() => {
-    setSelectingMode("departure");
-  }, []);
-
-  const handleArrivalPress = useCallback(() => {
-    setSelectingMode("arrival");
-  }, []);
-
-  const handleViaPress = useCallback(() => {
-    setSelectingMode("via");
-  }, []);
-
-  const handleSelectDeparture = useCallback(
-    (id: string, name: string) => {
-      setDeparture({ id, name });
-      setSelectingMode(null);
+  const handleStationSelect = useCallback(
+    (type: "start" | "via" | "end") => {
+      router.push({
+        pathname: "/station-select" as const,
+        params: { type },
+      } as never);
     },
-    [setDeparture],
+    [router],
   );
 
-  const handleSelectArrival = useCallback(
-    (id: string, name: string) => {
-      if (departure?.id === id) return;
-      setArrival({ id, name });
-      setSelectingMode(null);
-    },
-    [departure?.id, setArrival],
-  );
-
-  const handleAddVia = useCallback(
-    (id: string, name: string) => {
-      addViaStation({ id, name });
-      setSelectingMode(null);
-    },
-    [addViaStation],
-  );
-
-  const handleBackFromSelect = useCallback(() => {
-    setSelectingMode(null);
-  }, []);
-
-  const handleSearchPress = useCallback(() => {
-    if (!canSearch) return;
-    router.push("/route-result");
-  }, [canSearch, router]);
-
-  const handleClearDeparture = useCallback(
-    () => setDeparture(null),
-    [setDeparture],
-  );
-  const handleClearArrival = useCallback(() => setArrival(null), [setArrival]);
-  const handleClearVia = useCallback(
-    () => setViaStations([]),
-    [setViaStations],
-  );
-
-  const stationBlock = (
-    <StationBlock
-      arrival={arrival}
-      canAddVia={canAddVia}
-      departure={departure}
-      hideLabels
-      maxViaStations={maxViaStations}
-      onArrivalPress={handleArrivalPress}
-      onClearArrival={handleClearArrival}
-      onClearDeparture={handleClearDeparture}
-      onClearVia={handleClearVia}
-      onDeparturePress={handleDeparturePress}
-      onViaPress={handleViaPress}
-      selectingMode={selectingMode}
-      showViaField={showViaField}
-      viaStations={viaStations}
-    />
-  );
-
-  const renderContent = () => {
-    if (selectingMode === "departure") {
-      return (
-        <StationSelectPanel onBack={handleBackFromSelect} variant="departure">
-          {SAMPLE_STATIONS.map((s) => (
-            <StationListItem
-              accentBorder="border-secondary-200"
-              key={s.id}
-              lines={s.lines}
-              name={s.name}
-              onPress={() => handleSelectDeparture(s.id, s.name)}
-            />
-          ))}
-        </StationSelectPanel>
-      );
-    }
-
-    if (selectingMode === "arrival") {
-      return (
-        <StationSelectPanel onBack={handleBackFromSelect} variant="arrival">
-          {SAMPLE_STATIONS.map((s) => {
-            const disabled = departure?.id === s.id;
-            return (
-              <StationListItem
-                accentBorder="border-primary-200"
-                disabled={disabled}
-                key={s.id}
-                lines={s.lines}
-                name={s.name}
-                onPress={() => !disabled && handleSelectArrival(s.id, s.name)}
-              />
-            );
-          })}
-        </StationSelectPanel>
-      );
-    }
-
-    if (selectingMode === "via") {
-      return (
-        <StationSelectPanel
-          description={i18n.t("via.description")}
-          onBack={handleBackFromSelect}
-          variant="via"
-        >
-          {SAMPLE_STATIONS.map((s) => (
-            <StationListItem
-              key={s.id}
-              lines={s.lines}
-              name={s.name}
-              onPress={() => handleAddVia(s.id, s.name)}
-            />
-          ))}
-        </StationSelectPanel>
-      );
-    }
-
-    return (
-      <ScrollView
-        className="min-h-0 flex-1"
-        contentContainerStyle={defaultContentContainerStyle}
-        keyboardShouldPersistTaps="handled"
-        showsVerticalScrollIndicator={false}
-      >
-        <Text
-          className="mb-3 font-medium text-outline-600 text-sm"
-          ellipsizeMode="tail"
-          numberOfLines={1}
-        >
-          {i18n.t("homeScreen.searchAndExtras")}
-        </Text>
-        <SearchButton disabled={!canSearch} onPress={handleSearchPress} />
-      </ScrollView>
-    );
-  };
+  const handleSearch = useCallback(() => {
+    if (!(canSearch && startStation && endStation)) return;
+    router.push({
+      pathname: "/route-result",
+      params: {
+        start: startStation.id,
+        end: endStation.id,
+        ...(viaStation && { via: viaStation.id }),
+      },
+    });
+  }, [canSearch, startStation, endStation, viaStation, router]);
 
   return (
-    <RouteSceneLayout
-      stationBlock={stationBlock}
-      subtitle={i18n.t("homeScreen.subtitle")}
-      title={i18n.t("homeScreen.title")}
-    >
-      {renderContent()}
-    </RouteSceneLayout>
+    <GradientBackground>
+      <ScrollView
+        className="flex-1"
+        contentContainerStyle={{
+          paddingTop: insets.top + 16,
+          paddingBottom: 32,
+        }}
+      >
+        <View className="px-6">
+          {/* Header */}
+          <View className="mb-8">
+            <Text className="mb-2 font-medium text-3xl text-gray-900">
+              {i18n.t("homeScreen.title")}
+            </Text>
+            <Text className="text-base text-gray-600">
+              {i18n.t("homeScreen.subtitle")}
+            </Text>
+          </View>
+
+          {/* Route input card */}
+          <ElevatedCard className="mb-6">
+            <View className="gap-0">
+              {/* Departure */}
+              <Pressable
+                className={`relative flex-row items-center rounded-2xl bg-gray-50 py-4 pr-6 pl-12 active:bg-blue-50 ${
+                  startStation
+                    ? "border-2 border-[rgb(26,163,255)]"
+                    : "border-2 border-transparent"
+                }`}
+                onPress={() => handleStationSelect("start")}
+              >
+                <View className="absolute top-1/2 left-4 z-10 -translate-y-1/2">
+                  <View
+                    className="h-3 w-3 rounded-full"
+                    style={{ backgroundColor: "rgb(26, 163, 255)" }}
+                  />
+                </View>
+                {startStation ? (
+                  <View>
+                    <Text className="mb-0.5 text-gray-500 text-xs">
+                      {i18n.t("stationSelect.departureShort")}
+                    </Text>
+                    <View className="flex-row items-center gap-2">
+                      <Text className="text-gray-900 text-lg">
+                        {startStation.name}
+                      </Text>
+                      <LineBadge
+                        color={startStation.lineColor}
+                        line={startStation.line}
+                      />
+                    </View>
+                  </View>
+                ) : (
+                  <View>
+                    <Text className="mb-0.5 text-gray-400 text-xs">
+                      {i18n.t("stationSelect.departureShort")}
+                    </Text>
+                    <Text className="text-base text-gray-400">
+                      {i18n.t("homeScreen.departurePlaceholder")}
+                    </Text>
+                  </View>
+                )}
+              </Pressable>
+
+              {/* Connector line */}
+              <View className="flex-row items-center py-2 pl-4">
+                <View className="ml-[5px] h-8 w-0.5 bg-gray-300" />
+              </View>
+
+              {/* Via station */}
+              <Pressable
+                className={`relative flex-row items-center rounded-2xl bg-gray-50 py-4 pr-6 pl-12 active:bg-gray-100 ${
+                  viaStation
+                    ? "border-2 border-gray-400"
+                    : "border-2 border-transparent"
+                }`}
+                onPress={() => handleStationSelect("via")}
+              >
+                <View className="absolute top-1/2 left-4 z-10 -translate-y-1/2">
+                  <Circle color="#9CA3AF" size={12} />
+                </View>
+                {viaStation ? (
+                  <View>
+                    <Text className="mb-0.5 text-gray-500 text-xs">
+                      {i18n.t("stationSelect.viaShort")}
+                    </Text>
+                    <View className="flex-row items-center gap-2">
+                      <Text className="text-gray-900 text-lg">
+                        {viaStation.name}
+                      </Text>
+                      <LineBadge
+                        color={viaStation.lineColor}
+                        line={viaStation.line}
+                      />
+                    </View>
+                  </View>
+                ) : (
+                  <View>
+                    <Text className="mb-0.5 text-gray-400 text-xs">
+                      {i18n.t("stationSelect.viaShort")} (
+                      {i18n.t("via.optional")})
+                    </Text>
+                    <Text className="text-base text-gray-400">
+                      {i18n.t("homeScreen.viaPlaceholder")}
+                    </Text>
+                  </View>
+                )}
+              </Pressable>
+
+              {/* Connector line */}
+              <View className="flex-row items-center py-2 pl-4">
+                <View className="ml-[5px] h-8 w-0.5 bg-gray-300" />
+              </View>
+
+              {/* Arrival */}
+              <Pressable
+                className={`relative flex-row items-center rounded-2xl bg-gray-50 py-4 pr-6 pl-12 active:bg-orange-50 ${
+                  endStation
+                    ? "border-2 border-[rgb(255,163,26)]"
+                    : "border-2 border-transparent"
+                }`}
+                onPress={() => handleStationSelect("end")}
+              >
+                <View className="absolute top-1/2 left-4 z-10 -translate-y-1/2">
+                  <MapPin
+                    color="rgb(255, 163, 26)"
+                    fill="rgb(255, 163, 26)"
+                    size={16}
+                  />
+                </View>
+                {endStation ? (
+                  <View>
+                    <Text className="mb-0.5 text-gray-500 text-xs">
+                      {i18n.t("stationSelect.arrivalShort")}
+                    </Text>
+                    <View className="flex-row items-center gap-2">
+                      <Text className="text-gray-900 text-lg">
+                        {endStation.name}
+                      </Text>
+                      <LineBadge
+                        color={endStation.lineColor}
+                        line={endStation.line}
+                      />
+                    </View>
+                  </View>
+                ) : (
+                  <View>
+                    <Text className="mb-0.5 text-gray-400 text-xs">
+                      {i18n.t("stationSelect.arrivalShort")}
+                    </Text>
+                    <Text className="text-base text-gray-400">
+                      {i18n.t("homeScreen.arrivalPlaceholder")}
+                    </Text>
+                  </View>
+                )}
+              </Pressable>
+            </View>
+          </ElevatedCard>
+
+          {/* Search button */}
+          <Pressable
+            className={`w-full flex-row items-center justify-center gap-2 rounded-2xl py-4 ${
+              canSearch ? "bg-blue-600 active:bg-blue-700" : "bg-gray-300"
+            }`}
+            disabled={!canSearch}
+            onPress={handleSearch}
+            style={{
+              shadowColor: canSearch ? "#2563EB" : "#000",
+              shadowOffset: { width: 0, height: 4 },
+              shadowOpacity: canSearch ? 0.3 : 0.05,
+              shadowRadius: 8,
+              elevation: canSearch ? 6 : 2,
+            }}
+          >
+            <Navigation color={canSearch ? "#FFFFFF" : "#6B7280"} size={20} />
+            <Text
+              className={`font-medium text-lg ${
+                canSearch ? "text-white" : "text-gray-500"
+              }`}
+            >
+              {i18n.t("homeScreen.search")}
+            </Text>
+          </Pressable>
+
+          {/* Helper text */}
+          {!canSearch && (
+            <Text className="mt-4 text-center text-gray-500 text-sm">
+              {i18n.t("homeScreen.searchHint")}
+            </Text>
+          )}
+        </View>
+      </ScrollView>
+    </GradientBackground>
   );
 }
-
-const SearchButton = memo(function SearchButton({
-  disabled,
-  onPress,
-}: {
-  disabled: boolean;
-  onPress: () => void;
-}) {
-  return (
-    <Pressable
-      accessibilityLabel={i18n.t("homeScreen.search")}
-      accessibilityRole="button"
-      accessibilityState={{ disabled }}
-      className={cn(
-        "items-center justify-center rounded-xl py-4",
-        disabled ? "bg-outline-100" : "bg-primary-500",
-      )}
-      disabled={disabled}
-      onPress={onPress}
-    >
-      <Text
-        className={cn(
-          "font-semibold text-base",
-          disabled ? "text-outline-400" : "text-white",
-        )}
-        ellipsizeMode="tail"
-        numberOfLines={1}
-      >
-        {i18n.t("homeScreen.search")}
-      </Text>
-    </Pressable>
-  );
-});

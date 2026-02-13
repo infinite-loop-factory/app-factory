@@ -8,54 +8,100 @@
     "settings": "Settings"
   },
   "homeScreen": {
-    "title": "Find Route",
-    "subtitle": "Select departure and arrival stations",
+    "title": "Route Guide",
+    "subtitle": "Select departure and arrival stations to find the best route",
     "departure": "Departure",
-    "departurePlaceholder": "Select departure",
+    "departurePlaceholder": "Select departure station",
     "arrival": "Arrival",
-    "arrivalPlaceholder": "Select arrival",
+    "arrivalPlaceholder": "Select arrival station",
+    "viaPlaceholder": "Select via station",
     "addVia": "Add via",
-    "search": "Find route",
+    "search": "Search route",
+    "searchHint": "Select departure and arrival stations to search for routes",
     "searchAndExtras": "Search & more"
-  },
-  "settings": {
-    "notificationSettings": "Notification settings",
-    "defaultHome": "Default home",
-    "defaultHomeDescription": "Choose which tab to show when you open the app.",
-    "navigationHint": "Tapping an item navigates to a separate screen. Use the back button to return."
   },
   "stationSelect": {
     "departureTitle": "Select departure",
     "arrivalTitle": "Select arrival",
+    "viaTitle": "Select via station",
     "departureShort": "From",
     "arrivalShort": "To",
-    "viaTitle": "Add via stations",
     "viaShort": "Via",
-    "back": "Back"
+    "back": "Back",
+    "searchPlaceholder": "Enter station name",
+    "allLines": "All",
+    "transfer": "Transfer",
+    "searchResults": "Results ({{count}})",
+    "recentStations": "Recent stations",
+    "noResults": "No results found",
+    "searchHint": "Search for a station by name"
   },
   "via": {
+    "optional": "optional",
     "count": "{{count}} via station(s)",
     "countMax": "{{count}} via station(s) (max)",
     "max": "Max {{max}}",
-    "clearAll": "Clear via",
-    "description": "Add via stations (search & reordering in Phase 2)"
+    "clearAll": "Clear via"
   },
   "routeResult": {
     "title": "Route Result",
-    "placeholder": "Route search algorithm and detailed results will be implemented in Phase 3-4."
+    "loading": "Loading route information...",
+    "goBack": "Back to route guide",
+    "time": "Duration",
+    "minutes": "min",
+    "stations": "Stations",
+    "stationUnit": "",
+    "transfers": "Transfers",
+    "transferUnit": "",
+    "addFavorite": "Add to favorites",
+    "removeFavorite": "Remove favorite",
+    "detailRoute": "Detailed Route",
+    "transferTo": "transfer",
+    "direction": "direction",
+    "newSearch": "New route search"
+  },
+  "favorites": {
+    "description": "Quickly search your frequent routes",
+    "emptyTitle": "No favorites yet",
+    "emptyDescription": "Add frequently used routes to favorites for quick access",
+    "searchRoutes": "Search routes",
+    "searchAgain": "Search again",
+    "lastSearched": "Last searched",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "daysAgo": "{{count}} days ago"
+  },
+  "notifications": {
+    "description": "Subway operation info and congestion alerts",
+    "emptyTitle": "No notifications",
+    "emptyDescription": "Delay and congestion alerts will appear here",
+    "comingSoonTitle": "Notifications coming soon",
+    "comingSoonDescription": "Real-time transit info, favorite route delay alerts and more will be available in future updates."
+  },
+  "settings": {
+    "description": "Customize and personalize your app",
+    "notificationSettings": "Notification settings",
+    "notificationComingSoon": "Coming soon",
+    "comingSoon": "Available in future updates",
+    "defaultHome": "Default home screen",
+    "defaultHomeDescription": "Choose which screen appears when you open the app",
+    "appInfo": "App info",
+    "version": "Version",
+    "madeBy": "Made by",
+    "dataManagement": "Data management",
+    "clearRecentSearch": "Clear recent search history",
+    "clearAllFavorites": "Delete all favorites",
+    "confirmClearRecent": "Clear recent search history?",
+    "confirmClearFavorites": "Delete all favorites?",
+    "cancel": "Cancel",
+    "confirm": "Delete"
   },
   "notificationSettings": {
-    "placeholder": "This is the notification settings screen. (Not yet implemented) Use the back button to return."
+    "placeholder": "Notification settings screen. (Not yet implemented)"
   },
   "notFound": {
     "title": "Screen not found",
     "goHome": "Go to home screen"
-  },
-  "favorites": {
-    "placeholder": "Your favorite routes and stations will appear here. (Not yet implemented)"
-  },
-  "notifications": {
-    "placeholder": "Notifications and settings will appear here. (Not yet implemented)"
   },
   "common": {
     "back": "Back"

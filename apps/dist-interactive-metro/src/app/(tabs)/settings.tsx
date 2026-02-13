@@ -1,97 +1,203 @@
-import type { DefaultHomeTabId } from "@/lib/default-home";
-
-import { useRouter } from "expo-router";
-import { Check, ChevronRight } from "lucide-react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import {
+  Bell,
+  ChevronRight,
+  Home,
+  Info,
+  Settings as SettingsIcon,
+} from "lucide-react-native";
 import { useCallback, useEffect, useState } from "react";
-import { Pressable, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { ThemedText } from "@/components/themed-text";
-import { ThemedView } from "@/components/themed-view";
+import { Alert, Pressable, ScrollView, Text, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { clearAllFavorites } from "@/data/favorites";
+import { clearRecentStations } from "@/data/recent-stations";
 import i18n from "@/i18n";
-import { getDefaultHomeTab, setDefaultHomeTab } from "@/lib/default-home";
 
-const DEFAULT_HOME_OPTIONS: DefaultHomeTabId[] = [
-  "routeGuide",
-  "notifications",
-  "favorites",
-  "settings",
-];
+const TAB_OPTIONS = [
+  { id: "route", label: () => i18n.t("tabs.routeGuide") },
+  { id: "favorites", label: () => i18n.t("tabs.favorites") },
+] as const;
 
-const TAB_LABEL_KEYS: Record<DefaultHomeTabId, string> = {
-  routeGuide: "tabs.routeGuide",
-  notifications: "tabs.notifications",
-  favorites: "tabs.favorites",
-  settings: "tabs.settings",
-};
-
-export default function SettingsTabScreen() {
-  const router = useRouter();
-  const [defaultHome, setDefaultHomeState] = useState<DefaultHomeTabId | null>(
-    null,
-  );
+export default function SettingsTab() {
+  const insets = useSafeAreaInsets();
+  const [defaultTab, setDefaultTab] = useState("route");
 
   useEffect(() => {
-    getDefaultHomeTab()
-      .then(setDefaultHomeState)
+    AsyncStorage.getItem("defaultTab")
+      .then((val) => {
+        if (val) setDefaultTab(val);
+      })
       .catch(() => {
-        // ignore read errors — fallback to default
+        /* ignore */
       });
   }, []);
 
-  const onSelectDefaultHome = useCallback((tabId: DefaultHomeTabId) => {
-    setDefaultHomeTab(tabId)
-      .then(() => setDefaultHomeState(tabId))
-      .catch(() => {
-        // ignore write errors
-      });
+  const handleDefaultTabChange = useCallback(async (tab: string) => {
+    setDefaultTab(tab);
+    try {
+      await AsyncStorage.setItem("defaultTab", tab);
+    } catch {
+      // ignore
+    }
+  }, []);
+
+  const handleClearRecent = useCallback(() => {
+    Alert.alert(i18n.t("settings.confirmClearRecent"), "", [
+      { text: i18n.t("settings.cancel"), style: "cancel" },
+      {
+        text: i18n.t("settings.confirm"),
+        style: "destructive",
+        onPress: () => clearRecentStations(),
+      },
+    ]);
+  }, []);
+
+  const handleClearFavorites = useCallback(() => {
+    Alert.alert(i18n.t("settings.confirmClearFavorites"), "", [
+      { text: i18n.t("settings.cancel"), style: "cancel" },
+      {
+        text: i18n.t("settings.confirm"),
+        style: "destructive",
+        onPress: () => clearAllFavorites(),
+      },
+    ]);
   }, []);
 
   return (
-    <SafeAreaView className="flex-1 bg-background-0" edges={["top"]}>
-      <ThemedView className="flex-1">
-        <View className="flex-1 px-4 pt-6">
-          <ThemedText className="mb-6" type="title">
-            {i18n.t("tabs.settings")}
-          </ThemedText>
+    <View className="flex-1 bg-gray-50" style={{ paddingTop: insets.top }}>
+      <ScrollView
+        className="flex-1"
+        contentContainerStyle={{ paddingHorizontal: 16, paddingVertical: 24 }}
+      >
+        {/* Header */}
+        <View className="mb-6">
+          <View className="mb-2 flex-row items-center gap-3">
+            <SettingsIcon color="#374151" size={32} />
+            <Text className="font-medium text-2xl text-gray-900">
+              {i18n.t("tabs.settings")}
+            </Text>
+          </View>
+          <Text className="text-base text-gray-600">
+            {i18n.t("settings.description")}
+          </Text>
+        </View>
 
-          <ThemedText className="mb-2 font-medium text-sm text-typography-700">
-            {i18n.t("settings.defaultHome")}
-          </ThemedText>
-          <ThemedText className="mb-3 text-sm text-typography-500">
-            {i18n.t("settings.defaultHomeDescription")}
-          </ThemedText>
-          <View className="mb-6 overflow-hidden rounded-lg border border-outline-200 bg-background-0">
-            {DEFAULT_HOME_OPTIONS.map((tabId, index) => (
+        <View className="gap-4">
+          {/* Default home tab */}
+          <SettingsCard
+            description={i18n.t("settings.defaultHomeDescription")}
+            icon={<Home color="#6B7280" size={20} />}
+            title={i18n.t("settings.defaultHome")}
+          >
+            {TAB_OPTIONS.map((opt) => (
               <Pressable
                 accessibilityRole="radio"
-                accessibilityState={{ checked: defaultHome === tabId }}
-                className={`flex-row items-center justify-between border-outline-100 py-4 pr-3 pl-4 ${
-                  index < DEFAULT_HOME_OPTIONS.length - 1 ? "border-b" : ""
-                }`}
-                key={tabId}
-                onPress={() => onSelectDefaultHome(tabId)}
+                accessibilityState={{ checked: defaultTab === opt.id }}
+                className="flex-row items-center justify-between border-gray-100 border-b px-4 py-3 active:bg-gray-50"
+                key={opt.id}
+                onPress={() => handleDefaultTabChange(opt.id)}
               >
-                <ThemedText>{i18n.t(TAB_LABEL_KEYS[tabId])}</ThemedText>
-                {defaultHome === tabId ? (
-                  <Check className="text-typography-700" size={20} />
-                ) : null}
+                <Text className="text-base text-gray-900">{opt.label()}</Text>
+                {defaultTab === opt.id && (
+                  <View className="h-2 w-2 rounded-full bg-blue-600" />
+                )}
               </Pressable>
             ))}
-          </View>
+          </SettingsCard>
 
-          <Pressable
-            accessibilityRole="button"
-            className="flex-row items-center justify-between rounded-lg border border-outline-200 bg-background-0 py-4 pr-3 pl-4"
-            onPress={() => router.push("/notification-settings")}
+          {/* Notification settings */}
+          <SettingsCard
+            description={i18n.t("settings.notificationComingSoon")}
+            icon={<Bell color="#6B7280" size={20} />}
+            title={i18n.t("settings.notificationSettings")}
           >
-            <ThemedText>{i18n.t("settings.notificationSettings")}</ThemedText>
-            <ChevronRight className="text-typography-500" size={20} />
-          </Pressable>
-          <ThemedText className="mt-4 text-sm text-typography-500">
-            {i18n.t("settings.navigationHint")}
-          </ThemedText>
+            <View className="items-center p-4">
+              <Text className="text-gray-400 text-sm">
+                {i18n.t("settings.comingSoon")}
+              </Text>
+            </View>
+          </SettingsCard>
+
+          {/* App info */}
+          <SettingsCard
+            icon={<Info color="#6B7280" size={20} />}
+            title={i18n.t("settings.appInfo")}
+          >
+            <View className="flex-row items-center justify-between border-gray-100 border-b px-4 py-3">
+              <Text className="text-base text-gray-600">
+                {i18n.t("settings.version")}
+              </Text>
+              <Text className="text-gray-500 text-sm">0.1.0</Text>
+            </View>
+            <View className="flex-row items-center justify-between px-4 py-3">
+              <Text className="text-base text-gray-600">
+                {i18n.t("settings.madeBy")}
+              </Text>
+              <Text className="text-gray-500 text-sm">
+                dist-interactive-metro
+              </Text>
+            </View>
+          </SettingsCard>
+
+          {/* Data management */}
+          <SettingsCard title={i18n.t("settings.dataManagement")}>
+            <Pressable
+              className="flex-row items-center justify-between border-gray-100 border-b px-4 py-3 active:bg-gray-50"
+              onPress={handleClearRecent}
+            >
+              <Text className="text-base text-gray-900">
+                {i18n.t("settings.clearRecentSearch")}
+              </Text>
+              <ChevronRight color="#9CA3AF" size={20} />
+            </Pressable>
+            <Pressable
+              className="flex-row items-center justify-between px-4 py-3 active:bg-red-50"
+              onPress={handleClearFavorites}
+            >
+              <Text className="text-base text-red-600">
+                {i18n.t("settings.clearAllFavorites")}
+              </Text>
+              <ChevronRight color="#EF4444" size={20} />
+            </Pressable>
+          </SettingsCard>
         </View>
-      </ThemedView>
-    </SafeAreaView>
+      </ScrollView>
+    </View>
+  );
+}
+
+function SettingsCard({
+  icon,
+  title,
+  description,
+  children,
+}: {
+  icon?: React.ReactNode;
+  title: string;
+  description?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <View
+      className="overflow-hidden rounded-2xl bg-white"
+      style={{
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.05,
+        shadowRadius: 3,
+        elevation: 2,
+      }}
+    >
+      <View className="border-gray-100 border-b p-4">
+        <View className="flex-row items-center gap-2">
+          {icon}
+          <Text className="font-medium text-gray-900 text-lg">{title}</Text>
+        </View>
+        {description && (
+          <Text className="mt-1 text-gray-500 text-sm">{description}</Text>
+        )}
+      </View>
+      {children}
+    </View>
   );
 }
