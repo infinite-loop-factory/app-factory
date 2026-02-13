@@ -21,7 +21,8 @@
   "settings": {
     "notificationSettings": "Notification settings",
     "defaultHome": "Default home",
-    "defaultHomeDescription": "Choose which tab to show when you open the app."
+    "defaultHomeDescription": "Choose which tab to show when you open the app.",
+    "navigationHint": "Tapping an item navigates to a separate screen. Use the back button to return."
   },
   "stationSelect": {
     "departureTitle": "Select departure",
@@ -30,6 +31,33 @@
     "arrivalShort": "To",
     "viaTitle": "Add via stations",
     "viaShort": "Via",
+    "back": "Back"
+  },
+  "via": {
+    "count": "{{count}} via station(s)",
+    "countMax": "{{count}} via station(s) (max)",
+    "max": "Max {{max}}",
+    "clearAll": "Clear via",
+    "description": "Add via stations (search & reordering in Phase 2)"
+  },
+  "routeResult": {
+    "title": "Route Result",
+    "placeholder": "Route search algorithm and detailed results will be implemented in Phase 3-4."
+  },
+  "notificationSettings": {
+    "placeholder": "This is the notification settings screen. (Not yet implemented) Use the back button to return."
+  },
+  "notFound": {
+    "title": "Screen not found",
+    "goHome": "Go to home screen"
+  },
+  "favorites": {
+    "placeholder": "Your favorite routes and stations will appear here. (Not yet implemented)"
+  },
+  "notifications": {
+    "placeholder": "Notifications and settings will appear here. (Not yet implemented)"
+  },
+  "common": {
     "back": "Back"
   }
 }
