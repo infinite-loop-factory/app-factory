@@ -1,6 +1,5 @@
-"use client";
-
 import type { ReactNode } from "react";
+
 import { Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -32,18 +31,18 @@ export function RouteSceneLayout({
           <View className="shrink-0 px-6 pt-4 pb-2">
             {title != null && (
               <Text
-                className="text-xl font-semibold text-typography-900"
-                numberOfLines={1}
+                className="font-semibold text-typography-900 text-xl"
                 ellipsizeMode="tail"
+                numberOfLines={1}
               >
                 {title}
               </Text>
             )}
             {subtitle != null && (
               <Text
-                className="mt-1 text-sm text-outline-500"
-                numberOfLines={2}
+                className="mt-1 text-outline-500 text-sm"
                 ellipsizeMode="tail"
+                numberOfLines={2}
               >
                 {subtitle}
               </Text>

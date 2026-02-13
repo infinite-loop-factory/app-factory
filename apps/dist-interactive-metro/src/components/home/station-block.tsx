@@ -1,34 +1,33 @@
-"use client";
+import type { Station } from "@/types/station";
 
 import { View } from "react-native";
 import { AddViaField } from "@/components/home/add-via-field";
 import { StationField } from "@/components/home/station-field";
-import type { Station } from "@/types/station";
 import i18n from "@/i18n";
 
 export type StationSelectingMode = null | "departure" | "arrival" | "via";
 
 export interface StationBlockProps {
-  departure: Station | null
-  arrival: Station | null
-  viaStations: Station[]
-  showViaField: boolean
-  canAddVia: boolean
-  maxViaStations: number
-  onDeparturePress: () => void
-  onArrivalPress: () => void
-  onViaPress: () => void
-  onClearDeparture?: () => void
-  onClearArrival?: () => void
-  onClearVia?: () => void
+  departure: Station | null;
+  arrival: Station | null;
+  viaStations: Station[];
+  showViaField: boolean;
+  canAddVia: boolean;
+  maxViaStations: number;
+  onDeparturePress: () => void;
+  onArrivalPress: () => void;
+  onViaPress: () => void;
+  onClearDeparture?: () => void;
+  onClearArrival?: () => void;
+  onClearVia?: () => void;
   /** Optional: compact display-only for departure */
-  departureOnly?: boolean
+  departureOnly?: boolean;
   /** Optional: compact display-only for arrival */
-  arrivalOnly?: boolean
+  arrivalOnly?: boolean;
   /** Which field is currently being selected (highlights that cell) */
-  selectingMode?: StationSelectingMode
+  selectingMode?: StationSelectingMode;
   /** Hide departure/arrival labels; position (left→right) implies meaning */
-  hideLabels?: boolean
+  hideLabels?: boolean;
 }
 
 /**
@@ -60,10 +59,10 @@ export function StationBlock({
         <View className="min-w-0 flex-1">
           <StationField
             label={i18n.t("homeScreen.departure")}
+            onClear={onClearDeparture}
+            onPress={onDeparturePress}
             placeholder={i18n.t("homeScreen.departurePlaceholder")}
             value={departure}
-            onPress={onDeparturePress}
-            onClear={onClearDeparture}
           />
         </View>
       </View>
@@ -76,10 +75,10 @@ export function StationBlock({
         <View className="min-w-0 flex-1">
           <StationField
             label={i18n.t("homeScreen.arrival")}
+            onClear={onClearArrival}
+            onPress={onArrivalPress}
             placeholder={i18n.t("homeScreen.arrivalPlaceholder")}
             value={arrival}
-            onPress={onArrivalPress}
-            onClear={onClearArrival}
           />
         </View>
       </View>
@@ -90,38 +89,38 @@ export function StationBlock({
     <View className={rowClass}>
       <View className="min-w-0 flex-1">
         <StationField
-          label={i18n.t("homeScreen.departure")}
-          placeholder={i18n.t("homeScreen.departurePlaceholder")}
-          value={departure}
-          onPress={onDeparturePress}
-          onClear={onClearDeparture}
-          hideLabel={hideLabels}
           active={selectingMode === "departure"}
           activeVariant="departure"
+          hideLabel={hideLabels}
+          label={i18n.t("homeScreen.departure")}
+          onClear={onClearDeparture}
+          onPress={onDeparturePress}
+          placeholder={i18n.t("homeScreen.departurePlaceholder")}
+          value={departure}
         />
       </View>
       {showViaField && (
         <View className="min-w-0 flex-1">
           <AddViaField
-            label={i18n.t("homeScreen.addVia")}
-            viaCount={viaStations.length}
-            onPress={onViaPress}
-            onClearVia={onClearVia}
             disabled={!canAddVia}
+            label={i18n.t("homeScreen.addVia")}
             maxReached={viaStations.length >= maxViaStations}
+            onClearVia={onClearVia}
+            onPress={onViaPress}
+            viaCount={viaStations.length}
           />
         </View>
       )}
       <View className="min-w-0 flex-1">
         <StationField
-          label={i18n.t("homeScreen.arrival")}
-          placeholder={i18n.t("homeScreen.arrivalPlaceholder")}
-          value={arrival}
-          onPress={onArrivalPress}
-          onClear={onClearArrival}
-          hideLabel={hideLabels}
           active={selectingMode === "arrival"}
           activeVariant="arrival"
+          hideLabel={hideLabels}
+          label={i18n.t("homeScreen.arrival")}
+          onClear={onClearArrival}
+          onPress={onArrivalPress}
+          placeholder={i18n.t("homeScreen.arrivalPlaceholder")}
+          value={arrival}
         />
       </View>
     </View>
