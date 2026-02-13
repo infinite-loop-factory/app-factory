@@ -1,31 +1,30 @@
-"use client";
+import type { Station } from "@/types/station";
 
 import {
   createContext,
+  type ReactNode,
   useCallback,
   useContext,
   useMemo,
   useState,
-  type ReactNode,
 } from "react";
-import type { Station } from "@/types/station";
 
 interface RouteSearchState {
-  departure: Station | null
-  arrival: Station | null
-  viaStations: Station[]
+  departure: Station | null;
+  arrival: Station | null;
+  viaStations: Station[];
 }
 
 interface RouteSearchContextValue extends RouteSearchState {
-  setDeparture: (station: Station | null) => void
-  setArrival: (station: Station | null) => void
-  setViaStations: (stations: Station[]) => void
-  addViaStation: (station: Station) => void
-  removeViaStation: (stationId: string) => void
-  clearAll: () => void
-  canSearch: boolean
-  canAddVia: boolean
-  maxViaStations: number
+  setDeparture: (station: Station | null) => void;
+  setArrival: (station: Station | null) => void;
+  setViaStations: (stations: Station[]) => void;
+  addViaStation: (station: Station) => void;
+  removeViaStation: (stationId: string) => void;
+  clearAll: () => void;
+  canSearch: boolean;
+  canAddVia: boolean;
+  maxViaStations: number;
 }
 
 const initialState: RouteSearchState = {
@@ -33,6 +32,8 @@ const initialState: RouteSearchState = {
   arrival: null,
   viaStations: [],
 };
+
+const MAX_VIA_STATIONS = 3;
 
 const RouteSearchContext = createContext<RouteSearchContextValue | null>(null);
 
@@ -45,12 +46,12 @@ export function RouteSearchProvider({ children }: { children: ReactNode }) {
     initialState.viaStations,
   );
 
-  const MAX_VIA_STATIONS = 3;
-
   const addViaStation = useCallback((station: Station) => {
-    setViaStations((prev) =>
-      prev.length >= MAX_VIA_STATIONS ? prev : [...prev, station],
-    );
+    setViaStations((prev) => {
+      if (prev.length >= MAX_VIA_STATIONS) return prev;
+      if (prev.some((s) => s.id === station.id)) return prev;
+      return [...prev, station];
+    });
   }, []);
 
   const removeViaStation = useCallback((stationId: string) => {
@@ -66,7 +67,8 @@ export function RouteSearchProvider({ children }: { children: ReactNode }) {
   const canSearch = departure !== null && arrival !== null;
 
   const canAddVia =
-    (departure !== null || arrival !== null) && viaStations.length < MAX_VIA_STATIONS;
+    (departure !== null || arrival !== null) &&
+    viaStations.length < MAX_VIA_STATIONS;
 
   const value = useMemo<RouteSearchContextValue>(
     () => ({

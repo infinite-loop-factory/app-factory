@@ -18,6 +18,8 @@ import "@/i18n";
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
+const hiddenHeaderOptions = { headerShown: false } as const;
+
 export default function RootLayout() {
   const { colorScheme } = useColorScheme();
   const [loaded] = useFonts({
@@ -34,22 +36,17 @@ export default function RootLayout() {
     return null;
   }
 
-  const tabScreenOptions = { headerShown: false };
-
   return (
-    <GluestackUIProvider mode="light">
+    <GluestackUIProvider mode={colorScheme ?? "light"}>
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
         <RouteSearchProvider>
           <SyncStatusProvider>
             <Stack>
-              <Stack.Screen name="(tabs)" options={tabScreenOptions} />
-              <Stack.Screen
-                name="route-result"
-                options={{ title: "", headerShown: false }}
-              />
+              <Stack.Screen name="(tabs)" options={hiddenHeaderOptions} />
+              <Stack.Screen name="route-result" options={hiddenHeaderOptions} />
               <Stack.Screen
                 name="notification-settings"
-                options={{ title: "", headerShown: false }}
+                options={hiddenHeaderOptions}
               />
               <Stack.Screen name="+not-found" />
             </Stack>

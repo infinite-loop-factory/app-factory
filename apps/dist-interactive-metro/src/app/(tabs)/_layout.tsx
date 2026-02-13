@@ -3,11 +3,8 @@ import { useColorScheme } from "nativewind";
 import { useEffect, useRef } from "react";
 import { TabBarIcon } from "@/components/navigation/tab-bar-icon";
 import { COLORS } from "@/constants/colors";
-import {
-  DEFAULT_HOME_TAB_ROUTES,
-  getDefaultHomeTab,
-} from "@/lib/default-home";
 import i18n from "@/i18n";
+import { DEFAULT_HOME_TAB_ROUTES, getDefaultHomeTab } from "@/lib/default-home";
 
 const isDev = typeof __DEV__ !== "undefined" && __DEV__;
 
@@ -19,7 +16,7 @@ export default function TabLayout() {
 
   useEffect(() => {
     if (initialRedirectDone.current) return;
-    const tabSegment = segments[1];
+    const tabSegment = (segments as string[])[1];
     if (tabSegment !== "index") return;
     getDefaultHomeTab().then((defaultId) => {
       if (defaultId === "routeGuide") return;
