@@ -10,91 +10,58 @@ import {
 } from "react";
 
 interface RouteSearchState {
-  departure: Station | null;
-  arrival: Station | null;
-  viaStations: Station[];
+  startStation: Station | null;
+  viaStation: Station | null;
+  endStation: Station | null;
 }
 
 interface RouteSearchContextValue extends RouteSearchState {
-  setDeparture: (station: Station | null) => void;
-  setArrival: (station: Station | null) => void;
-  setViaStations: (stations: Station[]) => void;
-  addViaStation: (station: Station) => void;
-  removeViaStation: (stationId: string) => void;
+  setStartStation: (station: Station | null) => void;
+  setViaStation: (station: Station | null) => void;
+  setEndStation: (station: Station | null) => void;
   clearAll: () => void;
   canSearch: boolean;
-  canAddVia: boolean;
-  maxViaStations: number;
 }
 
 const initialState: RouteSearchState = {
-  departure: null,
-  arrival: null,
-  viaStations: [],
+  startStation: null,
+  viaStation: null,
+  endStation: null,
 };
-
-const MAX_VIA_STATIONS = 3;
 
 const RouteSearchContext = createContext<RouteSearchContextValue | null>(null);
 
 export function RouteSearchProvider({ children }: { children: ReactNode }) {
-  const [departure, setDeparture] = useState<Station | null>(
-    initialState.departure,
+  const [startStation, setStartStation] = useState<Station | null>(
+    initialState.startStation,
   );
-  const [arrival, setArrival] = useState<Station | null>(initialState.arrival);
-  const [viaStations, setViaStations] = useState<Station[]>(
-    initialState.viaStations,
+  const [viaStation, setViaStation] = useState<Station | null>(
+    initialState.viaStation,
   );
-
-  const addViaStation = useCallback((station: Station) => {
-    setViaStations((prev) => {
-      if (prev.length >= MAX_VIA_STATIONS) return prev;
-      if (prev.some((s) => s.id === station.id)) return prev;
-      return [...prev, station];
-    });
-  }, []);
-
-  const removeViaStation = useCallback((stationId: string) => {
-    setViaStations((prev) => prev.filter((s) => s.id !== stationId));
-  }, []);
+  const [endStation, setEndStation] = useState<Station | null>(
+    initialState.endStation,
+  );
 
   const clearAll = useCallback(() => {
-    setDeparture(null);
-    setArrival(null);
-    setViaStations([]);
+    setStartStation(null);
+    setViaStation(null);
+    setEndStation(null);
   }, []);
 
-  const canSearch = departure !== null && arrival !== null;
-
-  const canAddVia =
-    (departure !== null || arrival !== null) &&
-    viaStations.length < MAX_VIA_STATIONS;
+  const canSearch = startStation !== null && endStation !== null;
 
   const value = useMemo<RouteSearchContextValue>(
     () => ({
-      departure,
-      arrival,
-      viaStations,
-      setDeparture,
-      setArrival,
-      setViaStations,
-      addViaStation,
-      removeViaStation,
+      startStation,
+      viaStation,
+      endStation,
+      setStartStation,
+      setViaStation,
+      setEndStation,
       clearAll,
       canSearch,
-      canAddVia,
-      maxViaStations: MAX_VIA_STATIONS,
     }),
-    [
-      departure,
-      arrival,
-      viaStations,
-      addViaStation,
-      removeViaStation,
-      clearAll,
-      canSearch,
-      canAddVia,
-    ],
+    [startStation, viaStation, endStation, clearAll, canSearch],
   );
 
   return (
