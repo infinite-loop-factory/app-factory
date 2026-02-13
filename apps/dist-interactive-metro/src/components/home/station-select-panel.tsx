@@ -1,9 +1,8 @@
-"use client";
-
 import type { ReactNode } from "react";
-import { Pressable, ScrollView, Text, View } from "react-native";
+
 import { cn } from "@infinite-loop-factory/common";
 import { CircleDot, MapPin } from "lucide-react-native";
+import { Pressable, ScrollView, Text, View } from "react-native";
 import i18n from "@/i18n";
 
 export type StationSelectPanelVariant = "departure" | "arrival" | "via";
@@ -38,6 +37,15 @@ const VARIANT_LABELS: Record<StationSelectPanelVariant, string> = {
   via: i18n.t("stationSelect.viaShort"),
 };
 
+const VARIANT_ICONS: Record<
+  StationSelectPanelVariant,
+  typeof CircleDot | null
+> = {
+  departure: CircleDot,
+  arrival: MapPin,
+  via: null,
+};
+
 export interface StationSelectPanelProps {
   variant: StationSelectPanelVariant;
   onBack: () => void;
@@ -58,8 +66,7 @@ export function StationSelectPanel({
 }: StationSelectPanelProps) {
   const styles = VARIANT_STYLES[variant];
   const label = VARIANT_LABELS[variant];
-  const Icon =
-    variant === "departure" ? CircleDot : variant === "arrival" ? MapPin : null;
+  const Icon = VARIANT_ICONS[variant];
 
   return (
     <View className={cn("min-h-0 flex-1", styles.container)}>
@@ -75,15 +82,15 @@ export function StationSelectPanel({
       >
         <View className="mb-3 flex-row flex-wrap items-center gap-2">
           <Pressable
-            onPress={onBack}
-            className="rounded-lg px-2 py-1.5"
             accessibilityLabel={i18n.t("stationSelect.back")}
             accessibilityRole="button"
+            className="rounded-lg px-2 py-1.5"
+            onPress={onBack}
           >
             <Text
-              className="text-sm text-outline-600"
-              numberOfLines={1}
+              className="text-outline-600 text-sm"
               ellipsizeMode="tail"
+              numberOfLines={1}
             >
               {i18n.t("stationSelect.back")}
             </Text>
@@ -95,12 +102,12 @@ export function StationSelectPanel({
             )}
           >
             {Icon != null && (
-              <Icon size={16} className={cn("shrink-0", styles.pillIcon)} />
+              <Icon className={cn("shrink-0", styles.pillIcon)} size={16} />
             )}
             <Text
-              className={cn("text-xs font-medium", styles.pillText)}
-              numberOfLines={1}
+              className={cn("font-medium text-xs", styles.pillText)}
               ellipsizeMode="tail"
+              numberOfLines={1}
             >
               {label}
             </Text>
@@ -108,9 +115,9 @@ export function StationSelectPanel({
         </View>
         {description != null && description !== "" && (
           <Text
-            className="mb-2 text-sm text-outline-500"
-            numberOfLines={2}
+            className="mb-2 text-outline-500 text-sm"
             ellipsizeMode="tail"
+            numberOfLines={2}
           >
             {description}
           </Text>

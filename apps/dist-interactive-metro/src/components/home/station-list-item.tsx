@@ -1,7 +1,6 @@
-"use client";
-
-import { Pressable, Text, View } from "react-native";
 import { cn } from "@infinite-loop-factory/common";
+import { memo } from "react";
+import { Pressable, Text, View } from "react-native";
 
 export interface StationListItemProps {
   name: string;
@@ -16,7 +15,7 @@ export interface StationListItemProps {
 /**
  * Reusable station row for selection panels. Prevents text overflow with numberOfLines.
  */
-export function StationListItem({
+export const StationListItem = memo(function StationListItem({
   name,
   lines,
   onPress,
@@ -26,31 +25,31 @@ export function StationListItem({
 }: StationListItemProps) {
   return (
     <Pressable
-      onPress={onPress}
-      disabled={disabled}
+      accessibilityLabel={lines ? `${name}, ${lines}` : name}
+      accessibilityRole="button"
+      accessibilityState={{ disabled }}
       className={cn(
         "mt-4 rounded-xl border border-outline-200 bg-background-0 px-4 py-3",
         accentBorder,
         disabled && "opacity-50",
         className,
       )}
-      accessibilityLabel={lines ? `${name}, ${lines}` : name}
-      accessibilityRole="button"
-      accessibilityState={{ disabled }}
+      disabled={disabled}
+      onPress={onPress}
     >
       <View className="min-w-0">
         <Text
-          className="font-medium text-typography-900 text-sm"
-          numberOfLines={1}
+          className="font-medium text-sm text-typography-900"
           ellipsizeMode="tail"
+          numberOfLines={1}
         >
           {name}
         </Text>
         {lines != null && lines !== "" && (
           <Text
-            className="mt-0.5 text-xs text-outline-500"
-            numberOfLines={1}
+            className="mt-0.5 text-outline-500 text-xs"
             ellipsizeMode="tail"
+            numberOfLines={1}
           >
             {lines}
           </Text>
@@ -58,4 +57,4 @@ export function StationListItem({
       </View>
     </Pressable>
   );
-}
+});

@@ -1,19 +1,9 @@
-"use client";
-
 import { cn } from "@infinite-loop-factory/common";
 import { useRouter } from "expo-router";
-import { useState } from "react";
-import {
-  LayoutAnimation,
-  Platform,
-  Pressable,
-  ScrollView,
-  Text,
-  UIManager,
-  View,
-} from "react-native";
-import { StationBlock } from "@/components/home/station-block";
+import { memo, useCallback, useState } from "react";
+import { Pressable, ScrollView, Text } from "react-native";
 import { RouteSceneLayout } from "@/components/home/route-scene-layout";
+import { StationBlock } from "@/components/home/station-block";
 import { StationListItem } from "@/components/home/station-list-item";
 import { StationSelectPanel } from "@/components/home/station-select-panel";
 import { useRouteSearch } from "@/context/route-search-context";
@@ -21,23 +11,17 @@ import i18n from "@/i18n";
 
 type SelectingMode = null | "departure" | "arrival" | "via";
 
+// TODO: Replace with real data source
 const SAMPLE_STATIONS = [
   { id: "station-101", name: "서울역", lines: "1호선, 4호선" },
   { id: "station-202", name: "강남역", lines: "2호선, 신분당선" },
 ] as const;
 
-if (
-  Platform.OS === "android" &&
-  UIManager.setLayoutAnimationEnabledExperimental != null
-) {
-  UIManager.setLayoutAnimationEnabledExperimental(true);
-}
-
-function useLayoutTransition() {
-  return () => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-  };
-}
+const defaultContentContainerStyle = {
+  paddingHorizontal: 24,
+  paddingTop: 24,
+  paddingBottom: 32,
+} as const;
 
 export default function RouteGuideTab() {
   const router = useRouter();
@@ -55,82 +39,95 @@ export default function RouteGuideTab() {
   } = useRouteSearch();
 
   const [selectingMode, setSelectingMode] = useState<SelectingMode>(null);
-  const scheduleLayoutTransition = useLayoutTransition();
 
   const showViaField = !!departure || !!arrival;
 
-  const handleDeparturePress = () => {
-    scheduleLayoutTransition();
+  const handleDeparturePress = useCallback(() => {
     setSelectingMode("departure");
-  };
-  const handleArrivalPress = () => {
-    scheduleLayoutTransition();
+  }, []);
+
+  const handleArrivalPress = useCallback(() => {
     setSelectingMode("arrival");
-  };
-  const handleViaPress = () => {
-    scheduleLayoutTransition();
+  }, []);
+
+  const handleViaPress = useCallback(() => {
     setSelectingMode("via");
-  };
+  }, []);
 
-  const handleSelectDeparture = (id: string, name: string) => {
-    setDeparture({ id, name });
-    scheduleLayoutTransition();
+  const handleSelectDeparture = useCallback(
+    (id: string, name: string) => {
+      setDeparture({ id, name });
+      setSelectingMode(null);
+    },
+    [setDeparture],
+  );
+
+  const handleSelectArrival = useCallback(
+    (id: string, name: string) => {
+      if (departure?.id === id) return;
+      setArrival({ id, name });
+      setSelectingMode(null);
+    },
+    [departure?.id, setArrival],
+  );
+
+  const handleAddVia = useCallback(
+    (id: string, name: string) => {
+      addViaStation({ id, name });
+      setSelectingMode(null);
+    },
+    [addViaStation],
+  );
+
+  const handleBackFromSelect = useCallback(() => {
     setSelectingMode(null);
-  };
+  }, []);
 
-  const handleSelectArrival = (id: string, name: string) => {
-    if (departure?.id === id) return;
-    setArrival({ id, name });
-    scheduleLayoutTransition();
-    setSelectingMode(null);
-  };
-
-  const handleAddVia = (id: string, name: string) => {
-    addViaStation({ id, name });
-    scheduleLayoutTransition();
-    setSelectingMode(null);
-  };
-
-  const handleBackFromSelect = () => {
-    scheduleLayoutTransition();
-    setSelectingMode(null);
-  };
-
-  const handleSearchPress = () => {
+  const handleSearchPress = useCallback(() => {
     if (!canSearch) return;
     router.push("/route-result");
-  };
+  }, [canSearch, router]);
+
+  const handleClearDeparture = useCallback(
+    () => setDeparture(null),
+    [setDeparture],
+  );
+  const handleClearArrival = useCallback(() => setArrival(null), [setArrival]);
+  const handleClearVia = useCallback(
+    () => setViaStations([]),
+    [setViaStations],
+  );
 
   const stationBlock = (
     <StationBlock
-      departure={departure}
       arrival={arrival}
-      viaStations={viaStations}
-      showViaField={showViaField}
       canAddVia={canAddVia}
-      maxViaStations={maxViaStations}
-      onDeparturePress={handleDeparturePress}
-      onArrivalPress={handleArrivalPress}
-      onViaPress={handleViaPress}
-      onClearDeparture={() => setDeparture(null)}
-      onClearArrival={() => setArrival(null)}
-      onClearVia={() => setViaStations([])}
-      selectingMode={selectingMode}
+      departure={departure}
       hideLabels
+      maxViaStations={maxViaStations}
+      onArrivalPress={handleArrivalPress}
+      onClearArrival={handleClearArrival}
+      onClearDeparture={handleClearDeparture}
+      onClearVia={handleClearVia}
+      onDeparturePress={handleDeparturePress}
+      onViaPress={handleViaPress}
+      selectingMode={selectingMode}
+      showViaField={showViaField}
+      viaStations={viaStations}
     />
   );
 
   const renderContent = () => {
     if (selectingMode === "departure") {
       return (
-        <StationSelectPanel variant="departure" onBack={handleBackFromSelect}>
+        <StationSelectPanel onBack={handleBackFromSelect} variant="departure">
           {SAMPLE_STATIONS.map((s) => (
             <StationListItem
-              key={s.id}
-              name={s.name}
-              lines={s.lines}
-              onPress={() => handleSelectDeparture(s.id, s.name)}
               accentBorder="border-secondary-200"
+              key={s.id}
+              lines={s.lines}
+              name={s.name}
+              onPress={() => handleSelectDeparture(s.id, s.name)}
             />
           ))}
         </StationSelectPanel>
@@ -139,17 +136,17 @@ export default function RouteGuideTab() {
 
     if (selectingMode === "arrival") {
       return (
-        <StationSelectPanel variant="arrival" onBack={handleBackFromSelect}>
+        <StationSelectPanel onBack={handleBackFromSelect} variant="arrival">
           {SAMPLE_STATIONS.map((s) => {
             const disabled = departure?.id === s.id;
             return (
               <StationListItem
-                key={s.id}
-                name={s.name}
-                lines={s.lines}
-                onPress={() => !disabled && handleSelectArrival(s.id, s.name)}
-                disabled={disabled}
                 accentBorder="border-primary-200"
+                disabled={disabled}
+                key={s.id}
+                lines={s.lines}
+                name={s.name}
+                onPress={() => !disabled && handleSelectArrival(s.id, s.name)}
               />
             );
           })}
@@ -160,15 +157,15 @@ export default function RouteGuideTab() {
     if (selectingMode === "via") {
       return (
         <StationSelectPanel
-          variant="via"
+          description={i18n.t("via.description")}
           onBack={handleBackFromSelect}
-          description="경유역 추가 (검색·순서 조정은 Phase 2에서 구현)"
+          variant="via"
         >
           {SAMPLE_STATIONS.map((s) => (
             <StationListItem
               key={s.id}
-              name={s.name}
               lines={s.lines}
+              name={s.name}
               onPress={() => handleAddVia(s.id, s.name)}
             />
           ))}
@@ -179,66 +176,62 @@ export default function RouteGuideTab() {
     return (
       <ScrollView
         className="min-h-0 flex-1"
-        contentContainerStyle={{
-          paddingHorizontal: 24,
-          paddingTop: 24,
-          paddingBottom: 32,
-        }}
+        contentContainerStyle={defaultContentContainerStyle}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
         <Text
-          className="mb-3 text-sm font-medium text-outline-600"
-          numberOfLines={1}
+          className="mb-3 font-medium text-outline-600 text-sm"
           ellipsizeMode="tail"
+          numberOfLines={1}
         >
           {i18n.t("homeScreen.searchAndExtras")}
         </Text>
-        <SearchButton
-          disabled={!canSearch}
-          onPress={handleSearchPress}
-        />
+        <SearchButton disabled={!canSearch} onPress={handleSearchPress} />
       </ScrollView>
     );
   };
 
   return (
     <RouteSceneLayout
-      title={i18n.t("homeScreen.title")}
-      subtitle={i18n.t("homeScreen.subtitle")}
       stationBlock={stationBlock}
+      subtitle={i18n.t("homeScreen.subtitle")}
+      title={i18n.t("homeScreen.title")}
     >
       {renderContent()}
     </RouteSceneLayout>
   );
 }
 
-function SearchButton({
+const SearchButton = memo(function SearchButton({
   disabled,
   onPress,
-}: { disabled: boolean; onPress: () => void }) {
+}: {
+  disabled: boolean;
+  onPress: () => void;
+}) {
   return (
     <Pressable
-      onPress={onPress}
-      disabled={disabled}
+      accessibilityLabel={i18n.t("homeScreen.search")}
+      accessibilityRole="button"
+      accessibilityState={{ disabled }}
       className={cn(
         "items-center justify-center rounded-xl py-4",
         disabled ? "bg-outline-100" : "bg-primary-500",
       )}
-      accessibilityLabel={i18n.t("homeScreen.search")}
-      accessibilityRole="button"
-      accessibilityState={{ disabled }}
+      disabled={disabled}
+      onPress={onPress}
     >
       <Text
         className={cn(
-          "text-base font-semibold",
+          "font-semibold text-base",
           disabled ? "text-outline-400" : "text-white",
         )}
-        numberOfLines={1}
         ellipsizeMode="tail"
+        numberOfLines={1}
       >
         {i18n.t("homeScreen.search")}
       </Text>
     </Pressable>
   );
-}
+});
