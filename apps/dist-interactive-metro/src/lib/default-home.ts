@@ -1,42 +1,44 @@
-import AsyncStorage from "@react-native-async-storage/async-storage"
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const STORAGE_KEY = "defaultHomeTab"
+const STORAGE_KEY = "defaultHomeTab";
 
-export type DefaultHomeTabId =
-  | "routeGuide"
-  | "notifications"
-  | "favorites"
-  | "settings"
+const TAB_IDS = [
+  "routeGuide",
+  "notifications",
+  "favorites",
+  "settings",
+] as const;
 
-const DEFAULT_VALUE: DefaultHomeTabId = "routeGuide"
+export type DefaultHomeTabId = (typeof TAB_IDS)[number];
 
-/** 탭 라우트 경로와 DefaultHomeTabId 매핑 */
+const DEFAULT_VALUE: DefaultHomeTabId = "routeGuide";
+
+/** Tab route path ↔ DefaultHomeTabId mapping */
 export const DEFAULT_HOME_TAB_ROUTES: Record<DefaultHomeTabId, string> = {
   routeGuide: "/(tabs)",
   notifications: "/(tabs)/notifications",
   favorites: "/(tabs)/favorites",
   settings: "/(tabs)/settings",
-}
+};
 
 export async function getDefaultHomeTab(): Promise<DefaultHomeTabId> {
   try {
-    const value = await AsyncStorage.getItem(STORAGE_KEY)
-    if (
-      value === "routeGuide" ||
-      value === "notifications" ||
-      value === "favorites" ||
-      value === "settings"
-    ) {
-      return value
+    const value = await AsyncStorage.getItem(STORAGE_KEY);
+    if (value != null && (TAB_IDS as readonly string[]).includes(value)) {
+      return value as DefaultHomeTabId;
     }
   } catch {
-    // ignore
+    // ignore read errors
   }
-  return DEFAULT_VALUE
+  return DEFAULT_VALUE;
 }
 
 export async function setDefaultHomeTab(
-  tabId: DefaultHomeTabId
+  tabId: DefaultHomeTabId,
 ): Promise<void> {
-  await AsyncStorage.setItem(STORAGE_KEY, tabId)
+  try {
+    await AsyncStorage.setItem(STORAGE_KEY, tabId);
+  } catch {
+    // ignore write errors
+  }
 }

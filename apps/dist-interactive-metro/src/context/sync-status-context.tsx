@@ -1,20 +1,23 @@
-"use client";
+import type { SyncedItems, SyncState, SyncStatus } from "@/types/sync-status";
 
 import {
   createContext,
+  type ReactNode,
   useCallback,
   useContext,
   useMemo,
   useState,
-  type ReactNode,
 } from "react";
-import type { SyncState, SyncStatus, SyncedItems } from "@/types/sync-status";
 import { initialSyncState } from "@/types/sync-status";
 
 interface SyncStatusContextValue extends SyncState {
-  setSyncStatus: (status: SyncStatus) => void
-  setLastSync: (timestamp: number, items: SyncedItems, error?: string | null) => void
-  resetSyncState: () => void
+  setSyncStatus: (status: SyncStatus) => void;
+  setLastSync: (
+    timestamp: number,
+    items: SyncedItems,
+    error?: string | null,
+  ) => void;
+  resetSyncState: () => void;
 }
 
 const SyncStatusContext = createContext<SyncStatusContextValue | null>(null);
