@@ -808,6 +808,9 @@ importers:
       expo-localization:
         specifier: ~17.0.8
         version: 17.0.8(expo@54.0.30)(react@19.1.0)
+      expo-location:
+        specifier: ~19.0.8
+        version: 19.0.8(expo@54.0.30)
       expo-router:
         specifier: ~6.0.21
         version: 6.0.21(6ca02f81fe7d140b155cbd11b0c6d632)

@@ -1,5 +1,7 @@
 import type { Line, Station } from "@/types/station";
 
+import { stationCoordinates } from "./station-coordinates";
+
 /** Official Seoul Metro line colors (version 0) */
 export const lines: Line[] = [
   { id: "line1", number: "1", name: "1호선", color: "#263C96" },
@@ -1609,6 +1611,15 @@ export const stations: Station[] = [
     lineColor: "#D4003B",
   },
 ];
+
+// Enrich all stations with GPS coordinates
+for (const station of stations) {
+  const coords = stationCoordinates[station.id];
+  if (coords) {
+    station.latitude = coords.latitude;
+    station.longitude = coords.longitude;
+  }
+}
 
 /** Search stations by name or line */
 export function searchStations(keyword: string): Station[] {
