@@ -2,6 +2,7 @@
   "welcome": "환영합니다",
   "home": "홈",
   "tabs": {
+    "goNow": "지금 출발",
     "routeGuide": "경로안내",
     "notifications": "알림",
     "favorites": "즐겨찾기",
@@ -102,6 +103,44 @@
   "notFound": {
     "title": "화면을 찾을 수 없습니다",
     "goHome": "홈 화면으로 이동"
+  },
+  "goNow": {
+    "title": "지금 출발",
+    "subtitle": "목적지만 선택하세요 — 현재 위치 기반 최적 경로를 추천합니다",
+    "locating": "현재 위치를 찾고 있습니다...",
+    "locationReady": "주변 {{count}}개 역 감지됨",
+    "refresh": "위치 새로고침",
+    "destinationTitle": "어디로 가시나요?",
+    "destination": "도착역",
+    "destinationPlaceholder": "도착역을 선택하세요",
+    "selectDestinationHint": "도착역을 선택하면 최적의 경로들을 추천합니다",
+    "calculatingRoutes": "최적 경로를 계산하고 있습니다...",
+    "recommendedRoutes": "추천 경로",
+    "totalMin": "총 {{min}}분",
+    "walkMin": "도보 {{min}}분",
+    "subwayMin": "지하철 {{min}}분",
+    "transferCount": "환승 {{count}}회",
+    "permissionDenied": "위치 권한이 필요합니다",
+    "permissionDeniedHint": "가까운 역을 찾으려면 위치 권한을 허용해주세요",
+    "locationError": "위치를 가져올 수 없습니다",
+    "locationErrorHint": "위치 정보를 가져오는 중 오류가 발생했습니다",
+    "retry": "다시 시도"
+  },
+  "departureSelect": {
+    "title": "출발역 선택",
+    "subtitle": "현재 위치에서 가까운 역을 추천합니다",
+    "locating": "현재 위치를 찾고 있습니다...",
+    "nearbyStations": "가까운 역",
+    "closest": "가장 가까운 역",
+    "walkingTime": "도보 {{minutes}}분",
+    "refreshLocation": "위치 새로고침",
+    "orSearchManually": "또는 직접 검색",
+    "searchAllStations": "전체 역에서 검색하기",
+    "permissionDeniedTitle": "위치 권한이 필요합니다",
+    "permissionDeniedDesc": "가까운 역을 추천받으려면 위치 권한을 허용해주세요. 아래에서 직접 검색할 수도 있습니다.",
+    "errorTitle": "위치를 가져올 수 없습니다",
+    "locationError": "위치 정보를 가져오는 중 오류가 발생했습니다. 다시 시도해주세요.",
+    "retry": "다시 시도"
   },
   "common": {
     "back": "뒤로"

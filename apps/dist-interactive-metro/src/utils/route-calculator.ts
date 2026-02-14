@@ -1,4 +1,4 @@
-import type { Station } from "@/types/station";
+import type { NearbyStation, Station } from "@/types/station";
 
 export interface RouteSegment {
   station: Station;
@@ -9,8 +9,22 @@ export interface RouteSegment {
 export interface RouteInfo {
   segments: RouteSegment[];
   totalStations: number;
-  totalTime: number; // minutes
+  totalTime: number; // subway time in minutes
   transfers: number;
+}
+
+/**
+ * A route recommendation that includes walking to the departure station.
+ */
+export interface RouteRecommendation {
+  /** The nearby station used as departure */
+  departure: NearbyStation;
+  /** The calculated subway route */
+  route: RouteInfo;
+  /** Walking time to the departure station (minutes) */
+  walkingMinutes: number;
+  /** Total time = walking + subway (minutes) */
+  totalMinutes: number;
 }
 
 /**
@@ -69,4 +83,22 @@ function findTransferStation(start: Station, _end: Station): Station | null {
     name: "환승역",
     connections: [start.line, _end.line],
   };
+}
+
+/**
+ * Given a list of nearby stations and a destination, calculate route
+ * recommendations sorted by total time (walking + subway).
+ */
+export function recommendRoutes(
+  nearbyStations: NearbyStation[],
+  destination: Station,
+): RouteRecommendation[] {
+  return nearbyStations
+    .map((departure) => {
+      const route = calculateRoute(departure.station, destination);
+      const walkingMinutes = departure.walkingMinutes;
+      const totalMinutes = walkingMinutes + route.totalTime;
+      return { departure, route, walkingMinutes, totalMinutes };
+    })
+    .sort((a, b) => a.totalMinutes - b.totalMinutes);
 }
