@@ -6,7 +6,10 @@
 import { useRouter } from "expo-router";
 import { Sprout } from "lucide-react-native";
 import { useEffect } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
 import { BannerAdComponent, BannerAdSize } from "@/components/ads/BannerAd";
 import { Box, Text } from "@/components/ui";
 import { styleExamples, themeTailwindClasses } from "@/constants/designSystem";
@@ -15,6 +18,7 @@ import { useAppState } from "@/context/AppContext";
 export default function IndexScreen() {
   const router = useRouter();
   const { isInitialized, isLoading, error } = useAppState();
+  const insets = useSafeAreaInsets();
 
   useEffect(() => {
     // 앱이 초기화되면 카테고리 선택 화면으로 이동
@@ -95,7 +99,10 @@ export default function IndexScreen() {
       </Box>
 
       {/* 하단 광고 (절대 위치) */}
-      <Box className="absolute bottom-8 w-full px-5">
+      <Box
+        className="absolute w-full px-5"
+        style={{ bottom: insets.bottom + 32 }}
+      >
         <BannerAdComponent size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER} />
       </Box>
     </SafeAreaView>

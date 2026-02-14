@@ -244,7 +244,11 @@ export default function ContinuousCardScreen() {
     <RootWrapper className="flex-1 bg-orange-50">
       {/* StatusBar: 전체화면 모드가 아닐 때만 표시 */}
       {!isFullscreen && (
-        <StatusBar backgroundColor="#ffffff" barStyle="dark-content" />
+        <StatusBar
+          backgroundColor="transparent"
+          barStyle="dark-content"
+          translucent
+        />
       )}
 
       {/* 플로팅 뒤로 버튼: 전체화면 모드가 아닐 때만 표시 */}

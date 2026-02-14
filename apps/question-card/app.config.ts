@@ -24,6 +24,11 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     supportsTablet: true,
     bundleIdentifier: "com.infiniteloop.easytalking",
   },
+  androidStatusBar: {
+    barStyle: "dark-content",
+    backgroundColor: "transparent",
+    translucent: true,
+  },
   android: {
     package: "com.infiniteloop.easytalking",
     versionCode: 1,

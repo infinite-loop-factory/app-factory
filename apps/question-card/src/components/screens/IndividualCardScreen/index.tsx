@@ -148,7 +148,11 @@ export default function IndividualCardScreen() {
   return (
     <RootWrapper className="flex-1 bg-orange-50">
       {!isFullscreen && (
-        <StatusBar backgroundColor="#ffffff" barStyle="dark-content" />
+        <StatusBar
+          backgroundColor="transparent"
+          barStyle="dark-content"
+          translucent
+        />
       )}
       {!isFullscreen && <FloatingBackButton onPress={handleBackToList} />}
       <FullscreenToggleButton

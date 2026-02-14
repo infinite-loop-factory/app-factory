@@ -16,6 +16,7 @@ import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useColorScheme } from "nativewind";
 import { useEffect } from "react";
+import { StatusBar } from "react-native";
 import "react-native-reanimated";
 
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -89,6 +90,11 @@ export default function RootLayout() {
             <ThemeProvider
               value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
             >
+              <StatusBar
+                backgroundColor="transparent"
+                barStyle="dark-content"
+                translucent
+              />
               <Stack>
                 <Stack.Screen name="index" options={{ headerShown: false }} />
                 <Stack.Screen
