@@ -45,6 +45,10 @@ export default function RootLayout() {
               <Stack.Screen name="(tabs)" options={hiddenHeaderOptions} />
               <Stack.Screen name="route-result" options={hiddenHeaderOptions} />
               <Stack.Screen
+                name="departure-select"
+                options={hiddenHeaderOptions}
+              />
+              <Stack.Screen
                 name="station-select"
                 options={hiddenHeaderOptions}
               />

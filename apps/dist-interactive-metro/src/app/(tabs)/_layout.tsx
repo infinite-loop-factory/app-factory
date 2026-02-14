@@ -34,6 +34,18 @@ export default function TabLayout() {
       }}
     >
       <Tabs.Screen
+        name="go-now"
+        options={{
+          title: i18n.t("tabs.goNow"),
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon
+              color={color}
+              name={focused ? "location" : "location-outline"}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
         name="index"
         options={{
           title: i18n.t("tabs.routeGuide"),

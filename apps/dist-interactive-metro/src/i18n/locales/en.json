@@ -2,6 +2,7 @@
   "welcome": "Welcome",
   "home": "Home",
   "tabs": {
+    "goNow": "Go Now",
     "routeGuide": "Route",
     "notifications": "Notifications",
     "favorites": "Favorites",
@@ -102,6 +103,44 @@
   "notFound": {
     "title": "Screen not found",
     "goHome": "Go to home screen"
+  },
+  "goNow": {
+    "title": "Go Now",
+    "subtitle": "Just pick your destination — we'll recommend the best routes for you",
+    "locating": "Finding your location...",
+    "locationReady": "{{count}} nearby stations detected",
+    "refresh": "Refresh",
+    "destinationTitle": "Where are you going?",
+    "destination": "Destination",
+    "destinationPlaceholder": "Select your destination",
+    "selectDestinationHint": "Select a destination to see recommended routes",
+    "calculatingRoutes": "Calculating optimal routes...",
+    "recommendedRoutes": "Recommended Routes",
+    "totalMin": "{{min}} min total",
+    "walkMin": "{{min}} min walk",
+    "subwayMin": "{{min}} min subway",
+    "transferCount": "{{count}} transfer(s)",
+    "permissionDenied": "Location permission required",
+    "permissionDeniedHint": "Allow location access to find nearby stations",
+    "locationError": "Unable to get location",
+    "locationErrorHint": "An error occurred while fetching your location",
+    "retry": "Retry"
+  },
+  "departureSelect": {
+    "title": "Select Departure",
+    "subtitle": "Suggesting nearby stations based on your location",
+    "locating": "Finding your location...",
+    "nearbyStations": "Nearby Stations",
+    "closest": "Closest",
+    "walkingTime": "{{minutes}} min walk",
+    "refreshLocation": "Refresh location",
+    "orSearchManually": "or search manually",
+    "searchAllStations": "Search all stations",
+    "permissionDeniedTitle": "Location permission required",
+    "permissionDeniedDesc": "Allow location access to get nearby station recommendations. You can also search manually below.",
+    "errorTitle": "Unable to get location",
+    "locationError": "An error occurred while fetching your location. Please try again.",
+    "retry": "Retry"
   },
   "common": {
     "back": "Back"
