@@ -8,6 +8,19 @@ export interface Station {
   lineNumber: string;
   lineColor: string;
   connections?: string[];
+  latitude?: number;
+  longitude?: number;
+}
+
+/**
+ * Station with calculated distance from a reference point
+ */
+export interface NearbyStation {
+  station: Station;
+  /** Distance in meters */
+  distanceM: number;
+  /** Estimated walking time in minutes */
+  walkingMinutes: number;
 }
 
 /**

@@ -18,6 +18,10 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ios: {
     supportsTablet: true,
     bundleIdentifier: "com.infinite-loop-factory.dist-interactive-metro",
+    infoPlist: {
+      NSLocationWhenInUseUsageDescription:
+        "현재 위치에서 가장 가까운 지하철역을 추천하기 위해 위치 정보를 사용합니다.",
+    },
   },
   android: {
     adaptiveIcon: {
@@ -30,7 +34,18 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     output: "static",
     favicon: "./src/assets/images/favicon.png",
   },
-  plugins: ["expo-router", "expo-localization", "expo-font"],
+  plugins: [
+    "expo-router",
+    "expo-localization",
+    "expo-font",
+    [
+      "expo-location",
+      {
+        locationWhenInUsePermission:
+          "현재 위치에서 가장 가까운 지하철역을 추천하기 위해 위치 정보를 사용합니다.",
+      },
+    ],
+  ],
   experiments: {
     tsconfigPaths: true,
     typedRoutes: true,
