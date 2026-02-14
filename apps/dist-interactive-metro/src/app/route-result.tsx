@@ -244,7 +244,7 @@ export default function RouteResultScreen() {
               {routeInfo.segments.map((segment, index) => (
                 <View
                   className="relative"
-                  key={`seg-${segment.station.id}-${segment.station.line}`}
+                  key={`seg-${index}-${segment.station.id}-${segment.station.line}`}
                 >
                   {/* Connector line */}
                   {index < routeInfo.segments.length - 1 && (
