@@ -1,6 +1,7 @@
 import { Link } from "expo-router";
 import { ScrollView, Text, View } from "react-native";
 import { mockPosts } from "@/src/domain/mock";
+import { PostCard } from "@/src/features/posts/components/PostCard";
 
 export default function PostListSkeletonScreen() {
   return (
@@ -25,17 +26,18 @@ export default function PostListSkeletonScreen() {
 
       {mockPosts.map((post) => (
         <Link
+          asChild
           href={{ pathname: "/(posts)/[id]", params: { id: post.id } }}
           key={post.id}
-          style={{
-            backgroundColor: "white",
-            borderColor: "#e2e8f0",
-            borderWidth: 1,
-            borderRadius: 12,
-            padding: 14,
-          }}
         >
-          [{post.category}] {post.title} ({post.region}) - {post.status}
+          <PostCard
+            category={post.category}
+            meetAt={post.meetAt}
+            region={post.region}
+            status={post.status}
+            title={post.title}
+            variant="list"
+          />
         </Link>
       ))}
     </ScrollView>
