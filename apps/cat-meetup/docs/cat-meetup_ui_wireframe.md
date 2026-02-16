@@ -6,302 +6,320 @@ Expo React Native 앱 `cat-meetup`의 화면 단위 와이어프레임 문서입
 ## Screen Name
 Signup
 
+### Route
+`app/(auth)/signup.tsx`
+
 ### Layout structure
 - SafeAreaView
 - KeyboardAvoidingView
-- ScrollView (세로 스크롤)
-- Header 영역
-- Form 영역
-- Submit 영역
+- ScrollView
+- Header
+- Form
+- Submit CTA
 
 ### Key components
-- Header
-  - Title: 사람 회원가입
-  - Subtitle: 기본 정보 입력
-- Form Sections
-  - 기본 정보 섹션
-    - TextInput: 이름
-    - TextInput: 핸드폰번호(아이디)
-    - TextInput: 카카오톡 아이디
-    - TextInput: 이메일
-    - PasswordInput: 비밀번호
-  - 프로필 정보 섹션
-    - SegmentedControl/Radio: 성별
-    - DatePicker: 생년월일
-    - RegionPicker (BottomSheet/Modal)
-      - 옵션: 서울시 구로구, 관악구, 노원구
-    - MultilineInput: 자기소개
-- Footer CTA
-  - PrimaryButton: 가입 완료
-  - SecondaryTextButton: 이미 계정 있음 → 로그인
+- Header: title, subtitle
+- Form fields
+  - name
+  - phone (ID)
+  - kakaoId
+  - email
+  - password
+  - gender
+  - birthDate
+  - region picker
+  - bio
+- CTA buttons
+  - 가입 완료
+  - 이미 계정 있음
 
 ### Navigation actions
-- `가입 완료` -> Cat registration (선택 유도) 또는 Post list
-- `이미 계정 있음` -> 로그인 화면(추후)
-- Back -> 이전 화면 또는 앱 홈
+- 가입 완료 -> Cat registration 또는 Post list
+- 이미 계정 있음 -> 로그인(추후)
+- Back -> 이전 화면
+
+### Server actions
+- `createUserProfile`
+
+### State source
+- local: form 입력값, validation 에러, loading
+- server: 없음 (submit 시 mutation)
+- derived: 가입 가능 여부(`isValid && !isSubmitting`)
 
 ---
 
 ## Screen Name
 Cat registration
 
+### Route
+`app/(cat)/register.tsx`
+
 ### Layout structure
 - SafeAreaView
 - ScrollView
-- Header 영역
-- Cat Card Form 영역
-- 등록된 고양이 카드 리스트 영역
-- Bottom CTA 영역
+- Header
+- Cat form
+- Registered cat list
+- Bottom CTA
 
 ### Key components
-- Header
-  - Title: 동물 카드 작성
-  - Subtitle: 여러 마리 등록 가능
-- Cat Form
-  - TextInput: 고양이 이름
-  - SegmentedControl/Radio: 성별
-  - NumberInput: 나이
-  - Toggle: 중성화 여부
-  - MultiSelect Chips: 성격 (개냥이/수줍음/사나움)
-  - ImageUploader: 사진
-  - MultilineInput: 설명
-  - Button: 카드 추가
-- Registered Cards List
-  - CardItem (이름, 나이, 성별, 대표 여부)
-  - Action: 수정, 삭제, 대표 설정
-- Footer CTA
-  - PrimaryButton: 완료
-  - SecondaryButton: 나중에 등록
+- Cat form fields
+  - name, gender, age, neutered, temperament, image, description
+- Registered cats list
+- CTA
+  - 카드 추가
+  - 완료
+  - 나중에 등록
 
 ### Navigation actions
-- `카드 추가` -> 같은 화면 리스트 갱신
-- `완료` -> Post list
-- `나중에 등록` -> Post list
-- 카드 `수정` -> Cat registration (edit mode)
+- 카드 추가 -> 같은 화면 목록 갱신
+- 완료 -> Post list
+- 나중에 등록 -> Post list
+- 카드 수정 -> Cat registration(edit)
+
+### Server actions
+- `insertCatCard`
+
+### State source
+- local: 현재 입력중인 cat form, 이미지 임시 상태
+- server: 등록된 cat card 목록
+- derived: 대표 고양이 여부, 카드 추가 가능 여부
 
 ---
 
 ## Screen Name
 Post list (region + category filter)
 
+### Route
+`app/(posts)/list.tsx`
+
 ### Layout structure
 - SafeAreaView
-- Top Filter Bar (고정)
-- Status Filter Row
-- FlatList (게시물 목록)
-- FAB (작성자용 새 글)
+- Top filter bar
+- Status filter row
+- FlatList
+- FAB
 
 ### Key components
-- Top Filter Bar
-  - RegionFilter Dropdown/Chip Group
-  - CategoryFilter Chip Group
-- Status Filter Row
-  - Chips: 모집 / 매칭중 / 매칭완료
-- Post List Item
-  - Category Badge
-  - Title
-  - Meet datetime
-  - Region
-  - Status Tag
-  - Preview text
-  - Optional: 신청 상태 배지 (내 신청 대기/실패/매칭)
-- Empty State
-  - Text + Retry Button
-- FAB
-  - 아이콘 + "새 글 작성"
+- Region/Category/Status filters
+- `PostCard variant="list"`
+- FAB: 새 글 작성
 
 ### Navigation actions
-- List item tap -> Post detail
-- FAB tap -> Host create post
-- Filter 변경 -> 같은 화면 데이터 재조회
-- 상단 탭/버튼 -> Apply list, Matching screen
+- 카드 탭 -> Post detail
+- FAB 탭 -> Host create post
+- 필터 변경 -> 목록 재조회
+- 탭 이동 -> Apply list / Matching screen
+
+### Server actions
+- 없음 (query-only)
+
+### State source
+- local: filter UI state(region, category, status)
+- server: `posts(region, category, status)`
+- derived: empty state 여부, 로딩/오류 표시 상태
 
 ---
 
 ## Screen Name
 Post detail
 
+### Route
+`app/(posts)/[id].tsx`
+
 ### Layout structure
 - SafeAreaView
 - ScrollView
-- Post Header
-- Post Meta
-- Post Body
-- Author/Applicant Preview Section
-- Bottom Fixed CTA
+- Post summary
+- Body
+- Profile preview
+- Bottom fixed CTA
 
 ### Key components
-- Post Header
-  - Title
-  - Category Badge
-  - Status Tag
-- Post Meta
-  - Meet datetime
-  - Region
-- Body
-  - Content text
-- Profile Preview Section
-  - 작성자/신청자 프로필 요약
-  - 고양이 정보 요약
-  - 리뷰 요약
-- Bottom CTA
-  - PrimaryButton: 참여 신청
-  - Disabled state: 신청 완료
-  - Alternative label: 대기중
+- `PostCard variant="list"` (상세에서는 expanded mode)
+- 프로필/고양이/리뷰 preview
+- CTA: 참여 신청
 
 ### Navigation actions
-- `참여 신청` -> 상태 대기중으로 전환, 버튼 비활성
-- 프로필/고양이/리뷰 tap -> 프로필 상세 모달(추후)
+- 참여 신청 -> 신청 완료 상태 전환
+- 프로필/고양이/리뷰 탭 -> 상세 모달(추후)
 - Back -> Post list
+
+### Server actions
+- `createPostApplication`
+
+### State source
+- local: 신청 버튼 비활성 상태(optimistic)
+- server: post detail, 내 신청 상태
+- derived: 신청 가능 여부(status, 본인 작성글 여부, 점수 제한)
 
 ---
 
 ## Screen Name
 Apply list
 
+### Route
+`app/(posts)/applied.tsx`
+
 ### Layout structure
 - SafeAreaView
-- Filter Bar
-- FlatList (내가 신청한 게시물)
+- Filter bar
+- FlatList
 
 ### Key components
-- Filter Bar
-  - Region Filter
-  - Category Filter
-  - Status Filter
-- Applied Post Item
-  - Post title
-  - Category/Region
-  - Meet datetime
-  - My status badge: 대기 / 매칭 / 실패
-  - Right status box (매칭/대기/실패)
-- Empty State
-  - 신청 내역 없음 안내
+- Region/Category/Status filters
+- `PostCard variant="applied"`
 
 ### Navigation actions
-- Item tap -> Post detail
+- 카드 탭 -> Post detail
 - 상단 탭 이동 -> Post list / Matching screen
+
+### Server actions
+- 없음 (query-only)
+
+### State source
+- local: filter UI state
+- server: 내가 신청한 posts + application status
+- derived: 매칭/대기/실패 뱃지 매핑
 
 ---
 
 ## Screen Name
 Matching screen
 
+### Route
+`app/(applicant)/matches.tsx`
+
 ### Layout structure
 - SafeAreaView
-- Segmented Tabs (매칭중 / 매칭완료)
+- Segmented tabs
 - FlatList
 - Bottom helper panel
 
 ### Key components
-- Segment control
-  - Tab A: 매칭중(수락 필요)
-  - Tab B: 매칭완료
-- Match Item
-  - Post title
-  - 상대방 연락처 노출 상태
-  - 상태 텍스트
-  - PrimaryButton: 수락 (매칭중에서만)
-- Helper Panel
-  - 안내 텍스트: 수락 후 연락 가능, 리뷰 가능 시점
+- Tabs: 매칭중 / 매칭완료
+- `PostCard variant="match"`
+- CTA: 수락
 
 ### Navigation actions
-- `수락` -> 상태 매칭완료 업데이트
-- Item tap -> Post detail
+- 수락 -> 매칭완료 상태 전환
+- 카드 탭 -> Post detail
 - 탭 변경 -> 같은 화면 내 데이터 전환
+
+### Server actions
+- `acceptMatching`
+
+### State source
+- local: 선택 탭, 수락 진행중 상태
+- server: 매칭중/매칭완료 목록
+- derived: 수락 버튼 활성 여부(상태/권한/연락처 노출 조건)
 
 ---
 
 ## Screen Name
 Host create post
 
+### Route
+`app/(host)/create.tsx`
+
 ### Layout structure
 - SafeAreaView
 - ScrollView
 - Header
-- Form Sections
-- Bottom Fixed CTA
+- Form
+- Bottom fixed CTA
 
 ### Key components
-- Header
-  - Title: 새 글 작성
-- Form
-  - TextInput: 제목
-  - CategorySelector: 돌봄/친구찾기/물품나눔
-  - DateTimePicker: 만날 날짜/시간(24시간)
-  - MultilineInput: 본문
-- Bottom CTA
-  - PrimaryButton: 게시물 등록
-  - SecondaryButton: 임시저장(선택)
+- title
+- category
+- meet_at datetime
+- content
+- CTA: 게시물 등록
 
 ### Navigation actions
-- `게시물 등록` -> Host manage matching 또는 Post detail
+- 게시물 등록 -> Host manage matching 또는 Post detail
 - Back -> Post list
+
+### Server actions
+- `createPost` (신규)
+
+### State source
+- local: form 입력값, datetime picker 상태
+- server: 없음 (submit 시 mutation)
+- derived: 게시 가능 여부(form validation)
 
 ---
 
 ## Screen Name
 Host manage matching
 
+### Route
+`app/(host)/manage/[id].tsx`
+
 ### Layout structure
 - SafeAreaView
-- Post Summary Header
-- Applicant List (FlatList)
-- Selection Control Panel (하단 고정)
+- Post summary header
+- Applicant list
+- Selection control panel
 
 ### Key components
-- Post Summary Header
-  - 제목/카테고리/일시/상태
-- Applicant List Item
-  - 신청자 기본 프로필
-  - 고양이 정보 요약
-  - 리뷰 평점 요약
-  - 상태 배지
-  - ActionButton: 선택
-- Selection Control Panel
-  - 선택 변경 가능 여부 (하루 1회 제한 표시)
-  - PrimaryButton: 매칭 선택 확정
-  - WarningText: 매칭완료 시 변경 불가
+- 신청자 리스트 아이템
+- 선택 확정 CTA
+- 하루 1회 변경 제한 안내
 
 ### Navigation actions
-- 신청자 item tap -> 신청자 상세 모달(프로필/고양이/리뷰)
-- `매칭 선택 확정` -> 선택자=매칭중, 나머지=실패
-- 선택자 수락 확인 후 -> 상태 매칭완료
-- Back -> Post detail 또는 Post list
+- 신청자 탭 -> 프로필/고양이/리뷰 모달
+- 매칭 선택 확정 -> 선택자 매칭중, 나머지 실패
+- 수락 확인 후 -> 매칭완료
+- Back -> Post detail/Post list
+
+### Server actions
+- `selectMatchingCandidate` (신규)
+- `confirmMatchingCompleted` (신규)
+
+### State source
+- local: 현재 선택중 applicant id, 변경 가능 여부 표시
+- server: applications by post, post status
+- derived: 재선택 가능 여부(24시간 1회 제한, 매칭완료 잠금)
 
 ---
 
 ## Screen Name
 Review writing
 
+### Route
+`app/(reviews)/write.tsx` (신규 파일 필요)
+
 ### Layout structure
 - SafeAreaView
-- Review 대상 요약 카드
-- Form 영역
-- Submit 영역
+- Target summary card
+- Review form
+- Submit CTA
 
 ### Key components
-- Target Summary Card
-  - 게시물 제목
-  - 상대 사용자 이름
-  - 완료 일시
-  - 작성 가능 시작일 안내
-- Form
-  - Rating selector (1~5)
-  - MultilineInput: 리뷰 내용
-- Submit
-  - PrimaryButton: 리뷰 등록
-  - Validation/Error message
+- 대상 게시물/상대 사용자 요약
+- 작성 가능 시작일 표시
+- rating
+- review content
+- 리뷰 등록 버튼
 
 ### Navigation actions
-- `리뷰 등록` -> 완료 후 Post detail 또는 Apply list
-- 작성 가능 시점 이전이면 -> 버튼 비활성 + 안내
+- 리뷰 등록 -> Post detail 또는 Apply list
+- 작성 가능 시점 이전 -> 버튼 비활성
 - Back -> 이전 화면
+
+### Server actions
+- `createReview` (신규)
+
+### State source
+- local: rating/content 입력 상태
+- server: review 대상 정보, 작성 가능 시점
+- derived: 작성 가능 여부(`now >= available_from`)
 
 ---
 
 ## Navigation flow summary
-- Signup -> Cat registration (optional) -> Post list
+- Signup -> Cat registration(optional) -> Post list
 - Post list -> Post detail -> Apply action
 - Post list -> Apply list
 - Post list -> Matching screen
@@ -309,17 +327,48 @@ Review writing
 - 일정 종료 +1일 이후 -> Review writing
 
 ## Component hierarchy notes (implementation)
-- Shared Layout
-  - `ScreenContainer` (SafeArea + padding)
-  - `TopFilterBar` (region/category/status)
-  - `StatusBadge`
-  - `ProfilePreviewCard`
-- Domain UI
-  - `PostListItem`
-  - `ApplicantListItem`
-  - `CatCardItem`
-  - `MatchActionPanel`
-  - `ReviewForm`
-- State/Route
-  - 라우트 단위: `app/(auth)`, `app/(cat)`, `app/(posts)`, `app/(host)`, `app/(applicant)`
-  - 서버 상태: post list/apply list/matching list 분리 캐시 키 사용
+
+### 통합 카드 컴포넌트
+- `PostCard` 단일 컴포넌트로 통합
+  - `<PostCard variant="list" />`
+  - `<PostCard variant="applied" />`
+  - `<PostCard variant="match" />`
+
+### 공통 컴포넌트
+- `ScreenContainer`
+- `TopFilterBar`
+- `StatusBadge`
+- `ProfilePreviewCard`
+- `MatchActionPanel`
+- `ReviewForm`
+
+### 비고
+- `PostListItem`, `MatchItem`, `AppliedItem` 분리 대신 `PostCard variant` 통합으로 중복 제거
+- 예상 효과: 화면별 아이템 코드량 약 40% 절감
+
+## Data contracts (Supabase)
+
+### posts
+- `id`
+- `title`
+- `category`
+- `status`
+- `meet_at`
+- `author_user_id`
+
+### post_applications
+- `id`
+- `post_id`
+- `applicant_user_id`
+- `status`
+- `phone_visibility_state`
+
+## Server actions summary
+- `createUserProfile`
+- `insertCatCard`
+- `createPostApplication`
+- `acceptMatching`
+- `createPost` (신규)
+- `selectMatchingCandidate` (신규)
+- `confirmMatchingCompleted` (신규)
+- `createReview` (신규)
