@@ -10,7 +10,7 @@ import {
   View,
 } from "react-native";
 import { useFetchSearchLocations } from "@/api/reactQuery/tmap/useFetchSearchLocations";
-import CustomSafeAreaView from "@/components/CustomSafeAriaView";
+import CustomSafeAreaView from "@/components/CustomSafeAreaView";
 import LocationResultCard from "@/components/card/LocationResultCard";
 import HeaderBar from "@/components/HeaderBar";
 import { CloseIcon } from "@/components/ui/icon";

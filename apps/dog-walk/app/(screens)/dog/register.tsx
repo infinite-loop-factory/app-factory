@@ -5,7 +5,7 @@ import { useMemo, useState } from "react";
 import { ScrollView, View } from "react-native";
 import { userAtom } from "@/atoms/userAtom";
 import DogBreedActionsheet from "@/components/actionsheet/DogBreedActionsheet";
-import CustomSafeAreaView from "@/components/CustomSafeAriaView";
+import CustomSafeAreaView from "@/components/CustomSafeAreaView";
 import HeaderBar from "@/components/HeaderBar";
 import DatePicker from "@/components/molecules/DatePicker";
 import DogImagePicker from "@/components/molecules/DogImagePicker";

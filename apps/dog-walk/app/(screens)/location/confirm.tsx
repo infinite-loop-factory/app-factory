@@ -8,7 +8,7 @@ import { useRef, useState } from "react";
 import { Image, View } from "react-native";
 import Images from "@/assets/images";
 import { endPointAtom, startPointAtom } from "@/atoms/pointAtom";
-import CustomSafeAreaView from "@/components/CustomSafeAriaView";
+import CustomSafeAreaView from "@/components/CustomSafeAreaView";
 import HeaderBar from "@/components/HeaderBar";
 import { Button, ButtonText } from "@/components/ui/button";
 

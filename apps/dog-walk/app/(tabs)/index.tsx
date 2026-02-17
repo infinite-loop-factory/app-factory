@@ -8,12 +8,13 @@ import { FlatList, ScrollView, TouchableOpacity, View } from "react-native";
 import { useFindPopularCourses } from "@/api/reactQuery/course/useFindPopularCourses";
 import { useFindLatestReviews } from "@/api/reactQuery/review/useFindLatestReviews";
 import { userAtom } from "@/atoms/userAtom";
-import CustomSafeAreaView from "@/components/CustomSafeAriaView";
+import CustomSafeAreaView from "@/components/CustomSafeAreaView";
 import CourseCard from "@/components/card/CourseCard";
 import CourseCardSkeleton from "@/components/card/CourseCardSkeleton";
 import ReviewCard from "@/components/card/ReviewCard";
 import ReviewCardSkeleton from "@/components/card/ReviewCardSkeleton";
 import EmptyCourse from "@/components/molecules/EmptyCourse";
+import { TAB_BAR_HEIGHT } from "@/components/organisms/CustomTabBar";
 import { HStack } from "@/components/ui/hstack";
 import { Text } from "@/components/ui/text";
 
@@ -39,7 +40,11 @@ export default function HomeScreen() {
 
   return (
     <CustomSafeAreaView>
-      <ScrollView className="flex-1 px-4" showsVerticalScrollIndicator={false}>
+      <ScrollView
+        className="flex-1 px-4"
+        contentContainerStyle={{ paddingBottom: TAB_BAR_HEIGHT }}
+        showsVerticalScrollIndicator={false}
+      >
         <View className="py-4">
           <Text className="text-slate-600" size="sm">
             안녕하세요 👋

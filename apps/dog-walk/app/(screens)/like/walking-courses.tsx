@@ -6,7 +6,7 @@ import { useCallback } from "react";
 import { FlatList, View } from "react-native";
 import { useFindLikedCoursesInfinite } from "@/api/reactQuery/like/useFindLikedCoursesInfinite";
 import { userAtom } from "@/atoms/userAtom";
-import CustomSafeAreaView from "@/components/CustomSafeAriaView";
+import CustomSafeAreaView from "@/components/CustomSafeAreaView";
 import MyCourseCard from "@/components/card/MyCourseCard";
 import MyCourseCardSkeleton from "@/components/card/MyCourseCardSkeleton";
 import HeaderBar from "@/components/HeaderBar";

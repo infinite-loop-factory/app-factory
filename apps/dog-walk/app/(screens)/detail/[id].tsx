@@ -6,7 +6,7 @@ import { useFindCourse } from "@/api/reactQuery/course/useFindCourse";
 import Images from "@/assets/images";
 import { userAtom } from "@/atoms/userAtom";
 import IconText from "@/components/atoms/IconText";
-import CustomSafeAreaView from "@/components/CustomSafeAriaView";
+import CustomSafeAreaView from "@/components/CustomSafeAreaView";
 import DetailDescription from "@/components/organisms/DetailDescription";
 import DetailHeaderBar from "@/components/organisms/DetailHeaderBar";
 import DetailMap from "@/components/organisms/DetailMap";
