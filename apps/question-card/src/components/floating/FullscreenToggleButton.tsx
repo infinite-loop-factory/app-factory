@@ -5,6 +5,7 @@
  */
 
 import { Maximize2, Minimize2 } from "lucide-react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Pressable } from "@/components/ui/pressable";
 
 export interface FullscreenToggleButtonProps {
@@ -26,14 +27,15 @@ export function FullscreenToggleButton({
   onPress,
   disabled = false,
 }: FullscreenToggleButtonProps) {
+  const insets = useSafeAreaInsets();
   const iconSize = 20;
   const iconColor = "#ffffff";
 
   const baseClasses =
     "absolute z-20 h-11 w-11 items-center justify-center rounded-full backdrop-blur-sm shadow-xl";
 
-  // 전체화면 상태에 따른 위치 및 스타일
-  const positionClass = isFullscreen ? "top-4 right-4" : "top-2 right-14";
+  // 전체화면 상태에 따른 위치 및 스타일 (top은 style로 동적 적용)
+  const positionClass = isFullscreen ? "right-4" : "right-14";
   const styleClass = isFullscreen ? "bg-orange-500" : "bg-black/30";
   const disabledClass = disabled ? "opacity-50" : "";
 
@@ -46,6 +48,7 @@ export function FullscreenToggleButton({
       className={buttonClasses}
       disabled={disabled}
       onPress={onPress}
+      style={{ top: isFullscreen ? 16 : insets.top + 8 }}
     >
       {isFullscreen ? (
         <Minimize2 color={iconColor} size={iconSize} strokeWidth={2.5} />
