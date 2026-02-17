@@ -2,13 +2,13 @@
 
 **이지토킹 - 질문 카드 (EasyTalking - Question Card)**
 
-효력 발생일 / Effective Date: 2026년 2월 1일 / February 1, 2026
+효력 발생일 / Effective Date: 2026년 2월 17일 / February 17, 2026
 
 ---
 
 ## 한국어
 
-Infinite Loop Factory(이하 "회사")는 이지토킹 - 질문 카드(이하 "본 앱") 서비스를 제공하며, 사용자의 개인정보 보호를 매우 중요하게 생각합니다. 본 개인정보 처리방침은 본 앱이 어떤 정보를 수집하고 사용하는지 설명합니다.
+JAM-PARK(이하 "회사")는 이지토킹 - 질문 카드(이하 "본 앱") 서비스를 제공하며, 사용자의 개인정보 보호를 매우 중요하게 생각합니다. 본 개인정보 처리방침은 본 앱이 어떤 정보를 수집하고 사용하는지 설명합니다.
 
 ### 1. 수집하는 정보
 
@@ -59,14 +59,14 @@ AdMob의 데이터 수집 및 사용에 대한 자세한 내용은 Google의 개
 
 본 개인정보 처리방침에 대한 질문이나 우려사항이 있으시면 아래 연락처로 문의해 주시기 바랍니다:
 
-**Infinite Loop Factory**
-이메일: [contact@infiniteloop.com]
+**JAM-PARK**
+이메일: chwk05@gmail.com
 
 ---
 
 ## English
 
-Infinite Loop Factory (the "Company") provides the EasyTalking - Question Card service (the "App") and takes your privacy very seriously. This Privacy Policy explains what information the App collects and how it is used.
+JAM-PARK (the "Company") provides the EasyTalking - Question Card service (the "App") and takes your privacy very seriously. This Privacy Policy explains what information the App collects and how it is used.
 
 ### 1. Information We Collect
 
@@ -117,9 +117,9 @@ This Privacy Policy may be updated as necessary. If there are significant change
 
 If you have any questions or concerns about this Privacy Policy, please contact us:
 
-**Infinite Loop Factory**
-Email: [contact@infiniteloop.com]
+**JAM-PARK**
+Email: chwk05@gmail.com
 
 ---
 
-© 2026 Infinite Loop Factory. All rights reserved.
+© 2026 JAM-PARK. All rights reserved.
