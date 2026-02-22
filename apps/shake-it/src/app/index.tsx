@@ -1,6 +1,6 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import { useEffect, useRef } from "react";
+import { memo, useEffect, useRef } from "react";
 import { Animated, Easing, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useLocation } from "@/hooks/use-location";
@@ -17,7 +17,7 @@ function useShakeAnimation() {
   const rotation = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    Animated.loop(
+    const animation = Animated.loop(
       Animated.sequence([
         Animated.timing(rotation, {
           toValue: 2,
@@ -39,7 +39,12 @@ function useShakeAnimation() {
         }),
         Animated.delay(750),
       ]),
-    ).start();
+    );
+
+    animation.start();
+    return () => {
+      animation.stop();
+    };
   }, [rotation]);
 
   return {
@@ -58,7 +63,7 @@ function useBounceAnimation() {
   const translateY = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    Animated.loop(
+    const animation = Animated.loop(
       Animated.sequence([
         Animated.timing(translateY, {
           toValue: -10,
@@ -73,7 +78,12 @@ function useBounceAnimation() {
           useNativeDriver: true,
         }),
       ]),
-    ).start();
+    );
+
+    animation.start();
+    return () => {
+      animation.stop();
+    };
   }, [translateY]);
 
   return { transform: [{ translateY }] };
@@ -83,7 +93,7 @@ function usePulseAnimation() {
   const opacity = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
-    Animated.loop(
+    const animation = Animated.loop(
       Animated.sequence([
         Animated.timing(opacity, {
           toValue: 0.5,
@@ -98,7 +108,12 @@ function usePulseAnimation() {
           useNativeDriver: true,
         }),
       ]),
-    ).start();
+    );
+
+    animation.start();
+    return () => {
+      animation.stop();
+    };
   }, [opacity]);
 
   return { opacity };
@@ -109,7 +124,7 @@ function useRippleAnimation() {
   const opacity = useRef(new Animated.Value(0.3)).current;
 
   useEffect(() => {
-    Animated.loop(
+    const animation = Animated.loop(
       Animated.sequence([
         Animated.parallel([
           Animated.timing(scale, {
@@ -138,14 +153,23 @@ function useRippleAnimation() {
           }),
         ]),
       ]),
-    ).start();
+    );
+
+    animation.start();
+    return () => {
+      animation.stop();
+    };
   }, [scale, opacity]);
 
   return { transform: [{ scale }], opacity };
 }
 
 /** Motion lines decorating the phone illustration */
-function MotionLines({ side }: { side: "left" | "right" }) {
+const MotionLines = memo(function MotionLines({
+  side,
+}: {
+  side: "left" | "right";
+}) {
   const isLeft = side === "left";
   const position = isLeft ? { top: 40, left: -24 } : { bottom: 40, right: -24 };
 
@@ -172,10 +196,10 @@ function MotionLines({ side }: { side: "left" | "right" }) {
       />
     </View>
   );
-}
+});
 
 /** The phone illustration at the center of the screen */
-function PhoneIllustration() {
+const PhoneIllustration = memo(function PhoneIllustration() {
   const shakeStyle = useShakeAnimation();
   const bounceStyle = useBounceAnimation();
 
@@ -239,7 +263,7 @@ function PhoneIllustration() {
       <MotionLines side="right" />
     </Animated.View>
   );
-}
+});
 
 export default function HomeScreen() {
   const pulseStyle = usePulseAnimation();

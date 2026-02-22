@@ -1,7 +1,7 @@
 import type { Location } from "@/types";
 
 import * as ExpoLocation from "expo-location";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { reverseGeocode } from "@/services/kakao-api";
 
 export function useLocation() {
@@ -9,6 +9,14 @@ export function useLocation() {
   const [address, setAddress] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const isMountedRef = useRef(true);
+  const isRefreshingRef = useRef(false);
+
+  useEffect(() => {
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
 
   // 권한 요청
   const requestPermission = useCallback(async (): Promise<boolean> => {
@@ -26,41 +34,67 @@ export function useLocation() {
     }
   }, []);
 
+  const ensurePermission = useCallback(async (): Promise<boolean> => {
+    const { status } = await ExpoLocation.getForegroundPermissionsAsync();
+    if (status === "granted") {
+      return true;
+    }
+
+    return requestPermission();
+  }, [requestPermission]);
+
+  const getCurrentCoordinates = useCallback(async (): Promise<Location> => {
+    const position = await ExpoLocation.getCurrentPositionAsync({
+      accuracy: ExpoLocation.Accuracy.Balanced,
+    });
+
+    return {
+      latitude: position.coords.latitude,
+      longitude: position.coords.longitude,
+    };
+  }, []);
+
+  const syncAddress = useCallback(async ({ latitude, longitude }: Location) => {
+    if (!isMountedRef.current) {
+      return;
+    }
+    setLocation({ latitude, longitude });
+
+    const addressName = await reverseGeocode(latitude, longitude);
+    if (!isMountedRef.current) {
+      return;
+    }
+    setAddress(addressName);
+  }, []);
+
   // 위치 갱신
   const refreshLocation = useCallback(async (): Promise<void> => {
+    if (isRefreshingRef.current) {
+      return;
+    }
+    isRefreshingRef.current = true;
     setIsLoading(true);
     setError(null);
 
     try {
-      // 권한 확인
-      const { status } = await ExpoLocation.getForegroundPermissionsAsync();
-      if (status !== "granted") {
-        const granted = await requestPermission();
-        if (!granted) {
-          setIsLoading(false);
-          return;
-        }
+      const hasPermission = await ensurePermission();
+      if (!hasPermission) {
+        return;
       }
 
-      // 현재 위치 조회
-      const position = await ExpoLocation.getCurrentPositionAsync({
-        accuracy: ExpoLocation.Accuracy.Balanced,
-      });
-
-      const lat = position.coords.latitude;
-      const lng = position.coords.longitude;
-
-      setLocation({ latitude: lat, longitude: lng });
-
-      // 지역명 조회
-      const addressName = await reverseGeocode(37.496486063, 127.0284);
-      setAddress(addressName);
+      const nextLocation = await getCurrentCoordinates();
+      await syncAddress(nextLocation);
     } catch {
-      setError("위치 정보를 가져오는데 실패했습니다.");
+      if (isMountedRef.current) {
+        setError("위치 정보를 가져오는데 실패했습니다.");
+      }
     } finally {
-      setIsLoading(false);
+      if (isMountedRef.current) {
+        setIsLoading(false);
+      }
+      isRefreshingRef.current = false;
     }
-  }, [requestPermission]);
+  }, [ensurePermission, getCurrentCoordinates, syncAddress]);
 
   return {
     location,
