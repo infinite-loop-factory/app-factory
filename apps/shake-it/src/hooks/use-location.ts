@@ -68,9 +68,9 @@ export function useLocation() {
   }, []);
 
   // 위치 갱신
-  const refreshLocation = useCallback(async (): Promise<void> => {
+  const refreshLocation = useCallback(async (): Promise<Location | null> => {
     if (isRefreshingRef.current) {
-      return;
+      return null;
     }
     isRefreshingRef.current = true;
     setIsLoading(true);
@@ -79,15 +79,17 @@ export function useLocation() {
     try {
       const hasPermission = await ensurePermission();
       if (!hasPermission) {
-        return;
+        return null;
       }
 
       const nextLocation = await getCurrentCoordinates();
       await syncAddress(nextLocation);
+      return nextLocation;
     } catch {
       if (isMountedRef.current) {
         setError("위치 정보를 가져오는데 실패했습니다.");
       }
+      return null;
     } finally {
       if (isMountedRef.current) {
         setIsLoading(false);

@@ -18,6 +18,36 @@ interface KakaoCoordToAddressResponse {
   documents: KakaoCoordToAddressDocument[];
 }
 
+interface KakaoCategorySearchDocument {
+  id: string;
+  place_name: string;
+  category_name: string;
+  address_name: string;
+  road_address_name: string;
+  x: string;
+  y: string;
+  place_url: string;
+  phone: string;
+  distance: string;
+}
+
+interface KakaoCategorySearchResponse {
+  documents: KakaoCategorySearchDocument[];
+}
+
+export interface KakaoRestaurant {
+  id: string;
+  name: string;
+  category: string;
+  address: string;
+  roadAddress: string;
+  longitude: number;
+  latitude: number;
+  placeUrl: string;
+  phone: string;
+  distanceMeter: number;
+}
+
 /**
  * 위도/경도를 받아서 한글 지역명을 반환합니다.
  * @param latitude 위도
@@ -87,5 +117,64 @@ export async function reverseGeocode(
   } catch (error) {
     console.error("Kakao reverse geocode error:", error);
     return "";
+  }
+}
+
+/**
+ * 현재 좌표 주변 음식점(카테고리 FD6)을 검색합니다.
+ * @param latitude 위도
+ * @param longitude 경도
+ * @param radius 반경(미터), 기본 1km
+ */
+export async function searchNearbyRestaurants(
+  latitude: number,
+  longitude: number,
+  radius = 1000,
+): Promise<KakaoRestaurant[]> {
+  if (!KAKAO_REST_API_KEY) {
+    console.error("Kakao REST API key is missing");
+    return [];
+  }
+
+  try {
+    const searchParams = new URLSearchParams({
+      category_group_code: "FD6",
+      x: longitude.toString(),
+      y: latitude.toString(),
+      radius: radius.toString(),
+      sort: "distance",
+      size: "15",
+    });
+
+    const url = `https://dapi.kakao.com/v2/local/search/category.json?${searchParams.toString()}`;
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        Authorization: `KakaoAK ${KAKAO_REST_API_KEY}`,
+        Accept: "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      console.error("Kakao category search failed:", response.status);
+      return [];
+    }
+
+    const data: KakaoCategorySearchResponse = await response.json();
+    return data.documents.map((place) => ({
+      id: place.id,
+      name: place.place_name,
+      category: place.category_name,
+      address: place.address_name,
+      roadAddress: place.road_address_name,
+      longitude: Number(place.x),
+      latitude: Number(place.y),
+      placeUrl: place.place_url,
+      phone: place.phone,
+      distanceMeter: Number(place.distance),
+    }));
+  } catch (error) {
+    console.error("Kakao category search error:", error);
+    return [];
   }
 }

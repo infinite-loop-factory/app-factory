@@ -1,9 +1,13 @@
+import type { KakaoRestaurant } from "@/services/kakao-api";
+
 import { MaterialIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import { memo, useEffect, useRef } from "react";
-import { Animated, Easing, Pressable, Text, View } from "react-native";
+import { memo, useCallback, useEffect, useRef, useState } from "react";
+import { Animated, Easing, Linking, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { RestaurantResultModal } from "@/components/restaurant-result-modal";
 import { useLocation } from "@/hooks/use-location";
+import { searchNearbyRestaurants } from "@/services/kakao-api";
 
 const C = {
   primary: "#3d6bf5",
@@ -268,11 +272,128 @@ const PhoneIllustration = memo(function PhoneIllustration() {
 export default function HomeScreen() {
   const pulseStyle = usePulseAnimation();
   const rippleStyle = useRippleAnimation();
-  const { address, refreshLocation } = useLocation();
+  const { address, location, refreshLocation } = useLocation();
+  const [isRecommending, setIsRecommending] = useState(false);
+  const [showRecommendLoadingText, setShowRecommendLoadingText] =
+    useState(false);
+  const [recommendationError, setRecommendationError] = useState<string | null>(
+    null,
+  );
+  const [recommendedRestaurant, setRecommendedRestaurant] =
+    useState<KakaoRestaurant | null>(null);
+  const showRecommendTimerRef = useRef<ReturnType<typeof setTimeout> | null>(
+    null,
+  );
+  const hideRecommendTimerRef = useRef<ReturnType<typeof setTimeout> | null>(
+    null,
+  );
+  const recommendShownAtRef = useRef<number | null>(null);
 
   useEffect(() => {
     refreshLocation();
   }, [refreshLocation]);
+
+  useEffect(() => {
+    if (showRecommendTimerRef.current) {
+      clearTimeout(showRecommendTimerRef.current);
+      showRecommendTimerRef.current = null;
+    }
+    if (hideRecommendTimerRef.current) {
+      clearTimeout(hideRecommendTimerRef.current);
+      hideRecommendTimerRef.current = null;
+    }
+
+    if (isRecommending) {
+      showRecommendTimerRef.current = setTimeout(() => {
+        recommendShownAtRef.current = Date.now();
+        setShowRecommendLoadingText(true);
+      }, 180);
+      return;
+    }
+
+    if (!showRecommendLoadingText) {
+      return;
+    }
+
+    const elapsed = recommendShownAtRef.current
+      ? Date.now() - recommendShownAtRef.current
+      : 0;
+    const remaining = Math.max(0, 500 - elapsed);
+
+    hideRecommendTimerRef.current = setTimeout(() => {
+      recommendShownAtRef.current = null;
+      setShowRecommendLoadingText(false);
+    }, remaining);
+  }, [isRecommending, showRecommendLoadingText]);
+
+  useEffect(() => {
+    return () => {
+      if (showRecommendTimerRef.current) {
+        clearTimeout(showRecommendTimerRef.current);
+      }
+      if (hideRecommendTimerRef.current) {
+        clearTimeout(hideRecommendTimerRef.current);
+      }
+    };
+  }, []);
+
+  const handleRecommendRestaurant = useCallback(async () => {
+    setIsRecommending(true);
+    setRecommendationError(null);
+
+    try {
+      const currentLocation = location ?? (await refreshLocation());
+      if (!currentLocation) {
+        setRecommendationError("현재 위치를 확인할 수 없습니다.");
+        return;
+      }
+
+      const restaurants = await searchNearbyRestaurants(
+        currentLocation.latitude,
+        currentLocation.longitude,
+      );
+      if (restaurants.length === 0) {
+        setRecommendationError("주변에서 추천할 음식점을 찾지 못했습니다.");
+        setRecommendedRestaurant(null);
+        return;
+      }
+
+      const randomIndex = Math.floor(Math.random() * restaurants.length);
+      const selected = restaurants[randomIndex];
+      if (!selected) {
+        setRecommendationError(
+          "추천 결과를 선택하지 못했습니다. 다시 시도해주세요.",
+        );
+        setRecommendedRestaurant(null);
+        return;
+      }
+
+      setRecommendedRestaurant(selected);
+    } catch {
+      setRecommendationError("음식점 추천 중 오류가 발생했습니다.");
+      setRecommendedRestaurant(null);
+    } finally {
+      setIsRecommending(false);
+    }
+  }, [location, refreshLocation]);
+
+  const handleCloseRecommendation = useCallback(() => {
+    setRecommendedRestaurant(null);
+  }, []);
+
+  const handleOpenMap = useCallback(async () => {
+    if (!recommendedRestaurant?.placeUrl) {
+      return;
+    }
+
+    const supported = await Linking.canOpenURL(recommendedRestaurant.placeUrl);
+    if (!supported) {
+      setRecommendationError("지도를 열 수 없습니다.");
+      return;
+    }
+
+    await Linking.openURL(recommendedRestaurant.placeUrl);
+  }, [recommendedRestaurant]);
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -381,6 +502,8 @@ export default function HomeScreen() {
       <View className="items-center px-6 pb-6">
         <Pressable
           className="h-14 w-full max-w-xs flex-row items-center justify-center gap-2 rounded-2xl"
+          disabled={isRecommending}
+          onPress={handleRecommendRestaurant}
           style={{
             backgroundColor: C.surface,
             shadowColor: "#000",
@@ -392,13 +515,30 @@ export default function HomeScreen() {
         >
           <MaterialIcons color={C.primary} name="touch-app" size={20} />
           <Text className="font-bold" style={{ color: C.textMain }}>
-            흔들지 않고 터치하기
+            {showRecommendLoadingText ? "추천 중..." : "흔들지 않고 터치하기"}
           </Text>
         </Pressable>
+        {recommendationError ? (
+          <Text
+            className="mt-3 text-center text-xs"
+            style={{ color: "#dc2626" }}
+          >
+            {recommendationError}
+          </Text>
+        ) : null}
         <Text className="mt-4 text-center text-xs" style={{ color: C.textSub }}>
           흔들기가 동작하지 않나요? 설정을 확인해주세요.
         </Text>
       </View>
+
+      <RestaurantResultModal
+        isRecommending={isRecommending}
+        onClose={handleCloseRecommendation}
+        onOpenMap={handleOpenMap}
+        onRefresh={handleRecommendRestaurant}
+        restaurant={recommendedRestaurant}
+        visible={Boolean(recommendedRestaurant)}
+      />
     </SafeAreaView>
   );
 }
