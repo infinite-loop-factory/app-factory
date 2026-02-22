@@ -1,5 +1,6 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
+import { Accelerometer } from "expo-sensors";
 import { memo, useCallback, useEffect, useRef } from "react";
 import { Animated, Easing, Linking, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -7,6 +8,7 @@ import { RestaurantResultModal } from "@/components/restaurant-result-modal";
 import { ShakeHomeFooter } from "@/components/shake-home-footer";
 import { ShakeHomeHeader } from "@/components/shake-home-header";
 import { ShakeHomeHero } from "@/components/shake-home-hero";
+import { APP_CONFIG } from "@/constants/config";
 import { useLocation } from "@/hooks/use-location";
 import { useRestaurantRecommendation } from "@/hooks/use-restaurant-recommendation";
 
@@ -293,6 +295,37 @@ export default function HomeScreen() {
   const handleRecommendRestaurant = useCallback(async () => {
     await recommendRestaurant(location, refreshLocation);
   }, [location, recommendRestaurant, refreshLocation]);
+
+  // Shake gesture detection
+  useEffect(() => {
+    if (process.env.EXPO_OS === "web") {
+      return;
+    }
+
+    const SHAKE_THRESHOLD = APP_CONFIG.DEFAULT_SHAKE_THRESHOLD;
+    let lastShakeTime = 0;
+    const SHAKE_COOLDOWN = APP_CONFIG.SHAKE_COOLDOWN;
+
+    Accelerometer.setUpdateInterval(APP_CONFIG.SHAKE_DETECTION_INTERVAL);
+
+    const subscription = Accelerometer.addListener((accelerometerData) => {
+      const { x, y, z } = accelerometerData;
+      const acceleration = Math.sqrt(x * x + y * y + z * z);
+
+      const now = Date.now();
+      if (
+        acceleration > SHAKE_THRESHOLD &&
+        now - lastShakeTime > SHAKE_COOLDOWN
+      ) {
+        lastShakeTime = now;
+        handleRecommendRestaurant();
+      }
+    });
+
+    return () => {
+      subscription.remove();
+    };
+  }, [handleRecommendRestaurant]);
 
   const handleCloseRecommendation = useCallback(() => {
     clearRecommendation();

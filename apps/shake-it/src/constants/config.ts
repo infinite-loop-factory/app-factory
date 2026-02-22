@@ -1,8 +1,8 @@
 export const APP_CONFIG = {
   // 흔들기 감지 기본 임계값
-  DEFAULT_SHAKE_THRESHOLD: 1.5,
+  DEFAULT_SHAKE_THRESHOLD: 3,
   // 흔들기 감지 간격 (ms)
-  SHAKE_DETECTION_INTERVAL: 100,
+  SHAKE_DETECTION_INTERVAL: 150,
   // 흔들기 쿨다운 (ms) - 연속 감지 방지
   SHAKE_COOLDOWN: 1000,
   // 기본 최소 별점

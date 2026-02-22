@@ -35,6 +35,9 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       "android.permission.ACCESS_COARSE_LOCATION",
     ],
   },
+  developmentClient: {
+    silentLaunch: true,
+  },
   web: {
     bundler: "metro",
     output: "static",
