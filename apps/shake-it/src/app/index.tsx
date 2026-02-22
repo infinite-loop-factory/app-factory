@@ -17,6 +17,19 @@ const C = {
   textSub: "#8B95A1",
 };
 
+const ROULETTE_INTERVAL_MS = 70;
+const ROULETTE_DURATION_MS = 700;
+const DEFAULT_CATEGORIES = ["한식", "중식", "일식", "양식"];
+
+function getCategoryLabel(path: string) {
+  const categories = path
+    .split(">")
+    .map((item) => item.trim())
+    .filter(Boolean);
+
+  return categories.at(-1) ?? "맛집";
+}
+
 function useShakeAnimation() {
   const rotation = useRef(new Animated.Value(0)).current;
 
@@ -274,6 +287,10 @@ export default function HomeScreen() {
   const rippleStyle = useRippleAnimation();
   const { address, location, refreshLocation } = useLocation();
   const [isRecommending, setIsRecommending] = useState(false);
+  const [isSelectingRestaurant, setIsSelectingRestaurant] = useState(false);
+  const [rouletteCategories, setRouletteCategories] =
+    useState<string[]>(DEFAULT_CATEGORIES);
+  const [rouletteIndex, setRouletteIndex] = useState(0);
   const [showRecommendLoadingText, setShowRecommendLoadingText] =
     useState(false);
   const [recommendationError, setRecommendationError] = useState<string | null>(
@@ -288,6 +305,12 @@ export default function HomeScreen() {
     null,
   );
   const recommendShownAtRef = useRef<number | null>(null);
+  const selectionTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(
+    null,
+  );
+  const rouletteIntervalRef = useRef<ReturnType<typeof setInterval> | null>(
+    null,
+  );
 
   useEffect(() => {
     refreshLocation();
@@ -334,10 +357,70 @@ export default function HomeScreen() {
       if (hideRecommendTimerRef.current) {
         clearTimeout(hideRecommendTimerRef.current);
       }
+      if (selectionTimeoutRef.current) {
+        clearTimeout(selectionTimeoutRef.current);
+      }
+      if (rouletteIntervalRef.current) {
+        clearInterval(rouletteIntervalRef.current);
+      }
     };
   }, []);
 
+  const clearRouletteTimers = useCallback(() => {
+    if (selectionTimeoutRef.current) {
+      clearTimeout(selectionTimeoutRef.current);
+      selectionTimeoutRef.current = null;
+    }
+    if (rouletteIntervalRef.current) {
+      clearInterval(rouletteIntervalRef.current);
+      rouletteIntervalRef.current = null;
+    }
+  }, []);
+
+  const playSelectionRoulette = useCallback(
+    async (restaurants: KakaoRestaurant[], selected: KakaoRestaurant) => {
+      clearRouletteTimers();
+      const categories = Array.from(
+        new Set(restaurants.map((item) => getCategoryLabel(item.category))),
+      );
+      const roulettePool =
+        categories.length > 0 ? categories : DEFAULT_CATEGORIES;
+      const selectedCategory = getCategoryLabel(selected.category);
+      const selectedCategoryIndex = roulettePool.indexOf(selectedCategory);
+
+      let nextIndex = Math.max(
+        0,
+        Math.floor(Math.random() * roulettePool.length),
+      );
+
+      setIsSelectingRestaurant(true);
+      setRouletteCategories(roulettePool);
+      setRouletteIndex(nextIndex);
+
+      await new Promise<void>((resolve) => {
+        rouletteIntervalRef.current = setInterval(() => {
+          nextIndex = (nextIndex + 1) % roulettePool.length;
+          setRouletteIndex(nextIndex);
+        }, ROULETTE_INTERVAL_MS);
+
+        selectionTimeoutRef.current = setTimeout(() => {
+          clearRouletteTimers();
+          if (selectedCategoryIndex >= 0) {
+            setRouletteIndex(selectedCategoryIndex);
+          }
+          setIsSelectingRestaurant(false);
+          resolve();
+        }, ROULETTE_DURATION_MS);
+      });
+    },
+    [clearRouletteTimers],
+  );
+
   const handleRecommendRestaurant = useCallback(async () => {
+    if (isRecommending || isSelectingRestaurant) {
+      return;
+    }
+
     setIsRecommending(true);
     setRecommendationError(null);
 
@@ -368,14 +451,24 @@ export default function HomeScreen() {
         return;
       }
 
+      await playSelectionRoulette(restaurants, selected);
       setRecommendedRestaurant(selected);
     } catch {
       setRecommendationError("음식점 추천 중 오류가 발생했습니다.");
       setRecommendedRestaurant(null);
+      clearRouletteTimers();
+      setIsSelectingRestaurant(false);
     } finally {
       setIsRecommending(false);
     }
-  }, [location, refreshLocation]);
+  }, [
+    clearRouletteTimers,
+    isRecommending,
+    isSelectingRestaurant,
+    location,
+    playSelectionRoulette,
+    refreshLocation,
+  ]);
 
   const handleCloseRecommendation = useCallback(() => {
     setRecommendedRestaurant(null);
@@ -502,7 +595,7 @@ export default function HomeScreen() {
       <View className="items-center px-6 pb-6">
         <Pressable
           className="h-14 w-full max-w-xs flex-row items-center justify-center gap-2 rounded-2xl"
-          disabled={isRecommending}
+          disabled={isRecommending || isSelectingRestaurant}
           onPress={handleRecommendRestaurant}
           style={{
             backgroundColor: C.surface,
@@ -532,11 +625,14 @@ export default function HomeScreen() {
       </View>
 
       <RestaurantResultModal
-        isRecommending={isRecommending}
+        isRecommending={isRecommending || isSelectingRestaurant}
+        isSelecting={isSelectingRestaurant}
         onClose={handleCloseRecommendation}
         onOpenMap={handleOpenMap}
         onRefresh={handleRecommendRestaurant}
         restaurant={recommendedRestaurant}
+        rouletteCategories={rouletteCategories}
+        rouletteIndex={rouletteIndex}
         visible={Boolean(recommendedRestaurant)}
       />
     </SafeAreaView>
