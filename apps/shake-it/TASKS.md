@@ -81,7 +81,7 @@ src/
 │   ├── use-location.ts     # 위치 정보 훅
 │   └── use-settings.ts     # 설정 관리 훅
 ├── services/
-│   ├── naver-api.ts        # 네이버 검색 API
+│   ├── kakao-api.ts        # 카카오 로컬 API
 │   ├── storage.ts          # AsyncStorage 래퍼
 │   └── linking.ts          # 딥링크 유틸리티
 ├── types/
@@ -326,7 +326,7 @@ export function useLocation() {
 
 ### Task 5.1: 네이버 검색 API 서비스 구현
 
-- [ ] `src/services/naver-api.ts` 파일을 생성해주세요:
+- [ ] `src/services/kakao-api.ts` 파일을 생성해주세요:
 
 **구현 요구사항:**
 

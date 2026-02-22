@@ -2,7 +2,7 @@ import type { Location } from "@/types";
 
 import * as ExpoLocation from "expo-location";
 import { useCallback, useState } from "react";
-import { reverseGeocode } from "@/services/naver-api";
+import { reverseGeocode } from "@/services/kakao-api";
 
 export function useLocation() {
   const [location, setLocation] = useState<Location | null>(null);
