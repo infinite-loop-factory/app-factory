@@ -112,7 +112,13 @@ export function FloatingActionButton({
   };
 
   return (
-    <Pressable className={buttonClasses} disabled={disabled} onPress={onPress}>
+    <Pressable
+      accessibilityLabel={label || "실행"}
+      accessibilityRole="button"
+      className={buttonClasses}
+      disabled={disabled}
+      onPress={onPress}
+    >
       {label ? (
         <VStack className="items-center" space="xs">
           {renderIcon()}

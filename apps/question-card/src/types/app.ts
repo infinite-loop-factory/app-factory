@@ -5,6 +5,7 @@
 import type {
   AppError,
   Category,
+  CategoryGroup,
   Difficulty,
   DifficultyLevel,
   FilteredQuestionSet,
@@ -18,6 +19,7 @@ import type {
 export interface AppState {
   // 데이터 상태
   categories: Category[];
+  categoryGroups: CategoryGroup[];
   difficulties: Difficulty[];
   allQuestions: Question[];
 
@@ -42,6 +44,7 @@ export type AppAction =
       type: "INITIALIZE_APP";
       payload: {
         categories: Category[];
+        categoryGroups: CategoryGroup[];
         difficulties: Difficulty[];
         questions: Question[];
       };
@@ -62,6 +65,7 @@ export interface AppContextType {
   actions: {
     initializeApp: (data: {
       categories: Category[];
+      categoryGroups: CategoryGroup[];
       difficulties: Difficulty[];
       questions: Question[];
     }) => void;
@@ -70,7 +74,7 @@ export interface AppContextType {
     selectCategories: (categoryIds: string[]) => void;
     selectDifficulties: (difficulties: DifficultyLevel[]) => void;
     setQuestionMode: (mode: QuestionMode) => void;
-    filterQuestions: () => void;
+    filterQuestions: (modeOverride?: QuestionMode) => void;
     setCurrentQuestionIndex: (index: number) => void;
     goToNextQuestion: () => void;
     goToPreviousQuestion: () => void;
@@ -88,34 +92,3 @@ export type RootStackParamList = {
   QuestionList: undefined;
   IndividualCard: { questionIndex: number; fromList: boolean };
 };
-
-// 네비게이션 상태 타입
-export interface NavigationState {
-  index: number;
-  routes: Array<{
-    name: keyof RootStackParamList;
-    params?: RootStackParamList[keyof RootStackParamList];
-  }>;
-}
-
-// 네비게이션 prop 타입들
-export type ScreenNavigationProp<_T extends keyof RootStackParamList> = {
-  navigate: (
-    screen: keyof RootStackParamList,
-    params?: RootStackParamList[keyof RootStackParamList],
-  ) => void;
-  goBack: () => void;
-  reset: (state: NavigationState) => void;
-};
-
-export type ScreenRouteProp<T extends keyof RootStackParamList> = {
-  key: string;
-  name: T;
-  params: RootStackParamList[T];
-};
-
-// 공통 스크린 Props
-export interface ScreenProps<T extends keyof RootStackParamList> {
-  navigation: ScreenNavigationProp<T>;
-  route: ScreenRouteProp<T>;
-}

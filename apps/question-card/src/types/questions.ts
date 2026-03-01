@@ -24,7 +24,16 @@ export interface Question {
   difficulty: DifficultyLevel;
   content: string;
   order: number;
-  hints?: QuestionHint[]; // 2개의 서로 다른 유형 힌트
+  hints: QuestionHint[]; // 2개의 서로 다른 유형 힌트
+}
+
+// 카테고리 그룹 정보
+export interface CategoryGroup {
+  id: string;
+  name: string;
+  icon: string;
+  description: string;
+  order: number;
 }
 
 // 카테고리 정보
@@ -35,6 +44,7 @@ export interface Category {
   color: string;
   description: string;
   orderIndex: number;
+  groupId?: string;
 }
 
 // 난이도 레벨
@@ -73,7 +83,7 @@ export interface QuestionProgress {
   currentIndex: number;
   totalQuestions: number;
   currentQuestion: Question | null;
-  isCompleted: boolean;
+  isOnLastQuestion: boolean;
   canGoBack: boolean;
   canGoForward: boolean;
 }

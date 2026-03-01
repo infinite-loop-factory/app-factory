@@ -5,42 +5,96 @@
       "name": "나의 취향",
       "icon": "📝",
       "color": "#FF6B6B",
-      "description": "좋아하는 것들에 대한 질문"
+      "description": "좋아하는 것들에 대한 질문",
+      "groupId": "self-discovery"
     },
     {
       "id": "talent",
       "name": "나의 재능",
       "icon": "🎯",
       "color": "#4ECDC4",
-      "description": "능력과 소질에 대한 질문"
+      "description": "능력과 소질에 대한 질문",
+      "groupId": "self-discovery"
     },
     {
       "id": "values",
       "name": "나의 가치관",
       "icon": "⚖️",
       "color": "#45B7D1",
-      "description": "신념과 가치관에 대한 질문"
+      "description": "신념과 가치관에 대한 질문",
+      "groupId": "self-discovery"
     },
     {
       "id": "experience",
       "name": "나의 경험",
       "icon": "🌟",
       "color": "#96CEB4",
-      "description": "과거 경험에 대한 질문"
+      "description": "과거 경험에 대한 질문",
+      "groupId": "self-discovery"
     },
     {
       "id": "daily",
       "name": "나의 일상",
       "icon": "🏠",
       "color": "#FFEAA7",
-      "description": "일상생활에 대한 질문"
+      "description": "일상생활에 대한 질문",
+      "groupId": "self-discovery"
     },
     {
       "id": "direction",
       "name": "나의 방향성",
       "icon": "🧭",
       "color": "#DDA0DD",
-      "description": "미래와 목표에 대한 질문"
+      "description": "미래와 목표에 대한 질문",
+      "groupId": "self-discovery"
+    },
+    {
+      "id": "deep-question",
+      "name": "깊은 질문",
+      "icon": "🔮",
+      "color": "#8b5cf6",
+      "description": "삶의 본질에 대한 깊은 질문",
+      "groupId": "conversation"
+    },
+    {
+      "id": "love-relationship",
+      "name": "연애와 관계",
+      "icon": "💕",
+      "color": "#f43f5e",
+      "description": "사랑과 인간관계에 대한 질문",
+      "groupId": "conversation"
+    },
+    {
+      "id": "fun-question",
+      "name": "재미있는 질문",
+      "icon": "🎉",
+      "color": "#84cc16",
+      "description": "가볍고 재미있는 질문",
+      "groupId": "conversation"
+    },
+    {
+      "id": "hypothetical",
+      "name": "가정 질문",
+      "icon": "🤔",
+      "color": "#14b8a6",
+      "description": "만약에... 상상력을 자극하는 질문",
+      "groupId": "conversation"
+    },
+    {
+      "id": "self-reflection",
+      "name": "자기 성찰",
+      "icon": "🪞",
+      "color": "#6366f1",
+      "description": "자신을 돌아보는 성찰 질문",
+      "groupId": "conversation"
+    },
+    {
+      "id": "controversial",
+      "name": "논쟁적 주제",
+      "icon": "⚡",
+      "color": "#ef4444",
+      "description": "다양한 관점의 토론 질문",
+      "groupId": "conversation"
     }
   ],
   "difficulties": [
@@ -72,7 +126,10 @@
       "content": "두려움을 극복하고 해낸 일이 있나요?",
       "order": 1,
       "hints": [
-        { "type": "keyword", "content": "도전, 용기, 성취, 자신감, 극복" },
+        {
+          "type": "keyword",
+          "content": "도전, 용기, 성취, 자신감, 극복"
+        },
         {
           "type": "example",
           "content": "처음 발표할 때 떨렸지만 끝까지 해냈어요"
@@ -109,7 +166,10 @@
           "type": "keyword",
           "content": "로맨스, 액션, 스릴러, SF, 코미디, 다큐"
         },
-        { "type": "example", "content": "반전이 있는 스릴러 영화를 좋아해요" }
+        {
+          "type": "example",
+          "content": "반전이 있는 스릴러 영화를 좋아해요"
+        }
       ]
     },
     {
@@ -124,7 +184,10 @@
           "type": "keyword",
           "content": "독서, 게임, 운동, 산책, 넷플릭스, SNS"
         },
-        { "type": "example", "content": "주말에는 주로 카페에서 책을 읽어요" }
+        {
+          "type": "example",
+          "content": "주말에는 주로 카페에서 책을 읽어요"
+        }
       ]
     },
     {
@@ -139,7 +202,10 @@
           "type": "keyword",
           "content": "매운맛, 단맛, 짠맛, 한식, 양식, 일식"
         },
-        { "type": "example", "content": "매콤달콤한 떡볶이를 좋아해요" }
+        {
+          "type": "example",
+          "content": "매콤달콤한 떡볶이를 좋아해요"
+        }
       ]
     },
     {
@@ -154,7 +220,10 @@
           "type": "keyword",
           "content": "배낭여행, 휴양, 도시, 자연, 맛집투어"
         },
-        { "type": "example", "content": "계획 없이 느긋하게 걷는 걸 좋아해요" }
+        {
+          "type": "example",
+          "content": "계획 없이 느긋하게 걷는 걸 좋아해요"
+        }
       ]
     },
     {
@@ -165,8 +234,14 @@
       "content": "책을 읽는다면 어떤 분야를 선호하나요?",
       "order": 7,
       "hints": [
-        { "type": "keyword", "content": "소설, 에세이, 자기계발, 역사, 과학" },
-        { "type": "example", "content": "잠들기 전 가벼운 에세이를 읽어요" }
+        {
+          "type": "keyword",
+          "content": "소설, 에세이, 자기계발, 역사, 과학"
+        },
+        {
+          "type": "example",
+          "content": "잠들기 전 가벼운 에세이를 읽어요"
+        }
       ]
     },
     {
@@ -177,8 +252,14 @@
       "content": "가장 좋아하는 색깔이 있나요?",
       "order": 8,
       "hints": [
-        { "type": "keyword", "content": "파란색, 초록색, 분홍색, 검정, 흰색" },
-        { "type": "example", "content": "차분한 느낌의 네이비 블루를 좋아해요" }
+        {
+          "type": "keyword",
+          "content": "파란색, 초록색, 분홍색, 검정, 흰색"
+        },
+        {
+          "type": "example",
+          "content": "차분한 느낌의 네이비 블루를 좋아해요"
+        }
       ]
     },
     {
@@ -193,7 +274,10 @@
           "type": "thinking",
           "content": "그 작품이 내 생각이나 행동에 어떤 변화를 주었나요?"
         },
-        { "type": "related", "content": "그 작품을 접한 시기와 당시 상황은?" }
+        {
+          "type": "related",
+          "content": "그 작품을 접한 시기와 당시 상황은?"
+        }
       ]
     },
     {
@@ -208,7 +292,10 @@
           "type": "thinking",
           "content": "평소 관심은 있었지만 시도하지 못한 것이 있나요?"
         },
-        { "type": "related", "content": "그 취미에 끌리는 이유는 무엇인가요?" }
+        {
+          "type": "related",
+          "content": "그 취미에 끌리는 이유는 무엇인가요?"
+        }
       ]
     },
     {
@@ -223,7 +310,10 @@
           "type": "thinking",
           "content": "에너지를 얻는 관계 vs 소진되는 관계의 차이점은?"
         },
-        { "type": "related", "content": "가장 편안했던 모임이나 그룹은?" }
+        {
+          "type": "related",
+          "content": "가장 편안했던 모임이나 그룹은?"
+        }
       ]
     },
     {
@@ -238,7 +328,10 @@
           "type": "thinking",
           "content": "아침부터 밤까지 시간대별로 상상해보세요"
         },
-        { "type": "related", "content": "혼자 보내고 싶나요, 누군가와 함께?" }
+        {
+          "type": "related",
+          "content": "혼자 보내고 싶나요, 누군가와 함께?"
+        }
       ]
     },
     {
@@ -253,7 +346,10 @@
           "type": "thinking",
           "content": "몸을 움직이는 방법 vs 마음을 가라앉히는 방법?"
         },
-        { "type": "related", "content": "언제 이 방법을 발견했나요?" }
+        {
+          "type": "related",
+          "content": "언제 이 방법을 발견했나요?"
+        }
       ]
     },
     {
@@ -268,7 +364,10 @@
           "type": "thinking",
           "content": "음악, 미술, 문학, 영화, 공연 중 무엇에 가장 반응하나요?"
         },
-        { "type": "related", "content": "어떤 감정이나 경험을 줄 때 좋은가요?" }
+        {
+          "type": "related",
+          "content": "어떤 감정이나 경험을 줄 때 좋은가요?"
+        }
       ]
     },
     {
@@ -405,8 +504,14 @@
       "content": "친구들이 인정해주는 나의 장점은?",
       "order": 2,
       "hints": [
-        { "type": "keyword", "content": "유머, 배려, 성실함, 창의력, 리더십" },
-        { "type": "example", "content": "친구들이 고민 상담을 자주 해와요" }
+        {
+          "type": "keyword",
+          "content": "유머, 배려, 성실함, 창의력, 리더십"
+        },
+        {
+          "type": "example",
+          "content": "친구들이 고민 상담을 자주 해와요"
+        }
       ]
     },
     {
@@ -417,8 +522,14 @@
       "content": "새로운 것을 배울 때 가장 빠르게 익히는 분야는?",
       "order": 3,
       "hints": [
-        { "type": "keyword", "content": "언어, 기술, 운동, 예술, 대인관계" },
-        { "type": "example", "content": "새로운 앱이나 프로그램을 금방 익혀요" }
+        {
+          "type": "keyword",
+          "content": "언어, 기술, 운동, 예술, 대인관계"
+        },
+        {
+          "type": "example",
+          "content": "새로운 앱이나 프로그램을 금방 익혀요"
+        }
       ]
     },
     {
@@ -433,7 +544,10 @@
           "type": "keyword",
           "content": "조언, 기술지원, 물건수리, 이사도움, 글작성"
         },
-        { "type": "example", "content": "발표자료 만들 때 도움을 요청받아요" }
+        {
+          "type": "example",
+          "content": "발표자료 만들 때 도움을 요청받아요"
+        }
       ]
     },
     {
@@ -448,7 +562,10 @@
           "type": "keyword",
           "content": "그림, 암기, 달리기, 노래, 수학, 글쓰기"
         },
-        { "type": "example", "content": "어릴 때부터 그림 그리기를 좋아했어요" }
+        {
+          "type": "example",
+          "content": "어릴 때부터 그림 그리기를 좋아했어요"
+        }
       ]
     },
     {
@@ -463,7 +580,10 @@
           "type": "keyword",
           "content": "외모, 성격, 능력, 센스, 꼼꼼함, 창의성"
         },
-        { "type": "example", "content": "꼼꼼하다는 칭찬을 자주 들어요" }
+        {
+          "type": "example",
+          "content": "꼼꼼하다는 칭찬을 자주 들어요"
+        }
       ]
     },
     {
@@ -478,7 +598,10 @@
           "type": "keyword",
           "content": "요리, 공예, 스포츠, 춤, DIY, 악기연주"
         },
-        { "type": "example", "content": "손으로 만드는 것을 좋아해요" }
+        {
+          "type": "example",
+          "content": "손으로 만드는 것을 좋아해요"
+        }
       ]
     },
     {
@@ -493,7 +616,10 @@
           "type": "keyword",
           "content": "분석적, 직관적, 협력적, 실험적, 체계적"
         },
-        { "type": "example", "content": "일단 여러 가지를 시도해보는 편이에요" }
+        {
+          "type": "example",
+          "content": "일단 여러 가지를 시도해보는 편이에요"
+        }
       ]
     },
     {
@@ -508,7 +634,10 @@
           "type": "thinking",
           "content": "기회나 환경만 된다면 해보고 싶은 것이 있나요?"
         },
-        { "type": "related", "content": "왜 아직 시도하지 못했을까요?" }
+        {
+          "type": "related",
+          "content": "왜 아직 시도하지 못했을까요?"
+        }
       ]
     },
     {
@@ -523,7 +652,10 @@
           "type": "thinking",
           "content": "리더, 조율자, 아이디어뱅크, 실행자 중 어디에 가까운가요?"
         },
-        { "type": "related", "content": "그 역할이 편한가요, 불편한가요?" }
+        {
+          "type": "related",
+          "content": "그 역할이 편한가요, 불편한가요?"
+        }
       ]
     },
     {
@@ -538,7 +670,10 @@
           "type": "thinking",
           "content": "위기 상황에서 오히려 빛나는 면이 있나요?"
         },
-        { "type": "related", "content": "평상시와 다르게 작동하는 능력은?" }
+        {
+          "type": "related",
+          "content": "평상시와 다르게 작동하는 능력은?"
+        }
       ]
     },
     {
@@ -549,8 +684,14 @@
       "content": "다른 사람들과의 소통에서 나의 강점은 무엇인가요?",
       "order": 12,
       "hints": [
-        { "type": "thinking", "content": "경청, 설득, 공감, 유머 중 강점은?" },
-        { "type": "related", "content": "대화할 때 자주 듣는 피드백이 있나요?" }
+        {
+          "type": "thinking",
+          "content": "경청, 설득, 공감, 유머 중 강점은?"
+        },
+        {
+          "type": "related",
+          "content": "대화할 때 자주 듣는 피드백이 있나요?"
+        }
       ]
     },
     {
@@ -561,7 +702,10 @@
       "content": "새로운 도전이나 배움에 대한 나의 접근 방식은?",
       "order": 13,
       "hints": [
-        { "type": "thinking", "content": "계획 후 실행 vs 일단 시작 후 조정?" },
+        {
+          "type": "thinking",
+          "content": "계획 후 실행 vs 일단 시작 후 조정?"
+        },
         {
           "type": "related",
           "content": "실패에 대한 두려움은 어느 정도인가요?"
@@ -580,7 +724,10 @@
           "type": "thinking",
           "content": "공식적인 리더가 아니어도 주도했던 경험은?"
         },
-        { "type": "related", "content": "리더 역할이 편한가요, 불편한가요?" }
+        {
+          "type": "related",
+          "content": "리더 역할이 편한가요, 불편한가요?"
+        }
       ]
     },
     {
@@ -595,7 +742,10 @@
           "type": "thinking",
           "content": "위로자, 해결사, 중재자, 관찰자 중 어디에 가까운가요?"
         },
-        { "type": "related", "content": "이런 역할이 자연스럽게 맡겨지나요?" }
+        {
+          "type": "related",
+          "content": "이런 역할이 자연스럽게 맡겨지나요?"
+        }
       ]
     },
     {
@@ -610,7 +760,10 @@
           "type": "thinking",
           "content": "결정을 내릴 때 머리와 마음 중 무엇을 더 따르나요?"
         },
-        { "type": "related", "content": "상황에 따라 달라지나요?" }
+        {
+          "type": "related",
+          "content": "상황에 따라 달라지나요?"
+        }
       ]
     },
     {
@@ -621,7 +774,10 @@
       "content": "나의 재능을 최대로 발휘하려면 어떤 환경이나 조건이 필요한가요?",
       "order": 17,
       "hints": [
-        { "type": "thinking", "content": "언제 가장 몰입하고 성과를 냈나요?" },
+        {
+          "type": "thinking",
+          "content": "언제 가장 몰입하고 성과를 냈나요?"
+        },
         {
           "type": "situation",
           "content": "혼자 vs 팀, 자유로움 vs 구조화, 압박 vs 여유 등"
@@ -636,8 +792,14 @@
       "content": "재능과 노력 중 무엇이 나의 성과에 더 큰 영향을 미쳤나요?",
       "order": 18,
       "hints": [
-        { "type": "thinking", "content": "타고난 것과 갈고닦은 것의 비율은?" },
-        { "type": "situation", "content": "노력으로 극복한 한계가 있었나요?" }
+        {
+          "type": "thinking",
+          "content": "타고난 것과 갈고닦은 것의 비율은?"
+        },
+        {
+          "type": "situation",
+          "content": "노력으로 극복한 한계가 있었나요?"
+        }
       ]
     },
     {
@@ -648,7 +810,10 @@
       "content": "나만의 독특한 관점이나 사고방식이 있다고 생각하나요?",
       "order": 19,
       "hints": [
-        { "type": "thinking", "content": "남들과 다르게 보는 것이 있나요?" },
+        {
+          "type": "thinking",
+          "content": "남들과 다르게 보는 것이 있나요?"
+        },
         {
           "type": "situation",
           "content": "이런 관점이 도움이 됐거나 갈등을 일으킨 경험은?"
@@ -807,7 +972,10 @@
       "content": "개인의 자유와 사회적 책임 중 무엇이 더 중요한가요?",
       "order": 8,
       "hints": [
-        { "type": "keyword", "content": "자유, 책임, 조화, 공동체, 개인주의" },
+        {
+          "type": "keyword",
+          "content": "자유, 책임, 조화, 공동체, 개인주의"
+        },
         {
           "type": "example",
           "content": "자유를 누리되 타인에게 피해주지 않아야 해요"
@@ -844,7 +1012,10 @@
           "type": "thinking",
           "content": "옳고 그름을 판단하는 나만의 기준이 있나요?"
         },
-        { "type": "related", "content": "최근 겪은 딜레마 상황이 있다면?" }
+        {
+          "type": "related",
+          "content": "최근 겪은 딜레마 상황이 있다면?"
+        }
       ]
     },
     {
@@ -859,7 +1030,10 @@
           "type": "thinking",
           "content": "세대 간 가치관 차이를 어떻게 느끼나요?"
         },
-        { "type": "related", "content": "물려받고 싶은 것과 바꾸고 싶은 것은?" }
+        {
+          "type": "related",
+          "content": "물려받고 싶은 것과 바꾸고 싶은 것은?"
+        }
       ]
     },
     {
@@ -870,8 +1044,14 @@
       "content": "사회적 정의에 대한 나의 생각은 어떤가요?",
       "order": 12,
       "hints": [
-        { "type": "thinking", "content": "공정함이란 무엇이라고 생각하나요?" },
-        { "type": "related", "content": "불공정하다고 느꼈던 경험이 있나요?" }
+        {
+          "type": "thinking",
+          "content": "공정함이란 무엇이라고 생각하나요?"
+        },
+        {
+          "type": "related",
+          "content": "불공정하다고 느꼈던 경험이 있나요?"
+        }
       ]
     },
     {
@@ -886,7 +1066,10 @@
           "type": "thinking",
           "content": "안전한 선택 vs 도전적 선택, 어느 쪽인가요?"
         },
-        { "type": "related", "content": "후회하는 '하지 않은 일'이 있나요?" }
+        {
+          "type": "related",
+          "content": "후회하는 '하지 않은 일'이 있나요?"
+        }
       ]
     },
     {
@@ -919,7 +1102,10 @@
           "type": "thinking",
           "content": "설득, 타협, 존중, 거리두기 중 주로 어떤 방식?"
         },
-        { "type": "related", "content": "최근 가치관 충돌이 있었던 상황은?" }
+        {
+          "type": "related",
+          "content": "최근 가치관 충돌이 있었던 상황은?"
+        }
       ]
     },
     {
@@ -934,7 +1120,10 @@
           "type": "thinking",
           "content": "돈을 더 벌 수 있지만 스트레스가 크다면?"
         },
-        { "type": "related", "content": "적정 수준의 물질적 풍요란 어느 정도?" }
+        {
+          "type": "related",
+          "content": "적정 수준의 물질적 풍요란 어느 정도?"
+        }
       ]
     },
     {
@@ -1003,7 +1192,10 @@
           "type": "thinking",
           "content": "자녀나 후배에게 가르치고 싶은 것은?"
         },
-        { "type": "situation", "content": "배움, 존중, 도전, 감사, 책임감 등" }
+        {
+          "type": "situation",
+          "content": "배움, 존중, 도전, 감사, 책임감 등"
+        }
       ]
     },
     {
@@ -1014,8 +1206,14 @@
       "content": "가장 기억에 남는 여행지는 어디인가요?",
       "order": 1,
       "hints": [
-        { "type": "keyword", "content": "국내, 해외, 자연, 도시, 문화, 음식" },
-        { "type": "example", "content": "제주도에서 본 일출이 아직도 기억나요" }
+        {
+          "type": "keyword",
+          "content": "국내, 해외, 자연, 도시, 문화, 음식"
+        },
+        {
+          "type": "example",
+          "content": "제주도에서 본 일출이 아직도 기억나요"
+        }
       ]
     },
     {
@@ -1116,7 +1314,10 @@
       "content": "예상치 못한 좋은 일이 생겼던 적이 있나요?",
       "order": 7,
       "hints": [
-        { "type": "keyword", "content": "당첨, 우연한만남, 기회, 선물, 합격" },
+        {
+          "type": "keyword",
+          "content": "당첨, 우연한만남, 기회, 선물, 합격"
+        },
         {
           "type": "example",
           "content": "우연히 들른 카페에서 좋은 사람을 만났어요"
@@ -1131,7 +1332,10 @@
       "content": "가족과의 추억 중 가장 따뜻했던 순간은?",
       "order": 8,
       "hints": [
-        { "type": "keyword", "content": "명절, 생일, 여행, 대화, 함께한식사" },
+        {
+          "type": "keyword",
+          "content": "명절, 생일, 여행, 대화, 함께한식사"
+        },
         {
           "type": "example",
           "content": "온 가족이 모여 떡국 먹던 설날이 그리워요"
@@ -1146,8 +1350,14 @@
       "content": "인생에서 가장 도전적이었던 경험은 무엇인가요?",
       "order": 9,
       "hints": [
-        { "type": "thinking", "content": "두려웠지만 해냈던 일이 있나요?" },
-        { "type": "related", "content": "그 도전이 나에게 어떤 의미였나요?" }
+        {
+          "type": "thinking",
+          "content": "두려웠지만 해냈던 일이 있나요?"
+        },
+        {
+          "type": "related",
+          "content": "그 도전이 나에게 어떤 의미였나요?"
+        }
       ]
     },
     {
@@ -1158,8 +1368,14 @@
       "content": "실패했지만 값진 교훈을 얻었던 경험이 있나요?",
       "order": 10,
       "hints": [
-        { "type": "thinking", "content": "그 실패가 없었다면 몰랐을 것은?" },
-        { "type": "related", "content": "지금은 그 실패를 어떻게 바라보나요?" }
+        {
+          "type": "thinking",
+          "content": "그 실패가 없었다면 몰랐을 것은?"
+        },
+        {
+          "type": "related",
+          "content": "지금은 그 실패를 어떻게 바라보나요?"
+        }
       ]
     },
     {
@@ -1170,7 +1386,10 @@
       "content": "타인의 도움으로 어려움을 극복했던 경험은?",
       "order": 11,
       "hints": [
-        { "type": "thinking", "content": "누가, 어떻게 도움을 주었나요?" },
+        {
+          "type": "thinking",
+          "content": "누가, 어떻게 도움을 주었나요?"
+        },
         {
           "type": "related",
           "content": "그 경험이 관계에 어떤 영향을 주었나요?"
@@ -1189,7 +1408,10 @@
           "type": "thinking",
           "content": "그 계절과 연관된 기억이나 감정이 있나요?"
         },
-        { "type": "related", "content": "그 계절에 하고 싶은 활동은?" }
+        {
+          "type": "related",
+          "content": "그 계절에 하고 싶은 활동은?"
+        }
       ]
     },
     {
@@ -1204,7 +1426,10 @@
           "type": "thinking",
           "content": "좋은 쪽이든 나쁜 쪽이든 기대와 달랐던 일은?"
         },
-        { "type": "related", "content": "그 경험이 기대를 바꾸게 했나요?" }
+        {
+          "type": "related",
+          "content": "그 경험이 기대를 바꾸게 했나요?"
+        }
       ]
     },
     {
@@ -1219,7 +1444,10 @@
           "type": "thinking",
           "content": "해외여행, 다른 지역, 새로운 조직에서의 경험은?"
         },
-        { "type": "related", "content": "당연하게 여겼던 것이 달라 보인 적이?" }
+        {
+          "type": "related",
+          "content": "당연하게 여겼던 것이 달라 보인 적이?"
+        }
       ]
     },
     {
@@ -1248,7 +1476,10 @@
       "content": "감동받았던 사람과의 만남이나 이야기가 있나요?",
       "order": 16,
       "hints": [
-        { "type": "thinking", "content": "마음이 움직였던 순간은 언제인가요?" },
+        {
+          "type": "thinking",
+          "content": "마음이 움직였던 순간은 언제인가요?"
+        },
         {
           "type": "related",
           "content": "그 사람이나 이야기가 왜 감동적이었나요?"
@@ -1263,7 +1494,10 @@
       "content": "과거로 돌아간다면 다르게 하고 싶은 선택이 있나요?",
       "order": 17,
       "hints": [
-        { "type": "thinking", "content": "후회되는 선택의 순간이 있나요?" },
+        {
+          "type": "thinking",
+          "content": "후회되는 선택의 순간이 있나요?"
+        },
         {
           "type": "situation",
           "content": "진로, 관계, 기회, 말과 행동 등 다양한 영역에서"
@@ -1332,7 +1566,10 @@
       "content": "하루 중 가장 좋아하는 시간대는 언제인가요?",
       "order": 1,
       "hints": [
-        { "type": "keyword", "content": "아침, 점심, 저녁, 늦은밤, 새벽" },
+        {
+          "type": "keyword",
+          "content": "아침, 점심, 저녁, 늦은밤, 새벽"
+        },
         {
           "type": "example",
           "content": "해가 지는 저녁 시간이 가장 평화로워요"
@@ -1351,7 +1588,10 @@
           "type": "keyword",
           "content": "핸드폰, 스트레칭, 물마시기, 커피, 샤워"
         },
-        { "type": "example", "content": "눈 뜨자마자 핸드폰부터 확인해요" }
+        {
+          "type": "example",
+          "content": "눈 뜨자마자 핸드폰부터 확인해요"
+        }
       ]
     },
     {
@@ -1384,7 +1624,10 @@
           "type": "keyword",
           "content": "업무시간, 식사시간, 운동시간, 취미시간"
         },
-        { "type": "example", "content": "점심시간의 여유가 하루를 좌우해요" }
+        {
+          "type": "example",
+          "content": "점심시간의 여유가 하루를 좌우해요"
+        }
       ]
     },
     {
@@ -1395,7 +1638,10 @@
       "content": "집에서 가장 좋아하는 공간은 어디인가요?",
       "order": 5,
       "hints": [
-        { "type": "keyword", "content": "침실, 거실, 서재, 베란다, 부엌" },
+        {
+          "type": "keyword",
+          "content": "침실, 거실, 서재, 베란다, 부엌"
+        },
         {
           "type": "example",
           "content": "창가 자리에서 햇살 받으며 쉬는 게 좋아요"
@@ -1414,7 +1660,10 @@
           "type": "keyword",
           "content": "카카오톡, 유튜브, 인스타, 네이버, 배민"
         },
-        { "type": "example", "content": "유튜브 없이는 하루도 못 살 것 같아요" }
+        {
+          "type": "example",
+          "content": "유튜브 없이는 하루도 못 살 것 같아요"
+        }
       ]
     },
     {
@@ -1425,8 +1674,14 @@
       "content": "잠들기 전에 주로 무엇을 하나요?",
       "order": 7,
       "hints": [
-        { "type": "keyword", "content": "핸드폰, 독서, 음악, 명상, 대화" },
-        { "type": "example", "content": "ASMR 들으면서 잠들어요" }
+        {
+          "type": "keyword",
+          "content": "핸드폰, 독서, 음악, 명상, 대화"
+        },
+        {
+          "type": "example",
+          "content": "ASMR 들으면서 잠들어요"
+        }
       ]
     },
     {
@@ -1437,7 +1692,10 @@
       "content": "평일과 주말 중 어느 쪽을 더 좋아하나요?",
       "order": 8,
       "hints": [
-        { "type": "keyword", "content": "일상의리듬, 자유로움, 루틴, 휴식" },
+        {
+          "type": "keyword",
+          "content": "일상의리듬, 자유로움, 루틴, 휴식"
+        },
         {
           "type": "example",
           "content": "주말의 자유로움이 좋지만 월요병이 싫어요"
@@ -1452,8 +1710,14 @@
       "content": "스트레스를 해소하는 나만의 방법이 있나요?",
       "order": 9,
       "hints": [
-        { "type": "thinking", "content": "효과가 있었던 해소법은 무엇인가요?" },
-        { "type": "related", "content": "언제 이 방법을 발견하게 되었나요?" }
+        {
+          "type": "thinking",
+          "content": "효과가 있었던 해소법은 무엇인가요?"
+        },
+        {
+          "type": "related",
+          "content": "언제 이 방법을 발견하게 되었나요?"
+        }
       ]
     },
     {
@@ -1468,7 +1732,10 @@
           "type": "thinking",
           "content": "이 루틴이 없으면 하루가 어떻게 달라지나요?"
         },
-        { "type": "related", "content": "이 루틴을 시작하게 된 계기는?" }
+        {
+          "type": "related",
+          "content": "이 루틴을 시작하게 된 계기는?"
+        }
       ]
     },
     {
@@ -1483,7 +1750,10 @@
           "type": "thinking",
           "content": "유연하게 대처하는 편인가요, 당황하는 편인가요?"
         },
-        { "type": "related", "content": "최근 예상 밖의 일이 있었다면?" }
+        {
+          "type": "related",
+          "content": "최근 예상 밖의 일이 있었다면?"
+        }
       ]
     },
     {
@@ -1512,8 +1782,14 @@
       "content": "일과 휴식의 균형을 어떻게 맞추려고 노력하나요?",
       "order": 13,
       "hints": [
-        { "type": "thinking", "content": "워라밸에 대한 나의 생각은?" },
-        { "type": "related", "content": "균형이 깨졌을 때 어떤 신호가 오나요?" }
+        {
+          "type": "thinking",
+          "content": "워라밸에 대한 나의 생각은?"
+        },
+        {
+          "type": "related",
+          "content": "균형이 깨졌을 때 어떤 신호가 오나요?"
+        }
       ]
     },
     {
@@ -1528,7 +1804,10 @@
           "type": "thinking",
           "content": "이상적인 비율과 현재 비율의 차이는?"
         },
-        { "type": "related", "content": "더 원하는 시간은 어느 쪽인가요?" }
+        {
+          "type": "related",
+          "content": "더 원하는 시간은 어느 쪽인가요?"
+        }
       ]
     },
     {
@@ -1539,7 +1818,10 @@
       "content": "일상에서 감사함을 느끼는 순간들이 있나요?",
       "order": 15,
       "hints": [
-        { "type": "thinking", "content": "작은 것에서 행복을 느끼는 순간은?" },
+        {
+          "type": "thinking",
+          "content": "작은 것에서 행복을 느끼는 순간은?"
+        },
         {
           "type": "related",
           "content": "오늘 감사했던 것 세 가지를 떠올려보세요"
@@ -1558,7 +1840,10 @@
           "type": "thinking",
           "content": "운동, 식단, 수면 중 가장 신경쓰는 것은?"
         },
-        { "type": "related", "content": "건강을 챙기게 된 계기가 있나요?" }
+        {
+          "type": "related",
+          "content": "건강을 챙기게 된 계기가 있나요?"
+        }
       ]
     },
     {
@@ -1569,7 +1854,10 @@
       "content": "현재의 일상에서 가장 바꾸고 싶은 것은 무엇인가요?",
       "order": 17,
       "hints": [
-        { "type": "thinking", "content": "왜 바꾸기 어려운 걸까요?" },
+        {
+          "type": "thinking",
+          "content": "왜 바꾸기 어려운 걸까요?"
+        },
         {
           "type": "situation",
           "content": "습관, 환경, 관계, 시간 사용 등 다양한 영역에서"
@@ -1602,7 +1890,10 @@
       "content": "일상의 반복이 주는 의미나 가치를 어떻게 생각하나요?",
       "order": 19,
       "hints": [
-        { "type": "thinking", "content": "루틴의 안정감 vs 반복의 지루함?" },
+        {
+          "type": "thinking",
+          "content": "루틴의 안정감 vs 반복의 지루함?"
+        },
         {
           "type": "situation",
           "content": "반복 속에서 발견한 소중한 것이 있다면?"
@@ -1617,7 +1908,10 @@
       "content": "바쁜 일상 속에서 놓치고 있는 것이 있다고 생각하나요?",
       "order": 20,
       "hints": [
-        { "type": "thinking", "content": "정신없이 살다 보면 잊게 되는 것은?" },
+        {
+          "type": "thinking",
+          "content": "정신없이 살다 보면 잊게 되는 것은?"
+        },
         {
           "type": "situation",
           "content": "관계, 건강, 취미, 휴식, 자기성찰 등"
@@ -1632,8 +1926,14 @@
       "content": "올해 이루고 싶은 목표가 있나요?",
       "order": 1,
       "hints": [
-        { "type": "keyword", "content": "건강, 재테크, 자기계발, 관계, 취미" },
-        { "type": "example", "content": "올해는 운동 습관을 만들고 싶어요" }
+        {
+          "type": "keyword",
+          "content": "건강, 재테크, 자기계발, 관계, 취미"
+        },
+        {
+          "type": "example",
+          "content": "올해는 운동 습관을 만들고 싶어요"
+        }
       ]
     },
     {
@@ -1644,8 +1944,14 @@
       "content": "새롭게 시작해보고 싶은 일이 있나요?",
       "order": 2,
       "hints": [
-        { "type": "keyword", "content": "취미, 사업, 공부, 여행, 봉사활동" },
-        { "type": "example", "content": "언젠가 요리 클래스를 듣고 싶어요" }
+        {
+          "type": "keyword",
+          "content": "취미, 사업, 공부, 여행, 봉사활동"
+        },
+        {
+          "type": "example",
+          "content": "언젠가 요리 클래스를 듣고 싶어요"
+        }
       ]
     },
     {
@@ -1656,7 +1962,10 @@
       "content": "10년 전과 비교해서 어떤 점이 가장 많이 변했나요?",
       "order": 3,
       "hints": [
-        { "type": "keyword", "content": "외모, 성격, 가치관, 관계, 생활방식" },
+        {
+          "type": "keyword",
+          "content": "외모, 성격, 가치관, 관계, 생활방식"
+        },
         {
           "type": "example",
           "content": "예전보다 혼자 있는 시간을 즐기게 됐어요"
@@ -1675,7 +1984,10 @@
           "type": "keyword",
           "content": "유럽, 일본, 남미, 아프리카, 국내여행"
         },
-        { "type": "example", "content": "죽기 전에 오로라를 꼭 보고 싶어요" }
+        {
+          "type": "example",
+          "content": "죽기 전에 오로라를 꼭 보고 싶어요"
+        }
       ]
     },
     {
@@ -1686,7 +1998,10 @@
       "content": "배우고 싶은 새로운 기술이나 지식이 있나요?",
       "order": 5,
       "hints": [
-        { "type": "keyword", "content": "외국어, 악기, 코딩, 그림, 요리" },
+        {
+          "type": "keyword",
+          "content": "외국어, 악기, 코딩, 그림, 요리"
+        },
         {
           "type": "example",
           "content": "스페인어를 배워서 남미 여행 가고 싶어요"
@@ -1701,8 +2016,14 @@
       "content": "미래의 나에게 하고 싶은 말이 있다면?",
       "order": 6,
       "hints": [
-        { "type": "keyword", "content": "응원, 조언, 질문, 당부, 감사" },
-        { "type": "example", "content": "지금의 고생이 헛되지 않기를 바라요" }
+        {
+          "type": "keyword",
+          "content": "응원, 조언, 질문, 당부, 감사"
+        },
+        {
+          "type": "example",
+          "content": "지금의 고생이 헛되지 않기를 바라요"
+        }
       ]
     },
     {
@@ -1713,8 +2034,14 @@
       "content": "은퇴 후에 하고 싶은 일이 있나요?",
       "order": 7,
       "hints": [
-        { "type": "keyword", "content": "여행, 취미, 봉사, 가족, 창업" },
-        { "type": "example", "content": "작은 정원이 있는 집에서 살고 싶어요" }
+        {
+          "type": "keyword",
+          "content": "여행, 취미, 봉사, 가족, 창업"
+        },
+        {
+          "type": "example",
+          "content": "작은 정원이 있는 집에서 살고 싶어요"
+        }
       ]
     },
     {
@@ -1725,8 +2052,14 @@
       "content": "내년에는 어떤 새로운 도전을 해보고 싶나요?",
       "order": 8,
       "hints": [
-        { "type": "keyword", "content": "이직, 창업, 공부, 여행, 관계" },
-        { "type": "example", "content": "마라톤 완주에 도전해보고 싶어요" }
+        {
+          "type": "keyword",
+          "content": "이직, 창업, 공부, 여행, 관계"
+        },
+        {
+          "type": "example",
+          "content": "마라톤 완주에 도전해보고 싶어요"
+        }
       ]
     },
     {
@@ -1759,7 +2092,10 @@
           "type": "thinking",
           "content": "어떤 분야에서 더 나아지려고 노력하나요?"
         },
-        { "type": "related", "content": "왜 그 분야에 집중하게 됐나요?" }
+        {
+          "type": "related",
+          "content": "왜 그 분야에 집중하게 됐나요?"
+        }
       ]
     },
     {
@@ -1770,8 +2106,14 @@
       "content": "이루고 싶은 꿈을 위해 현재 어떤 노력을 하고 있나요?",
       "order": 11,
       "hints": [
-        { "type": "thinking", "content": "꿈과 현재 행동 사이의 연결고리는?" },
-        { "type": "related", "content": "더 노력해야 할 부분이 있다면?" }
+        {
+          "type": "thinking",
+          "content": "꿈과 현재 행동 사이의 연결고리는?"
+        },
+        {
+          "type": "related",
+          "content": "더 노력해야 할 부분이 있다면?"
+        }
       ]
     },
     {
@@ -1786,7 +2128,10 @@
           "type": "thinking",
           "content": "시간과 에너지를 가장 많이 쏟는 곳은?"
         },
-        { "type": "related", "content": "우선순위와 실제 행동이 일치하나요?" }
+        {
+          "type": "related",
+          "content": "우선순위와 실제 행동이 일치하나요?"
+        }
       ]
     },
     {
@@ -1801,7 +2146,10 @@
           "type": "thinking",
           "content": "어떤 점을 고치거나 발전시키고 싶나요?"
         },
-        { "type": "related", "content": "변화를 막는 장애물은 무엇인가요?" }
+        {
+          "type": "related",
+          "content": "변화를 막는 장애물은 무엇인가요?"
+        }
       ]
     },
     {
@@ -1812,7 +2160,10 @@
       "content": "미래에 대한 불안과 기대 중 어느 것이 더 큰가요?",
       "order": 14,
       "hints": [
-        { "type": "thinking", "content": "미래를 생각할 때 드는 감정은?" },
+        {
+          "type": "thinking",
+          "content": "미래를 생각할 때 드는 감정은?"
+        },
         {
           "type": "related",
           "content": "불안을 기대로 바꾸려면 무엇이 필요할까요?"
@@ -1827,8 +2178,14 @@
       "content": "내가 세상에 남기고 싶은 흔적이나 영향은?",
       "order": 15,
       "hints": [
-        { "type": "thinking", "content": "어떻게 기억되고 싶나요?" },
-        { "type": "related", "content": "지금 그 방향으로 가고 있나요?" }
+        {
+          "type": "thinking",
+          "content": "어떻게 기억되고 싶나요?"
+        },
+        {
+          "type": "related",
+          "content": "지금 그 방향으로 가고 있나요?"
+        }
       ]
     },
     {
@@ -1843,7 +2200,10 @@
           "type": "thinking",
           "content": "어떤 순간에 방향에 대한 의문이 생기나요?"
         },
-        { "type": "related", "content": "그 의문을 어떻게 해결하나요?" }
+        {
+          "type": "related",
+          "content": "그 의문을 어떻게 해결하나요?"
+        }
       ]
     },
     {
@@ -1854,7 +2214,10 @@
       "content": "인생에서 꼭 이루고 싶은 궁극적인 목표는 무엇인가요?",
       "order": 17,
       "hints": [
-        { "type": "thinking", "content": "모든 것을 이룬 후에도 남는 목표는?" },
+        {
+          "type": "thinking",
+          "content": "모든 것을 이룬 후에도 남는 목표는?"
+        },
         {
           "type": "situation",
           "content": "재정적 성공, 가족, 사회기여, 자아실현 등"
@@ -1869,7 +2232,10 @@
       "content": "죽기 전에 반드시 해야 할 일들의 목록이 있나요?",
       "order": 18,
       "hints": [
-        { "type": "thinking", "content": "버킷리스트의 가장 중요한 항목은?" },
+        {
+          "type": "thinking",
+          "content": "버킷리스트의 가장 중요한 항목은?"
+        },
         {
           "type": "situation",
           "content": "경험, 성취, 관계, 기여 등 다양한 영역에서"
@@ -1902,12 +2268,2191 @@
       "content": "인생의 의미나 목적에 대해 어떻게 생각하나요?",
       "order": 20,
       "hints": [
-        { "type": "thinking", "content": "삶의 의미를 어디서 찾나요?" },
+        {
+          "type": "thinking",
+          "content": "삶의 의미를 어디서 찾나요?"
+        },
         {
           "type": "situation",
           "content": "관계, 성취, 기여, 경험, 성장 등 다양한 원천"
         }
       ]
+    },
+    {
+      "id": 121,
+      "categoryId": "deep-question",
+      "categoryName": "깊은 질문",
+      "difficulty": "easy",
+      "content": "행복이란 무엇이라고 생각하나요?",
+      "order": 1,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "만족, 평화, 기쁨, 소소함, 순간"
+        },
+        {
+          "type": "example",
+          "content": "좋아하는 사람들과 함께 있을 때가 행복이에요"
+        }
+      ]
+    },
+    {
+      "id": 122,
+      "categoryId": "deep-question",
+      "categoryName": "깊은 질문",
+      "difficulty": "easy",
+      "content": "인생에서 가장 소중한 것은 무엇인가요?",
+      "order": 2,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "가족, 건강, 사랑, 시간, 관계"
+        },
+        {
+          "type": "example",
+          "content": "부모님의 건강과 함께하는 시간이 가장 소중해요"
+        }
+      ]
+    },
+    {
+      "id": 123,
+      "categoryId": "deep-question",
+      "categoryName": "깊은 질문",
+      "difficulty": "easy",
+      "content": "당신에게 성공이란 어떤 의미인가요?",
+      "order": 3,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "목표, 달성, 만족, 인정, 성장"
+        },
+        {
+          "type": "example",
+          "content": "내가 세운 작은 목표를 이루는 것이 성공이에요"
+        }
+      ]
+    },
+    {
+      "id": 124,
+      "categoryId": "deep-question",
+      "categoryName": "깊은 질문",
+      "difficulty": "easy",
+      "content": "살면서 가장 중요하게 생각하는 가치는 무엇인가요?",
+      "order": 4,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "정직, 성실, 배려, 책임, 자유"
+        },
+        {
+          "type": "example",
+          "content": "다른 사람에 대한 배려와 존중을 가장 중요하게 생각해요"
+        }
+      ]
+    },
+    {
+      "id": 125,
+      "categoryId": "deep-question",
+      "categoryName": "깊은 질문",
+      "difficulty": "easy",
+      "content": "지금 이 순간 가장 감사한 것은 무엇인가요?",
+      "order": 5,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "현재, 건강, 평범함, 일상, 사람"
+        },
+        {
+          "type": "example",
+          "content": "매일 아침 눈을 뜨고 하루를 시작할 수 있다는 것이 감사해요"
+        }
+      ]
+    },
+    {
+      "id": 126,
+      "categoryId": "deep-question",
+      "categoryName": "깊은 질문",
+      "difficulty": "easy",
+      "content": "어떤 순간에 내가 살아있음을 가장 느끼나요?",
+      "order": 6,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "생동감, 몰입, 열정, 감동, 자극"
+        },
+        {
+          "type": "example",
+          "content": "좋아하는 음악을 들으며 운동할 때 살아있음을 느껴요"
+        }
+      ]
+    },
+    {
+      "id": 127,
+      "categoryId": "deep-question",
+      "categoryName": "깊은 질문",
+      "difficulty": "easy",
+      "content": "인생에서 배운 가장 중요한 교훈은 무엇인가요?",
+      "order": 7,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "경험, 실패, 깨달음, 지혜, 변화"
+        },
+        {
+          "type": "example",
+          "content": "완벽하지 않아도 괜찮다는 것을 배웠어요"
+        }
+      ]
+    },
+    {
+      "id": 128,
+      "categoryId": "deep-question",
+      "categoryName": "깊은 질문",
+      "difficulty": "easy",
+      "content": "당신이 생각하는 좋은 삶이란 무엇인가요?",
+      "order": 8,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "균형, 의미, 만족, 관계, 성장"
+        },
+        {
+          "type": "example",
+          "content": "일과 삶의 균형을 유지하며 의미 있는 일을 하는 것이에요"
+        }
+      ]
+    },
+    {
+      "id": 129,
+      "categoryId": "deep-question",
+      "categoryName": "깊은 질문",
+      "difficulty": "medium",
+      "content": "죽기 전에 꼭 이루고 싶은 것이 있나요?",
+      "order": 9,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "버킷리스트, 꿈, 후회, 유산, 완성"
+        },
+        {
+          "type": "example",
+          "content": "세계 여행을 다니며 다양한 문화를 경험하고 싶어요"
+        }
+      ]
+    },
+    {
+      "id": 130,
+      "categoryId": "deep-question",
+      "categoryName": "깊은 질문",
+      "difficulty": "medium",
+      "content": "인생의 의미를 찾았다고 생각하나요?",
+      "order": 10,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "목적, 존재, 방향, 질문, 탐구"
+        },
+        {
+          "type": "example",
+          "content": "아직 찾는 중이지만 관계 속에서 의미를 느껴요"
+        }
+      ]
+    },
+    {
+      "id": 131,
+      "categoryId": "deep-question",
+      "categoryName": "깊은 질문",
+      "difficulty": "medium",
+      "content": "과거의 나에게 해주고 싶은 조언이 있나요?",
+      "order": 11,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "후회, 교훈, 위로, 격려, 경험"
+        },
+        {
+          "type": "example",
+          "content": "실패를 두려워하지 말고 도전해보라고 말해주고 싶어요"
+        }
+      ]
+    },
+    {
+      "id": 132,
+      "categoryId": "deep-question",
+      "categoryName": "깊은 질문",
+      "difficulty": "medium",
+      "content": "당신의 존재가 세상에 남긴 영향은 무엇이라고 생각하나요?",
+      "order": 12,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "흔적, 기여, 변화, 유산, 가치"
+        },
+        {
+          "type": "example",
+          "content": "주변 사람들에게 긍정적인 에너지를 주려고 노력했어요"
+        }
+      ]
+    },
+    {
+      "id": 133,
+      "categoryId": "deep-question",
+      "categoryName": "깊은 질문",
+      "difficulty": "medium",
+      "content": "진정한 자유란 무엇이라고 생각하나요?",
+      "order": 13,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "선택, 독립, 해방, 책임, 제약"
+        },
+        {
+          "type": "example",
+          "content": "타인의 시선에서 벗어나 내 기준으로 사는 것이 자유예요"
+        }
+      ]
+    },
+    {
+      "id": 134,
+      "categoryId": "deep-question",
+      "categoryName": "깊은 질문",
+      "difficulty": "medium",
+      "content": "인간의 본성은 선한가요, 악한가요?",
+      "order": 14,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "본질, 도덕, 환경, 선택, 양면"
+        },
+        {
+          "type": "example",
+          "content": "상황에 따라 달라지지만 기본적으로 선하다고 믿어요"
+        }
+      ]
+    },
+    {
+      "id": 135,
+      "categoryId": "deep-question",
+      "categoryName": "깊은 질문",
+      "difficulty": "medium",
+      "content": "고통과 아픔이 우리 삶에 필요하다고 생각하나요?",
+      "order": 15,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "성장, 교훈, 감사, 대비, 깊이"
+        },
+        {
+          "type": "example",
+          "content": "고통을 통해 성장하고 행복의 가치를 알게 되는 것 같아요"
+        }
+      ]
+    },
+    {
+      "id": 136,
+      "categoryId": "deep-question",
+      "categoryName": "깊은 질문",
+      "difficulty": "medium",
+      "content": "당신의 인생을 한 문장으로 표현한다면?",
+      "order": 16,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "정의, 요약, 본질, 여정, 이야기"
+        },
+        {
+          "type": "example",
+          "content": "끊임없이 배우고 성장하는 미완성의 작품이에요"
+        }
+      ]
+    },
+    {
+      "id": 137,
+      "categoryId": "deep-question",
+      "categoryName": "깊은 질문",
+      "difficulty": "hard",
+      "content": "죽음에 대해 어떻게 생각하나요? 두렵나요?",
+      "order": 17,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "필연, 끝, 전환, 수용, 공포"
+        },
+        {
+          "type": "example",
+          "content": "두렵지만 삶의 한 부분으로 받아들이려고 노력해요"
+        }
+      ]
+    },
+    {
+      "id": 138,
+      "categoryId": "deep-question",
+      "categoryName": "깊은 질문",
+      "difficulty": "hard",
+      "content": "당신이 존재하는 이유는 무엇이라고 생각하나요?",
+      "order": 18,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "목적, 사명, 의미, 존재론, 가치"
+        },
+        {
+          "type": "example",
+          "content": "다른 사람들과 연결되고 서로에게 의미가 되기 위해서요"
+        }
+      ]
+    },
+    {
+      "id": 139,
+      "categoryId": "deep-question",
+      "categoryName": "깊은 질문",
+      "difficulty": "hard",
+      "content": "만약 내일 죽는다면 오늘 무엇을 하고 싶나요?",
+      "order": 19,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "우선순위, 소중함, 마지막, 본질, 후회"
+        },
+        {
+          "type": "example",
+          "content": "사랑하는 사람들에게 감사와 사랑을 전하고 싶어요"
+        }
+      ]
+    },
+    {
+      "id": 140,
+      "categoryId": "deep-question",
+      "categoryName": "깊은 질문",
+      "difficulty": "hard",
+      "content": "진정한 나는 누구인가요? 본질적인 자아를 찾았나요?",
+      "order": 20,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "정체성, 본질, 자아, 탐구, 변화"
+        },
+        {
+          "type": "example",
+          "content": "계속 변하는 존재이지만 핵심 가치는 일관되게 유지하려고 해요"
+        }
+      ]
+    },
+    {
+      "id": 141,
+      "categoryId": "love-relationship",
+      "categoryName": "연애와 관계",
+      "difficulty": "easy",
+      "content": "이상형은 어떤 사람인가요?",
+      "order": 1,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "외모, 성격, 가치관, 매력, 조건"
+        },
+        {
+          "type": "example",
+          "content": "유머 있고 배려심 깊은 사람이 좋아요"
+        }
+      ]
+    },
+    {
+      "id": 142,
+      "categoryId": "love-relationship",
+      "categoryName": "연애와 관계",
+      "difficulty": "easy",
+      "content": "첫눈에 반한 적이 있나요?",
+      "order": 2,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "설렘, 끌림, 인상, 순간, 호감"
+        },
+        {
+          "type": "example",
+          "content": "대학교 때 도서관에서 본 선배에게 첫눈에 반했어요"
+        }
+      ]
+    },
+    {
+      "id": 143,
+      "categoryId": "love-relationship",
+      "categoryName": "연애와 관계",
+      "difficulty": "easy",
+      "content": "연애할 때 가장 중요하게 생각하는 것은 무엇인가요?",
+      "order": 3,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "소통, 신뢰, 존중, 배려, 이해"
+        },
+        {
+          "type": "example",
+          "content": "서로에 대한 솔직한 대화와 신뢰가 가장 중요해요"
+        }
+      ]
+    },
+    {
+      "id": 144,
+      "categoryId": "love-relationship",
+      "categoryName": "연애와 관계",
+      "difficulty": "easy",
+      "content": "가장 기억에 남는 데이트는 어땠나요?",
+      "order": 4,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "추억, 장소, 감정, 특별함, 순간"
+        },
+        {
+          "type": "example",
+          "content": "해변에서 일몰을 보며 산책했던 날이 가장 기억에 남아요"
+        }
+      ]
+    },
+    {
+      "id": 145,
+      "categoryId": "love-relationship",
+      "categoryName": "연애와 관계",
+      "difficulty": "easy",
+      "content": "좋아하는 사람에게 먼저 고백하는 편인가요?",
+      "order": 5,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "적극성, 용기, 표현, 망설임, 주도권"
+        },
+        {
+          "type": "example",
+          "content": "먼저 고백하기보다는 신호를 보내는 편이에요"
+        }
+      ]
+    },
+    {
+      "id": 146,
+      "categoryId": "love-relationship",
+      "categoryName": "연애와 관계",
+      "difficulty": "easy",
+      "content": "친구와 연인의 차이는 무엇이라고 생각하나요?",
+      "order": 6,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "설렘, 독점욕, 깊이, 친밀감, 감정"
+        },
+        {
+          "type": "example",
+          "content": "함께 있을 때 느껴지는 설렘과 특별함이 다른 것 같아요"
+        }
+      ]
+    },
+    {
+      "id": 147,
+      "categoryId": "love-relationship",
+      "categoryName": "연애와 관계",
+      "difficulty": "easy",
+      "content": "사랑을 표현하는 당신만의 방식이 있나요?",
+      "order": 7,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "스킨십, 말, 선물, 행동, 관심"
+        },
+        {
+          "type": "example",
+          "content": "좋아하는 음식을 챙겨주거나 작은 선물을 자주 해요"
+        }
+      ]
+    },
+    {
+      "id": 148,
+      "categoryId": "love-relationship",
+      "categoryName": "연애와 관계",
+      "difficulty": "easy",
+      "content": "썸 탈 때와 연애할 때 중 어느 쪽이 더 좋나요?",
+      "order": 8,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "설렘, 안정감, 긴장감, 확신, 떨림"
+        },
+        {
+          "type": "example",
+          "content": "썸 탈 때의 설렘도 좋지만 연애할 때의 안정감이 더 좋아요"
+        }
+      ]
+    },
+    {
+      "id": 149,
+      "categoryId": "love-relationship",
+      "categoryName": "연애와 관계",
+      "difficulty": "medium",
+      "content": "연애에서 가장 힘들었던 순간은 언제였나요?",
+      "order": 9,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "갈등, 오해, 이별, 배신, 상처"
+        },
+        {
+          "type": "example",
+          "content": "가치관 차이로 계속 싸울 때가 가장 힘들었어요"
+        }
+      ]
+    },
+    {
+      "id": 150,
+      "categoryId": "love-relationship",
+      "categoryName": "연애와 관계",
+      "difficulty": "medium",
+      "content": "옛사랑을 완전히 잊을 수 있다고 생각하나요?",
+      "order": 10,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "추억, 미련, 상처, 시간, 치유"
+        },
+        {
+          "type": "example",
+          "content": "완전히 잊긴 어렵지만 추억으로 남기고 앞으로 나아갈 수 있어요"
+        }
+      ]
+    },
+    {
+      "id": 151,
+      "categoryId": "love-relationship",
+      "categoryName": "연애와 관계",
+      "difficulty": "medium",
+      "content": "헤어진 연인과 다시 만날 수 있을까요?",
+      "order": 11,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "재회, 변화, 타이밍, 인연, 가능성"
+        },
+        {
+          "type": "example",
+          "content": "서로 성장했다면 다시 만날 수도 있다고 생각해요"
+        }
+      ]
+    },
+    {
+      "id": 152,
+      "categoryId": "love-relationship",
+      "categoryName": "연애와 관계",
+      "difficulty": "medium",
+      "content": "연애와 결혼은 다르다고 생각하나요?",
+      "order": 12,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "책임, 현실, 설렘, 생활, 약속"
+        },
+        {
+          "type": "example",
+          "content": "연애는 감정 중심이고 결혼은 책임과 현실이 더해지는 것 같아요"
+        }
+      ]
+    },
+    {
+      "id": 153,
+      "categoryId": "love-relationship",
+      "categoryName": "연애와 관계",
+      "difficulty": "medium",
+      "content": "연인의 과거 연애를 알고 싶나요?",
+      "order": 13,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "호기심, 질투, 과거, 현재, 신뢰"
+        },
+        {
+          "type": "example",
+          "content": "궁금하긴 하지만 과거보다 현재가 더 중요하다고 생각해요"
+        }
+      ]
+    },
+    {
+      "id": 154,
+      "categoryId": "love-relationship",
+      "categoryName": "연애와 관계",
+      "difficulty": "medium",
+      "content": "장거리 연애를 할 수 있나요?",
+      "order": 14,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "거리, 신뢰, 노력, 외로움, 인내"
+        },
+        {
+          "type": "example",
+          "content": "힘들겠지만 서로 노력한다면 가능하다고 믿어요"
+        }
+      ]
+    },
+    {
+      "id": 155,
+      "categoryId": "love-relationship",
+      "categoryName": "연애와 관계",
+      "difficulty": "medium",
+      "content": "친구에서 연인으로 발전할 수 있다고 생각하나요?",
+      "order": 15,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "우정, 변화, 설렘, 관계, 전환"
+        },
+        {
+          "type": "example",
+          "content": "서로를 잘 알기 때문에 오히려 더 좋은 관계가 될 수 있어요"
+        }
+      ]
+    },
+    {
+      "id": 156,
+      "categoryId": "love-relationship",
+      "categoryName": "연애와 관계",
+      "difficulty": "medium",
+      "content": "사랑과 집착의 차이는 무엇이라고 생각하나요?",
+      "order": 16,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "자유, 통제, 존중, 독립, 건강"
+        },
+        {
+          "type": "example",
+          "content": "사랑은 상대를 존중하고 집착은 통제하려는 것 같아요"
+        }
+      ]
+    },
+    {
+      "id": 157,
+      "categoryId": "love-relationship",
+      "categoryName": "연애와 관계",
+      "difficulty": "hard",
+      "content": "영원한 사랑이 존재한다고 믿나요?",
+      "order": 17,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "영속성, 변화, 노력, 현실, 이상"
+        },
+        {
+          "type": "example",
+          "content": "감정은 변하지만 계속 선택하고 노력하는 것이 영원한 사랑이에요"
+        }
+      ]
+    },
+    {
+      "id": 158,
+      "categoryId": "love-relationship",
+      "categoryName": "연애와 관계",
+      "difficulty": "hard",
+      "content": "운명적인 사랑을 믿나요? 소울메이트가 있을까요?",
+      "order": 18,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "운명, 인연, 선택, 필연, 우연"
+        },
+        {
+          "type": "example",
+          "content": "운명보다는 서로 만들어가는 관계라고 생각해요"
+        }
+      ]
+    },
+    {
+      "id": 159,
+      "categoryId": "love-relationship",
+      "categoryName": "연애와 관계",
+      "difficulty": "hard",
+      "content": "사랑 없는 결혼과 결혼 없는 사랑 중 무엇을 선택하겠나요?",
+      "order": 19,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "선택, 가치관, 현실, 감정, 제도"
+        },
+        {
+          "type": "example",
+          "content": "사랑이 있다면 결혼 형식은 중요하지 않다고 생각해요"
+        }
+      ]
+    },
+    {
+      "id": 160,
+      "categoryId": "love-relationship",
+      "categoryName": "연애와 관계",
+      "difficulty": "hard",
+      "content": "사랑하는 사람을 위해 자신을 희생할 수 있나요?",
+      "order": 20,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "헌신, 희생, 균형, 자아, 한계"
+        },
+        {
+          "type": "example",
+          "content": "어느 정도는 가능하지만 자신을 잃어선 안 된다고 생각해요"
+        }
+      ]
+    },
+    {
+      "id": 161,
+      "categoryId": "fun-question",
+      "categoryName": "재미있는 질문",
+      "difficulty": "easy",
+      "content": "초능력을 하나 가질 수 있다면 무엇을 선택하겠나요?",
+      "order": 1,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "날기, 투명, 순간이동, 마음읽기, 시간정지"
+        },
+        {
+          "type": "example",
+          "content": "순간이동으로 언제든지 가고 싶은 곳에 갈 수 있으면 좋겠어요"
+        }
+      ]
+    },
+    {
+      "id": 162,
+      "categoryId": "fun-question",
+      "categoryName": "재미있는 질문",
+      "difficulty": "easy",
+      "content": "동물이 될 수 있다면 무엇이 되고 싶나요?",
+      "order": 2,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "자유, 날기, 헤엄, 귀여움, 특징"
+        },
+        {
+          "type": "example",
+          "content": "자유롭게 하늘을 나는 새가 되고 싶어요"
+        }
+      ]
+    },
+    {
+      "id": 163,
+      "categoryId": "fun-question",
+      "categoryName": "재미있는 질문",
+      "difficulty": "easy",
+      "content": "복권에 당첨되면 가장 먼저 하고 싶은 일은?",
+      "order": 3,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "집, 여행, 기부, 투자, 사치"
+        },
+        {
+          "type": "example",
+          "content": "부모님께 좋은 집을 선물하고 세계 여행을 떠나고 싶어요"
+        }
+      ]
+    },
+    {
+      "id": 164,
+      "categoryId": "fun-question",
+      "categoryName": "재미있는 질문",
+      "difficulty": "easy",
+      "content": "무인도에 하나만 가져갈 수 있다면 무엇을 가져가겠나요?",
+      "order": 4,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "생존, 도구, 실용성, 위안, 선택"
+        },
+        {
+          "type": "example",
+          "content": "만능 칼 같은 생존 도구를 가져가겠어요"
+        }
+      ]
+    },
+    {
+      "id": 165,
+      "categoryId": "fun-question",
+      "categoryName": "재미있는 질문",
+      "difficulty": "easy",
+      "content": "평생 한 가지 음식만 먹어야 한다면 무엇을 선택하겠나요?",
+      "order": 5,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "맛, 질리지않음, 영양, 좋아함, 편안함"
+        },
+        {
+          "type": "example",
+          "content": "다양하게 변형 가능한 밥이나 파스타를 선택할 것 같아요"
+        }
+      ]
+    },
+    {
+      "id": 166,
+      "categoryId": "fun-question",
+      "categoryName": "재미있는 질문",
+      "difficulty": "easy",
+      "content": "외계인을 만난다면 가장 먼저 뭐라고 말하겠나요?",
+      "order": 6,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "인사, 소통, 궁금증, 평화, 놀라움"
+        },
+        {
+          "type": "example",
+          "content": "어디서 왔는지 궁금하다고 물어볼 것 같아요"
+        }
+      ]
+    },
+    {
+      "id": 167,
+      "categoryId": "fun-question",
+      "categoryName": "재미있는 질문",
+      "difficulty": "easy",
+      "content": "영화 속 주인공이 될 수 있다면 누가 되고 싶나요?",
+      "order": 7,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "히어로, 능력, 모험, 로맨스, 판타지"
+        },
+        {
+          "type": "example",
+          "content": "해리 포터가 되어 마법 세계를 경험하고 싶어요"
+        }
+      ]
+    },
+    {
+      "id": 168,
+      "categoryId": "fun-question",
+      "categoryName": "재미있는 질문",
+      "difficulty": "easy",
+      "content": "하루 동안 투명인간이 될 수 있다면 무엇을 하고 싶나요?",
+      "order": 8,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "호기심, 관찰, 몰래, 자유, 재미"
+        },
+        {
+          "type": "example",
+          "content": "좋아하는 연예인의 일상을 몰래 구경하고 싶어요"
+        }
+      ]
+    },
+    {
+      "id": 169,
+      "categoryId": "fun-question",
+      "categoryName": "재미있는 질문",
+      "difficulty": "medium",
+      "content": "역사 속 인물을 만날 수 있다면 누구를 만나고 싶나요?",
+      "order": 9,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "위인, 질문, 대화, 지혜, 호기심"
+        },
+        {
+          "type": "example",
+          "content": "세종대왕을 만나 한글 창제 이야기를 직접 듣고 싶어요"
+        }
+      ]
+    },
+    {
+      "id": 170,
+      "categoryId": "fun-question",
+      "categoryName": "재미있는 질문",
+      "difficulty": "medium",
+      "content": "좀비 아포칼립스가 온다면 어떻게 살아남겠나요?",
+      "order": 10,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "생존, 전략, 피난처, 무기, 동료"
+        },
+        {
+          "type": "example",
+          "content": "높은 건물에 올라가서 식량과 물을 확보하고 버틸 거예요"
+        }
+      ]
+    },
+    {
+      "id": 171,
+      "categoryId": "fun-question",
+      "categoryName": "재미있는 질문",
+      "difficulty": "medium",
+      "content": "하루 동안 성별이 바뀐다면 무엇을 해보고 싶나요?",
+      "order": 11,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "경험, 차이, 관점, 호기심, 일상"
+        },
+        {
+          "type": "example",
+          "content": "반대 성별로서의 일상과 사회적 대우를 경험해보고 싶어요"
+        }
+      ]
+    },
+    {
+      "id": 172,
+      "categoryId": "fun-question",
+      "categoryName": "재미있는 질문",
+      "difficulty": "medium",
+      "content": "세상에서 하나의 법칙을 바꿀 수 있다면 무엇을 바꾸겠나요?",
+      "order": 12,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "규칙, 물리법칙, 사회, 변화, 개선"
+        },
+        {
+          "type": "example",
+          "content": "중력을 약하게 만들어서 가볍게 뛰어다닐 수 있게 하고 싶어요"
+        }
+      ]
+    },
+    {
+      "id": 173,
+      "categoryId": "fun-question",
+      "categoryName": "재미있는 질문",
+      "difficulty": "medium",
+      "content": "모든 동물과 대화할 수 있다면 어떤 동물과 가장 먼저 대화하고 싶나요?",
+      "order": 13,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "소통, 반려동물, 궁금증, 이해, 교감"
+        },
+        {
+          "type": "example",
+          "content": "우리 집 강아지와 대화해서 무슨 생각을 하는지 알고 싶어요"
+        }
+      ]
+    },
+    {
+      "id": 174,
+      "categoryId": "fun-question",
+      "categoryName": "재미있는 질문",
+      "difficulty": "medium",
+      "content": "로봇이 모든 일을 대신해준다면 무엇을 하며 살겠나요?",
+      "order": 14,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "여유, 취미, 창작, 관계, 자유"
+        },
+        {
+          "type": "example",
+          "content": "여행을 다니며 다양한 사람들을 만나고 새로운 것을 배우고 싶어요"
+        }
+      ]
+    },
+    {
+      "id": 175,
+      "categoryId": "fun-question",
+      "categoryName": "재미있는 질문",
+      "difficulty": "medium",
+      "content": "어떤 유명인과 하루를 보낼 수 있다면 누구를 선택하겠나요?",
+      "order": 15,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "연예인, 동경, 경험, 대화, 특별함"
+        },
+        {
+          "type": "example",
+          "content": "좋아하는 가수와 함께 노래하고 이야기를 나누고 싶어요"
+        }
+      ]
+    },
+    {
+      "id": 176,
+      "categoryId": "fun-question",
+      "categoryName": "재미있는 질문",
+      "difficulty": "medium",
+      "content": "게임이나 만화 속 세계에 들어갈 수 있다면 어디로 가겠나요?",
+      "order": 16,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "판타지, 모험, 세계관, 능력, 몰입"
+        },
+        {
+          "type": "example",
+          "content": "포켓몬 세계에 들어가서 직접 포켓몬을 키우고 싶어요"
+        }
+      ]
+    },
+    {
+      "id": 177,
+      "categoryId": "fun-question",
+      "categoryName": "재미있는 질문",
+      "difficulty": "hard",
+      "content": "과거로 돌아갈 수 있다면 언제로 돌아가고 싶나요?",
+      "order": 17,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "후회, 선택, 추억, 변화, 타임머신"
+        },
+        {
+          "type": "example",
+          "content": "고등학교 시절로 돌아가 더 열심히 공부하고 싶어요"
+        }
+      ]
+    },
+    {
+      "id": 178,
+      "categoryId": "fun-question",
+      "categoryName": "재미있는 질문",
+      "difficulty": "hard",
+      "content": "죽지 않는 불로불사의 삶을 살고 싶나요?",
+      "order": 18,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "영생, 고독, 변화, 의미, 한계"
+        },
+        {
+          "type": "example",
+          "content": "사랑하는 사람들을 계속 떠나보내야 해서 싫을 것 같아요"
+        }
+      ]
+    },
+    {
+      "id": 179,
+      "categoryId": "fun-question",
+      "categoryName": "재미있는 질문",
+      "difficulty": "hard",
+      "content": "자신의 수명을 알 수 있다면 알고 싶나요?",
+      "order": 19,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "미래, 두려움, 계획, 불안, 운명"
+        },
+        {
+          "type": "example",
+          "content": "알고 싶지 않아요, 그 사실이 삶을 제약할 것 같아요"
+        }
+      ]
+    },
+    {
+      "id": 180,
+      "categoryId": "fun-question",
+      "categoryName": "재미있는 질문",
+      "difficulty": "hard",
+      "content": "현실 세계가 사실 시뮬레이션이라면 어떻게 반응하겠나요?",
+      "order": 20,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "존재, 진실, 의미, 매트릭스, 실재"
+        },
+        {
+          "type": "example",
+          "content": "충격적이겠지만 어차피 내 경험은 진짜니까 계속 살아갈 것 같아요"
+        }
+      ]
+    },
+    {
+      "id": 181,
+      "categoryId": "hypothetical",
+      "categoryName": "가정 질문",
+      "difficulty": "easy",
+      "content": "만약 하루가 48시간이라면 무엇을 더 하고 싶나요?",
+      "order": 1,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "시간, 취미, 여유, 활동, 꿈"
+        },
+        {
+          "type": "example",
+          "content": "밀린 책도 읽고 운동도 하고 친구들도 더 자주 만나고 싶어요"
+        }
+      ]
+    },
+    {
+      "id": 182,
+      "categoryId": "hypothetical",
+      "categoryName": "가정 질문",
+      "difficulty": "easy",
+      "content": "만약 돈 걱정 없이 산다면 어떤 직업을 가지고 싶나요?",
+      "order": 2,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "열정, 의미, 보람, 꿈, 자유"
+        },
+        {
+          "type": "example",
+          "content": "동물 보호소를 운영하며 버려진 동물들을 돌보고 싶어요"
+        }
+      ]
+    },
+    {
+      "id": 183,
+      "categoryId": "hypothetical",
+      "categoryName": "가정 질문",
+      "difficulty": "easy",
+      "content": "만약 다시 태어난다면 같은 인생을 살고 싶나요?",
+      "order": 3,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "선택, 후회, 만족, 변화, 인생"
+        },
+        {
+          "type": "example",
+          "content": "힘든 순간도 있었지만 지금의 나를 만든 과정이니 다시 살고 싶어요"
+        }
+      ]
+    },
+    {
+      "id": 184,
+      "categoryId": "hypothetical",
+      "categoryName": "가정 질문",
+      "difficulty": "easy",
+      "content": "만약 세상에서 한 가지를 없앨 수 있다면 무엇을 없애겠나요?",
+      "order": 4,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "문제, 고통, 불공평, 개선, 평화"
+        },
+        {
+          "type": "example",
+          "content": "질병을 없애서 모두가 건강하게 살 수 있으면 좋겠어요"
+        }
+      ]
+    },
+    {
+      "id": 185,
+      "categoryId": "hypothetical",
+      "categoryName": "가정 질문",
+      "difficulty": "easy",
+      "content": "만약 하루 동안 대통령이 된다면 무엇을 하겠나요?",
+      "order": 5,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "권력, 정책, 변화, 개혁, 우선순위"
+        },
+        {
+          "type": "example",
+          "content": "서민들의 주거 문제를 해결할 정책을 만들고 싶어요"
+        }
+      ]
+    },
+    {
+      "id": 186,
+      "categoryId": "hypothetical",
+      "categoryName": "가정 질문",
+      "difficulty": "easy",
+      "content": "만약 마법을 배울 수 있다면 어떤 마법을 배우고 싶나요?",
+      "order": 6,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "주문, 능력, 편리함, 신비, 활용"
+        },
+        {
+          "type": "example",
+          "content": "순간이동 마법으로 시간과 거리를 절약하고 싶어요"
+        }
+      ]
+    },
+    {
+      "id": 187,
+      "categoryId": "hypothetical",
+      "categoryName": "가정 질문",
+      "difficulty": "easy",
+      "content": "만약 날씨를 마음대로 조종할 수 있다면 어떻게 활용하겠나요?",
+      "order": 7,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "기후, 편리함, 농업, 여행, 조절"
+        },
+        {
+          "type": "example",
+          "content": "여행 갈 때마다 화창한 날씨로 만들어서 즐기고 싶어요"
+        }
+      ]
+    },
+    {
+      "id": 188,
+      "categoryId": "hypothetical",
+      "categoryName": "가정 질문",
+      "difficulty": "easy",
+      "content": "만약 악기를 완벽하게 연주할 수 있다면 어떤 악기를 선택하겠나요?",
+      "order": 8,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "음악, 표현, 감성, 연주, 소리"
+        },
+        {
+          "type": "example",
+          "content": "피아노로 아름다운 클래식을 연주하고 싶어요"
+        }
+      ]
+    },
+    {
+      "id": 189,
+      "categoryId": "hypothetical",
+      "categoryName": "가정 질문",
+      "difficulty": "medium",
+      "content": "만약 시간을 멈출 수 있다면 그 시간에 무엇을 하겠나요?",
+      "order": 9,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "정지, 여유, 관찰, 자유, 활용"
+        },
+        {
+          "type": "example",
+          "content": "책도 읽고 그림도 그리고 여유롭게 생각을 정리하고 싶어요"
+        }
+      ]
+    },
+    {
+      "id": 190,
+      "categoryId": "hypothetical",
+      "categoryName": "가정 질문",
+      "difficulty": "medium",
+      "content": "만약 우주여행이 가능하다면 어느 행성에 가보고 싶나요?",
+      "order": 10,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "탐험, 미지, 신비, 발견, 우주"
+        },
+        {
+          "type": "example",
+          "content": "화성에 가서 직접 그곳의 환경을 체험해보고 싶어요"
+        }
+      ]
+    },
+    {
+      "id": 191,
+      "categoryId": "hypothetical",
+      "categoryName": "가정 질문",
+      "difficulty": "medium",
+      "content": "만약 세상에 거짓말이 없다면 어떻게 될 것 같나요?",
+      "order": 11,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "진실, 솔직함, 충격, 관계, 사회"
+        },
+        {
+          "type": "example",
+          "content": "처음엔 충격적이지만 결국 더 건강한 관계가 만들어질 것 같아요"
+        }
+      ]
+    },
+    {
+      "id": 192,
+      "categoryId": "hypothetical",
+      "categoryName": "가정 질문",
+      "difficulty": "medium",
+      "content": "만약 인간이 수면 없이 살 수 있다면 사회는 어떻게 변할까요?",
+      "order": 12,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "생산성, 24시간, 변화, 효율, 피로"
+        },
+        {
+          "type": "example",
+          "content": "더 많은 일을 할 수 있겠지만 쉼의 가치를 잃을 것 같아요"
+        }
+      ]
+    },
+    {
+      "id": 193,
+      "categoryId": "hypothetical",
+      "categoryName": "가정 질문",
+      "difficulty": "medium",
+      "content": "만약 인공지능이 모든 직업을 대체한다면 인간은 무엇을 해야 할까요?",
+      "order": 13,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "자동화, 일자리, 의미, 창의성, 미래"
+        },
+        {
+          "type": "example",
+          "content": "예술과 창작 같은 인간 고유의 감성적 활동에 집중해야 할 것 같아요"
+        }
+      ]
+    },
+    {
+      "id": 194,
+      "categoryId": "hypothetical",
+      "categoryName": "가정 질문",
+      "difficulty": "medium",
+      "content": "만약 기억을 삭제할 수 있다면 어떤 기억을 지우고 싶나요?",
+      "order": 14,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "고통, 트라우마, 후회, 상처, 선택"
+        },
+        {
+          "type": "example",
+          "content": "너무 아팠던 이별의 기억을 지우고 싶지만 그것도 나의 일부예요"
+        }
+      ]
+    },
+    {
+      "id": 195,
+      "categoryId": "hypothetical",
+      "categoryName": "가정 질문",
+      "difficulty": "medium",
+      "content": "만약 당신의 모든 생각이 투명하게 보인다면 어떻게 살겠나요?",
+      "order": 15,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "프라이버시, 솔직함, 당황, 관계, 노출"
+        },
+        {
+          "type": "example",
+          "content": "처음엔 힘들겠지만 진실한 관계만 남게 될 것 같아요"
+        }
+      ]
+    },
+    {
+      "id": 196,
+      "categoryId": "hypothetical",
+      "categoryName": "가정 질문",
+      "difficulty": "medium",
+      "content": "만약 지구가 멸망한다면 마지막 날 무엇을 하겠나요?",
+      "order": 16,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "종말, 소중함, 마지막, 의미, 사랑"
+        },
+        {
+          "type": "example",
+          "content": "가족과 함께 있으며 그동안의 삶에 감사하고 싶어요"
+        }
+      ]
+    },
+    {
+      "id": 197,
+      "categoryId": "hypothetical",
+      "categoryName": "가정 질문",
+      "difficulty": "hard",
+      "content": "만약 과거를 바꿀 수 있지만 현재의 모든 것을 잃는다면 바꾸겠나요?",
+      "order": 17,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "선택, 후회, 현재, 과거, 대가"
+        },
+        {
+          "type": "example",
+          "content": "과거의 실수가 지금의 나를 만들었으니 바꾸지 않을 거예요"
+        }
+      ]
+    },
+    {
+      "id": 198,
+      "categoryId": "hypothetical",
+      "categoryName": "가정 질문",
+      "difficulty": "hard",
+      "content": "만약 평행 우주의 자신을 만날 수 있다면 무엇을 물어보고 싶나요?",
+      "order": 18,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "선택, 가능성, 대안, 호기심, 인생"
+        },
+        {
+          "type": "example",
+          "content": "다른 선택을 했을 때 지금 행복한지 물어보고 싶어요"
+        }
+      ]
+    },
+    {
+      "id": 199,
+      "categoryId": "hypothetical",
+      "categoryName": "가정 질문",
+      "difficulty": "hard",
+      "content": "만약 영원히 20대로 살 수 있다면 그렇게 살고 싶나요?",
+      "order": 19,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "젊음, 성숙, 변화, 성장, 나이듦"
+        },
+        {
+          "type": "example",
+          "content": "젊음은 좋지만 나이 들며 얻는 지혜도 소중해서 고민될 것 같아요"
+        }
+      ]
+    },
+    {
+      "id": 200,
+      "categoryId": "hypothetical",
+      "categoryName": "가정 질문",
+      "difficulty": "hard",
+      "content": "만약 세상의 모든 진실을 알 수 있다면 알고 싶나요?",
+      "order": 20,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "지식, 진리, 부담, 무지, 행복"
+        },
+        {
+          "type": "example",
+          "content": "모든 진실을 아는 것은 너무 큰 짐이 될 것 같아요"
+        }
+      ]
+    },
+    {
+      "id": 201,
+      "categoryId": "self-reflection",
+      "categoryName": "자기 성찰",
+      "difficulty": "easy",
+      "content": "지금의 나를 한 단어로 표현한다면?",
+      "order": 1,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "정체성, 현재, 특징, 본질, 표현"
+        },
+        {
+          "type": "example",
+          "content": "성장 중이라고 표현하고 싶어요"
+        }
+      ]
+    },
+    {
+      "id": 202,
+      "categoryId": "self-reflection",
+      "categoryName": "자기 성찰",
+      "difficulty": "easy",
+      "content": "나의 가장 큰 강점은 무엇이라고 생각하나요?",
+      "order": 2,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "장점, 능력, 자신감, 특성, 재능"
+        },
+        {
+          "type": "example",
+          "content": "어려운 상황에서도 긍정적으로 생각하는 능력이에요"
+        }
+      ]
+    },
+    {
+      "id": 203,
+      "categoryId": "self-reflection",
+      "categoryName": "자기 성찰",
+      "difficulty": "easy",
+      "content": "가장 개선하고 싶은 나의 단점은 무엇인가요?",
+      "order": 3,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "약점, 고치기, 성장, 인정, 변화"
+        },
+        {
+          "type": "example",
+          "content": "미루는 습관을 고치고 즉시 행동하는 사람이 되고 싶어요"
+        }
+      ]
+    },
+    {
+      "id": 204,
+      "categoryId": "self-reflection",
+      "categoryName": "자기 성찰",
+      "difficulty": "easy",
+      "content": "스트레스를 받을 때 어떻게 대처하나요?",
+      "order": 4,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "해소, 방법, 취미, 휴식, 관리"
+        },
+        {
+          "type": "example",
+          "content": "산책을 하거나 좋아하는 음악을 들으며 마음을 진정시켜요"
+        }
+      ]
+    },
+    {
+      "id": 205,
+      "categoryId": "self-reflection",
+      "categoryName": "자기 성찰",
+      "difficulty": "easy",
+      "content": "나를 가장 행복하게 만드는 것은 무엇인가요?",
+      "order": 5,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "기쁨, 만족, 순간, 활동, 감정"
+        },
+        {
+          "type": "example",
+          "content": "좋아하는 사람들과 맛있는 음식을 먹으며 이야기하는 시간이에요"
+        }
+      ]
+    },
+    {
+      "id": 206,
+      "categoryId": "self-reflection",
+      "categoryName": "자기 성찰",
+      "difficulty": "easy",
+      "content": "나만의 위로 방법이 있나요?",
+      "order": 6,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "힐링, 치유, 방법, 회복, 안정"
+        },
+        {
+          "type": "example",
+          "content": "좋아하는 영화를 보거나 따뜻한 차를 마시며 쉬어요"
+        }
+      ]
+    },
+    {
+      "id": 207,
+      "categoryId": "self-reflection",
+      "categoryName": "자기 성찰",
+      "difficulty": "easy",
+      "content": "나는 어떤 순간에 가장 나답다고 느끼나요?",
+      "order": 7,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "진정성, 자연스러움, 편안함, 정체성, 순간"
+        },
+        {
+          "type": "example",
+          "content": "친한 친구들과 편하게 농담하며 웃을 때 가장 나다운 것 같아요"
+        }
+      ]
+    },
+    {
+      "id": 208,
+      "categoryId": "self-reflection",
+      "categoryName": "자기 성찰",
+      "difficulty": "easy",
+      "content": "1년 전의 나와 비교했을 때 어떤 점이 달라졌나요?",
+      "order": 8,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "성장, 변화, 비교, 발전, 깨달음"
+        },
+        {
+          "type": "example",
+          "content": "타인의 시선을 덜 의식하고 내 선택을 더 믿게 되었어요"
+        }
+      ]
+    },
+    {
+      "id": 209,
+      "categoryId": "self-reflection",
+      "categoryName": "자기 성찰",
+      "difficulty": "medium",
+      "content": "나는 어떤 사람으로 기억되고 싶나요?",
+      "order": 9,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "유산, 인상, 영향, 이미지, 가치"
+        },
+        {
+          "type": "example",
+          "content": "따뜻하고 긍정적인 에너지를 나눠준 사람으로 기억되고 싶어요"
+        }
+      ]
+    },
+    {
+      "id": 210,
+      "categoryId": "self-reflection",
+      "categoryName": "자기 성찰",
+      "difficulty": "medium",
+      "content": "내가 진정으로 원하는 것은 무엇인가요?",
+      "order": 10,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "욕구, 꿈, 본심, 목표, 열망"
+        },
+        {
+          "type": "example",
+          "content": "의미 있는 일을 하며 사랑하는 사람들과 행복하게 사는 거예요"
+        }
+      ]
+    },
+    {
+      "id": 211,
+      "categoryId": "self-reflection",
+      "categoryName": "자기 성찰",
+      "difficulty": "medium",
+      "content": "나를 가장 힘들게 하는 감정은 무엇인가요?",
+      "order": 11,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "불안, 두려움, 슬픔, 분노, 감정"
+        },
+        {
+          "type": "example",
+          "content": "불확실한 미래에 대한 불안감이 가장 힘들어요"
+        }
+      ]
+    },
+    {
+      "id": 212,
+      "categoryId": "self-reflection",
+      "categoryName": "자기 성찰",
+      "difficulty": "medium",
+      "content": "나의 가치관은 어디서 형성되었나요?",
+      "order": 12,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "영향, 경험, 가족, 환경, 신념"
+        },
+        {
+          "type": "example",
+          "content": "부모님의 가르침과 다양한 경험을 통해 형성된 것 같아요"
+        }
+      ]
+    },
+    {
+      "id": 213,
+      "categoryId": "self-reflection",
+      "categoryName": "자기 성찰",
+      "difficulty": "medium",
+      "content": "나는 실패를 어떻게 받아들이나요?",
+      "order": 13,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "좌절, 배움, 극복, 태도, 회복"
+        },
+        {
+          "type": "example",
+          "content": "처음엔 힘들지만 배울 점을 찾으며 다시 도전하려고 해요"
+        }
+      ]
+    },
+    {
+      "id": 214,
+      "categoryId": "self-reflection",
+      "categoryName": "자기 성찰",
+      "difficulty": "medium",
+      "content": "나에게 용기가 필요한 순간은 언제인가요?",
+      "order": 14,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "도전, 두려움, 결단, 변화, 시작"
+        },
+        {
+          "type": "example",
+          "content": "새로운 환경에 적응해야 할 때 용기가 필요해요"
+        }
+      ]
+    },
+    {
+      "id": 215,
+      "categoryId": "self-reflection",
+      "categoryName": "자기 성찰",
+      "difficulty": "medium",
+      "content": "내가 타협할 수 없는 가치는 무엇인가요?",
+      "order": 15,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "원칙, 신념, 타협, 고집, 핵심"
+        },
+        {
+          "type": "example",
+          "content": "정직함과 성실함은 어떤 상황에서도 타협할 수 없어요"
+        }
+      ]
+    },
+    {
+      "id": 216,
+      "categoryId": "self-reflection",
+      "categoryName": "자기 성찰",
+      "difficulty": "medium",
+      "content": "나는 어떤 상황에서 가장 창의적이 되나요?",
+      "order": 16,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "영감, 환경, 자극, 몰입, 조건"
+        },
+        {
+          "type": "example",
+          "content": "혼자 조용한 공간에서 음악을 들을 때 아이디어가 잘 떠올라요"
+        }
+      ]
+    },
+    {
+      "id": 217,
+      "categoryId": "self-reflection",
+      "categoryName": "자기 성찰",
+      "difficulty": "hard",
+      "content": "나는 나 자신을 얼마나 사랑하나요?",
+      "order": 17,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "자존감, 수용, 존중, 애정, 평가"
+        },
+        {
+          "type": "example",
+          "content": "부족한 면도 있지만 있는 그대로의 나를 받아들이려 노력해요"
+        }
+      ]
+    },
+    {
+      "id": 218,
+      "categoryId": "self-reflection",
+      "categoryName": "자기 성찰",
+      "difficulty": "hard",
+      "content": "나를 가장 두렵게 만드는 것은 무엇인가요?",
+      "order": 18,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "공포, 불안, 취약함, 깊이, 직면"
+        },
+        {
+          "type": "example",
+          "content": "사랑하는 사람들을 잃는 것이 가장 두려워요"
+        }
+      ]
+    },
+    {
+      "id": 219,
+      "categoryId": "self-reflection",
+      "categoryName": "자기 성찰",
+      "difficulty": "hard",
+      "content": "10년 후의 나는 지금의 나를 어떻게 평가할 것 같나요?",
+      "order": 19,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "미래, 시선, 성장, 후회, 평가"
+        },
+        {
+          "type": "example",
+          "content": "최선을 다했다고 인정하면서도 더 용감했으면 좋았을 거라 생각할 것 같아요"
+        }
+      ]
+    },
+    {
+      "id": 220,
+      "categoryId": "self-reflection",
+      "categoryName": "자기 성찰",
+      "difficulty": "hard",
+      "content": "나는 진정으로 나 자신에게 솔직한가요?",
+      "order": 20,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "진실, 자기기만, 직면, 인정, 용기"
+        },
+        {
+          "type": "example",
+          "content": "때로는 불편한 진실을 회피하기도 하지만 점점 솔직해지려 노력해요"
+        }
+      ]
+    },
+    {
+      "id": 221,
+      "categoryId": "controversial",
+      "categoryName": "논쟁적 주제",
+      "difficulty": "easy",
+      "content": "행복과 성공 중 하나만 선택해야 한다면 무엇을 선택하겠나요?",
+      "order": 1,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "우선순위, 가치, 만족, 목표, 의미"
+        },
+        {
+          "type": "example",
+          "content": "성공해도 행복하지 않으면 의미가 없으니 행복을 선택할 거예요"
+        }
+      ]
+    },
+    {
+      "id": 222,
+      "categoryId": "controversial",
+      "categoryName": "논쟁적 주제",
+      "difficulty": "easy",
+      "content": "돈으로 행복을 살 수 있다고 생각하나요?",
+      "order": 2,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "물질, 만족, 한계, 관계, 본질"
+        },
+        {
+          "type": "example",
+          "content": "기본적인 필요는 채울 수 있지만 진정한 행복은 아닌 것 같아요"
+        }
+      ]
+    },
+    {
+      "id": 223,
+      "categoryId": "controversial",
+      "categoryName": "논쟁적 주제",
+      "difficulty": "easy",
+      "content": "결혼은 필수라고 생각하나요?",
+      "order": 3,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "선택, 제도, 가치관, 자유, 전통"
+        },
+        {
+          "type": "example",
+          "content": "개인의 선택이지 필수는 아니라고 생각해요"
+        }
+      ]
+    },
+    {
+      "id": 224,
+      "categoryId": "controversial",
+      "categoryName": "논쟁적 주제",
+      "difficulty": "easy",
+      "content": "친구와 가족 중 누가 더 중요한가요?",
+      "order": 4,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "우선순위, 관계, 혈연, 선택, 사랑"
+        },
+        {
+          "type": "example",
+          "content": "둘 다 소중하지만 상황에 따라 달라질 수 있을 것 같아요"
+        }
+      ]
+    },
+    {
+      "id": 225,
+      "categoryId": "controversial",
+      "categoryName": "논쟁적 주제",
+      "difficulty": "easy",
+      "content": "일과 삶의 균형과 일에서의 성공 중 무엇이 더 중요한가요?",
+      "order": 5,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "워라밸, 커리어, 삶의질, 성취, 균형"
+        },
+        {
+          "type": "example",
+          "content": "일도 중요하지만 삶의 균형이 더 중요하다고 생각해요"
+        }
+      ]
+    },
+    {
+      "id": 226,
+      "categoryId": "controversial",
+      "categoryName": "논쟁적 주제",
+      "difficulty": "easy",
+      "content": "외모와 내면 중 무엇이 더 중요한가요?",
+      "order": 6,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "본질, 첫인상, 가치, 매력, 중요도"
+        },
+        {
+          "type": "example",
+          "content": "첫 만남은 외모지만 결국 내면이 더 중요한 것 같아요"
+        }
+      ]
+    },
+    {
+      "id": 227,
+      "categoryId": "controversial",
+      "categoryName": "논쟁적 주제",
+      "difficulty": "easy",
+      "content": "학벌이 중요하다고 생각하나요?",
+      "order": 7,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "교육, 능력, 차별, 기회, 현실"
+        },
+        {
+          "type": "example",
+          "content": "현실적으로 영향은 있지만 절대적이진 않다고 생각해요"
+        }
+      ]
+    },
+    {
+      "id": 228,
+      "categoryId": "controversial",
+      "categoryName": "논쟁적 주제",
+      "difficulty": "easy",
+      "content": "인생에서 실패를 경험하는 것이 필요하다고 생각하나요?",
+      "order": 8,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "성장, 교훈, 경험, 배움, 과정"
+        },
+        {
+          "type": "example",
+          "content": "실패를 통해 배우고 성장하니까 필요하다고 생각해요"
+        }
+      ]
+    },
+    {
+      "id": 229,
+      "categoryId": "controversial",
+      "categoryName": "논쟁적 주제",
+      "difficulty": "medium",
+      "content": "완벽한 거짓말과 잔인한 진실 중 무엇을 선택하겠나요?",
+      "order": 9,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "정직, 배려, 고통, 진실, 거짓"
+        },
+        {
+          "type": "example",
+          "content": "잔인해도 진실을 말하는 게 장기적으로 더 나은 것 같아요"
+        }
+      ]
+    },
+    {
+      "id": 230,
+      "categoryId": "controversial",
+      "categoryName": "논쟁적 주제",
+      "difficulty": "medium",
+      "content": "과정이 중요한가요, 결과가 중요한가요?",
+      "order": 10,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "노력, 성과, 가치, 목표, 의미"
+        },
+        {
+          "type": "example",
+          "content": "결과도 중요하지만 과정에서 배우는 게 더 가치 있다고 생각해요"
+        }
+      ]
+    },
+    {
+      "id": 231,
+      "categoryId": "controversial",
+      "categoryName": "논쟁적 주제",
+      "difficulty": "medium",
+      "content": "자유와 안정 중 무엇이 더 중요한가요?",
+      "order": 11,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "선택, 보장, 모험, 안전, 균형"
+        },
+        {
+          "type": "example",
+          "content": "기본적인 안정이 있어야 진정한 자유를 누릴 수 있을 것 같아요"
+        }
+      ]
+    },
+    {
+      "id": 232,
+      "categoryId": "controversial",
+      "categoryName": "논쟁적 주제",
+      "difficulty": "medium",
+      "content": "운명과 노력 중 무엇이 인생을 더 좌우한다고 생각하나요?",
+      "order": 12,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "필연, 선택, 통제, 우연, 결정"
+        },
+        {
+          "type": "example",
+          "content": "운명도 있지만 결국 노력으로 바꿀 수 있다고 믿어요"
+        }
+      ]
+    },
+    {
+      "id": 233,
+      "categoryId": "controversial",
+      "categoryName": "논쟁적 주제",
+      "difficulty": "medium",
+      "content": "인공지능이 인간을 대체하는 것이 좋은 일일까요?",
+      "order": 13,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "기술, 일자리, 효율, 위협, 공존"
+        },
+        {
+          "type": "example",
+          "content": "효율적이지만 인간 고유의 가치를 잃을 수 있어서 우려돼요"
+        }
+      ]
+    },
+    {
+      "id": 234,
+      "categoryId": "controversial",
+      "categoryName": "논쟁적 주제",
+      "difficulty": "medium",
+      "content": "사회적 성공과 개인적 만족 중 무엇이 더 가치 있나요?",
+      "order": 14,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "인정, 내면, 행복, 평가, 기준"
+        },
+        {
+          "type": "example",
+          "content": "타인의 인정보다 내가 만족하는 삶이 더 가치 있어요"
+        }
+      ]
+    },
+    {
+      "id": 235,
+      "categoryId": "controversial",
+      "categoryName": "논쟁적 주제",
+      "difficulty": "medium",
+      "content": "정의와 자비 중 무엇이 더 중요한가요?",
+      "order": 15,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "원칙, 용서, 법, 감정, 균형"
+        },
+        {
+          "type": "example",
+          "content": "정의가 기본이지만 상황에 따라 자비도 필요하다고 생각해요"
+        }
+      ]
+    },
+    {
+      "id": 236,
+      "categoryId": "controversial",
+      "categoryName": "논쟁적 주제",
+      "difficulty": "medium",
+      "content": "전통과 혁신 중 무엇이 더 중요한가요?",
+      "order": 16,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "보존, 변화, 발전, 뿌리, 미래"
+        },
+        {
+          "type": "example",
+          "content": "전통을 존중하되 시대에 맞게 혁신해야 한다고 생각해요"
+        }
+      ]
+    },
+    {
+      "id": 237,
+      "categoryId": "controversial",
+      "categoryName": "논쟁적 주제",
+      "difficulty": "hard",
+      "content": "개인의 자유와 공동체의 안전 중 무엇이 우선인가요?",
+      "order": 17,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "권리, 책임, 제한, 보호, 균형"
+        },
+        {
+          "type": "example",
+          "content": "자유도 중요하지만 공동체의 안전이 기반이 되어야 해요"
+        }
+      ]
+    },
+    {
+      "id": 238,
+      "categoryId": "controversial",
+      "categoryName": "논쟁적 주제",
+      "difficulty": "hard",
+      "content": "선의의 거짓말은 정당화될 수 있나요?",
+      "order": 18,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "윤리, 의도, 배려, 진실, 도덕"
+        },
+        {
+          "type": "example",
+          "content": "상대를 보호하기 위한 거짓말이라면 때로는 정당화될 수 있어요"
+        }
+      ]
+    },
+    {
+      "id": 239,
+      "categoryId": "controversial",
+      "categoryName": "논쟁적 주제",
+      "difficulty": "hard",
+      "content": "기술 발전이 인류에게 더 나은 미래를 가져올까요?",
+      "order": 19,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "진보, 위험, 편리함, 인간성, 양날"
+        },
+        {
+          "type": "example",
+          "content": "편리함은 증가하지만 인간성을 잃지 않도록 주의해야 해요"
+        }
+      ]
+    },
+    {
+      "id": 240,
+      "categoryId": "controversial",
+      "categoryName": "논쟁적 주제",
+      "difficulty": "hard",
+      "content": "완벽한 평등 사회가 가능하다고 생각하나요?",
+      "order": 20,
+      "hints": [
+        {
+          "type": "keyword",
+          "content": "이상, 현실, 차이, 공정, 유토피아"
+        },
+        {
+          "type": "example",
+          "content": "이상적이지만 현실적으로는 공정한 기회를 보장하는 게 더 중요해요"
+        }
+      ]
+    }
+  ],
+  "categoryGroups": [
+    {
+      "id": "self-discovery",
+      "name": "나를 알아가기",
+      "icon": "🌱",
+      "description": "나 자신을 탐구하는 질문들",
+      "order": 0
+    },
+    {
+      "id": "conversation",
+      "name": "함께 이야기하기",
+      "icon": "💬",
+      "description": "함께 대화를 나누는 질문들",
+      "order": 1
     }
   ]
 }

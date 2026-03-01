@@ -4,6 +4,7 @@
  */
 
 import { ArrowLeft } from "lucide-react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Pressable } from "@/components/ui/pressable";
 
 export type FloatingBackButtonPosition = "top-left" | "top-right";
@@ -18,8 +19,8 @@ export interface FloatingBackButtonProps {
 }
 
 const positionClasses: Record<FloatingBackButtonPosition, string> = {
-  "top-left": "top-2 left-2",
-  "top-right": "top-2 right-2",
+  "top-left": "left-2",
+  "top-right": "right-2",
 };
 
 const styleClasses: Record<FloatingBackButtonStyle, string> = {
@@ -41,6 +42,7 @@ export function FloatingBackButton({
   size = 20,
   disabled = false,
 }: FloatingBackButtonProps) {
+  const insets = useSafeAreaInsets();
   const baseClasses =
     "absolute z-10 h-11 w-11 items-center justify-center rounded-full backdrop-blur-sm shadow-xl";
   const positionClass = positionClasses[position];
@@ -54,7 +56,14 @@ export function FloatingBackButton({
   }`;
 
   return (
-    <Pressable className={buttonClasses} disabled={disabled} onPress={onPress}>
+    <Pressable
+      accessibilityLabel="뒤로 가기"
+      accessibilityRole="button"
+      className={buttonClasses}
+      disabled={disabled}
+      onPress={onPress}
+      style={{ top: insets.top + 8 }}
+    >
       <ArrowLeft color={iconColor} size={size} strokeWidth={2.5} />
     </Pressable>
   );

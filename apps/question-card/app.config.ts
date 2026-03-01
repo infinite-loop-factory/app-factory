@@ -2,7 +2,7 @@ import type { ConfigContext, ExpoConfig } from "expo/config";
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
-  name: "question-card",
+  name: "이지토킹 - 질문 카드",
   slug: "question-card",
   scheme: "question-card",
   version: "1.0.0",
@@ -24,12 +24,17 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     supportsTablet: true,
     bundleIdentifier: "com.infiniteloop.easytalking",
   },
+  androidStatusBar: {
+    barStyle: "dark-content",
+    backgroundColor: "#00000000",
+    translucent: true,
+  },
   android: {
     package: "com.infiniteloop.easytalking",
     versionCode: 1,
     adaptiveIcon: {
       foregroundImage: "./src/assets/images/adaptive-icon.png",
-      backgroundColor: "#00000000",
+      backgroundColor: "#FFFFFF",
     },
     permissions: [],
   },
@@ -52,6 +57,15 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         iosAppId: "ca-app-pub-3940256099942544~1458002511", // Test App ID
         // iOS 14+ App Tracking Transparency message
         userTrackingUsageDescription: "맞춤형 광고를 제공하기 위해 사용됩니다.",
+      },
+    ],
+    [
+      "expo-build-properties",
+      {
+        android: {
+          extraProguardRules:
+            "-keep class com.google.android.gms.ads.** { *; }\n-keep class com.google.ads.** { *; }\n-keep class com.google.android.gms.internal.consent_sdk.** { *; }",
+        },
       },
     ],
   ],

@@ -20,7 +20,12 @@
  * 참고 문서: docs/design-system-modern-refined.md
  */
 
-import type { Category, Difficulty, DifficultyLevel } from "@/types";
+import type {
+  Category,
+  CategoryGroup,
+  Difficulty,
+  DifficultyLevel,
+} from "@/types";
 
 // Vibrant Orange 테마 색상 (HSL → HEX 변환)
 export const themeColors = {
@@ -153,6 +158,48 @@ export const categoryColors = {
     600: "#0284c7", // sky-600
     700: "#0369a1", // sky-700
   },
+  "deep-question": {
+    50: "#f5f3ff", // violet-50 - 깊은 질문
+    100: "#ede9fe", // violet-100
+    500: "#8b5cf6", // violet-500
+    600: "#7c3aed", // violet-600
+    700: "#6d28d9", // violet-700
+  },
+  "love-relationship": {
+    50: "#fff1f2", // rose-50 - 연애와 관계
+    100: "#ffe4e6", // rose-100
+    500: "#f43f5e", // rose-500
+    600: "#e11d48", // rose-600
+    700: "#be123c", // rose-700
+  },
+  "fun-question": {
+    50: "#f7fee7", // lime-50 - 재미있는 질문
+    100: "#ecfccb", // lime-100
+    500: "#84cc16", // lime-500
+    600: "#65a30d", // lime-600
+    700: "#4d7c0f", // lime-700
+  },
+  hypothetical: {
+    50: "#f0fdfa", // teal-50 - 가정 질문
+    100: "#ccfbf1", // teal-100
+    500: "#14b8a6", // teal-500
+    600: "#0d9488", // teal-600
+    700: "#0f766e", // teal-700
+  },
+  "self-reflection": {
+    50: "#eef2ff", // indigo-50 - 자기 성찰
+    100: "#e0e7ff", // indigo-100
+    500: "#6366f1", // indigo-500
+    600: "#4f46e5", // indigo-600
+    700: "#4338ca", // indigo-700
+  },
+  controversial: {
+    50: "#fef2f2", // red-50 - 논쟁적 주제
+    100: "#fee2e2", // red-100
+    500: "#ef4444", // red-500
+    600: "#dc2626", // red-600
+    700: "#b91c1c", // red-700
+  },
 } as const;
 
 // 카테고리별 NativeWind Tailwind 클래스 매핑 (새 테마 반영)
@@ -263,6 +310,114 @@ export const categoryTailwindClasses = {
     border: {
       500: "border-sky-500",
       600: "border-sky-600",
+    },
+  },
+  "deep-question": {
+    bg: {
+      50: "bg-violet-50",
+      100: "bg-violet-100",
+      500: "bg-violet-500",
+      600: "bg-violet-600",
+      700: "bg-violet-700",
+    },
+    text: {
+      500: "text-violet-500",
+      600: "text-violet-600",
+      700: "text-violet-700",
+    },
+    border: {
+      500: "border-violet-500",
+      600: "border-violet-600",
+    },
+  },
+  "love-relationship": {
+    bg: {
+      50: "bg-rose-50",
+      100: "bg-rose-100",
+      500: "bg-rose-500",
+      600: "bg-rose-600",
+      700: "bg-rose-700",
+    },
+    text: {
+      500: "text-rose-500",
+      600: "text-rose-600",
+      700: "text-rose-700",
+    },
+    border: {
+      500: "border-rose-500",
+      600: "border-rose-600",
+    },
+  },
+  "fun-question": {
+    bg: {
+      50: "bg-lime-50",
+      100: "bg-lime-100",
+      500: "bg-lime-500",
+      600: "bg-lime-600",
+      700: "bg-lime-700",
+    },
+    text: {
+      500: "text-lime-500",
+      600: "text-lime-600",
+      700: "text-lime-700",
+    },
+    border: {
+      500: "border-lime-500",
+      600: "border-lime-600",
+    },
+  },
+  hypothetical: {
+    bg: {
+      50: "bg-teal-50",
+      100: "bg-teal-100",
+      500: "bg-teal-500",
+      600: "bg-teal-600",
+      700: "bg-teal-700",
+    },
+    text: {
+      500: "text-teal-500",
+      600: "text-teal-600",
+      700: "text-teal-700",
+    },
+    border: {
+      500: "border-teal-500",
+      600: "border-teal-600",
+    },
+  },
+  "self-reflection": {
+    bg: {
+      50: "bg-indigo-50",
+      100: "bg-indigo-100",
+      500: "bg-indigo-500",
+      600: "bg-indigo-600",
+      700: "bg-indigo-700",
+    },
+    text: {
+      500: "text-indigo-500",
+      600: "text-indigo-600",
+      700: "text-indigo-700",
+    },
+    border: {
+      500: "border-indigo-500",
+      600: "border-indigo-600",
+    },
+  },
+  controversial: {
+    bg: {
+      50: "bg-red-50",
+      100: "bg-red-100",
+      500: "bg-red-500",
+      600: "bg-red-600",
+      700: "bg-red-700",
+    },
+    text: {
+      500: "text-red-500",
+      600: "text-red-600",
+      700: "text-red-700",
+    },
+    border: {
+      500: "border-red-500",
+      600: "border-red-600",
     },
   },
 } as const;
@@ -387,8 +542,27 @@ export const shadows = {
   },
 } as const;
 
+// 카테고리 그룹 정보
+export const categoryGroups: CategoryGroup[] = [
+  {
+    id: "self-discovery",
+    name: "나를 알아가기",
+    icon: "🌱",
+    description: "나 자신을 탐구하는 질문들",
+    order: 0,
+  },
+  {
+    id: "conversation",
+    name: "함께 이야기하기",
+    icon: "💬",
+    description: "함께 대화를 나누는 질문들",
+    order: 1,
+  },
+];
+
 // 카테고리 정보 (아이콘, 색상 매핑)
 export const categories: Category[] = [
+  // 그룹: 나를 알아가기
   {
     id: "hobby",
     name: "나의 취향",
@@ -396,6 +570,7 @@ export const categories: Category[] = [
     color: categoryColors.hobby[500],
     description: "좋아하는 것들에 대한 질문",
     orderIndex: 0,
+    groupId: "self-discovery",
   },
   {
     id: "talent",
@@ -404,6 +579,7 @@ export const categories: Category[] = [
     color: categoryColors.talent[500],
     description: "능력과 소질에 대한 질문",
     orderIndex: 1,
+    groupId: "self-discovery",
   },
   {
     id: "values",
@@ -412,6 +588,7 @@ export const categories: Category[] = [
     color: categoryColors.values[500],
     description: "신념과 가치관에 대한 질문",
     orderIndex: 2,
+    groupId: "self-discovery",
   },
   {
     id: "experience",
@@ -420,6 +597,7 @@ export const categories: Category[] = [
     color: categoryColors.experience[500],
     description: "과거 경험에 대한 질문",
     orderIndex: 3,
+    groupId: "self-discovery",
   },
   {
     id: "daily",
@@ -428,6 +606,7 @@ export const categories: Category[] = [
     color: categoryColors.daily[500],
     description: "일상생활에 대한 질문",
     orderIndex: 4,
+    groupId: "self-discovery",
   },
   {
     id: "direction",
@@ -436,6 +615,62 @@ export const categories: Category[] = [
     color: categoryColors.direction[500],
     description: "미래와 목표에 대한 질문",
     orderIndex: 5,
+    groupId: "self-discovery",
+  },
+  // 그룹: 함께 이야기하기
+  {
+    id: "deep-question",
+    name: "깊은 질문",
+    icon: "🔮",
+    color: categoryColors["deep-question"][500],
+    description: "삶의 본질에 대한 깊은 질문",
+    orderIndex: 6,
+    groupId: "conversation",
+  },
+  {
+    id: "love-relationship",
+    name: "연애와 관계",
+    icon: "💕",
+    color: categoryColors["love-relationship"][500],
+    description: "사랑과 인간관계에 대한 질문",
+    orderIndex: 7,
+    groupId: "conversation",
+  },
+  {
+    id: "fun-question",
+    name: "재미있는 질문",
+    icon: "🎉",
+    color: categoryColors["fun-question"][500],
+    description: "가볍고 재미있는 질문",
+    orderIndex: 8,
+    groupId: "conversation",
+  },
+  {
+    id: "hypothetical",
+    name: "가정 질문",
+    icon: "🤔",
+    color: categoryColors.hypothetical[500],
+    description: "만약에... 상상력을 자극하는 질문",
+    orderIndex: 9,
+    groupId: "conversation",
+  },
+  {
+    id: "self-reflection",
+    name: "자기 성찰",
+    icon: "🪞",
+    color: categoryColors["self-reflection"][500],
+    description: "자신을 돌아보는 성찰 질문",
+    orderIndex: 10,
+    groupId: "conversation",
+  },
+  {
+    id: "controversial",
+    name: "논쟁적 주제",
+    icon: "⚡",
+    color: categoryColors.controversial[500],
+    description: "다양한 관점의 토론 질문",
+    orderIndex: 11,
+    groupId: "conversation",
   },
 ];
 

@@ -10,3 +10,5 @@ dist/
 
 .serena
 .playwright-mcp
+
+.omc/

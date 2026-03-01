@@ -4,6 +4,7 @@
  */
 
 import { MoreHorizontal } from "lucide-react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Pressable } from "@/components/ui/pressable";
 import { Text } from "@/components/ui/text";
 
@@ -24,8 +25,8 @@ export interface FloatingMenuButtonProps {
 }
 
 const positionClasses: Record<FloatingMenuButtonPosition, string> = {
-  "top-left": "top-12 left-4",
-  "top-right": "top-12 right-4",
+  "top-left": "left-4",
+  "top-right": "right-4",
   "bottom-left": "bottom-12 left-4",
   "bottom-right": "bottom-12 right-4",
 };
@@ -62,6 +63,7 @@ export function FloatingMenuButton({
   disabled = false,
   size = "md",
 }: FloatingMenuButtonProps) {
+  const insets = useSafeAreaInsets();
   const baseClasses =
     "absolute z-10 items-center justify-center backdrop-blur-sm shadow-lg";
   const positionClass = positionClasses[position];
@@ -79,8 +81,19 @@ export function FloatingMenuButton({
 
   const iconColor = textClass.includes("white") ? "#ffffff" : "#374151";
 
+  const topStyle = position.startsWith("top-")
+    ? { top: insets.top + 8 }
+    : undefined;
+
   return (
-    <Pressable className={buttonClasses} disabled={disabled} onPress={onPress}>
+    <Pressable
+      accessibilityLabel={label || "메뉴"}
+      accessibilityRole="button"
+      className={buttonClasses}
+      disabled={disabled}
+      onPress={onPress}
+      style={topStyle}
+    >
       {label ? (
         <Text className={`${textClass} font-medium text-xs`}>{label}</Text>
       ) : (
