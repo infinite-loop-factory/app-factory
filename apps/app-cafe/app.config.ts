@@ -1,11 +1,10 @@
-import "dotenv/config";
 import type { ConfigContext, ExpoConfig } from "expo/config";
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
-  name: "cafe",
-  slug: "cafe",
-  scheme: "cafe",
+  name: "app-cafe",
+  slug: "app-cafe",
+  scheme: "app-cafe",
   version: "1.0.0",
   orientation: "portrait",
   icon: "./src/assets/images/icon.png",
@@ -13,7 +12,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   splash: {
     image: "./src/assets/images/splash.png",
     resizeMode: "contain",
-    backgroundColor: "#ffffff",
+    backgroundColor: "#5D4037",
   },
   newArchEnabled: true,
   ios: {
@@ -21,9 +20,10 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     bundleIdentifier: "com.infiniteloop.cafe",
   },
   android: {
+    package: "com.anonymous.appcafe",
     adaptiveIcon: {
       foregroundImage: "./src/assets/images/adaptive-icon.png",
-      backgroundColor: "#ffffff",
+      backgroundColor: "#5D4037",
     },
   },
   web: {
@@ -50,12 +50,8 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   experiments: {
     tsconfigPaths: true,
     typedRoutes: true,
-    baseUrl: "/app-factory/cafe",
+    baseUrl: "/app-factory/app-cafe",
   },
-  extra: {
-    NAVER_CLIENT_ID: process.env.NAVER_CLIENT_ID,
-    NAVER_CLIENT_SECRET: process.env.NAVER_CLIENT_SECRET,
-    SUPABASE_URL: process.env.EXPO_PUBLIC_SUPABASE_URL,
-    SUPABASE_ANON_KEY: process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY,
-  },
+  jsEngine: "hermes",
+  newArchEnabled: true,
 });
