@@ -1,3 +1,4 @@
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { useRouter } from "expo-router";
 import { useSetAtom } from "jotai";
 import { supabase } from "@/api/supabaseClient";
@@ -10,6 +11,7 @@ export function useLogout() {
   const logout = async () => {
     try {
       await supabase.auth.signOut();
+      await GoogleSignin.signOut();
 
       // NOTE: 사용자 정보 초기화
       setUserInfo({
