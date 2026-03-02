@@ -34,6 +34,7 @@ import {
   VISITED_STROKE_WIDTH_WEB,
 } from "@/features/map/constants/style";
 import { useVisitedCountrySummariesQuery } from "@/features/map/hooks/use-visited-country-summaries";
+import { animateToBrowserLocation } from "@/features/map/utils/browser-geolocation";
 import {
   getCountryPolygon,
   normalizeCountryCode,
@@ -45,11 +46,13 @@ import i18n from "@/lib/i18n";
 const easeInOut = (t: number) => (t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t);
 
 type MapGlobeProps = {
-  year: number;
+  year: number | null;
+  startDate?: string;
+  endDate?: string;
 };
 
 const MapGlobeComponent = forwardRef<MapGlobeRef, MapGlobeProps>(
-  ({ year }, ref) => {
+  ({ year, startDate, endDate }, ref) => {
     const { user } = useAuthUser();
     const [primary, outline] = useThemeColor(["primary-500", "outline-400"]);
     const [rotate, setRotate] = useState<[number, number, number]>([0, 0, 0]);
@@ -91,6 +94,8 @@ const MapGlobeComponent = forwardRef<MapGlobeRef, MapGlobeProps>(
       >({
         userId: user?.id ?? null,
         year,
+        startDate,
+        endDate,
         select: (summaries) => {
           const features: Feature<Polygon, { country_code: string }>[] = [];
           const uniqueCodes = Array.from(
@@ -198,7 +203,14 @@ const MapGlobeComponent = forwardRef<MapGlobeRef, MapGlobeProps>(
         zoomIn: () => setScale((s) => Math.min(s * 1.5, 800)),
         zoomOut: () => setScale((s) => Math.max(s / 1.5, 100)),
         animateToUserLocation: () => {
-          // Web implementation or stub
+          const geolocation =
+            typeof navigator === "undefined" ? null : navigator.geolocation;
+          animateToBrowserLocation({
+            geolocation,
+            onSuccess: ({ latitude, longitude }) => {
+              startRotationAnimation(latitude, longitude, 1400);
+            },
+          });
         },
       }),
       [startRotationAnimation],
