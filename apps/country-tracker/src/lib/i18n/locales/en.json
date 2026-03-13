@@ -45,6 +45,19 @@
     },
     "error-loading": "Failed to load visited countries.",
     "no-visited-countries": "No visited countries yet",
+    "no-visited-countries-subtitle": "Start tracking your journey by adding your first visit!",
+    "delete-visit": {
+      "title": "Delete Visit",
+      "message": "Remove all %{count} day(s) in %{country}? This cannot be undone.",
+      "confirm": "Delete",
+      "cancel": "Cancel",
+      "toast": {
+        "success-title": "Visit deleted",
+        "success-description": "Removed %{count} day(s) from %{country}.",
+        "error-title": "Delete failed",
+        "error-description": "Could not delete the visit. Please try again."
+      }
+    },
     "add-visit": {
       "button": "Add a New Visit",
       "title": "Add a New Visit",
@@ -229,7 +242,11 @@
     "github": "Login with GitHub",
     "terms": "Terms of Service",
     "privacy": "Privacy Policy",
-    "security-note": "OAuth only. No password is stored in app."
+    "security-note": "OAuth only. No password is stored in app.",
+    "error": {
+      "title": "Login failed",
+      "description": "Could not sign in. Please try again."
+    }
   },
   "location": {
     "foregroundService": {

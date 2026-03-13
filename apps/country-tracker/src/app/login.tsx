@@ -168,7 +168,7 @@ export default function LoginPage() {
       }
     } catch (e) {
       const message =
-        e instanceof Error ? e.message : i18n.t("home.error-loading");
+        e instanceof Error ? e.message : i18n.t("login.error.description");
       toast.show({
         duration: 3000,
         render: () => (
@@ -177,7 +177,7 @@ export default function LoginPage() {
             className="border-outline-300"
             variant="outline"
           >
-            <ToastTitle>{i18n.t("settings.toast.language.title")}</ToastTitle>
+            <ToastTitle>{i18n.t("login.error.title")}</ToastTitle>
             <ToastDescription>{message}</ToastDescription>
           </Toast>
         ),

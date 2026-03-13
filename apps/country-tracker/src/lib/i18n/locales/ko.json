@@ -45,6 +45,19 @@
     },
     "error-loading": "방문 국가 목록을 불러오지 못했어요.",
     "no-visited-countries": "아직 방문한 국가가 없어요",
+    "no-visited-countries-subtitle": "첫 번째 방문을 추가하여 여행 기록을 시작해보세요!",
+    "delete-visit": {
+      "title": "방문 기록 삭제",
+      "message": "%{country}의 %{count}일 기록을 삭제할까요? 되돌릴 수 없어요.",
+      "confirm": "삭제",
+      "cancel": "취소",
+      "toast": {
+        "success-title": "삭제 완료",
+        "success-description": "%{country}에서 %{count}일이 삭제됐어요.",
+        "error-title": "삭제 실패",
+        "error-description": "방문 기록을 삭제하지 못했어요. 다시 시도해주세요."
+      }
+    },
     "add-visit": {
       "button": "방문 기록 추가",
       "title": "새 방문 기록 추가",
@@ -224,7 +237,11 @@
     "github": "깃허브 로그인",
     "terms": "이용약관",
     "privacy": "개인정보처리방침",
-    "security-note": "OAuth 로그인만 지원하며 비밀번호는 앱에 저장되지 않습니다."
+    "security-note": "OAuth 로그인만 지원하며 비밀번호는 앱에 저장되지 않습니다.",
+    "error": {
+      "title": "로그인 실패",
+      "description": "로그인할 수 없어요. 다시 시도해주세요."
+    }
   },
   "location": {
     "foregroundService": {

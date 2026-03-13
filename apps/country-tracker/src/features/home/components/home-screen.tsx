@@ -6,18 +6,21 @@ import {
   BottomSheetModal,
   BottomSheetView,
 } from "@gorhom/bottom-sheet";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "expo-router";
 import { useSetAtom } from "jotai";
 import {
   CalendarDays,
   Globe2,
+  MapPinPlus,
   Plus,
   Search,
   SlidersHorizontal,
+  Trash2,
 } from "lucide-react-native";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
+  Alert,
   FlatList,
   Image,
   Pressable,
@@ -35,6 +38,7 @@ import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
+import { useDeleteVisitMutation } from "@/features/home/hooks/use-delete-visit";
 import { locationQueryKeys } from "@/features/location/apis/query-keys";
 import { fetchVisitedCountries } from "@/features/map/apis/fetch-visited-countries";
 import { useThemeColor } from "@/hooks/use-theme-color";
@@ -54,6 +58,8 @@ type FilterOption =
 
 export default function HomeScreen() {
   const setTheme = useSetAtom(themeAtom);
+  const queryClient = useQueryClient();
+  const { mutate: deleteVisit } = useDeleteVisitMutation();
   const [searchText, setSearchText] = useState("");
   const [activeFilter, setActiveFilter] = useState<FilterOption>("recent");
   const [selectedFilter, setSelectedFilter] = useState<FilterOption>("recent");
@@ -72,6 +78,7 @@ export default function HomeScreen() {
     warningSurface,
     warningText,
     secondarySurface,
+    errorColor,
   ] = useThemeColor([
     "background-50",
     "background",
@@ -82,6 +89,7 @@ export default function HomeScreen() {
     "warning-0",
     "warning-600",
     "secondary-0",
+    "error-500",
   ]);
 
   useEffect(() => {
@@ -151,6 +159,38 @@ export default function HomeScreen() {
 
   const isEmpty =
     userLoaded && !isLoading && !isError && sortedCountries.length === 0;
+
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const handleRefresh = useCallback(async () => {
+    setIsRefreshing(true);
+    await queryClient.invalidateQueries({
+      queryKey: ["location", "visited-countries"],
+    });
+    setIsRefreshing(false);
+  }, [queryClient]);
+
+  const handleDeleteVisit = useCallback(
+    (item: CountryItem) => {
+      const stayDays = getStayDays(item);
+      Alert.alert(
+        i18n.t("home.delete-visit.title"),
+        i18n.t("home.delete-visit.message", {
+          count: stayDays,
+          country: item.country,
+        }),
+        [
+          { text: i18n.t("home.delete-visit.cancel"), style: "cancel" },
+          {
+            text: i18n.t("home.delete-visit.confirm"),
+            style: "destructive",
+            onPress: () => deleteVisit(item),
+          },
+        ],
+      );
+    },
+    [deleteVisit],
+  );
 
   const filterLabels: Record<FilterOption, string> = {
     recent: i18n.t("home.filters.recent"),
@@ -243,15 +283,20 @@ export default function HomeScreen() {
             </Box>
           </Box>
         </Box>
-        <Badge
-          className="rounded-full"
-          size="sm"
-          style={{ backgroundColor: warningSurface }}
-        >
-          <BadgeText style={{ color: warningText }}>
-            {i18n.t("home.list.stay-days", { count: stayDays })}
-          </BadgeText>
-        </Badge>
+        <Box className="items-end gap-2">
+          <Badge
+            className="rounded-full"
+            size="sm"
+            style={{ backgroundColor: warningSurface }}
+          >
+            <BadgeText style={{ color: warningText }}>
+              {i18n.t("home.list.stay-days", { count: stayDays })}
+            </BadgeText>
+          </Badge>
+          <TouchableOpacity hitSlop={8} onPress={() => handleDeleteVisit(item)}>
+            <Trash2 color={errorColor} size={16} />
+          </TouchableOpacity>
+        </Box>
       </Box>
     );
   };
@@ -432,19 +477,41 @@ export default function HomeScreen() {
             ) : (
               <Skeleton className="w-full" isLoaded={userLoaded && !isLoading}>
                 {isEmpty ? (
-                  <View className="items-center justify-center px-6 py-10">
+                  <View className="items-center justify-center px-6 py-12">
+                    <MapPinPlus color={textMuted} size={48} />
                     <Text
-                      className="text-center font-semibold text-base"
+                      className="mt-4 text-center font-semibold text-lg"
                       style={{ color: textStrong }}
                     >
                       {i18n.t("home.no-visited-countries")}
                     </Text>
+                    <Text
+                      className="mt-2 text-center text-sm"
+                      style={{ color: textMuted }}
+                    >
+                      {i18n.t("home.no-visited-countries-subtitle")}
+                    </Text>
+                    <Link asChild href="/add-visit">
+                      <Button
+                        action="primary"
+                        className="mt-5 rounded-full px-6"
+                        size="md"
+                        variant="solid"
+                      >
+                        <ButtonIcon as={Plus} className="mr-1" />
+                        <ButtonText>
+                          {i18n.t("home.add-visit.button")}
+                        </ButtonText>
+                      </Button>
+                    </Link>
                   </View>
                 ) : (
                   <FlatList
                     contentContainerStyle={{ paddingVertical: 4 }}
                     data={sortedCountries}
                     keyExtractor={(item) => item.id}
+                    onRefresh={() => void handleRefresh()}
+                    refreshing={isRefreshing}
                     renderItem={({ item }) => renderCountryCard(item)}
                     scrollEnabled={false}
                     showsVerticalScrollIndicator={false}
