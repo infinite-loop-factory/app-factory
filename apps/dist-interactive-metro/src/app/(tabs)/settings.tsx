@@ -1,4 +1,3 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   Bell,
   ChevronRight,
@@ -12,33 +11,35 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { clearAllFavorites } from "@/data/favorites";
 import { clearRecentStations } from "@/data/recent-stations";
 import i18n from "@/i18n";
+import {
+  type DefaultHomeTabId,
+  getDefaultHomeTab,
+  setDefaultHomeTab,
+} from "@/lib/default-home";
 
-const TAB_OPTIONS = [
-  { id: "route", label: () => i18n.t("tabs.routeGuide") },
+const TAB_OPTIONS: { id: DefaultHomeTabId; label: () => string }[] = [
+  { id: "goNow", label: () => i18n.t("tabs.goNow") },
+  { id: "routeGuide", label: () => i18n.t("tabs.routeGuide") },
   { id: "favorites", label: () => i18n.t("tabs.favorites") },
-] as const;
+];
 
 export default function SettingsTab() {
   const insets = useSafeAreaInsets();
-  const [defaultTab, setDefaultTab] = useState("route");
+  const [defaultTab, setDefaultTab] = useState<DefaultHomeTabId>("routeGuide");
 
   useEffect(() => {
-    AsyncStorage.getItem("defaultTab")
-      .then((val) => {
-        if (val) setDefaultTab(val);
-      })
+    getDefaultHomeTab()
+      .then(setDefaultTab)
       .catch(() => {
         /* ignore */
       });
   }, []);
 
-  const handleDefaultTabChange = useCallback(async (tab: string) => {
+  const handleDefaultTabChange = useCallback(async (tab: DefaultHomeTabId) => {
     setDefaultTab(tab);
-    try {
-      await AsyncStorage.setItem("defaultTab", tab);
-    } catch {
-      // ignore
-    }
+    await setDefaultHomeTab(tab).catch(() => {
+      /* ignore */
+    });
   }, []);
 
   const handleClearRecent = useCallback(() => {

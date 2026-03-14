@@ -3,6 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 const STORAGE_KEY = "defaultHomeTab";
 
 const TAB_IDS = [
+  "goNow",
   "routeGuide",
   "notifications",
   "favorites",
@@ -15,6 +16,7 @@ const DEFAULT_VALUE: DefaultHomeTabId = "routeGuide";
 
 /** Tab route path ↔ DefaultHomeTabId mapping */
 export const DEFAULT_HOME_TAB_ROUTES: Record<DefaultHomeTabId, string> = {
+  goNow: "/(tabs)/go-now",
   routeGuide: "/(tabs)",
   notifications: "/(tabs)/notifications",
   favorites: "/(tabs)/favorites",
