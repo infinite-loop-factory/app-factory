@@ -28,3 +28,14 @@ export function getAllStations(): Station[] {
 export function getDynamicStations(): Station[] {
   return _dynamic;
 }
+
+/** Search all stations (static + dynamic) by name or line. */
+export function searchAllStations(keyword: string): Station[] {
+  if (!keyword.trim()) return [];
+  const lower = keyword.toLowerCase();
+  return _merged.filter(
+    (s) =>
+      s.name.toLowerCase().includes(lower) ||
+      s.line.toLowerCase().includes(lower),
+  );
+}

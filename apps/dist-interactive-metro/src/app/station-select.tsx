@@ -15,7 +15,8 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { LineBadge } from "@/components/ui/line-badge";
 import { useRouteSearch } from "@/context/route-search-context";
 import { addRecentStation, getRecentStations } from "@/data/recent-stations";
-import { lines, searchStations } from "@/data/stations";
+import { searchAllStations } from "@/data/station-store";
+import { lines } from "@/data/stations";
 import i18n from "@/i18n";
 
 export default function StationSelectScreen() {
@@ -35,7 +36,7 @@ export default function StationSelectScreen() {
 
   const searchResults = useMemo(() => {
     if (!keyword.trim()) return [];
-    return searchStations(keyword);
+    return searchAllStations(keyword);
   }, [keyword]);
 
   const filterByLine = useCallback(
