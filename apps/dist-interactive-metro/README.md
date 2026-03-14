@@ -1,118 +1,67 @@
-# Dist Interactive Metro 🚇
+# Dist Interactive Metro
 
-거리 기반 지하철 경로 추천 애플리케이션
+거리 기반 GPS 통합 지하철 경로 추천 앱 (수도권)
 
-## 📖 프로젝트 소개
+## 앱 소개
 
-"Dist Interactive Metro"는 출발 승강장에서 도착 승강장까지의 최적 경로를 거리 기반으로 추천해주는 지하철 경로 안내 앱입니다. 사용자가 출발역과 도착역을 선택하면, 가장 효율적인 환승 경로와 함께 각 구간의 거리 정보를 제공합니다.
+출발 승강장에서 도착 승강장까지 최적 경로를 추천하는 지하철 경로 안내 앱입니다. GPS로 주변 역을 자동 감지하고, KRIC(한국철도데이터활용센터) Open API를 통해 실시간 시간표와 환승 정보를 제공합니다.
 
-### 🎯 핵심 가치
-- **정확한 거리 계산**: 실제 승강장 간 거리를 기반으로 한 경로 추천
-- **위치 기반 최적화**: 사용자 현재 위치를 기반으로 최적화된 여러 경로 옵션 제공 (핵심 차별점)
-- **최적 경로 탐색**: 환승 횟수와 총 거리를 고려한 최적 경로 제공
-- **직관적인 UI**: 간단하고 명확한 인터페이스로 빠른 경로 확인
-- **오프라인 지원**: 캐시된 데이터를 활용한 오프라인 경로 탐색
+### 핵심 기능
 
-## ✨ 주요 기능
+- **GPS 기반 출발역 자동 감지** — 현재 위치에서 가장 가까운 역 추천
+- **Dijkstra 경로 탐색** — 거리 기반 최적 경로 계산
+- **실시간 시간표** — KRIC API 연동, 다음 출발 시간 표시
+- **환승 정보** — 환승 통로 보행 거리 및 예상 소요 시간
+- **즐겨찾기** — 자주 쓰는 경로 저장 및 빠른 재검색
+- **오프라인 지원** — 역 정보 캐싱 (KRIC 코드 맵 24시간 TTL)
 
-### 🚉 홈 화면 및 역 선택
-- **홈 화면**: 출발역(빈칸) + 도착역(빈칸) + 경유 추가(선택). 가장 친숙하고 편리한 형태.
-- **인터페이스 분리**: 출발/도착/경유 추가 각각 탭 시 서로 다른 전용 인터페이스로 이동.
-- 출발역·도착역·경유역 선택
-- 즐겨찾는 역 관리 (추후)
+## 탭 구성
 
-### 🗺️ 경로 탐색
-- 최단 거리 경로 추천
-- 최소 환승 경로 추천
-- **사용자 현재 위치 기반 최적화된 여러 경로 옵션 제공**
-- 다중 경로 옵션 제공
-- 각 구간별 거리 및 소요 시간 표시
+| 탭 | 설명 |
+|----|------|
+| **홈 (Route)** | 출발·도착·경유 선택 → 경로 탐색 |
+| **Go Now** | GPS로 현재 위치 기반 즉시 경로 추천 |
+| **알림 (Notifications)** | 즐겨찾기 경로별 실시간 출발 시간 |
+| **즐겨찾기 (Favorites)** | 저장된 경로 관리 |
+| **설정 (Settings)** | 언어·기본 탭 설정 |
+| **Dev** _(개발 빌드 전용)_ | API Inspector, DB 시각화, 동기화 시뮬레이션 |
 
-### 📊 경로 상세 정보
-- 총 거리 표시
-- 소요 시간 계산 및 표시
-- 환승 횟수 및 환승역 정보
-- 각 구간별 상세 정보 (거리, 시간)
-- 현재 위치 기반 최적 경로 강조
+## 기술 스택
 
-## 👥 타겟 사용자
+| 항목 | 세부 |
+|------|------|
+| Framework | Expo SDK ~54, React Native 0.81.5 |
+| Language | TypeScript 5.9+ |
+| Routing | Expo Router 6 (파일 기반) |
+| Styling | NativeWind 4 (Tailwind CSS) + Gluestack UI 3 |
+| Icons | Lucide React Native |
+| State | Context API (`RouteSearchContext`, `SyncStatusContext`) |
+| Data API | KRIC Open API (5개 엔드포인트) |
+| Caching | AsyncStorage (KRIC 코드 맵 24h TTL) |
+| Location | expo-location |
+| i18n | i18n-js (한국어·영어) |
+| Linter | Biome |
 
-### 주요 타겟: 지하철 이용자
-- 일상적으로 지하철을 이용하는 사람들
-- 최적 경로를 찾고 싶은 사람들
-- 환승 정보를 미리 확인하고 싶은 사람들
+## 환경 설정
 
-### 사용 시나리오
-- **일상 통근**: 출퇴근 경로 최적화
-- **여행/관광**: 낯선 지역의 지하철 경로 확인
-- **시간 절약**: 최단 거리 경로로 이동 시간 단축
-
-## 📊 데이터 구조
-
-- **지하철 노선 정보**: 노선별 역 목록 및 순서
-- **역 간 거리 데이터**: 승강장 간 실제 거리 정보
-- **환승 정보**: 환승 가능한 역 및 노선 정보
-- **데이터 소스**: 공공포탈 API 연동
-- **데이터 범위**: 전국 노선 지원 목표, 현재는 수도권까지 구현
-- **캐싱**: 로컬 캐시를 통한 오프라인 지원
-- **참고**: 지하철종결자 앱의 데이터 구조 및 방식 참고
-
-## 📁 프로젝트 구조
-
-```
-dist-interactive-metro/
-├── README.md
-├── docs/                    # 기획 문서들
-│   ├── PROJECT_STATUS.md   # 프로젝트 상태 추적
-│   ├── requirements.md     # 기능 요구사항
-│   ├── user-flow.md        # 사용자 플로우
-│   ├── data-structure.md   # 데이터 구조
-│   └── architecture.md     # 기술 아키텍처
-└── src/                    # 소스 코드
+```bash
+# .env.local
+EXPO_PUBLIC_KRIC_SERVICE_KEY=your_kric_service_key
 ```
 
-## 📚 문서
+KRIC API 키는 [https://data.kric.go.kr](https://data.kric.go.kr) 에서 발급합니다.
 
-- [프로젝트 상태](./docs/PROJECT_STATUS.md) - 개발 진행 상황 추적
-- [기능 요구사항](./docs/requirements.md) - 개발할 기능 명세
-- [사용자 플로우](./docs/user-flow.md) - 앱 사용 흐름 및 화면 이동
-- [데이터 구조](./docs/data-structure.md) - 지하철 노선 및 거리 데이터 구조
-- [기술 아키텍처](./docs/architecture.md) - 기술 스택 및 구조 설계
+## 개발 실행
 
-## 🚀 개발 상태
+```bash
+pnpm install
+pnpm --filter dist-interactive-metro dev
+```
 
-### 📋 기획 단계
-- [x] 프로젝트 기획 및 범위 정의
-- [x] 사용자 플로우 설계
-- [x] 데이터 구조 설계
-- [x] 기능 요구사항 정의
-- [x] 기술 아키텍처 설계
+## 문서
 
-### 🔄 개발 단계
-- [x] 개발 환경 설정
-- [ ] 공공포탈 API 연동
-- [ ] 데이터 수집 및 구조화
-- [ ] GPS 위치 서비스 구현
-- [ ] 경로 탐색 알고리즘 구현
-- [ ] 핵심 기능 구현
-- [ ] UI/UX 개발
-- [ ] 테스트 및 최적화
-
-## 🛠 기술 스택
-
-- **Framework**: Expo SDK ~54, React Native 0.81.5
-- **Language**: TypeScript 5.9+
-- **Routing**: Expo Router
-- **Styling**: NativeWind (Tailwind CSS), Gluestack UI
-- **State Management**: Context API (프로젝트 공유 패턴)
-- **Data**: 공공포탈 API, AsyncStorage/SQLite 캐싱
-- **Location**: expo-location (GPS 기반 위치 서비스)
-- **i18n**: i18n-js (한국어, 영어)
-
-## 📝 라이선스
-
-(추후 결정)
-
----
-
-**Made with ❤️ for efficient subway navigation**
+- [아키텍처](./docs/architecture.md) — 파일 구조, 데이터 흐름, 핵심 패턴
+- [디자인](./docs/design.md) — 컬러 시스템, 컴포넌트, 화면 스펙
+- [API 연동](./docs/api-research.md) — KRIC API 엔드포인트 및 사용 방법
+- [사용자 플로우](./docs/user-flow.md) — 화면 구성 및 네비게이션
+- [개발자 화면](./docs/dev-screen.md) — Dev 탭 기능 및 API Inspector
