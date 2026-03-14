@@ -73,11 +73,23 @@
     "daysAgo": "{{count}} days ago"
   },
   "notifications": {
-    "description": "Subway operation info and congestion alerts",
-    "emptyTitle": "No notifications",
-    "emptyDescription": "Delay and congestion alerts will appear here",
+    "description": "Upcoming trains for your favorite routes",
+    "emptyTitle": "No favorites yet",
+    "emptyDescription": "Add routes to favorites and see upcoming trains here",
     "comingSoonTitle": "Notifications coming soon",
-    "comingSoonDescription": "Real-time transit info, favorite route delay alerts and more will be available in future updates."
+    "comingSoonDescription": "Real-time transit info, favorite route delay alerts and more will be available in future updates.",
+    "addFavorites": "Add a favorite route",
+    "nextTrains": "Next trains",
+    "from": "From"
+  },
+  "timetable": {
+    "title": "Next trains",
+    "noData": "Could not load timetable",
+    "syncRequired": "Sync station data to see departure times",
+    "departure": "Departs",
+    "direction": "direction",
+    "loading": "Loading timetable…",
+    "noUpcoming": "No more trains today"
   },
   "settings": {
     "description": "Customize and personalize your app",
