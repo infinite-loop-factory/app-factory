@@ -24,7 +24,7 @@ import { GradientBackground } from "@/components/ui/gradient-background";
 import { LineBadge } from "@/components/ui/line-badge";
 import { useRouteSearch } from "@/context/route-search-context";
 import { addRecentStation } from "@/data/recent-stations";
-import { stations } from "@/data/stations";
+import { getAllStations } from "@/data/station-store";
 import i18n from "@/i18n";
 import { findNearestStations, formatDistance } from "@/utils/geo";
 
@@ -46,7 +46,7 @@ async function fetchNearbyStations(): Promise<NearbyStation[]> {
   return findNearestStations(
     location.coords.latitude,
     location.coords.longitude,
-    stations,
+    getAllStations(),
     3,
   );
 }

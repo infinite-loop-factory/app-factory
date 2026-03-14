@@ -26,7 +26,7 @@ import {
   getFavoriteRoutes,
   isFavoriteRoute,
 } from "@/data/favorites";
-import { stations } from "@/data/stations";
+import { getAllStations } from "@/data/station-store";
 import { useStationTimetable } from "@/hooks/use-station-timetable";
 import { useTransferInfo } from "@/hooks/use-transfer-info";
 import i18n from "@/i18n";
@@ -137,16 +137,18 @@ export default function RouteResultScreen() {
   const [isFavorite, setIsFavorite] = useState(false);
 
   const startStation = useMemo(
-    () => stations.find((s) => s.id === params.start) ?? null,
+    () => getAllStations().find((s) => s.id === params.start) ?? null,
     [params.start],
   );
   const endStation = useMemo(
-    () => stations.find((s) => s.id === params.end) ?? null,
+    () => getAllStations().find((s) => s.id === params.end) ?? null,
     [params.end],
   );
   const viaStation = useMemo(
     () =>
-      params.via ? (stations.find((s) => s.id === params.via) ?? null) : null,
+      params.via
+        ? (getAllStations().find((s) => s.id === params.via) ?? null)
+        : null,
     [params.via],
   );
 

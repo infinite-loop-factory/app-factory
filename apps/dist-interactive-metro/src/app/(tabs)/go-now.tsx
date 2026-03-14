@@ -26,7 +26,7 @@ import { ElevatedCard } from "@/components/ui/elevated-card";
 import { GradientBackground } from "@/components/ui/gradient-background";
 import { LineBadge } from "@/components/ui/line-badge";
 import { useRouteSearch } from "@/context/route-search-context";
-import { stations } from "@/data/stations";
+import { getAllStations } from "@/data/station-store";
 import i18n from "@/i18n";
 import { findNearestStations, formatDistance } from "@/utils/geo";
 import { recommendRoutes } from "@/utils/route-calculator";
@@ -51,7 +51,7 @@ async function resolveNearbyStations(): Promise<LocationState> {
   const nearby = findNearestStations(
     location.coords.latitude,
     location.coords.longitude,
-    stations,
+    getAllStations(),
     NEARBY_COUNT,
   );
   return { status: "ready", nearby };
