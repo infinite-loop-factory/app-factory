@@ -28,8 +28,42 @@ import {
 } from "@/data/favorites";
 import { stations } from "@/data/stations";
 import { useStationTimetable } from "@/hooks/use-station-timetable";
+import { useTransferInfo } from "@/hooks/use-transfer-info";
 import i18n from "@/i18n";
 import { calculateRoute } from "@/utils/route-calculator";
+
+interface TransferInfoBadgeProps {
+  stationName: string;
+  fromLineName: string;
+  toLineName: string;
+}
+
+function TransferInfoBadge({
+  stationName,
+  fromLineName,
+  toLineName,
+}: TransferInfoBadgeProps) {
+  const { info, loading } = useTransferInfo(
+    stationName,
+    fromLineName,
+    toLineName,
+  );
+
+  if (loading || !info) return null;
+
+  return (
+    <View className="mt-1 flex-row items-center gap-2">
+      <Text className="text-orange-700 text-xs">
+        {i18n.t("transferInfo.walkingDistance", { distance: info.distanceM })}
+      </Text>
+      <Text className="text-orange-500 text-xs">
+        {i18n.t("transferInfo.walkingMinutes", {
+          minutes: info.walkingMinutes,
+        })}
+      </Text>
+    </View>
+  );
+}
 
 interface DepartureStripProps {
   stationName: string;
@@ -376,6 +410,11 @@ export default function RouteResultScreen() {
                               {i18n.t("routeResult.transferTo")}
                             </Text>
                           </View>
+                          <TransferInfoBadge
+                            fromLineName={segment.station.line}
+                            stationName={segment.station.name}
+                            toLineName={segment.transferTo[0] ?? ""}
+                          />
                         </View>
                       )}
 
