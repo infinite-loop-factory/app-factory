@@ -72,13 +72,6 @@
     "yesterday": "어제",
     "daysAgo": "{{count}}일 전"
   },
-  "notifications": {
-    "description": "지하철 운행 정보와 혼잡도 알림",
-    "emptyTitle": "알림이 없습니다",
-    "emptyDescription": "운행 지연, 혼잡도 정보 등의 알림이 여기에 표시됩니다",
-    "comingSoonTitle": "알림 기능은 준비 중입니다",
-    "comingSoonDescription": "향후 업데이트를 통해 실시간 운행 정보, 즐겨찾기 경로의 지연 알림 등의 기능이 추가될 예정입니다."
-  },
   "settings": {
     "description": "앱 환경을 설정하고 개인화하세요",
     "notificationSettings": "알림 설정",
@@ -144,5 +137,24 @@
   },
   "common": {
     "back": "뒤로"
+  },
+  "timetable": {
+    "title": "다음 열차",
+    "noData": "배차 정보를 불러오지 못했습니다",
+    "syncRequired": "역 정보를 동기화하면 배차 시각이 표시됩니다",
+    "departure": "출발",
+    "direction": "방면",
+    "loading": "배차 정보 불러오는 중…",
+    "noUpcoming": "오늘 이후 열차 없음"
+  },
+  "notifications": {
+    "description": "즐겨찾기 경로의 다음 열차 정보",
+    "emptyTitle": "즐겨찾기가 없습니다",
+    "emptyDescription": "즐겨찾기에 경로를 추가하면 다음 열차 시각이 여기에 표시됩니다",
+    "comingSoonTitle": "알림 기능은 준비 중입니다",
+    "comingSoonDescription": "향후 업데이트를 통해 실시간 운행 정보, 즐겨찾기 경로의 지연 알림 등의 기능이 추가될 예정입니다.",
+    "addFavorites": "경로 즐겨찾기 추가하기",
+    "nextTrains": "다음 열차",
+    "from": "출발역"
   }
 }

@@ -10,7 +10,13 @@ import {
   Repeat,
 } from "lucide-react-native";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Pressable, ScrollView, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  Pressable,
+  ScrollView,
+  Text,
+  View,
+} from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ElevatedCard } from "@/components/ui/elevated-card";
 import { GradientBackground } from "@/components/ui/gradient-background";
@@ -21,8 +27,68 @@ import {
   isFavoriteRoute,
 } from "@/data/favorites";
 import { stations } from "@/data/stations";
+import { useStationTimetable } from "@/hooks/use-station-timetable";
 import i18n from "@/i18n";
 import { calculateRoute } from "@/utils/route-calculator";
+
+interface DepartureStripProps {
+  stationName: string;
+  lineName: string;
+  lineColor: string;
+}
+
+function DepartureStrip({
+  stationName,
+  lineName,
+  lineColor,
+}: DepartureStripProps) {
+  const { departures, loading } = useStationTimetable(stationName, lineName, 4);
+
+  function renderContent() {
+    if (loading) {
+      return (
+        <View className="flex-row items-center gap-2">
+          <ActivityIndicator color={lineColor} size="small" />
+          <Text className="text-gray-400 text-xs">
+            {i18n.t("timetable.loading")}
+          </Text>
+        </View>
+      );
+    }
+    if (departures.length === 0) {
+      return (
+        <Text className="text-gray-400 text-xs">
+          {i18n.t("timetable.noUpcoming")}
+        </Text>
+      );
+    }
+    return (
+      <View className="flex-row flex-wrap gap-2">
+        {departures.map((dep) => (
+          <View
+            className="flex-row items-center gap-1 rounded-full px-3 py-1"
+            key={dep.trnNo}
+            style={{ backgroundColor: `${lineColor}18` }}
+          >
+            <Clock color={lineColor} size={11} />
+            <Text className="font-medium text-xs" style={{ color: lineColor }}>
+              {dep.dptTime}
+            </Text>
+          </View>
+        ))}
+      </View>
+    );
+  }
+
+  return (
+    <View className="mt-4 border-gray-100 border-t pt-4">
+      <Text className="mb-2 text-gray-500 text-xs">
+        {i18n.t("timetable.title")}
+      </Text>
+      {renderContent()}
+    </View>
+  );
+}
 
 export default function RouteResultScreen() {
   const router = useRouter();
@@ -198,6 +264,13 @@ export default function RouteResultScreen() {
                 </Text>
               </View>
             </View>
+
+            {/* Next departures */}
+            <DepartureStrip
+              lineColor={startStation.lineColor}
+              lineName={startStation.line}
+              stationName={startStation.name}
+            />
 
             {/* Favorite button */}
             <View className="mt-6 items-center">
