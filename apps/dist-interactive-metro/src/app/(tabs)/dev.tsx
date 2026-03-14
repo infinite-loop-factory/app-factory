@@ -12,6 +12,7 @@ import {
 import { useCallback, useEffect, useRef } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { ApiInspector } from "@/components/dev/api-inspector";
 import { useSyncStatus } from "@/context/sync-status-context";
 import { syncKricStations } from "@/data/kric-station-sync";
 
@@ -218,6 +219,11 @@ export default function DevScreen() {
               ))}
             </View>
           </View>
+        </View>
+
+        {/* API Inspector */}
+        <View className="mb-8">
+          <ApiInspector />
         </View>
 
         {/* Dev actions */}
