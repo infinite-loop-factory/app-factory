@@ -294,7 +294,10 @@ export function calculateRoute(
   via?: Station,
 ): RouteInfo {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const { stations } = require("@/data/stations") as { stations: Station[] };
+  const { getAllStations } = require("@/data/station-store") as {
+    getAllStations: () => Station[];
+  };
+  const stations = getAllStations();
   const graph = buildGraph(stations);
   const stationMap = getStationMap(stations);
 

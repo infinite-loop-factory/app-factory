@@ -13,6 +13,7 @@ import { useCallback, useEffect, useRef } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useSyncStatus } from "@/context/sync-status-context";
+import { syncKricStations } from "@/data/kric-station-sync";
 
 const DB_ENTITIES = [
   {
@@ -106,15 +107,23 @@ export default function DevScreen() {
 
   const handleSimulateSync = useCallback(() => {
     setSyncStatus("syncing");
-    timerRef.current = setTimeout(() => {
-      setLastSync(Date.now(), {
-        lines: 18,
-        stations: 600,
-        distances: 12000,
-        transfers: 200,
+    syncKricStations({ force: true })
+      .then((result) => {
+        setLastSync(Date.now(), {
+          lines: result.linesSucceeded,
+          stations: result.dynamicStationsAdded,
+          distances: 0,
+          transfers: result.codeMapEntries,
+        });
+      })
+      .catch((err: unknown) => {
+        setLastSync(
+          Date.now(),
+          items,
+          err instanceof Error ? err.message : "Sync failed",
+        );
       });
-    }, 1500);
-  }, [setSyncStatus, setLastSync]);
+  }, [setSyncStatus, setLastSync, items]);
 
   const handleSimulateError = useCallback(() => {
     setSyncStatus("syncing");
