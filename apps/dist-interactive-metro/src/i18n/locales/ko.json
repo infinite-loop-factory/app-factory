@@ -156,5 +156,11 @@
     "addFavorites": "경로 즐겨찾기 추가하기",
     "nextTrains": "다음 열차",
     "from": "출발역"
+  },
+  "transferInfo": {
+    "walkingDistance": "{{distance}}m 도보",
+    "walkingMinutes": "약 {{minutes}}분",
+    "platformFrom": "출발: {{platform}}",
+    "platformTo": "도착: {{platform}}"
   }
 }

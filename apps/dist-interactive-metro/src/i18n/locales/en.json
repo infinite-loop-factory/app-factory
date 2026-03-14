@@ -156,5 +156,11 @@
   },
   "common": {
     "back": "Back"
+  },
+  "transferInfo": {
+    "walkingDistance": "{{distance}}m walk",
+    "walkingMinutes": "~{{minutes}} min",
+    "platformFrom": "From: {{platform}}",
+    "platformTo": "To: {{platform}}"
   }
 }
