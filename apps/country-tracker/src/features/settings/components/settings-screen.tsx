@@ -12,7 +12,9 @@ import {
   FileText,
   Globe2,
   PlaneTakeoff,
+  Trash2,
 } from "lucide-react-native";
+import { Alert } from "react-native";
 import ParallaxScrollView from "@/components/parallax-scroll-view";
 import { Badge, BadgeText } from "@/components/ui/badge";
 import { Box } from "@/components/ui/box";
@@ -28,6 +30,7 @@ import {
   useToast,
 } from "@/components/ui/toast";
 import { stopLocationTask } from "@/features/location/location-permission";
+import { useDeleteAccountMutation } from "@/features/settings/hooks/use-delete-account";
 import { useAuthUser } from "@/hooks/use-auth-user";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import i18n from "@/lib/i18n";
@@ -79,6 +82,23 @@ export default function SettingsScreen() {
     await stopLocationTask();
     await supabase.auth.signOut();
     router.replace("/login");
+  };
+
+  const deleteAccount = useDeleteAccountMutation();
+
+  const handleDeleteAccount = () => {
+    Alert.alert(
+      i18n.t("settings.delete-account.title"),
+      i18n.t("settings.delete-account.message"),
+      [
+        { text: i18n.t("settings.delete-account.cancel"), style: "cancel" },
+        {
+          text: i18n.t("settings.delete-account.confirm"),
+          style: "destructive",
+          onPress: () => void deleteAccount.mutate(),
+        },
+      ],
+    );
   };
 
   return (
@@ -220,6 +240,22 @@ export default function SettingsScreen() {
           <Text className="font-medium text-error-600 text-lg">
             {i18n.t("settings.logout")}
           </Text>
+        </Button>
+      </Box>
+
+      <Box className="mx-1 mt-3 overflow-hidden rounded-2xl border border-outline-100 bg-background-0 shadow-xs">
+        <Button
+          action="default"
+          className="h-14 w-full items-center justify-center rounded-none bg-transparent px-4"
+          disabled={deleteAccount.isPending}
+          onPress={handleDeleteAccount}
+        >
+          <Box className="flex-row items-center gap-2">
+            <Trash2 color="#dc2626" size={18} />
+            <Text className="font-medium text-error-600 text-lg">
+              {i18n.t("settings.delete-account.button")}
+            </Text>
+          </Box>
         </Button>
       </Box>
 

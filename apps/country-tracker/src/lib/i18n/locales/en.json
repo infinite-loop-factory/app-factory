@@ -230,7 +230,18 @@
         "description": "Please go to System Settings > Apps > Language settings to change your language."
       }
     },
-    "logout": "Logout"
+    "logout": "Logout",
+    "delete-account": {
+      "button": "Delete Account",
+      "title": "Delete Account",
+      "message": "This will permanently delete all your travel data and sign you out. This action cannot be undone.",
+      "confirm": "Delete",
+      "cancel": "Cancel",
+      "toast": {
+        "error-title": "Deletion failed",
+        "error-description": "Could not delete your account. Please try again."
+      }
+    }
   },
 
   "login": {
@@ -238,6 +249,7 @@
     "description": "Login is required to use this service.",
     "hero-title": "Start Your Journey",
     "hero-subtitle": "Sign in to continue to your dashboard",
+    "apple": "Sign in with Apple",
     "google": "Login with Google",
     "github": "Login with GitHub",
     "terms": "Terms of Service",

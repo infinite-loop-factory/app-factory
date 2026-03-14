@@ -16,11 +16,8 @@ import {
   VISITED_FILL_OPACITY,
   VISITED_STROKE_WIDTH_NATIVE,
 } from "@/features/map/constants/style";
-import { useVisitedCountrySummariesQuery } from "@/features/map/hooks/use-visited-country-summaries";
-import {
-  getCountryPolygon,
-  normalizeCountryCode,
-} from "@/features/map/utils/country-polygons";
+import { useVisitedCountryCodes } from "@/features/map/hooks/use-visited-country-codes";
+import { getCountryPolygon } from "@/features/map/utils/country-polygons";
 import {
   addAlphaToColor,
   calculateLongitudeDifference,
@@ -55,30 +52,19 @@ const MapGlobe = forwardRef<MapGlobeRef, MapGlobeProps>(
       longitudeDelta: 75,
     });
 
-    const { data: countryPolygons = [] } = useVisitedCountrySummariesQuery<
-      CountryPolygon[]
-    >({
+    const { data: visitedCodes = [] } = useVisitedCountryCodes({
       userId: user?.id ?? null,
       year,
       startDate,
       endDate,
-      select: (summaries) => {
-        const uniqueCodes = Array.from(
-          new Set(
-            summaries.map((summary) => summary.countryCode).filter(Boolean),
-          ),
-        ) as string[];
-
-        return uniqueCodes
-          .map((raw) => {
-            const normalized = normalizeCountryCode(raw);
-            if (!normalized) return null;
-            const polygon = getCountryPolygon(normalized);
-            return polygon ? { ...polygon, country_code: normalized } : null;
-          })
-          .filter((polygon): polygon is CountryPolygon => polygon !== null);
-      },
     });
+
+    const countryPolygons = visitedCodes
+      .map((code) => {
+        const polygon = getCountryPolygon(code);
+        return polygon ? { ...polygon, country_code: code } : null;
+      })
+      .filter((polygon): polygon is CountryPolygon => polygon !== null);
 
     // 애니메이션 값 생성
     const animatedValue = useRef(new Animated.Value(0)).current;

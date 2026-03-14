@@ -1,5 +1,5 @@
-import { ALPHA3_TO_ALPHA2 } from "@/features/map/constants/alpha3-to-alpha2";
-import { numericToAlpha2 } from "@/features/map/utils/iso-numeric-to-alpha2";
+import { ALPHA3_TO_ALPHA2 } from "@/utils/country-codes/alpha3-to-alpha2";
+import { numericToAlpha2 } from "@/utils/country-codes/iso-numeric-to-alpha2";
 
 export function normalizeCountryCode(
   code: string | null | undefined,

@@ -38,9 +38,14 @@ const redirectTo = makeRedirectUri();
 const OAUTH_PROVIDERS: {
   key: Provider;
   labelKey: string;
-  icon: typeof Chrome | typeof Github;
-  variant: "google" | "github";
+  icon?: typeof Chrome | typeof Github;
+  variant: "apple" | "google" | "github";
 }[] = [
+  {
+    key: "apple",
+    labelKey: "login.apple",
+    variant: "apple",
+  },
   {
     key: "google",
     labelKey: "login.google",
@@ -56,6 +61,11 @@ const OAUTH_PROVIDERS: {
 ];
 
 type OAuthProviderConfig = (typeof OAUTH_PROVIDERS)[number];
+
+const LEGAL_URLS = {
+  terms: "https://gracefullight.dev/country-tracker/terms",
+  privacy: "https://gracefullight.dev/country-tracker/privacy",
+} as const;
 
 const createSessionFromUrl = async (url: string) => {
   const { params, errorCode } = QueryParams.getQueryParams(url);
@@ -90,14 +100,15 @@ function OAuthProviderButton({
   isPending: boolean;
   onPress: (provider: Provider) => void;
 }) {
-  const isGithub = provider.variant === "github";
-  const buttonClassName = isGithub
+  const isDark = provider.variant === "apple" || provider.variant === "github";
+  const buttonClassName = isDark
     ? "h-12 w-full rounded-xl border border-typography-900 bg-typography-900 px-4"
     : "h-12 w-full rounded-xl border border-outline-200 bg-background-0 px-4";
-  const iconClassName = isGithub ? "text-typography-0" : "text-typography-700";
-  const textClassName = isGithub
-    ? "ml-3 font-bold text-lg text-typography-0"
-    : "ml-3 font-bold text-lg text-typography-900";
+  const iconClassName = isDark ? "text-typography-0" : "text-typography-700";
+  const textClassName = isDark
+    ? "font-bold text-lg text-typography-0"
+    : "font-bold text-lg text-typography-900";
+  const hasIcon = isPending || !!provider.icon;
 
   return (
     <Button
@@ -105,15 +116,14 @@ function OAuthProviderButton({
       className={buttonClassName}
       disabled={disabled}
       onPress={() => onPress(provider.key)}
-      variant={isGithub ? "solid" : "outline"}
+      variant={isDark ? "solid" : "outline"}
     >
       <Box className="w-full flex-row items-center justify-center">
-        {isPending ? (
-          <ButtonSpinner className={iconClassName} />
-        ) : (
+        {isPending && <ButtonSpinner className={iconClassName} />}
+        {!isPending && provider.icon && (
           <ButtonIcon as={provider.icon} className={iconClassName} size="md" />
         )}
-        <ButtonText className={textClassName}>
+        <ButtonText className={`${hasIcon ? "ml-3" : ""} ${textClassName}`}>
           {i18n.t(provider.labelKey)}
         </ButtonText>
       </Box>
@@ -240,12 +250,26 @@ export default function LoginPage() {
             <Divider className="bg-outline-100" />
 
             <Box className="flex-row items-center justify-center gap-5">
-              <Button action="default" className="px-0" variant="link">
+              <Button
+                action="default"
+                className="px-0"
+                onPress={() =>
+                  void WebBrowser.openBrowserAsync(LEGAL_URLS.terms)
+                }
+                variant="link"
+              >
                 <Text className="text-sm text-typography-500">
                   {i18n.t("login.terms")}
                 </Text>
               </Button>
-              <Button action="default" className="px-0" variant="link">
+              <Button
+                action="default"
+                className="px-0"
+                onPress={() =>
+                  void WebBrowser.openBrowserAsync(LEGAL_URLS.privacy)
+                }
+                variant="link"
+              >
                 <Text className="text-sm text-typography-500">
                   {i18n.t("login.privacy")}
                 </Text>

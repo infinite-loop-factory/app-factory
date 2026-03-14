@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-import { useFormContext } from "@/hooks/form-context";
+import { useFormContext } from "@/features/home/hooks/form-context";
 
 export type AppSubscribeButtonRenderProps = {
   isSubmitting: boolean;

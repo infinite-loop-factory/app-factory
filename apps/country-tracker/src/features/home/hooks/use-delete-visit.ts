@@ -1,6 +1,7 @@
 import type { CountryItem } from "@/types/country-item";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { queryKeys } from "@/constants/query-keys";
 import { deleteVisitDays } from "@/features/home/apis/delete-visit";
 import { useAuthUser } from "@/hooks/use-auth-user";
 import { useGlobalToast } from "@/hooks/use-global-toast";
@@ -33,9 +34,14 @@ export function useDeleteVisitMutation() {
         }),
       );
       queryClient.invalidateQueries({
-        queryKey: ["location", "visited-countries"],
+        queryKey: queryKeys.location.visitedCountries(),
       });
-      queryClient.invalidateQueries({ queryKey: ["map", "visited-countries"] });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.map.visitedCountrySummaries({
+          userId: null,
+          year: "",
+        }),
+      });
     },
     onError: () => {
       showToast(

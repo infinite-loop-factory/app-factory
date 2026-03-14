@@ -2,7 +2,7 @@ import type { ConfigContext, ExpoConfig } from "expo/config";
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
-  name: "country-tracker",
+  name: "Country Tracker",
   slug: "country-tracker",
   owner: "gracefullight",
   scheme: "country-tracker",
@@ -19,6 +19,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ios: {
     supportsTablet: true,
     bundleIdentifier: "com.gracefullight.countrytracker",
+    usesAppleSignIn: true,
     infoPlist: {
       UIBackgroundModes: ["location"],
       NSLocationWhenInUseUsageDescription:
@@ -33,6 +34,13 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       backgroundColor: "#ffffff",
     },
     package: "com.gracefullight.countrytracker",
+    permissions: [
+      "ACCESS_FINE_LOCATION",
+      "ACCESS_COARSE_LOCATION",
+      "ACCESS_BACKGROUND_LOCATION",
+      "FOREGROUND_SERVICE",
+      "FOREGROUND_SERVICE_LOCATION",
+    ],
   },
   web: {
     bundler: "metro",
@@ -52,6 +60,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
           "Allow background location so we can automatically save visits while the app is not active. Your data stays in your account and you can delete it anytime.",
       },
     ],
+    "expo-apple-authentication",
     "expo-router",
     "expo-font",
   ],

@@ -38,8 +38,8 @@ import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
+import { queryKeys } from "@/constants/query-keys";
 import { useDeleteVisitMutation } from "@/features/home/hooks/use-delete-visit";
-import { locationQueryKeys } from "@/features/location/apis/query-keys";
 import { fetchVisitedCountries } from "@/features/map/apis/fetch-visited-countries";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import i18n from "@/lib/i18n";
@@ -106,7 +106,7 @@ export default function HomeScreen() {
 
   const { data, isLoading, isError } = useQuery({
     queryKey: [
-      ...locationQueryKeys.visitedCountries(searchText),
+      ...queryKeys.location.visitedCountries(searchText),
       currentUser?.id ?? "guest",
     ],
     enabled: Boolean(currentUser?.id),
@@ -165,7 +165,7 @@ export default function HomeScreen() {
   const handleRefresh = useCallback(async () => {
     setIsRefreshing(true);
     await queryClient.invalidateQueries({
-      queryKey: ["location", "visited-countries"],
+      queryKey: queryKeys.location.visitedCountries(),
     });
     setIsRefreshing(false);
   }, [queryClient]);

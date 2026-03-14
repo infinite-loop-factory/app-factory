@@ -28,10 +28,10 @@ import {
   type AddVisitForm,
   AddVisitFormSchema,
 } from "@/features/home/constants/add-visit-form-schema";
+import { useAppForm } from "@/features/home/hooks/create-app-form";
 import { usePrefillLocationMutation } from "@/features/home/hooks/use-prefill-location";
 import { useSubmitVisitMutation } from "@/features/home/hooks/use-submit-visit";
 import { resolveCountryFromCoordinates } from "@/features/home/utils/resolve-country";
-import { useAppForm } from "@/hooks/create-app-form";
 import i18n from "@/lib/i18n";
 import { zodOnDynamic } from "@/utils/zod-on-dynamic";
 

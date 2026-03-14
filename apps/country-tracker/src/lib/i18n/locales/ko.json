@@ -161,7 +161,18 @@
         "description": "시스템설정 > 앱 > 언어설정에서 직접 언어를 바꿔주세요."
       }
     },
-    "logout": "로그아웃"
+    "logout": "로그아웃",
+    "delete-account": {
+      "button": "계정 삭제",
+      "title": "계정 삭제",
+      "message": "모든 여행 데이터가 영구적으로 삭제되고 로그아웃됩니다. 이 작업은 되돌릴 수 없습니다.",
+      "confirm": "삭제",
+      "cancel": "취소",
+      "toast": {
+        "error-title": "삭제 실패",
+        "error-description": "계정을 삭제하지 못했어요. 다시 시도해주세요."
+      }
+    }
   },
 
   "map": {
@@ -233,6 +244,7 @@
     "description": "로그인 후 이용 가능합니다.",
     "hero-title": "Start Your Journey",
     "hero-subtitle": "대시보드로 이동하려면 로그인해주세요",
+    "apple": "Apple로 로그인",
     "google": "구글 로그인",
     "github": "깃허브 로그인",
     "terms": "이용약관",
