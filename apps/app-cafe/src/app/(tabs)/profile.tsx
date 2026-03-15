@@ -1,5 +1,7 @@
 import { Image } from "expo-image";
+import { router } from "expo-router";
 import {
+  ChevronRight,
   Globe,
   Mail,
   MapPin,
@@ -8,11 +10,12 @@ import {
   User,
   Wand2,
 } from "lucide-react-native";
-import { View } from "react-native";
+import { Pressable, View } from "react-native";
 import { LanguageToggle } from "@/components/features/setting/toggle/language-toggle";
 import { TabBarStyleToggle } from "@/components/features/setting/toggle/tab-bar-style-toggle";
 import { ThemeStyleToggle } from "@/components/features/setting/toggle/theme-style-toggle";
 import { ThemeSwitch } from "@/components/features/theme/controls/theme-switch";
+import { StorybookIcon } from "@/components/ui/icons/storybook-icon";
 import { BaseLayout } from "@/components/ui/layout/base-layout";
 import { ThemedText } from "@/components/ui/themed-text";
 import { useTranslation } from "@/hooks/use-translation.ts";
@@ -24,7 +27,7 @@ export default function ProfileScreen() {
     <BaseLayout
       contentContainerStyle={{ paddingBottom: 20 }}
       scrollable
-      title={t("profile")}
+      title={t("common.profile")}
     >
       <View className="px-4 pt-6">
         <View className="mb-6 items-center">
@@ -169,6 +172,32 @@ export default function ProfileScreen() {
               />
             </View>
           </View>
+        </View>
+
+        <View className="mt-6">
+          <Pressable
+            className="overflow-hidden rounded-xl bg-background-0 active:bg-background-100"
+            onPress={() => router.push("/storybook")}
+          >
+            <View className="h-[60px] flex-row items-center justify-between px-4">
+              <View className="flex-row items-center gap-3">
+                <View className="rounded-lg bg-primary-500 p-2">
+                  <StorybookIcon height={20} width={20} />
+                </View>
+                <View>
+                  <ThemedText
+                    className="font-semibold text-base text-typography-800"
+                    translationKey="profile.componentPlayground"
+                  />
+                  <ThemedText
+                    className="text-sm text-typography-400"
+                    translationKey="profile.componentPlaygroundDescription"
+                  />
+                </View>
+              </View>
+              <ChevronRight className="text-typography-400" size={20} />
+            </View>
+          </Pressable>
         </View>
       </View>
     </BaseLayout>

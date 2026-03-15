@@ -13,6 +13,7 @@ export const translations: Translations = {
     home: "홈",
     search: "검색",
     favorites: "즐겨찾기",
+    map: "지도",
     profile: "프로필",
   },
   settings: {
@@ -45,6 +46,8 @@ export const translations: Translations = {
     settings: "설정",
     ownerMode: "사장님 모드",
     ownerModeDescription: "사장님이시면 카페를 등록하고 관리할 수 있습니다",
+    componentPlayground: "UI 컴포넌트 둘러보기",
+    componentPlaygroundDescription: "컴포넌트들을 미리보기",
   },
   cafe: {
     intro: "소개",
@@ -54,6 +57,15 @@ export const translations: Translations = {
     menu: "메뉴",
     photos: "사진",
     reviews: "리뷰",
+  },
+  map: {
+    currentLocation: "현재 위치",
+    moveToCurrentLocation: "현재 위치로 이동",
+    showNearbyCafes: "주변 카페 보기",
+    cafeCount: "카페",
+    filter: "필터",
+    zoomIn: "확대",
+    zoomOut: "축소",
   },
 };
 

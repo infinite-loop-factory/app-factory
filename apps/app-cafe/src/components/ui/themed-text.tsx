@@ -3,11 +3,12 @@ import type { TextProps } from "react-native";
 import { cn } from "@gluestack-ui/utils";
 import Animated from "react-native-reanimated";
 import { useTranslation } from "@/hooks/use-translation.ts";
-import i18n, { type TranslationKey } from "@/i18n";
+import { type TranslationKey } from "@/i18n";
 
 export type ThemedTextProps = TextProps & {
   type?: "default" | "title" | "defaultSemiBold" | "subtitle" | "link";
   translationKey?: TranslationKey;
+  className?: string;
 };
 
 export function ThemedText({

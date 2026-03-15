@@ -1,3 +1,4 @@
+import { Appearance } from "react-native";
 import { objectEntries } from "@toss/utils";
 import { create } from "zustand";
 import { darkConfig } from "@/components/ui/design-token/config-dark";
@@ -25,6 +26,7 @@ export {
   type ThemeStyle,
   TAB_BAR_STYLE_ENUM,
   type TabBarStyle,
+  type ThemeColorKeys,
 };
 
 // ------------------------------------------------------------------
@@ -49,7 +51,31 @@ export const ALL_RGB_CONFIG: Record<
 ) as Record<ThemeType, Record<ThemeColorKeys, string>>;
 
 // ------------------------------------------------------------------
-// 3. Zustand Store (가변 상태 관리)
+// 3. System Theme Detection
+// ------------------------------------------------------------------
+const getSystemTheme = (): ThemeType => {
+  const colorScheme = Appearance.getColorScheme();
+  return colorScheme === "dark" ? THEME_MODE_ENUM.DARK : THEME_MODE_ENUM.LIGHT;
+};
+
+// 시스템 테마 변경 리스너 등록
+Appearance.addChangeListener(({ colorScheme }) => {
+  useThemeStore.setState((state) => {
+    const newMode =
+      colorScheme === "dark" ? THEME_MODE_ENUM.DARK : THEME_MODE_ENUM.LIGHT;
+
+    return {
+      mode: newMode,
+      isDark: newMode === THEME_MODE_ENUM.DARK,
+      isLight: newMode === THEME_MODE_ENUM.LIGHT,
+      currentRgb: ALL_RGB_CONFIG[newMode],
+      currentHex: ALL_HEX_CONFIG[newMode],
+    };
+  });
+});
+
+// ------------------------------------------------------------------
+// 4. Zustand Store (가변 상태 관리)
 // ------------------------------------------------------------------
 interface ThemeStore {
   // --- Primitive States ---
@@ -76,16 +102,16 @@ interface ThemeStore {
 
 export const useThemeStore = create<ThemeStore>((set) => ({
   // [Initial State]
-  mode: THEME_MODE_ENUM.LIGHT,
-  isDark: false,
-  isLight: true,
+  mode: getSystemTheme(),
+  isDark: getSystemTheme() === THEME_MODE_ENUM.DARK,
+  isLight: getSystemTheme() === THEME_MODE_ENUM.LIGHT,
   themeStyle: THEME_STYLE_ENUM.SPOTLIGHT,
   tabBarStyle: TAB_BAR_STYLE_ENUM.MODERN,
   isTabBarModern: true,
   isTabBarRetro: false,
 
-  currentRgb: ALL_RGB_CONFIG[THEME_MODE_ENUM.LIGHT],
-  currentHex: ALL_HEX_CONFIG[THEME_MODE_ENUM.LIGHT],
+  currentRgb: ALL_RGB_CONFIG[getSystemTheme()],
+  currentHex: ALL_HEX_CONFIG[getSystemTheme()],
 
   toggleTabBarStyle: () => {
     set((state) => {
