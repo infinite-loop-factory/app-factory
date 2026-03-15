@@ -90,7 +90,7 @@ export function CafeCard({ cafe, onPress }: CafeCardProps) {
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           <View className="flex-row flex-nowrap gap-2">
             {cafe.tags.map((tag) => (
-              <CafeTag key={tag} tag={tag} />
+              <CafeTag key={String(tag)} tag={tag} />
             ))}
           </View>
         </ScrollView>

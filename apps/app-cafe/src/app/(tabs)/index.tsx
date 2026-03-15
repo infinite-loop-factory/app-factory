@@ -87,7 +87,7 @@ export default function HomeScreen() {
             <TitleText className={"text-3xl"} enableTransition={true}>
               {t("home.findCafesTitle")}
             </TitleText>
-            <View className="absolute" style={{ top: 43 }}>
+            <View className="absolute" style={{ top: 43, width: 1000 }}>
               <ThemedText
                 className="absolute font-medium text-primary-950"
                 style={{ left: 1, top: 1, opacity: 0.5 }}

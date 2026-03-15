@@ -13,6 +13,7 @@ export const translations: Translations = {
     home: "Home",
     search: "Search",
     favorites: "Favorites",
+    map: "Map",
     profile: "Profile",
   },
   settings: {
@@ -45,6 +46,8 @@ export const translations: Translations = {
     settings: "Settings",
     ownerMode: "Owner Mode",
     ownerModeDescription: "Register and manage your cafe if you're an owner",
+    componentPlayground: "Component Playground",
+    componentPlaygroundDescription: "Preview all UI components",
   },
   cafe: {
     intro: "Introduction",
@@ -54,6 +57,15 @@ export const translations: Translations = {
     menu: "Menu",
     photos: "Photos",
     reviews: "Reviews",
+  },
+  map: {
+    currentLocation: "Current Location",
+    moveToCurrentLocation: "Move to Current Location",
+    showNearbyCafes: "Show Nearby Cafes",
+    cafeCount: "Cafes",
+    filter: "Filter",
+    zoomIn: "Zoom In",
+    zoomOut: "Zoom Out",
   },
 };
 

@@ -56,19 +56,8 @@ export default function CafeDetailScreen() {
   const { t } = useTranslation();
 
   useLayoutEffect(() => {
-    navigation.setOptions({
-      title: cafe.name,
-      headerTitleStyle: {
-        fontWeight: "bold",
-      },
-      headerStyle: {
-        backgroundColor: currentHex["--color-background-50"],
-      },
-      headerTintColor: currentHex["--color-typography-0"],
-      headerTitleAlign: "center",
-      headerTransparent: false,
-    });
-  }, [navigation, cafe.name, currentHex]);
+    navigation.setOptions({ title: cafe.name });
+  }, [cafe.name, navigation]);
 
   return (
     <SafeAreaView className="flex-1 bg-background-100" edges={["bottom"]}>

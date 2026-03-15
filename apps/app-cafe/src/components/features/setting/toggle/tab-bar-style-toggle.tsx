@@ -4,17 +4,19 @@ import { Toggle } from "@/components/ui/toggle";
 import { useThemeStore } from "@/hooks/use-theme";
 
 export const TabBarStyleToggle = memo(function TabBarStyleToggle() {
-  const { mode, isTabBarModern, toggleTabBarStyle } = useThemeStore();
+  const { currentHex, isTabBarModern, toggleTabBarStyle } = useThemeStore();
+
+  const clockColor = currentHex["--color-typography-300"];
 
   return (
     <Toggle
       backgroundColor={
-        mode === "dark" ? "rgba(255,255,255,0.2)" : "rgba(0,0,0,0.1)"
+        currentHex["--color-background-400"]
       }
       isActive={isTabBarModern}
-      leftContent={<Smartphone color="#3B82F6" size={12} strokeWidth={2.5} />}
+      leftContent={<Smartphone color={currentHex["--color-primary-500"]} size={12} strokeWidth={2.5} />}
       onPress={toggleTabBarStyle}
-      rightContent={<Clock color="#6B7280" size={12} strokeWidth={2.5} />}
+      rightContent={<Clock color={clockColor} size={12} strokeWidth={2.5} />}
     />
   );
 });

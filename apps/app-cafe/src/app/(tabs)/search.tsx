@@ -2,7 +2,7 @@ import { Search } from "lucide-react-native";
 import { useState } from "react";
 import { View } from "react-native";
 import { CafeCard } from "@/components/features/cafe/cafe-card";
-import { Input, InputField, InputIcon } from "@/components/ui/common/input";
+import { Input, InputField } from "@/components/ui/common/forms/input";
 import { BaseLayout } from "@/components/ui/layout/base-layout";
 import { ThemedText } from "@/components/ui/themed-text";
 import {
@@ -68,9 +68,7 @@ export default function SearchScreen() {
       <View className="gap-1 px-4 pb-10">
         <View className="mb-8">
           <Input variant={"rounded"}>
-            <InputIcon>
-              <Search size={18} />
-            </InputIcon>
+            <Search color={"#ada298"} size={18} />
             <InputField
               onChangeText={setSearchQuery}
               placeholder={t("search.searchPlaceholder")}

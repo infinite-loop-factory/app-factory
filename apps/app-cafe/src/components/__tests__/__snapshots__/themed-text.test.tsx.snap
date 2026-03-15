@@ -2,12 +2,27 @@
 
 exports[`renders correctly 1`] = `
 <Text
-  className="text-base leading-6"
+  className="text-typography-300 text-sm leading-6"
+  collapsable={false}
+  jestAnimatedProps={
+    {
+      "value": {},
+    }
+  }
+  jestAnimatedStyle={
+    {
+      "value": {},
+    }
+  }
+  jestInlineStyle={
+    [
+      undefined,
+    ]
+  }
+  nativeID="0"
+  numberOfLines={1}
   style={
     [
-      {
-        "color": "#11181C",
-      },
       undefined,
     ]
   }

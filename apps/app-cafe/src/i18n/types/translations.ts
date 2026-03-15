@@ -11,6 +11,7 @@ export interface Translations {
     home: string;
     search: string;
     favorites: string;
+    map: string;
     profile: string;
   };
   settings: {
@@ -43,6 +44,8 @@ export interface Translations {
     settings: string;
     ownerMode: string;
     ownerModeDescription: string;
+    componentPlayground: string;
+    componentPlaygroundDescription: string;
   };
   cafe: {
     intro: string;
@@ -52,5 +55,14 @@ export interface Translations {
     menu: string;
     photos: string;
     reviews: string;
+  };
+  map: {
+    currentLocation: string;
+    moveToCurrentLocation: string;
+    showNearbyCafes: string;
+    cafeCount: string;
+    filter: string;
+    zoomIn: string;
+    zoomOut: string;
   };
 }

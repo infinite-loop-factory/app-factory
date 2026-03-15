@@ -55,6 +55,7 @@ export const TitleText = ({
   titleColor,
   style,
   enableTransition = false,
+  translationKey,
   ...props
 }: ThreeDTextProps) => {
   const { mode } = useThemeStore();
@@ -81,6 +82,7 @@ export const TitleText = ({
             config={config}
             key={String(index)}
             progress={progress}
+            translationKey={translationKey}
           >
             {children}
           </ShadowLayer>
@@ -92,6 +94,7 @@ export const TitleText = ({
         className={textClassName}
         numberOfLines={1}
         style={titleColor ? { color: titleColor } : undefined}
+        translationKey={translationKey}
       >
         {children}
       </ThemedText>
@@ -105,11 +108,13 @@ const ShadowLayer = ({
   config,
   children,
   className,
+  translationKey,
 }: {
   progress: DerivedValue<0 | 1>;
   config: (typeof LAYER_CONFIG)[0];
   children?: string;
   className?: string;
+  translationKey?: TranslationKey;
 }) => {
   const animatedStyle = useAnimatedStyle(() => {
     return {
@@ -140,6 +145,7 @@ const ShadowLayer = ({
       importantForAccessibility="no-hide-descendants"
       numberOfLines={1}
       style={animatedStyle}
+      translationKey={translationKey}
     >
       {children}
     </ThemedText>
