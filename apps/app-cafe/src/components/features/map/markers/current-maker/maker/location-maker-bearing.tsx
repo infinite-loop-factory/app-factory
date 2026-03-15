@@ -1,4 +1,5 @@
 import type { ActivityType } from "@/hooks/location/use-location.ts";
+
 import { Platform } from "react-native";
 import Animated, {
   SensorType,
