@@ -1,8 +1,11 @@
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
+import { useAtomValue } from "jotai";
 import { useState } from "react";
 import { TouchableOpacity, View } from "react-native";
+import { useDeleteReview } from "@/api/reactQuery/review/useDeleteReview";
 import { useFindLatestCourseReviews } from "@/api/reactQuery/review/useFindLatestCourseReviews";
+import { userAtom } from "@/atoms/userAtom";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import ReviewScoreCard from "../card/ReviewScoreCard";
 import ImageModal from "../modal/ImageModal";
@@ -18,14 +21,18 @@ interface ReviewsProps {
 
 export default function Reviews({ courseId, rate }: ReviewsProps) {
   const primary500Color = useThemeColor({}, "--color-primary-500");
+  const userInfo = useAtomValue(userAtom);
 
   const { data = [] } = useFindLatestCourseReviews(courseId);
+  const { mutate: deleteReview } = useDeleteReview(courseId);
 
   const [reviewImages, setReviewImages] = useState<string[]>([]);
-
   const [showImageModal, setShowImageModal] = useState(false);
-
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+
+  const handleDelete = (reviewId: number) => {
+    deleteReview(reviewId, { onSuccess: () => router.back() });
+  };
 
   const onPressCloseModal = () => {
     setShowImageModal(false);
@@ -76,7 +83,9 @@ export default function Reviews({ courseId, rate }: ReviewsProps) {
       <VStack className="gap-1">
         {data.map((reviewData) => (
           <ReviewItem
+            currentUserId={userInfo.id}
             key={`review_${reviewData.id}`}
+            onDelete={handleDelete}
             reviewData={reviewData}
             setReviewImages={setReviewImages}
             setSelectedImageIndex={setSelectedImageIndex}
