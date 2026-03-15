@@ -98,9 +98,23 @@
         "partial-title": "일부 날짜 건너뜀",
         "partial-description": "%{count}일은 이미 기록되어 건너뛰었어요.",
         "error-title": "등록에 실패했어요",
-        "error-description": "기록을 저장하지 못했어요. 다시 시도해주세요."
+        "error-description": "기록을 저장하지 못했어요. 다시 시도해주세요.",
+        "offline-title": "오프라인 저장",
+        "offline-description": "%{count}일이 온라인 연결 시 자동으로 동기화됩니다."
       }
+    },
+    "edit-visit": {
+      "title": "방문 기록 수정"
     }
+  },
+
+  "country-detail": {
+    "total-visits": "방문",
+    "total-days": "일수",
+    "first-visit": "첫 방문",
+    "last-visit": "최근",
+    "visit-history": "방문 이력",
+    "no-visits": "방문 기록이 없습니다."
   },
 
   "settings": {
@@ -160,6 +174,12 @@
         "title": "앗!",
         "description": "시스템설정 > 앱 > 언어설정에서 직접 언어를 바꿔주세요."
       }
+    },
+    "nationality": {
+      "label": "국적",
+      "title": "국적 설정",
+      "message": "여권 국가 코드를 입력하세요 (예: KR, US, JP)",
+      "not-set": "미설정"
     },
     "logout": "로그아웃",
     "delete-account": {
@@ -246,7 +266,7 @@
     "hero-subtitle": "대시보드로 이동하려면 로그인해주세요",
     "apple": "Apple로 로그인",
     "google": "구글 로그인",
-    "github": "깃허브 로그인",
+    "facebook": "페이스북 로그인",
     "terms": "이용약관",
     "privacy": "개인정보처리방침",
     "security-note": "OAuth 로그인만 지원하며 비밀번호는 앱에 저장되지 않습니다.",
@@ -277,5 +297,27 @@
     "message": "%{year}년에 방문한 국가를 확인해보세요!",
     "error": "공유할 수 없어요. 다시 시도해주세요.",
     "not-available": "이 기기에서는 공유 기능을 사용할 수 없어요."
+  },
+  "visa": {
+    "title": "비자 알림",
+    "description": "국가별 무비자 체류 일수를 설정하고 초과 전 알림을 받으세요.",
+    "no-limits": "설정된 비자 한도가 없습니다.",
+    "add-limit": "비자 한도 추가",
+    "save": "저장",
+    "max-days": "최대 일수",
+    "alert-before": "알림 기한 (일)",
+    "country-placeholder": "국가 코드 (예: JP)",
+    "limit-info": "최대 %{max}일, %{alert}일 전 알림",
+    "delete": {
+      "title": "한도 삭제",
+      "message": "%{country}의 비자 한도를 삭제할까요?",
+      "confirm": "삭제"
+    },
+    "toast": {
+      "saved-title": "저장 완료",
+      "saved-description": "비자 한도가 업데이트되었습니다.",
+      "error-title": "오류",
+      "error-description": "비자 한도를 저장하지 못했습니다."
+    }
   }
 }

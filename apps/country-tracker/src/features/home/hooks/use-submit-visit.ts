@@ -15,9 +15,18 @@ import { useGlobalToast } from "@/hooks/use-global-toast";
 import i18n from "@/lib/i18n";
 import { toUtcBoundaryTimestamp } from "@/utils/date-range";
 
+interface EditData {
+  countryCode: string;
+  country: string;
+  startDate: string;
+  endDate: string;
+  dateSet: string[];
+}
+
 export type Result = {
   count: number;
   skipped: number;
+  offline?: boolean;
 };
 
 export function useSubmitVisitMutation() {
@@ -26,14 +35,34 @@ export function useSubmitVisitMutation() {
   const { user } = useAuthUser();
 
   return useMutation({
-    mutationFn: async (vars: AddVisitForm): Promise<Result> => {
+    mutationFn: async (
+      vars: AddVisitForm & { editData?: EditData },
+    ): Promise<Result> => {
+      const { editData: editInfo, ...formVars } = vars as AddVisitForm & {
+        editData?: EditData;
+      };
+
+      // In edit mode, delete old entries first
+      if (editInfo) {
+        const { deleteVisitDays } = await import(
+          "@/features/home/apis/delete-visit"
+        );
+        if (user?.id) {
+          await deleteVisitDays({
+            userId: user.id,
+            countryCode: editInfo.countryCode,
+            dateSet: editInfo.dateSet,
+          });
+        }
+      }
+
       const {
         selectedCountry,
         countryNameOverride,
         startDate,
         endDate,
         coords,
-      } = vars;
+      } = formVars;
       const isRangeInvalidValue = false; // validation will be handled by ensureValidForm
 
       const { userId, countryCode, rangeDates } = ensureValidForm({
@@ -87,20 +116,31 @@ export function useSubmitVisitMutation() {
         zoneName,
       });
 
-      await insertManualEntries(payload);
+      const insertResult = await insertManualEntries(payload);
       return {
         count: payload.length,
         skipped: rangeDates.length - payload.length,
+        offline: insertResult.offline,
       };
     },
     onSuccess: (result) => {
-      showToast(
-        "success",
-        i18n.t("home.add-visit.toast.success-title"),
-        i18n.t("home.add-visit.toast.success-description", {
-          count: result.count,
-        }),
-      );
+      if (result.offline) {
+        showToast(
+          "info",
+          i18n.t("home.add-visit.toast.offline-title"),
+          i18n.t("home.add-visit.toast.offline-description", {
+            count: result.count,
+          }),
+        );
+      } else {
+        showToast(
+          "success",
+          i18n.t("home.add-visit.toast.success-title"),
+          i18n.t("home.add-visit.toast.success-description", {
+            count: result.count,
+          }),
+        );
+      }
       if (result.skipped > 0) {
         showToast(
           "info",

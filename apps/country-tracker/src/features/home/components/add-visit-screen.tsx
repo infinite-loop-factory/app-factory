@@ -35,10 +35,23 @@ import { resolveCountryFromCoordinates } from "@/features/home/utils/resolve-cou
 import i18n from "@/lib/i18n";
 import { zodOnDynamic } from "@/utils/zod-on-dynamic";
 
-export function AddVisitScreen() {
+interface EditData {
+  countryCode: string;
+  country: string;
+  startDate: string;
+  endDate: string;
+  dateSet: string[];
+}
+
+interface AddVisitScreenProps {
+  editData?: EditData;
+}
+
+export function AddVisitScreen({ editData }: AddVisitScreenProps) {
   const { mutateAsync: prefillMutateAsync } = usePrefillLocationMutation();
   const { mutateAsync: submitMutateAsync } = useSubmitVisitMutation();
   const colorScheme = useColorScheme();
+  const isEditMode = Boolean(editData);
 
   const [errorMessage, setErrorMessage] = useState<string | undefined>(
     undefined,
@@ -46,12 +59,30 @@ export function AddVisitScreen() {
 
   const form = useAppForm({
     ...addVisitFormOptions,
+    ...(editData
+      ? {
+          defaultValues: {
+            selectedCountry: editData.countryCode,
+            countryNameOverride: editData.country,
+            startDate: editData.startDate,
+            endDate: editData.endDate,
+            sameDay: editData.startDate === editData.endDate,
+            coords: null,
+          },
+        }
+      : {}),
     formId: ADD_VISIT_FORM_ID,
     validationLogic: revalidateLogic(),
     validators: { onDynamic: zodOnDynamic(AddVisitFormSchema) },
     onSubmit: async ({ value }) => {
       try {
-        await submitMutateAsync(value as AddVisitForm);
+        if (isEditMode && editData) {
+          await submitMutateAsync({ ...value, editData } as AddVisitForm & {
+            editData: EditData;
+          });
+        } else {
+          await submitMutateAsync(value as AddVisitForm);
+        }
       } catch {
         // submit hook handles toast/error UI; keep this handler minimal.
       }
@@ -98,8 +129,10 @@ export function AddVisitScreen() {
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: useEffect
   useEffect(() => {
-    prefillFromLocation();
-  }, []);
+    if (!isEditMode) {
+      prefillFromLocation();
+    }
+  }, [isEditMode]);
 
   const keyboardBehavior = Platform.select({
     ios: "padding",
@@ -130,7 +163,9 @@ export function AddVisitScreen() {
               />
             </Pressable>
             <Text className="text-center font-bold text-lg text-slate-900 leading-tight tracking-tight dark:text-white">
-              {i18n.t("home.add-visit.title") ?? "Add a New Visit"}
+              {isEditMode
+                ? i18n.t("home.edit-visit.title")
+                : (i18n.t("home.add-visit.title") ?? "Add a New Visit")}
             </Text>
             <View className="size-10" />
           </View>

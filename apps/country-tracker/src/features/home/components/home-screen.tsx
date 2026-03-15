@@ -6,31 +6,22 @@ import {
   BottomSheetModal,
   BottomSheetView,
 } from "@gorhom/bottom-sheet";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Link } from "expo-router";
+import { FlashList } from "@shopify/flash-list";
+import { useQuery } from "@tanstack/react-query";
+import { Link, router } from "expo-router";
 import { useSetAtom } from "jotai";
 import {
   CalendarDays,
   Globe2,
-  MapPinPlus,
   Plus,
   Search,
+  Share2,
   SlidersHorizontal,
-  Trash2,
 } from "lucide-react-native";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import {
-  Alert,
-  FlatList,
-  Image,
-  Pressable,
-  ScrollView,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Pressable, ScrollView, TouchableOpacity, View } from "react-native";
 import { themeAtom } from "@/atoms/theme.atom";
 import ParallaxScrollView from "@/components/parallax-scroll-view";
-import { Badge, BadgeText } from "@/components/ui/badge";
 import { Box } from "@/components/ui/box";
 import { Button, ButtonIcon, ButtonText } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
@@ -39,13 +30,16 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
 import { queryKeys } from "@/constants/query-keys";
+import { ShareStatsModal } from "@/features/home/components/share-stats-modal";
+import { SwipeableCountryCard } from "@/features/home/components/swipeable-country-card";
 import { useDeleteVisitMutation } from "@/features/home/hooks/use-delete-visit";
 import { fetchVisitedCountries } from "@/features/map/apis/fetch-visited-countries";
 import { useThemeColor } from "@/hooks/use-theme-color";
+import { useWidgetSync } from "@/hooks/use-widget-sync";
 import i18n from "@/lib/i18n";
 import supabase from "@/lib/supabase";
-import { getFlagUri, getStayDays, resolveRegion } from "@/utils/country-region";
-import { formatIsoDate } from "@/utils/format-date";
+import { getStayDays, resolveRegion } from "@/utils/country-region";
+import { triggerHaptic } from "@/utils/haptics";
 
 type FilterOption =
   | "recent"
@@ -58,8 +52,6 @@ type FilterOption =
 
 export default function HomeScreen() {
   const setTheme = useSetAtom(themeAtom);
-  const queryClient = useQueryClient();
-  const { mutate: deleteVisit } = useDeleteVisitMutation();
   const [searchText, setSearchText] = useState("");
   const [activeFilter, setActiveFilter] = useState<FilterOption>("recent");
   const [selectedFilter, setSelectedFilter] = useState<FilterOption>("recent");
@@ -67,30 +59,18 @@ export default function HomeScreen() {
   const [userLoaded, setUserLoaded] = useState(false);
   const bottomSheetRef = useRef<BottomSheetModal>(null);
   const sheetSnapPoints = useMemo(() => ["48%"], []);
+  const deleteVisitMutation = useDeleteVisitMutation();
+  const [shareVisible, setShareVisible] = useState(false);
 
-  const [
-    screenBg,
-    cardBg,
-    borderColor,
-    textMuted,
-    textStrong,
-    primaryColor,
-    warningSurface,
-    warningText,
-    secondarySurface,
-    errorColor,
-  ] = useThemeColor([
-    "background-50",
-    "background",
-    "outline-100",
-    "typography-400",
-    "typography-900",
-    "primary-300",
-    "warning-0",
-    "warning-600",
-    "secondary-0",
-    "error-500",
-  ]);
+  const [screenBg, cardBg, borderColor, textMuted, textStrong, primaryColor] =
+    useThemeColor([
+      "background-50",
+      "background",
+      "outline-100",
+      "typography-400",
+      "typography-900",
+      "primary-300",
+    ]);
 
   useEffect(() => {
     setSelectedFilter(activeFilter);
@@ -126,6 +106,7 @@ export default function HomeScreen() {
     currentUser?.user_metadata?.full_name ?? i18n.t("home.default-name");
 
   const safeCountries = data ?? [];
+  useWidgetSync(safeCountries);
 
   const trackedDays = useMemo(
     () => safeCountries.reduce((sum, item) => sum + getStayDays(item), 0),
@@ -160,38 +141,6 @@ export default function HomeScreen() {
   const isEmpty =
     userLoaded && !isLoading && !isError && sortedCountries.length === 0;
 
-  const [isRefreshing, setIsRefreshing] = useState(false);
-
-  const handleRefresh = useCallback(async () => {
-    setIsRefreshing(true);
-    await queryClient.invalidateQueries({
-      queryKey: queryKeys.location.visitedCountries(),
-    });
-    setIsRefreshing(false);
-  }, [queryClient]);
-
-  const handleDeleteVisit = useCallback(
-    (item: CountryItem) => {
-      const stayDays = getStayDays(item);
-      Alert.alert(
-        i18n.t("home.delete-visit.title"),
-        i18n.t("home.delete-visit.message", {
-          count: stayDays,
-          country: item.country,
-        }),
-        [
-          { text: i18n.t("home.delete-visit.cancel"), style: "cancel" },
-          {
-            text: i18n.t("home.delete-visit.confirm"),
-            style: "destructive",
-            onPress: () => deleteVisit(item),
-          },
-        ],
-      );
-    },
-    [deleteVisit],
-  );
-
   const filterLabels: Record<FilterOption, string> = {
     recent: i18n.t("home.filters.recent"),
     mostDays: i18n.t("home.filters.most-days"),
@@ -218,7 +167,14 @@ export default function HomeScreen() {
 
   const renderFilterChip = useCallback(
     (option: FilterOption, isActive: boolean, onPress: () => void) => (
-      <Pressable className="mr-3 mb-2" key={option} onPress={onPress}>
+      <Pressable
+        className="mr-3 mb-2"
+        key={option}
+        onPress={() => {
+          triggerHaptic("light");
+          onPress();
+        }}
+      >
         <Box
           className="rounded-full border px-4 py-2"
           style={{
@@ -238,68 +194,30 @@ export default function HomeScreen() {
     [borderColor, cardBg, filterLabels, screenBg, textMuted, textStrong],
   );
 
-  const renderCountryCard = (item: CountryItem) => {
-    const flagUri = getFlagUri(item.country_code);
-    const stayDays = getStayDays(item);
-    const lastVisited = formatIsoDate(item.endDate, {
-      format: "LLL yyyy",
-      fallback: "--",
-    });
+  const handleDeleteVisit = useCallback(
+    (item: CountryItem) => {
+      deleteVisitMutation.mutate(item);
+    },
+    [deleteVisitMutation],
+  );
 
-    return (
-      <Box
-        className="mb-3 flex-row items-center justify-between rounded-2xl border px-3 py-3"
+  const renderCountryCard = useCallback(
+    (item: CountryItem) => (
+      <SwipeableCountryCard
+        item={item}
         key={item.id}
-        style={{ backgroundColor: cardBg, borderColor }}
-      >
-        <Box className="flex-row items-center gap-3">
-          <Box
-            className="h-14 w-14 items-center justify-center overflow-hidden rounded-xl border"
-            style={{ backgroundColor: secondarySurface, borderColor }}
-          >
-            {flagUri ? (
-              <Image
-                alt={`${item.country} flag`}
-                className="h-full w-full"
-                source={{ uri: flagUri }}
-              />
-            ) : (
-              <Text className="text-2xl" style={{ color: textStrong }}>
-                {item.flag}
-              </Text>
-            )}
-          </Box>
-          <Box>
-            <Text
-              className="font-semibold text-lg"
-              style={{ color: textStrong }}
-            >
-              {item.country}
-            </Text>
-            <Box className="mt-1 flex-row items-center gap-1">
-              <Text className="text-xs" style={{ color: textMuted }}>
-                {i18n.t("home.list.last-visit", { date: lastVisited })}
-              </Text>
-            </Box>
-          </Box>
-        </Box>
-        <Box className="items-end gap-2">
-          <Badge
-            className="rounded-full"
-            size="sm"
-            style={{ backgroundColor: warningSurface }}
-          >
-            <BadgeText style={{ color: warningText }}>
-              {i18n.t("home.list.stay-days", { count: stayDays })}
-            </BadgeText>
-          </Badge>
-          <TouchableOpacity hitSlop={8} onPress={() => handleDeleteVisit(item)}>
-            <Trash2 color={errorColor} size={16} />
-          </TouchableOpacity>
-        </Box>
-      </Box>
-    );
-  };
+        onDelete={handleDeleteVisit}
+        onPress={() => {
+          triggerHaptic("light");
+          router.push({
+            pathname: "/country-detail/[code]",
+            params: { code: item.country_code },
+          } as never);
+        }}
+      />
+    ),
+    [handleDeleteVisit],
+  );
 
   return (
     <ParallaxScrollView>
@@ -455,16 +373,21 @@ export default function HomeScreen() {
             >
               {i18n.t("home.stats.countries")}
             </Heading>
-            <Link asChild href="/map">
-              <Pressable className="flex-row items-center gap-1">
-                <Text
-                  className="font-semibold text-sm"
-                  style={{ color: primaryColor }}
-                >
-                  {i18n.t("home.actions.view-map")}
-                </Text>
+            <Box className="flex-row items-center gap-3">
+              <Pressable hitSlop={8} onPress={() => setShareVisible(true)}>
+                <Share2 color={primaryColor} size={18} />
               </Pressable>
-            </Link>
+              <Link asChild href="/map">
+                <Pressable className="flex-row items-center gap-1">
+                  <Text
+                    className="font-semibold text-sm"
+                    style={{ color: primaryColor }}
+                  >
+                    {i18n.t("home.actions.view-map")}
+                  </Text>
+                </Pressable>
+              </Link>
+            </Box>
           </Box>
 
           <Box className="px-1 py-2">
@@ -477,41 +400,19 @@ export default function HomeScreen() {
             ) : (
               <Skeleton className="w-full" isLoaded={userLoaded && !isLoading}>
                 {isEmpty ? (
-                  <View className="items-center justify-center px-6 py-12">
-                    <MapPinPlus color={textMuted} size={48} />
+                  <View className="items-center justify-center px-6 py-10">
                     <Text
-                      className="mt-4 text-center font-semibold text-lg"
+                      className="text-center font-semibold text-base"
                       style={{ color: textStrong }}
                     >
                       {i18n.t("home.no-visited-countries")}
                     </Text>
-                    <Text
-                      className="mt-2 text-center text-sm"
-                      style={{ color: textMuted }}
-                    >
-                      {i18n.t("home.no-visited-countries-subtitle")}
-                    </Text>
-                    <Link asChild href="/add-visit">
-                      <Button
-                        action="primary"
-                        className="mt-5 rounded-full px-6"
-                        size="md"
-                        variant="solid"
-                      >
-                        <ButtonIcon as={Plus} className="mr-1" />
-                        <ButtonText>
-                          {i18n.t("home.add-visit.button")}
-                        </ButtonText>
-                      </Button>
-                    </Link>
                   </View>
                 ) : (
-                  <FlatList
+                  <FlashList<CountryItem>
                     contentContainerStyle={{ paddingVertical: 4 }}
                     data={sortedCountries}
                     keyExtractor={(item) => item.id}
-                    onRefresh={() => void handleRefresh()}
-                    refreshing={isRefreshing}
                     renderItem={({ item }) => renderCountryCard(item)}
                     scrollEnabled={false}
                     showsVerticalScrollIndicator={false}
@@ -613,6 +514,12 @@ export default function HomeScreen() {
           </BottomSheetModal>
         </VStack>
       </Box>
+      <ShareStatsModal
+        countries={safeCountries}
+        onClose={() => setShareVisible(false)}
+        userName={greetingName}
+        visible={shareVisible}
+      />
     </ParallaxScrollView>
   );
 }

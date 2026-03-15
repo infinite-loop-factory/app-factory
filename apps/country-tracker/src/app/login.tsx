@@ -6,7 +6,7 @@ import * as QueryParams from "expo-auth-session/build/QueryParams";
 import * as Linking from "expo-linking";
 import { Stack, useRouter } from "expo-router";
 import * as WebBrowser from "expo-web-browser";
-import { Chrome, Github } from "lucide-react-native";
+import { Chrome, Facebook } from "lucide-react-native";
 import { useEffect, useState } from "react";
 import { Box } from "@/components/ui/box";
 import {
@@ -38,8 +38,8 @@ const redirectTo = makeRedirectUri();
 const OAUTH_PROVIDERS: {
   key: Provider;
   labelKey: string;
-  icon?: typeof Chrome | typeof Github;
-  variant: "apple" | "google" | "github";
+  icon?: typeof Chrome | typeof Facebook;
+  variant: "apple" | "google" | "facebook";
 }[] = [
   {
     key: "apple",
@@ -53,19 +53,14 @@ const OAUTH_PROVIDERS: {
     variant: "google",
   },
   {
-    key: "github",
-    labelKey: "login.github",
-    icon: Github,
-    variant: "github",
+    key: "facebook",
+    labelKey: "login.facebook",
+    icon: Facebook,
+    variant: "facebook",
   },
 ];
 
 type OAuthProviderConfig = (typeof OAUTH_PROVIDERS)[number];
-
-const LEGAL_URLS = {
-  terms: "https://gracefullight.dev/country-tracker/terms",
-  privacy: "https://gracefullight.dev/country-tracker/privacy",
-} as const;
 
 const createSessionFromUrl = async (url: string) => {
   const { params, errorCode } = QueryParams.getQueryParams(url);
@@ -89,6 +84,37 @@ const createSessionFromUrl = async (url: string) => {
   return data.session;
 };
 
+const getButtonStyles = (variant: string) => {
+  switch (variant) {
+    case "apple":
+      return {
+        button:
+          "h-12 w-full rounded-xl border border-typography-900 bg-typography-900 px-4",
+        buttonStyle: undefined,
+        buttonVariant: "solid" as const,
+        icon: "text-typography-0",
+        text: "ml-3 font-bold text-lg text-typography-0",
+      };
+    case "facebook":
+      return {
+        button: "h-12 w-full rounded-xl px-4",
+        buttonStyle: { backgroundColor: "#1877F2" },
+        buttonVariant: "solid" as const,
+        icon: "text-typography-0",
+        text: "ml-3 font-bold text-lg text-typography-0",
+      };
+    default: // google
+      return {
+        button:
+          "h-12 w-full rounded-xl border border-outline-200 bg-background-0 px-4",
+        buttonStyle: undefined,
+        buttonVariant: "outline" as const,
+        icon: "text-typography-700",
+        text: "ml-3 font-bold text-lg text-typography-900",
+      };
+  }
+};
+
 function OAuthProviderButton({
   provider,
   disabled,
@@ -100,30 +126,23 @@ function OAuthProviderButton({
   isPending: boolean;
   onPress: (provider: Provider) => void;
 }) {
-  const isDark = provider.variant === "apple" || provider.variant === "github";
-  const buttonClassName = isDark
-    ? "h-12 w-full rounded-xl border border-typography-900 bg-typography-900 px-4"
-    : "h-12 w-full rounded-xl border border-outline-200 bg-background-0 px-4";
-  const iconClassName = isDark ? "text-typography-0" : "text-typography-700";
-  const textClassName = isDark
-    ? "font-bold text-lg text-typography-0"
-    : "font-bold text-lg text-typography-900";
-  const hasIcon = isPending || !!provider.icon;
+  const styles = getButtonStyles(provider.variant);
 
   return (
     <Button
       action="default"
-      className={buttonClassName}
+      className={styles.button}
       disabled={disabled}
       onPress={() => onPress(provider.key)}
-      variant={isDark ? "solid" : "outline"}
+      style={styles.buttonStyle}
+      variant={styles.buttonVariant}
     >
       <Box className="w-full flex-row items-center justify-center">
-        {isPending && <ButtonSpinner className={iconClassName} />}
+        {isPending && <ButtonSpinner className={styles.icon} />}
         {!isPending && provider.icon && (
-          <ButtonIcon as={provider.icon} className={iconClassName} size="md" />
+          <ButtonIcon as={provider.icon} className={styles.icon} size="md" />
         )}
-        <ButtonText className={`${hasIcon ? "ml-3" : ""} ${textClassName}`}>
+        <ButtonText className={styles.text}>
           {i18n.t(provider.labelKey)}
         </ButtonText>
       </Box>
@@ -178,7 +197,7 @@ export default function LoginPage() {
       }
     } catch (e) {
       const message =
-        e instanceof Error ? e.message : i18n.t("login.error.description");
+        e instanceof Error ? e.message : i18n.t("home.error-loading");
       toast.show({
         duration: 3000,
         render: () => (
@@ -187,7 +206,7 @@ export default function LoginPage() {
             className="border-outline-300"
             variant="outline"
           >
-            <ToastTitle>{i18n.t("login.error.title")}</ToastTitle>
+            <ToastTitle>{i18n.t("settings.toast.language.title")}</ToastTitle>
             <ToastDescription>{message}</ToastDescription>
           </Toast>
         ),
@@ -250,26 +269,12 @@ export default function LoginPage() {
             <Divider className="bg-outline-100" />
 
             <Box className="flex-row items-center justify-center gap-5">
-              <Button
-                action="default"
-                className="px-0"
-                onPress={() =>
-                  void WebBrowser.openBrowserAsync(LEGAL_URLS.terms)
-                }
-                variant="link"
-              >
+              <Button action="default" className="px-0" variant="link">
                 <Text className="text-sm text-typography-500">
                   {i18n.t("login.terms")}
                 </Text>
               </Button>
-              <Button
-                action="default"
-                className="px-0"
-                onPress={() =>
-                  void WebBrowser.openBrowserAsync(LEGAL_URLS.privacy)
-                }
-                variant="link"
-              >
+              <Button action="default" className="px-0" variant="link">
                 <Text className="text-sm text-typography-500">
                   {i18n.t("login.privacy")}
                 </Text>

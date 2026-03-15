@@ -7,6 +7,7 @@ import {
   forwardRef,
   useEffect,
   useImperativeHandle,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -16,8 +17,11 @@ import {
   VISITED_FILL_OPACITY,
   VISITED_STROKE_WIDTH_NATIVE,
 } from "@/features/map/constants/style";
-import { useVisitedCountryCodes } from "@/features/map/hooks/use-visited-country-codes";
-import { getCountryPolygon } from "@/features/map/utils/country-polygons";
+import { useVisitedCountrySummariesQuery } from "@/features/map/hooks/use-visited-country-summaries";
+import {
+  getCountryPolygon,
+  normalizeCountryCode,
+} from "@/features/map/utils/country-polygons";
 import {
   addAlphaToColor,
   calculateLongitudeDifference,
@@ -52,19 +56,30 @@ const MapGlobe = forwardRef<MapGlobeRef, MapGlobeProps>(
       longitudeDelta: 75,
     });
 
-    const { data: visitedCodes = [] } = useVisitedCountryCodes({
+    const { data: countryPolygons = [] } = useVisitedCountrySummariesQuery<
+      CountryPolygon[]
+    >({
       userId: user?.id ?? null,
       year,
       startDate,
       endDate,
-    });
+      select: (summaries) => {
+        const uniqueCodes = Array.from(
+          new Set(
+            summaries.map((summary) => summary.countryCode).filter(Boolean),
+          ),
+        ) as string[];
 
-    const countryPolygons = visitedCodes
-      .map((code) => {
-        const polygon = getCountryPolygon(code);
-        return polygon ? { ...polygon, country_code: code } : null;
-      })
-      .filter((polygon): polygon is CountryPolygon => polygon !== null);
+        return uniqueCodes
+          .map((raw) => {
+            const normalized = normalizeCountryCode(raw);
+            if (!normalized) return null;
+            const polygon = getCountryPolygon(normalized);
+            return polygon ? { ...polygon, country_code: normalized } : null;
+          })
+          .filter((polygon): polygon is CountryPolygon => polygon !== null);
+      },
+    });
 
     // 애니메이션 값 생성
     const animatedValue = useRef(new Animated.Value(0)).current;
@@ -218,16 +233,9 @@ const MapGlobe = forwardRef<MapGlobeRef, MapGlobeProps>(
       })();
     }, []);
 
-    return (
-      <MapView
-        mapType={Platform.OS === "ios" ? "satelliteFlyover" : "terrain"}
-        onRegionChangeComplete={(newRegion) => setRegion(newRegion)}
-        ref={mapRef}
-        region={region}
-        showsCompass={false}
-        style={{ flex: 1 }}
-      >
-        {countryPolygons.map((polygonData) =>
+    const renderedPolygons = useMemo(
+      () =>
+        countryPolygons.map((polygonData) =>
           polygonData.coordinates.map((coords: number[][], index: number) => (
             <Polygon
               coordinates={coords
@@ -246,7 +254,20 @@ const MapGlobe = forwardRef<MapGlobeRef, MapGlobeProps>(
               strokeWidth={VISITED_STROKE_WIDTH_NATIVE}
             />
           )),
-        )}
+        ),
+      [countryPolygons, polygonFillColor, primaryColor],
+    );
+
+    return (
+      <MapView
+        mapType={Platform.OS === "ios" ? "satelliteFlyover" : "terrain"}
+        onRegionChangeComplete={(newRegion) => setRegion(newRegion)}
+        ref={mapRef}
+        region={region}
+        showsCompass={false}
+        style={{ flex: 1 }}
+      >
+        {renderedPolygons}
       </MapView>
     );
   },

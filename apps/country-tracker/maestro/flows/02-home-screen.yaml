@@ -1,0 +1,33 @@
+appId: com.gracefullight.countrytracker
+name: Home Screen Navigation
+tags:
+  - requires-auth
+---
+# Assumes user is already logged in
+- launchApp
+- assertVisible: "My Travels"
+- assertVisible: "Countries"
+- assertVisible: "Days Tracked"
+
+# Test search input
+- tapOn: "Search destination..."
+- inputText: "Japan"
+- assertVisible: "Japan"
+- clearText
+
+# Test filter chips
+- tapOn: "Recent"
+- tapOn: "Most Days"
+- tapOn: "Europe"
+- tapOn: "Asia"
+- tapOn: "Recent"
+
+# Test filter sheet
+- tapOn:
+    id: "home.filter-button-a11y"
+- assertVisible: "Filter visited countries"
+- tapOn: "Cancel"
+
+# Test add visit button (FAB)
+- tapOn:
+    id: "Plus"

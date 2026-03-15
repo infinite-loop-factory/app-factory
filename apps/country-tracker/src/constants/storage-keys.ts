@@ -3,3 +3,4 @@ export const LAST_LOCATION_STORAGE_KEY =
   "country-tracker-last-location" as const;
 export const LOCATION_QUEUE_STORAGE_KEY =
   "country-tracker-location-queue" as const;
+export const VISIT_QUEUE_STORAGE_KEY = "visit-offline-queue" as const;
