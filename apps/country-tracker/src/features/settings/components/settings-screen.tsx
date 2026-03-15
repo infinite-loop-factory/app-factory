@@ -4,15 +4,20 @@ import {
 } from "@infinite-loop-factory/common";
 import Constants from "expo-constants";
 import { useRouter } from "expo-router";
+import { useAtom } from "jotai";
 import {
   Ban,
   ChevronRight,
   CircleHelp,
   ExternalLink,
   FileText,
+  Flag,
   Globe2,
   PlaneTakeoff,
+  ShieldAlert,
 } from "lucide-react-native";
+import { Alert } from "react-native";
+import { nationalityAtom } from "@/atoms/nationality.atom";
 import ParallaxScrollView from "@/components/parallax-scroll-view";
 import { Badge, BadgeText } from "@/components/ui/badge";
 import { Box } from "@/components/ui/box";
@@ -37,6 +42,7 @@ export default function SettingsScreen() {
   const toast = useToast();
   const router = useRouter();
   const { user } = useAuthUser();
+  const [nationality, setNationality] = useAtom(nationalityAtom);
 
   const [iconColor, chevronColor] = useThemeColor([
     "typography-0",
@@ -155,6 +161,53 @@ export default function SettingsScreen() {
             </Text>
             <ChevronRight color={chevronColor} size={18} />
           </Box>
+        </Button>
+        <Divider className="bg-outline-100" />
+        <Button
+          action="default"
+          className="h-14 w-full justify-between rounded-none bg-transparent px-4"
+          onPress={() => {
+            Alert.prompt(
+              i18n.t("settings.nationality.title"),
+              i18n.t("settings.nationality.message"),
+              (value) => {
+                if (value) void setNationality(value.toUpperCase());
+              },
+              "plain-text",
+              nationality || "",
+            );
+          }}
+        >
+          <Box className="flex-row items-center gap-3.5">
+            <Box className="h-8 w-8 items-center justify-center rounded-md bg-primary-500">
+              <Flag color={iconColor} size={17} />
+            </Box>
+            <Text className="font-medium text-base text-typography-900">
+              {i18n.t("settings.nationality.label")}
+            </Text>
+          </Box>
+          <Box className="flex-row items-center gap-2">
+            <Text className="font-normal text-base text-secondary-600">
+              {nationality || i18n.t("settings.nationality.not-set")}
+            </Text>
+            <ChevronRight color={chevronColor} size={18} />
+          </Box>
+        </Button>
+        <Divider className="bg-outline-100" />
+        <Button
+          action="default"
+          className="h-14 w-full justify-between rounded-none bg-transparent px-4"
+          onPress={() => router.push("/settings/visa-limits" as never)}
+        >
+          <Box className="flex-row items-center gap-3.5">
+            <Box className="h-8 w-8 items-center justify-center rounded-md bg-error-500">
+              <ShieldAlert color={iconColor} size={17} />
+            </Box>
+            <Text className="font-medium text-base text-typography-900">
+              {i18n.t("visa.title")}
+            </Text>
+          </Box>
+          <ChevronRight color={chevronColor} size={18} />
         </Button>
         <Divider className="bg-outline-100" />
         <Button

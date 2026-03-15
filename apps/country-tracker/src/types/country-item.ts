@@ -7,4 +7,7 @@ export type CountryItem = {
   country_code: string;
   startDate: string;
   dateSet: string[];
+  // Aggregate fields (computed client-side)
+  visitCount?: number;
+  totalStayDays?: number;
 };

@@ -31,6 +31,7 @@ import { LocationPermissionDeniedToast } from "@/components/toasts/location-perm
 import { useToast } from "@/components/ui/toast";
 import { startLocationTask } from "@/features/location/location-permission";
 import { flushLocationQueueIfAny } from "@/features/location/location-task";
+import { flushVisitQueue } from "@/utils/offline-queue";
 
 const navigationIntegration = null;
 /* Sentry.reactNavigationIntegration({
@@ -104,6 +105,9 @@ function RootLayout() {
     if (connected && !wasConnectedRef.current) {
       flushLocationQueueIfAny().catch((_e) => {
         /* ignore error */
+      });
+      flushVisitQueue().catch((_e) => {
+        /* best-effort */
       });
     }
     wasConnectedRef.current = connected;

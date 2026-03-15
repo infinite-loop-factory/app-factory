@@ -54,6 +54,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     ],
     "expo-router",
     "expo-font",
+    "expo-notifications",
   ],
   experiments: {
     tsconfigPaths: true,

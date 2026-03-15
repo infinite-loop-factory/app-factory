@@ -4,8 +4,8 @@ import type { CountryPolygon } from "@/features/map/types/country-polygon";
 
 import { feature } from "topojson-client";
 import worldTopo from "@/assets/geodata/world/countries-110m.json";
-import { numericToAlpha2 } from "@/features/map/utils/iso-numeric-to-alpha2";
-import { normalizeCountryCode } from "@/features/map/utils/normalize-country-code";
+import { numericToAlpha2 } from "@/utils/country-codes/iso-numeric-to-alpha2";
+import { normalizeCountryCode } from "@/utils/country-codes/normalize-country-code";
 
 const NAME_OVERRIDES: Record<string, string> = {
   "W. Sahara": "EH",

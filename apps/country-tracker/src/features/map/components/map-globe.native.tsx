@@ -7,6 +7,7 @@ import {
   forwardRef,
   useEffect,
   useImperativeHandle,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -232,16 +233,9 @@ const MapGlobe = forwardRef<MapGlobeRef, MapGlobeProps>(
       })();
     }, []);
 
-    return (
-      <MapView
-        mapType={Platform.OS === "ios" ? "satelliteFlyover" : "terrain"}
-        onRegionChangeComplete={(newRegion) => setRegion(newRegion)}
-        ref={mapRef}
-        region={region}
-        showsCompass={false}
-        style={{ flex: 1 }}
-      >
-        {countryPolygons.map((polygonData) =>
+    const renderedPolygons = useMemo(
+      () =>
+        countryPolygons.map((polygonData) =>
           polygonData.coordinates.map((coords: number[][], index: number) => (
             <Polygon
               coordinates={coords
@@ -260,7 +254,20 @@ const MapGlobe = forwardRef<MapGlobeRef, MapGlobeProps>(
               strokeWidth={VISITED_STROKE_WIDTH_NATIVE}
             />
           )),
-        )}
+        ),
+      [countryPolygons, polygonFillColor, primaryColor],
+    );
+
+    return (
+      <MapView
+        mapType={Platform.OS === "ios" ? "satelliteFlyover" : "terrain"}
+        onRegionChangeComplete={(newRegion) => setRegion(newRegion)}
+        ref={mapRef}
+        region={region}
+        showsCompass={false}
+        style={{ flex: 1 }}
+      >
+        {renderedPolygons}
       </MapView>
     );
   },

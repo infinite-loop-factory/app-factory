@@ -1,5 +1,6 @@
 import supabase from "@/lib/supabase";
 import { formatIsoDate } from "@/utils/format-date";
+import { enqueueOperation, isOnline } from "@/utils/offline-queue";
 
 export async function fetchExistingByDateMap(params: {
   userId: string;
@@ -29,7 +30,19 @@ export async function fetchExistingByDateMap(params: {
 
 export async function insertManualEntries(
   payload: Array<Record<string, unknown>>,
-) {
+): Promise<{ offline: boolean }> {
+  const online = await isOnline();
+
+  if (!online) {
+    await enqueueOperation({
+      type: "insert",
+      table: "locations",
+      payload,
+    });
+    return { offline: true };
+  }
+
   const { error } = await supabase.from("locations").insert(payload);
   if (error) throw error;
+  return { offline: false };
 }

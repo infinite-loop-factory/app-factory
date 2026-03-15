@@ -6,7 +6,7 @@ import * as QueryParams from "expo-auth-session/build/QueryParams";
 import * as Linking from "expo-linking";
 import { Stack, useRouter } from "expo-router";
 import * as WebBrowser from "expo-web-browser";
-import { Chrome, Github } from "lucide-react-native";
+import { Chrome, Facebook } from "lucide-react-native";
 import { useEffect, useState } from "react";
 import { Box } from "@/components/ui/box";
 import {
@@ -38,9 +38,14 @@ const redirectTo = makeRedirectUri();
 const OAUTH_PROVIDERS: {
   key: Provider;
   labelKey: string;
-  icon: typeof Chrome | typeof Github;
-  variant: "google" | "github";
+  icon?: typeof Chrome | typeof Facebook;
+  variant: "apple" | "google" | "facebook";
 }[] = [
+  {
+    key: "apple",
+    labelKey: "login.apple",
+    variant: "apple",
+  },
   {
     key: "google",
     labelKey: "login.google",
@@ -48,10 +53,10 @@ const OAUTH_PROVIDERS: {
     variant: "google",
   },
   {
-    key: "github",
-    labelKey: "login.github",
-    icon: Github,
-    variant: "github",
+    key: "facebook",
+    labelKey: "login.facebook",
+    icon: Facebook,
+    variant: "facebook",
   },
 ];
 
@@ -79,6 +84,37 @@ const createSessionFromUrl = async (url: string) => {
   return data.session;
 };
 
+const getButtonStyles = (variant: string) => {
+  switch (variant) {
+    case "apple":
+      return {
+        button:
+          "h-12 w-full rounded-xl border border-typography-900 bg-typography-900 px-4",
+        buttonStyle: undefined,
+        buttonVariant: "solid" as const,
+        icon: "text-typography-0",
+        text: "ml-3 font-bold text-lg text-typography-0",
+      };
+    case "facebook":
+      return {
+        button: "h-12 w-full rounded-xl px-4",
+        buttonStyle: { backgroundColor: "#1877F2" },
+        buttonVariant: "solid" as const,
+        icon: "text-typography-0",
+        text: "ml-3 font-bold text-lg text-typography-0",
+      };
+    default: // google
+      return {
+        button:
+          "h-12 w-full rounded-xl border border-outline-200 bg-background-0 px-4",
+        buttonStyle: undefined,
+        buttonVariant: "outline" as const,
+        icon: "text-typography-700",
+        text: "ml-3 font-bold text-lg text-typography-900",
+      };
+  }
+};
+
 function OAuthProviderButton({
   provider,
   disabled,
@@ -90,30 +126,23 @@ function OAuthProviderButton({
   isPending: boolean;
   onPress: (provider: Provider) => void;
 }) {
-  const isGithub = provider.variant === "github";
-  const buttonClassName = isGithub
-    ? "h-12 w-full rounded-xl border border-typography-900 bg-typography-900 px-4"
-    : "h-12 w-full rounded-xl border border-outline-200 bg-background-0 px-4";
-  const iconClassName = isGithub ? "text-typography-0" : "text-typography-700";
-  const textClassName = isGithub
-    ? "ml-3 font-bold text-lg text-typography-0"
-    : "ml-3 font-bold text-lg text-typography-900";
+  const styles = getButtonStyles(provider.variant);
 
   return (
     <Button
       action="default"
-      className={buttonClassName}
+      className={styles.button}
       disabled={disabled}
       onPress={() => onPress(provider.key)}
-      variant={isGithub ? "solid" : "outline"}
+      style={styles.buttonStyle}
+      variant={styles.buttonVariant}
     >
       <Box className="w-full flex-row items-center justify-center">
-        {isPending ? (
-          <ButtonSpinner className={iconClassName} />
-        ) : (
-          <ButtonIcon as={provider.icon} className={iconClassName} size="md" />
+        {isPending && <ButtonSpinner className={styles.icon} />}
+        {!isPending && provider.icon && (
+          <ButtonIcon as={provider.icon} className={styles.icon} size="md" />
         )}
-        <ButtonText className={textClassName}>
+        <ButtonText className={styles.text}>
           {i18n.t(provider.labelKey)}
         </ButtonText>
       </Box>

@@ -1,6 +1,7 @@
 import type { CountryYearSummary } from "@/features/map/types/map-summary";
 
 import { ArrowRight, CalendarDays } from "lucide-react-native";
+import { memo } from "react";
 import { Box } from "@/components/ui/box";
 import { Button, ButtonIcon, ButtonText } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
@@ -13,7 +14,7 @@ interface CountrySummaryItemProps {
   onPress: (item: CountryYearSummary) => void;
 }
 
-export function CountrySummaryItem({ item, onPress }: CountrySummaryItemProps) {
+function CountrySummaryItemInner({ item, onPress }: CountrySummaryItemProps) {
   const [mutedTextColor] = useThemeColor(["typography-500"]);
 
   return (
@@ -67,3 +68,5 @@ export function CountrySummaryItem({ item, onPress }: CountrySummaryItemProps) {
     </Box>
   );
 }
+
+export const CountrySummaryItem = memo(CountrySummaryItemInner);

@@ -1,0 +1,32 @@
+appId: com.gracefullight.countrytracker
+name: Add Visit Flow
+tags:
+  - requires-auth
+---
+- launchApp
+
+# Navigate to add visit
+- tapOn:
+    id: "Plus"
+
+# Verify add visit screen
+- assertVisible: "Add a New Visit"
+
+# Select country
+- tapOn: "Select a country"
+- inputText: "Japan"
+- tapOn: "Japan"
+
+# Verify date section is visible
+- assertVisible: "Start"
+- assertVisible: "End"
+- assertVisible: "Stayed one day"
+
+# Toggle same day
+- tapOn: "Stayed one day"
+
+# Submit
+- tapOn: "Register"
+
+# Should navigate back to home
+- assertVisible: "My Travels"

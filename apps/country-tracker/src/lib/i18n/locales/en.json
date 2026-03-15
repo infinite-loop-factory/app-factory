@@ -45,6 +45,19 @@
     },
     "error-loading": "Failed to load visited countries.",
     "no-visited-countries": "No visited countries yet",
+    "no-visited-countries-subtitle": "Start tracking your journey by adding your first visit!",
+    "delete-visit": {
+      "title": "Delete Visit",
+      "message": "Remove all %{count} day(s) in %{country}? This cannot be undone.",
+      "confirm": "Delete",
+      "cancel": "Cancel",
+      "toast": {
+        "success-title": "Visit deleted",
+        "success-description": "Removed %{count} day(s) from %{country}.",
+        "error-title": "Delete failed",
+        "error-description": "Could not delete the visit. Please try again."
+      }
+    },
     "add-visit": {
       "button": "Add a New Visit",
       "title": "Add a New Visit",
@@ -90,9 +103,23 @@
         "partial-title": "Some days skipped",
         "partial-description": "Skipped %{count} duplicate day(s).",
         "error-title": "Something went wrong",
-        "error-description": "We couldn't save that stay. Please try again."
+        "error-description": "We couldn't save that stay. Please try again.",
+        "offline-title": "Saved offline",
+        "offline-description": "Your %{count} day(s) will sync when you're back online."
       }
+    },
+    "edit-visit": {
+      "title": "Edit Visit"
     }
+  },
+
+  "country-detail": {
+    "total-visits": "Visits",
+    "total-days": "Days",
+    "first-visit": "First",
+    "last-visit": "Last",
+    "visit-history": "Visit History",
+    "no-visits": "No visits recorded."
   },
 
   "map": {
@@ -173,6 +200,7 @@
       "language-value-en": "English",
       "language-value-ko": "Korean",
       "home-country": "Home Country",
+      "nationality": "Nationality",
       "home-country-value": "USA",
       "currency": "Currency",
       "currency-value": "USD ($)"
@@ -217,7 +245,24 @@
         "description": "Please go to System Settings > Apps > Language settings to change your language."
       }
     },
-    "logout": "Logout"
+    "nationality": {
+      "label": "Nationality",
+      "title": "Set Nationality",
+      "message": "Enter your passport country code (e.g. KR, US, JP)",
+      "not-set": "Not set"
+    },
+    "logout": "Logout",
+    "delete-account": {
+      "button": "Delete Account",
+      "title": "Delete Account",
+      "message": "This will permanently delete all your travel data and sign you out. This action cannot be undone.",
+      "confirm": "Delete",
+      "cancel": "Cancel",
+      "toast": {
+        "error-title": "Deletion failed",
+        "error-description": "Could not delete your account. Please try again."
+      }
+    }
   },
 
   "login": {
@@ -225,11 +270,16 @@
     "description": "Login is required to use this service.",
     "hero-title": "Start Your Journey",
     "hero-subtitle": "Sign in to continue to your dashboard",
+    "apple": "Sign in with Apple",
     "google": "Login with Google",
-    "github": "Login with GitHub",
+    "facebook": "Login with Facebook",
     "terms": "Terms of Service",
     "privacy": "Privacy Policy",
-    "security-note": "OAuth only. No password is stored in app."
+    "security-note": "OAuth only. No password is stored in app.",
+    "error": {
+      "title": "Login failed",
+      "description": "Could not sign in. Please try again."
+    }
   },
   "location": {
     "foregroundService": {
@@ -253,5 +303,27 @@
     "message": "Check out my visited countries in %{year}!",
     "error": "Unable to share. Please try again.",
     "not-available": "Sharing is not available on this device."
+  },
+  "visa": {
+    "title": "Visa Alerts",
+    "description": "Set visa-free day limits per country and get notified before exceeding them.",
+    "no-limits": "No visa limits set yet.",
+    "add-limit": "Add Visa Limit",
+    "save": "Save",
+    "max-days": "Max days",
+    "alert-before": "Alert before (days)",
+    "country-placeholder": "Country code (e.g. JP)",
+    "limit-info": "Max %{max} days, alert %{alert}d before",
+    "delete": {
+      "title": "Remove Limit",
+      "message": "Remove visa limit for %{country}?",
+      "confirm": "Remove"
+    },
+    "toast": {
+      "saved-title": "Limit saved",
+      "saved-description": "Visa limit has been updated.",
+      "error-title": "Error",
+      "error-description": "Could not save visa limit."
+    }
   }
 }
