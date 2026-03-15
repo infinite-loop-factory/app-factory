@@ -1,4 +1,12 @@
-import { Heart, Home, House, Search, User } from "lucide-react-native";
+import {
+  Heart,
+  Home,
+  House,
+  Map,
+  MapPin,
+  Search,
+  User,
+} from "lucide-react-native";
 
 export const TAB_BAR_ICON = {
   home: {
@@ -12,6 +20,10 @@ export const TAB_BAR_ICON = {
   favorites: {
     basic: Heart,
     focused: Heart,
+  },
+  map: {
+    basic: Map,
+    focused: MapPin,
   },
   profile: {
     basic: User,

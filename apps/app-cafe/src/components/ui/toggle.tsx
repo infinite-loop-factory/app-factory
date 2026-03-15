@@ -25,14 +25,20 @@ export function Toggle({
   onPress,
   leftContent,
   rightContent,
-  backgroundColor,
+  backgroundColor = "#E5E7EB",
   duration = 300,
   easing = "ease",
 }: ToggleProps) {
-  const translateX = useSharedValue(isActive ? 24 : 0);
+  const TOGGLE_WIDTH = 48;
+  const TOGGLE_HEIGHT = 24;
+  const PADDING = 2;
+  const THUMB_SIZE = TOGGLE_HEIGHT - PADDING * 2; // 20
+  const TRAVEL_DISTANCE = TOGGLE_WIDTH - PADDING * 2 - THUMB_SIZE; // 24
+
+  const translateX = useSharedValue(isActive ? TRAVEL_DISTANCE : 0);
 
   useEffect(() => {
-    const targetX = isActive ? 24 : 0;
+    const targetX = isActive ? TRAVEL_DISTANCE : 0;
     if (easing === "spring") {
       translateX.value = withSpring(targetX, { duration });
     } else {
@@ -41,75 +47,98 @@ export function Toggle({
         easing: Easing.out(Easing.ease),
       });
     }
-  }, [isActive, duration, easing]);
+  }, [isActive, duration, easing, TRAVEL_DISTANCE]);
 
-  const animatedStyle = useAnimatedStyle(() => ({
+  const thumbAnimatedStyle = useAnimatedStyle(() => ({
     transform: [{ translateX: translateX.value }],
   }));
 
-  const leftAnimatedStyle = useAnimatedStyle(() => ({
-    opacity: withTiming(isActive ? 0.4 : 1, { duration }),
+  // ▼▼▼▼▼ 수정된 부분 ▼▼▼▼▼
+  // 활성/비활성 상태에 따른 투명도 조절 (0으로 설정하여 완전히 숨김)
+  const leftIconStyle = useAnimatedStyle(() => ({
+    // isActive가 true(오른쪽)이면 왼쪽 아이콘 투명도 0, 아니면 1
+    opacity: withTiming(isActive ? 0 : 1, { duration }),
   }));
 
-  const rightAnimatedStyle = useAnimatedStyle(() => ({
-    opacity: withTiming(isActive ? 1 : 0.4, { duration }),
+  const rightIconStyle = useAnimatedStyle(() => ({
+    // isActive가 true(오른쪽)이면 오른쪽 아이콘 투명도 1, 아니면 0
+    opacity: withTiming(isActive ? 1 : 0, { duration }),
   }));
+  // ▲▲▲▲▲ 수정된 부분 ▲▲▲▲▲
 
   return (
-    <View>
-      <Pressable
-        className="relative flex-row items-center overflow-hidden rounded-full"
-        onPress={onPress}
+    <Pressable
+      onPress={onPress}
+      style={{
+        width: TOGGLE_WIDTH,
+        height: TOGGLE_HEIGHT,
+        backgroundColor,
+        borderRadius: 9999,
+        justifyContent: "center",
+        padding: PADDING,
+        overflow: "hidden",
+      }}
+    >
+      {/* 1. 움직이는 썸 (흰색 원) - zIndex: 0 */}
+      <Animated.View
+        style={[
+          {
+            width: THUMB_SIZE,
+            height: THUMB_SIZE,
+            borderRadius: THUMB_SIZE / 2,
+            backgroundColor: "#FFFFFF",
+            shadowColor: "#000",
+            shadowOffset: { width: 0, height: 1 },
+            shadowOpacity: Platform.OS === "ios" ? 0.2 : 0.2,
+            shadowRadius: 2,
+            elevation: 2,
+            zIndex: 0,
+          },
+          thumbAnimatedStyle,
+        ]}
+      />
+
+      {/* 2. 아이콘 레이어 (고정) - zIndex: 1 */}
+      <View
+        className="absolute inset-0 flex-row items-center justify-between"
+        pointerEvents="none"
         style={{
-          width: 48,
-          height: 24,
-          padding: 2,
-          backgroundColor,
+          paddingHorizontal: PADDING,
+          width: TOGGLE_WIDTH,
+          height: TOGGLE_HEIGHT,
+          zIndex: 1,
         }}
       >
+        {/* 왼쪽 아이콘 영역 */}
         <Animated.View
-          className="absolute items-center justify-center"
           style={[
+            leftIconStyle,
             {
-              left: 4,
-              zIndex: 1,
+              width: THUMB_SIZE,
+              height: THUMB_SIZE,
+              alignItems: "center",
+              justifyContent: "center",
             },
-            leftAnimatedStyle,
           ]}
         >
           {leftContent}
         </Animated.View>
+
+        {/* 오른쪽 아이콘 영역 */}
         <Animated.View
-          className="absolute items-center justify-center"
           style={[
+            rightIconStyle,
             {
-              right: 4,
-              zIndex: 1,
+              width: THUMB_SIZE,
+              height: THUMB_SIZE,
+              alignItems: "center",
+              justifyContent: "center",
             },
-            rightAnimatedStyle,
           ]}
         >
           {rightContent}
         </Animated.View>
-        <Animated.View
-          className="absolute rounded-full"
-          style={[
-            {
-              width: 20,
-              height: 20,
-              borderRadius: 10,
-              backgroundColor: "#FFFFFF",
-              shadowColor: "#000",
-              shadowOffset: { width: 0, height: 2 },
-              shadowOpacity: Platform.OS === "ios" ? 0.4 : 0.2,
-              shadowRadius: Platform.OS === "ios" ? 4 : 3,
-              elevation: Platform.OS === "android" ? 6 : 4,
-              zIndex: 0,
-            },
-            animatedStyle,
-          ]}
-        />
-      </Pressable>
-    </View>
+      </View>
+    </Pressable>
   );
 }
