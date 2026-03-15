@@ -41,7 +41,10 @@ export function LocationMarker({
   });
 
   const bearingRotation = useDerivedValue(() => {
-    const isMovingFast = activity === "Cycling" || activity === "Automotive" || activity === "Flying";
+    const isMovingFast =
+      activity === "Cycling" ||
+      activity === "Automotive" ||
+      activity === "Flying";
 
     if (isMovingFast && courseBearing) {
       bearingSv.value = courseBearing.value;
