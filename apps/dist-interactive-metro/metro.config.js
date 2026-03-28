@@ -36,6 +36,27 @@ config.resolver.blockList = [
   /node_modules\/.*\/node_modules\/react-native-svg\/.*/,
 ];
 
+// dom-helpers@6 uses package exports (./*  → cjs/*.js) but Metro has
+// unstable_enablePackageExports disabled for workspace compat. Map each
+// sub-path that @gluestack-ui/core web overlays import directly to cjs/.
+const domHelpersRoot = path.resolve(
+  __dirname,
+  "../../node_modules/dom-helpers/cjs",
+);
+const prevResolveRequest = config.resolver.resolveRequest;
+config.resolver.resolveRequest = (context, moduleName, platform) => {
+  if (moduleName.startsWith("dom-helpers/")) {
+    const subpath = moduleName.slice("dom-helpers/".length);
+    return {
+      filePath: path.join(domHelpersRoot, `${subpath}.js`),
+      type: "sourceFile",
+    };
+  }
+  if (prevResolveRequest)
+    return prevResolveRequest(context, moduleName, platform);
+  return context.resolveRequest(context, moduleName, platform);
+};
+
 module.exports = config;
 
 /**
