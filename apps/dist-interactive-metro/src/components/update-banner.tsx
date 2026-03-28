@@ -25,7 +25,7 @@ export function UpdateBanner() {
   const { visible, message, type, hideBanner } = useUpdateBanner();
   const insets = useSafeAreaInsets();
   const translateY = useRef(new Animated.Value(-120)).current;
-  const timerRef = useRef<ReturnType<typeof setTimeout>>();
+  const timerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   useEffect(() => {
     if (timerRef.current) clearTimeout(timerRef.current);

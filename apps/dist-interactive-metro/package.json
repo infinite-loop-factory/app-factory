@@ -17,6 +17,7 @@
     "web:publish": "tsx ../../scripts/web-publish.ts --app dist-interactive-metro"
   },
   "dependencies": {
+    "@datastructures-js/priority-queue": "^6.3.5",
     "@expo/metro-runtime": "6.1.2",
     "@expo/vector-icons": "^15.0.3",
     "@gluestack-ui/core": "^3.0.12",

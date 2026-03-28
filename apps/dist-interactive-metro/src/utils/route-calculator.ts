@@ -1,5 +1,8 @@
 import type { NearbyStation, Station } from "@/types/station";
 
+import { MinPriorityQueue } from "@datastructures-js/priority-queue";
+import { getAllStations } from "@/data/station-store";
+
 // ── Public types ─────────────────────────────────────────────
 
 export interface RouteSegment {
@@ -62,6 +65,10 @@ function addLineEdges(graph: EdgeMap, stations: Station[]): void {
     byLine.set(s.line, arr);
   }
   for (const lineStations of byLine.values()) {
+    // Sequence order is guaranteed by the data layer:
+    // - Static bundle entries are ordered by stinConsOrdr at build time.
+    // - Dynamic stations from itemsToStation() are sorted by stinConsOrdr
+    //   before being passed to setDynamicStations(), preserving insertion order.
     for (let i = 0; i < lineStations.length - 1; i++) {
       addBidirectional(
         graph,
@@ -119,22 +126,11 @@ interface DijkstraState {
   transferEdges: Set<string>;
 }
 
-function insertSorted(queue: DijkstraState[], s: DijkstraState): void {
-  let lo = 0;
-  let hi = queue.length;
-  while (lo < hi) {
-    const mid = (lo + hi) >> 1;
-    if (queue[mid].cost <= s.cost) lo = mid + 1;
-    else hi = mid;
-  }
-  queue.splice(lo, 0, s);
-}
-
 function expandNode(
   curr: DijkstraState,
   edge: { toId: string; isTransfer: boolean },
   bestCost: Map<string, number>,
-  queue: DijkstraState[],
+  queue: MinPriorityQueue<DijkstraState>,
 ): void {
   const newTransfers = curr.transfers + (edge.isTransfer ? 1 : 0);
   const newHops = curr.hops + 1;
@@ -143,7 +139,7 @@ function expandNode(
   bestCost.set(edge.toId, newCost);
   const newTransferEdges = new Set(curr.transferEdges);
   if (edge.isTransfer) newTransferEdges.add(`${curr.id}->${edge.toId}`);
-  insertSorted(queue, {
+  queue.enqueue({
     id: edge.toId,
     cost: newCost,
     hops: newHops,
@@ -167,8 +163,8 @@ function dijkstra(
     };
   }
   const bestCost = new Map<string, number>();
-  const queue: DijkstraState[] = [];
-  insertSorted(queue, {
+  const queue = new MinPriorityQueue<DijkstraState>((s) => s.cost);
+  queue.enqueue({
     id: startId,
     cost: 0,
     hops: 0,
@@ -177,9 +173,10 @@ function dijkstra(
     transferEdges: new Set(),
   });
   bestCost.set(startId, 0);
-  while (queue.length > 0) {
-    const curr = queue.shift();
-    if (!curr) break;
+  while (!queue.isEmpty()) {
+    // dequeue() returns T | null; isEmpty() guard above ensures non-null
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const curr = queue.dequeue()!;
     if (curr.id === endId) {
       return {
         path: curr.path,
@@ -293,10 +290,6 @@ export function calculateRoute(
   end: Station,
   via?: Station,
 ): RouteInfo {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const { getAllStations } = require("@/data/station-store") as {
-    getAllStations: () => Station[];
-  };
   const stations = getAllStations();
   const graph = buildGraph(stations);
   const stationMap = getStationMap(stations);

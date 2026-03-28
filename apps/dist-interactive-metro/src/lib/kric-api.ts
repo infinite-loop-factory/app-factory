@@ -134,7 +134,10 @@ export interface SubwayTimetableItem {
   stinCd: string;
 }
 
-export type DayCd = "8" | "7" | "9"; // weekday | Saturday | Sunday/holiday
+/** "8" = weekday, "7" = Saturday, "9" = Sunday/public holiday.
+ *  Note: public holidays are not detected automatically — getCurrentDayCd()
+ *  returns "9" only on Sundays. Callers must pass "9" manually on holidays. */
+export type DayCd = "8" | "7" | "9";
 
 export function fetchSubwayTimetable(params: {
   railOprIsttCd: string;

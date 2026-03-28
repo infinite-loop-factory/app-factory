@@ -33,7 +33,9 @@ export function getDynamicStations(): Station[] {
   return _dynamic;
 }
 
-/** Search all stations (static + dynamic) by name or line. */
+/** Search all stations (static + dynamic) by name or line.
+ *  Returns [] for blank input intentionally — callers should display a
+ *  placeholder/hint rather than flooding the UI with all stations. */
 export function searchAllStations(keyword: string): Station[] {
   if (!keyword.trim()) return [];
   const lower = keyword.toLowerCase();

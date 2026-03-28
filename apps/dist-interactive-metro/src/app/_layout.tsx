@@ -35,11 +35,19 @@ SplashScreen.preventAutoHideAsync();
 
 const hiddenHeaderOptions = { headerShown: false } as const;
 
-/** Triggers the KRIC station sync once fonts are loaded. */
+/** Triggers the KRIC station sync once on mount.
+ *  On failure the app continues with the static-only station bundle —
+ *  all core routes remain functional, only dynamic lines (6, 8, etc.)
+ *  will be missing until the next successful sync.
+ */
 function KricSyncTrigger() {
   const { setSyncStatus, setLastSync } = useSyncStatus();
+  const hasSynced = useRef(false);
 
   useEffect(() => {
+    if (hasSynced.current) return;
+    hasSynced.current = true;
+
     setSyncStatus("syncing");
     syncKricStations()
       .then((result) => {
@@ -51,15 +59,14 @@ function KricSyncTrigger() {
         });
       })
       .catch((err: unknown) => {
+        // Fallback: static-only mode — dynamic lines unavailable until next sync
         setLastSync(
           Date.now(),
           { lines: 0, stations: 0, routes: 0, transfers: 0 },
           err instanceof Error ? err.message : "Sync failed",
         );
       });
-    // Run once on mount
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [setLastSync, setSyncStatus]);
+  }, [setSyncStatus, setLastSync]);
 
   return null;
 }
