@@ -28,14 +28,17 @@ function getServiceKey(): string {
 
 interface KricEnvelope<T> {
   header?: { resultCode: string; resultMsg: string };
-  body?: { items?: T[] | { item?: T[] } | null; totalCount?: number };
+  body?: { items?: T[] | { item?: T | T[] } | null; totalCount?: number };
   response?: {
     header?: { resultCode: string; resultMsg: string };
-    body?: { items?: T[] | { item?: T[] } | null; totalCount?: number };
+    body?: { items?: T[] | { item?: T | T[] } | null; totalCount?: number };
   };
 }
 
 function extractItems<T>(raw: KricEnvelope<T>): T[] {
+  // Pattern: top-level array (rare but possible)
+  if (Array.isArray(raw)) return raw as unknown as T[];
+
   const body = raw.body ?? raw.response?.body;
   const header = raw.header ?? raw.response?.header;
 
@@ -44,27 +47,47 @@ function extractItems<T>(raw: KricEnvelope<T>): T[] {
   }
 
   const items = body?.items;
-  if (!items) return [];
+  // Handle empty-string sentinel some KRIC endpoints return
+  if (!items || (items as unknown) === "") return [];
   if (Array.isArray(items)) return items;
-  // Older envelope wraps items in { item: [...] }
-  return items.item ?? [];
+
+  // Wrapped format: { item: T | T[] }
+  const item = (items as { item?: T | T[] }).item;
+  if (!item) return [];
+  if (Array.isArray(item)) return item;
+  return [item]; // single-item: API returns object instead of array
 }
 
 async function get<T>(
   path: string,
   params: Record<string, string>,
 ): Promise<T[]> {
+  // serviceKey is appended raw (not URL-encoded). KRIC API expects the literal
+  // token in the query string — URLSearchParams would encode $ to %24 and break auth.
   const qs = new URLSearchParams({
-    serviceKey: getServiceKey(),
     format: "json",
+    numOfRows: "9999",
     ...params,
   });
-  const url = `${BASE_URL}/${path}?${qs.toString()}`;
+  const url = `${BASE_URL}/${path}?serviceKey=${getServiceKey()}&${qs.toString()}`;
+
   const res = await fetch(url);
+
   if (!res.ok) {
     throw new Error(`KRIC HTTP ${res.status} for ${path}`);
   }
-  const json = (await res.json()) as KricEnvelope<T>;
+
+  const text = await res.text();
+  const json = JSON.parse(text) as KricEnvelope<T>;
+  return extractItems<T>(json);
+}
+
+/**
+ * Exposed for the dev API inspector — parses a raw JSON string using the same
+ * envelope-normalisation logic as `get()`, without needing a serviceKey.
+ */
+export function parseKricJson<T>(text: string): T[] {
+  const json = JSON.parse(text) as KricEnvelope<T>;
   return extractItems<T>(json);
 }
 

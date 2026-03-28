@@ -6,11 +6,14 @@
  * and persists:
  *
  *   1. Dynamic Station objects for lines not in the static bundle
- *      (lines 6, 8, Airport Railroad, Gyeongui-Jungang, Gyeongchun,
- *       Suinbundang).
+ *      (lines 6, 8, 신분당선, Airport Railroad, Gyeongui-Jungang,
+ *       Gyeongchun, Suinbundang).
  *
  *   2. A KRIC code lookup table  { "<stinNm>|<kricLnCd>" → KricStationRef }
  *      used by the timetable and transfer-info hooks.
+ *
+ *   3. A routes list per line  (routCd / routNm / stationCount) that
+ *      captures branch lines (e.g. 5호선 방화지선).
  *
  * Results are cached in AsyncStorage (TTL = 24 h) so the API is not
  * called on every launch.
@@ -20,7 +23,11 @@ import type { Station } from "@/types/station";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { fetchSubwayRouteInfo, type SubwayRouteInfoItem } from "@/lib/kric-api";
-import { setDynamicStations } from "./station-store";
+import {
+  getAllStations,
+  getDynamicStations,
+  setDynamicStations,
+} from "./station-store";
 
 // ── KRIC line catalogue ──────────────────────────────────────
 
@@ -148,7 +155,10 @@ const SYNC_TARGETS: SyncTarget[] = [
     appLine: "신분당선",
     lineNumber: "S",
     lineColor: "#D4003B",
-    dynamic: false,
+    // Static bundle only has 6 stations; API provides all ~18 stations.
+    // setDynamicStations() deduplicates by name|line, so the 6 static entries
+    // remain and the remaining stations are appended from the API.
+    dynamic: true,
   },
 ];
 
@@ -156,7 +166,9 @@ const SYNC_TARGETS: SyncTarget[] = [
 
 const STORAGE_DYNAMIC = "@kric/dynamic_stations_v1";
 const STORAGE_CODE_MAP = "@kric/station_code_map_v1";
+const STORAGE_ROUTES = "@kric/routes_v1";
 const STORAGE_SYNC_TS = "@kric/last_sync_ts_v1";
+const STORAGE_CHECKSUM = "@kric/data_checksum_v1";
 
 const CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
 
@@ -172,8 +184,23 @@ export interface KricStationRef {
 /** Lookup map: "<stinNm>|<kricLnCd>" → KricStationRef */
 export type KricCodeMap = Record<string, KricStationRef>;
 
-// In-memory cache of the lookup map
+/** A single route (경로) within a line — captures branch lines. */
+export interface KricRoute {
+  lnCd: string;
+  appLine: string;
+  lineColor: string;
+  lineNumber: string;
+  /** KRIC route code */
+  routCd: string;
+  /** KRIC route name (e.g. "1호선 본선", "5호선 방화지선") */
+  routNm: string;
+  stationCount: number;
+}
+
+// ── In-memory caches ─────────────────────────────────────────
+
 let _codeMap: KricCodeMap = {};
+let _routes: KricRoute[] = [];
 
 export function getKricRef(
   stationName: string,
@@ -186,11 +213,16 @@ export function getKricCodeMap(): KricCodeMap {
   return _codeMap;
 }
 
+export function getKricRoutes(): KricRoute[] {
+  return _routes;
+}
+
 // ── Sync result ───────────────────────────────────────────────
 
 export interface SyncResult {
   dynamicStationsAdded: number;
   codeMapEntries: number;
+  routeEntries: number;
   linesSucceeded: number;
   linesFailed: number;
   errors: string[];
@@ -234,6 +266,44 @@ function buildCodeMapEntries(
   return map;
 }
 
+/** Builds a KricRoute[] from the items of a single line API response. */
+function buildRouteEntries(
+  items: SubwayRouteInfoItem[],
+  target: SyncTarget,
+): KricRoute[] {
+  const routeMap = new Map<string, KricRoute>();
+  for (const item of items) {
+    const existing = routeMap.get(item.routCd);
+    if (existing) {
+      existing.stationCount++;
+    } else {
+      routeMap.set(item.routCd, {
+        lnCd: target.lnCd,
+        appLine: target.appLine,
+        lineColor: target.lineColor,
+        lineNumber: target.lineNumber,
+        routCd: item.routCd,
+        routNm: item.routNm,
+        stationCount: 1,
+      });
+    }
+  }
+  return [...routeMap.values()];
+}
+
+function computeCodeMapChecksum(codeMap: KricCodeMap): string {
+  const entries = Object.entries(codeMap).sort(([a], [b]) =>
+    a.localeCompare(b),
+  );
+  const str = JSON.stringify(entries);
+  let hash = 5381;
+  for (let i = 0; i < str.length; i++) {
+    hash = ((hash << 5) + hash) ^ str.charCodeAt(i);
+    hash |= 0;
+  }
+  return (hash >>> 0).toString(16);
+}
+
 async function isCacheValid(): Promise<boolean> {
   try {
     const ts = await AsyncStorage.getItem(STORAGE_SYNC_TS);
@@ -246,15 +316,19 @@ async function isCacheValid(): Promise<boolean> {
 
 async function loadFromCache(): Promise<boolean> {
   try {
-    const [dynRaw, mapRaw] = await Promise.all([
+    const [dynRaw, mapRaw, routesRaw] = await Promise.all([
       AsyncStorage.getItem(STORAGE_DYNAMIC),
       AsyncStorage.getItem(STORAGE_CODE_MAP),
+      AsyncStorage.getItem(STORAGE_ROUTES),
     ]);
     if (!(dynRaw && mapRaw)) return false;
     const dynamic = JSON.parse(dynRaw) as Station[];
     const map = JSON.parse(mapRaw) as KricCodeMap;
     setDynamicStations(dynamic);
     _codeMap = map;
+    if (routesRaw) {
+      _routes = JSON.parse(routesRaw) as KricRoute[];
+    }
     return true;
   } catch {
     return false;
@@ -264,10 +338,12 @@ async function loadFromCache(): Promise<boolean> {
 async function saveToCache(
   dynamic: Station[],
   map: KricCodeMap,
+  routes: KricRoute[],
 ): Promise<void> {
   await Promise.all([
     AsyncStorage.setItem(STORAGE_DYNAMIC, JSON.stringify(dynamic)),
     AsyncStorage.setItem(STORAGE_CODE_MAP, JSON.stringify(map)),
+    AsyncStorage.setItem(STORAGE_ROUTES, JSON.stringify(routes)),
     AsyncStorage.setItem(STORAGE_SYNC_TS, String(Date.now())),
   ]);
 }
@@ -277,7 +353,7 @@ async function saveToCache(
  *
  * - Skips if the cache is still valid (< 24 h old) unless `force` is true.
  * - Fetches each line independently so a single failure doesn't abort others.
- * - Updates the in-memory station store and KRIC code map.
+ * - Updates the in-memory station store, KRIC code map, and routes list.
  */
 export async function syncKricStations(
   opts: { force?: boolean } = {},
@@ -287,6 +363,7 @@ export async function syncKricStations(
     return {
       dynamicStationsAdded: 0,
       codeMapEntries: Object.keys(_codeMap).length,
+      routeEntries: _routes.length,
       linesSucceeded: 0,
       linesFailed: 0,
       errors: [],
@@ -295,6 +372,7 @@ export async function syncKricStations(
 
   const dynamicStations: Station[] = [];
   const codeMap: KricCodeMap = {};
+  const routes: KricRoute[] = [];
   let linesSucceeded = 0;
   let linesFailed = 0;
   const errors: string[] = [];
@@ -310,6 +388,9 @@ export async function syncKricStations(
 
       // Build KRIC code map entries for every line (needed for timetable API)
       Object.assign(codeMap, buildCodeMapEntries(items, target.lnCd));
+
+      // Build route entries (captures branch lines like 5호선 방화지선)
+      routes.push(...buildRouteEntries(items, target));
 
       // Only add to dynamic station store for lines missing from static bundle
       if (target.dynamic) {
@@ -327,11 +408,15 @@ export async function syncKricStations(
 
   setDynamicStations(dynamicStations);
   _codeMap = codeMap;
-  await saveToCache(dynamicStations, codeMap);
+  _routes = routes;
+  // Save the already-deduped list so the cache never contains duplicates
+  // of stations that exist in both the static bundle and the API response.
+  await saveToCache(getDynamicStations(), codeMap, routes);
 
   return {
-    dynamicStationsAdded: dynamicStations.length,
+    dynamicStationsAdded: getDynamicStations().length,
     codeMapEntries: Object.keys(codeMap).length,
+    routeEntries: routes.length,
     linesSucceeded,
     linesFailed,
     errors,
@@ -341,4 +426,76 @@ export async function syncKricStations(
 /** Load persisted data into memory without hitting the API. */
 export async function loadCachedKricData(): Promise<void> {
   await loadFromCache();
+}
+
+/**
+ * Merge freshly-fetched route info for a single line into the in-memory code
+ * map, station store, and routes list, then persist to AsyncStorage.
+ * Called by the dev API Inspector after a successful subwayRouteInfo query.
+ */
+export async function mergeLineRouteInfo(
+  items: SubwayRouteInfoItem[],
+  lnCd: string,
+): Promise<{ codeMapEntries: number; stationsAdded: number }> {
+  if (items.length === 0) return { codeMapEntries: 0, stationsAdded: 0 };
+
+  const newEntries = buildCodeMapEntries(items, lnCd);
+  Object.assign(_codeMap, newEntries);
+
+  const target = SYNC_TARGETS.find((t) => t.lnCd === lnCd);
+  let stationsAdded = 0;
+  if (target?.dynamic) {
+    const existing = getDynamicStations().filter(
+      (s) => s.line !== target.appLine,
+    );
+    const newStations = itemsToStation(items, target);
+    setDynamicStations([...existing, ...newStations]);
+    stationsAdded = newStations.length;
+  }
+
+  // Update route entries for this line (replace old ones)
+  if (target) {
+    const newRoutes = buildRouteEntries(items, target);
+    _routes = [..._routes.filter((r) => r.lnCd !== lnCd), ...newRoutes];
+  }
+
+  await saveToCache(getDynamicStations(), _codeMap, _routes);
+  return { codeMapEntries: Object.keys(newEntries).length, stationsAdded };
+}
+
+/**
+ * Force-syncs all lines, computes a checksum of the new code map, and
+ * compares it with the previously stored checksum.
+ *
+ * Returns `updated = true` only when data actually changed (not on the very
+ * first run when there is no baseline checksum yet).
+ */
+export async function checkAndRefreshData(): Promise<{
+  updated: boolean;
+  linesChecked: number;
+  stations: number;
+  routes: number;
+  transfers: number;
+}> {
+  const prevChecksum = await AsyncStorage.getItem(STORAGE_CHECKSUM).catch(
+    () => null,
+  );
+
+  const result = await syncKricStations({ force: true });
+
+  const newChecksum = computeCodeMapChecksum(_codeMap);
+  const updated = prevChecksum !== null && newChecksum !== prevChecksum;
+
+  await AsyncStorage.setItem(STORAGE_CHECKSUM, newChecksum).catch(() => {
+    // best-effort
+  });
+
+  return {
+    updated,
+    linesChecked: result.linesSucceeded,
+    // getAllStations() = static bundle + deduped dynamic (true total)
+    stations: getAllStations().length,
+    routes: result.routeEntries,
+    transfers: result.codeMapEntries,
+  };
 }

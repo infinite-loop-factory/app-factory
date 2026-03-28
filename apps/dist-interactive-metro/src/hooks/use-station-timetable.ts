@@ -5,6 +5,10 @@
  * Looks up the station's KRIC identifiers from the synced code map,
  * fetches the full day's timetable, then returns only the next N
  * departures from the current time.
+ *
+ * If the KRIC code map has not been loaded yet (sync in progress), the hook
+ * retries every 2 s (up to 8 times ≈ 16 s) so it self-heals once sync
+ * completes without requiring the caller to re-mount.
  */
 
 import type { StationTimetableItem } from "@/lib/kric-api";
@@ -17,24 +21,10 @@ import {
   nowInMinutes,
   parseApiTime,
 } from "@/lib/kric-api";
+import { APP_LINE_TO_KRIC } from "@/lib/line-codes";
 
-/** KRIC line code for a given app line name */
-const APP_LINE_TO_KRIC: Record<string, string> = {
-  "1호선": "1",
-  "2호선": "2",
-  "3호선": "3",
-  "4호선": "4",
-  "5호선": "5",
-  "6호선": "6",
-  "7호선": "7",
-  "8호선": "8",
-  "9호선": "9",
-  공항철도: "A1",
-  경의중앙선: "K1",
-  경춘선: "K4",
-  수인분당선: "K2",
-  신분당선: "D1",
-};
+const MAX_RETRIES = 8;
+const RETRY_DELAY_MS = 2000;
 
 export interface UpcomingDeparture {
   /** Departure time as "HH:MM" */
@@ -66,6 +56,7 @@ export function useStationTimetable(
     loading: true,
     error: null,
   });
+  const [retryCount, setRetryCount] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
@@ -78,7 +69,11 @@ export function useStationTimetable(
 
     const ref = getKricRef(stationName, kricLnCd);
     if (!ref) {
-      // Code map not yet synced — not an error, just not ready
+      // Code map not yet synced — retry until available or max retries reached
+      if (retryCount < MAX_RETRIES) {
+        const t = setTimeout(() => setRetryCount((c) => c + 1), RETRY_DELAY_MS);
+        return () => clearTimeout(t);
+      }
       setState({ departures: [], loading: false, error: null });
       return;
     }
@@ -125,7 +120,7 @@ export function useStationTimetable(
     return () => {
       cancelled = true;
     };
-  }, [stationName, lineName, limit]);
+  }, [stationName, lineName, limit, retryCount]);
 
   return state;
 }

@@ -13,10 +13,14 @@ import { stations as staticStations } from "./stations";
 let _dynamic: Station[] = [];
 let _merged: Station[] = staticStations;
 
-/** Replace the dynamic station set and rebuild the merged array. */
+/** Replace the dynamic station set and rebuild the merged array.
+ *  Deduplicates against the static bundle by (name, line) so that lines
+ *  which are both in the static bundle and fetched dynamically don't appear twice.
+ */
 export function setDynamicStations(stations: Station[]): void {
-  _dynamic = stations;
-  _merged = [...staticStations, ...stations];
+  const staticKeys = new Set(staticStations.map((s) => `${s.name}|${s.line}`));
+  _dynamic = stations.filter((s) => !staticKeys.has(`${s.name}|${s.line}`));
+  _merged = [...staticStations, ..._dynamic];
 }
 
 /** Return all stations (static + dynamic) as a stable reference. */

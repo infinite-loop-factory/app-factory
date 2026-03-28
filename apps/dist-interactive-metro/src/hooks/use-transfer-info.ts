@@ -1,29 +1,18 @@
 /**
  * Hook that fetches transfer walking distance between two lines at a station
  * using the KRIC convenientInfo/stationTransferInfo endpoint.
+ *
+ * Retries every 2 s (up to 8 times) when the KRIC code map has not yet been
+ * loaded, so the hook self-heals once the initial sync completes.
  */
 
 import { useEffect, useState } from "react";
 import { getKricRef } from "@/data/kric-station-sync";
 import { fetchStationTransferInfo } from "@/lib/kric-api";
+import { APP_LINE_TO_KRIC } from "@/lib/line-codes";
 
-/** KRIC line code for a given app line name */
-const APP_LINE_TO_KRIC: Record<string, string> = {
-  "1호선": "1",
-  "2호선": "2",
-  "3호선": "3",
-  "4호선": "4",
-  "5호선": "5",
-  "6호선": "6",
-  "7호선": "7",
-  "8호선": "8",
-  "9호선": "9",
-  공항철도: "A1",
-  경의중앙선: "K1",
-  경춘선: "K4",
-  수인분당선: "K2",
-  신분당선: "D1",
-};
+const MAX_RETRIES = 8;
+const RETRY_DELAY_MS = 2000;
 
 export interface TransferInfo {
   /** Walking distance in metres */
@@ -57,6 +46,7 @@ export function useTransferInfo(
     loading: true,
     error: null,
   });
+  const [retryCount, setRetryCount] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
@@ -71,6 +61,10 @@ export function useTransferInfo(
 
     const ref = getKricRef(stationName, fromLnCd);
     if (!ref) {
+      if (retryCount < MAX_RETRIES) {
+        const t = setTimeout(() => setRetryCount((c) => c + 1), RETRY_DELAY_MS);
+        return () => clearTimeout(t);
+      }
       setState({ info: null, loading: false, error: null });
       return;
     }
@@ -125,7 +119,7 @@ export function useTransferInfo(
     return () => {
       cancelled = true;
     };
-  }, [stationName, fromLineName, toLineName]);
+  }, [stationName, fromLineName, toLineName, retryCount]);
 
   return state;
 }
