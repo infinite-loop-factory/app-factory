@@ -7,6 +7,7 @@ import {
   Share2,
 } from "lucide-react-native";
 import { useEffect, useState } from "react";
+import { useDeleteCourse } from "@/api/reactQuery/course/useDeleteCourse";
 import { useDeleteLikedCourse } from "@/api/reactQuery/like/useDeleteLikedCourse";
 import { useFindLikedCourse } from "@/api/reactQuery/like/useFindLikedCourse";
 import { useInsertLikedCourse } from "@/api/reactQuery/like/useInsertLikedCourse";
@@ -21,9 +22,13 @@ import { Icon } from "../ui/icon";
 
 interface DetailHeaderBarProps {
   courseId: number;
+  courseUserId?: string;
 }
 
-export default function DetailHeaderBar({ courseId }: DetailHeaderBarProps) {
+export default function DetailHeaderBar({
+  courseId,
+  courseUserId,
+}: DetailHeaderBarProps) {
   const userInfo = useAtomValue(userAtom);
 
   const error500Color = useThemeColor({}, "--color-error-500");
@@ -37,6 +42,9 @@ export default function DetailHeaderBar({ courseId }: DetailHeaderBarProps) {
 
   const { mutateAsync: insertLikeCourse } = useInsertLikedCourse();
   const { mutateAsync: deleteLikeCourse } = useDeleteLikedCourse();
+  const { mutateAsync: deleteCourse } = useDeleteCourse();
+
+  const isOwner = !!userInfo.id && userInfo.id === courseUserId;
 
   const [showOptionsActionsheet, setShowOptionsActionsheet] = useState(false);
   const [showBlockCourseActionsheet, setShowBlockCourseActionsheet] =
@@ -46,6 +54,16 @@ export default function DetailHeaderBar({ courseId }: DetailHeaderBarProps) {
   useEffect(() => {
     setIsLikeCourse(!!id);
   }, [id]);
+
+  const handleDelete = async () => {
+    try {
+      await deleteCourse({ courseId, userId: userInfo.id });
+      getGlobalHandleToast("산책 코스가 삭제되었습니다.");
+      router.back();
+    } catch {
+      getGlobalHandleToast("삭제에 실패했습니다.");
+    }
+  };
 
   const handleLike = async () => {
     try {
@@ -112,11 +130,17 @@ export default function DetailHeaderBar({ courseId }: DetailHeaderBarProps) {
       {/* NOTE: MODAL ==> */}
       <OptionsActionsheet
         onPressOption={() => {
-          setShowOptionsActionsheet(false);
-          setShowBlockCourseActionsheet(true);
+          if (isOwner) {
+            setShowOptionsActionsheet(false);
+            handleDelete();
+          } else {
+            setShowOptionsActionsheet(false);
+            setShowBlockCourseActionsheet(true);
+          }
         }}
         setShowActionsheet={setShowOptionsActionsheet}
         showActionsheet={showOptionsActionsheet}
+        type={isOwner ? "DELETE" : "BLOCK"}
       />
       <BlockCourseActionsheet
         courseId={courseId}
