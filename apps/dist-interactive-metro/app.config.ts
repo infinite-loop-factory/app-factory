@@ -49,6 +49,11 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   experiments: {
     tsconfigPaths: true,
     typedRoutes: true,
-    baseUrl: "/app-factory/dist-interactive-metro",
+    // baseUrl is only needed for production web deployment (e.g. GitHub Pages).
+    // In dev the Metro server runs at localhost root, so this must be omitted to
+    // prevent Metro's HMR server from crashing on empty-path WebSocket URLs.
+    ...(process.env.APP_ENV === "production"
+      ? { baseUrl: "/app-factory/dist-interactive-metro" }
+      : {}),
   },
 });

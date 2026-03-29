@@ -71,6 +71,33 @@ config.resolver.resolveRequest = (context, moduleName, platform) => {
   return context.resolveRequest(context, moduleName, platform);
 };
 
+// Prevent Metro HMR server from crashing when the Expo web client registers
+// from the root URL (http://localhost:8081/?platform=web → empty path "/" which
+// jsc-safe-url rejects). Rewrite to the app's bundle path relative to the
+// monorepo root (the Metro server root), so HMR can parse it correctly.
+const workspaceRoot = path.resolve(__dirname, "../..");
+const appRelPath = path.relative(workspaceRoot, __dirname);
+const prevRewriteRequestUrl = config.server?.rewriteRequestUrl;
+config.server = {
+  ...config.server,
+  rewriteRequestUrl(url) {
+    let rewritten = url;
+    try {
+      const parsed = new URL(url);
+      if (
+        parsed.pathname === "/" &&
+        parsed.searchParams.get("platform") === "web"
+      ) {
+        parsed.pathname = `/${appRelPath}/index.bundle`;
+        rewritten = parsed.toString();
+      }
+    } catch {
+      // URL may not be parseable — leave rewritten as the original value
+    }
+    return prevRewriteRequestUrl ? prevRewriteRequestUrl(rewritten) : rewritten;
+  },
+};
+
 module.exports = config;
 
 /**
