@@ -152,7 +152,7 @@ export function useRestaurantRecommendation() {
     async (
       location: Location | null,
       refreshLocation: RefreshLocation,
-      radius: number = APP_CONFIG.DEFAULT_SEARCH_RADIUS,
+      radius = APP_CONFIG.DEFAULT_SEARCH_RADIUS,
     ) => {
       if (isRecommending || isSelectingRestaurant) {
         return;
@@ -177,6 +177,7 @@ export function useRestaurantRecommendation() {
             ? radius
             : APP_CONFIG.DEFAULT_SEARCH_RADIUS,
         );
+
         if (restaurants.length === 0) {
           setRecommendationError("주변에서 추천할 음식점을 찾지 못했습니다.");
           setRecommendedRestaurant(null);
