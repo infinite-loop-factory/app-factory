@@ -1,6 +1,7 @@
 import type { CourseActionType } from "@/types/option";
 
 import { Trash2 } from "lucide-react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import {
   Actionsheet,
   ActionsheetBackdrop,
@@ -25,6 +26,8 @@ export default function OptionsActionsheet({
   setShowActionsheet,
   onPressOption,
 }: OptionsActionsheetProps) {
+  const insets = useSafeAreaInsets();
+
   const handleClose = () => {
     setShowActionsheet(false);
   };
@@ -32,7 +35,7 @@ export default function OptionsActionsheet({
   return (
     <Actionsheet isOpen={showActionsheet} onClose={handleClose}>
       <ActionsheetBackdrop />
-      <ActionsheetContent>
+      <ActionsheetContent style={{ paddingBottom: insets.bottom }}>
         <ActionsheetDragIndicatorWrapper className="pb-5">
           <ActionsheetDragIndicator />
         </ActionsheetDragIndicatorWrapper>
