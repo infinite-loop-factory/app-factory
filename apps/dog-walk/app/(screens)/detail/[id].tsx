@@ -102,7 +102,7 @@ export default function DetailScreen() {
 
   return (
     <CustomSafeAreaView>
-      <DetailHeaderBar courseId={Number(id)} />
+      <DetailHeaderBar courseId={Number(id)} courseUserId={data.user_id} />
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         <VStack className="flex-1 px-4">
           <Image
