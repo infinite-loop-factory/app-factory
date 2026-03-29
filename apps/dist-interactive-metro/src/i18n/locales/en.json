@@ -1,0 +1,166 @@
+{
+  "welcome": "Welcome",
+  "home": "Home",
+  "tabs": {
+    "goNow": "Go Now",
+    "routeGuide": "Route",
+    "notifications": "Notifications",
+    "favorites": "Favorites",
+    "settings": "Settings"
+  },
+  "homeScreen": {
+    "title": "Route Guide",
+    "subtitle": "Select departure and arrival stations to find the best route",
+    "departure": "Departure",
+    "departurePlaceholder": "Select departure station",
+    "arrival": "Arrival",
+    "arrivalPlaceholder": "Select arrival station",
+    "viaPlaceholder": "Select via station",
+    "addVia": "Add via",
+    "search": "Search route",
+    "searchHint": "Select departure and arrival stations to search for routes",
+    "searchAndExtras": "Search & more"
+  },
+  "stationSelect": {
+    "departureTitle": "Select departure",
+    "arrivalTitle": "Select arrival",
+    "viaTitle": "Select via station",
+    "departureShort": "From",
+    "arrivalShort": "To",
+    "viaShort": "Via",
+    "back": "Back",
+    "searchPlaceholder": "Enter station name",
+    "allLines": "All",
+    "transfer": "Transfer",
+    "searchResults": "Results ({{count}})",
+    "recentStations": "Recent stations",
+    "noResults": "No results found",
+    "searchHint": "Search for a station by name"
+  },
+  "via": {
+    "optional": "optional",
+    "count": "{{count}} via station(s)",
+    "countMax": "{{count}} via station(s) (max)",
+    "max": "Max {{max}}",
+    "clearAll": "Clear via"
+  },
+  "routeResult": {
+    "title": "Route Result",
+    "loading": "Loading route information...",
+    "goBack": "Back to route guide",
+    "time": "Duration",
+    "minutes": "min",
+    "stations": "Stations",
+    "stationUnit": "",
+    "transfers": "Transfers",
+    "transferUnit": "",
+    "addFavorite": "Add to favorites",
+    "removeFavorite": "Remove favorite",
+    "detailRoute": "Detailed Route",
+    "transferTo": "transfer",
+    "direction": "direction",
+    "newSearch": "New route search"
+  },
+  "favorites": {
+    "description": "Quickly search your frequent routes",
+    "emptyTitle": "No favorites yet",
+    "emptyDescription": "Add frequently used routes to favorites for quick access",
+    "searchRoutes": "Search routes",
+    "searchAgain": "Search again",
+    "lastSearched": "Last searched",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "daysAgo": "{{count}} days ago"
+  },
+  "notifications": {
+    "description": "Upcoming trains for your favorite routes",
+    "emptyTitle": "No favorites yet",
+    "emptyDescription": "Add routes to favorites and see upcoming trains here",
+    "comingSoonTitle": "Notifications coming soon",
+    "comingSoonDescription": "Real-time transit info, favorite route delay alerts and more will be available in future updates.",
+    "addFavorites": "Add a favorite route",
+    "nextTrains": "Next trains",
+    "from": "From"
+  },
+  "timetable": {
+    "title": "Next trains",
+    "noData": "Could not load timetable",
+    "syncRequired": "Sync station data to see departure times",
+    "departure": "Departs",
+    "direction": "direction",
+    "loading": "Loading timetable…",
+    "noUpcoming": "No more trains today"
+  },
+  "settings": {
+    "description": "Customize and personalize your app",
+    "notificationSettings": "Notification settings",
+    "notificationComingSoon": "Coming soon",
+    "comingSoon": "Available in future updates",
+    "defaultHome": "Default home screen",
+    "defaultHomeDescription": "Choose which screen appears when you open the app",
+    "appInfo": "App info",
+    "version": "Version",
+    "madeBy": "Made by",
+    "dataManagement": "Data management",
+    "clearRecentSearch": "Clear recent search history",
+    "clearAllFavorites": "Delete all favorites",
+    "confirmClearRecent": "Clear recent search history?",
+    "confirmClearFavorites": "Delete all favorites?",
+    "cancel": "Cancel",
+    "confirm": "Delete"
+  },
+  "notificationSettings": {
+    "placeholder": "Notification settings screen. (Not yet implemented)"
+  },
+  "notFound": {
+    "title": "Screen not found",
+    "goHome": "Go to home screen"
+  },
+  "goNow": {
+    "title": "Go Now",
+    "subtitle": "Just pick your destination — we'll recommend the best routes for you",
+    "locating": "Finding your location...",
+    "locationReady": "{{count}} nearby stations detected",
+    "refresh": "Refresh",
+    "destinationTitle": "Where are you going?",
+    "destination": "Destination",
+    "destinationPlaceholder": "Select your destination",
+    "selectDestinationHint": "Select a destination to see recommended routes",
+    "calculatingRoutes": "Calculating optimal routes...",
+    "recommendedRoutes": "Recommended Routes",
+    "totalMin": "{{min}} min total",
+    "walkMin": "{{min}} min walk",
+    "subwayMin": "{{min}} min subway",
+    "transferCount": "{{count}} transfer(s)",
+    "permissionDenied": "Location permission required",
+    "permissionDeniedHint": "Allow location access to find nearby stations",
+    "locationError": "Unable to get location",
+    "locationErrorHint": "An error occurred while fetching your location",
+    "retry": "Retry"
+  },
+  "departureSelect": {
+    "title": "Select Departure",
+    "subtitle": "Suggesting nearby stations based on your location",
+    "locating": "Finding your location...",
+    "nearbyStations": "Nearby Stations",
+    "closest": "Closest",
+    "walkingTime": "{{minutes}} min walk",
+    "refreshLocation": "Refresh location",
+    "orSearchManually": "or search manually",
+    "searchAllStations": "Search all stations",
+    "permissionDeniedTitle": "Location permission required",
+    "permissionDeniedDesc": "Allow location access to get nearby station recommendations. You can also search manually below.",
+    "errorTitle": "Unable to get location",
+    "locationError": "An error occurred while fetching your location. Please try again.",
+    "retry": "Retry"
+  },
+  "common": {
+    "back": "Back"
+  },
+  "transferInfo": {
+    "walkingDistance": "{{distance}}m walk",
+    "walkingMinutes": "~{{minutes}} min",
+    "platformFrom": "From: {{platform}}",
+    "platformTo": "To: {{platform}}"
+  }
+}
