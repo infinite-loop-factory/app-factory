@@ -2,6 +2,7 @@ import type { KakaoRestaurant } from "@/services/kakao-api";
 import type { Location } from "@/types";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { APP_CONFIG } from "@/constants/config";
 import { searchNearbyRestaurants } from "@/services/kakao-api";
 
 const ROULETTE_INTERVAL_MS = 70;
@@ -148,7 +149,11 @@ export function useRestaurantRecommendation() {
   );
 
   const recommendRestaurant = useCallback(
-    async (location: Location | null, refreshLocation: RefreshLocation) => {
+    async (
+      location: Location | null,
+      refreshLocation: RefreshLocation,
+      radius = APP_CONFIG.DEFAULT_SEARCH_RADIUS,
+    ) => {
       if (isRecommending || isSelectingRestaurant) {
         return;
       }
@@ -166,7 +171,13 @@ export function useRestaurantRecommendation() {
         const restaurants = await searchNearbyRestaurants(
           currentLocation.latitude,
           currentLocation.longitude,
+          APP_CONFIG.SEARCH_RADIUS_OPTIONS.includes(
+            radius as (typeof APP_CONFIG.SEARCH_RADIUS_OPTIONS)[number],
+          )
+            ? radius
+            : APP_CONFIG.DEFAULT_SEARCH_RADIUS,
         );
+
         if (restaurants.length === 0) {
           setRecommendationError("주변에서 추천할 음식점을 찾지 못했습니다.");
           setRecommendedRestaurant(null);

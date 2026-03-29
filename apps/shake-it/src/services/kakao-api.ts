@@ -141,6 +141,7 @@ export async function searchNearbyRestaurants(
       category_group_code: "FD6",
       x: longitude.toString(),
       y: latitude.toString(),
+      page: String(Math.floor(Math.random() * 5) + 1),
       radius: radius.toString(),
       sort: "distance",
       size: "15",
