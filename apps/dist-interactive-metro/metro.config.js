@@ -22,18 +22,32 @@ config.resolver.alias = {
   "@": path.resolve(__dirname, "src"),
 };
 
-// Prevent duplicate react-native-svg registration in monorepo
-// Force ALL imports of react-native-svg to resolve to this project's version
-const svgPath = path.resolve(__dirname, "../../node_modules/react-native-svg");
+// Prevent duplicate native module registration in monorepo.
+// Several expo packages (expo-dev-client, expo-keep-awake, etc.) ship their
+// own nested copies of these packages. Force every import to resolve to the
+// single root-level copy so the native view is only registered once.
+const rootModules = path.resolve(__dirname, "../../node_modules");
+const deduped = [
+  "react-native-safe-area-context",
+  "react-native-screens",
+  "react-native-gesture-handler",
+  "react-native-svg",
+  "react-native-reanimated",
+];
 config.resolver.extraNodeModules = {
   ...config.resolver.extraNodeModules,
-  "react-native-svg": svgPath,
+  ...Object.fromEntries(
+    deduped.map((pkg) => [pkg, path.join(rootModules, pkg)]),
+  ),
 };
 config.resolver.blockList = [
   ...(Array.isArray(config.resolver.blockList)
     ? config.resolver.blockList
     : []),
-  /node_modules\/.*\/node_modules\/react-native-svg\/.*/,
+  // Block any nested copy of the deduped packages
+  new RegExp(
+    `node_modules/.*?/node_modules/(${deduped.map((p) => p.replace(/-/g, "\\-")).join("|")})/.*`,
+  ),
 ];
 
 // dom-helpers@6 uses package exports (./*  → cjs/*.js) but Metro has
