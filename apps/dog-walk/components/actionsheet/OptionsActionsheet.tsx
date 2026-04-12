@@ -1,6 +1,6 @@
 import type { CourseActionType } from "@/types/option";
 
-import { Trash2 } from "lucide-react-native";
+import { Pencil, Trash2 } from "lucide-react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import {
   Actionsheet,
@@ -18,6 +18,7 @@ interface OptionsActionsheetProps {
   showActionsheet: boolean;
   setShowActionsheet: React.Dispatch<React.SetStateAction<boolean>>;
   onPressOption: () => void;
+  onPressEdit?: () => void;
 }
 
 export default function OptionsActionsheet({
@@ -25,6 +26,7 @@ export default function OptionsActionsheet({
   showActionsheet,
   setShowActionsheet,
   onPressOption,
+  onPressEdit,
 }: OptionsActionsheetProps) {
   const insets = useSafeAreaInsets();
 
@@ -39,13 +41,14 @@ export default function OptionsActionsheet({
         <ActionsheetDragIndicatorWrapper className="pb-5">
           <ActionsheetDragIndicator />
         </ActionsheetDragIndicatorWrapper>
-        {type === "BLOCK" ? (
+        {type === "BLOCK" && (
           <ActionsheetItem onPress={onPressOption}>
             <ActionsheetItemText className="font-medium" size="md">
               이 산책 코스 보지 않기
             </ActionsheetItemText>
           </ActionsheetItem>
-        ) : (
+        )}
+        {type === "DELETE" && (
           <ActionsheetItem onPress={onPressOption}>
             <Icon as={Trash2} className="h-4 w-4 text-error-500" />
             <ActionsheetItemText
@@ -55,6 +58,25 @@ export default function OptionsActionsheet({
               삭제하기
             </ActionsheetItemText>
           </ActionsheetItem>
+        )}
+        {type === "OWNER" && (
+          <>
+            <ActionsheetItem onPress={onPressEdit}>
+              <Icon as={Pencil} className="h-4 w-4 text-slate-700" />
+              <ActionsheetItemText className="font-medium" size="md">
+                수정하기
+              </ActionsheetItemText>
+            </ActionsheetItem>
+            <ActionsheetItem onPress={onPressOption}>
+              <Icon as={Trash2} className="h-4 w-4 text-error-500" />
+              <ActionsheetItemText
+                className="font-medium text-error-500"
+                size="md"
+              >
+                삭제하기
+              </ActionsheetItemText>
+            </ActionsheetItem>
+          </>
         )}
       </ActionsheetContent>
     </Actionsheet>
