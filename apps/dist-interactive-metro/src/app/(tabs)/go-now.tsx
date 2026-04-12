@@ -1,4 +1,4 @@
-import type { NearbyStation } from "@/types/station";
+import type { NearbyStation, Station } from "@/types/station";
 import type { RouteRecommendation } from "@/utils/route-calculator";
 
 import * as Location from "expo-location";
@@ -26,7 +26,7 @@ import { ElevatedCard } from "@/components/ui/elevated-card";
 import { GradientBackground } from "@/components/ui/gradient-background";
 import { LineBadge } from "@/components/ui/line-badge";
 import { useRouteSearch } from "@/context/route-search-context";
-import { getAllStations } from "@/data/station-store";
+import { useStations } from "@/data/station-store";
 import i18n from "@/i18n";
 import { findNearestStations, formatDistance } from "@/utils/geo";
 import { recommendRoutes } from "@/utils/route-calculator";
@@ -41,7 +41,9 @@ type LocationState =
 
 const NEARBY_COUNT = 4;
 
-async function resolveNearbyStations(): Promise<LocationState> {
+async function resolveNearbyStations(
+  stations: Station[],
+): Promise<LocationState> {
   const { status } = await Location.requestForegroundPermissionsAsync();
   if (status !== "granted") return { status: "denied" };
 
@@ -51,7 +53,7 @@ async function resolveNearbyStations(): Promise<LocationState> {
   const nearby = findNearestStations(
     location.coords.latitude,
     location.coords.longitude,
-    getAllStations(),
+    stations,
     NEARBY_COUNT,
   );
   return { status: "ready", nearby };
@@ -63,15 +65,18 @@ export default function GoNowTab() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { endStation, setStartStation } = useRouteSearch();
+  const stations = useStations();
 
   const [locationState, setLocationState] = useState<LocationState>({
     status: "loading",
   });
 
-  // Fetch GPS on mount
+  // Fetch GPS on mount or when stations change (initial sync)
   useEffect(() => {
     let cancelled = false;
-    resolveNearbyStations()
+    if (stations.length === 0) return;
+
+    resolveNearbyStations(stations)
       .then((s) => {
         if (!cancelled) setLocationState(s);
       })
@@ -81,7 +86,7 @@ export default function GoNowTab() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [stations]);
 
   // Compute route recommendations whenever nearby + destination are ready
   const recommendations: RouteRecommendation[] = useMemo(() => {
@@ -90,17 +95,18 @@ export default function GoNowTab() {
   }, [locationState, endStation]);
 
   const handleRefresh = useCallback(() => {
+    if (stations.length === 0) return;
     setLocationState({ status: "loading" });
-    resolveNearbyStations()
+    resolveNearbyStations(stations)
       .then(setLocationState)
       .catch(() => setLocationState({ status: "error" }));
-  }, []);
+  }, [stations]);
 
   const handleSelectDestination = useCallback(() => {
     router.push({
-      pathname: "/station-select" as const,
+      pathname: "/station-select",
       params: { type: "end" },
-    } as never);
+    });
   }, [router]);
 
   const handleTapRoute = useCallback(

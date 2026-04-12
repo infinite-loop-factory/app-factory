@@ -65,7 +65,10 @@ export default function SettingsTab() {
   }, []);
 
   return (
-    <View className="flex-1 bg-gray-50" style={{ paddingTop: insets.top }}>
+    <View
+      className="flex-1 bg-gray-50 dark:bg-gray-950"
+      style={{ paddingTop: insets.top }}
+    >
       <ScrollView
         className="flex-1"
         contentContainerStyle={{ paddingHorizontal: 16, paddingVertical: 24 }}
@@ -73,12 +76,16 @@ export default function SettingsTab() {
         {/* Header */}
         <View className="mb-6">
           <View className="mb-2 flex-row items-center gap-3">
-            <SettingsIcon color="#374151" size={32} />
-            <Text className="font-medium text-2xl text-gray-900">
+            <SettingsIcon
+              className="dark:text-gray-400"
+              color="#374151"
+              size={32}
+            />
+            <Text className="font-medium text-2xl text-gray-900 dark:text-gray-100">
               {i18n.t("tabs.settings")}
             </Text>
           </View>
-          <Text className="text-base text-gray-600">
+          <Text className="text-base text-gray-600 dark:text-gray-400">
             {i18n.t("settings.description")}
           </Text>
         </View>
@@ -94,11 +101,13 @@ export default function SettingsTab() {
               <Pressable
                 accessibilityRole="radio"
                 accessibilityState={{ checked: defaultTab === opt.id }}
-                className="flex-row items-center justify-between border-gray-100 border-b px-4 py-3 active:bg-gray-50"
+                className="flex-row items-center justify-between border-gray-100 border-b px-4 py-3 active:bg-gray-50 dark:border-gray-800 dark:active:bg-gray-800"
                 key={opt.id}
                 onPress={() => handleDefaultTabChange(opt.id)}
               >
-                <Text className="text-base text-gray-900">{opt.label()}</Text>
+                <Text className="text-base text-gray-900 dark:text-gray-100">
+                  {opt.label()}
+                </Text>
                 {defaultTab === opt.id && (
                   <View className="h-2 w-2 rounded-full bg-blue-600" />
                 )}
@@ -113,7 +122,7 @@ export default function SettingsTab() {
             title={i18n.t("settings.notificationSettings")}
           >
             <View className="items-center p-4">
-              <Text className="text-gray-400 text-sm">
+              <Text className="text-gray-400 text-sm dark:text-gray-500">
                 {i18n.t("settings.comingSoon")}
               </Text>
             </View>
@@ -124,17 +133,19 @@ export default function SettingsTab() {
             icon={<Info color="#6B7280" size={20} />}
             title={i18n.t("settings.appInfo")}
           >
-            <View className="flex-row items-center justify-between border-gray-100 border-b px-4 py-3">
-              <Text className="text-base text-gray-600">
+            <View className="flex-row items-center justify-between border-gray-100 border-b px-4 py-3 dark:border-gray-800">
+              <Text className="text-base text-gray-600 dark:text-gray-400">
                 {i18n.t("settings.version")}
               </Text>
-              <Text className="text-gray-500 text-sm">0.1.0</Text>
+              <Text className="text-gray-500 text-sm dark:text-gray-500">
+                0.1.0
+              </Text>
             </View>
             <View className="flex-row items-center justify-between px-4 py-3">
-              <Text className="text-base text-gray-600">
+              <Text className="text-base text-gray-600 dark:text-gray-400">
                 {i18n.t("settings.madeBy")}
               </Text>
-              <Text className="text-gray-500 text-sm">
+              <Text className="text-gray-500 text-sm dark:text-gray-500">
                 dist-interactive-metro
               </Text>
             </View>
@@ -143,16 +154,16 @@ export default function SettingsTab() {
           {/* Data management */}
           <SettingsCard title={i18n.t("settings.dataManagement")}>
             <Pressable
-              className="flex-row items-center justify-between border-gray-100 border-b px-4 py-3 active:bg-gray-50"
+              className="flex-row items-center justify-between border-gray-100 border-b px-4 py-3 active:bg-gray-50 dark:border-gray-800 dark:active:bg-gray-800"
               onPress={handleClearRecent}
             >
-              <Text className="text-base text-gray-900">
+              <Text className="text-base text-gray-900 dark:text-gray-100">
                 {i18n.t("settings.clearRecentSearch")}
               </Text>
               <ChevronRight color="#9CA3AF" size={20} />
             </Pressable>
             <Pressable
-              className="flex-row items-center justify-between px-4 py-3 active:bg-red-50"
+              className="flex-row items-center justify-between px-4 py-3 active:bg-red-50 dark:active:bg-red-900/20"
               onPress={handleClearFavorites}
             >
               <Text className="text-base text-red-600">
@@ -180,7 +191,7 @@ function SettingsCard({
 }) {
   return (
     <View
-      className="overflow-hidden rounded-2xl bg-white"
+      className="overflow-hidden rounded-2xl bg-white dark:bg-gray-900"
       style={{
         shadowColor: "#000",
         shadowOffset: { width: 0, height: 1 },
@@ -189,13 +200,17 @@ function SettingsCard({
         elevation: 2,
       }}
     >
-      <View className="border-gray-100 border-b p-4">
+      <View className="border-gray-100 border-b p-4 dark:border-gray-800">
         <View className="flex-row items-center gap-2">
           {icon}
-          <Text className="font-medium text-gray-900 text-lg">{title}</Text>
+          <Text className="font-medium text-gray-900 text-lg dark:text-gray-100">
+            {title}
+          </Text>
         </View>
         {description && (
-          <Text className="mt-1 text-gray-500 text-sm">{description}</Text>
+          <Text className="mt-1 text-gray-500 text-sm dark:text-gray-400">
+            {description}
+          </Text>
         )}
       </View>
       {children}

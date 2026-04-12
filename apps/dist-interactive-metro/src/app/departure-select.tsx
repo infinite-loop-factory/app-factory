@@ -1,4 +1,4 @@
-import type { NearbyStation } from "@/types/station";
+import type { NearbyStation, Station } from "@/types/station";
 
 import * as Location from "expo-location";
 import { useRouter } from "expo-router";
@@ -24,7 +24,7 @@ import { GradientBackground } from "@/components/ui/gradient-background";
 import { LineBadge } from "@/components/ui/line-badge";
 import { useRouteSearch } from "@/context/route-search-context";
 import { addRecentStation } from "@/data/recent-stations";
-import { getAllStations } from "@/data/station-store";
+import { useStations } from "@/data/station-store";
 import i18n from "@/i18n";
 import { findNearestStations, formatDistance } from "@/utils/geo";
 
@@ -39,24 +39,26 @@ async function requestLocationPermission(): Promise<boolean> {
   return status === "granted";
 }
 
-async function fetchNearbyStations(): Promise<NearbyStation[]> {
+async function fetchNearbyStations(
+  stations: Station[],
+): Promise<NearbyStation[]> {
   const location = await Location.getCurrentPositionAsync({
     accuracy: Location.Accuracy.Balanced,
   });
   return findNearestStations(
     location.coords.latitude,
     location.coords.longitude,
-    getAllStations(),
+    stations,
     3,
   );
 }
 
 /** Resolve GPS permission + nearby stations into a LocationState. */
-async function resolveLocation(): Promise<LocationState> {
+async function resolveLocation(stations: Station[]): Promise<LocationState> {
   const granted = await requestLocationPermission();
   if (!granted) return { status: "denied" };
 
-  const nearby = await fetchNearbyStations();
+  const nearby = await fetchNearbyStations(stations);
   return { status: "granted", nearby };
 }
 
@@ -64,14 +66,17 @@ export default function DepartureSelectScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { setStartStation } = useRouteSearch();
+  const stations = useStations();
+
   const [locationState, setLocationState] = useState<LocationState>({
     status: "loading",
   });
 
   useEffect(() => {
     let cancelled = false;
+    if (stations.length === 0) return;
 
-    resolveLocation()
+    resolveLocation(stations)
       .then((state) => {
         if (!cancelled) setLocationState(state);
       })
@@ -87,7 +92,7 @@ export default function DepartureSelectScreen() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [stations]);
 
   const handleSelectNearby = useCallback(
     async (item: NearbyStation) => {
@@ -100,14 +105,15 @@ export default function DepartureSelectScreen() {
 
   const handleGoToSearch = useCallback(() => {
     router.replace({
-      pathname: "/station-select" as const,
+      pathname: "/station-select",
       params: { type: "start" },
-    } as never);
+    });
   }, [router]);
 
   const handleRefreshLocation = useCallback(() => {
+    if (stations.length === 0) return;
     setLocationState({ status: "loading" });
-    fetchNearbyStations()
+    fetchNearbyStations(stations)
       .then((nearby) => {
         setLocationState({ status: "granted", nearby });
       })
@@ -117,7 +123,7 @@ export default function DepartureSelectScreen() {
           message: i18n.t("departureSelect.locationError"),
         });
       });
-  }, []);
+  }, [stations]);
 
   return (
     <GradientBackground>
