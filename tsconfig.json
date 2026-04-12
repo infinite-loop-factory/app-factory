@@ -3,9 +3,7 @@
   "references": [
     { "path": "./apps/app-cafe" },
     { "path": "./apps/reaction-speed-test" },
-    { "path": "./apps/delivery" },
     { "path": "./apps/country-tracker" },
-    { "path": "./apps/playlist" },
     { "path": "./apps/dog-walk" }
   ]
 }

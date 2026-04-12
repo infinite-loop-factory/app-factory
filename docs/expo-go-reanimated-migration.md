@@ -306,7 +306,6 @@ cd apps/hungry && pnpm start
 ### 다른 앱들의 상태
 모노레포 내 다른 앱들도 동일한 템플릿을 사용하므로 같은 문제가 발생할 수 있습니다:
 - `apps/dog-walk`
-- `apps/delivery`
 - `apps/question-card`
 - `apps/reaction-speed-test`
 - 기타...
