@@ -2,7 +2,7 @@ import type { FavoriteRoute } from "@/types/station";
 
 import { useRouter } from "expo-router";
 import { Bell, Clock, Navigation, RefreshCw } from "lucide-react-native";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,

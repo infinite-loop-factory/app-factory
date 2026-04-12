@@ -72,12 +72,11 @@ function addLineEdges(graph: EdgeMap, stations: Station[]): void {
     // - Dynamic stations from itemsToStation() are sorted by stinConsOrdr
     //   before being passed to setDynamicStations(), preserving insertion order.
     for (let i = 0; i < lineStations.length - 1; i++) {
-      addBidirectional(
-        graph,
-        lineStations[i].id,
-        lineStations[i + 1].id,
-        false,
-      );
+      const s1 = lineStations[i];
+      const s2 = lineStations[i + 1];
+      if (s1 && s2) {
+        addBidirectional(graph, s1.id, s2.id, false);
+      }
     }
   }
 }
@@ -93,7 +92,11 @@ function addTransferEdges(graph: EdgeMap, stations: Station[]): void {
     if (group.length < 2) continue;
     for (let i = 0; i < group.length; i++) {
       for (let j = i + 1; j < group.length; j++) {
-        addBidirectional(graph, group[i].id, group[j].id, true);
+        const s1 = group[i];
+        const s2 = group[j];
+        if (s1 && s2) {
+          addBidirectional(graph, s1.id, s2.id, true);
+        }
       }
     }
   }
@@ -176,9 +179,9 @@ function dijkstra(
   });
   bestCost.set(startId, 0);
   while (!queue.isEmpty()) {
-    // dequeue() returns T | null; isEmpty() guard above ensures non-null
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const curr = queue.dequeue()!;
+    const curr = queue.dequeue();
+    if (!curr) continue;
+
     if (curr.id === endId) {
       return {
         path: curr.path,
@@ -245,7 +248,9 @@ function buildSegments(
   const segments: RouteSegment[] = [];
   const lastIdx = path.length - 1;
   for (let i = 0; i <= lastIdx; i++) {
-    const station = stationMap.get(path[i]);
+    const id = path[i];
+    if (!id) continue;
+    const station = stationMap.get(id);
     if (!station) continue;
     const nextIsTransfer = isTransferEdge(path, i, transferEdges, "next");
     const prevWasTransfer = isTransferEdge(path, i, transferEdges, "prev");
