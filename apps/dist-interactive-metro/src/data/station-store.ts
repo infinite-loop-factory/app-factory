@@ -8,10 +8,27 @@
 
 import type { Station } from "@/types/station";
 
+import { useSyncExternalStore } from "react";
 import { stations as staticStations } from "./stations";
 
 let _dynamic: Station[] = [];
 let _merged: Station[] = staticStations;
+const listeners = new Set<() => void>();
+
+function notify(): void {
+  for (const listener of listeners) {
+    listener();
+  }
+}
+
+export function subscribe(onStoreChange: () => void): () => void {
+  listeners.add(onStoreChange);
+  return () => listeners.delete(onStoreChange);
+}
+
+export function getSnapshot(): Station[] {
+  return _merged;
+}
 
 /** Replace the dynamic station set and rebuild the merged array.
  *  Deduplicates against the static bundle by (name, line) so that lines
@@ -19,8 +36,25 @@ let _merged: Station[] = staticStations;
  */
 export function setDynamicStations(stations: Station[]): void {
   const staticKeys = new Set(staticStations.map((s) => `${s.name}|${s.line}`));
-  _dynamic = stations.filter((s) => !staticKeys.has(`${s.name}|${s.line}`));
+  const nextDynamic = stations.filter(
+    (s) => !staticKeys.has(`${s.name}|${s.line}`),
+  );
+
+  if (JSON.stringify(_dynamic) === JSON.stringify(nextDynamic)) return;
+
+  _dynamic = nextDynamic;
   _merged = [...staticStations, ..._dynamic];
+  notify();
+}
+
+/** Return all stations (static + dynamic) using useSyncExternalStore for React. */
+export function useStations(): Station[] {
+  return useSyncExternalStore(subscribe, getSnapshot);
+}
+
+/** Return only the dynamically loaded stations using useSyncExternalStore for React. */
+export function useDynamicStations(): Station[] {
+  return useSyncExternalStore(subscribe, () => _dynamic);
 }
 
 /** Return all stations (static + dynamic) as a stable reference. */

@@ -377,14 +377,14 @@ export async function syncKricStations(
   let linesFailed = 0;
   const errors: string[] = [];
 
-  for (const target of SYNC_TARGETS) {
+  const syncTasks = SYNC_TARGETS.map(async (target) => {
     try {
       const items = await fetchSubwayRouteInfo({
         mreaWideCd: target.mreaWideCd,
         lnCd: target.lnCd,
       });
 
-      if (items.length === 0) continue;
+      if (items.length === 0) return;
 
       // Build KRIC code map entries for every line (needed for timetable API)
       Object.assign(codeMap, buildCodeMapEntries(items, target.lnCd));
@@ -404,7 +404,9 @@ export async function syncKricStations(
         `${target.appLine}: ${err instanceof Error ? err.message : String(err)}`,
       );
     }
-  }
+  });
+
+  await Promise.allSettled(syncTasks);
 
   setDynamicStations(dynamicStations);
   _codeMap = codeMap;
