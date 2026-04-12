@@ -1,16 +1,19 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { Accelerometer } from "expo-sensors";
-import { memo, useCallback, useEffect, useRef } from "react";
+import { memo, useCallback, useEffect, useRef, useState } from "react";
 import { Animated, Easing, Linking, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { RestaurantResultModal } from "@/components/restaurant-result-modal";
+import { SearchRadiusModal } from "@/components/search-radius-modal";
 import { ShakeHomeFooter } from "@/components/shake-home-footer";
 import { ShakeHomeHeader } from "@/components/shake-home-header";
 import { ShakeHomeHero } from "@/components/shake-home-hero";
 import { APP_CONFIG } from "@/constants/config";
 import { useLocation } from "@/hooks/use-location";
 import { useRestaurantRecommendation } from "@/hooks/use-restaurant-recommendation";
+import { useSearchRadius } from "@/hooks/use-search-radius";
+import { formatSearchRadius } from "@/utils/search-radius";
 
 const C = {
   primary: "#3d6bf5",
@@ -277,6 +280,11 @@ export default function HomeScreen() {
   const rippleStyle = useRippleAnimation();
   const { address, location, refreshLocation } = useLocation();
   const {
+    radius,
+    isLoading: isSearchRadiusLoading,
+    setRadius,
+  } = useSearchRadius();
+  const {
     isRecommending,
     isSelectingRestaurant,
     rouletteCategories,
@@ -287,14 +295,25 @@ export default function HomeScreen() {
     recommendRestaurant,
     clearRecommendation,
   } = useRestaurantRecommendation();
+  const [isRadiusModalVisible, setIsRadiusModalVisible] = useState(false);
 
   useEffect(() => {
-    refreshLocation();
+    void refreshLocation();
   }, [refreshLocation]);
 
   const handleRecommendRestaurant = useCallback(async () => {
-    await recommendRestaurant(location, refreshLocation);
-  }, [location, recommendRestaurant, refreshLocation]);
+    await recommendRestaurant(
+      location,
+      refreshLocation,
+      isSearchRadiusLoading ? APP_CONFIG.DEFAULT_SEARCH_RADIUS : radius,
+    );
+  }, [
+    isSearchRadiusLoading,
+    location,
+    radius,
+    recommendRestaurant,
+    refreshLocation,
+  ]);
 
   // Shake gesture detection
   useEffect(() => {
@@ -331,6 +350,22 @@ export default function HomeScreen() {
     clearRecommendation();
   }, [clearRecommendation]);
 
+  const handleOpenRadiusModal = useCallback(() => {
+    setIsRadiusModalVisible(true);
+  }, []);
+
+  const handleCloseRadiusModal = useCallback(() => {
+    setIsRadiusModalVisible(false);
+  }, []);
+
+  const handleSelectRadius = useCallback(
+    async (nextRadius: number) => {
+      await setRadius(nextRadius);
+      setIsRadiusModalVisible(false);
+    },
+    [setRadius],
+  );
+
   const handleOpenMap = useCallback(async () => {
     if (!recommendedRestaurant?.placeUrl) {
       return;
@@ -346,7 +381,11 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <ShakeHomeHeader address={address} />
+      <ShakeHomeHeader
+        address={address}
+        onPressRadius={handleOpenRadiusModal}
+        radiusLabel={formatSearchRadius(radius)}
+      />
       <ShakeHomeHero
         phoneIllustration={<PhoneIllustration />}
         pulseStyle={pulseStyle}
@@ -369,6 +408,13 @@ export default function HomeScreen() {
         rouletteCategories={rouletteCategories}
         rouletteIndex={rouletteIndex}
         visible={Boolean(recommendedRestaurant)}
+      />
+      <SearchRadiusModal
+        onClose={handleCloseRadiusModal}
+        onSelect={handleSelectRadius}
+        options={APP_CONFIG.SEARCH_RADIUS_OPTIONS}
+        selectedRadius={radius}
+        visible={isRadiusModalVisible}
       />
     </SafeAreaView>
   );

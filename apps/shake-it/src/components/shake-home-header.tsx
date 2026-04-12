@@ -8,23 +8,36 @@ const C = {
 
 interface ShakeHomeHeaderProps {
   address: string;
+  radiusLabel: string;
+  onPressRadius: () => void;
 }
 
-export function ShakeHomeHeader({ address }: ShakeHomeHeaderProps) {
+export function ShakeHomeHeader({
+  address,
+  radiusLabel,
+  onPressRadius,
+}: ShakeHomeHeaderProps) {
   return (
     <View className="flex-row items-center justify-between px-5 pb-4">
-      <Pressable className="flex-row items-center gap-1.5">
-        <Text
-          className="font-bold text-xl"
-          style={{ color: C.textMain, letterSpacing: -0.5 }}
-        >
-          {address || "위치 확인 중..."}
-        </Text>
-        <MaterialIcons
-          color={C.textMain}
-          name="keyboard-arrow-down"
-          size={24}
-        />
+      <Pressable className="gap-1" onPress={onPressRadius}>
+        <View className="flex-row items-center gap-1.5">
+          <Text
+            className="font-bold text-xl"
+            style={{ color: C.textMain, letterSpacing: -0.5 }}
+          >
+            {address || "위치 확인 중..."}
+          </Text>
+          <MaterialIcons
+            color={C.textMain}
+            name="keyboard-arrow-down"
+            size={24}
+          />
+        </View>
+        <View className="self-start rounded-full bg-[#EFF6FF] px-3 py-1">
+          <Text className="font-medium text-[#3366FF] text-xs">
+            검색 반경 {radiusLabel}
+          </Text>
+        </View>
       </Pressable>
 
       <Pressable
