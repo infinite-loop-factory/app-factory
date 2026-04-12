@@ -71,15 +71,22 @@ async function get<T>(
   });
   const url = `${BASE_URL}/${path}?serviceKey=${getServiceKey()}&${qs.toString()}`;
 
-  const res = await fetch(url);
+  try {
+    const res = await fetch(url);
 
-  if (!res.ok) {
-    throw new Error(`KRIC HTTP ${res.status} for ${path}`);
+    if (!res.ok) {
+      throw new Error(`KRIC HTTP ${res.status} for ${path}`);
+    }
+
+    const text = await res.text();
+    const json = JSON.parse(text) as KricEnvelope<T>;
+    return extractItems<T>(json);
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    // Mask serviceKey if it leaked into the error message
+    const masked = msg.replace(getServiceKey(), "REDACTED");
+    throw new Error(masked);
   }
-
-  const text = await res.text();
-  const json = JSON.parse(text) as KricEnvelope<T>;
-  return extractItems<T>(json);
 }
 
 /**

@@ -5,8 +5,8 @@ import { Bell, Clock, Navigation, RefreshCw } from "lucide-react-native";
 import { useCallback, useEffect, useState } from "react";
 import {
   ActivityIndicator,
+  FlatList,
   Pressable,
-  ScrollView,
   Text,
   View,
 } from "react-native";
@@ -83,7 +83,7 @@ interface FavoriteCardProps {
 function FavoriteCard({ route, onSearch }: FavoriteCardProps) {
   return (
     <View
-      className="overflow-hidden rounded-2xl bg-white"
+      className="mb-3 overflow-hidden rounded-2xl bg-white"
       style={{
         shadowColor: "#000",
         shadowOffset: { width: 0, height: 1 },
@@ -161,52 +161,59 @@ export default function NotificationsTab() {
     [router],
   );
 
-  return (
-    <View className="flex-1 bg-gray-50" style={{ paddingTop: insets.top }}>
-      <ScrollView
-        className="flex-1"
-        contentContainerStyle={{ paddingHorizontal: 16, paddingVertical: 24 }}
-      >
-        {/* Header */}
-        <View className="mb-6 flex-row items-start justify-between">
-          <View className="flex-1">
-            <View className="mb-2 flex-row items-center gap-3">
-              <Bell color="#2563EB" size={32} />
-              <Text className="font-medium text-2xl text-gray-900">
-                {i18n.t("tabs.notifications")}
-              </Text>
-            </View>
-            <Text className="text-base text-gray-600">
-              {i18n.t("notifications.description")}
+  const renderItem = useCallback(
+    ({ item }: { item: FavoriteRoute }) => (
+      <FavoriteCard onSearch={handleSearch} route={item} />
+    ),
+    [handleSearch],
+  );
+
+  const ListHeader = useMemo(
+    () => (
+      <View className="mb-6 flex-row items-start justify-between">
+        <View className="flex-1">
+          <View className="mb-2 flex-row items-center gap-3">
+            <Bell color="#2563EB" size={32} />
+            <Text className="font-medium text-2xl text-gray-900">
+              {i18n.t("tabs.notifications")}
             </Text>
           </View>
-          <Pressable
-            className="mt-1 rounded-xl bg-white p-2.5 active:bg-gray-100"
-            onPress={loadFavorites}
-            style={{
-              shadowColor: "#000",
-              shadowOffset: { width: 0, height: 1 },
-              shadowOpacity: 0.05,
-              shadowRadius: 2,
-              elevation: 1,
-            }}
-          >
-            <RefreshCw color="#6B7280" size={18} />
-          </Pressable>
+          <Text className="text-base text-gray-600">
+            {i18n.t("notifications.description")}
+          </Text>
         </View>
+        <Pressable
+          className="mt-1 rounded-xl bg-white p-2.5 active:bg-gray-100"
+          onPress={loadFavorites}
+          style={{
+            shadowColor: "#000",
+            shadowOffset: { width: 0, height: 1 },
+            shadowOpacity: 0.05,
+            shadowRadius: 2,
+            elevation: 1,
+          }}
+        >
+          <RefreshCw color="#6B7280" size={18} />
+        </Pressable>
+      </View>
+    ),
+    [loadFavorites],
+  );
 
-        {/* Content */}
-        {routes.length > 0 ? (
-          <View className="gap-3">
-            {routes.map((route) => (
-              <FavoriteCard
-                key={route.id}
-                onSearch={handleSearch}
-                route={route}
-              />
-            ))}
-          </View>
-        ) : (
+  return (
+    <View className="flex-1 bg-gray-50" style={{ paddingTop: insets.top }}>
+      {routes.length > 0 ? (
+        <FlatList
+          contentContainerStyle={{ paddingHorizontal: 16, paddingVertical: 24 }}
+          data={routes}
+          keyExtractor={(item) => item.id}
+          ListHeaderComponent={ListHeader}
+          renderItem={renderItem}
+          showsVerticalScrollIndicator={false}
+        />
+      ) : (
+        <View className="flex-1 px-4 py-6">
+          {ListHeader}
           <EmptyState
             actionLabel={i18n.t("notifications.addFavorites")}
             description={i18n.t("notifications.emptyDescription")}
@@ -214,8 +221,8 @@ export default function NotificationsTab() {
             onAction={() => router.navigate("/(tabs)/favorites")}
             title={i18n.t("notifications.emptyTitle")}
           />
-        )}
-      </ScrollView>
+        </View>
+      )}
     </View>
   );
 }

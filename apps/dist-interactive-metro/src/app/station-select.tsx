@@ -15,9 +15,11 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { LineBadge } from "@/components/ui/line-badge";
 import { useRouteSearch } from "@/context/route-search-context";
 import { addRecentStation, getRecentStations } from "@/data/recent-stations";
-import { searchAllStations } from "@/data/station-store";
+import { useStations } from "@/data/station-store";
 import { lines } from "@/data/stations";
 import i18n from "@/i18n";
+
+const ITEM_HEIGHT = 84; // Estimated height of each station item
 
 export default function StationSelectScreen() {
   const router = useRouter();
@@ -25,6 +27,7 @@ export default function StationSelectScreen() {
   const { type } = useLocalSearchParams<{ type: "start" | "via" | "end" }>();
 
   const { setStartStation, setViaStation, setEndStation } = useRouteSearch();
+  const stations = useStations();
 
   const [keyword, setKeyword] = useState("");
   const [recentStations, setRecentStations] = useState<Station[]>([]);
@@ -35,9 +38,14 @@ export default function StationSelectScreen() {
   }, []);
 
   const searchResults = useMemo(() => {
-    if (!keyword.trim()) return [];
-    return searchAllStations(keyword);
-  }, [keyword]);
+    const term = keyword.trim().toLowerCase();
+    if (!term) return [];
+    return stations.filter(
+      (s) =>
+        s.name.toLowerCase().includes(term) ||
+        s.line.toLowerCase().includes(term),
+    );
+  }, [keyword, stations]);
 
   const filterByLine = useCallback(
     (list: Station[]) => {
@@ -89,6 +97,7 @@ export default function StationSelectScreen() {
       <Pressable
         className="border-gray-100 border-b px-6 py-4 active:bg-gray-50"
         onPress={() => handleSelectStation(item)}
+        style={{ height: ITEM_HEIGHT }}
       >
         <Text className="mb-1 text-gray-900 text-lg">{item.name}</Text>
         <View className="flex-row items-center gap-2">
@@ -106,6 +115,15 @@ export default function StationSelectScreen() {
 
   const keyExtractor = useCallback(
     (item: Station, index: number) => `${item.id}-${index}`,
+    [],
+  );
+
+  const getItemLayout = useCallback(
+    (_: unknown, index: number) => ({
+      length: ITEM_HEIGHT,
+      offset: ITEM_HEIGHT * index,
+      index,
+    }),
     [],
   );
 
@@ -234,6 +252,7 @@ export default function StationSelectScreen() {
           {displayStations.length > 0 ? (
             <FlatList
               data={displayStations}
+              getItemLayout={getItemLayout}
               keyExtractor={keyExtractor}
               renderItem={renderStationItem}
               showsVerticalScrollIndicator={false}
