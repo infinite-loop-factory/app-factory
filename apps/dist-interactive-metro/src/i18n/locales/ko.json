@@ -59,6 +59,7 @@
     "detailRoute": "상세 경로",
     "transferTo": "(으)로 환승",
     "direction": "방면",
+    "viaFailed": "직통 경로를 찾았습니다 (경유지를 거치는 경로를 찾을 수 없음)",
     "newSearch": "새로운 경로 검색"
   },
   "favorites": {

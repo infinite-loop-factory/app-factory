@@ -23,10 +23,12 @@ import { GradientBackground } from "@/components/ui/gradient-background";
 import { LineBadge } from "@/components/ui/line-badge";
 import {
   addFavoriteRoute,
+  findFavoriteRoute,
   getFavoriteRoutes,
   isFavoriteRoute,
+  removeFavoriteRoute,
 } from "@/data/favorites";
-import { getAllStations } from "@/data/station-store";
+import { useStations } from "@/data/station-store";
 import { useStationTimetable } from "@/hooks/use-station-timetable";
 import { useTransferInfo } from "@/hooks/use-transfer-info";
 import i18n from "@/i18n";
@@ -135,50 +137,76 @@ export default function RouteResultScreen() {
 
   const [routeInfo, setRouteInfo] = useState<RouteInfo | null>(null);
   const [isFavorite, setIsFavorite] = useState(false);
+  const stations = useStations();
 
   const startStation = useMemo(
-    () => getAllStations().find((s) => s.id === params.start) ?? null,
-    [params.start],
+    () => stations.find((s) => s.id === params.start) ?? null,
+    [params.start, stations],
   );
   const endStation = useMemo(
-    () => getAllStations().find((s) => s.id === params.end) ?? null,
-    [params.end],
+    () => stations.find((s) => s.id === params.end) ?? null,
+    [params.end, stations],
   );
   const viaStation = useMemo(
     () =>
-      params.via
-        ? (getAllStations().find((s) => s.id === params.via) ?? null)
-        : null,
-    [params.via],
+      params.via ? (stations.find((s) => s.id === params.via) ?? null) : null,
+    [params.via, stations],
   );
 
   useEffect(() => {
+    let cancelled = false;
+
     if (startStation && endStation) {
       const route = calculateRoute(
         startStation,
         endStation,
         viaStation ?? undefined,
       );
-      setRouteInfo(route);
+      if (!cancelled) {
+        setRouteInfo(route);
 
-      getFavoriteRoutes().then((favs) => {
-        setIsFavorite(
-          isFavoriteRoute(favs, startStation.id, endStation.id, viaStation?.id),
-        );
-      });
+        getFavoriteRoutes().then((favs) => {
+          if (!cancelled) {
+            setIsFavorite(
+              isFavoriteRoute(
+                favs,
+                startStation.id,
+                endStation.id,
+                viaStation?.id,
+              ),
+            );
+          }
+        });
+      }
     }
+
+    return () => {
+      cancelled = true;
+    };
   }, [startStation, endStation, viaStation]);
 
   const handleToggleFavorite = useCallback(async () => {
     if (!(startStation && endStation)) return;
-    if (!isFavorite) {
+
+    const favs = await getFavoriteRoutes();
+    const existing = findFavoriteRoute(
+      favs,
+      startStation.id,
+      endStation.id,
+      viaStation?.id,
+    );
+
+    if (isFavorite && existing) {
+      await removeFavoriteRoute(existing.id);
+      setIsFavorite(false);
+    } else if (!isFavorite) {
       await addFavoriteRoute({
         startStation,
         endStation,
         ...(viaStation && { viaStation }),
       });
+      setIsFavorite(true);
     }
-    setIsFavorite((prev) => !prev);
   }, [startStation, endStation, viaStation, isFavorite]);
 
   if (!(routeInfo && startStation && endStation)) {
@@ -215,7 +243,7 @@ export default function RouteResultScreen() {
           <View className="mb-6 flex-row items-center gap-3">
             <Pressable
               accessibilityLabel={i18n.t("common.back")}
-              className="h-10 w-10 items-center justify-center rounded-full bg-white active:bg-gray-50"
+              className="h-10 w-10 items-center justify-center rounded-full bg-white active:bg-gray-50 dark:bg-gray-800"
               onPress={() => router.back()}
               style={{
                 shadowColor: "#000",
@@ -227,13 +255,20 @@ export default function RouteResultScreen() {
             >
               <ArrowLeft color="#111827" size={20} />
             </Pressable>
-            <Text className="font-medium text-2xl text-gray-900">
+            <Text className="font-medium text-2xl text-gray-900 dark:text-gray-100">
               {i18n.t("routeResult.title")}
             </Text>
           </View>
 
           {/* Summary card */}
           <ElevatedCard className="mb-6">
+            {routeInfo.viaFailed && (
+              <View className="mb-4 flex-row items-center gap-2 rounded-lg bg-amber-50 p-3">
+                <Text className="text-amber-700 text-xs">
+                  ⚠ {i18n.t("routeResult.viaFailed")}
+                </Text>
+              </View>
+            )}
             {/* From → To */}
             <View className="mb-6 flex-row items-center justify-between">
               <View className="flex-1">
@@ -241,7 +276,7 @@ export default function RouteResultScreen() {
                   {i18n.t("stationSelect.departureShort")}
                 </Text>
                 <View className="flex-row items-center gap-2">
-                  <Text className="font-medium text-gray-900 text-xl">
+                  <Text className="font-medium text-gray-900 text-xl dark:text-gray-100">
                     {startStation.name}
                   </Text>
                   <LineBadge
@@ -256,7 +291,7 @@ export default function RouteResultScreen() {
                   {i18n.t("stationSelect.arrivalShort")}
                 </Text>
                 <View className="flex-row items-center gap-2">
-                  <Text className="font-medium text-gray-900 text-xl">
+                  <Text className="font-medium text-gray-900 text-xl dark:text-gray-100">
                     {endStation.name}
                   </Text>
                   <LineBadge
@@ -274,7 +309,7 @@ export default function RouteResultScreen() {
                 <Text className="mt-1 text-gray-500 text-sm">
                   {i18n.t("routeResult.time")}
                 </Text>
-                <Text className="font-medium text-gray-900 text-lg">
+                <Text className="font-medium text-gray-900 text-lg dark:text-gray-100">
                   {routeInfo.totalTime}
                   {i18n.t("routeResult.minutes")}
                 </Text>
@@ -284,7 +319,7 @@ export default function RouteResultScreen() {
                 <Text className="mt-1 text-gray-500 text-sm">
                   {i18n.t("routeResult.stations")}
                 </Text>
-                <Text className="font-medium text-gray-900 text-lg">
+                <Text className="font-medium text-gray-900 text-lg dark:text-gray-100">
                   {routeInfo.totalStations}
                   {i18n.t("routeResult.stationUnit")}
                 </Text>
@@ -294,7 +329,7 @@ export default function RouteResultScreen() {
                 <Text className="mt-1 text-gray-500 text-sm">
                   {i18n.t("routeResult.transfers")}
                 </Text>
-                <Text className="font-medium text-gray-900 text-lg">
+                <Text className="font-medium text-gray-900 text-lg dark:text-gray-100">
                   {routeInfo.transfers}
                   {i18n.t("routeResult.transferUnit")}
                 </Text>
@@ -314,7 +349,7 @@ export default function RouteResultScreen() {
                 className={`flex-row items-center gap-2 rounded-full px-6 py-3 ${
                   isFavorite
                     ? "bg-red-500"
-                    : "border-2 border-gray-200 bg-white"
+                    : "border-2 border-gray-200 bg-white dark:bg-gray-800"
                 }`}
                 onPress={handleToggleFavorite}
                 style={{
@@ -345,7 +380,7 @@ export default function RouteResultScreen() {
 
           {/* Detailed route card */}
           <ElevatedCard className="mb-6">
-            <Text className="mb-6 font-medium text-gray-900 text-lg">
+            <Text className="mb-6 font-medium text-gray-900 text-lg dark:text-gray-100">
               {i18n.t("routeResult.detailRoute")}
             </Text>
 
@@ -381,7 +416,7 @@ export default function RouteResultScreen() {
                       }}
                     >
                       {index === 0 && (
-                        <View className="h-3 w-3 rounded-full bg-white" />
+                        <View className="h-3 w-3 rounded-full bg-white dark:bg-gray-800" />
                       )}
                       {index === routeInfo.segments.length - 1 && (
                         <MapPin color="#FFFFFF" fill="#FFFFFF" size={14} />
@@ -394,7 +429,7 @@ export default function RouteResultScreen() {
                     {/* Station info */}
                     <View className="flex-1 pb-8">
                       <View className="mb-1 flex-row items-center gap-2">
-                        <Text className="font-medium text-gray-900 text-lg">
+                        <Text className="font-medium text-gray-900 text-lg dark:text-gray-100">
                           {segment.station.name}
                         </Text>
                         <LineBadge
@@ -434,7 +469,7 @@ export default function RouteResultScreen() {
 
           {/* New search button */}
           <Pressable
-            className="w-full items-center rounded-2xl border-2 border-blue-600 bg-white py-4 active:bg-blue-50"
+            className="w-full items-center rounded-2xl border-2 border-blue-600 bg-white py-4 active:bg-blue-50 dark:bg-gray-800"
             onPress={() => router.back()}
           >
             <Text className="font-medium text-blue-600 text-lg">

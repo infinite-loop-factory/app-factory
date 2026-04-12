@@ -20,9 +20,19 @@ export async function addFavoriteRoute(route: {
 }): Promise<void> {
   try {
     const favorites = await getFavoriteRoutes();
+
+    // Check for duplicates
+    const isDuplicate = favorites.some(
+      (f) =>
+        f.startStation.id === route.startStation.id &&
+        f.endStation.id === route.endStation.id &&
+        f.viaStation?.id === route.viaStation?.id,
+    );
+    if (isDuplicate) return;
+
     const newRoute: FavoriteRoute = {
       ...route,
-      id: `${Date.now()}-${Math.random()}`,
+      id: `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
       lastSearched: new Date().toISOString(),
     };
     await AsyncStorage.setItem(
@@ -52,16 +62,25 @@ export async function clearAllFavorites(): Promise<void> {
   }
 }
 
+export function findFavoriteRoute(
+  favorites: FavoriteRoute[],
+  startId: string,
+  endId: string,
+  viaId?: string,
+): FavoriteRoute | undefined {
+  return favorites.find(
+    (f) =>
+      f.startStation.id === startId &&
+      f.endStation.id === endId &&
+      f.viaStation?.id === viaId,
+  );
+}
+
 export function isFavoriteRoute(
   favorites: FavoriteRoute[],
   startId: string,
   endId: string,
   viaId?: string,
 ): boolean {
-  return favorites.some(
-    (f) =>
-      f.startStation.id === startId &&
-      f.endStation.id === endId &&
-      f.viaStation?.id === viaId,
-  );
+  return !!findFavoriteRoute(favorites, startId, endId, viaId);
 }

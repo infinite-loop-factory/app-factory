@@ -18,6 +18,8 @@ export interface RouteInfo {
   /** Estimated subway travel time in minutes */
   totalTime: number;
   transfers: number;
+  /** True if a 'via' station was requested but a path through it could not be found */
+  viaFailed?: boolean;
 }
 
 export interface RouteRecommendation {
@@ -305,6 +307,11 @@ export function calculateRoute(
         totalTransfers: leg1.totalTransfers + leg2.totalTransfers,
       };
       return buildRouteInfo(combined, stationMap);
+    }
+    // If path through 'via' fails, calculate direct route but mark as failed
+    const direct = dijkstra(graph, start.id, end.id);
+    if (direct) {
+      return { ...buildRouteInfo(direct, stationMap), viaFailed: true };
     }
   }
 

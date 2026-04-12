@@ -59,6 +59,7 @@
     "detailRoute": "Detailed Route",
     "transferTo": "transfer",
     "direction": "direction",
+    "viaFailed": "Direct route found (could not find path through via station)",
     "newSearch": "New route search"
   },
   "favorites": {
