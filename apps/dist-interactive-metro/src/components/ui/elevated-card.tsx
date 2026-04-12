@@ -10,7 +10,7 @@ interface ElevatedCardProps {
 export function ElevatedCard({ children, className = "" }: ElevatedCardProps) {
   return (
     <View
-      className={`bg-white rounded-3xl p-6 shadow-xl ${className}`}
+      className={`bg-white dark:bg-gray-900 rounded-3xl p-6 shadow-xl ${className}`}
       style={{
         // RN shadow props for consistent cross-platform shadow
         shadowColor: "#000",
