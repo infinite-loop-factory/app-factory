@@ -20,6 +20,13 @@ const navigationItems = [
     title: "흔들어서 맛집 추천",
     description: "위치와 검색 반경을 바탕으로 가까운 맛집을 골라드려요.",
   },
+  {
+    href: "/lotto",
+    icon: "confirmation-number",
+    eyebrow: "행운의 숫자",
+    title: "로또 번호 추첨",
+    description: "흔들거나 버튼을 눌러 행운의 번호 6개를 뽑아보세요.",
+  },
 ] as const;
 
 export default function IndexScreen() {
