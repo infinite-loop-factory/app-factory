@@ -1,0 +1,167 @@
+{
+  "welcome": "환영합니다",
+  "home": "홈",
+  "tabs": {
+    "goNow": "지금 출발",
+    "routeGuide": "경로안내",
+    "notifications": "알림",
+    "favorites": "즐겨찾기",
+    "settings": "설정"
+  },
+  "homeScreen": {
+    "title": "경로 안내",
+    "subtitle": "출발역과 도착역을 선택하여 최적의 경로를 찾아보세요",
+    "departure": "출발역",
+    "departurePlaceholder": "출발역을 선택하세요",
+    "arrival": "도착역",
+    "arrivalPlaceholder": "도착역을 선택하세요",
+    "viaPlaceholder": "경유역을 선택하세요",
+    "addVia": "경유 추가",
+    "search": "경로 검색",
+    "searchHint": "출발역과 도착역을 선택하면 경로를 검색할 수 있습니다",
+    "searchAndExtras": "검색 및 부가 기능"
+  },
+  "stationSelect": {
+    "departureTitle": "출발역 선택",
+    "arrivalTitle": "도착역 선택",
+    "viaTitle": "경유역 선택",
+    "departureShort": "출발",
+    "arrivalShort": "도착",
+    "viaShort": "경유",
+    "back": "뒤로",
+    "searchPlaceholder": "역 이름을 입력하세요",
+    "allLines": "전체",
+    "transfer": "환승",
+    "searchResults": "검색 결과 ({{count}}개)",
+    "recentStations": "최근 선택한 역",
+    "noResults": "검색 결과가 없습니다",
+    "searchHint": "역 이름을 입력하여 검색해보세요"
+  },
+  "via": {
+    "optional": "선택사항",
+    "count": "{{count}}개 경유역",
+    "countMax": "{{count}}개 경유역 (최대)",
+    "max": "최대 {{max}}개",
+    "clearAll": "경유 초기화"
+  },
+  "routeResult": {
+    "title": "경로 안내 결과",
+    "loading": "경로 정보를 불러오는 중...",
+    "goBack": "경로 안내로 돌아가기",
+    "time": "소요 시간",
+    "minutes": "분",
+    "stations": "정거장",
+    "stationUnit": "개",
+    "transfers": "환승",
+    "transferUnit": "회",
+    "addFavorite": "즐겨찾기 추가",
+    "removeFavorite": "즐겨찾기 제거",
+    "detailRoute": "상세 경로",
+    "transferTo": "(으)로 환승",
+    "direction": "방면",
+    "viaFailed": "직통 경로를 찾았습니다 (경유지를 거치는 경로를 찾을 수 없음)",
+    "newSearch": "새로운 경로 검색"
+  },
+  "favorites": {
+    "description": "자주 찾는 경로를 빠르게 검색하세요",
+    "emptyTitle": "즐겨찾기가 없습니다",
+    "emptyDescription": "자주 사용하는 경로를 즐겨찾기에 추가하면 빠르게 검색할 수 있습니다",
+    "searchRoutes": "경로 검색하기",
+    "searchAgain": "다시 검색",
+    "lastSearched": "마지막 검색",
+    "today": "오늘",
+    "yesterday": "어제",
+    "daysAgo": "{{count}}일 전"
+  },
+  "settings": {
+    "description": "앱 환경을 설정하고 개인화하세요",
+    "notificationSettings": "알림 설정",
+    "notificationComingSoon": "준비 중인 기능입니다",
+    "comingSoon": "향후 업데이트에서 지원 예정",
+    "defaultHome": "기본 화면 설정",
+    "defaultHomeDescription": "앱 실행 시 기본으로 보여질 화면을 선택하세요",
+    "appInfo": "앱 정보",
+    "version": "버전",
+    "madeBy": "제작",
+    "dataManagement": "데이터 관리",
+    "clearRecentSearch": "최근 검색 기록 삭제",
+    "clearAllFavorites": "즐겨찾기 모두 삭제",
+    "confirmClearRecent": "최근 검색 기록을 삭제하시겠습니까?",
+    "confirmClearFavorites": "즐겨찾기를 모두 삭제하시겠습니까?",
+    "cancel": "취소",
+    "confirm": "삭제"
+  },
+  "notificationSettings": {
+    "placeholder": "알림 설정 화면입니다. (미구현)"
+  },
+  "notFound": {
+    "title": "화면을 찾을 수 없습니다",
+    "goHome": "홈 화면으로 이동"
+  },
+  "goNow": {
+    "title": "지금 출발",
+    "subtitle": "목적지만 선택하세요 — 현재 위치 기반 최적 경로를 추천합니다",
+    "locating": "현재 위치를 찾고 있습니다...",
+    "locationReady": "주변 {{count}}개 역 감지됨",
+    "refresh": "위치 새로고침",
+    "destinationTitle": "어디로 가시나요?",
+    "destination": "도착역",
+    "destinationPlaceholder": "도착역을 선택하세요",
+    "selectDestinationHint": "도착역을 선택하면 최적의 경로들을 추천합니다",
+    "calculatingRoutes": "최적 경로를 계산하고 있습니다...",
+    "recommendedRoutes": "추천 경로",
+    "totalMin": "총 {{min}}분",
+    "walkMin": "도보 {{min}}분",
+    "subwayMin": "지하철 {{min}}분",
+    "transferCount": "환승 {{count}}회",
+    "permissionDenied": "위치 권한이 필요합니다",
+    "permissionDeniedHint": "가까운 역을 찾으려면 위치 권한을 허용해주세요",
+    "locationError": "위치를 가져올 수 없습니다",
+    "locationErrorHint": "위치 정보를 가져오는 중 오류가 발생했습니다",
+    "retry": "다시 시도"
+  },
+  "departureSelect": {
+    "title": "출발역 선택",
+    "subtitle": "현재 위치에서 가까운 역을 추천합니다",
+    "locating": "현재 위치를 찾고 있습니다...",
+    "nearbyStations": "가까운 역",
+    "closest": "가장 가까운 역",
+    "walkingTime": "도보 {{minutes}}분",
+    "refreshLocation": "위치 새로고침",
+    "orSearchManually": "또는 직접 검색",
+    "searchAllStations": "전체 역에서 검색하기",
+    "permissionDeniedTitle": "위치 권한이 필요합니다",
+    "permissionDeniedDesc": "가까운 역을 추천받으려면 위치 권한을 허용해주세요. 아래에서 직접 검색할 수도 있습니다.",
+    "errorTitle": "위치를 가져올 수 없습니다",
+    "locationError": "위치 정보를 가져오는 중 오류가 발생했습니다. 다시 시도해주세요.",
+    "retry": "다시 시도"
+  },
+  "common": {
+    "back": "뒤로"
+  },
+  "timetable": {
+    "title": "다음 열차",
+    "noData": "배차 정보를 불러오지 못했습니다",
+    "syncRequired": "역 정보를 동기화하면 배차 시각이 표시됩니다",
+    "departure": "출발",
+    "direction": "방면",
+    "loading": "배차 정보 불러오는 중…",
+    "noUpcoming": "오늘 이후 열차 없음"
+  },
+  "notifications": {
+    "description": "즐겨찾기 경로의 다음 열차 정보",
+    "emptyTitle": "즐겨찾기가 없습니다",
+    "emptyDescription": "즐겨찾기에 경로를 추가하면 다음 열차 시각이 여기에 표시됩니다",
+    "comingSoonTitle": "알림 기능은 준비 중입니다",
+    "comingSoonDescription": "향후 업데이트를 통해 실시간 운행 정보, 즐겨찾기 경로의 지연 알림 등의 기능이 추가될 예정입니다.",
+    "addFavorites": "경로 즐겨찾기 추가하기",
+    "nextTrains": "다음 열차",
+    "from": "출발역"
+  },
+  "transferInfo": {
+    "walkingDistance": "{{distance}}m 도보",
+    "walkingMinutes": "약 {{minutes}}분",
+    "platformFrom": "출발: {{platform}}",
+    "platformTo": "도착: {{platform}}"
+  }
+}
