@@ -47,7 +47,7 @@ Travel
 4+ (no objectionable content)
 
 ## Privacy Policy URL
-https://gracefullight.dev/country-tracker/privacy
+https://infinite-loop-factory.github.io/app-factory/country-tracker/privacy
 
 ## Support URL
-https://gracefullight.dev/country-tracker/support
+https://infinite-loop-factory.github.io/app-factory/country-tracker/support

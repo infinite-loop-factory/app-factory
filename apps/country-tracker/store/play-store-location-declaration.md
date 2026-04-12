@@ -26,4 +26,8 @@ Country Tracker automatically records which countries users visit by detecting t
 - Users can export or delete their data at any time
 
 ### Video demonstration
-[Record a short video showing: app install → permission grant → background tracking → country appearing in list]
+Record and upload a short review video that shows:
+- app install and login
+- in-app disclosure shown before the OS permission dialog
+- foreground and background location permission grant
+- a country visit appearing in the app after location sync

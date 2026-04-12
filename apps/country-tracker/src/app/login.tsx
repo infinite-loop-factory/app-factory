@@ -269,12 +269,22 @@ export default function LoginPage() {
             <Divider className="bg-outline-100" />
 
             <Box className="flex-row items-center justify-center gap-5">
-              <Button action="default" className="px-0" variant="link">
+              <Button
+                action="default"
+                className="px-0"
+                onPress={() => router.push("/terms" as never)}
+                variant="link"
+              >
                 <Text className="text-sm text-typography-500">
                   {i18n.t("login.terms")}
                 </Text>
               </Button>
-              <Button action="default" className="px-0" variant="link">
+              <Button
+                action="default"
+                className="px-0"
+                onPress={() => router.push("/privacy" as never)}
+                variant="link"
+              >
                 <Text className="text-sm text-typography-500">
                   {i18n.t("login.privacy")}
                 </Text>

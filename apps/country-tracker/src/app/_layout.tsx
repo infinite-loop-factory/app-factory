@@ -27,9 +27,6 @@ import { useRef } from "react";
 import { Platform } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { LocationPermissionDeniedToast } from "@/components/toasts/location-permission-denied";
-import { useToast } from "@/components/ui/toast";
-import { startLocationTask } from "@/features/location/location-permission";
 import { flushLocationQueueIfAny } from "@/features/location/location-task";
 import { flushVisitQueue } from "@/utils/offline-queue";
 
@@ -68,7 +65,6 @@ function RootLayout() {
   });
   const net = useNetworkState();
   const wasConnectedRef = useRef(false);
-  const toast = useToast();
 
   useEffect(() => {
     if (navigationRef && navigationIntegration) {
@@ -87,17 +83,6 @@ function RootLayout() {
       colorScheme.set(savedTheme);
     }
   }, [savedTheme]);
-
-  useEffect(() => {
-    startLocationTask({
-      onPermissionDenied: () => {
-        toast.show({
-          duration: 3000,
-          render: LocationPermissionDeniedToast,
-        });
-      },
-    });
-  }, [toast]);
 
   useEffect(() => {
     const connected =
