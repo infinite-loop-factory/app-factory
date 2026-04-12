@@ -1,18 +1,7 @@
-/**
- * Hook that fetches transfer walking distance between two lines at a station
- * using the KRIC convenientInfo/stationTransferInfo endpoint.
- *
- * Retries every 2 s (up to 8 times) when the KRIC code map has not yet been
- * loaded, so the hook self-heals once the initial sync completes.
- */
-
 import { useEffect, useState } from "react";
-import { getKricRef } from "@/data/kric-station-sync";
 import { fetchStationTransferInfo } from "@/lib/kric-api";
 import { APP_LINE_TO_KRIC } from "@/lib/line-codes";
-
-const MAX_RETRIES = 8;
-const RETRY_DELAY_MS = 2000;
+import { useKricRefRetry } from "./use-kric-retry";
 
 export interface TransferInfo {
   /** Walking distance in metres */
@@ -31,40 +20,35 @@ interface TransferInfoState {
   error: string | null;
 }
 
-/**
- * Returns transfer walking info from `fromLineName` to `toLineName`
- * at `stationName`. Returns null info (not an error) when the KRIC
- * code map has not been synced yet.
- */
 export function useTransferInfo(
   stationName: string,
   fromLineName: string,
   toLineName: string,
 ): TransferInfoState {
+  const fromLnCd = APP_LINE_TO_KRIC[fromLineName];
+  const toLnCd = APP_LINE_TO_KRIC[toLineName];
+  const { ref, isRetrying } = useKricRefRetry(stationName, fromLnCd);
+
   const [state, setState] = useState<TransferInfoState>({
     info: null,
     loading: true,
     error: null,
   });
-  const [retryCount, setRetryCount] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
-
-    const fromLnCd = APP_LINE_TO_KRIC[fromLineName];
-    const toLnCd = APP_LINE_TO_KRIC[toLineName];
 
     if (!(fromLnCd && toLnCd)) {
       setState({ info: null, loading: false, error: null });
       return;
     }
 
-    const ref = getKricRef(stationName, fromLnCd);
+    if (isRetrying) {
+      setState((s) => ({ ...s, loading: true, error: null }));
+      return;
+    }
+
     if (!ref) {
-      if (retryCount < MAX_RETRIES) {
-        const t = setTimeout(() => setRetryCount((c) => c + 1), RETRY_DELAY_MS);
-        return () => clearTimeout(t);
-      }
       setState({ info: null, loading: false, error: null });
       return;
     }
@@ -119,7 +103,7 @@ export function useTransferInfo(
     return () => {
       cancelled = true;
     };
-  }, [stationName, fromLineName, toLineName, retryCount]);
+  }, [ref, isRetrying, fromLnCd, toLnCd, toLineName]);
 
   return state;
 }

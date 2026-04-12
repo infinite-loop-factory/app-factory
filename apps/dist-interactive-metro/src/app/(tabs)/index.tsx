@@ -17,9 +17,9 @@ export default function RouteGuideTab() {
   const handleStationSelect = useCallback(
     (type: "start" | "via" | "end") => {
       router.push({
-        pathname: "/station-select" as const,
+        pathname: "/station-select",
         params: { type },
-      } as never);
+      });
     },
     [router],
   );
@@ -48,10 +48,10 @@ export default function RouteGuideTab() {
         <View className="px-6">
           {/* Header */}
           <View className="mb-8">
-            <Text className="mb-2 font-medium text-3xl text-gray-900">
+            <Text className="mb-2 font-medium text-3xl text-gray-900 dark:text-gray-100">
               {i18n.t("homeScreen.title")}
             </Text>
-            <Text className="text-base text-gray-600">
+            <Text className="text-base text-gray-600 dark:text-gray-400">
               {i18n.t("homeScreen.subtitle")}
             </Text>
           </View>
@@ -61,7 +61,7 @@ export default function RouteGuideTab() {
             <View className="gap-0">
               {/* Departure */}
               <Pressable
-                className={`relative flex-row items-center rounded-2xl bg-gray-50 py-4 pr-6 pl-12 active:bg-blue-50 ${
+                className={`relative flex-row items-center rounded-2xl bg-gray-50 py-4 pr-6 pl-12 active:bg-blue-50 dark:bg-gray-800 dark:active:bg-blue-900/30 ${
                   startStation
                     ? "border-2 border-[rgb(26,163,255)]"
                     : "border-2 border-transparent"
@@ -76,11 +76,11 @@ export default function RouteGuideTab() {
                 </View>
                 {startStation ? (
                   <View>
-                    <Text className="mb-0.5 text-gray-500 text-xs">
+                    <Text className="mb-0.5 text-gray-500 text-xs dark:text-gray-400">
                       {i18n.t("stationSelect.departureShort")}
                     </Text>
                     <View className="flex-row items-center gap-2">
-                      <Text className="text-gray-900 text-lg">
+                      <Text className="text-gray-900 text-lg dark:text-gray-100">
                         {startStation.name}
                       </Text>
                       <LineBadge
@@ -91,10 +91,10 @@ export default function RouteGuideTab() {
                   </View>
                 ) : (
                   <View>
-                    <Text className="mb-0.5 text-gray-400 text-xs">
+                    <Text className="mb-0.5 text-gray-400 text-xs dark:text-gray-500">
                       {i18n.t("stationSelect.departureShort")}
                     </Text>
-                    <Text className="text-base text-gray-400">
+                    <Text className="text-base text-gray-400 dark:text-gray-500">
                       {i18n.t("homeScreen.departurePlaceholder")}
                     </Text>
                   </View>
@@ -103,12 +103,12 @@ export default function RouteGuideTab() {
 
               {/* Connector line */}
               <View className="flex-row items-center py-2 pl-4">
-                <View className="ml-[5px] h-8 w-0.5 bg-gray-300" />
+                <View className="ml-[5px] h-8 w-0.5 bg-gray-300 dark:bg-gray-700" />
               </View>
 
               {/* Via station */}
               <Pressable
-                className={`relative flex-row items-center rounded-2xl bg-gray-50 py-4 pr-6 pl-12 active:bg-gray-100 ${
+                className={`relative flex-row items-center rounded-2xl bg-gray-50 py-4 pr-6 pl-12 active:bg-gray-100 dark:bg-gray-800 dark:active:bg-gray-700 ${
                   viaStation
                     ? "border-2 border-gray-400"
                     : "border-2 border-transparent"
@@ -120,11 +120,11 @@ export default function RouteGuideTab() {
                 </View>
                 {viaStation ? (
                   <View>
-                    <Text className="mb-0.5 text-gray-500 text-xs">
+                    <Text className="mb-0.5 text-gray-500 text-xs dark:text-gray-400">
                       {i18n.t("stationSelect.viaShort")}
                     </Text>
                     <View className="flex-row items-center gap-2">
-                      <Text className="text-gray-900 text-lg">
+                      <Text className="text-gray-900 text-lg dark:text-gray-100">
                         {viaStation.name}
                       </Text>
                       <LineBadge
@@ -135,11 +135,11 @@ export default function RouteGuideTab() {
                   </View>
                 ) : (
                   <View>
-                    <Text className="mb-0.5 text-gray-400 text-xs">
+                    <Text className="mb-0.5 text-gray-400 text-xs dark:text-gray-500">
                       {i18n.t("stationSelect.viaShort")} (
                       {i18n.t("via.optional")})
                     </Text>
-                    <Text className="text-base text-gray-400">
+                    <Text className="text-base text-gray-400 dark:text-gray-500">
                       {i18n.t("homeScreen.viaPlaceholder")}
                     </Text>
                   </View>
@@ -148,12 +148,12 @@ export default function RouteGuideTab() {
 
               {/* Connector line */}
               <View className="flex-row items-center py-2 pl-4">
-                <View className="ml-[5px] h-8 w-0.5 bg-gray-300" />
+                <View className="ml-[5px] h-8 w-0.5 bg-gray-300 dark:bg-gray-700" />
               </View>
 
               {/* Arrival */}
               <Pressable
-                className={`relative flex-row items-center rounded-2xl bg-gray-50 py-4 pr-6 pl-12 active:bg-orange-50 ${
+                className={`relative flex-row items-center rounded-2xl bg-gray-50 py-4 pr-6 pl-12 active:bg-orange-50 dark:bg-gray-800 dark:active:bg-orange-900/30 ${
                   endStation
                     ? "border-2 border-[rgb(255,163,26)]"
                     : "border-2 border-transparent"
@@ -169,11 +169,11 @@ export default function RouteGuideTab() {
                 </View>
                 {endStation ? (
                   <View>
-                    <Text className="mb-0.5 text-gray-500 text-xs">
+                    <Text className="mb-0.5 text-gray-500 text-xs dark:text-gray-400">
                       {i18n.t("stationSelect.arrivalShort")}
                     </Text>
                     <View className="flex-row items-center gap-2">
-                      <Text className="text-gray-900 text-lg">
+                      <Text className="text-gray-900 text-lg dark:text-gray-100">
                         {endStation.name}
                       </Text>
                       <LineBadge
@@ -184,10 +184,10 @@ export default function RouteGuideTab() {
                   </View>
                 ) : (
                   <View>
-                    <Text className="mb-0.5 text-gray-400 text-xs">
+                    <Text className="mb-0.5 text-gray-400 text-xs dark:text-gray-500">
                       {i18n.t("stationSelect.arrivalShort")}
                     </Text>
-                    <Text className="text-base text-gray-400">
+                    <Text className="text-base text-gray-400 dark:text-gray-500">
                       {i18n.t("homeScreen.arrivalPlaceholder")}
                     </Text>
                   </View>
@@ -199,7 +199,9 @@ export default function RouteGuideTab() {
           {/* Search button */}
           <Pressable
             className={`w-full flex-row items-center justify-center gap-2 rounded-2xl py-4 ${
-              canSearch ? "bg-blue-600 active:bg-blue-700" : "bg-gray-300"
+              canSearch
+                ? "bg-blue-600 active:bg-blue-700"
+                : "bg-gray-300 dark:bg-gray-700"
             }`}
             disabled={!canSearch}
             onPress={handleSearch}
@@ -214,7 +216,7 @@ export default function RouteGuideTab() {
             <Navigation color={canSearch ? "#FFFFFF" : "#6B7280"} size={20} />
             <Text
               className={`font-medium text-lg ${
-                canSearch ? "text-white" : "text-gray-500"
+                canSearch ? "text-white" : "text-gray-500 dark:text-gray-400"
               }`}
             >
               {i18n.t("homeScreen.search")}
@@ -223,7 +225,7 @@ export default function RouteGuideTab() {
 
           {/* Helper text */}
           {!canSearch && (
-            <Text className="mt-4 text-center text-gray-500 text-sm">
+            <Text className="mt-4 text-center text-gray-500 text-sm dark:text-gray-400">
               {i18n.t("homeScreen.searchHint")}
             </Text>
           )}
