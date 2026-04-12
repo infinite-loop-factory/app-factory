@@ -16,6 +16,10 @@ export default function RootLayout() {
       >
         <Stack.Screen name="index" options={{ title: "냥냥모임" }} />
         <Stack.Screen
+          name="(auth)/login"
+          options={{ headerShown: false, title: "로그인" }}
+        />
+        <Stack.Screen
           name="(auth)/signup"
           options={{ title: "사람 회원가입" }}
         />

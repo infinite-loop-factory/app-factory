@@ -12,12 +12,14 @@
     "test": "jest --passWithNoTests",
     "test:watch": "jest --watchAll --passWithNoTests",
     "type-check": "tsc --noEmit",
-    "web": "expo start --web",
+    "web": "expo start --web --clear",
     "web:publish": "tsx ../../scripts/web-publish.ts --app cat-meetup"
   },
   "dependencies": {
     "@expo/metro-runtime": "6.1.2",
+    "@react-native-async-storage/async-storage": "^3.0.2",
     "@react-navigation/native": "^7.1.14",
+    "@supabase/supabase-js": "^2.100.1",
     "expo": "~54.0.30",
     "expo-font": "~14.0.10",
     "expo-router": "~6.0.21",
@@ -29,6 +31,7 @@
     "react-native": "0.81.5",
     "react-native-safe-area-context": "5.6.2",
     "react-native-screens": "4.16.0",
+    "react-native-url-polyfill": "^2.0.0",
     "react-native-web": "~0.21.2",
     "tailwindcss": "catalog:"
   },

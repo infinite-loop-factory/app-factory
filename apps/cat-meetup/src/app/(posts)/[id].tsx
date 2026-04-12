@@ -1,6 +1,6 @@
 import { useLocalSearchParams } from "expo-router";
 import { Text, View } from "react-native";
-import { mockPosts } from "@/src/domain/mock";
+import { mockPosts } from "@/domain/mock";
 
 export default function PostDetailSkeletonScreen() {
   const params = useLocalSearchParams<{ id: string }>();

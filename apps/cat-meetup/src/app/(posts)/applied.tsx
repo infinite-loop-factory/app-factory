@@ -1,6 +1,6 @@
 import { ScrollView, Text } from "react-native";
-import { mockAppliedPosts } from "@/src/domain/mock";
-import { PostCard } from "@/src/features/posts/components/PostCard";
+import { mockAppliedPosts } from "@/domain/mock";
+import { PostCard } from "@/features/posts/components/PostCard";
 
 export default function AppliedPostsSkeletonScreen() {
   return (

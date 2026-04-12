@@ -2,6 +2,7 @@ import { Link } from "expo-router";
 import { ScrollView, Text, View } from "react-native";
 
 const entryMenus = [
+  { href: "/(auth)/login", label: "🔑 로그인" },
   { href: "/(auth)/signup", label: "1) 사람 회원가입" },
   { href: "/(cat)/register", label: "2) 동물 카드 등록" },
   { href: "/(posts)/list", label: "3) 매칭 게시물 목록" },
