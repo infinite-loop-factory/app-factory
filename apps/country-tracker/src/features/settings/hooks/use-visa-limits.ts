@@ -12,10 +12,14 @@ const VISA_LIMITS_KEY = ["settings", "visa-limits"];
 
 export function useVisaLimitsQuery() {
   const { user } = useAuthUser();
+  const userId = user?.id;
   return useQuery({
-    queryKey: [...VISA_LIMITS_KEY, user?.id],
-    enabled: Boolean(user?.id),
-    queryFn: () => fetchVisaLimits(user?.id),
+    queryKey: [...VISA_LIMITS_KEY, userId],
+    enabled: Boolean(userId),
+    queryFn: () => {
+      if (!userId) return Promise.resolve([]);
+      return fetchVisaLimits(userId);
+    },
   });
 }
 
@@ -23,13 +27,19 @@ export function useUpsertVisaLimitMutation() {
   const queryClient = useQueryClient();
   const { showToast } = useGlobalToast();
   const { user } = useAuthUser();
+  const userId = user?.id;
 
   return useMutation({
     mutationFn: (params: {
       countryCode: string;
       maxDays: number;
       alertDaysBefore: number;
-    }) => upsertVisaLimit({ userId: user?.id, ...params }),
+    }) => {
+      if (!userId) {
+        throw new Error("User must be authenticated to save visa limits");
+      }
+      return upsertVisaLimit({ userId, ...params });
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: VISA_LIMITS_KEY });
       showToast(
