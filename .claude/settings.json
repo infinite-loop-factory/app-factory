@@ -1,0 +1,50 @@
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"/Users/gracefullight/.bun/bin/bun\" \"$CLAUDE_PROJECT_DIR/.claude/hooks/keyword-detector.ts\"",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"/Users/gracefullight/.bun/bin/bun\" \"$CLAUDE_PROJECT_DIR/.claude/hooks/test-filter.ts\"",
+            "timeout": 5
+          }
+        ],
+        "matcher": "Bash"
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"/Users/gracefullight/.bun/bin/bun\" \"$CLAUDE_PROJECT_DIR/.claude/hooks/persistent-mode.ts\"",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "\"/Users/gracefullight/.bun/bin/bun\" \"$CLAUDE_PROJECT_DIR/.claude/hooks/hud.ts\""
+  },
+  "permissions": {
+    "allow": [
+      "Bash(bun run:*)",
+      "Bash(bunx tsx:*)",
+      "Bash(git add:*)",
+      "mcp__serena__*"
+    ]
+  }
+}

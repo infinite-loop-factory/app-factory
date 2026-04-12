@@ -1,0 +1,38 @@
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"/Users/gracefullight/.bun/bin/bun\" .codex/hooks/keyword-detector.ts",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"/Users/gracefullight/.bun/bin/bun\" .codex/hooks/test-filter.ts",
+            "timeout": 5
+          }
+        ],
+        "matcher": "Bash"
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"/Users/gracefullight/.bun/bin/bun\" .codex/hooks/persistent-mode.ts",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}
