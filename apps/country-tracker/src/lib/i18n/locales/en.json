@@ -207,7 +207,9 @@
     },
     "support": {
       "title": "Support",
-      "help-center": "Help Center"
+      "help-center": "Help Center",
+      "privacy-policy": "Privacy Policy",
+      "terms": "Terms of Service"
     },
     "footer": {
       "app-name": "Country Tracker",
@@ -286,10 +288,18 @@
       "title": "Location Tracking",
       "body": "Tracking your location to update visited countries."
     },
+    "disclosure": {
+      "badge": "Automatic Visit Tracking",
+      "title": "Allow background location to log country visits automatically",
+      "message": "Country Tracker collects location data even when the app is closed or not in use so it can detect border crossings and save visits to your private travel history. Location is only used for app functionality, never for ads, and you can turn it off in Settings at any time.",
+      "primary": "Continue",
+      "secondary": "Not now",
+      "requesting": "Requesting permission..."
+    },
     "permission": {
       "denied": {
         "title": "Permission needed",
-        "message": "Allow location access in your browser to keep tracking in the background."
+        "message": "Allow Always location access in device settings to keep automatic visit tracking running in the background."
       }
     }
   },

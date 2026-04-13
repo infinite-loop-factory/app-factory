@@ -1,0 +1,40 @@
+{
+  "hooks": {
+    "BeforeAgent": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"/Users/gracefullight/.bun/bin/bun\" \"$GEMINI_PROJECT_DIR/.gemini/hooks/keyword-detector.ts\"",
+            "timeout": 5000
+          }
+        ],
+        "matcher": "*"
+      }
+    ],
+    "BeforeTool": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"/Users/gracefullight/.bun/bin/bun\" \"$GEMINI_PROJECT_DIR/.gemini/hooks/test-filter.ts\"",
+            "timeout": 5000
+          }
+        ],
+        "matcher": "run_shell_command"
+      }
+    ],
+    "AfterAgent": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"/Users/gracefullight/.bun/bin/bun\" \"$GEMINI_PROJECT_DIR/.gemini/hooks/persistent-mode.ts\"",
+            "timeout": 5000
+          }
+        ],
+        "matcher": "*"
+      }
+    ]
+  }
+}

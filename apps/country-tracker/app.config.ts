@@ -2,7 +2,7 @@ import type { ConfigContext, ExpoConfig } from "expo/config";
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
-  name: "country-tracker",
+  name: "Country Tracker",
   slug: "country-tracker",
   owner: "gracefullight",
   scheme: "country-tracker",
@@ -20,11 +20,13 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     supportsTablet: true,
     bundleIdentifier: "com.gracefullight.countrytracker",
     infoPlist: {
-      UIBackgroundModes: ["location"],
+      UIBackgroundModes: ["location", "fetch"],
       NSLocationWhenInUseUsageDescription:
         "방문 국가 업데이트와 지도 표시를 위해 위치 정보가 필요합니다. 설정에서 언제든지 비활성화할 수 있어요.",
       NSLocationAlwaysAndWhenInUseUsageDescription:
         "앱이 활성화되지 않아도 자동으로 방문 기록을 저장하려면 백그라운드 위치 권한이 필요합니다. 데이터는 내 계정에 보관되며 언제든 삭제할 수 있어요.",
+      NSLocationAlwaysUsageDescription:
+        "여행 중 국경을 넘을 때 자동으로 방문 기록을 저장하기 위해 백그라운드 위치 접근이 필요합니다.",
     },
   },
   android: {
@@ -47,9 +49,9 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         isIosBackgroundLocationEnabled: true,
         isAndroidBackgroundLocationEnabled: true,
         locationWhenInUsePermission:
-          "We use your location to update visited countries and show your travel history on the map. You can disable this at any time in Settings.",
+          "방문 국가 업데이트와 지도 표시를 위해 위치 정보가 필요합니다. 설정에서 언제든지 비활성화할 수 있어요.",
         locationAlwaysAndWhenInUsePermission:
-          "Allow background location so we can automatically save visits while the app is not active. Your data stays in your account and you can delete it anytime.",
+          "앱이 활성화되지 않아도 자동으로 방문 기록을 저장하려면 백그라운드 위치 권한이 필요합니다. 데이터는 내 계정에 보관되며 언제든 삭제할 수 있어요.",
       },
     ],
     "expo-router",

@@ -1,5 +1,6 @@
 import { Redirect, Slot } from "expo-router";
 import { ActivityIndicator, View } from "react-native";
+import { LocationPermissionGate } from "@/features/location/components/location-permission-gate";
 import { useAuthUser } from "@/hooks/use-auth-user";
 
 export default function AppLayout() {
@@ -18,5 +19,10 @@ export default function AppLayout() {
     return <Redirect href="/login" />;
   }
 
-  return <Slot />;
+  return (
+    <>
+      <Slot />
+      <LocationPermissionGate />
+    </>
+  );
 }

@@ -1,7 +1,4 @@
-import {
-  openLanguageSetting,
-  openStorePage,
-} from "@infinite-loop-factory/common";
+import { openLanguageSetting } from "@infinite-loop-factory/common";
 import Constants from "expo-constants";
 import { useRouter } from "expo-router";
 import { useAtom } from "jotai";
@@ -250,7 +247,7 @@ export default function SettingsScreen() {
         <Button
           action="default"
           className="h-14 w-full justify-between rounded-none bg-transparent px-4"
-          onPress={() => void openStorePage({})}
+          onPress={() => router.push("/support" as never)}
         >
           <Box className="flex-row items-center gap-3.5">
             <Box className="h-8 w-8 items-center justify-center rounded-md bg-info-500">
@@ -258,6 +255,38 @@ export default function SettingsScreen() {
             </Box>
             <Text className="font-medium text-base text-typography-900">
               {i18n.t("settings.support.help-center")}
+            </Text>
+          </Box>
+          <ExternalLink color={chevronColor} size={18} />
+        </Button>
+        <Divider className="bg-outline-100" />
+        <Button
+          action="default"
+          className="h-14 w-full justify-between rounded-none bg-transparent px-4"
+          onPress={() => router.push("/privacy" as never)}
+        >
+          <Box className="flex-row items-center gap-3.5">
+            <Box className="h-8 w-8 items-center justify-center rounded-md bg-primary-500">
+              <ShieldAlert color={iconColor} size={17} />
+            </Box>
+            <Text className="font-medium text-base text-typography-900">
+              {i18n.t("settings.support.privacy-policy")}
+            </Text>
+          </Box>
+          <ExternalLink color={chevronColor} size={18} />
+        </Button>
+        <Divider className="bg-outline-100" />
+        <Button
+          action="default"
+          className="h-14 w-full justify-between rounded-none bg-transparent px-4"
+          onPress={() => router.push("/terms" as never)}
+        >
+          <Box className="flex-row items-center gap-3.5">
+            <Box className="h-8 w-8 items-center justify-center rounded-md bg-secondary-500">
+              <FileText color={iconColor} size={17} />
+            </Box>
+            <Text className="font-medium text-base text-typography-900">
+              {i18n.t("settings.support.terms")}
             </Text>
           </Box>
           <ExternalLink color={chevronColor} size={18} />
