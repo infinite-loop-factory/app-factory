@@ -1,6 +1,6 @@
 import Constants from "expo-constants";
 import { AlertCircle, Bell, RefreshCw } from "lucide-react-native";
-import { useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import { useSyncStatus } from "@/context/sync-status-context";
 import { useUpdateBanner } from "@/context/update-banner-context";
@@ -13,11 +13,23 @@ const SCROLL_CONTENT = {
 const SECTION_LABEL =
   "mb-2 text-xs font-semibold uppercase tracking-widest text-outline-400";
 
+interface ExpoConfigExtra {
+  env?: string;
+}
+
 export function ActionsTab() {
   const timerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
   const { status, items, setSyncStatus, setLastSync, resetSyncState } =
     useSyncStatus();
   const { showBanner } = useUpdateBanner();
+
+  useEffect(() => {
+    return () => {
+      if (timerRef.current !== undefined) {
+        clearTimeout(timerRef.current);
+      }
+    };
+  }, []);
 
   const handleSimulateError = useCallback(() => {
     setSyncStatus("syncing");
@@ -36,7 +48,7 @@ export function ActionsTab() {
     Constants.expoConfig?.android?.versionCode?.toString() ??
     "—";
   const envName =
-    (Constants.expoConfig?.extra as Record<string, unknown> | undefined)?.env ??
+    (Constants.expoConfig?.extra as ExpoConfigExtra | undefined)?.env ??
     "development";
 
   return (
@@ -119,7 +131,7 @@ export function ActionsTab() {
         <View className="flex-row items-center justify-between px-4 py-3.5">
           <Text className="text-outline-600 text-sm">Environment</Text>
           <Text className="font-mono font-semibold text-primary-600 text-sm">
-            {String(envName)}
+            {envName}
           </Text>
         </View>
       </View>
