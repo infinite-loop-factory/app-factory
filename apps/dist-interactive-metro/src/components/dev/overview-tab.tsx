@@ -1,12 +1,6 @@
 import type { SyncStatus } from "@/types/sync-status";
 
-import {
-  AlertCircle,
-  CheckCircle2,
-  Clock,
-  Loader2,
-  RefreshCw,
-} from "lucide-react-native";
+import { Loader2, RefreshCw } from "lucide-react-native";
 import { useCallback } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import { useSyncStatus } from "@/context/sync-status-context";
@@ -37,25 +31,21 @@ function SyncStatusBadge({ status }: { status: SyncStatus }) {
       label: "Idle",
       dot: "bg-outline-300",
       text: "text-outline-500",
-      Icon: Clock,
     },
     syncing: {
       label: "Syncing…",
       dot: "bg-primary-500",
       text: "text-primary-600",
-      Icon: Loader2,
     },
     success: {
       label: "Success",
       dot: "bg-green-500",
       text: "text-green-600",
-      Icon: CheckCircle2,
     },
     error: {
       label: "Error",
       dot: "bg-red-500",
       text: "text-red-600",
-      Icon: AlertCircle,
     },
   };
   const { label, dot, text } = configs[status];
@@ -158,7 +148,7 @@ export function OverviewTab() {
         </View>
         {lastSyncError ? (
           <View className="border-outline-100 border-t bg-red-50 px-4 py-3">
-            <Text className="font-mono text-red-700 text-sm">
+            <Text className="font-mono text-red-700 text-sm" numberOfLines={2}>
               {lastSyncError}
             </Text>
           </View>
@@ -190,7 +180,7 @@ export function OverviewTab() {
         onPress={handleForceSync}
       >
         {status === "syncing" ? (
-          <Loader2 className="text-primary-600" size={18} />
+          <Loader2 className="animate-spin text-primary-600" size={18} />
         ) : (
           <RefreshCw className="text-primary-600" size={18} />
         )}
