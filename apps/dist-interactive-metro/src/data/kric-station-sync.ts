@@ -162,6 +162,10 @@ const SYNC_TARGETS: SyncTarget[] = [
   },
 ];
 
+/** Maps app-facing line name → KRIC lnCd (e.g. "1호선" → "1", "공항철도" → "A1"). */
+export const APP_LINE_TO_LN_CD: Readonly<Record<string, string>> =
+  Object.fromEntries(SYNC_TARGETS.map((t) => [t.appLine, t.lnCd]));
+
 // ── Storage keys ─────────────────────────────────────────────
 
 const STORAGE_DYNAMIC = "@kric/dynamic_stations_v1";
@@ -234,6 +238,12 @@ function buildStationId(railOprIsttCd: string, stinCd: string): string {
   return `kric_${railOprIsttCd}_${stinCd}`;
 }
 
+/** Strips KRIC's parenthetical location notes, e.g. "교대(법원.검찰청)" → "교대". */
+function stripParenSuffix(name: string): string {
+  const idx = name.indexOf("(");
+  return idx > 0 ? name.slice(0, idx).trimEnd() : name;
+}
+
 function itemsToStation(
   items: SubwayRouteInfoItem[],
   target: SyncTarget,
@@ -243,7 +253,7 @@ function itemsToStation(
     .sort((a, b) => Number(a.stinConsOrdr) - Number(b.stinConsOrdr))
     .map((item) => ({
       id: buildStationId(item.railOprIsttCd, item.stinCd),
-      name: item.stinNm,
+      name: stripParenSuffix(item.stinNm),
       line: target.appLine,
       lineNumber: target.lineNumber,
       lineColor: target.lineColor,
@@ -256,8 +266,8 @@ function buildCodeMapEntries(
 ): KricCodeMap {
   const map: KricCodeMap = {};
   for (const item of items) {
-    const key = `${item.stinNm}|${kricLnCd}`;
-    map[key] = {
+    const stinNm = stripParenSuffix(item.stinNm);
+    map[`${stinNm}|${kricLnCd}`] = {
       stinCd: item.stinCd,
       railOprIsttCd: item.railOprIsttCd,
       lnCd: item.lnCd,

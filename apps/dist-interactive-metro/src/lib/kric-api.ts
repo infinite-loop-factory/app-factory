@@ -46,6 +46,9 @@ function extractItems<T>(raw: KricEnvelope<T>): T[] {
     throw new Error(`KRIC API error ${header.resultCode}: ${header.resultMsg}`);
   }
 
+  // subwayRouteInfo returns body as a flat array instead of { items: [...] }
+  if (Array.isArray(body)) return body as unknown as T[];
+
   const items = body?.items;
   // Handle empty-string sentinel some KRIC endpoints return
   if (!items || (items as unknown) === "") return [];
