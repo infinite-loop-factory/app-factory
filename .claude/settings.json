@@ -5,7 +5,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "\"/Users/gracefullight/.bun/bin/bun\" \"$CLAUDE_PROJECT_DIR/.claude/hooks/keyword-detector.ts\"",
+            "command": "bun \"$CLAUDE_PROJECT_DIR/.claude/hooks/keyword-detector.ts\"",
             "timeout": 5
           }
         ]
@@ -16,7 +16,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "\"/Users/gracefullight/.bun/bin/bun\" \"$CLAUDE_PROJECT_DIR/.claude/hooks/test-filter.ts\"",
+            "command": "bun \"$CLAUDE_PROJECT_DIR/.claude/hooks/test-filter.ts\"",
             "timeout": 5
           }
         ],
@@ -28,7 +28,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "\"/Users/gracefullight/.bun/bin/bun\" \"$CLAUDE_PROJECT_DIR/.claude/hooks/persistent-mode.ts\"",
+            "command": "bun \"$CLAUDE_PROJECT_DIR/.claude/hooks/persistent-mode.ts\"",
             "timeout": 5
           }
         ]
@@ -37,7 +37,7 @@
   },
   "statusLine": {
     "type": "command",
-    "command": "\"/Users/gracefullight/.bun/bin/bun\" \"$CLAUDE_PROJECT_DIR/.claude/hooks/hud.ts\""
+    "command": "bun \"$CLAUDE_PROJECT_DIR/.claude/hooks/hud.ts\""
   },
   "permissions": {
     "allow": [
