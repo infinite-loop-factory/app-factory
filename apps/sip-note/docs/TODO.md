@@ -30,9 +30,10 @@
   - `src/db/` (client, migrations, schema) — README 로 컨벤션 정의
   - `src/features/` — `{tasting,place,pairing,badge,my}/` 는 각 Phase 진행 시 생성
   - `src/services/` — `{photo,location,notification,export}/` 는 각 Phase 진행 시 생성
-- [ ] **디자인 시스템 토큰 정리 — claude design 활용**
+- [x] **디자인 시스템 토큰 정리 — claude design 활용**
   - 컬러 토큰 (라이트/다크), 카테고리 컬러(위스키/와인/맥주/사케/칵테일/기타)
   - 타이포 스케일, 8px 그리드, 카드/바텀시트/FAB 컴포넌트 스타일
+  - 산출: [`DESIGN.md`](../DESIGN.md), [`docs/design-checkpoint-phase-0.md`](./design-checkpoint-phase-0.md)
 - [x] i18n 키 베이스라인 (`ko`, `en`) — 131 키, nested namespace
   - 사용 패턴: `import i18n from "@/i18n"; i18n.t("namespace.key")` (sibling country-tracker 와 동일)
 
