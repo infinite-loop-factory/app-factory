@@ -1,26 +1,24 @@
 /**
- * Below are the colors that are used in the app. The colors are defined in the light and dark mode.
- * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
+ * Legacy `COLORS` map kept for Expo Router / `useThemeColor` consumers.
+ * Values derive from semantic tokens in `@/design-system/theme`.
  */
-
-const tintColorLight = "#0a7ea4";
-const tintColorDark = "#fff";
+import { darkColors, lightColors } from "@/design-system/theme";
 
 export const COLORS = {
   light: {
-    text: "#11181C",
-    background: "#fff",
-    tint: tintColorLight,
-    icon: "#687076",
-    tabIconDefault: "#687076",
-    tabIconSelected: tintColorLight,
+    text: lightColors.text,
+    background: lightColors.bg,
+    tint: lightColors.brand,
+    icon: lightColors.textSubtle,
+    tabIconDefault: lightColors.textSubtle,
+    tabIconSelected: lightColors.brand,
   },
   dark: {
-    text: "#ECEDEE",
-    background: "#151718",
-    tint: tintColorDark,
-    icon: "#9BA1A6",
-    tabIconDefault: "#9BA1A6",
-    tabIconSelected: tintColorDark,
+    text: darkColors.text,
+    background: darkColors.bg,
+    tint: darkColors.brand,
+    icon: darkColors.textSubtle,
+    tabIconDefault: darkColors.textSubtle,
+    tabIconSelected: darkColors.brand,
   },
 };

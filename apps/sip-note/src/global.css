@@ -1,3 +1,235 @@
+/* ============================================================
+   Sip Note — global tokens (web layer for NativeWind/Tailwind)
+   Dark first · light override · 8pt grid · Pretendard + Fraunces
+
+   Token values mirror `@/design-system/theme` (hex) and
+   `@/constants/color-tokens` (rgb triplets injected on RN).
+   ============================================================ */
+
+/* --- Brand fonts (local) --- */
+@font-face {
+  font-family: "Fraunces";
+  src: url("./assets/fonts/Fraunces-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Fraunces";
+  src: url("./assets/fonts/Fraunces-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Pretendard";
+  src: url("./assets/fonts/Pretendard-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Pretendard";
+  src: url("./assets/fonts/Pretendard-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* --- Dark = default --- */
+:root,
+.dark,
+[data-theme="dark"] {
+  --color-brand: 212 154 79;
+  --color-brand-strong: 185 127 54;
+  --color-brand-soft: 74 54 33;
+  --color-brand-on: 36 25 16;
+
+  --color-bg: 31 27 22;
+  --color-surface: 40 35 29;
+  --color-surface-raised: 49 43 35;
+  --color-surface-sunken: 25 21 18;
+
+  --color-text: 244 236 220;
+  --color-text-muted: 199 188 166;
+  --color-text-subtle: 142 132 114;
+  --color-text-faint: 92 85 71;
+  --color-text-on-brand: 36 25 16;
+
+  --color-border: 61 54 44;
+  --color-border-strong: 84 74 61;
+  --color-border-subtle: 46 40 31;
+
+  --color-success: 124 199 155;
+  --color-success-soft: 38 70 52;
+  --color-warning: 225 184 115;
+  --color-warning-soft: 74 58 32;
+  --color-danger: 226 114 96;
+  --color-danger-soft: 72 36 29;
+  --color-info: 125 183 220;
+  --color-info-soft: 31 56 72;
+
+  --color-cat-whiskey: 201 148 97;
+  --color-cat-wine: 156 42 65;
+  --color-cat-beer: 217 180 69;
+  --color-cat-sake: 207 205 182;
+  --color-cat-cocktail: 211 133 147;
+  --color-cat-etc: 142 132 114;
+
+  --color-place-bar: 185 134 85;
+  --color-place-distillery: 122 90 58;
+  --color-place-winery: 156 42 65;
+  --color-place-brewery: 210 167 70;
+  --color-place-restaurant: 124 179 146;
+  --color-place-etc: 142 132 114;
+
+  --color-pair-bad: 178 99 80;
+  --color-pair-okay: 162 155 137;
+  --color-pair-good: 132 188 142;
+  --color-pair-great: 221 176 93;
+
+  --overlay: rgba(20, 16, 12, 0.72);
+
+  --shadow-1: 0 1px 2px rgb(0 0 0 / 0.32), 0 0 0 1px rgb(0 0 0 / 0.18);
+  --shadow-2: 0 4px 14px rgb(0 0 0 / 0.4), 0 1px 3px rgb(0 0 0 / 0.24);
+  --shadow-3: 0 12px 32px rgb(0 0 0 / 0.5), 0 2px 8px rgb(0 0 0 / 0.3);
+  --shadow-fab:
+    0 12px 28px rgb(var(--color-brand-strong) / 0.45), 0 4px 10px
+    rgb(0 0 0 / 0.4);
+}
+
+/* --- Light override --- */
+.light,
+[data-theme="light"] {
+  --color-brand: 176 117 51;
+  --color-brand-strong: 142 87 34;
+  --color-brand-soft: 244 229 208;
+  --color-brand-on: 255 252 247;
+
+  --color-bg: 248 244 236;
+  --color-surface: 253 250 243;
+  --color-surface-raised: 255 255 255;
+  --color-surface-sunken: 241 236 226;
+
+  --color-text: 42 33 26;
+  --color-text-muted: 92 82 71;
+  --color-text-subtle: 128 118 106;
+  --color-text-faint: 173 164 147;
+  --color-text-on-brand: 255 252 247;
+
+  --color-border: 225 217 199;
+  --color-border-strong: 181 169 143;
+  --color-border-subtle: 239 233 218;
+
+  --color-success: 62 122 85;
+  --color-success-soft: 226 240 229;
+  --color-warning: 162 111 30;
+  --color-warning-soft: 244 233 210;
+  --color-danger: 162 58 44;
+  --color-danger-soft: 243 220 214;
+  --color-info: 63 115 160;
+  --color-info-soft: 221 232 242;
+
+  --color-cat-whiskey: 154 107 48;
+  --color-cat-wine: 126 31 49;
+  --color-cat-beer: 166 134 45;
+  --color-cat-sake: 168 164 138;
+  --color-cat-cocktail: 162 79 96;
+  --color-cat-etc: 128 118 106;
+
+  --color-place-bar: 139 95 42;
+  --color-place-distillery: 92 66 38;
+  --color-place-winery: 126 31 49;
+  --color-place-brewery: 166 134 45;
+  --color-place-restaurant: 63 124 92;
+  --color-place-etc: 128 118 106;
+
+  --color-pair-bad: 142 60 46;
+  --color-pair-okay: 128 120 104;
+  --color-pair-good: 63 126 77;
+  --color-pair-great: 162 118 30;
+
+  --overlay: rgba(28, 22, 16, 0.42);
+
+  --shadow-1: 0 1px 2px rgb(42 33 26 / 0.06), 0 0 0 1px rgb(42 33 26 / 0.04);
+  --shadow-2: 0 4px 14px rgb(42 33 26 / 0.1), 0 1px 3px rgb(42 33 26 / 0.06);
+  --shadow-3: 0 12px 32px rgb(42 33 26 / 0.16), 0 2px 8px rgb(42 33 26 / 0.08);
+  --shadow-fab:
+    0 12px 28px rgb(var(--color-brand-strong) / 0.36), 0 4px 10px
+    rgb(42 33 26 / 0.12);
+}
+
+/* --- Type / spacing / radius / motion --- */
+:root {
+  --font-display:
+    "Fraunces", "Pretendard", -apple-system, "Apple SD Gothic Neo",
+    "Noto Sans KR", system-ui, serif;
+  --font-text:
+    "Pretendard", -apple-system, "Apple SD Gothic Neo", "Noto Sans KR",
+    system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "SF Mono", ui-monospace, monospace;
+
+  --text-display: 34px;
+  --text-h1: 26px;
+  --text-h2: 20px;
+  --text-h3: 17px;
+  --text-body: 16px;
+  --text-body-sm: 14px;
+  --text-caption: 12px;
+  --text-overline: 11px;
+
+  --leading-tight: 1.18;
+  --leading-snug: 1.32;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.7;
+
+  --tracking-tight: -0.02em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.04em;
+  --tracking-wider: 0.12em;
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-2xl: 28px;
+  --radius-pill: 999px;
+
+  --target-min: 44px;
+
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-emphasized: cubic-bezier(0.3, 0, 0, 1);
+  --duration-fast: 120ms;
+  --duration-base: 220ms;
+  --duration-slow: 360ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0ms;
+    --duration-base: 0ms;
+    --duration-slow: 0ms;
+  }
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
