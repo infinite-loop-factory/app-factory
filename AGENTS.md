@@ -3,13 +3,13 @@
 This guide orients agents and contributors working inside the Turborepo monorepo. Keep this close while making changes; it distills the conventions the team expects.
 
 ## Project Structure & Module Organization
-- `apps/` holds Expo apps such as `reaction-speed-test`, `cafe`, `delivery`, `country-tracker`, `playlist`, and `dog-walk`. Each app keeps feature code under `app/` with colocated assets and tests (or in `__tests__/`).
+- `apps/` holds Expo apps such as `country-tracker`, `playlist`, and `dog-walk`. Each app keeps feature code under `app/` with colocated assets and tests (or in `__tests__/`).
 - `packages/` contains shared libraries. Reach for `@infinite-loop-factory/common` for cross-app utilities, `@infinite-loop-factory/ui` for design primitives, and `config-typescript` for reusable build settings.
 - `turbo/` provides Turborepo generators and templates. Update these if you change scaffolding logic, otherwise leave untouched.
 
 ## Build, Test, and Development Commands
 - Install dependencies: `pnpm install` (run once per checkout or lockfile change).
-- Launch an Expo app: `pnpm --filter @infinite-loop-factory/reaction-speed-test start` plus `-- --tunnel` or `--android` based on your target.
+- Launch an Expo app: `pnpm --filter @infinite-loop-factory/dog-walk start` plus `-- --tunnel` or `--android` based on your target.
 - Build a package: `pnpm --filter @infinite-loop-factory/ui build` to validate reusable components.
 - Lint or type-check: `pnpm --filter <pkg> lint` and `pnpm --filter <pkg> type-check` keep Biome and TS happy before committing.
 - Test: `pnpm --filter <pkg> test` (append `-- --coverage` when updating metrics). For multi-package builds, run `pnpm dlx turbo run build --filter <pkg>`.
