@@ -48,7 +48,9 @@
   - `tasting_note_tags` (note_id, tag) — CASCADE
   - `tasting_note_photos` (note_id, uri, sort_order) — CASCADE
   - `places` (stub: id, name, category, latitude, longitude) — Phase 2 에서 확장
-- [ ] Repository: `tastingNoteRepo` (create / get / update / delete / list with filters)
+- [x] Repository: `tastingNoteRepo` (create / get / update / delete / list with filters)
+  - `queries.ts` 의 `buildListQuery` + 단위 테스트 (필터 매트릭스)
+  - 도메인 타입 `TastingNote` 만 노출 (DB row → camelCase 매핑)
 - [ ] 사진 서비스 (`src/services/photo/`)
   - 촬영(`expo-camera`) / 선택(`expo-image-picker`)
   - 압축(`expo-image-manipulator`) → Documents 디렉토리 저장(`expo-file-system`)
