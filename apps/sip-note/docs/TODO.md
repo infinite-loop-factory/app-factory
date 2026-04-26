@@ -42,12 +42,12 @@
 
 > 핵심 루프 완성: DB 초기화 → 사진 → 정보 입력 → 저장 → 목록
 
-- [ ] SQLite 클라이언트 (`src/db/client.ts`) — `sip-note.db` open + 마이그레이션 러너
-- [ ] 스키마 v1
-  - `tasting_notes` (id, category, name, score, memo, price, price_unit, date, created_at, updated_at)
-  - `tasting_note_tags` (note_id, tag)
-  - `tasting_note_photos` (note_id, uri, sort_order)
-  - `places` (stub: id, name, category, lat, lng) — Phase 2 에서 확장
+- [x] SQLite 클라이언트 (`src/db/client.ts`) — `sip-note.db` open + 마이그레이션 러너
+- [x] 스키마 v1
+  - `tasting_notes` (id, category, name, score, memo, price, price_unit, date, place_id, created_at, updated_at)
+  - `tasting_note_tags` (note_id, tag) — CASCADE
+  - `tasting_note_photos` (note_id, uri, sort_order) — CASCADE
+  - `places` (stub: id, name, category, latitude, longitude) — Phase 2 에서 확장
 - [ ] Repository: `tastingNoteRepo` (create / get / update / delete / list with filters)
 - [ ] 사진 서비스 (`src/services/photo/`)
   - 촬영(`expo-camera`) / 선택(`expo-image-picker`)
