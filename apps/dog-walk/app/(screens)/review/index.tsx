@@ -28,6 +28,19 @@ export default function ReviewScreen() {
     deleteReview(reviewId, { onSuccess: () => router.back() });
   };
 
+  const handleEdit = (reviewData: ReviewDataType) => {
+    router.push({
+      pathname: "/(screens)/review/edit" as never,
+      params: {
+        reviewId: reviewData.id,
+        courseId,
+        initialRate: reviewData.rate,
+        initialContent: reviewData.content,
+        initialImages: reviewData.images ?? "[]",
+      },
+    });
+  };
+
   const [reviewList, setReviewList] = useState<ReviewDataType[]>([]);
   const [reviewImages, setReviewImages] = useState<string[]>([]);
   const [showImageModal, setShowImageModal] = useState(false);
@@ -65,6 +78,7 @@ export default function ReviewScreen() {
               currentUserId={userInfo.id}
               key={`course_review_${item.id}`}
               onDelete={handleDelete}
+              onEdit={handleEdit}
               reviewData={item}
               setReviewImages={setReviewImages}
               setSelectedImageIndex={setSelectedImageIndex}

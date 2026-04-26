@@ -1,3 +1,5 @@
+import type { ReviewDataType } from "@/types/review";
+
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useAtomValue } from "jotai";
@@ -32,6 +34,19 @@ export default function Reviews({ courseId, rate }: ReviewsProps) {
 
   const handleDelete = (reviewId: number) => {
     deleteReview(reviewId, { onSuccess: () => router.back() });
+  };
+
+  const handleEdit = (reviewData: ReviewDataType) => {
+    router.push({
+      pathname: "/(screens)/review/edit" as never,
+      params: {
+        reviewId: reviewData.id,
+        courseId,
+        initialRate: reviewData.rate,
+        initialContent: reviewData.content,
+        initialImages: reviewData.images ?? "[]",
+      },
+    });
   };
 
   const onPressCloseModal = () => {
@@ -86,6 +101,7 @@ export default function Reviews({ courseId, rate }: ReviewsProps) {
             currentUserId={userInfo.id}
             key={`review_${reviewData.id}`}
             onDelete={handleDelete}
+            onEdit={handleEdit}
             reviewData={reviewData}
             setReviewImages={setReviewImages}
             setSelectedImageIndex={setSelectedImageIndex}

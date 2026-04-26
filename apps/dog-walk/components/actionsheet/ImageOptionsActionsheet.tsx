@@ -1,3 +1,4 @@
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import {
   Actionsheet,
   ActionsheetBackdrop,
@@ -19,6 +20,8 @@ export default function ImageOptionsActionsheet({
   setShowActionsheet,
   handleDelete,
 }: ImageOptionsActionsheetProps) {
+  const insets = useSafeAreaInsets();
+
   const handleClose = () => {
     setShowActionsheet(false);
   };
@@ -26,7 +29,7 @@ export default function ImageOptionsActionsheet({
   return (
     <Actionsheet isOpen={showActionsheet} onClose={handleClose}>
       <ActionsheetBackdrop />
-      <ActionsheetContent>
+      <ActionsheetContent style={{ paddingBottom: insets.bottom }}>
         <ActionsheetDragIndicatorWrapper>
           <ActionsheetDragIndicator />
         </ActionsheetDragIndicatorWrapper>
