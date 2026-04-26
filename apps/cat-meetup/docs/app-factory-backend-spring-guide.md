@@ -18,8 +18,6 @@
 - `apps/country-tracker`
 - `apps/delivery`
 - `apps/dog-walk`
-- `apps/question-card`
-- `apps/reaction-speed-test`
 - `packages/common`: 공통 유틸
 - `packages/ui`: 공통 UI 컴포넌트
 - `turbo/generators`: 신규 앱/모듈 생성기
