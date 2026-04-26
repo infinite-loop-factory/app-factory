@@ -22,9 +22,10 @@
   - `expo-location ~19.0.8`, `expo-task-manager ~14.0.9`, `expo-notifications ~0.32.16`
   - `expo-file-system ~19.0.21`, `expo-sharing ~14.0.8`, `expo-haptics ~15.0.8`
   - `react-native-maps 1.20.1`
-- [ ] `app.config.ts` 권한/플러그인 추가
-  - camera, location (foreground + background), notifications, maps API key
-  - `expo-sqlite` plugin 등록
+- [x] `app.config.ts` 권한/플러그인 추가
+  - camera, location (foreground + background), notifications, `expo-sqlite` plugin 등록
+  - iOS `UIBackgroundModes: ["location", "fetch"]` 추가
+  - Maps API key 는 Phase 2 지도 렌더링 시점에 별도 추가
 - [ ] 폴더 구조 정립
   - `src/db/` (client, migrations, schema)
   - `src/features/{tasting,place,pairing,badge,my}/` (UI + repo + hooks)
