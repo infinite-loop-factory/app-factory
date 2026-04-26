@@ -51,9 +51,10 @@
 - [x] Repository: `tastingNoteRepo` (create / get / update / delete / list with filters)
   - `queries.ts` 의 `buildListQuery` + 단위 테스트 (필터 매트릭스)
   - 도메인 타입 `TastingNote` 만 노출 (DB row → camelCase 매핑)
-- [ ] 사진 서비스 (`src/services/photo/`)
-  - 촬영(`expo-camera`) / 선택(`expo-image-picker`)
-  - 압축(`expo-image-manipulator`) → Documents 디렉토리 저장(`expo-file-system`)
+- [x] 사진 서비스 (`src/services/photo/`)
+  - 촬영 + 갤러리 모두 `expo-image-picker` 로 통일 (커스텀 카메라 화면은 추후)
+  - 압축 1600px / JPEG 0.85 (`expo-image-manipulator`) → Documents/photos/ 저장(`expo-file-system/legacy`)
+  - public API: `takePhoto` / `pickPhoto` / `pickPhotos` / `savePhotoToNote` / `removePhoto`
 - [ ] 화면: **홈 (테이스팅 피드)** — 최신순 타임라인, 카드형, FAB
 - [ ] 화면: **기록 작성** (풀스크린 모달) — 카테고리, 이름, 점수(0.5단위), 태그, 메모, 가격, 사진, 날짜
 - [ ] 화면: **기록 상세** (조회 / 수정 / 삭제)
