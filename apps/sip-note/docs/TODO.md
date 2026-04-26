@@ -26,10 +26,10 @@
   - camera, location (foreground + background), notifications, `expo-sqlite` plugin 등록
   - iOS `UIBackgroundModes: ["location", "fetch"]` 추가
   - Maps API key 는 Phase 2 지도 렌더링 시점에 별도 추가
-- [ ] 폴더 구조 정립
-  - `src/db/` (client, migrations, schema)
-  - `src/features/{tasting,place,pairing,badge,my}/` (UI + repo + hooks)
-  - `src/services/{photo,location,notification,export}/`
+- [x] 폴더 구조 정립
+  - `src/db/` (client, migrations, schema) — README 로 컨벤션 정의
+  - `src/features/` — `{tasting,place,pairing,badge,my}/` 는 각 Phase 진행 시 생성
+  - `src/services/` — `{photo,location,notification,export}/` 는 각 Phase 진행 시 생성
 - [ ] **디자인 시스템 토큰 정리 — claude design 활용**
   - 컬러 토큰 (라이트/다크), 카테고리 컬러(위스키/와인/맥주/사케/칵테일/기타)
   - 타이포 스케일, 8px 그리드, 카드/바텀시트/FAB 컴포넌트 스타일
