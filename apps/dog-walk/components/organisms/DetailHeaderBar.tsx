@@ -65,6 +65,14 @@ export default function DetailHeaderBar({
     }
   };
 
+  const handleEdit = () => {
+    setShowOptionsActionsheet(false);
+    router.push({
+      pathname: "/(screens)/course/edit" as never,
+      params: { id: courseId },
+    });
+  };
+
   const handleLike = async () => {
     try {
       if (!isLikeCourse) {
@@ -129,6 +137,7 @@ export default function DetailHeaderBar({
       </HStack>
       {/* NOTE: MODAL ==> */}
       <OptionsActionsheet
+        onPressEdit={handleEdit}
         onPressOption={() => {
           if (isOwner) {
             setShowOptionsActionsheet(false);
@@ -140,7 +149,7 @@ export default function DetailHeaderBar({
         }}
         setShowActionsheet={setShowOptionsActionsheet}
         showActionsheet={showOptionsActionsheet}
-        type={isOwner ? "DELETE" : "BLOCK"}
+        type={isOwner ? "OWNER" : "BLOCK"}
       />
       <BlockCourseActionsheet
         courseId={courseId}
