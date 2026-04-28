@@ -11,8 +11,15 @@ const translations = {
 };
 const i18n = new I18n(translations);
 
-// Set the locale once at the beginning of your app.
-i18n.locale = getLocales()[0]?.languageCode ?? "en";
+// ko = primary (PRD), en = supported. 그 외 디바이스 locale (ja / zh / 미정 등)
+// 도 ko 로 폴백한다 — .design-context.md 의 "Supported languages" 정책.
+const SUPPORTED = ["ko", "en"] as const;
+const deviceLang = getLocales()[0]?.languageCode;
+i18n.locale =
+  deviceLang && (SUPPORTED as readonly string[]).includes(deviceLang)
+    ? deviceLang
+    : "ko";
+i18n.defaultLocale = "ko";
 
 // When a value is missing from a language it'll fall back to another language with the key present.
 i18n.enableFallback = true;
