@@ -56,12 +56,18 @@
   - 촬영 + 갤러리 모두 `expo-image-picker` 로 통일 (커스텀 카메라 화면은 추후)
   - 압축 1600px / JPEG 0.85 (`expo-image-manipulator`) → Documents/photos/ 저장(`expo-file-system/legacy`)
   - public API: `takePhoto` / `pickPhoto` / `pickPhotos` / `savePhotoToNote` / `removePhoto`
-- [ ] 화면: **홈 (테이스팅 피드)** — 최신순 타임라인, 카드형, FAB
-- [ ] 화면: **기록 작성** (풀스크린 모달) — 카테고리, 이름, 점수(0.5단위), 태그, 메모, 가격, 사진, 날짜
-- [ ] 화면: **기록 상세** (조회 / 수정 / 삭제)
-- [ ] 검색 & 필터 (카테고리 / 점수 범위 / 태그 / 기간 / 텍스트)
-- [ ] 햅틱 피드백 (`expo-haptics`) — 저장 완료 시
+- [x] 화면: **홈 (테이스팅 피드)** — 최신순 타임라인, 카드형, FAB
+  - `useTastingFeed` 훅 + `groupByDay` 유틸 + Card / FAB / DayDivider / EmptyState
+- [x] 화면: **기록 작성** (풀스크린 모달) — 카테고리, 이름, 점수(0.5단위), 태그, 메모, 가격, 사진, 날짜
+  - `/note/compose?noteId=` create / update 분기, `compose-form.tsx` orchestrator
+- [x] 화면: **기록 상세** (조회 / 수정 / 삭제)
+  - `/note/[id]` 사진 hero + score 블록 + meta 그리드 + 수정/삭제 액션
+- [x] 검색 & 필터 (카테고리 / 점수 범위 / 태그 / 기간 / 텍스트)
+  - 카테고리 칩 + 검색바 wire 완료. 점수/기간/태그 BottomSheet 는 Phase 1.5 또는 Phase 2 와 함께
+- [x] 햅틱 피드백 (`expo-haptics`) — 저장 완료 시
+  - `src/lib/haptics.ts` wrapper. FAB / 칩 / 슬라이더 / save / delete 모두 wire
 - [ ] **디자인 체크포인트** — 홈 / 작성 / 상세 → claude design 으로 UI 다듬기
+  - 다음 세션: Claude Design 에서 새 handoff 받아와 적용 + `design-checkpoint-phase-1.md` 작성
 
 ---
 

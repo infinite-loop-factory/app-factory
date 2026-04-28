@@ -17,7 +17,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: i18n.t("home"),
+          title: i18n.t("tabs.home"),
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
               color={color}
@@ -26,8 +26,7 @@ export default function TabLayout() {
           ),
         }}
       />
-      {/* Phase 1 에서는 기록 탭만 노출. 다른 탭은 해당 Phase 에서 추가. */}
-      <Tabs.Screen name="explore" options={{ href: null }} />
+      {/* 지도 / 페어링 / 마이 탭은 각각 Phase 2 / 3 / 4 에서 추가. */}
     </Tabs>
   );
 }
