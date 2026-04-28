@@ -26,18 +26,8 @@ export default function TabLayout() {
           ),
         }}
       />
-      <Tabs.Screen
-        name="explore"
-        options={{
-          title: "Explore",
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon
-              color={color}
-              name={focused ? "code-slash" : "code-slash-outline"}
-            />
-          ),
-        }}
-      />
+      {/* Phase 1 에서는 기록 탭만 노출. 다른 탭은 해당 Phase 에서 추가. */}
+      <Tabs.Screen name="explore" options={{ href: null }} />
     </Tabs>
   );
 }
