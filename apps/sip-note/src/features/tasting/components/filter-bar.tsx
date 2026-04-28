@@ -3,6 +3,7 @@ import type { TastingCategory } from "@/db/schema";
 import { Pressable, ScrollView, Text, TextInput, View } from "react-native";
 import { Path, Svg } from "react-native-svg";
 import i18n from "@/i18n";
+import { haptic } from "@/lib/haptics";
 
 const CATEGORIES: TastingCategory[] = [
   "whiskey",
@@ -63,7 +64,10 @@ export function FilterBar({
           active={category === undefined}
           dotColor="rgb(var(--color-brand))"
           label={i18n.t("tasting.feed.filterAll")}
-          onPress={() => onCategoryChange(undefined)}
+          onPress={() => {
+            haptic.selection();
+            onCategoryChange(undefined);
+          }}
         />
         {CATEGORIES.map((c) => (
           <Chip
@@ -71,7 +75,10 @@ export function FilterBar({
             dotColor={`rgb(var(--color-cat-${c}))`}
             key={c}
             label={i18n.t(`category.${c}` as const)}
-            onPress={() => onCategoryChange(category === c ? undefined : c)}
+            onPress={() => {
+              haptic.selection();
+              onCategoryChange(category === c ? undefined : c);
+            }}
           />
         ))}
       </ScrollView>

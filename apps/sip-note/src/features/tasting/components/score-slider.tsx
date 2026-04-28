@@ -1,5 +1,6 @@
 import { Pressable, Text, View } from "react-native";
 import { ClipPath, Defs, Path, Rect, Svg } from "react-native-svg";
+import { haptic } from "@/lib/haptics";
 
 const GLASS_PATH = "M6 4h12l-1 14a3 3 0 0 1-3 3h-4a3 3 0 0 1-3-3L6 4z";
 
@@ -51,6 +52,7 @@ export type ScoreSliderProps = {
  */
 export function ScoreSlider({ value, onChange, size = 28 }: ScoreSliderProps) {
   const handle = (next: number) => {
+    haptic.selection();
     if (Math.abs(next - value) < 0.001) {
       onChange(Math.max(0, next - 0.5));
     } else {

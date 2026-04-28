@@ -12,6 +12,7 @@ import {
 } from "@/features/tasting/components/compose-form";
 import * as repo from "@/features/tasting/repo/tastingNoteRepo";
 import i18n from "@/i18n";
+import { haptic } from "@/lib/haptics";
 import * as photoService from "@/services/photo";
 
 async function persistPhotos(
@@ -80,6 +81,7 @@ export default function ComposeScreen() {
           await repo.update(created.id, { ...input, photos });
         }
       }
+      haptic.success();
       router.back();
     } finally {
       setSubmitting(false);

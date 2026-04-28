@@ -1,5 +1,6 @@
 import { Pressable } from "react-native";
 import { Path, Svg } from "react-native-svg";
+import { haptic } from "@/lib/haptics";
 
 export type FabProps = {
   onPress: () => void;
@@ -17,7 +18,10 @@ export function Fab({
       accessibilityLabel={accessibilityLabel}
       accessibilityRole="button"
       className="absolute right-5 h-14 w-14 items-center justify-center rounded-pill bg-brand shadow-fab active:opacity-80"
-      onPress={onPress}
+      onPress={() => {
+        haptic.light();
+        onPress();
+      }}
       style={{ bottom: bottomOffset }}
     >
       <Svg fill="none" height={22} viewBox="0 0 24 24" width={22}>

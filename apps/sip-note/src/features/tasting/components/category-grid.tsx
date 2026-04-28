@@ -3,6 +3,7 @@ import type { TastingCategory } from "@/db/schema";
 import { Pressable, Text, View } from "react-native";
 import { CategoryGlyph } from "@/components/ui-domain";
 import i18n from "@/i18n";
+import { haptic } from "@/lib/haptics";
 
 const CATEGORIES: TastingCategory[] = [
   "whiskey",
@@ -33,7 +34,10 @@ export function CategoryGrid({ value, onChange }: CategoryGridProps) {
                 : "h-20 w-[31.5%] items-center justify-center gap-1 rounded-md border border-border-subtle bg-surface"
             }
             key={c}
-            onPress={() => onChange(c)}
+            onPress={() => {
+              haptic.selection();
+              onChange(c);
+            }}
           >
             <CategoryGlyph category={c} size={28} />
             <Text

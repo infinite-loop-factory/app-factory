@@ -12,6 +12,7 @@ import {
   formatDateShort,
 } from "@/features/tasting/utils/format-date";
 import i18n from "@/i18n";
+import { haptic } from "@/lib/haptics";
 
 export default function NoteDetailScreen() {
   const router = useRouter();
@@ -54,6 +55,7 @@ export default function NoteDetailScreen() {
         style: "destructive",
         onPress: async () => {
           await repo.remove(note.id);
+          haptic.warning();
           router.back();
         },
       },
