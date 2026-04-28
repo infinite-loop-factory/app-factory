@@ -1,6 +1,7 @@
 import { Pressable, Text, View } from "react-native";
 import { Path, Svg } from "react-native-svg";
 import { useThemeColors } from "@/hooks/use-theme-colors";
+import i18n from "@/i18n";
 
 export type TagChipProps = {
   label: string;
@@ -51,7 +52,7 @@ export function TagChip({
   if (dismissible && onDismiss) {
     return (
       <Pressable
-        accessibilityLabel={`${label} 제거`}
+        accessibilityLabel={i18n.t("tasting.a11y.removeTag", { label })}
         accessibilityRole="button"
         className={`${baseClass} ${styleClass} gap-1`}
         onPress={onDismiss}

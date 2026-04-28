@@ -42,7 +42,7 @@ export function PhotoStrip({ photos, onChange, max = 5 }: PhotoStripProps) {
         >
           <Image className="h-full w-full" source={{ uri }} />
           <Pressable
-            accessibilityLabel="사진 제거"
+            accessibilityLabel={i18n.t("tasting.a11y.removePhoto")}
             accessibilityRole="button"
             className="absolute top-1 right-1 h-5 w-5 items-center justify-center rounded-pill"
             onPress={() => remove(uri)}

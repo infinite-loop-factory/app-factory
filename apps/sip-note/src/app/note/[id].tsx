@@ -39,7 +39,7 @@ export default function NoteDetailScreen() {
     return (
       <SafeAreaView className="flex-1 items-center justify-center bg-bg">
         <Text className="font-text text-bodySm text-text-subtle">
-          기록을 찾을 수 없어요
+          {i18n.t("tasting.detail.notFound")}
         </Text>
       </SafeAreaView>
     );
@@ -97,7 +97,9 @@ export default function NoteDetailScreen() {
             <View className="absolute right-0 bottom-3 left-0 flex-row justify-center gap-1">
               {note.photos.map((uri, idx) => (
                 <Pressable
-                  accessibilityLabel={`사진 ${idx + 1}`}
+                  accessibilityLabel={i18n.t("tasting.a11y.photoIndex", {
+                    index: idx + 1,
+                  })}
                   accessibilityRole="button"
                   className={
                     idx === activePhoto
@@ -174,7 +176,7 @@ export default function NoteDetailScreen() {
             </>
           )}
 
-          <SectionTitle label="정보" />
+          <SectionTitle label={i18n.t("tasting.detail.sectionInfo")} />
           <View className="flex-row flex-wrap gap-2">
             <MetaTile label={i18n.t("tasting.field.date")}>
               {formatDateShort(note.date)}
@@ -192,7 +194,11 @@ export default function NoteDetailScreen() {
               </MetaTile>
             )}
             <MetaTile label={i18n.t("tasting.field.photos")}>
-              {note.photos.length > 0 ? `${note.photos.length}장` : "없음"}
+              {note.photos.length > 0
+                ? i18n.t("tasting.detail.photosCount", {
+                    count: note.photos.length,
+                  })
+                : i18n.t("tasting.detail.noPhotos")}
             </MetaTile>
           </View>
 

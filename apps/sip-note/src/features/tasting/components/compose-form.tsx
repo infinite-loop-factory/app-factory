@@ -94,7 +94,7 @@ export function ComposeForm({ initial, onChange }: ComposeFormProps) {
       showsVerticalScrollIndicator={false}
     >
       <FieldLabel
-        hint="선택 · 최대 5장"
+        hint={i18n.t("tasting.field.photosHint")}
         label={i18n.t("tasting.field.photos")}
       />
       <PhotoStrip onChange={(p) => update("photos", p)} photos={state.photos} />
@@ -117,7 +117,7 @@ export function ComposeForm({ initial, onChange }: ComposeFormProps) {
       </View>
 
       <FieldLabel
-        hint="0.5 단위 · 위스키 잔"
+        hint={i18n.t("tasting.field.scoreHint")}
         label={i18n.t("tasting.field.score")}
       />
       <View className="rounded-md border border-border-subtle bg-surface-sunken p-4">
@@ -140,7 +140,10 @@ export function ComposeForm({ initial, onChange }: ComposeFormProps) {
 
       {/* TODO Phase 2: 자동 위치 태깅 + 변경 UI. */}
 
-      <FieldLabel hint="선택" label={i18n.t("tasting.field.price")} />
+      <FieldLabel
+        hint={i18n.t("tasting.field.priceHint")}
+        label={i18n.t("tasting.field.price")}
+      />
       <PriceRow
         amount={state.price}
         onAmountChange={(v) => update("price", v)}

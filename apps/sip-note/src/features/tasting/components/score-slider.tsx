@@ -1,6 +1,7 @@
 import { Pressable, Text, View } from "react-native";
 import { ClipPath, Defs, Path, Rect, Svg } from "react-native-svg";
 import { useThemeColors } from "@/hooks/use-theme-colors";
+import i18n from "@/i18n";
 import { haptic } from "@/lib/haptics";
 
 const GLASS_PATH = "M6 4h12l-1 14a3 3 0 0 1-3 3h-4a3 3 0 0 1-3-3L6 4z";
@@ -72,7 +73,9 @@ export function ScoreSlider({ value, onChange, size = 28 }: ScoreSliderProps) {
           return (
             <View className="flex-row" key={i}>
               <Pressable
-                accessibilityLabel={`${halfScore} 점`}
+                accessibilityLabel={i18n.t("tasting.a11y.scorePoint", {
+                  score: halfScore,
+                })}
                 accessibilityRole="button"
                 onPress={() => handle(halfScore)}
                 style={{ width: size / 2 }}
@@ -82,7 +85,9 @@ export function ScoreSlider({ value, onChange, size = 28 }: ScoreSliderProps) {
                 </View>
               </Pressable>
               <Pressable
-                accessibilityLabel={`${fullScore} 점`}
+                accessibilityLabel={i18n.t("tasting.a11y.scorePoint", {
+                  score: fullScore,
+                })}
                 accessibilityRole="button"
                 onPress={() => handle(fullScore)}
                 style={{ width: size / 2, marginLeft: -size / 2 }}

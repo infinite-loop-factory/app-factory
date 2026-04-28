@@ -65,7 +65,7 @@ export default function HomeScreen() {
       <View className="flex-row items-end justify-between px-6 pt-3">
         <View>
           <Text className="font-semibold font-text text-overline text-text-subtle tracking-wider">
-            Welcome back
+            {i18n.t("tasting.feed.greeting")}
           </Text>
           <Text className="mt-1 font-display font-semibold text-display text-text">
             {i18n.t("tasting.feed.title")}
@@ -79,9 +79,9 @@ export default function HomeScreen() {
       {/* TODO Phase 4: home-stats (이번 주 / 평균 / 누적) 연결. */}
       <View className="mx-6 mt-4 flex-row rounded-lg border border-border-subtle bg-surface px-1 py-3">
         {[
-          { num: "—", lbl: "이번 주" },
-          { num: "—", lbl: "평균 점수" },
-          { num: "—", lbl: "올해 누적" },
+          { num: "—", lbl: i18n.t("tasting.feed.stats.thisWeek") },
+          { num: "—", lbl: i18n.t("tasting.feed.stats.avgScore") },
+          { num: "—", lbl: i18n.t("tasting.feed.stats.yearTotal") },
         ].map((s, idx) => (
           <View
             className={`flex-1 items-center px-2 ${idx > 0 ? "border-border-subtle border-l" : ""}`}
