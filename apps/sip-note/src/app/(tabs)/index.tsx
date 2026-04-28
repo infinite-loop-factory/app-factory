@@ -1,10 +1,12 @@
+import type { TastingCategory } from "@/db/schema";
 import type { TastingNoteFilter } from "@/features/tasting/repo/types";
 
 import { useRouter } from "expo-router";
-import { useMemo, useState } from "react";
+import { useDeferredValue, useMemo, useState } from "react";
 import { FlatList, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Card, DayDivider, EmptyState, Fab } from "@/components/ui-domain";
+import { FilterBar } from "@/features/tasting/components/filter-bar";
 import { useTastingFeed } from "@/features/tasting/hooks/use-tasting-feed";
 import i18n from "@/i18n";
 
@@ -19,9 +21,22 @@ type FeedRow =
 export default function HomeScreen() {
   const router = useRouter();
 
-  // Filter state lives here; wire-up of search/category UI lands in the next commit.
-  const [filter] = useState<TastingNoteFilter>({});
+  const [query, setQuery] = useState("");
+  const [category, setCategory] = useState<TastingCategory | undefined>(
+    undefined,
+  );
+  const deferredQuery = useDeferredValue(query);
+
+  const filter = useMemo<TastingNoteFilter>(
+    () => ({
+      query: deferredQuery.trim() || undefined,
+      category,
+    }),
+    [deferredQuery, category],
+  );
+
   const { buckets, isLoading } = useTastingFeed(filter);
+  const isFiltered = Boolean(filter.query) || filter.category !== undefined;
 
   const rows = useMemo<FeedRow[]>(() => {
     const out: FeedRow[] = [];
@@ -61,10 +76,7 @@ export default function HomeScreen() {
         </Text>
       </View>
 
-      {/*
-        TODO Commit 3: 검색바 + 카테고리 칩 wire-up.
-        TODO Phase 4: home-stats (이번 주 / 평균 / 누적) 연결.
-      */}
+      {/* TODO Phase 4: home-stats (이번 주 / 평균 / 누적) 연결. */}
       <View className="mx-6 mt-4 flex-row rounded-lg border border-border-subtle bg-surface px-1 py-3">
         {[
           { num: "—", lbl: "이번 주" },
@@ -85,15 +97,36 @@ export default function HomeScreen() {
         ))}
       </View>
 
+      <View className="mt-4">
+        <FilterBar
+          category={category}
+          onCategoryChange={setCategory}
+          onQueryChange={setQuery}
+          query={query}
+        />
+      </View>
+
       <View className="relative flex-1">
         {isEmpty ? (
           <EmptyState
-            caption={i18n.t("empty.feed.body")}
-            cta={{
-              label: i18n.t("tasting.feed.fab"),
-              onPress: () => router.push("/note/compose" as never),
-            }}
-            title={i18n.t("empty.feed.title")}
+            caption={
+              isFiltered
+                ? i18n.t("tasting.feed.noResultsBody")
+                : i18n.t("empty.feed.body")
+            }
+            cta={
+              isFiltered
+                ? undefined
+                : {
+                    label: i18n.t("tasting.feed.fab"),
+                    onPress: () => router.push("/note/compose" as never),
+                  }
+            }
+            title={
+              isFiltered
+                ? i18n.t("tasting.feed.noResultsTitle")
+                : i18n.t("empty.feed.title")
+            }
           />
         ) : (
           <FlatList

@@ -46,7 +46,11 @@
   "tasting": {
     "feed": {
       "title": "Tasting Feed",
-      "fab": "Add Note"
+      "fab": "Add Note",
+      "searchPlaceholder": "Search notes, tags, memo",
+      "filterAll": "All",
+      "noResultsTitle": "No results",
+      "noResultsBody": "Try a different search or category"
     },
     "write": {
       "title": "New Note",

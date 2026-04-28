@@ -46,7 +46,11 @@
   "tasting": {
     "feed": {
       "title": "테이스팅 피드",
-      "fab": "기록 추가"
+      "fab": "기록 추가",
+      "searchPlaceholder": "기록·태그·메모 검색",
+      "filterAll": "전체",
+      "noResultsTitle": "검색 결과가 없어요",
+      "noResultsBody": "다른 검색어나 카테고리를 시도해보세요"
     },
     "write": {
       "title": "새 기록",
