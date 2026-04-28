@@ -1,5 +1,6 @@
 import { View } from "react-native";
 import { ClipPath, Defs, Path, Rect, Svg } from "react-native-svg";
+import { useThemeColors } from "@/hooks/use-theme-colors";
 
 type GlassState = "full" | "half" | "empty";
 
@@ -9,12 +10,9 @@ type GlassProps = {
 };
 
 function WhiskyGlass({ state, size }: GlassProps) {
-  const fillColor =
-    state === "empty" ? "transparent" : "rgb(var(--color-brand))";
-  const strokeColor =
-    state === "empty"
-      ? "rgb(var(--color-text-faint))"
-      : "rgb(var(--color-brand))";
+  const colors = useThemeColors();
+  const fillColor = state === "empty" ? "transparent" : colors.brand;
+  const strokeColor = state === "empty" ? colors.textFaint : colors.brand;
 
   return (
     <Svg height={size} viewBox="0 0 24 24" width={size}>
@@ -35,7 +33,7 @@ function WhiskyGlass({ state, size }: GlassProps) {
         <Path
           clipPath="url(#half)"
           d="M6 4h12l-1 14a3 3 0 0 1-3 3h-4a3 3 0 0 1-3-3L6 4z"
-          fill="rgb(var(--color-brand))"
+          fill={colors.brand}
         />
       )}
     </Svg>

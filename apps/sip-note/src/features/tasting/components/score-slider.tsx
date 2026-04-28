@@ -1,5 +1,6 @@
 import { Pressable, Text, View } from "react-native";
 import { ClipPath, Defs, Path, Rect, Svg } from "react-native-svg";
+import { useThemeColors } from "@/hooks/use-theme-colors";
 import { haptic } from "@/lib/haptics";
 
 const GLASS_PATH = "M6 4h12l-1 14a3 3 0 0 1-3 3h-4a3 3 0 0 1-3-3L6 4z";
@@ -7,12 +8,9 @@ const GLASS_PATH = "M6 4h12l-1 14a3 3 0 0 1-3 3h-4a3 3 0 0 1-3-3L6 4z";
 type GlassState = "full" | "half" | "empty";
 
 function Glass({ state, size = 28 }: { state: GlassState; size?: number }) {
-  const fillColor =
-    state === "empty" ? "transparent" : "rgb(var(--color-brand))";
-  const strokeColor =
-    state === "empty"
-      ? "rgb(var(--color-text-faint))"
-      : "rgb(var(--color-brand))";
+  const colors = useThemeColors();
+  const fillColor = state === "empty" ? "transparent" : colors.brand;
+  const strokeColor = state === "empty" ? colors.textFaint : colors.brand;
 
   return (
     <Svg height={size} viewBox="0 0 24 24" width={size}>
@@ -33,7 +31,7 @@ function Glass({ state, size = 28 }: { state: GlassState; size?: number }) {
         <Path
           clipPath={`url(#half-${state})`}
           d={GLASS_PATH}
-          fill="rgb(var(--color-brand))"
+          fill={colors.brand}
         />
       )}
     </Svg>

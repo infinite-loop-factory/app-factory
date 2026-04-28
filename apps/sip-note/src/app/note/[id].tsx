@@ -11,11 +11,13 @@ import {
   formatDateLong,
   formatDateShort,
 } from "@/features/tasting/utils/format-date";
+import { useThemeColors, withAlpha } from "@/hooks/use-theme-colors";
 import i18n from "@/i18n";
 import { haptic } from "@/lib/haptics";
 
 export default function NoteDetailScreen() {
   const router = useRouter();
+  const colors = useThemeColors();
   const { id } = useLocalSearchParams<{ id: string }>();
   const [note, setNote] = useState<TastingNote | null | undefined>(undefined);
   const [activePhoto, setActivePhoto] = useState(0);
@@ -85,7 +87,7 @@ export default function NoteDetailScreen() {
             <IconButton onPress={() => router.back()}>
               <Path
                 d="M15 18l-6-6 6-6"
-                stroke="rgb(var(--color-text))"
+                stroke={colors.text}
                 strokeLinecap="round"
                 strokeWidth={2}
               />
@@ -114,20 +116,16 @@ export default function NoteDetailScreen() {
           <View
             className="h-6 flex-row items-center gap-1.5 self-start rounded-pill px-2"
             style={{
-              backgroundColor: `rgb(var(--color-cat-${note.category}) / 0.18)`,
+              backgroundColor: withAlpha(colors.drink[note.category], 0.18),
             }}
           >
             <View
               className="h-1.5 w-1.5 rounded-pill"
-              style={{
-                backgroundColor: `rgb(var(--color-cat-${note.category}))`,
-              }}
+              style={{ backgroundColor: colors.drink[note.category] }}
             />
             <Text
               className="font-semibold font-text text-overline tracking-wider"
-              style={{
-                color: `rgb(var(--color-cat-${note.category}))`,
-              }}
+              style={{ color: colors.drink[note.category] }}
             >
               {i18n.t(`category.${note.category}` as const).toUpperCase()}
             </Text>

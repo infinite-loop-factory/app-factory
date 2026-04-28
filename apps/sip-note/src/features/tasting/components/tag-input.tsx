@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { TextInput, View } from "react-native";
 import { TagChip } from "@/components/ui-domain";
+import { useThemeColors } from "@/hooks/use-theme-colors";
 import i18n from "@/i18n";
 
 export type TagInputProps = {
@@ -9,6 +10,7 @@ export type TagInputProps = {
 };
 
 export function TagInput({ value, onChange }: TagInputProps) {
+  const colors = useThemeColors();
   const [draft, setDraft] = useState("");
 
   const add = () => {
@@ -42,7 +44,7 @@ export function TagInput({ value, onChange }: TagInputProps) {
         onChangeText={setDraft}
         onSubmitEditing={add}
         placeholder={i18n.t("tasting.field.tagsPlaceholder")}
-        placeholderTextColor="rgb(var(--color-text-faint))"
+        placeholderTextColor={colors.textFaint}
         returnKeyType="done"
         value={draft}
       />

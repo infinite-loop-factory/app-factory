@@ -1,6 +1,7 @@
 import type { PriceUnit } from "@/db/schema";
 
 import { Pressable, Text, TextInput, View } from "react-native";
+import { useThemeColors } from "@/hooks/use-theme-colors";
 import i18n from "@/i18n";
 
 export type PriceRowProps = {
@@ -16,6 +17,7 @@ export function PriceRow({
   onAmountChange,
   onUnitChange,
 }: PriceRowProps) {
+  const colors = useThemeColors();
   return (
     <View className="flex-row items-center gap-2">
       <View className="h-12 flex-1 flex-row items-center rounded-md border border-border-subtle bg-surface-sunken px-3">
@@ -26,7 +28,7 @@ export function PriceRow({
           keyboardType="number-pad"
           onChangeText={(v) => onAmountChange(v.replace(/[^0-9]/g, ""))}
           placeholder="0"
-          placeholderTextColor="rgb(var(--color-text-faint))"
+          placeholderTextColor={colors.textFaint}
           value={amount}
         />
       </View>

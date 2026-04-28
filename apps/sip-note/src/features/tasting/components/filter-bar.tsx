@@ -2,6 +2,7 @@ import type { TastingCategory } from "@/db/schema";
 
 import { Pressable, ScrollView, Text, TextInput, View } from "react-native";
 import { Path, Svg } from "react-native-svg";
+import { useThemeColors } from "@/hooks/use-theme-colors";
 import i18n from "@/i18n";
 import { haptic } from "@/lib/haptics";
 
@@ -27,18 +28,19 @@ export function FilterBar({
   category,
   onCategoryChange,
 }: FilterBarProps) {
+  const colors = useThemeColors();
   return (
     <View>
       <View className="mx-6 flex-row items-center gap-2 rounded-pill border border-border-subtle bg-surface-sunken px-4 py-2">
         <Svg fill="none" height={14} viewBox="0 0 24 24" width={14}>
           <Path
             d="M11 18a7 7 0 1 0 0-14 7 7 0 0 0 0 14z"
-            stroke="rgb(var(--color-text-subtle))"
+            stroke={colors.textSubtle}
             strokeWidth={2}
           />
           <Path
             d="m20 20-3.5-3.5"
-            stroke="rgb(var(--color-text-subtle))"
+            stroke={colors.textSubtle}
             strokeLinecap="round"
             strokeWidth={2}
           />
@@ -48,7 +50,7 @@ export function FilterBar({
           className="flex-1 font-text text-bodySm text-text"
           onChangeText={onQueryChange}
           placeholder={i18n.t("tasting.feed.searchPlaceholder")}
-          placeholderTextColor="rgb(var(--color-text-faint))"
+          placeholderTextColor={colors.textFaint}
           returnKeyType="search"
           value={query}
         />
@@ -62,7 +64,7 @@ export function FilterBar({
       >
         <Chip
           active={category === undefined}
-          dotColor="rgb(var(--color-brand))"
+          dotColor={colors.brand}
           label={i18n.t("tasting.feed.filterAll")}
           onPress={() => {
             haptic.selection();
@@ -72,7 +74,7 @@ export function FilterBar({
         {CATEGORIES.map((c) => (
           <Chip
             active={category === c}
-            dotColor={`rgb(var(--color-cat-${c}))`}
+            dotColor={colors.drink[c]}
             key={c}
             label={i18n.t(`category.${c}` as const)}
             onPress={() => {

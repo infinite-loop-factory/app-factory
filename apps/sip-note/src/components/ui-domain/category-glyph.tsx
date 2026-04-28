@@ -1,6 +1,8 @@
+import type React from "react";
 import type { TastingCategory } from "@/db/schema";
 
 import { Path, Rect, Svg } from "react-native-svg";
+import { useThemeColors } from "@/hooks/use-theme-colors";
 
 const PATHS: Record<TastingCategory, React.ReactNode> = {
   whiskey: (
@@ -36,15 +38,6 @@ const PATHS: Record<TastingCategory, React.ReactNode> = {
   ),
 };
 
-const TOKEN_COLOR: Record<TastingCategory, string> = {
-  whiskey: "rgb(var(--color-cat-whiskey))",
-  wine: "rgb(var(--color-cat-wine))",
-  beer: "rgb(var(--color-cat-beer))",
-  sake: "rgb(var(--color-cat-sake))",
-  cocktail: "rgb(var(--color-cat-cocktail))",
-  etc: "rgb(var(--color-cat-etc))",
-};
-
 export type CategoryGlyphProps = {
   category: TastingCategory;
   size?: number;
@@ -58,11 +51,14 @@ export function CategoryGlyph({
   color,
   strokeWidth = 1.5,
 }: CategoryGlyphProps) {
+  const colors = useThemeColors();
+  const stroke = color ?? colors.drink[category];
+
   return (
     <Svg
       fill="none"
       height={size}
-      stroke={color ?? TOKEN_COLOR[category]}
+      stroke={stroke}
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth={strokeWidth}

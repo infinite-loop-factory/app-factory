@@ -10,6 +10,7 @@ import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useColorScheme } from "nativewind";
 import { useEffect } from "react";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
 import "@/i18n";
 
@@ -40,13 +41,17 @@ export default function RootLayout() {
   const themeMode = colorScheme === "light" ? "light" : "dark";
 
   return (
-    <GluestackUIProvider mode={themeMode}>
-      <ThemeProvider value={colorScheme === "light" ? DefaultTheme : DarkTheme}>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={tabScreenOptions} />
-          <Stack.Screen name="+not-found" />
-        </Stack>
-      </ThemeProvider>
-    </GluestackUIProvider>
+    <SafeAreaProvider>
+      <GluestackUIProvider mode={themeMode}>
+        <ThemeProvider
+          value={colorScheme === "light" ? DefaultTheme : DarkTheme}
+        >
+          <Stack>
+            <Stack.Screen name="(tabs)" options={tabScreenOptions} />
+            <Stack.Screen name="+not-found" />
+          </Stack>
+        </ThemeProvider>
+      </GluestackUIProvider>
+    </SafeAreaProvider>
   );
 }

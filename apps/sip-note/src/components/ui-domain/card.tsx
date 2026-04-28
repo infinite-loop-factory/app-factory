@@ -1,6 +1,7 @@
 import type { TastingCategory } from "@/db/schema";
 
 import { Image, Pressable, Text, View } from "react-native";
+import { useThemeColors } from "@/hooks/use-theme-colors";
 import i18n from "@/i18n";
 import { CategoryGlyph } from "./category-glyph";
 import { ScoreStars } from "./score-stars";
@@ -24,6 +25,7 @@ export function Card({
   score,
   onPress,
 }: CardProps) {
+  const colors = useThemeColors();
   const categoryLabel = i18n.t(`category.${category}` as const);
 
   return (
@@ -51,9 +53,7 @@ export function Card({
         <View className="flex-row items-center gap-1">
           <View
             className="h-1.5 w-1.5 rounded-pill"
-            style={{
-              backgroundColor: `rgb(var(--color-cat-${category}))`,
-            }}
+            style={{ backgroundColor: colors.drink[category] }}
           />
           <Text
             className="font-text text-caption text-text-subtle"

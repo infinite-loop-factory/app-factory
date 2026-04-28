@@ -6,6 +6,7 @@ import type {
 
 import { useState } from "react";
 import { ScrollView, Text, TextInput, View } from "react-native";
+import { useThemeColors } from "@/hooks/use-theme-colors";
 import i18n from "@/i18n";
 import { CategoryGrid } from "./category-grid";
 import { PhotoStrip } from "./photo-strip";
@@ -71,6 +72,7 @@ export function toInput(state: ComposeFormState): TastingNoteInput {
 }
 
 export function ComposeForm({ initial, onChange }: ComposeFormProps) {
+  const colors = useThemeColors();
   const [state, setState] = useState<ComposeFormState>(() =>
     initial ? fromNote(initial) : blankState(),
   );
@@ -109,7 +111,7 @@ export function ComposeForm({ initial, onChange }: ComposeFormProps) {
           className="font-text text-body text-text"
           onChangeText={(v) => update("name", v)}
           placeholder={i18n.t("tasting.field.namePlaceholder")}
-          placeholderTextColor="rgb(var(--color-text-faint))"
+          placeholderTextColor={colors.textFaint}
           value={state.name}
         />
       </View>
@@ -131,7 +133,7 @@ export function ComposeForm({ initial, onChange }: ComposeFormProps) {
         multiline
         onChangeText={(v) => update("memo", v)}
         placeholder={i18n.t("tasting.field.memoPlaceholder")}
-        placeholderTextColor="rgb(var(--color-text-faint))"
+        placeholderTextColor={colors.textFaint}
         textAlignVertical="top"
         value={state.memo}
       />

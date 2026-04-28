@@ -1,5 +1,6 @@
 import { Pressable, Text, View } from "react-native";
 import { Path, Svg } from "react-native-svg";
+import { useThemeColors } from "@/hooks/use-theme-colors";
 
 export type TagChipProps = {
   label: string;
@@ -14,6 +15,7 @@ export function TagChip({
   onDismiss,
   variant = "filled",
 }: TagChipProps) {
+  const colors = useThemeColors();
   const baseClass = "h-7 flex-row items-center rounded-pill px-3";
   const styleClass =
     variant === "filled"
@@ -36,11 +38,7 @@ export function TagChip({
           <Svg fill="none" height={10} viewBox="0 0 24 24" width={10}>
             <Path
               d="M6 6l12 12M18 6L6 18"
-              stroke={
-                variant === "filled"
-                  ? "rgb(var(--color-brand))"
-                  : "rgb(var(--color-text-muted))"
-              }
+              stroke={variant === "filled" ? colors.brand : colors.textMuted}
               strokeLinecap="round"
               strokeWidth={2.5}
             />

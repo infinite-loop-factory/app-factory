@@ -11,6 +11,7 @@ import {
   toInput,
 } from "@/features/tasting/components/compose-form";
 import * as repo from "@/features/tasting/repo/tastingNoteRepo";
+import { useThemeColors } from "@/hooks/use-theme-colors";
 import i18n from "@/i18n";
 import { haptic } from "@/lib/haptics";
 import * as photoService from "@/services/photo";
@@ -36,6 +37,7 @@ async function persistPhotos(
 
 export default function ComposeScreen() {
   const router = useRouter();
+  const colors = useThemeColors();
   const { noteId } = useLocalSearchParams<{ noteId?: string }>();
   const isEdit = Boolean(noteId);
 
@@ -102,7 +104,7 @@ export default function ComposeScreen() {
           <Svg fill="none" height={14} viewBox="0 0 24 24" width={14}>
             <Path
               d="M6 6l12 12M18 6L6 18"
-              stroke="rgb(var(--color-text-muted))"
+              stroke={colors.textMuted}
               strokeLinecap="round"
               strokeWidth={2.2}
             />
