@@ -24,7 +24,6 @@ export default function RootLayout() {
     setColorScheme("dark");
   }, [setColorScheme]);
   const [loaded] = useFonts({
-    SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
     "Fraunces-Regular": require("../assets/fonts/Fraunces-Regular.ttf"),
     "Fraunces-SemiBold": require("../assets/fonts/Fraunces-SemiBold.ttf"),
     "Pretendard-Regular": require("../assets/fonts/Pretendard-Regular.ttf"),
