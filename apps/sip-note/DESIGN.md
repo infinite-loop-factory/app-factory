@@ -2,7 +2,7 @@
 
 > Phase 0 산출물. 모든 토큰 / 폰트 / 컴포넌트 anchor 의 단일 진입점.
 > Source of truth: [`src/design-system/theme.ts`](./src/design-system/theme.ts) (TS) · [`src/global.css`](./src/global.css) (web 변수) · [`src/constants/color-tokens.ts`](./src/constants/color-tokens.ts) (RN 주입).
-> 디자인 컨텍스트: [`.design-context.md`](./.design-context.md) · 작업 흐름: [`docs/design-workflow.md`](./docs/design-workflow.md).
+> 디자인 컨텍스트: [`.design-context.md`](./.design-context.md) · 작업 흐름: [`docs/design/workflow.md`](./docs/design/workflow.md).
 
 ---
 

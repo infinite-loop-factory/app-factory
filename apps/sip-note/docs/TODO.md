@@ -19,7 +19,7 @@
 
 ## 디자인 체크포인트 프로세스 (claude design)
 
-> 자세한 가이드: [`design-workflow.md`](./design-workflow.md). 본 섹션은 Phase 별
+> 자세한 가이드: [`design/workflow.md`](./design/workflow.md). 본 섹션은 Phase 별
 > "디자인 체크포인트" 항목 실행 시 따르는 6 단계 요약.
 
 ### 입력 (사전 준비)
@@ -37,16 +37,16 @@
    캡처. 빈 상태 / 로딩 / 에러 / 권한 거부 화면도 포함.
 2. **Claude Design (web)**: <https://claude.ai/design> 진입 → "Connect codebase"
    로 `apps/sip-note/` 연결 → `.design-context.md` + 스크린샷 첨부 →
-   [`design-workflow.md`](./design-workflow.md) 의 Phase 별 프롬프트 그대로 붙여넣기.
+   [`design/workflow.md`](./design/workflow.md) 의 Phase 별 프롬프트 그대로 붙여넣기.
 3. **Refine**: inline 코멘트 / spacing·color slider 로 다듬기. 안티패턴 6 종 재점검.
 4. **Handoff**: Claude Design 의 "Handoff to Claude Code" 실행 →
-   `apps/sip-note/docs/sip-note-design-system/` 에 번들 압축 해제 (gitignore 됨,
+   `apps/sip-note/docs/design/sip-note-design-system/` 에 번들 압축 해제 (gitignore 됨,
    reference 전용). HTML 프로토타입 + 토큰 패치 + 컴포넌트 코드 포함.
 5. **Claude Code (이 CLI) 적용**: 번들 경로와 Phase 번호 명시해 적용 요청.
    - 시맨틱 토큰만 / 8pt 그리드 / Gluestack 우선 / 다크 우선 룰 통과 후 적용
    - 카테고리 컬러는 `colors.cat.*` 네임스페이스 유지
    - 번들의 web 컴포넌트는 RN + NativeWind 로 변환
-6. **AUDIT + 체크포인트 문서**: 다음 4 단계 확인 후 `design-checkpoint-phase-N.md`
+6. **AUDIT + 체크포인트 문서**: 다음 4 단계 확인 후 `design/checkpoint-phase-N.md`
    작성, 커밋 메시지 `docs(sip-note): 📚 design checkpoint phase N`.
    - **Responsive** — 375 / 768 / 1024 px 캡처
    - **WCAG AA** — 본문 4.5:1, 큰 텍스트·인터랙티브 3:1 이상
@@ -56,7 +56,7 @@
 
 ### 산출물
 
-- `apps/sip-note/docs/design-checkpoint-phase-{0..4}.md` — Phase 별 1 개
+- `apps/sip-note/docs/design/checkpoint-phase-{0..4}.md` — Phase 별 1 개
   (스크린샷 / AUDIT / Decisions / Open Issues 4 섹션)
 - 갱신된 `apps/sip-note/DESIGN.md` (필요 시 토큰·컴포넌트 추가)
 - 갱신된 `apps/sip-note/tailwind.config.ts` / `src/global.css` (토큰 패치 적용 시)
@@ -93,7 +93,7 @@
 - [x] **디자인 시스템 토큰 정리 — claude design 활용**
   - 컬러 토큰 (라이트/다크), 카테고리 컬러(위스키/와인/맥주/사케/칵테일/기타)
   - 타이포 스케일, 8px 그리드, 카드/바텀시트/FAB 컴포넌트 스타일
-  - 산출: [`DESIGN.md`](../DESIGN.md), [`docs/design-checkpoint-phase-0.md`](./design-checkpoint-phase-0.md)
+  - 산출: [`DESIGN.md`](../DESIGN.md), [`docs/design/checkpoint-phase-0.md`](./design/checkpoint-phase-0.md)
 - [x] i18n 키 베이스라인 (`ko`, `en`) — 131 키, nested namespace
   - 사용 패턴: `import i18n from "@/i18n"; i18n.t("namespace.key")` (sibling country-tracker 와 동일)
 
@@ -127,7 +127,7 @@
 - [x] 햅틱 피드백 (`expo-haptics`) — 저장 완료 시
   - `src/lib/haptics.ts` wrapper. FAB / 칩 / 슬라이더 / save / delete 모두 wire
 - [ ] **디자인 체크포인트** — 홈 / 작성 / 상세 → claude design 으로 UI 다듬기
-  - 다음 세션: Claude Design 에서 새 handoff 받아와 적용 + `design-checkpoint-phase-1.md` 작성
+  - 다음 세션: Claude Design 에서 새 handoff 받아와 적용 + `design/checkpoint-phase-1.md` 작성
 
 ---
 
