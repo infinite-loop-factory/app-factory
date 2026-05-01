@@ -18,7 +18,11 @@ import "@/i18n";
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const { colorScheme } = useColorScheme();
+  const { colorScheme, setColorScheme } = useColorScheme();
+  // 디자인 시스템 정책: dark 우선. 디바이스 스킴과 무관하게 항상 다크로 시작.
+  useEffect(() => {
+    setColorScheme("dark");
+  }, [setColorScheme]);
   const [loaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
     "Fraunces-Regular": require("../assets/fonts/Fraunces-Regular.ttf"),
