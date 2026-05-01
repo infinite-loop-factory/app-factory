@@ -11,7 +11,7 @@ const translations = {
 const i18n = new I18n(translations);
 
 // ko = primary (PRD). 디바이스 locale 과 무관하게 ko 로 시작한다 —
-// .design-context.md 의 "Supported languages" 정책.
+// docs/design/context.md 의 "Supported languages" 정책.
 i18n.locale = "ko";
 i18n.defaultLocale = "ko";
 

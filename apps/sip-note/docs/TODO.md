@@ -26,7 +26,7 @@
 
 | 자료 | 위치 | 비고 |
 |---|---|---|
-| 디자인 컨텍스트 | [`../.design-context.md`](../.design-context.md) | 톤 / 안티패턴 / 카테고리 |
+| 디자인 컨텍스트 | [`./design/context.md`](./design/context.md) | 톤 / 안티패턴 / 카테고리 |
 | PRD | [`./prd-drink-diary.md`](./prd-drink-diary.md) | 화면 / 데이터 / 흐름 |
 | 디자인 시스템 | [`../DESIGN.md`](../DESIGN.md) | 토큰 / 컴포넌트 anchor |
 | 현재 화면 스크린샷 | iOS / Android 시뮬레이터 캡처 | 375px 우선, 토큰 미적용 / 불일치 부위 식별용 |
@@ -36,7 +36,7 @@
 1. **Claude Code (이 CLI)**: 현재 Phase 의 화면들을 시뮬레이터로 띄워 스크린샷
    캡처. 빈 상태 / 로딩 / 에러 / 권한 거부 화면도 포함.
 2. **Claude Design (web)**: <https://claude.ai/design> 진입 → "Connect codebase"
-   로 `apps/sip-note/` 연결 → `.design-context.md` + 스크린샷 첨부 →
+   로 `apps/sip-note/` 연결 → `docs/design/context.md` + 스크린샷 첨부 →
    [`design/workflow.md`](./design/workflow.md) 의 Phase 별 프롬프트 그대로 붙여넣기.
 3. **Refine**: inline 코멘트 / spacing·color slider 로 다듬기. 안티패턴 6 종 재점검.
 4. **Handoff**: Claude Design 의 "Handoff to Claude Code" 실행 →

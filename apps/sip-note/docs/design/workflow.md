@@ -1,6 +1,6 @@
 # Sip Note — Claude Design × Claude Code 작업 가이드
 
-> 참조: [`prd-drink-diary.md`](../prd-drink-diary.md), [`TODO.md`](../TODO.md), [`../../.design-context.md`](../../.design-context.md)
+> 참조: [`prd-drink-diary.md`](../prd-drink-diary.md), [`TODO.md`](../TODO.md), [`./context.md`](./context.md)
 > Claude Design 소개: <https://www.anthropic.com/news/claude-design-anthropic-labs>
 > 작업 도구: <https://claude.ai/design>
 
@@ -33,7 +33,7 @@ Claude Design 은 Pro / Max / Team / Enterprise 구독에서 사용 가능. 본 
 
 Claude Design 은 코드베이스를 읽어 디자인 시스템을 자동 추출하지만, 도메인 / 톤 / 안티패턴은 별도 컨텍스트로 명시해야 정확도가 올라간다. 이미 다음 파일들이 준비되어 있다:
 
-- `apps/sip-note/.design-context.md` — 톤 / 타겟 / CJK / WCAG / 안티패턴 / 카테고리 6 종
+- `apps/sip-note/docs/design/context.md` — 톤 / 타겟 / CJK / WCAG / 안티패턴 / 카테고리 6 종
 - `apps/sip-note/docs/prd-drink-diary.md` — 화면 / 기능 / 데이터
 - `apps/sip-note/docs/TODO.md` — 빌드 Phase 별 화면 목록
 - `apps/sip-note/tailwind.config.ts`, `apps/sip-note/gluestack-ui.config.json` — 기존 토큰
@@ -42,10 +42,10 @@ Claude Design 은 코드베이스를 읽어 디자인 시스템을 자동 추출
 이 파일들을 한 묶음으로 Claude Design 에 입력하는 가장 안정적인 방법은:
 
 1. **Repo 연결**: Claude Design 의 "Connect codebase" 로 이 모노레포(또는 `apps/sip-note/`) 를 연결
-2. **Pin context**: `.design-context.md` 와 `docs/prd-drink-diary.md` 를 대화에 첨부 또는 import
+2. **Pin context**: `docs/design/context.md` 와 `docs/prd-drink-diary.md` 를 대화에 첨부 또는 import
 3. **(선택)** PRD 의 화면 목록 섹션을 Markdown 으로 paste 하여 화면별 작업 단위 명시
 
-> ⚠️ 한 번도 import 하지 않은 새 대화방에서는 매번 `.design-context.md` 를 첨부하는 습관을 들이는 게 안전하다.
+> ⚠️ 한 번도 import 하지 않은 새 대화방에서는 매번 `docs/design/context.md` 를 첨부하는 습관을 들이는 게 안전하다.
 
 ---
 
@@ -54,7 +54,7 @@ Claude Design 은 코드베이스를 읽어 디자인 시스템을 자동 추출
 ```
 [Claude Code]                     [Claude Design]                   [Claude Code]
 1. 코드 골격 작성        ───▶    2. 화면 디자인 / 시스템 정의
-   (TODO Phase N)                    - 입력: 코드 + .design-context.md
+   (TODO Phase N)                    - 입력: 코드 + docs/design/context.md
                                      - 산출: 목업 + 토큰 + 컴포넌트 변형
                                      - 반복: inline 코멘트 / sliders 로 refine
                                                   │
@@ -81,19 +81,19 @@ Claude Design 은 코드베이스를 읽어 디자인 시스템을 자동 추출
 
 ### STEP B1. Claude Design 에 코드베이스 + 컨텍스트 연결
 
-→ Claude Design 의 **"Connect codebase"** 로 모노레포(또는 `apps/sip-note/`) 연결, `.design-context.md` 첨부.
+→ Claude Design 의 **"Connect codebase"** 로 모노레포(또는 `apps/sip-note/`) 연결, `docs/design/context.md` 첨부.
 
 ### STEP B2. Claude Design 에 보낼 첫 프롬프트
 
 > 그대로 복사해서 Claude Design 대화방에 붙여넣는다. (Claude Code 에 보내는 게 아님)
 
 ```
-연결된 apps/sip-note 코드베이스와 첨부된 .design-context.md, docs/prd-drink-diary.md
+연결된 apps/sip-note 코드베이스와 첨부된 docs/design/context.md, docs/prd-drink-diary.md
 를 기반으로 sip-note 의 디자인 시스템을 만들어주세요.
 
 단계:
 1. 코드베이스에서 기존 토큰을 자동 추출 (tailwind.config.ts + gluestack-ui.config.json)
-2. .design-context.md 의 "Aesthetic Directions A/B/C" 중 추천안 1 개 + 대안 2 개를
+2. docs/design/context.md 의 "Aesthetic Directions A/B/C" 중 추천안 1 개 + 대안 2 개를
    각각 라이트/다크 페어로 제안. 카테고리 6 종 (whisky / wine / beer / sake /
    cocktail / etc) 컬러 토큰 포함.
 3. 핵심 공용 컴포넌트 6 종(Card, BottomSheet, FAB, ScoreSlider, Tag chip,
@@ -355,7 +355,7 @@ Bundle 이 어떤 형태로 오든 다음을 강제한다.
 
 ### Q. Claude Design 에 코드베이스 connect 가 안 된다
 - 모노레포 루트 connect 가 너무 무거우면 `apps/sip-note/` 만 별도로 connect 시도
-- 또는 핵심 파일만 첨부: `tailwind.config.ts`, `gluestack-ui.config.json`, `.design-context.md`, `docs/prd-drink-diary.md`
+- 또는 핵심 파일만 첨부: `tailwind.config.ts`, `gluestack-ui.config.json`, `docs/design/context.md`, `docs/prd-drink-diary.md`
 
 ### Q. Handoff bundle 이 Tailwind 가 아닌 일반 CSS 로 와 있다
 - Claude Code 에 "이 CSS 를 tailwind.config.ts 의 theme.extend 토큰 + className 으로 변환해서 적용해주세요" 라고 명시
@@ -363,8 +363,8 @@ Bundle 이 어떤 형태로 오든 다음을 강제한다.
 ### Q. Handoff bundle 의 컴포넌트가 React Native 가 아닌 web 컴포넌트다
 - Claude Design 의 출력은 종종 web 우선이므로, Claude Code 에 "Gluestack v3 + NativeWind v4 컴포넌트로 변환 후 적용" 을 명시
 
-### Q. 디자인 안이 .design-context.md 의 톤과 어긋난다
-- Claude Design 에 `.design-context.md` 를 다시 첨부하고, 어긋난 항목을 inline 코멘트로 지적
+### Q. 디자인 안이 docs/design/context.md 의 톤과 어긋난다
+- Claude Design 에 `docs/design/context.md` 를 다시 첨부하고, 어긋난 항목을 inline 코멘트로 지적
 - 그래도 어긋나면 STEP B2 의 첫 프롬프트로 돌아가 컨텍스트를 재주입
 
 ---
@@ -374,7 +374,7 @@ Bundle 이 어떤 형태로 오든 다음을 강제한다.
 | 항목 | 값 |
 |---|---|
 | Claude Design 진입 | <https://claude.ai/design> (Pro / Max / Team / Enterprise) |
-| 첨부 우선순위 | `.design-context.md` → `docs/prd-drink-diary.md` → 코드베이스 connect |
+| 첨부 우선순위 | `docs/design/context.md` → `docs/prd-drink-diary.md` → 코드베이스 connect |
 | Export 권장 | "Handoff to Claude Code" bundle (URL) |
 | Claude Code 응답 언어 | 한국어 (`.claude/rules/i18n-guide.md`) |
 | 코드 / 토큰명 / 커밋 메시지 | 영문 |

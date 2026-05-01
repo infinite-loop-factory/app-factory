@@ -1,7 +1,7 @@
 # Sip Note — Design Context
 
 > 디자인 작업의 단일 진입점(SSOT). Claude Design / Claude Code 양쪽에서 첨부·참조.
-> 변경 이력: `git log apps/sip-note/.design-context.md` 로 추적.
+> 변경 이력: `git log apps/sip-note/docs/design/context.md` 로 추적.
 
 ---
 
@@ -9,9 +9,9 @@
 
 - **App**: Sip Note (한 잔의 기록)
 - **Scope**: 위스키 / 와인 / 맥주 / 사케 / 칵테일 / 기타 — 통합 음주 아카이브
-- **Source PRD**: [`docs/prd-drink-diary.md`](./docs/prd-drink-diary.md)
-- **Build roadmap**: [`docs/TODO.md`](./docs/TODO.md)
-- **Design workflow**: [`docs/design/workflow.md`](./docs/design/workflow.md)
+- **Source PRD**: [`docs/prd-drink-diary.md`](../prd-drink-diary.md)
+- **Build roadmap**: [`docs/TODO.md`](../TODO.md)
+- **Design workflow**: [`docs/design/workflow.md`](./workflow.md)
 
 ## Stack
 

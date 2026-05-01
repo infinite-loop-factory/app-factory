@@ -3,7 +3,7 @@
 > 사용법: `claude.ai/design` 에서 `apps/sip-note/` 코드베이스를 connect 한 뒤
 > 아래 3 개 파일을 함께 첨부하고, 맨 아래 **Prompt** 블록을 그대로 붙여넣는다.
 >
-> 1. [`apps/sip-note/.design-context.md`](../../.design-context.md) — 톤·안티패턴·카테고리
+> 1. [`apps/sip-note/docs/design/context.md`](./context.md) — 톤·안티패턴·카테고리
 > 2. [`apps/sip-note/DESIGN.md`](../../DESIGN.md) — Phase 0 산출 토큰
 > 3. [`apps/sip-note/docs/design/checkpoint-phase-0.md`](./checkpoint-phase-0.md) — 직전 결정 / open issues
 > 4. (선택) 시뮬레이터 스크린샷 — iOS 375pt + Android 360dp, 다크/라이트 페어
@@ -86,7 +86,7 @@ TODO.md "Anchor 컴포넌트 누적 표" Phase 1 항목.
 ## Prompt (Claude Design 대화방에 붙여넣기)
 
 ```
-연결된 apps/sip-note 코드베이스와 첨부한 .design-context.md, DESIGN.md,
+연결된 apps/sip-note 코드베이스와 첨부한 docs/design/context.md, DESIGN.md,
 checkpoint-phase-0.md, 그리고 시뮬레이터 스크린샷을 기반으로 Phase 1 화면을
 다듬어주세요.
 
@@ -112,7 +112,7 @@ checkpoint-phase-0.md, 그리고 시뮬레이터 스크린샷을 기반으로 Ph
 - 8pt 그리드, body 최소 16px, 한국어 line-height 1.7 보장
 - 다크 우선 + 라이트 시스템 동조
 - prefers-reduced-motion 시 모든 motion 0ms
-- 안티패턴 6 종 0 건 (.design-context.md 참조)
+- 안티패턴 6 종 0 건 (docs/design/context.md 참조)
 
 산출:
 - 인터랙티브 프로토타입 (3 화면 + 상태 변형)
