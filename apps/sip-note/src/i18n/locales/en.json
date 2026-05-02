@@ -91,6 +91,7 @@
       "removePhoto": "Remove photo",
       "removeTag": "Remove {{label}}",
       "scorePoint": "{{score}} points",
+      "score": "Score {{score}}",
       "photoIndex": "Photo {{index}}"
     },
     "action": {

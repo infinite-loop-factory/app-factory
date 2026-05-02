@@ -2,10 +2,11 @@ import type { TastingNote } from "@/features/tasting/repo/types";
 
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { Alert, Image, Pressable, ScrollView, Text, View } from "react-native";
+import { Alert, Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Path, Svg } from "react-native-svg";
-import { CategoryGlyph, ScoreStars, TagChip } from "@/components/ui-domain";
+import { ScoreStars, TagChip } from "@/components/ui-domain";
+import { CaskHero } from "@/features/tasting/components/cask-hero";
 import * as repo from "@/features/tasting/repo/tastingNoteRepo";
 import {
   formatDateLong,
@@ -72,14 +73,11 @@ export default function NoteDetailScreen() {
         contentContainerClassName="pb-12"
         showsVerticalScrollIndicator={false}
       >
-        <View className="aspect-[4/3] bg-surface-sunken">
-          {heroPhoto ? (
-            <Image className="h-full w-full" source={{ uri: heroPhoto }} />
-          ) : (
-            <View className="flex-1 items-center justify-center">
-              <CategoryGlyph category={note.category} size={80} />
-            </View>
-          )}
+        <CaskHero
+          category={note.category}
+          photoUri={heroPhoto}
+          score={note.score}
+        >
           <SafeAreaView
             className="absolute top-0 right-0 left-0 flex-row justify-between p-4"
             edges={["top"]}
@@ -94,7 +92,7 @@ export default function NoteDetailScreen() {
             </IconButton>
           </SafeAreaView>
           {note.photos.length > 1 && (
-            <View className="absolute right-0 bottom-3 left-0 flex-row justify-center gap-1">
+            <View className="absolute right-0 bottom-12 left-0 flex-row justify-center gap-1">
               {note.photos.map((uri, idx) => (
                 <Pressable
                   accessibilityLabel={i18n.t("tasting.a11y.photoIndex", {
@@ -112,7 +110,7 @@ export default function NoteDetailScreen() {
               ))}
             </View>
           )}
-        </View>
+        </CaskHero>
 
         <View className="px-6 pt-5">
           <View

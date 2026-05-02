@@ -91,6 +91,7 @@
       "removePhoto": "사진 제거",
       "removeTag": "{{label}} 제거",
       "scorePoint": "{{score}} 점",
+      "score": "점수 {{score}}",
       "photoIndex": "사진 {{index}}"
     },
     "action": {
