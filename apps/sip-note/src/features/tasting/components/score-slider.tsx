@@ -1,43 +1,17 @@
+import { useEffect } from "react";
 import { Pressable, Text, View } from "react-native";
-import { ClipPath, Defs, Path, Rect, Svg } from "react-native-svg";
-import { useThemeColors } from "@/hooks/use-theme-colors";
+import {
+  Easing,
+  useSharedValue,
+  withRepeat,
+  withTiming,
+} from "react-native-reanimated";
+import { GlassVessel } from "@/components/ui-domain/glass-vessel";
+import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import i18n from "@/i18n";
 import { haptic } from "@/lib/haptics";
 
-const GLASS_PATH = "M6 4h12l-1 14a3 3 0 0 1-3 3h-4a3 3 0 0 1-3-3L6 4z";
-
-type GlassState = "full" | "half" | "empty";
-
-function Glass({ state, size = 28 }: { state: GlassState; size?: number }) {
-  const colors = useThemeColors();
-  const fillColor = state === "empty" ? "transparent" : colors.brand;
-  const strokeColor = state === "empty" ? colors.textFaint : colors.brand;
-
-  return (
-    <Svg height={size} viewBox="0 0 24 24" width={size}>
-      <Defs>
-        <ClipPath id={`half-${state}`}>
-          <Rect height={24} width={12} x={0} y={0} />
-        </ClipPath>
-      </Defs>
-      <Path
-        d={GLASS_PATH}
-        fill={state === "half" ? "transparent" : fillColor}
-        stroke={strokeColor}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={1.6}
-      />
-      {state === "half" && (
-        <Path
-          clipPath={`url(#half-${state})`}
-          d={GLASS_PATH}
-          fill={colors.brand}
-        />
-      )}
-    </Svg>
-  );
-}
+const WAVE_PERIOD = 2400;
 
 export type ScoreSliderProps = {
   value: number;
@@ -48,8 +22,33 @@ export type ScoreSliderProps = {
 /**
  * Each glass has two hit zones (left = +0.5, right = +1.0).
  * Tapping a glass at its current value clears it (drops to that index minus 0.5).
+ *
+ * A single sinusoidal phase is shared across all 5 glasses for visual sync
+ * + minimal worklet overhead.
  */
 export function ScoreSlider({ value, onChange, size = 28 }: ScoreSliderProps) {
+  const reduce = useReducedMotion();
+  const phase = useSharedValue(0);
+  const hasPartial = [0, 1, 2, 3, 4].some((i) => {
+    const f = value - i;
+    return f > 0 && f < 1;
+  });
+  const wavy = !reduce && hasPartial;
+
+  useEffect(() => {
+    if (wavy) {
+      phase.value = 0;
+      phase.value = withRepeat(
+        withTiming(Math.PI * 2, {
+          duration: WAVE_PERIOD,
+          easing: Easing.linear,
+        }),
+        -1,
+        false,
+      );
+    }
+  }, [wavy, phase]);
+
   const handle = (next: number) => {
     haptic.selection();
     if (Math.abs(next - value) < 0.001) {
@@ -65,10 +64,7 @@ export function ScoreSlider({ value, onChange, size = 28 }: ScoreSliderProps) {
         {[0, 1, 2, 3, 4].map((i) => {
           const fullScore = i + 1;
           const halfScore = i + 0.5;
-          let state: GlassState;
-          if (value >= fullScore) state = "full";
-          else if (value >= halfScore) state = "half";
-          else state = "empty";
+          const fill = Math.max(0, Math.min(1, value - i));
 
           return (
             <View className="flex-row" key={i}>
@@ -81,7 +77,7 @@ export function ScoreSlider({ value, onChange, size = 28 }: ScoreSliderProps) {
                 style={{ width: size / 2 }}
               >
                 <View pointerEvents="none">
-                  <Glass size={size} state={state} />
+                  <GlassVessel fill={fill} phase={phase} size={size} />
                 </View>
               </Pressable>
               <Pressable
