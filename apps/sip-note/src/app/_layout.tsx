@@ -20,6 +20,10 @@ export default function RootLayout() {
   const { colorScheme } = useColorScheme();
   const [loaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
+    "Fraunces-Regular": require("../assets/fonts/Fraunces-Regular.ttf"),
+    "Fraunces-SemiBold": require("../assets/fonts/Fraunces-SemiBold.ttf"),
+    "Pretendard-Regular": require("../assets/fonts/Pretendard-Regular.ttf"),
+    "Pretendard-SemiBold": require("../assets/fonts/Pretendard-SemiBold.ttf"),
   });
 
   useEffect(() => {
@@ -33,10 +37,11 @@ export default function RootLayout() {
   }
 
   const tabScreenOptions = { headerShown: false };
+  const themeMode = colorScheme === "light" ? "light" : "dark";
 
   return (
-    <GluestackUIProvider mode="light">
-      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+    <GluestackUIProvider mode={themeMode}>
+      <ThemeProvider value={colorScheme === "light" ? DefaultTheme : DarkTheme}>
         <Stack>
           <Stack.Screen name="(tabs)" options={tabScreenOptions} />
           <Stack.Screen name="+not-found" />

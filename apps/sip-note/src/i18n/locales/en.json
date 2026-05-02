@@ -1,4 +1,219 @@
 {
-  "welcome": "Welcome",
-  "home": "Home"
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "confirm": "Confirm",
+    "back": "Back",
+    "done": "Done",
+    "search": "Search",
+    "filter": "Filter",
+    "reset": "Reset",
+    "edit": "Edit",
+    "add": "Add",
+    "close": "Close",
+    "retry": "Retry",
+    "loading": "Loading"
+  },
+  "tabs": {
+    "home": "Home",
+    "map": "Map",
+    "pairing": "Pairing",
+    "my": "My"
+  },
+  "category": {
+    "whiskey": "Whiskey",
+    "wine": "Wine",
+    "beer": "Beer",
+    "sake": "Sake",
+    "cocktail": "Cocktail",
+    "etc": "Other"
+  },
+  "placeCategory": {
+    "bar": "Bar / Pub",
+    "distillery": "Distillery",
+    "winery": "Winery",
+    "brewery": "Brewery",
+    "restaurant": "Restaurant",
+    "etc": "Other"
+  },
+  "matchScore": {
+    "bad": "Not great",
+    "soso": "Okay",
+    "good": "Good",
+    "excellent": "Excellent"
+  },
+  "tasting": {
+    "feed": {
+      "title": "Tasting Feed",
+      "fab": "Add Note"
+    },
+    "write": {
+      "title": "New Note",
+      "editTitle": "Edit Note"
+    },
+    "detail": {
+      "title": "Note Detail"
+    },
+    "field": {
+      "name": "Name",
+      "namePlaceholder": "Enter beverage name",
+      "category": "Category",
+      "score": "Score",
+      "tags": "Tags",
+      "tagsPlaceholder": "Enter tags",
+      "memo": "Memo",
+      "memoPlaceholder": "Write your tasting notes freely",
+      "price": "Price",
+      "priceUnitGlass": "Glass",
+      "priceUnitBottle": "Bottle",
+      "date": "Date",
+      "photos": "Photos"
+    },
+    "action": {
+      "takePhoto": "Take Photo",
+      "pickPhoto": "Pick from Gallery",
+      "delete": "Delete Note"
+    },
+    "delete": {
+      "confirm": "Delete this note?"
+    },
+    "saved": "Note saved"
+  },
+  "place": {
+    "list": {
+      "title": "Places"
+    },
+    "detail": {
+      "title": "Place Detail",
+      "visitCount": "Visited {{count}} times",
+      "recentNote": "Recent Note"
+    },
+    "wishlist": {
+      "title": "Wishlist",
+      "add": "Add to Wishlist",
+      "added": "Added to wishlist"
+    },
+    "map": {
+      "filterAll": "All",
+      "searchPlaceholder": "Search places",
+      "longPressHint": "Long-press the map to add a wishlist place"
+    }
+  },
+  "pairing": {
+    "list": {
+      "title": "Pairings",
+      "empty": "No pairings yet"
+    },
+    "write": {
+      "title": "Add Pairing",
+      "editTitle": "Edit Pairing"
+    },
+    "field": {
+      "tasting": "Beverage",
+      "food": "Food",
+      "foodPlaceholder": "What food was it with?",
+      "matchScore": "Match Score"
+    },
+    "saved": "Pairing saved"
+  },
+  "my": {
+    "title": "My",
+    "stats": {
+      "title": "Stats",
+      "totalNotes": "Total Notes",
+      "thisMonth": "This Month",
+      "byCategory": "By Category",
+      "scoreTrend": "Average Score Trend",
+      "placesVisited": "Places Visited",
+      "citiesVisited": "Cities",
+      "topTags": "Top Tags",
+      "bestPairing": "Best Pairing"
+    },
+    "badges": {
+      "title": "Badges",
+      "unlocked": "Unlocked",
+      "locked": "Locked"
+    },
+    "settings": {
+      "title": "Settings",
+      "notifications": "Notifications",
+      "notificationTime": "Notification Time",
+      "geofenceRadius": "Geofence Radius",
+      "theme": "Theme",
+      "themeLight": "Light",
+      "themeDark": "Dark",
+      "themeSystem": "System",
+      "currency": "Default Currency"
+    },
+    "export": {
+      "title": "Export Data",
+      "description": "Bundle all notes with photos and share",
+      "action": "Export"
+    },
+    "reset": {
+      "title": "Reset Data",
+      "warning": "All data will be deleted. This cannot be undone.",
+      "confirm": "Reset everything?"
+    }
+  },
+  "permission": {
+    "camera": {
+      "deniedTitle": "Camera permission required",
+      "deniedBody": "Please allow camera access in settings to take photos"
+    },
+    "photoLibrary": {
+      "deniedTitle": "Photo library permission required",
+      "deniedBody": "Please allow photo library access to pick photos"
+    },
+    "location": {
+      "deniedTitle": "Location permission required",
+      "deniedBody": "Please allow location access to auto-tag places"
+    },
+    "locationBackground": {
+      "deniedTitle": "Background location required",
+      "deniedBody": "Select \"Always\" to receive wishlist nearby alerts"
+    },
+    "notification": {
+      "deniedTitle": "Notification permission required",
+      "deniedBody": "Please allow notifications to receive reminders and alerts"
+    },
+    "openSettings": "Open Settings"
+  },
+  "notification": {
+    "weeklyReminder": {
+      "title": "Sip Note",
+      "body": "Don't forget to log this week's sips 🍷"
+    },
+    "weeklyReport": {
+      "title": "Weekly Report",
+      "body": "This week: {{count}} notes, avg {{score}}"
+    },
+    "geofence": {
+      "title": "A wishlist place is nearby",
+      "body": "{{name}} is just nearby"
+    },
+    "badgeUnlocked": {
+      "title": "Badge unlocked! 🏅",
+      "body": "You earned the '{{title}}' badge"
+    }
+  },
+  "empty": {
+    "feed": {
+      "title": "No notes yet",
+      "body": "Capture your first sip"
+    },
+    "map": {
+      "title": "No places visited yet",
+      "body": "Enable location and add a note to drop a pin"
+    },
+    "pairing": {
+      "title": "No pairings yet",
+      "body": "Log how a sip met a bite"
+    },
+    "badges": {
+      "title": "Toward your first badge",
+      "body": "Earn badges as you log"
+    }
+  }
 }

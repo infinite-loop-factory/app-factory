@@ -1,4 +1,219 @@
 {
-  "welcome": "환영합니다",
-  "home": "홈"
+  "common": {
+    "save": "저장",
+    "cancel": "취소",
+    "delete": "삭제",
+    "confirm": "확인",
+    "back": "뒤로",
+    "done": "완료",
+    "search": "검색",
+    "filter": "필터",
+    "reset": "초기화",
+    "edit": "수정",
+    "add": "추가",
+    "close": "닫기",
+    "retry": "다시 시도",
+    "loading": "로딩 중"
+  },
+  "tabs": {
+    "home": "홈",
+    "map": "지도",
+    "pairing": "페어링",
+    "my": "마이"
+  },
+  "category": {
+    "whiskey": "위스키",
+    "wine": "와인",
+    "beer": "맥주",
+    "sake": "사케",
+    "cocktail": "칵테일",
+    "etc": "기타"
+  },
+  "placeCategory": {
+    "bar": "바 / 펍",
+    "distillery": "증류소",
+    "winery": "와이너리",
+    "brewery": "브루어리",
+    "restaurant": "레스토랑",
+    "etc": "기타"
+  },
+  "matchScore": {
+    "bad": "별로",
+    "soso": "보통",
+    "good": "좋음",
+    "excellent": "최고"
+  },
+  "tasting": {
+    "feed": {
+      "title": "테이스팅 피드",
+      "fab": "기록 추가"
+    },
+    "write": {
+      "title": "새 기록",
+      "editTitle": "기록 수정"
+    },
+    "detail": {
+      "title": "기록 상세"
+    },
+    "field": {
+      "name": "이름",
+      "namePlaceholder": "주류 이름을 입력하세요",
+      "category": "카테고리",
+      "score": "점수",
+      "tags": "태그",
+      "tagsPlaceholder": "태그를 입력하세요",
+      "memo": "메모",
+      "memoPlaceholder": "테이스팅 노트를 자유롭게 적어보세요",
+      "price": "가격",
+      "priceUnitGlass": "잔",
+      "priceUnitBottle": "병",
+      "date": "날짜",
+      "photos": "사진"
+    },
+    "action": {
+      "takePhoto": "사진 촬영",
+      "pickPhoto": "갤러리에서 선택",
+      "delete": "기록 삭제"
+    },
+    "delete": {
+      "confirm": "이 기록을 삭제할까요?"
+    },
+    "saved": "기록을 저장했어요"
+  },
+  "place": {
+    "list": {
+      "title": "장소"
+    },
+    "detail": {
+      "title": "장소 상세",
+      "visitCount": "{{count}}회 방문",
+      "recentNote": "최근 기록"
+    },
+    "wishlist": {
+      "title": "위시리스트",
+      "add": "위시리스트에 추가",
+      "added": "위시리스트에 추가했어요"
+    },
+    "map": {
+      "filterAll": "전체",
+      "searchPlaceholder": "장소 검색",
+      "longPressHint": "지도에서 길게 눌러 위시리스트에 추가"
+    }
+  },
+  "pairing": {
+    "list": {
+      "title": "페어링",
+      "empty": "아직 페어링 기록이 없어요"
+    },
+    "write": {
+      "title": "페어링 추가",
+      "editTitle": "페어링 수정"
+    },
+    "field": {
+      "tasting": "주류",
+      "food": "음식",
+      "foodPlaceholder": "어떤 음식과 함께였나요?",
+      "matchScore": "궁합 점수"
+    },
+    "saved": "페어링을 저장했어요"
+  },
+  "my": {
+    "title": "마이",
+    "stats": {
+      "title": "통계",
+      "totalNotes": "총 기록",
+      "thisMonth": "이번 달",
+      "byCategory": "카테고리 비율",
+      "scoreTrend": "평균 점수 추이",
+      "placesVisited": "방문 장소",
+      "citiesVisited": "도시",
+      "topTags": "자주 쓴 태그",
+      "bestPairing": "최고 궁합"
+    },
+    "badges": {
+      "title": "뱃지",
+      "unlocked": "획득",
+      "locked": "미획득"
+    },
+    "settings": {
+      "title": "설정",
+      "notifications": "알림",
+      "notificationTime": "알림 시간",
+      "geofenceRadius": "지오펜싱 반경",
+      "theme": "테마",
+      "themeLight": "라이트",
+      "themeDark": "다크",
+      "themeSystem": "시스템",
+      "currency": "기본 통화"
+    },
+    "export": {
+      "title": "데이터 내보내기",
+      "description": "모든 기록을 JSON 과 사진으로 묶어 공유합니다",
+      "action": "내보내기"
+    },
+    "reset": {
+      "title": "데이터 초기화",
+      "warning": "모든 기록이 삭제됩니다. 되돌릴 수 없어요.",
+      "confirm": "정말 초기화할까요?"
+    }
+  },
+  "permission": {
+    "camera": {
+      "deniedTitle": "카메라 권한이 필요해요",
+      "deniedBody": "사진을 촬영하려면 설정에서 카메라 권한을 허용해주세요"
+    },
+    "photoLibrary": {
+      "deniedTitle": "사진 권한이 필요해요",
+      "deniedBody": "갤러리에서 사진을 선택하려면 사진 권한을 허용해주세요"
+    },
+    "location": {
+      "deniedTitle": "위치 권한이 필요해요",
+      "deniedBody": "마신 장소를 자동으로 태깅하려면 위치 권한을 허용해주세요"
+    },
+    "locationBackground": {
+      "deniedTitle": "백그라운드 위치 권한이 필요해요",
+      "deniedBody": "위시리스트 장소 알림을 받으려면 '항상 허용' 을 선택해주세요"
+    },
+    "notification": {
+      "deniedTitle": "알림 권한이 필요해요",
+      "deniedBody": "리마인더와 위시리스트 알림을 받으려면 알림을 허용해주세요"
+    },
+    "openSettings": "설정 열기"
+  },
+  "notification": {
+    "weeklyReminder": {
+      "title": "한 잔의 기록",
+      "body": "이번 주에 마신 술, 기록해두세요 🍷"
+    },
+    "weeklyReport": {
+      "title": "이번 주 리포트",
+      "body": "이번 주 {{count}}잔, 평균 점수 {{score}}점"
+    },
+    "geofence": {
+      "title": "근처에 가보고 싶었던 장소가 있어요",
+      "body": "{{name}} 이(가) 근처에 있어요"
+    },
+    "badgeUnlocked": {
+      "title": "뱃지 획득! 🏅",
+      "body": "'{{title}}' 뱃지를 받았어요"
+    }
+  },
+  "empty": {
+    "feed": {
+      "title": "아직 기록이 없어요",
+      "body": "첫 잔의 이야기를 남겨보세요"
+    },
+    "map": {
+      "title": "아직 방문한 장소가 없어요",
+      "body": "위치를 켜고 기록을 남기면 지도에 핀이 추가됩니다"
+    },
+    "pairing": {
+      "title": "아직 페어링이 없어요",
+      "body": "술과 음식의 만남을 기록해보세요"
+    },
+    "badges": {
+      "title": "첫 뱃지를 향해",
+      "body": "기록을 쌓으면 뱃지가 해제됩니다"
+    }
+  }
 }
