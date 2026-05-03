@@ -85,7 +85,11 @@
       "priceUnitBottle": "병",
       "date": "날짜",
       "photos": "사진",
-      "photosHint": "선택 · 최대 5장"
+      "photosHint": "선택 · 최대 5장",
+      "place": "장소",
+      "placeHint": "선택",
+      "placePlaceholder": "장소 선택",
+      "placeRemove": "장소 제거"
     },
     "a11y": {
       "removePhoto": "사진 제거",
@@ -122,6 +126,16 @@
       "filterAll": "전체",
       "searchPlaceholder": "장소 검색",
       "longPressHint": "지도에서 길게 눌러 위시리스트에 추가"
+    },
+    "picker": {
+      "title": "장소 선택",
+      "searchPlaceholder": "장소 이름·주소",
+      "empty": "검색 결과가 없어요",
+      "addNew": "새 장소 추가",
+      "newTitle": "새 장소",
+      "namePlaceholder": "장소 이름",
+      "addressPlaceholder": "주소 (선택)",
+      "useCurrentLocation": "현재 위치 사용"
     }
   },
   "pairing": {

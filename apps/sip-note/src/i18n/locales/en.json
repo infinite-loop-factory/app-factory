@@ -85,7 +85,11 @@
       "priceUnitBottle": "Bottle",
       "date": "Date",
       "photos": "Photos",
-      "photosHint": "Optional · max 5"
+      "photosHint": "Optional · max 5",
+      "place": "Place",
+      "placeHint": "Optional",
+      "placePlaceholder": "Select a place",
+      "placeRemove": "Remove place"
     },
     "a11y": {
       "removePhoto": "Remove photo",
@@ -122,6 +126,16 @@
       "filterAll": "All",
       "searchPlaceholder": "Search places",
       "longPressHint": "Long-press the map to add a wishlist place"
+    },
+    "picker": {
+      "title": "Select Place",
+      "searchPlaceholder": "Place name or address",
+      "empty": "No matches",
+      "addNew": "Add new place",
+      "newTitle": "New Place",
+      "namePlaceholder": "Place name",
+      "addressPlaceholder": "Address (optional)",
+      "useCurrentLocation": "Use current location"
     }
   },
   "pairing": {
