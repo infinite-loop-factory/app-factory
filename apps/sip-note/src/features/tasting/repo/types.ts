@@ -37,4 +37,5 @@ export type TastingNoteFilter = {
   dateFrom?: number;
   dateTo?: number;
   query?: string;
+  placeId?: string;
 };

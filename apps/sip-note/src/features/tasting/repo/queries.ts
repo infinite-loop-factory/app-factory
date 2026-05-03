@@ -39,6 +39,10 @@ export function buildListQuery(filter: TastingNoteFilter = {}): {
     );
     params.push(...filter.tags);
   }
+  if (filter.placeId) {
+    conditions.push("place_id = ?");
+    params.push(filter.placeId);
+  }
 
   const where =
     conditions.length > 0 ? ` WHERE ${conditions.join(" AND ")}` : "";
