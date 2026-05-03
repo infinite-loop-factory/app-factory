@@ -10,7 +10,7 @@ import {
   type ComposeFormState,
   toInput,
 } from "@/features/tasting/components/compose-form";
-import * as repo from "@/features/tasting/repo/tastingNoteRepo";
+import * as repo from "@/features/tasting/repo/tasting-note-repo";
 import { useThemeColors } from "@/hooks/use-theme-colors";
 import i18n from "@/i18n";
 import { haptic } from "@/lib/haptics";

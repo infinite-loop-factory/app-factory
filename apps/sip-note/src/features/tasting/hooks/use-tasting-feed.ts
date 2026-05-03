@@ -6,7 +6,7 @@ import type { DayBucket } from "@/features/tasting/utils/group-by-day";
 
 import { useFocusEffect } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
-import * as repo from "@/features/tasting/repo/tastingNoteRepo";
+import * as repo from "@/features/tasting/repo/tasting-note-repo";
 import { groupByDay } from "@/features/tasting/utils/group-by-day";
 
 export type TastingFeedState = {

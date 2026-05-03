@@ -7,7 +7,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Path, Svg } from "react-native-svg";
 import { ScoreStars, TagChip } from "@/components/ui-domain";
 import { CaskHero } from "@/features/tasting/components/cask-hero";
-import * as repo from "@/features/tasting/repo/tastingNoteRepo";
+import * as repo from "@/features/tasting/repo/tasting-note-repo";
 import {
   formatDateLong,
   formatDateShort,
