@@ -26,7 +26,16 @@ export default function TabLayout() {
           ),
         }}
       />
-      {/* 지도 / 페어링 / 마이 탭은 각각 Phase 2 / 3 / 4 에서 추가. */}
+      <Tabs.Screen
+        name="map"
+        options={{
+          title: i18n.t("tabs.map"),
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon color={color} name={focused ? "map" : "map-outline"} />
+          ),
+        }}
+      />
+      {/* 페어링 / 마이 탭은 각각 Phase 3 / 4 에서 추가. */}
     </Tabs>
   );
 }
