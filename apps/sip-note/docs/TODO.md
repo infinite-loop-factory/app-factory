@@ -135,19 +135,27 @@
 
 > 기록에 위치 컨텍스트가 붙는다
 
-- [ ] 위치 서비스 (`src/services/location/`) — 권한 요청 + 현위치 조회
-- [ ] 스키마 확장 (마이그레이션 v2)
-  - `places` 확장: address, is_wishlist, visit_count
-  - `tasting_notes.place_id` FK
-- [ ] Repository: `placeRepo` + 테이스팅 노트 N:1 join 쿼리
-- [ ] 기록 작성 화면에 **위치 자동 태깅 + 수동 변경 UI**
-- [ ] 화면: **지도 탭** (`react-native-maps`)
-  - 방문 완료 핀(채움) / 위시리스트 핀(빈)
-  - 카테고리 필터 토글 (바·펍 / 증류소 / 와이너리 / 브루어리 / 레스토랑 / 기타)
-- [ ] 핀 탭 → **장소 요약 바텀시트** (장소명, 방문 횟수, 최근 기록 미리보기)
-- [ ] 화면: **장소 상세** — 해당 장소의 모든 기록 목록
+- [x] 위치 서비스 (`src/services/location/`) — 권한 요청 + 현위치 조회
+  - `requestLocationPermission` / `getCurrentPosition` / `getLastKnownPosition` (Balanced accuracy, 권한 NG → null) — photo 서비스 패턴 일관
+- [x] 스키마 확장 (마이그레이션 v2)
+  - `places` 확장: address, is_wishlist, visit_count, created_at, updated_at + idx_places_category / idx_places_is_wishlist
+  - `tasting_notes.place_id` FK 는 v1 에 이미 컬럼 존재 → v2 변경 없음
+- [x] Repository: `placeRepo` + 테이스팅 노트 N:1 join 쿼리
+  - `placeRepo` (CRUD + toggleWishlist + incrementVisitCount + bounds 필터) + `TastingNoteFilter.placeId` 분기 (장소 상세에서 노트 리스트)
+- [x] 기록 작성 화면에 **위치 자동 태깅 + 수동 변경 UI**
+  - 수동 picker (검색 + 새 장소 추가 + 현재 위치 사용 토글) wire 완료. 저장 시 자동 매칭 (현재 위치로 가까운 장소 후보 제안) 은 v1 보류 — Phase 2.5 또는 디자인 체크포인트와 함께
+- [x] 화면: **지도 탭** (`react-native-maps`)
+  - 방문 완료 핀(채움) / 위시리스트 핀(빈) — `MapPin` 컴포넌트 + `place.*` 카테고리 컬러 토큰
+  - 카테고리 필터 토글 (바·펍 / 증류소 / 와이너리 / 브루어리 / 레스토랑 / 기타) + 위시리스트 토글 + 사용자 위치
+- [x] 핀 탭 → **장소 요약 바텀시트** (장소명, 방문 횟수, 최근 기록 미리보기)
+  - `@gorhom/bottom-sheet` v5, snap [25%, 50%], "상세 보기" CTA → 장소 상세
+- [x] 화면: **장소 상세** — 해당 장소의 모든 기록 목록
+  - 헤더 (back / 위시리스트 ♥ 토글) + 카테고리 chip / 이름 / 주소 / 방문 횟수 + 노트 리스트 + "이 장소에 기록 추가" CTA (Compose 에 placeId prefill)
 - [ ] 도시/리전 방문 통계 집계 쿼리 (Phase 4 통계에 재사용)
 - [ ] **디자인 체크포인트** — 지도 / 바텀시트 / 장소 상세 → claude design
+  - 후속 PR — Claude Design handoff 받아 적용 + `checkpoint-phase-2.md` 작성. caption-size brand light 토큰 스왑 (Phase 1 carry-over) 도 함께.
+- [ ] 지오펜싱 알림 — 위시리스트 장소 근처 푸시 (`expo-task-manager` + `expo-notifications`)
+  - Phase 2 carry-over — 별도 PR
 
 ---
 
