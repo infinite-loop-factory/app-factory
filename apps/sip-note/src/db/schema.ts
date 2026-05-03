@@ -33,10 +33,23 @@ export type TastingNotePhotoRow = {
   sort_order: number;
 };
 
+export type PlaceCategory =
+  | "bar"
+  | "distillery"
+  | "winery"
+  | "brewery"
+  | "restaurant"
+  | "etc";
+
 export type PlaceRow = {
   id: string;
   name: string;
-  category: string | null;
+  category: PlaceCategory | null;
   latitude: number | null;
   longitude: number | null;
+  address: string | null;
+  is_wishlist: number;
+  visit_count: number;
+  created_at: number;
+  updated_at: number;
 };
