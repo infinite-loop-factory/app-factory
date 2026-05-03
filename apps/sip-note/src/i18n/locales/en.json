@@ -122,6 +122,9 @@
       "add": "Add to Wishlist",
       "added": "Added to wishlist"
     },
+    "summary": {
+      "viewDetail": "View Detail"
+    },
     "map": {
       "filterAll": "All",
       "searchPlaceholder": "Search places",

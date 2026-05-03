@@ -1,5 +1,6 @@
 import "../global.css";
 
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import {
   DarkTheme,
   DefaultTheme,
@@ -10,6 +11,7 @@ import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useColorScheme } from "nativewind";
 import { useEffect } from "react";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
 import "@/i18n";
@@ -44,17 +46,21 @@ export default function RootLayout() {
   const themeMode = colorScheme === "light" ? "light" : "dark";
 
   return (
-    <SafeAreaProvider>
-      <GluestackUIProvider mode={themeMode}>
-        <ThemeProvider
-          value={colorScheme === "light" ? DefaultTheme : DarkTheme}
-        >
-          <Stack>
-            <Stack.Screen name="(tabs)" options={tabScreenOptions} />
-            <Stack.Screen name="+not-found" />
-          </Stack>
-        </ThemeProvider>
-      </GluestackUIProvider>
-    </SafeAreaProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <SafeAreaProvider>
+        <GluestackUIProvider mode={themeMode}>
+          <ThemeProvider
+            value={colorScheme === "light" ? DefaultTheme : DarkTheme}
+          >
+            <BottomSheetModalProvider>
+              <Stack>
+                <Stack.Screen name="(tabs)" options={tabScreenOptions} />
+                <Stack.Screen name="+not-found" />
+              </Stack>
+            </BottomSheetModalProvider>
+          </ThemeProvider>
+        </GluestackUIProvider>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 }

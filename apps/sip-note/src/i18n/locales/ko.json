@@ -122,6 +122,9 @@
       "add": "위시리스트에 추가",
       "added": "위시리스트에 추가했어요"
     },
+    "summary": {
+      "viewDetail": "상세 보기"
+    },
     "map": {
       "filterAll": "전체",
       "searchPlaceholder": "장소 검색",

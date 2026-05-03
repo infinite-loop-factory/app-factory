@@ -1,10 +1,12 @@
+import type { PlaceSummarySheetRef } from "@/components/place-summary-sheet";
 import type { Place, PlaceCategory } from "@/features/place/repo/types";
 
-import { useFocusEffect } from "expo-router";
-import { useCallback, useEffect, useState } from "react";
+import { useFocusEffect, useRouter } from "expo-router";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { PlaceSummarySheet } from "@/components/place-summary-sheet";
 import { MapPin } from "@/features/place/components/map-pin";
 import * as placeRepo from "@/features/place/repo/place-repo";
 import i18n from "@/i18n";
@@ -28,6 +30,8 @@ const CATEGORIES: PlaceCategory[] = [
 ];
 
 export default function MapScreen() {
+  const router = useRouter();
+  const sheetRef = useRef<PlaceSummarySheetRef>(null);
   const [places, setPlaces] = useState<Place[]>([]);
   const [region, setRegion] = useState(DEFAULT_REGION);
   const [category, setCategory] = useState<PlaceCategory | null>(null);
@@ -78,6 +82,10 @@ export default function MapScreen() {
               longitude: p.longitude as number,
             }}
             key={p.id}
+            onPress={() => {
+              haptic.selection();
+              sheetRef.current?.present(p.id);
+            }}
           >
             <MapPin category={p.category} isWishlist={p.isWishlist} />
           </Marker>
@@ -131,6 +139,11 @@ export default function MapScreen() {
           </Text>
         </View>
       )}
+
+      <PlaceSummarySheet
+        onViewDetail={(id) => router.push(`/place/${id}`)}
+        ref={sheetRef}
+      />
     </View>
   );
 }
