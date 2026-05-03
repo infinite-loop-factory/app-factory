@@ -35,6 +35,7 @@ export type ComposeFormState = {
 
 export type ComposeFormProps = {
   initial?: TastingNote;
+  initialPlaceId?: string;
   onChange: (state: ComposeFormState, isValid: boolean) => void;
 };
 
@@ -84,17 +85,24 @@ export function toInput(state: ComposeFormState): TastingNoteInput {
   };
 }
 
-export function ComposeForm({ initial, onChange }: ComposeFormProps) {
+export function ComposeForm({
+  initial,
+  initialPlaceId,
+  onChange,
+}: ComposeFormProps) {
   const colors = useThemeColors();
-  const [state, setState] = useState<ComposeFormState>(() =>
-    initial ? fromNote(initial) : blankState(),
-  );
+  const [state, setState] = useState<ComposeFormState>(() => {
+    if (initial) return fromNote(initial);
+    const blank = blankState();
+    return initialPlaceId ? { ...blank, placeId: initialPlaceId } : blank;
+  });
   const [pickerVisible, setPickerVisible] = useState(false);
 
   useEffect(() => {
-    if (!initial?.placeId) return;
+    const id = initial?.placeId ?? initialPlaceId;
+    if (!id) return;
     let alive = true;
-    placeRepo.get(initial.placeId).then((p) => {
+    placeRepo.get(id).then((p) => {
       if (!(alive && p)) return;
       setState((prev) => ({
         ...prev,
@@ -105,7 +113,7 @@ export function ComposeForm({ initial, onChange }: ComposeFormProps) {
     return () => {
       alive = false;
     };
-  }, [initial?.placeId]);
+  }, [initial?.placeId, initialPlaceId]);
 
   const update = <K extends keyof ComposeFormState>(
     key: K,

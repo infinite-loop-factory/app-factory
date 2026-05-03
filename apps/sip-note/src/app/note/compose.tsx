@@ -38,7 +38,10 @@ async function persistPhotos(
 export default function ComposeScreen() {
   const router = useRouter();
   const colors = useThemeColors();
-  const { noteId } = useLocalSearchParams<{ noteId?: string }>();
+  const { noteId, placeId: queryPlaceId } = useLocalSearchParams<{
+    noteId?: string;
+    placeId?: string;
+  }>();
   const isEdit = Boolean(noteId);
 
   const [initial, setInitial] = useState<TastingNote | undefined>(undefined);
@@ -135,6 +138,7 @@ export default function ComposeScreen() {
       <View className="flex-1 px-5">
         <ComposeForm
           initial={initial}
+          initialPlaceId={!isEdit ? queryPlaceId : undefined}
           onChange={(s, v) => {
             setDraft(s);
             setIsValid(v);

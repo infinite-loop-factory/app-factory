@@ -115,7 +115,13 @@
     "detail": {
       "title": "장소 상세",
       "visitCount": "{{count}}회 방문",
-      "recentNote": "최근 기록"
+      "recentNote": "최근 기록",
+      "notes": "기록",
+      "empty": "이 장소의 기록이 아직 없어요",
+      "addNote": "이 장소에 기록 추가",
+      "notFound": "장소를 찾을 수 없어요",
+      "wishlistAdd": "위시리스트에 추가",
+      "wishlistRemove": "위시리스트에서 제거"
     },
     "wishlist": {
       "title": "위시리스트",

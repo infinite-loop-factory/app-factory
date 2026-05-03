@@ -115,7 +115,13 @@
     "detail": {
       "title": "Place Detail",
       "visitCount": "Visited {{count}} times",
-      "recentNote": "Recent Note"
+      "recentNote": "Recent Note",
+      "notes": "Notes",
+      "empty": "No notes for this place yet",
+      "addNote": "Add a note here",
+      "notFound": "Place not found",
+      "wishlistAdd": "Add to wishlist",
+      "wishlistRemove": "Remove from wishlist"
     },
     "wishlist": {
       "title": "Wishlist",

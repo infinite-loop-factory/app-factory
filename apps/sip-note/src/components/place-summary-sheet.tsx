@@ -125,7 +125,7 @@ export const PlaceSummarySheet = forwardRef<
               className="mt-4 h-12 items-center justify-center rounded-md bg-brand"
               onPress={handleViewDetail}
             >
-              <Text className="font-medium font-text text-body text-text-on-brand">
+              <Text className="font-medium font-text text-body text-text-onBrand">
                 {i18n.t("place.summary.viewDetail")}
               </Text>
             </Pressable>
