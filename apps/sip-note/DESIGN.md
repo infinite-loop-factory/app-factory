@@ -2,7 +2,7 @@
 
 > Phase 0 산출물. 모든 토큰 / 폰트 / 컴포넌트 anchor 의 단일 진입점.
 > Source of truth: [`src/design-system/theme.ts`](./src/design-system/theme.ts) (TS) · [`src/global.css`](./src/global.css) (web 변수) · [`src/constants/color-tokens.ts`](./src/constants/color-tokens.ts) (RN 주입).
-> 디자인 컨텍스트: [`.design-context.md`](./.design-context.md) · 작업 흐름: [`docs/design-workflow.md`](./docs/design-workflow.md).
+> 디자인 컨텍스트: [`docs/design/context.md`](./docs/design/context.md) · 작업 흐름: [`docs/design/workflow.md`](./docs/design/workflow.md).
 
 ---
 
@@ -116,7 +116,7 @@ Phase 0 에서는 토큰만 확정한다. 실제 컴포넌트 구현은 각 Phas
 
 ## 9. Anti-pattern watchlist
 
-`.design-context.md` + handoff 결정사항. AUDIT 시 0 건이어야 다음 Phase 진입.
+`docs/design/context.md` + handoff 결정사항. AUDIT 시 0 건이어야 다음 Phase 진입.
 
 - ❌ Purple → Blue 그라데이션 배경
 - ❌ Card 안의 Card 중첩 (페어링 카드 안에 테이스팅 카드 직접 배치 금지)

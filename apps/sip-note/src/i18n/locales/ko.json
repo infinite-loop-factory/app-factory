@@ -46,29 +46,53 @@
   "tasting": {
     "feed": {
       "title": "테이스팅 피드",
-      "fab": "기록 추가"
+      "fab": "기록 추가",
+      "greeting": "오늘의 한 잔",
+      "searchPlaceholder": "기록·태그·메모 검색",
+      "filterAll": "전체",
+      "noResultsTitle": "검색 결과가 없어요",
+      "noResultsBody": "다른 검색어나 카테고리를 시도해보세요",
+      "stats": {
+        "thisWeek": "이번 주",
+        "avgScore": "평균 점수",
+        "yearTotal": "올해 누적"
+      }
     },
     "write": {
       "title": "새 기록",
       "editTitle": "기록 수정"
     },
     "detail": {
-      "title": "기록 상세"
+      "title": "기록 상세",
+      "notFound": "기록을 찾을 수 없어요",
+      "sectionInfo": "정보",
+      "photosCount": "{{count}}장",
+      "noPhotos": "없음"
     },
     "field": {
       "name": "이름",
       "namePlaceholder": "주류 이름을 입력하세요",
       "category": "카테고리",
       "score": "점수",
+      "scoreHint": "0.5 단위 · 위스키 잔",
       "tags": "태그",
       "tagsPlaceholder": "태그를 입력하세요",
       "memo": "메모",
       "memoPlaceholder": "테이스팅 노트를 자유롭게 적어보세요",
       "price": "가격",
+      "priceHint": "선택",
       "priceUnitGlass": "잔",
       "priceUnitBottle": "병",
       "date": "날짜",
-      "photos": "사진"
+      "photos": "사진",
+      "photosHint": "선택 · 최대 5장"
+    },
+    "a11y": {
+      "removePhoto": "사진 제거",
+      "removeTag": "{{label}} 제거",
+      "scorePoint": "{{score}} 점",
+      "score": "점수 {{score}}",
+      "photoIndex": "사진 {{index}}"
     },
     "action": {
       "takePhoto": "사진 촬영",
@@ -215,5 +239,9 @@
       "title": "첫 뱃지를 향해",
       "body": "기록을 쌓으면 뱃지가 해제됩니다"
     }
+  },
+  "notFound": {
+    "title": "페이지를 찾을 수 없어요",
+    "cta": "홈으로 돌아가기"
   }
 }
