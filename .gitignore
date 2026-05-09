@@ -12,3 +12,4 @@ dist/
 .playwright-mcp
 
 .omc/
+.agents/state/

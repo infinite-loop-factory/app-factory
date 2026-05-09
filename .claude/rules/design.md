@@ -1,6 +1,8 @@
 ---
-description: "Design system, typography, color, accessibility (WCAG 2.2), responsive-first layout, and motion design standards"
+description: Design system, typography, color, accessibility (WCAG 2.2),
+  responsive-first layout, and motion design standards
 ---
+
 
 # Design Standards
 

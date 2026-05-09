@@ -1,5 +1,4 @@
 #!/usr/bin/env bun
-
 /**
  * oh-my-agent — Stop Hook (Persistent Mode)
  *
@@ -21,7 +20,7 @@ import {
   unlinkSync,
   writeFileSync,
 } from "node:fs";
-import { dirname, join } from "node:path";
+import { join } from "node:path";
 import { isDeactivationRequest } from "./keyword-detector.ts";
 import {
   type ModeState,
@@ -52,7 +51,7 @@ interface TriggerConfig {
 }
 
 function loadPersistentWorkflows(): string[] {
-  const configPath = join(dirname(import.meta.path), "triggers.json");
+  const configPath = join(import.meta.dirname, "triggers.json");
   try {
     const config: TriggerConfig = JSON.parse(readFileSync(configPath, "utf-8"));
     return Object.entries(config.workflows)
@@ -65,12 +64,22 @@ function loadPersistentWorkflows(): string[] {
 
 // ── Vendor Detection ──────────────────────────────────────────
 
+function inferVendorFromScriptPath(): Vendor | null {
+  const path = import.meta.filename;
+  if (path.includes(`${join(".cursor", "hooks")}`)) return "cursor";
+  if (path.includes(`${join(".qwen", "hooks")}`)) return "qwen";
+  if (path.includes(`${join(".claude", "hooks")}`)) return "claude";
+  if (path.includes(`${join(".gemini", "hooks")}`)) return "gemini";
+  if (path.includes(`${join(".codex", "hooks")}`)) return "codex";
+  return null;
+}
+
 function detectVendor(input: Record<string, unknown>): Vendor {
   const event = input.hook_event_name as string | undefined;
+  const byScriptPath = inferVendorFromScriptPath();
+  if (byScriptPath) return byScriptPath;
   if (event === "AfterAgent") return "gemini";
-  if (event === "Stop") {
-    if ("session_id" in input && !("sessionId" in input)) return "codex";
-  }
+  if (event === "Stop" && "session_id" in input) return "codex";
   if (process.env.QWEN_PROJECT_DIR) return "qwen";
   return "claude";
 }
@@ -155,17 +164,25 @@ function incrementReinforcement(
 
 // ── Main ──────────────────────────────────────────────────────
 
-function parseInput(raw: string): Record<string, unknown> | null {
+async function main() {
+  const raw = readFileSync(0, "utf-8");
+  let input: Record<string, unknown>;
   try {
-    return JSON.parse(raw) as Record<string, unknown>;
+    input = JSON.parse(raw);
   } catch {
-    return null;
+    process.exit(0);
   }
-}
 
-function collectTextToCheck(input: Record<string, unknown>): string {
-  return [
-    input.prompt_response,
+  const vendor = detectVendor(input);
+  const projectDir = getProjectDir(vendor, input);
+  const sessionId = getSessionId(input);
+  const lang = detectLanguage(projectDir);
+
+  // Check all text fields in stdin for deactivation phrases.
+  // The assistant may have included "workflow done" in its response,
+  // or it may appear in transcript/content fields depending on vendor.
+  const textToCheck = [
+    input.prompt_response, // Gemini AfterAgent
     input.response,
     input.content,
     input.message,
@@ -173,60 +190,27 @@ function collectTextToCheck(input: Record<string, unknown>): string {
   ]
     .filter((v): v is string => typeof v === "string")
     .join(" ");
-}
 
-function deactivateSessionModes(projectDir: string, sessionId: string): void {
-  const stateDir = join(projectDir, ".agents", "state");
-  if (!existsSync(stateDir)) {
-    return;
-  }
-
-  try {
-    const suffix = `-state-${sessionId}.json`;
-    for (const file of readdirSync(stateDir)) {
-      if (file.endsWith(suffix)) {
-        unlinkSync(join(stateDir, file));
+  if (textToCheck && isDeactivationRequest(textToCheck, lang)) {
+    // Deactivate all persistent workflows for this session
+    const stateDir = join(projectDir, ".agents", "state");
+    if (existsSync(stateDir)) {
+      try {
+        const suffix = `-state-${sessionId}.json`;
+        for (const file of readdirSync(stateDir)) {
+          if (file.endsWith(suffix)) {
+            unlinkSync(join(stateDir, file));
+          }
+        }
+      } catch {
+        /* ignore */
       }
     }
-  } catch {
-    // ignore cleanup errors
-  }
-}
-
-function handleDeactivation(
-  textToCheck: string,
-  lang: string,
-  projectDir: string,
-  sessionId: string,
-): boolean {
-  if (!(textToCheck && isDeactivationRequest(textToCheck, lang))) {
-    return false;
+    process.exit(0);
   }
 
-  deactivateSessionModes(projectDir, sessionId);
-  return true;
-}
+  const persistentWorkflows = loadPersistentWorkflows();
 
-function buildPersistentModeReason(
-  workflow: string,
-  sessionId: string,
-  reinforcementCount: number,
-): string {
-  const stateFile = `.agents/state/${workflow}-state-${sessionId}.json`;
-  return [
-    `[OMA PERSISTENT MODE: ${workflow.toUpperCase()}]`,
-    `The /${workflow} workflow is still active (reinforcement ${reinforcementCount}/${MAX_REINFORCEMENTS}).`,
-    "Continue executing the workflow. If all tasks are genuinely complete:",
-    `  1. Delete the state file: Bash \`rm ${stateFile}\``,
-    `  2. Or ask the user to say "워크플로우 완료" / "workflow done"`,
-  ].join("\n");
-}
-
-function getBlockingReason(
-  projectDir: string,
-  sessionId: string,
-  persistentWorkflows: string[],
-): string | null {
   for (const workflow of persistentWorkflows) {
     const state = readModeState(projectDir, workflow, sessionId);
     if (!state) continue;
@@ -237,43 +221,28 @@ function getBlockingReason(
     }
 
     incrementReinforcement(projectDir, workflow, sessionId, state);
-    return buildPersistentModeReason(
-      workflow,
-      sessionId,
-      state.reinforcementCount,
-    );
-  }
 
-  return null;
-}
+    const stateFile = `.agents/state/${workflow}-state-${sessionId}.json`;
+    const reason = [
+      `[OMA PERSISTENT MODE: ${workflow.toUpperCase()}]`,
+      `The /${workflow} workflow is still active (reinforcement ${state.reinforcementCount}/${MAX_REINFORCEMENTS}).`,
+      `Continue executing the workflow. If all tasks are genuinely complete:`,
+      `  1. Delete the state file: Bash \`rm ${stateFile}\``,
+      `  2. Or ask the user to say "워크플로우 완료" / "workflow done"`,
+    ].join("\n");
 
-function main() {
-  const raw = readFileSync("/dev/stdin", "utf-8");
-  const input = parseInput(raw);
-  if (!input) {
-    process.exit(0);
-  }
-
-  const vendor = detectVendor(input);
-  const projectDir = getProjectDir(vendor, input);
-  const sessionId = getSessionId(input);
-  const lang = detectLanguage(projectDir);
-  const textToCheck = collectTextToCheck(input);
-
-  if (handleDeactivation(textToCheck, lang, projectDir, sessionId)) {
-    process.exit(0);
-  }
-
-  const persistentWorkflows = loadPersistentWorkflows();
-  const reason = getBlockingReason(projectDir, sessionId, persistentWorkflows);
-  if (reason) {
-    process.stdout.write(makeBlockOutput(vendor, reason));
-    process.exit(2);
+    writeBlockAndExit(vendor, reason);
   }
 
   process.exit(0);
 }
 
+export function writeBlockAndExit(vendor: Vendor, reason: string): never {
+  process.stderr.write(reason);
+  process.stdout.write(makeBlockOutput(vendor, reason));
+  process.exit(2);
+}
+
 if (import.meta.main) {
-  main();
+  main().catch(() => process.exit(0));
 }

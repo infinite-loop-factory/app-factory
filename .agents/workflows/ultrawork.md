@@ -20,7 +20,7 @@ description: Ultrawork - high-quality 5-phase development workflow with 11 revie
 ## Vendor Detection
 
 Before starting, determine your runtime environment by following `.agents/skills/_shared/core/vendor-detection.md`.
-The detected vendor determines how agents are spawned in Phase 2 (IMPL), Phase 3 (VERIFY), Phase 4 (REFINE), and Phase 5 (SHIP).
+The detected runtime vendor and each agent's target vendor determine how agents are spawned in Phase 2 (IMPL), Phase 3 (VERIFY), Phase 4 (REFINE), and Phase 5 (SHIP).
 
 ---
 
@@ -82,16 +82,26 @@ Activate PM Agent to execute Steps 1-4:
 // turbo
 Spawn Implementation Agents (Backend/Frontend/Mobile) in parallel.
 
-#### If Claude Code
+#### Per-Agent Dispatch
+Resolve the target vendor for each agent from `.agents/oma-config.yaml`.
+Use native subagents only when `target_vendor === current_runtime_vendor` and that runtime supports the vendor's role-subagent path.
+Otherwise use `oma agent:spawn` for that agent.
+
+#### If Claude Code and target vendor is Claude
 Use the Agent tool to spawn subagents:
 - `Agent(subagent_type="backend-engineer", prompt="Implement backend tasks per plan. IMPORTANT: Follow .agents/skills/_shared/core/context-loading.md rules.", run_in_background=true)`
 - `Agent(subagent_type="frontend-engineer", prompt="Implement frontend tasks per plan. IMPORTANT: Follow .agents/skills/_shared/core/context-loading.md rules.", run_in_background=true)`
 - Multiple Agent tool calls in the same message = true parallel execution
 
-#### If Codex CLI
-Request parallel subagent execution with the specific implementation tasks per plan.
+#### If Codex CLI and target vendor is Codex
+Spawn native Codex custom agents using `.codex/agents/{agent}.toml` when available.
+Pass each agent its task description, API contracts, and relevant context.
+If native dispatch is not verified in the current runtime, fall back to `oma agent:spawn`.
 
-#### If Gemini CLI or Antigravity or CLI Fallback
+#### If Gemini CLI and target vendor is Gemini
+Use native Gemini subagents when available, otherwise fall back to `oma agent:spawn`.
+
+#### If target vendor differs from current runtime, or native dispatch is unavailable
 ```bash
 oma agent:spawn backend "Implement backend tasks per plan. IMPORTANT: Follow .agents/skills/_shared/core/context-loading.md rules." session-id -w ./backend &
 oma agent:spawn frontend "Implement frontend tasks per plan. IMPORTANT: Follow .agents/skills/_shared/core/context-loading.md rules." session-id -w ./frontend &
@@ -145,7 +155,8 @@ Use the Agent tool to spawn subagent:
 - `Agent(subagent_type="qa-reviewer", prompt="Execute Phase 3 Verification. Step 6: Alignment Review. Step 7: Security/Bug Review (npm audit, OWASP). Step 8: Improvement/Regression Review. IMPORTANT: Follow .agents/skills/_shared/core/context-loading.md rules.", run_in_background=true)`
 
 #### If Codex CLI
-Request parallel subagent execution with the QA verification tasks.
+Spawn native Codex custom agents using `.codex/agents/{agent}.toml` when available for QA verification.
+If native dispatch is not verified in the current runtime, fall back to `oma agent:spawn`.
 
 #### If Gemini CLI or Antigravity or CLI Fallback
 ```bash
@@ -189,9 +200,15 @@ If baseline was measured at Step 5.2:
 
 **On gate pass**: Use memory edit tool to record phase completion in `session-ultrawork.md`
 
-**Gate failure (1st time)** → Return to Step 5, fix implementation issues, and repeat VERIFY phase.
+**Gate failure (1st time)** → Before re-spawning for the next VERIFY cycle, check the session cost cap:
 
-**Gate failure (2nd time on same issue)** → Activate **Exploration Loop**:
+> **Review Loop termination conditions (OR — whichever fires first wins)**
+> 1. Gate failure count has reached the configured maximum iterations (default: 5 total VERIFY + REFINE cycles). Do not start another cycle.
+> 2. Session cost cap exceeded: call `checkCap(sessionId, loadQuotaCap())` from `cli/io/session-cost.ts`. If `exceeded === true`, print `formatPromptMessage(result)` to the user and stop the loop immediately — save all current step results before stopping, then report to the user that the loop was terminated early due to quota.
+>
+> If neither condition is met, return to Step 5 and continue.
+
+**Gate failure (2nd time on same issue, and termination conditions not yet met)** → Activate **Exploration Loop**:
 1. Load `exploration-loop.md` (conditional, per `context-loading.md`)
 2. Generate 2-3 alternative hypotheses using Exploration Decision template (`reasoning-templates.md` #6)
 3. Experiment each approach sequentially (git stash per attempt)
@@ -213,7 +230,8 @@ Use the Agent tool to spawn subagent:
 - `Agent(subagent_type="debug-investigator", prompt="Execute Phase 4 Refine. Step 9: Split large files. Step 10: Integration check. Step 11: Side Effect analysis (find_referencing_symbols). Step 12: Consistency review. Step 13: Cleanup dead code. IMPORTANT: Follow .agents/skills/_shared/core/context-loading.md rules.", run_in_background=true)`
 
 #### If Codex CLI
-Request parallel subagent execution with the refinement tasks.
+Spawn native Codex custom agents using `.codex/agents/{agent}.toml` when available for refinement tasks.
+If native dispatch is not verified in the current runtime, fall back to `oma agent:spawn`.
 
 #### If Gemini CLI or Antigravity or CLI Fallback
 ```bash
@@ -264,7 +282,13 @@ If baseline was measured at Step 5.2:
 
 **On gate pass**: Use memory edit tool to record phase completion in `session-ultrawork.md`
 
-**Gate failure → Re-spawn Debug Agent with specific issues and repeat until GATE passes.**
+**Gate failure → Before re-spawning the Debug Agent, apply the same termination check:**
+
+> **Review Loop termination conditions (OR — whichever fires first wins)**
+> 1. Total REFINE failure count has reached the configured maximum iterations (default: 5 cycles across all phases). Do not start another cycle.
+> 2. Session cost cap exceeded: call `checkCap(sessionId, loadQuotaCap())` from `cli/io/session-cost.ts`. If `exceeded === true`, print `formatPromptMessage(result)` to the user and stop — save current step results before stopping, then report early termination due to quota.
+>
+> If neither condition is met, re-spawn the Debug Agent with specific issues and repeat until GATE passes.
 
 **Skip conditions**: Simple tasks < 50 lines
 
@@ -281,7 +305,8 @@ Use the Agent tool to spawn subagent:
 - `Agent(subagent_type="qa-reviewer", prompt="Execute Phase 5 Ship. Step 14: Quality Review (lint/coverage). Step 15: UX Flow Verification. Step 16: Related Issues Review. Step 17: Deployment Readiness. IMPORTANT: Follow .agents/skills/_shared/core/context-loading.md rules.", run_in_background=true)`
 
 #### If Codex CLI
-Request parallel subagent execution with the final QA and deployment readiness tasks.
+Spawn native Codex custom agents using `.codex/agents/{agent}.toml` when available for final QA and deployment readiness tasks.
+If native dispatch is not verified in the current runtime, fall back to `oma agent:spawn`.
 
 #### If Gemini CLI or Antigravity or CLI Fallback
 ```bash
@@ -341,6 +366,20 @@ If Quality Score was measured during this session:
 **On gate pass**: Use memory write tool to record final results in `session-ultrawork.md`
 
 **Gate failure → Address issues, re-run affected steps, and repeat until GATE passes.**
+
+---
+
+## Step 18: Optional Doc Verify Hook
+
+If `oma-config.yaml` has `docs.auto_verify: true`:
+
+1. Run `oma docs verify --json` from the repo root.
+2. Capture the JSON output.
+3. If `broken.length === 0`: print `✓ docs verified clean (N docs)` summary to stdout and continue with workflow completion.
+4. If `broken.length > 0`: print a 1-3 line summary identifying which docs have drift, and a hint `Run /oma-docs verify for the full report.` Continue with workflow completion (warn-only — never block).
+5. If `oma-docs` is not available (CLI command missing): skip silently.
+
+This hook is opt-in; the default `auto_verify: false` skips this step entirely.
 
 ---
 

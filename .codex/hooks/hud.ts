@@ -1,5 +1,4 @@
 #!/usr/bin/env bun
-
 /**
  * oh-my-agent — HUD Statusline
  *
@@ -10,10 +9,9 @@
  * stdout: ANSI-colored status text
  */
 
-import type { ModeState } from "./types.ts";
-
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
+import type { ModeState } from "./types.ts";
 
 // ── ANSI Colors ───────────────────────────────────────────────
 
@@ -58,7 +56,7 @@ interface StatuslineStdin {
 
 function readStdin(): StatuslineStdin {
   try {
-    return JSON.parse(readFileSync("/dev/stdin", "utf-8"));
+    return JSON.parse(readFileSync(0, "utf-8"));
   } catch {
     return {};
   }
@@ -72,7 +70,7 @@ function getActiveWorkflow(projectDir: string): ModeState | null {
 
   try {
     for (const file of readdirSync(stateDir)) {
-      if (!(file.endsWith(".json") && file.includes("-state-"))) continue;
+      if (!file.endsWith(".json") || !file.includes("-state-")) continue;
       const content = readFileSync(join(stateDir, file), "utf-8");
       const state: ModeState = JSON.parse(content);
 

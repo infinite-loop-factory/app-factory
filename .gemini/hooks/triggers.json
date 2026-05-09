@@ -1533,6 +1533,917 @@
       }
     }
   },
+  "skills": {
+    "oma-architecture": {
+      "keywords": {
+        "*": [],
+        "en": [
+          "design the system",
+          "architecture doc",
+          "high level design",
+          "define boundaries",
+          "architecture tradeoffs"
+        ],
+        "ko": [
+          "아키텍처 짜줘",
+          "시스템 구조 설계",
+          "경계 정의해줘",
+          "구조 검토해줘",
+          "아키텍처 문서"
+        ],
+        "ja": [
+          "アーキテクチャを設計",
+          "システム構成を考えて",
+          "境界を定義",
+          "構成レビュー",
+          "アーキ文書"
+        ],
+        "zh": ["设计架构", "系统架构方案", "定义边界", "架构文档", "架构权衡"]
+      }
+    },
+    "oma-backend": {
+      "keywords": {
+        "*": ["CRUD", "JWT auth"],
+        "en": [
+          "build an api",
+          "add endpoint",
+          "server side logic",
+          "write a migration",
+          "repository pattern",
+          "rest api",
+          "api endpoint",
+          "backend service",
+          "database migration",
+          "auth flow",
+          "server implementation",
+          "clean architecture"
+        ],
+        "ko": [
+          "api 만들어줘",
+          "엔드포인트 추가",
+          "백엔드 구현",
+          "마이그레이션 작성",
+          "인증 붙여줘"
+        ],
+        "ja": [
+          "apiを作って",
+          "エンドポイント追加",
+          "バックエンド実装",
+          "マイグレーション書いて",
+          "認証を実装"
+        ],
+        "zh": ["写个接口", "加接口", "后端实现", "写迁移", "加认证"]
+      }
+    },
+    "oma-brainstorm": {
+      "keywords": {
+        "*": [],
+        "en": [
+          "toss around ideas",
+          "kick around options",
+          "spitball",
+          "some ideas please",
+          "ideation session"
+        ],
+        "ko": [
+          "아이디어 좀 뽑아줘",
+          "같이 고민해줘",
+          "아이디어 내보자",
+          "방향성 고민"
+        ],
+        "ja": [
+          "アイデア出して",
+          "一緒に考えて",
+          "方向性を探りたい",
+          "案を出して"
+        ],
+        "zh": ["帮我想想", "一起想想办法", "给点灵感"]
+      }
+    },
+    "oma-coordination": {
+      "keywords": {
+        "*": [],
+        "en": [
+          "coordinate the agents",
+          "hand off to agent",
+          "multi agent workflow",
+          "run agents manually",
+          "multi agent coordination",
+          "coordinate agents",
+          "cli handoff",
+          "manual orchestration"
+        ],
+        "ko": [
+          "에이전트 조율",
+          "에이전트끼리 협업",
+          "수동으로 에이전트 돌려",
+          "에이전트 순서 잡아줘"
+        ],
+        "ja": [
+          "エージェントを調整",
+          "エージェント連携",
+          "手動でエージェント",
+          "エージェントの順序"
+        ],
+        "zh": ["协调代理", "代理之间协作", "手动跑代理", "代理之间衔接"]
+      }
+    },
+    "oma-db": {
+      "keywords": {
+        "*": ["ERD", "vector db"],
+        "en": [
+          "design a schema",
+          "normalize tables",
+          "tune the index",
+          "slow query",
+          "plan capacity",
+          "schema design",
+          "ERD",
+          "normalization",
+          "index tuning",
+          "query tuning",
+          "vector index",
+          "RAG retrieval",
+          "data migration",
+          "capacity planning"
+        ],
+        "ko": [
+          "스키마 설계",
+          "테이블 설계",
+          "인덱스 튜닝",
+          "쿼리 느려",
+          "용량 산정"
+        ],
+        "ja": [
+          "スキーマ設計",
+          "テーブル設計",
+          "インデックス調整",
+          "クエリが遅い",
+          "容量見積"
+        ],
+        "zh": ["设计表结构", "表设计", "索引优化", "查询很慢", "容量评估"]
+      }
+    },
+    "oma-debug": {
+      "keywords": {
+        "*": [],
+        "en": [
+          "find the root cause",
+          "why does it crash",
+          "write a regression test",
+          "analyze this stack trace",
+          "bug diagnosis",
+          "root cause",
+          "regression test",
+          "stack trace",
+          "crash fix",
+          "error investigation"
+        ],
+        "ko": [
+          "버그 찾아줘",
+          "에러 원인",
+          "크래시 분석",
+          "스택트레이스 봐줘",
+          "원인 파악해줘"
+        ],
+        "ja": [
+          "バグを探して",
+          "エラー原因",
+          "クラッシュを分析",
+          "スタックトレースを見て",
+          "原因を特定"
+        ],
+        "zh": ["找出 bug", "错误原因", "分析崩溃", "看堆栈", "定位原因"]
+      }
+    },
+    "oma-design": {
+      "keywords": {
+        "*": ["WCAG"],
+        "en": [
+          "design tokens",
+          "build a landing page",
+          "pick a color palette",
+          "typography scale",
+          "motion spec",
+          "typography system",
+          "landing page design",
+          "responsive layout",
+          "motion design"
+        ],
+        "ko": [
+          "디자인 토큰",
+          "랜딩 만들어줘",
+          "컬러 팔레트 잡아줘",
+          "타이포 스케일",
+          "모션 가이드"
+        ],
+        "ja": [
+          "デザイントークン",
+          "ランディング作成",
+          "カラーパレット決めて",
+          "モーション設計"
+        ],
+        "zh": ["设计令牌", "做个落地页", "定配色", "字体层级", "动效规范"]
+      }
+    },
+    "oma-dev-workflow": {
+      "keywords": {
+        "*": ["mise.toml", "CI/CD"],
+        "en": [
+          "setup mise task",
+          "configure ci pipeline",
+          "automate release",
+          "add git hook",
+          "monorepo tasks",
+          "mise task",
+          "monorepo workflow",
+          "ci/cd pipeline",
+          "git hook",
+          "release automation",
+          "build automation"
+        ],
+        "ko": [
+          "mise 태스크",
+          "ci 파이프라인",
+          "릴리즈 자동화",
+          "깃 훅 설정",
+          "모노레포 워크플로우"
+        ],
+        "ja": [
+          "miseタスク",
+          "ciパイプライン",
+          "リリース自動化",
+          "gitフック",
+          "モノレポ作業"
+        ],
+        "zh": [
+          "mise 任务",
+          "ci 流水线",
+          "发布自动化",
+          "git 钩子",
+          "monorepo 工作流"
+        ]
+      }
+    },
+    "oma-frontend": {
+      "keywords": {
+        "*": [
+          "shadcn",
+          "FSD",
+          "next.js",
+          "nextjs",
+          "react",
+          "tailwind",
+          "tsx",
+          "frontend"
+        ],
+        "en": [
+          "make a react component",
+          "build a next page",
+          "style with tailwind",
+          "hook up shadcn",
+          "react component",
+          "next.js page",
+          "tailwind styling",
+          "shadcn component",
+          "frontend ui",
+          "FSD architecture"
+        ],
+        "ko": [
+          "리액트 컴포넌트",
+          "넥스트 페이지",
+          "tailwind로 스타일",
+          "shadcn 붙여줘",
+          "프론트 구현"
+        ],
+        "ja": [
+          "reactコンポーネント",
+          "nextページ",
+          "tailwindで装飾",
+          "shadcn導入",
+          "フロント実装"
+        ],
+        "zh": [
+          "写个 react 组件",
+          "next 页面",
+          "用 tailwind",
+          "接入 shadcn",
+          "前端实现"
+        ]
+      }
+    },
+    "oma-hwp": {
+      "keywords": {
+        "*": ["kordoc", "hwp", "hwpx", "hwpml"],
+        "en": [
+          "convert this hwp",
+          "hwp to markdown",
+          "parse hwp",
+          "parse hwpx",
+          "extract hwp content",
+          "hangul word processor",
+          "hwp ingestion"
+        ],
+        "ko": [
+          "한글 파일",
+          "한글 변환",
+          "한글 파싱",
+          "hwp 변환",
+          "hwp 파싱",
+          "hwp 마크다운",
+          "hwpx 변환",
+          "hwpx 파싱"
+        ],
+        "ja": ["hwp変換", "hwpをマークダウン", "hwpを解析", "韓国語ワープロ"],
+        "zh": ["hwp 转换", "hwp 解析", "hwp 转 markdown", "韩文文档"]
+      }
+    },
+    "oma-mobile": {
+      "keywords": {
+        "*": ["riverpod", "cupertino"],
+        "en": [
+          "flutter screen",
+          "react native view",
+          "dart widget",
+          "ios android build",
+          "flutter widget",
+          "react native screen",
+          "dart code",
+          "riverpod state",
+          "mobile app",
+          "android ios"
+        ],
+        "ko": [
+          "플러터 화면",
+          "리액트 네이티브 화면",
+          "다트 위젯",
+          "안드로이드 아이폰 앱",
+          "모바일 앱"
+        ],
+        "ja": [
+          "flutter画面",
+          "react native画面",
+          "dartウィジェット",
+          "iosアンドロイド",
+          "モバイルアプリ"
+        ],
+        "zh": [
+          "flutter 页面",
+          "react native 页面",
+          "dart 组件",
+          "安卓 ios",
+          "移动端应用"
+        ]
+      }
+    },
+    "oma-observability": {
+      "keywords": {
+        "*": [
+          "OpenTelemetry",
+          "OTel",
+          "OTLP",
+          "W3C Trace Context",
+          "traceparent",
+          "MELT",
+          "APM",
+          "RUM",
+          "SLO",
+          "SLI",
+          "burn-rate",
+          "PromQL",
+          "Prometheus",
+          "Grafana",
+          "Jaeger",
+          "Tempo",
+          "Loki",
+          "Mimir",
+          "Fluent Bit",
+          "OpenCost",
+          "OpenFeature",
+          "Flagger",
+          "Falco",
+          "Parca",
+          "Pyroscope",
+          "Honeycomb",
+          "Datadog",
+          "Sentry",
+          "Crashlytics",
+          "Core Web Vitals"
+        ],
+        "en": [
+          "observability",
+          "traceability",
+          "telemetry",
+          "distributed tracing",
+          "instrument my service",
+          "set up OTel",
+          "OTel pipeline",
+          "collector topology",
+          "tail sampling",
+          "cardinality budget",
+          "clock skew",
+          "error budget",
+          "burn rate alert",
+          "canary analysis",
+          "progressive delivery",
+          "feature flag observability",
+          "incident forensics",
+          "6-dimension localization",
+          "root cause across services",
+          "multi-tenant telemetry",
+          "per-tenant sampling",
+          "data residency telemetry",
+          "redact PII in logs",
+          "observability as code",
+          "dashboard as code",
+          "PrometheusRule CRD",
+          "Grafana Jsonnet",
+          "Perses dashboard",
+          "UDP MTU telemetry",
+          "StatsD fragmentation",
+          "OTLP gRPC vs HTTP",
+          "propagator matrix",
+          "BGP observability",
+          "QUIC observability",
+          "eBPF observability",
+          "service mesh tracing",
+          "zero code instrumentation",
+          "mobile crash analytics",
+          "crash-free rate",
+          "symbolication pipeline",
+          "offline telemetry queue"
+        ],
+        "ko": [
+          "관측성",
+          "관측 가능성",
+          "추적성",
+          "추적 가능성",
+          "텔레메트리",
+          "텔레메트리 수집",
+          "분산 트레이싱",
+          "OTel 도입",
+          "OTel 셋업",
+          "OTel 계측",
+          "OTel 파이프라인",
+          "컬렉터 토폴로지",
+          "테일 샘플링",
+          "카디널리티",
+          "카디널리티 관리",
+          "클록 스큐",
+          "시계 드리프트",
+          "에러 버짓",
+          "에러 예산",
+          "번레이트 알람",
+          "번레이트",
+          "카나리 분석",
+          "프로그레시브 딜리버리",
+          "점진 배포",
+          "피처 플래그 관측",
+          "사건 부검",
+          "장애 부검",
+          "장애 원인 분석",
+          "6차원 좁히기",
+          "멀티테넌트 관측",
+          "테넌트별 샘플링",
+          "데이터 거주 관측",
+          "로그 PII 제거",
+          "로그 익명화",
+          "로그 가명화",
+          "관측성 as code",
+          "대시보드 as code",
+          "대시보드 코드화",
+          "PrometheusRule",
+          "Grafana Jsonnet",
+          "Perses 대시보드",
+          "UDP MTU 튜닝",
+          "StatsD 단편화",
+          "OTLP gRPC 선택",
+          "전파자 매핑",
+          "BGP 관측",
+          "QUIC 관측",
+          "eBPF 관측",
+          "서비스 메시 트레이싱",
+          "zero-code 계측",
+          "모바일 크래시 분석",
+          "크래시 프리 레이트",
+          "심볼리케이션",
+          "오프라인 텔레메트리 큐"
+        ],
+        "ja": [
+          "オブザーバビリティ",
+          "トレーサビリティ",
+          "テレメトリ",
+          "分散トレーシング",
+          "OTel導入",
+          "OTelパイプライン",
+          "コレクタ構成",
+          "テイルサンプリング",
+          "カーディナリティ予算",
+          "クロックスキュー",
+          "エラーバジェット",
+          "バーンレートアラート",
+          "カナリア分析",
+          "プログレッシブデリバリ",
+          "機能フラグ観測",
+          "インシデントフォレンジック",
+          "マルチテナント観測",
+          "データ居住性観測",
+          "ログPII除去",
+          "Observability as Code",
+          "Dashboard as Code",
+          "UDP MTUチューニング",
+          "StatsDフラグメンテーション",
+          "OTLP選択",
+          "プロパゲータマッピング",
+          "BGP観測",
+          "QUIC観測",
+          "eBPF観測",
+          "サービスメッシュトレース",
+          "モバイルクラッシュ分析",
+          "クラッシュフリーレート",
+          "シンボリケーション",
+          "オフラインテレメトリ"
+        ],
+        "zh": [
+          "可观测性",
+          "可追溯性",
+          "遥测",
+          "分布式追踪",
+          "OTel 接入",
+          "OTel 流水线",
+          "采集器拓扑",
+          "尾采样",
+          "基数预算",
+          "时钟漂移",
+          "错误预算",
+          "燃烧率告警",
+          "金丝雀分析",
+          "渐进式发布",
+          "特性开关观测",
+          "事件取证",
+          "多租户观测",
+          "数据驻留观测",
+          "日志脱敏",
+          "可观测性即代码",
+          "仪表盘即代码",
+          "UDP MTU 调优",
+          "StatsD 分片",
+          "OTLP 选择",
+          "传播器映射",
+          "BGP 观测",
+          "QUIC 观测",
+          "eBPF 观测",
+          "服务网格追踪",
+          "零代码探针",
+          "移动崩溃分析",
+          "崩溃无事率",
+          "符号化",
+          "离线遥测队列"
+        ]
+      }
+    },
+    "oma-orchestrator": {
+      "keywords": {
+        "*": ["MCP Memory"],
+        "en": [
+          "spawn parallel agents",
+          "run agents in parallel",
+          "fan out work",
+          "review loop pipeline",
+          "parallel subagents",
+          "multi agent orchestration",
+          "spawn agents",
+          "review loop",
+          "mcp memory coordination"
+        ],
+        "ko": [
+          "에이전트 병렬 실행",
+          "동시에 에이전트 돌려",
+          "fan-out",
+          "리뷰 루프 돌려"
+        ],
+        "ja": [
+          "エージェント並列実行",
+          "同時にエージェント",
+          "fan-out",
+          "レビューループ"
+        ],
+        "zh": ["并行跑代理", "同时派发代理", "fan-out 任务", "评审循环"]
+      }
+    },
+    "oma-pdf": {
+      "keywords": {
+        "*": ["opendataloader-pdf"],
+        "en": [
+          "convert this pdf",
+          "pdf to markdown",
+          "extract pdf content",
+          "parse pdf document",
+          "parse pdf",
+          "extract pdf",
+          "convert pdf",
+          "pdf ingestion"
+        ],
+        "ko": ["pdf 변환", "pdf 파싱", "pdf 마크다운", "pdf 내용 추출"],
+        "ja": ["pdf変換", "pdfをマークダウン", "pdfを解析", "pdfの内容を抽出"],
+        "zh": ["pdf 转换", "pdf 解析", "pdf 转 markdown", "提取 pdf 内容"]
+      }
+    },
+    "oma-pm": {
+      "keywords": {
+        "*": ["PRD", "WBS"],
+        "en": [
+          "break down requirements",
+          "write a spec",
+          "prioritize features",
+          "define scope",
+          "product roadmap",
+          "requirements breakdown",
+          "task decomposition",
+          "product spec",
+          "scope definition",
+          "prioritization matrix"
+        ],
+        "ko": [
+          "요구사항 정리",
+          "스펙 문서",
+          "우선순위 매겨줘",
+          "스코프 정의",
+          "제품 로드맵"
+        ],
+        "ja": [
+          "要件を整理",
+          "スペック作成",
+          "優先度付け",
+          "スコープ定義",
+          "プロダクトロードマップ"
+        ],
+        "zh": ["梳理需求", "写规格书", "排优先级", "界定范围", "产品路线图"]
+      }
+    },
+    "oma-qa": {
+      "keywords": {
+        "*": ["OWASP", "WCAG", "lighthouse"],
+        "en": [
+          "run a security audit",
+          "accessibility check",
+          "performance review",
+          "coverage report",
+          "quality gate",
+          "owasp review",
+          "accessibility audit",
+          "test coverage"
+        ],
+        "ko": ["접근성 점검", "성능 점검", "커버리지 확인", "품질 게이트"],
+        "ja": [
+          "アクセシビリティ確認",
+          "パフォーマンス点検",
+          "カバレッジ確認",
+          "品質ゲート"
+        ],
+        "zh": ["无障碍检查", "性能检查", "覆盖率报告", "质量门禁"]
+      }
+    },
+    "oma-recap": {
+      "keywords": {
+        "*": ["recap"],
+        "en": [
+          "summarize my day",
+          "daily recap",
+          "weekly summary",
+          "what did i work on",
+          "transcript summary",
+          "conversation recap",
+          "daily summary",
+          "work summary",
+          "transcript analysis",
+          "multi tool recap"
+        ],
+        "ko": [
+          "오늘 한 일 정리",
+          "하루 요약",
+          "주간 요약",
+          "작업 내용 정리",
+          "대화 요약"
+        ],
+        "ja": [
+          "今日の作業まとめ",
+          "日次サマリ",
+          "週次サマリ",
+          "作業振り返り",
+          "会話まとめ"
+        ],
+        "zh": ["今天做了什么", "日报总结", "周报总结", "工作回顾", "对话总结"]
+      }
+    },
+    "oma-scm": {
+      "keywords": {
+        "*": [],
+        "en": [
+          "set up branching",
+          "resolve merge conflict",
+          "rebase my branch",
+          "tag a release",
+          "use git worktree",
+          "branching strategy",
+          "rebase workflow",
+          "git worktree"
+        ],
+        "ko": ["머지 충돌 해결", "리베이스해줘", "워크트리 써줘"],
+        "ja": [
+          "マージ衝突解決",
+          "リベースして",
+          "リリースタグ",
+          "worktree使って"
+        ],
+        "zh": ["解决合并冲突", "帮我 rebase", "打发布标签", "用 worktree"]
+      }
+    },
+    "oma-search": {
+      "keywords": {
+        "*": ["context7"],
+        "en": [
+          "look up docs",
+          "find the library",
+          "search the web",
+          "reference docs",
+          "library api",
+          "search docs",
+          "find library",
+          "code search",
+          "web research",
+          "library reference",
+          "context7 docs"
+        ],
+        "ko": [
+          "검색해줘",
+          "찾아줘",
+          "레퍼런스 찾아",
+          "문서 찾아줘",
+          "라이브러리 찾아줘"
+        ],
+        "ja": [
+          "検索して",
+          "調べて",
+          "ドキュメント探して",
+          "ライブラリ調べて",
+          "リファレンス探して"
+        ],
+        "zh": ["帮我查", "搜一下", "找找文档", "找个库", "查参考资料"]
+      }
+    },
+    "oma-tf-infra": {
+      "keywords": {
+        "*": ["terraform", "OIDC", "IAM"],
+        "en": [
+          "terraform plan",
+          "provision infrastructure",
+          "iac module",
+          "cloud resources",
+          "optimize cost",
+          "iac provisioning",
+          "cloud infrastructure",
+          "iam policy",
+          "oidc setup",
+          "cost optimization"
+        ],
+        "ko": [
+          "테라폼 플랜",
+          "인프라 프로비저닝",
+          "iac 모듈",
+          "클라우드 리소스",
+          "비용 최적화"
+        ],
+        "ja": [
+          "terraformプラン",
+          "インフラ構築",
+          "iacモジュール",
+          "クラウドリソース",
+          "コスト最適化"
+        ],
+        "zh": [
+          "terraform plan",
+          "搭建基础设施",
+          "iac 模块",
+          "云资源",
+          "成本优化"
+        ]
+      }
+    },
+    "oma-translator": {
+      "keywords": {
+        "*": ["arb", "i18n"],
+        "en": [
+          "translate this",
+          "localize the strings",
+          "ui translation",
+          "multilingual copy",
+          "translate to english",
+          "translate strings",
+          "localization copy",
+          "multilingual content",
+          "arb translation"
+        ],
+        "ko": [
+          "번역해줘",
+          "번역 부탁",
+          "다국어로",
+          "영어로 바꿔줘",
+          "현지화해줘"
+        ],
+        "ja": ["翻訳して", "英訳", "多言語化", "ローカライズして", "訳して"],
+        "zh": ["翻译一下", "帮我翻译", "多语言", "本地化", "翻成英文"]
+      }
+    },
+    "oma-image": {
+      "keywords": {
+        "*": [
+          "nano-banana",
+          "nanobanana",
+          "gpt-image",
+          "pollinations",
+          "oma-image"
+        ],
+        "en": [
+          "generate image",
+          "generate an image",
+          "create image",
+          "create an image",
+          "make a picture",
+          "make an image",
+          "render image",
+          "render a picture",
+          "draw me",
+          "draw a",
+          "ai image",
+          "image generation",
+          "generate a photo",
+          "create picture",
+          "picture of",
+          "image of"
+        ],
+        "ko": [
+          "이미지 만들어",
+          "이미지 만들어줘",
+          "이미지 생성",
+          "이미지 생성해",
+          "이미지 생성해줘",
+          "사진 만들어",
+          "사진 만들어줘",
+          "그림 그려",
+          "그림 그려줘",
+          "이미지 뽑아",
+          "이미지 뽑아줘",
+          "이미지 그려줘",
+          "이미지 출력",
+          "나노바나나",
+          "나노 바나나",
+          "바나나로 뽑",
+          "이미지 생성기",
+          "ai 이미지"
+        ],
+        "ja": [
+          "画像を生成",
+          "画像生成",
+          "画像を作",
+          "画像を作成",
+          "絵を描いて",
+          "画像出力",
+          "イラストを生成",
+          "写真を生成"
+        ],
+        "zh": [
+          "生成图像",
+          "生成图片",
+          "生成一张",
+          "画一张",
+          "画一幅",
+          "帮我画",
+          "出图",
+          "图像生成",
+          "图片生成"
+        ],
+        "es": [
+          "generar imagen",
+          "crear imagen",
+          "hazme una imagen",
+          "genera una foto"
+        ],
+        "fr": [
+          "générer une image",
+          "créer une image",
+          "fais-moi une image",
+          "dessine-moi"
+        ],
+        "de": [
+          "bild generieren",
+          "bild erstellen",
+          "erstelle ein bild",
+          "zeichne mir"
+        ]
+      }
+    }
+  },
   "informationalPatterns": {
     "en": [
       "what is",
@@ -1629,7 +2540,7 @@
       "wykryto"
     ]
   },
-  "excludedWorkflows": ["tools", "stack-set", "exec-plan"],
+  "excludedWorkflows": ["tools", "stack-set"],
   "cjkScripts": ["ko", "ja", "zh"],
   "extensionRouting": {
     "frontend-engineer": [

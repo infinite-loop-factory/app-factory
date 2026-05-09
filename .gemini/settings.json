@@ -4,9 +4,16 @@
       {
         "hooks": [
           {
+            "name": "keyword-detector",
             "type": "command",
-            "command": "\"/Users/gracefullight/.bun/bin/bun\" \"$GEMINI_PROJECT_DIR/.gemini/hooks/keyword-detector.ts\"",
+            "command": "bun \"$GEMINI_PROJECT_DIR/.gemini/hooks/keyword-detector.ts\"",
             "timeout": 5000
+          },
+          {
+            "name": "skill-injector",
+            "type": "command",
+            "command": "bun \"$GEMINI_PROJECT_DIR/.gemini/hooks/skill-injector.ts\"",
+            "timeout": 3000
           }
         ],
         "matcher": "*"
@@ -16,8 +23,9 @@
       {
         "hooks": [
           {
+            "name": "test-filter",
             "type": "command",
-            "command": "\"/Users/gracefullight/.bun/bin/bun\" \"$GEMINI_PROJECT_DIR/.gemini/hooks/test-filter.ts\"",
+            "command": "bun \"$GEMINI_PROJECT_DIR/.gemini/hooks/test-filter.ts\"",
             "timeout": 5000
           }
         ],
@@ -28,13 +36,25 @@
       {
         "hooks": [
           {
+            "name": "persistent-mode",
             "type": "command",
-            "command": "\"/Users/gracefullight/.bun/bin/bun\" \"$GEMINI_PROJECT_DIR/.gemini/hooks/persistent-mode.ts\"",
+            "command": "bun \"$GEMINI_PROJECT_DIR/.gemini/hooks/persistent-mode.ts\"",
             "timeout": 5000
           }
         ],
         "matcher": "*"
       }
     ]
+  },
+  "general": {
+    "enableNotifications": true
+  },
+  "experimental": {
+    "enableAgents": true
+  },
+  "mcpServers": {
+    "serena": {
+      "url": "http://localhost:12341/mcp"
+    }
   }
 }

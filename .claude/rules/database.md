@@ -1,7 +1,9 @@
 ---
-description: "Database schema design, normalization, indexing, and integrity standards for SQL, NoSQL, and vector databases"
+description: Database schema design, normalization, indexing, and integrity
+  standards for SQL, NoSQL, and vector databases
 paths: "**/*.{sql,prisma}"
 ---
+
 
 # Database Standards
 
