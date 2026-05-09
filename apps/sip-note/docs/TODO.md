@@ -151,7 +151,8 @@
   - `@gorhom/bottom-sheet` v5, snap [25%, 50%], "상세 보기" CTA → 장소 상세
 - [x] 화면: **장소 상세** — 해당 장소의 모든 기록 목록
   - 헤더 (back / 위시리스트 ♥ 토글) + 카테고리 chip / 이름 / 주소 / 방문 횟수 + 노트 리스트 + "이 장소에 기록 추가" CTA (Compose 에 placeId prefill)
-- [ ] 도시/리전 방문 통계 집계 쿼리 (Phase 4 통계에 재사용)
+- [x] 도시/리전 방문 통계 집계 쿼리 (Phase 4 통계에 재사용)
+  - 마이그레이션 v3: `places.city`,`region` + 인덱스. `placeRepo` 에 `listCityVisitStats` / `listRegionVisitStats` / `listPlaceVisitStats` / `getVisitTotals` 추가 (derived-table join 으로 visit×note 곱셈 회피). UI 입력 필드는 디자인 체크포인트 후 별도 PR.
 - [ ] **디자인 체크포인트** — 지도 / 바텀시트 / 장소 상세 → claude design
   - 후속 PR — Claude Design handoff 받아 적용 + `checkpoint-phase-2.md` 작성. caption-size brand light 토큰 스왑 (Phase 1 carry-over) 도 함께.
 - [ ] 지오펜싱 알림 — 위시리스트 장소 근처 푸시 (`expo-task-manager` + `expo-notifications`)

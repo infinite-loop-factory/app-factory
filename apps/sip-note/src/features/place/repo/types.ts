@@ -9,6 +9,8 @@ export type Place = {
   latitude: number | null;
   longitude: number | null;
   address: string | null;
+  city: string | null;
+  region: string | null;
   isWishlist: boolean;
   visitCount: number;
   createdAt: number;
@@ -21,6 +23,8 @@ export type PlaceInput = {
   latitude?: number | null;
   longitude?: number | null;
   address?: string | null;
+  city?: string | null;
+  region?: string | null;
   isWishlist?: boolean;
 };
 
@@ -36,4 +40,42 @@ export type PlaceFilter = {
   isWishlist?: boolean;
   query?: string;
   bounds?: PlaceBounds;
+};
+
+export type StatsFilter = {
+  category?: PlaceCategory;
+  isWishlist?: boolean;
+  includeUnknown?: boolean;
+};
+
+export type CityVisitStat = {
+  city: string | null;
+  placeCount: number;
+  visitCount: number;
+  noteCount: number;
+};
+
+export type RegionVisitStat = {
+  region: string | null;
+  placeCount: number;
+  visitCount: number;
+  noteCount: number;
+};
+
+export type PlaceVisitStat = {
+  id: string;
+  name: string;
+  category: PlaceCategory | null;
+  city: string | null;
+  region: string | null;
+  visitCount: number;
+  noteCount: number;
+};
+
+export type VisitTotals = {
+  totalCities: number;
+  totalRegions: number;
+  totalPlaces: number;
+  totalVisits: number;
+  totalNotes: number;
 };

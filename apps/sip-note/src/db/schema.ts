@@ -48,6 +48,8 @@ export type PlaceRow = {
   latitude: number | null;
   longitude: number | null;
   address: string | null;
+  city: string | null;
+  region: string | null;
   is_wishlist: number;
   visit_count: number;
   created_at: number;
