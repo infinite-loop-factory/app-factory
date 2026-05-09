@@ -1,7 +1,13 @@
 import type { FavoriteRoute } from "@/types/station";
 
 import { useRouter } from "expo-router";
-import { Heart, Navigation, Star, Trash2 } from "lucide-react-native";
+import {
+  ArrowRight,
+  Heart,
+  Navigation,
+  Star,
+  Trash2,
+} from "lucide-react-native";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { FlatList, Pressable, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -20,7 +26,7 @@ function formatDate(dateString: string): string {
   if (diffInDays === 0) return i18n.t("favorites.today");
   if (diffInDays === 1) return i18n.t("favorites.yesterday");
   if (diffInDays < 7) return i18n.t("favorites.daysAgo", { count: diffInDays });
-  return date.toLocaleDateString("ko-KR");
+  return date.toLocaleDateString("ko-KR", { month: "short", day: "numeric" });
 }
 
 export default function FavoritesTab() {
@@ -51,7 +57,14 @@ export default function FavoritesTab() {
       setStartStation(route.startStation);
       setEndStation(route.endStation);
       setViaStation(route.viaStation ?? null);
-      router.navigate("/(tabs)");
+      router.push({
+        pathname: "/route-result",
+        params: {
+          start: route.startStation.id,
+          end: route.endStation.id,
+          ...(route.viaStation && { via: route.viaStation.id }),
+        },
+      });
     },
     [setStartStation, setEndStation, setViaStation, router],
   );
@@ -59,80 +72,101 @@ export default function FavoritesTab() {
   const renderItem = useCallback(
     ({ item: route }: { item: FavoriteRoute }) => (
       <View
-        className="mb-3 overflow-hidden rounded-2xl bg-white dark:bg-gray-800"
+        className="mb-4 overflow-hidden rounded-2xl bg-white dark:bg-gray-800"
         style={{
           shadowColor: "#000",
-          shadowOffset: { width: 0, height: 1 },
+          shadowOffset: { width: 0, height: 2 },
           shadowOpacity: 0.05,
-          shadowRadius: 3,
-          elevation: 2,
+          shadowRadius: 8,
+          elevation: 3,
         }}
       >
-        <View className="p-5">
-          {/* Route info */}
-          <View className="mb-3 flex-row items-start justify-between">
-            <View className="flex-1">
-              <View className="mb-2 flex-row items-center gap-2">
-                <Text className="text-gray-900 text-lg dark:text-gray-100">
-                  {route.startStation.name}
-                </Text>
-                <LineBadge
-                  color={route.startStation.lineColor}
-                  line={route.startStation.line}
-                />
-              </View>
-
-              {route.viaStation && (
-                <View className="mb-2 flex-row items-center gap-2 pl-4">
-                  <View className="h-2 w-2 rounded-full bg-gray-400" />
-                  <Text className="text-gray-600 text-sm dark:text-gray-400">
-                    {route.viaStation.name}
-                  </Text>
-                  <LineBadge
-                    color={route.viaStation.lineColor}
-                    line={route.viaStation.line}
-                  />
-                </View>
-              )}
-
-              <View className="flex-row items-center gap-2">
-                <Navigation color="#EF4444" size={16} />
-                <Text className="text-gray-900 text-lg dark:text-gray-100">
-                  {route.endStation.name}
-                </Text>
-                <LineBadge
-                  color={route.endStation.lineColor}
-                  line={route.endStation.line}
-                />
-              </View>
+        <Pressable
+          className="p-5 active:bg-gray-50 dark:active:bg-gray-700/50"
+          onPress={() => handleSearch(route)}
+        >
+          {/* Route Header */}
+          <View className="mb-4 flex-row items-center justify-between">
+            <View className="flex-row items-center gap-1.5 rounded-full bg-blue-50 px-2.5 py-1 dark:bg-blue-900/30">
+              <Star color="#2563EB" fill="#2563EB" size={12} />
+              <Text className="font-bold text-[10px] text-blue-700 dark:text-blue-300">
+                FAVORITE
+              </Text>
             </View>
-            <Star color="#EAB308" fill="#EAB308" size={20} />
+            <Text className="text-gray-400 text-xs">
+              {i18n.t("favorites.lastSearched")}:{" "}
+              {formatDate(route.lastSearched)}
+            </Text>
           </View>
 
-          {/* Last searched */}
-          <Text className="mb-4 text-gray-500 text-xs dark:text-gray-400">
-            {i18n.t("favorites.lastSearched")}: {formatDate(route.lastSearched)}
-          </Text>
+          {/* Timeline-style Route info */}
+          <View className="flex-row items-center justify-between">
+            <View className="flex-1 items-start">
+              <Text
+                className="mb-1 font-bold text-gray-900 text-lg dark:text-gray-100"
+                numberOfLines={1}
+              >
+                {route.startStation.name}
+              </Text>
+              <LineBadge
+                color={route.startStation.lineColor}
+                line={route.startStation.line}
+              />
+            </View>
 
-          {/* Action buttons */}
-          <View className="flex-row gap-2">
+            <View className="mx-4 items-center justify-center">
+              <ArrowRight color="#D1D5DB" size={20} />
+            </View>
+
+            <View className="flex-1 items-end">
+              <Text
+                className="mb-1 font-bold text-gray-900 text-lg dark:text-gray-100"
+                numberOfLines={1}
+              >
+                {route.endStation.name}
+              </Text>
+              <LineBadge
+                color={route.endStation.lineColor}
+                line={route.endStation.line}
+              />
+            </View>
+          </View>
+
+          {route.viaStation && (
+            <View className="mt-4 flex-row items-center justify-center gap-2 rounded-lg bg-gray-50 py-2 dark:bg-gray-900/50">
+              <Text className="text-gray-400 text-xs">
+                {i18n.t("stationSelect.viaShort")}:
+              </Text>
+              <Text className="font-semibold text-gray-700 text-sm dark:text-gray-300">
+                {route.viaStation.name}
+              </Text>
+              <LineBadge
+                color={route.viaStation.lineColor}
+                line={route.viaStation.line}
+                size="sm"
+              />
+            </View>
+          )}
+
+          {/* Action Buttons */}
+          <View className="mt-5 flex-row gap-3">
             <Pressable
-              className="flex-1 flex-row items-center justify-center gap-2 rounded-xl bg-blue-600 py-2.5 active:bg-blue-700"
+              className="flex-1 flex-row items-center justify-center gap-2 rounded-xl bg-blue-600 py-3 shadow-sm active:bg-blue-700"
               onPress={() => handleSearch(route)}
             >
-              <Navigation color="#FFFFFF" size={16} />
-              <Text className="font-medium text-white">
+              <Navigation color="#FFFFFF" fill="white" size={16} />
+              <Text className="font-bold text-white">
                 {i18n.t("favorites.searchAgain")}
               </Text>
             </Pressable>
             <Pressable
-              className="rounded-xl bg-gray-100 px-4 py-2.5 active:bg-red-50 dark:bg-gray-700 dark:active:bg-red-900/20"
+              className="items-center justify-center rounded-xl bg-gray-100 px-4 py-3 active:bg-red-50 dark:bg-gray-700 dark:active:bg-red-900/20"
               onPress={() => handleRemove(route.id)}
             >
-              <Trash2 color="#6B7280" size={16} />
+              <Trash2 color="#9CA3AF" size={18} />
             </Pressable>
           </View>
-        </View>
+        </Pressable>
       </View>
     ),
     [handleRemove, handleSearch],
@@ -140,16 +174,20 @@ export default function FavoritesTab() {
 
   const ListHeader = useMemo(
     () => (
-      <View className="mb-6">
+      <View className="mb-8">
         <View className="mb-2 flex-row items-center gap-3">
-          <Heart color="#EF4444" fill="#EF4444" size={32} />
-          <Text className="font-medium text-2xl text-gray-900 dark:text-gray-100">
-            {i18n.t("tabs.favorites")}
-          </Text>
+          <View className="h-12 w-12 items-center justify-center rounded-2xl bg-red-500 shadow-sm">
+            <Heart color="white" fill="white" size={28} />
+          </View>
+          <View>
+            <Text className="font-bold text-3xl text-gray-900 dark:text-gray-100">
+              {i18n.t("tabs.favorites")}
+            </Text>
+            <Text className="text-gray-500 dark:text-gray-400">
+              {i18n.t("favorites.description")}
+            </Text>
+          </View>
         </View>
-        <Text className="text-base text-gray-600 dark:text-gray-400">
-          {i18n.t("favorites.description")}
-        </Text>
       </View>
     ),
     [],
@@ -158,11 +196,11 @@ export default function FavoritesTab() {
   return (
     <View
       className="flex-1 bg-gray-50 dark:bg-gray-950"
-      style={{ paddingTop: insets.top }}
+      style={{ paddingTop: insets.top + 16 }}
     >
       {routes.length > 0 ? (
         <FlatList
-          contentContainerStyle={{ paddingHorizontal: 16, paddingVertical: 24 }}
+          contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 48 }}
           data={routes}
           keyExtractor={(item) => item.id}
           ListHeaderComponent={ListHeader}
@@ -170,12 +208,12 @@ export default function FavoritesTab() {
           showsVerticalScrollIndicator={false}
         />
       ) : (
-        <View className="flex-1 px-4 py-6">
+        <View className="flex-1 px-5 py-6">
           {ListHeader}
           <EmptyState
             actionLabel={i18n.t("favorites.searchRoutes")}
             description={i18n.t("favorites.emptyDescription")}
-            icon={<Heart color="#9CA3AF" size={40} />}
+            icon={<Heart color="#D1D5DB" size={64} />}
             onAction={() => router.navigate("/(tabs)")}
             title={i18n.t("favorites.emptyTitle")}
           />

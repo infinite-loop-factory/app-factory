@@ -19,6 +19,7 @@ interface RouteSearchContextValue extends RouteSearchState {
   setStartStation: (station: Station | null) => void;
   setViaStation: (station: Station | null) => void;
   setEndStation: (station: Station | null) => void;
+  swapStations: () => void;
   clearAll: () => void;
   canSearch: boolean;
 }
@@ -42,6 +43,11 @@ export function RouteSearchProvider({ children }: { children: ReactNode }) {
     initialState.endStation,
   );
 
+  const swapStations = useCallback(() => {
+    setStartStation(endStation);
+    setEndStation(startStation);
+  }, [startStation, endStation]);
+
   const clearAll = useCallback(() => {
     setStartStation(null);
     setViaStation(null);
@@ -58,10 +64,11 @@ export function RouteSearchProvider({ children }: { children: ReactNode }) {
       setStartStation,
       setViaStation,
       setEndStation,
+      swapStations,
       clearAll,
       canSearch,
     }),
-    [startStation, viaStation, endStation, clearAll, canSearch],
+    [startStation, viaStation, endStation, swapStations, clearAll, canSearch],
   );
 
   return (

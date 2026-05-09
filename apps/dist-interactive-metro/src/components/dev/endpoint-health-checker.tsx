@@ -65,11 +65,16 @@ function findTransferPair(
   const nameMap = new Map<string, KricStationRef[]>();
   for (const [key, ref] of Object.entries(codeMap)) {
     const name = key.split("|")[0];
-    if (!nameMap.has(name)) nameMap.set(name, []);
-    nameMap.get(name)?.push(ref);
+    if (name) {
+      if (!nameMap.has(name)) nameMap.set(name, []);
+      nameMap.get(name)?.push(ref);
+    }
   }
   const pair = [...nameMap.values()].find((refs) => refs.length >= 2);
-  return pair ? [pair[0], pair[1]] : null;
+  if (pair?.[0] && pair[1]) {
+    return [pair[0], pair[1]];
+  }
+  return null;
 }
 
 async function checkEndpoint(
@@ -137,13 +142,14 @@ async function checkEndpoint(
 function HealthRow({ entry }: { entry: EndpointHealth }) {
   const isChecking = entry.status === "checking";
 
-  const badge = {
+  const badges: Record<HealthStatus, { label: string; cls: string }> = {
     untested: { label: "—", cls: "text-outline-400" },
     checking: { label: "…", cls: "text-primary-500" },
     ok: { label: "✓ OK", cls: "text-green-600" },
     error: { label: "✗ Error", cls: "text-red-600" },
     skipped: { label: "Skip", cls: "text-outline-400" },
-  }[entry.status];
+  };
+  const badge = badges[entry.status];
 
   return (
     <View className="border-outline-100 border-b px-4 py-3 last:border-0">
@@ -229,15 +235,17 @@ export function EndpointHealthChecker() {
 
       const settled = await Promise.allSettled(checks);
       setResults(
-        ENDPOINT_DEFS.map((def, i) =>
-          settled[i]?.status === "fulfilled"
-            ? settled[i].value
-            : {
-                ...def,
-                status: "error" as HealthStatus,
-                errorMessage: "Unexpected failure",
-              },
-        ),
+        ENDPOINT_DEFS.map((def, i) => {
+          const res = settled[i];
+          if (res?.status === "fulfilled") {
+            return res.value;
+          }
+          return {
+            ...def,
+            status: "error" as HealthStatus,
+            errorMessage: "Unexpected failure",
+          };
+        }),
       );
     } finally {
       setIsRunning(false);
