@@ -2,6 +2,8 @@
 
 ## Animation Libraries & When to Use
 
+> **`framer-motion` is BANNED.** It is the legacy package name for `motion`. Always import from `motion/react`, never from `framer-motion`. (Package install/manager rules live in the frontend rule.)
+
 | Library         | Import                      | Best For                              |
 |-----------------|-----------------------------|---------------------------------------|
 | motion          | `from "motion/react"`       | Declarative, springs, layout, gestures|

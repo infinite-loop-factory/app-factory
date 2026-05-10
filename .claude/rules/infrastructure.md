@@ -1,7 +1,9 @@
 ---
-description: "Terraform infrastructure-as-code standards for multi-cloud (AWS, GCP, Azure, OCI) provisioning"
+description: Terraform infrastructure-as-code standards for multi-cloud (AWS,
+  GCP, Azure, OCI) provisioning
 paths: "**/*.{tf,tfvars,hcl}"
 ---
+
 
 # Infrastructure Standards
 

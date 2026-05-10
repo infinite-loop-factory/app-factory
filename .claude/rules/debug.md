@@ -1,6 +1,8 @@
 ---
-description: "Bug diagnosis and fixing standards - root cause analysis, minimal fixes, regression tests"
+description: Bug diagnosis and fixing standards - root cause analysis, minimal
+  fixes, regression tests
 ---
+
 
 # Debug Standards
 

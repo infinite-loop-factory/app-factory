@@ -5,7 +5,16 @@ description: Context-aware translation that preserves tone, style, and natural w
 
 # Translator - Context-Aware Translation
 
-## When to use
+## Scheduling
+
+### Goal
+Translate, review, or adapt multilingual content while preserving meaning, register, placeholders, structure, domain terminology, and natural target-language word order.
+
+### Intent signature
+- User asks to translate, localize, review translation quality, create a glossary, or adapt UI/docs/marketing copy.
+- User needs context-aware translation rather than mechanical word substitution.
+
+### When to use
 
 - Translating UI strings, error messages, or microcopy
 - Translating documentation, README, or guides
@@ -14,31 +23,64 @@ description: Context-aware translation that preserves tone, style, and natural w
 - Creating glossaries or translation style guides
 - Any task involving multilingual content
 
-## When NOT to use
+### When NOT to use
 
 - i18n infrastructure setup (key extraction, routing, build) -> use dev-workflow
 - Adding new locale to framework config -> use dev-workflow
 - Code-level l10n patterns (date formatting, pluralization API) -> use relevant agent
 
-## Core Rules
+### Expected inputs
+- Source text, target language, and optional locale or audience
+- Existing locale files, glossary, code context, or style constraints
+- Placeholder syntax, formatting constraints, and output mode
 
-1. Scan existing locale files before translating to align with project conventions
-2. Preserve placeholders and interpolation syntax
-3. Translate meaning, not words
-4. Preserve emotional connotations — translate the feeling, not just the dictionary meaning (e.g., "alarming" carries urgency/concern, not merely "surprising")
-5. Match register consistently throughout a single piece
-6. Split, merge, or restructure sentences for target language naturalness
-7. Flag ambiguous source text rather than guessing
-8. Preserve domain terminology — if a term has established meaning in the field (e.g., harness, scaffold, shim, polyfill, middleware), keep it even if a "simpler" native word exists
-9. Never produce literal word-for-word translations
-10. Never mix registers within a single piece (formal + casual)
-11. Never replace domain-specific terms with generic equivalents (e.g., "harness" → "framework", "shim" → "wrapper")
-12. Never translate proper nouns unless existing translations do so
-13. Never change the meaning to "sound better"
-14. Never skip verification stage for batches > 10 strings
-15. Never modify source file structure (keys, nesting, comments)
+### Expected outputs
+- Natural target-language translation or review findings
+- Preserved placeholders, code spans, links, headings, lists, and file structure
+- Translator notes when source concepts need explanation
+- Batch-safe output for i18n files when requested
 
-## Context Inference
+### Dependencies
+- Existing translations and surrounding code for register and terminology
+- `resources/translation-rubric.md` and `resources/anti-ai-patterns.md`
+- Project locale files when translating UI strings
+
+### Control-flow features
+- Branches by content type, target language, batch size, register uncertainty, and placeholder/structure requirements
+- Reads locale files and source context; may write translated content only when explicitly editing files
+- Blocks output until mechanical verification passes
+
+## Structural Flow
+
+### Entry
+1. Confirm source text, target language, content type, and output mode.
+2. Load existing translations, glossary, file context, or code context when available.
+3. Identify placeholders, formatting constraints, and ambiguity.
+
+### Scenes
+1. **PREPARE**: Determine language, register, domain, and structure constraints.
+2. **ACQUIRE**: Read existing translations and surrounding context.
+3. **REASON**: Analyze source meaning, connotations, figurative language, and terminology.
+4. **ACT**: Reconstruct natural target-language output.
+5. **VERIFY**: Run mechanical checks and translation rubric.
+6. **FINALIZE**: Emit translation, review notes, or file changes.
+
+### Transitions
+- If context is insufficient, ask one targeted question.
+- If batch size is greater than 10 strings, verification is mandatory before output.
+- If CJK output contains em dashes or source-language artifacts, rewrite before final output.
+- If placeholders or structure do not match, revise and rerun verification.
+
+### Failure and recovery
+- If source meaning is ambiguous, flag ambiguity rather than guessing.
+- If project conventions conflict with literal translation, follow project conventions and explain if needed.
+- If file structure is risky to modify, preserve structure and limit edits to values.
+
+### Exit
+- Success: target text is natural, faithful, structurally equivalent, and verified.
+- Partial success: ambiguous source text or missing context is explicit.
+
+### Context Inference
 
 No config file required. Instead, infer translation context from:
 
@@ -49,7 +91,7 @@ No config file required. Instead, infer translation context from:
 
 If context is insufficient to make a confident decision, ask the user. Prefer one targeted question over a batch of questions.
 
-## Translation Method
+### Translation Method
 
 ### Stage 1: Analyze Source
 
@@ -75,9 +117,56 @@ Strip away source language structure. Ask yourself:
 
 Do NOT start forming target sentences yet.
 
+### Stage 2.5: Persona Assignment
+
+Persona resolution has two layers: **content-type** (what kind of text) and **voice** (how punchy or formal the rhythm). Both are needed.
+
+#### Layer 1: Read `translation_voice` from `.agents/oma-config.yaml`
+
+The `translation_voice` field controls global rhythm/formality. Three values:
+
+| Voice | Style override applied on top of content-type |
+|---|---|
+| `formal` | complete sentences only, no fragments, strict 합니다체/です・ます, no padding cuts |
+| `balanced` (default) | content-type defaults — fragments allowed only in label/cell positions |
+| `interpreter` | interpreter mindset across all content types: punchy, audience-first, spoken cadence, fragments allowed when natural in target, drops formal padding ("을 받았습니다" → "받음" / "을 모두" → drop) |
+
+If the field is missing, default to `balanced`. If `oma-config.yaml` is unreadable, also `balanced`.
+
+#### Layer 2: Content-type persona table
+
+| Content type | Persona | Base style markers |
+|---|---|---|
+| UI strings / microcopy | UX copywriter | concise, imperative, user-friendly |
+| Docs / README / API reference | technical writer | data + commentary, expanded explanations |
+| Benchmark / report / changelog | technical reporter | data + commentary, objective tone |
+| Marketing / landing / hero copy | brand copywriter | concise impact, audience-first, aggressive transcreation |
+| Blog post / essay | essayist | preserve cadence and rhythm, retain author voice |
+| Literary / prose | literary translator | preserve imagery, style consistency, narrative voice |
+| Dialogue / subtitle / interview | interpreter | immediacy, audience-first, spoken register, cultural context inline |
+
+Classification heuristics:
+- File location `messages/`, `locales/`, `*.arb` → UX copywriter
+- Filename `README*`, `docs/*`, or `.md` with frequent code blocks → technical writer
+- Score tables, benchmark stats, changelog rows → technical reporter
+- Page/section hero copy → brand copywriter
+- Quote marks, em-dashes, speaker labels in source → interpreter
+
+When unclear, default to **technical writer** for code-adjacent content and **essayist** for prose. Never use a generic "translator" persona.
+
+#### Combining layers
+
+Voice is applied **on top** of the content-type persona. Examples:
+
+- Content-type = `technical reporter` + voice = `formal` → fully expanded sentences, no fragments anywhere, strict 합니다체.
+- Content-type = `technical reporter` + voice = `balanced` → complete sentences in body, fragments allowed in table cells (current default).
+- Content-type = `technical reporter` + voice = `interpreter` → punchier rhythm, list-item fragments allowed (e.g., "39턴 / 8m 13s / $1.28 (파일당 $0.14)" instead of "39턴, 8m 13s, 총 $1.28을 썼습니다(파일당 약 $0.14)"), drops "을 모두 받았습니다" padding.
+
+The persona is then **localized to the target language** at execution time — translating into Korean as a "technical reporter" with `interpreter` voice means thinking as a Korean technical reporter who values rhythm and audience scan-speed over formal completeness.
+
 ### Stage 3: Reconstruct in Target Language
 
-Rebuild from meaning, following target language norms:
+Rebuild from meaning **as the assigned persona**, following target language norms:
 
 **Word order**: Follow target language's natural structure.
 - EN → KO: SVO → SOV, move verb to end, particles replace prepositions
@@ -96,9 +185,22 @@ Rebuild from meaning, following target language norms:
 - Many languages (Korean, Japanese, Chinese, etc.) allow subject or pronoun omission when contextually clear
 - Don't force subjects or pronouns that feel unnatural in the target language
 
-### Stage 4: Verify
+### Stage 4: Verification Gate (blocking — do not emit output until every item is confirmed)
 
-Check against rubric (see `resources/translation-rubric.md`):
+This stage is mandatory. Skipping any item is a bug, not a shortcut. Before producing the final translation, run the mechanical checks first, then the rubric.
+
+**A. Mechanical checks (run before rubric, must all pass):**
+
+- **CJK em dash scan**: For Korean, Japanese, or Chinese targets, search the draft output for `—`. Every occurrence must be **structurally restructured** — never simply substituted with `:` / `(` / `,`. Em dash usually signals a definitional `X — Y` pattern that maps to coordinated noun phrases, relative clauses, or separate sentences in CJK. Zero em dashes AND zero mechanical-substitution survivors in the emitted output. (See anti-AI rule 17.)
+- **Curly quote scan**: Search the draft output for `“`, `”`, `‘`, `’`. Replace with straight quotes (`"`, `'`) unless the source explicitly uses curly quotes, the target language convention requires them (e.g., Japanese 「」/『』, French «»), or the surrounding file format mandates them.
+- **Placeholder integrity**: Every `{name}`, `{{count}}`, `%s`, `<tag>`, and `` `code` `` from the source appears unchanged in the target.
+- **Structure parity**: Headings, list bullets, table rows, code blocks, and links match the source count and nesting.
+- **Register consistency**: One sentence-ending style throughout (don't mix `-ㅂ니다` with `-다`, formal with casual).
+- **Sibling-pattern match (when applicable)**: If the target lives in a context that already contains target-language siblings (markdown table rows, locale file with sibling values, glossary entries, list items in a doc), read at least 3 siblings and identify (a) separator style — comma vs `및`/`와`/`과` vs em dash vs colon vs newline, (b) action-verb form — noun-phrase fragments vs full verb phrases vs imperative, (c) loanword density, (d) register and sentence-ending style. Your draft MUST match the dominant pattern. If the draft uses a separator/verb form/register absent from siblings, BLOCK and revise. Example failure: siblings use comma-separated noun phrases without colons; your draft uses `X: Y and Z` colon syntax. → revise to comma form.
+
+If any mechanical check fails, revise and re-run. Do not proceed to the rubric until all pass.
+
+**B. Translation rubric (see `resources/translation-rubric.md`):**
 1. Does it read like it was originally written in the target language?
 2. Are domain terms consistent with existing translations in the project?
 3. Is the register consistent throughout?
@@ -106,19 +208,29 @@ Check against rubric (see `resources/translation-rubric.md`):
 5. Are cultural references adapted appropriately?
 6. Are emotional connotations preserved (not flattened into neutral descriptions)?
 
-Check against anti-AI patterns (see `resources/anti-ai-patterns.md`):
+**C. Anti-AI patterns (see `resources/anti-ai-patterns.md`):**
 7. No AI vocabulary clustering or inflated significance
 8. No promotional tone upgrade beyond the source
 9. No synonym cycling — consistent terminology
 10. No source-language word order leaking through
-11. No unnecessary bold, em dashes, or formatting artifacts
+11. No unnecessary bold or formatting artifacts (em dashes already covered in mechanical check A)
 12. No Europeanized patterns (unnecessary connectives, passive voice, noun pile-up, over-nominalization, forced pronouns, cleft calques)
 
-Check figurative language handling:
+**D. Figurative language handling:**
 13. Were all metaphors/idioms handled per the classify decision (interpret/substitute/retain)?
 14. Do figurative expressions read naturally in the target language, not as literal calques?
 
-## Translator's Notes Guidelines
+**E. Pre-emit gate (must answer in writing before output):**
+
+Before emitting the translation, write 1–2 sentences answering each:
+
+1. **"Why is Stage 5 reflection ON or OFF for this content?"** — must cite the specific classification rule from the "When to run Stage 5–7" section. If the target qualifies for both ON and OFF lists (e.g., README table cell — short string AND documentation), default ON wins.
+2. **"Does my draft match the sibling patterns in the target context?"** — must reference at least one specific sibling and the matched (or unmatched) pattern dimension.
+3. **"Is any source-language structural artifact (em dash, colon-after-X, parentheses-after-noun) merely substituted rather than restructured?"** — must answer No, with evidence.
+
+If any answer is missing, hand-wavy, or "I think so" without evidence, run Stage 5 anyway before emitting.
+
+### Translator's Notes Guidelines
 
 When adding explanatory notes for terms, cultural references, or concepts that target readers may struggle with:
 
@@ -136,14 +248,37 @@ When adding explanatory notes for terms, cultural references, or concepts that t
 - Don't annotate self-explanatory terms or widely recognized loanwords
 - If a comprehension challenge was identified in Stage 1, use the pre-planned explanation
 
-## Refined Mode (Long-form Content)
+### Reflection Mode (default for non-trivial content)
 
-For publication-quality translation of long-form content (articles, documentation, essays), extend the standard 4-stage workflow with three additional passes. Use when explicitly requested or when the content demands high polish.
+Reflection passes (Stage 5–7) are the default — not optional — for any content that is more than a short snippet. Empirical evidence (Slator 2024, Self-Refine paper) shows a single polish pass cuts translationese rates roughly in half. Skipping reflection on non-trivial content is the most common cause of translationese complaints.
 
-### When to use
-- User explicitly requests "refined", "publication quality", or "정밀 번역"
-- Important documents, official publications, marketing materials
-- Content where naturalness and readability are critical
+### When to run Stage 5–7
+
+Default ON for:
+- Documentation (README, guides, API reference)
+- Reports, benchmarks, changelogs, blog posts
+- Marketing copy and landing pages
+- Any prose longer than ~3 sentences
+- Anything containing tables, bullet lists, or code blocks mixed with prose
+- Translation review mode
+
+Default OFF (Stage 4 verification only) for:
+- Single short UI string (< 10 words) **in a UI locale file** (i18n keys, `.arb`, `.json`, `messages/`) with established glossary
+- Batch UI key translations where each value is independent and < 1 sentence
+- User explicitly requests "fast translation", "skip reflection", or "직역"
+
+**Tie-breaker rule**: When a target qualifies for BOTH ON and OFF categories, default ON wins. Common conflict cases:
+
+| Situation | Why both | Resolution |
+|---|---|---|
+| README table cell (short AND documentation) | <10 words but lives in `README*.md` | ON — README is documentation |
+| CHANGELOG line entry | <10 words but lives in changelog | ON — changelog is documentation |
+| Skill description in registry | short noun phrase but commits to git-tracked source | ON — any git-tracked text |
+| Tooltip in i18n file | <10 words AND in `messages/` | OFF — UI string in locale file |
+
+Reflection cost is acceptable; post-merge revision cost is not.
+
+When in doubt, run reflection. The cost is roughly 1.5–2× tokens; the quality gain on body-text fragments and Europeanized patterns is large.
 
 ### Extended workflow
 
@@ -151,7 +286,9 @@ After completing Stage 1–4, continue with:
 
 **Stage 5: Critical Review**
 
-Re-read the translation against the source with fresh eyes. Produce a diagnostic review (no rewriting yet):
+Re-read the translation against the source with fresh eyes. Produce a diagnostic review (no rewriting yet).
+
+Start the review by explicitly answering this question first: **"What makes the draft below still feel obviously machine-translated or AI-generated?"** Write 3–7 short bullets naming the remaining tells (e.g., "register suddenly shifts to formal in the final paragraph", "the same connective construction repeats three times", "noun-ending fragments survive in body text outside label/cell positions", "a metaphor was kept literal where the target language would interpret it"). Then continue with the structured checklist:
 
 - **Accuracy**: Compare paragraph by paragraph — any facts, numbers, or qualifiers altered?
 - **Europeanized language**: Scan for unnecessary connectives, passive voice, noun pile-up, over-nominalization, forced pronouns (see `resources/anti-ai-patterns.md`)
@@ -180,7 +317,7 @@ Final pass for publication quality:
 - Final scan for surviving literal metaphors or translation-ese
 - Verify formatting preservation (headings, bold, links, code blocks)
 
-## Batch Translation Rules
+### Batch Translation Rules
 
 When translating multiple strings (e.g., UI keys):
 
@@ -191,7 +328,7 @@ When translating multiple strings (e.g., UI keys):
 5. **Keep key structure** — only translate values, never keys
 6. **Match length roughly** for UI strings (avoid 3x longer translations that break layout)
 
-## Output Format
+### Output Format
 
 ### Single text
 ```
@@ -220,7 +357,7 @@ Why:
 - [specific issues: unnatural word order, wrong register, inconsistent term, etc.]
 ```
 
-## Troubleshooting
+### Troubleshooting
 
 | Issue | Solution |
 |-------|----------|
@@ -233,15 +370,82 @@ Why:
 | Target language requires gendered forms | Follow source text intent; prefer gender-neutral forms when available in target language |
 | Tone shifts across a long document | Re-read end-to-end after translating; normalize register to the dominant tone |
 
-## How to Execute
+### How to Execute
 
 Follow the translation method (Stage 1-4) step by step.
 Before submitting, verify against `resources/translation-rubric.md` and `resources/anti-ai-patterns.md`.
 
-## Execution Protocol (CLI Mode)
+### Execution Protocol (CLI Mode)
 
 Vendor-specific execution protocols are injected automatically by `oma agent:spawn`.
 Source files live under `../_shared/runtime/execution-protocols/{vendor}.md`.
+
+## Logical Operations
+
+### Actions
+| Action | SSL primitive | Evidence |
+|--------|---------------|----------|
+| Read source and context | `READ` | Text, locale files, code context |
+| Select register and terminology | `SELECT` | Existing translations and domain terms |
+| Infer intended meaning | `INFER` | Meaning extraction stage |
+| Write translation | `WRITE` | Target-language reconstruction |
+| Validate placeholders/structure | `VALIDATE` | Verification gate |
+| Compare against rubric | `COMPARE` | Translation rubric |
+| Report translation or notes | `NOTIFY` | Final output |
+
+### Tools and instruments
+- Existing locale files and surrounding code
+- Translation rubric, anti-AI-pattern rules, glossary/style references
+- File editing tools only when the user requests file changes
+
+### Canonical workflow path
+```text
+1. Analyze source register, intent, domain terms, placeholders, and structure.
+2. Reconstruct meaning in the target language, not word-for-word.
+3. Run mechanical checks and `resources/translation-rubric.md` before emitting output.
+```
+
+For UI files, scan sibling locale files first:
+```bash
+rg "<source-key-or-term>" .
+```
+
+### Resource scope
+| Scope | Resource target |
+|-------|-----------------|
+| `LOCAL_FS` | Locale files, docs, README, source text files |
+| `CODEBASE` | Components and code context around UI strings |
+| `MEMORY` | Register, glossary, ambiguity, verification notes |
+| `USER_DATA` | User-provided text and target-language requirements |
+
+### Preconditions
+- Source text and target language are known.
+- Placeholder and structure constraints are identifiable.
+- Ambiguities are resolved or explicitly flagged.
+
+### Effects and side effects
+- Produces translated text or translation review.
+- May modify locale/docs files only when requested.
+- Preserves source structure and placeholders.
+
+### Guardrails
+
+1. Scan existing locale files before translating to align with project conventions
+2. Preserve placeholders and interpolation syntax
+3. Translate meaning, not words
+4. Preserve emotional connotations — translate the feeling, not just the dictionary meaning (e.g., "alarming" carries urgency/concern, not merely "surprising")
+5. Match register consistently throughout a single piece
+6. Split, merge, or restructure sentences for target language naturalness
+7. Flag ambiguous source text rather than guessing
+8. Preserve domain terminology — if a term has established meaning in the field (e.g., harness, scaffold, shim, polyfill, middleware), keep it even if a "simpler" native word exists
+9. Never produce literal word-for-word translations
+10. Never mix registers within a single piece (formal + casual)
+11. Never replace domain-specific terms with generic equivalents (e.g., "harness" → "framework", "shim" → "wrapper")
+12. Never translate proper nouns unless existing translations do so
+13. Never change the meaning to "sound better"
+14. Never skip verification stage for batches > 10 strings
+15. Never modify source file structure (keys, nesting, comments)
+16. Never preserve source-language formatting artifacts that are unnatural in the target language. For CJK targets (Korean, Japanese, Chinese), em dashes (—), title case in headings, and trailing "-ing" participle clauses must be restructured — even when the source uses them. See `resources/anti-ai-patterns.md` rules 13–16.
 
 ## References
 

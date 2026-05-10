@@ -28,7 +28,14 @@
   },
   "files": {
     "ignoreUnknown": false,
-    "includes": ["**"]
+    "includes": [
+      "**",
+      "!**/.claude/hooks",
+      "!**/.codex/hooks",
+      "!**/.cursor/hooks",
+      "!**/.gemini/hooks",
+      "!**/.qwen/hooks"
+    ]
   },
   "formatter": {
     "attributePosition": "auto",
