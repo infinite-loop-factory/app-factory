@@ -7,7 +7,9 @@ import {
   Clock,
   MapPin,
   Navigation,
+  Plus,
   Trash2,
+  X,
 } from "lucide-react-native";
 import { useCallback, useState } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
@@ -27,6 +29,7 @@ interface StationInputProps {
   placeholder: string;
   type: "start" | "end";
   onPress: () => void;
+  onClear: () => void;
 }
 
 function StationInput({
@@ -35,46 +38,178 @@ function StationInput({
   placeholder,
   type,
   onPress,
+  onClear,
 }: StationInputProps) {
   const isStart = type === "start";
   return (
-    <Pressable
-      className={`relative flex-row items-center py-5 pr-6 pl-14 active:bg-blue-50/50 dark:active:bg-blue-900/20 ${
-        station ? "bg-white dark:bg-gray-800" : "bg-gray-50 dark:bg-gray-900"
-      }`}
-      onPress={onPress}
-    >
-      <View className="absolute top-1/2 left-5 z-10 -translate-y-1/2">
-        {isStart ? (
-          <View
-            className="h-4 w-4 rounded-full border-2 border-white bg-blue-500"
-            style={{
-              shadowColor: "#3B82F6",
-              shadowOffset: { width: 0, height: 0 },
-              shadowOpacity: 0.5,
-              shadowRadius: 4,
-            }}
-          />
-        ) : (
-          <MapPin color="#F59E0B" fill="#F59E0B" size={18} />
-        )}
+    <View className="relative">
+      <Pressable
+        className={`relative flex-row items-center py-5 pr-14 pl-14 active:bg-blue-50/50 dark:active:bg-blue-900/20 ${
+          station ? "bg-white dark:bg-gray-800" : "bg-gray-50 dark:bg-gray-900"
+        }`}
+        onPress={onPress}
+      >
+        <View className="absolute top-1/2 left-5 z-10 -translate-y-1/2">
+          {isStart ? (
+            <View
+              className="h-4 w-4 rounded-full border-2 border-white bg-blue-500"
+              style={{
+                shadowColor: "#3B82F6",
+                shadowOffset: { width: 0, height: 0 },
+                shadowOpacity: 0.5,
+                shadowRadius: 4,
+              }}
+            />
+          ) : (
+            <MapPin color="#F59E0B" fill="#F59E0B" size={18} />
+          )}
+        </View>
+        <View className="flex-1">
+          <Text className="mb-1 font-medium text-gray-400 text-xs uppercase tracking-wider">
+            {label}
+          </Text>
+          {station ? (
+            <View className="flex-row items-center gap-2">
+              <Text className="font-bold text-gray-900 text-lg dark:text-gray-100">
+                {station.name}
+              </Text>
+              <LineBadge color={station.lineColor} line={station.line} />
+            </View>
+          ) : (
+            <Text className="text-gray-400 text-lg">{placeholder}</Text>
+          )}
+        </View>
+      </Pressable>
+      {station && (
+        <Pressable
+          className="absolute top-1/2 right-4 z-20 h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-gray-100 active:bg-gray-200 dark:bg-gray-700"
+          onPress={onClear}
+        >
+          <X color="#9CA3AF" size={16} />
+        </Pressable>
+      )}
+    </View>
+  );
+}
+
+function RecentStationsList({
+  stations,
+  onPress,
+  onClear,
+}: {
+  stations: Station[];
+  onPress: (s: Station) => void;
+  onClear: () => void;
+}) {
+  if (stations.length === 0) return null;
+
+  return (
+    <View className="mb-8">
+      <View className="mb-4 flex-row items-center justify-between">
+        <View className="flex-row items-center gap-2">
+          <Clock color="#6B7280" size={16} />
+          <Text className="font-bold text-gray-900 text-lg dark:text-gray-100">
+            {i18n.t("stationSelect.recentStations")}
+          </Text>
+        </View>
+        <Pressable
+          className="flex-row items-center gap-1 rounded-full bg-gray-100 px-3 py-1 active:bg-gray-200 dark:bg-gray-800"
+          onPress={onClear}
+        >
+          <Trash2 color="#9CA3AF" size={12} />
+          <Text className="font-medium text-gray-500 text-xs">
+            {i18n.t("settings.clearRecentSearch")}
+          </Text>
+        </Pressable>
       </View>
-      <View className="flex-1">
-        <Text className="mb-1 font-medium text-gray-400 text-xs uppercase tracking-wider">
-          {label}
-        </Text>
-        {station ? (
-          <View className="flex-row items-center gap-2">
-            <Text className="font-bold text-gray-900 text-lg dark:text-gray-100">
-              {station.name}
+      <ScrollView
+        className="-mx-6 px-6"
+        horizontal
+        showsHorizontalScrollIndicator={false}
+      >
+        <View className="flex-row gap-3">
+          {stations.map((station) => (
+            <Pressable
+              className="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm active:bg-gray-50 dark:border-gray-700 dark:bg-gray-800"
+              key={station.id}
+              onPress={() => onPress(station)}
+            >
+              <Text className="mb-2 font-bold text-base text-gray-900 dark:text-gray-100">
+                {station.name}
+              </Text>
+              <LineBadge color={station.lineColor} line={station.line} />
+            </Pressable>
+          ))}
+        </View>
+      </ScrollView>
+    </View>
+  );
+}
+
+function ViaInput({
+  viaStation,
+  showVia,
+  onPress,
+  onClear,
+  onShow,
+}: {
+  viaStation: Station | null;
+  showVia: boolean;
+  onPress: () => void;
+  onClear: () => void;
+  onShow: () => void;
+}) {
+  if (!(showVia || viaStation)) {
+    return (
+      <View className="mt-4 items-center">
+        <Pressable
+          className="flex-row items-center gap-1.5 rounded-full px-4 py-2 active:bg-gray-100 dark:active:bg-gray-800"
+          onPress={onShow}
+        >
+          <Plus color="#6B7280" size={16} />
+          <Text className="font-medium text-gray-500 text-sm">
+            {i18n.t("stationSelect.addVia", { defaultValue: "경유지 추가" })}
+          </Text>
+        </Pressable>
+      </View>
+    );
+  }
+
+  return (
+    <View className="mt-4 flex-row items-center gap-2">
+      <Pressable
+        className={`flex-1 flex-row items-center rounded-2xl border-2 border-dashed px-4 py-3 active:bg-gray-50 dark:active:bg-gray-800 ${
+          viaStation ? "border-blue-200 bg-blue-50/30" : "border-gray-200"
+        }`}
+        onPress={onPress}
+      >
+        <Circle
+          className="mr-3"
+          color={viaStation ? "#3B82F6" : "#9CA3AF"}
+          size={16}
+        />
+        <View className="flex-1">
+          {viaStation ? (
+            <View className="flex-row items-center gap-2">
+              <Text className="font-bold text-gray-700 dark:text-gray-200">
+                {viaStation.name}
+              </Text>
+              <LineBadge color={viaStation.lineColor} line={viaStation.line} />
+            </View>
+          ) : (
+            <Text className="text-gray-500 text-sm">
+              {i18n.t("stationSelect.viaShort")} ({i18n.t("via.optional")})
             </Text>
-            <LineBadge color={station.lineColor} line={station.line} />
-          </View>
-        ) : (
-          <Text className="text-gray-400 text-lg">{placeholder}</Text>
-        )}
-      </View>
-    </Pressable>
+          )}
+        </View>
+      </Pressable>
+      <Pressable
+        className="h-12 w-12 items-center justify-center rounded-2xl bg-gray-100 active:bg-gray-200 dark:bg-gray-800"
+        onPress={onClear}
+      >
+        <X color="#9CA3AF" size={20} />
+      </Pressable>
+    </View>
   );
 }
 
@@ -89,11 +224,13 @@ export default function RouteGuideTab() {
     endStation,
     swapStations,
     setStartStation,
+    setViaStation,
     setEndStation,
     canSearch,
   } = useRouteSearch();
 
   const [recentStations, setRecentStations] = useState<Station[]>([]);
+  const [showVia, setShowVia] = useState(!!viaStation);
 
   useFocusEffect(
     useCallback(() => {
@@ -166,6 +303,7 @@ export default function RouteGuideTab() {
               <View>
                 <StationInput
                   label={i18n.t("stationSelect.departureShort")}
+                  onClear={() => setStartStation(null)}
                   onPress={() => handleStationSelect("start")}
                   placeholder={i18n.t("homeScreen.departurePlaceholder")}
                   station={startStation}
@@ -184,6 +322,7 @@ export default function RouteGuideTab() {
 
                 <StationInput
                   label={i18n.t("stationSelect.arrivalShort")}
+                  onClear={() => setEndStation(null)}
                   onPress={() => handleStationSelect("end")}
                   placeholder={i18n.t("homeScreen.arrivalPlaceholder")}
                   station={endStation}
@@ -192,82 +331,23 @@ export default function RouteGuideTab() {
               </View>
             </ElevatedCard>
 
-            <Pressable
-              className={`mt-4 flex-row items-center rounded-2xl border-2 border-dashed px-4 py-3 active:bg-gray-50 dark:active:bg-gray-800 ${
-                viaStation ? "border-blue-200 bg-blue-50/30" : "border-gray-200"
-              }`}
+            <ViaInput
+              onClear={() => {
+                setViaStation(null);
+                setShowVia(false);
+              }}
               onPress={() => handleStationSelect("via")}
-            >
-              <Circle
-                className="mr-3"
-                color={viaStation ? "#3B82F6" : "#9CA3AF"}
-                size={16}
-              />
-              <View className="flex-1">
-                {viaStation ? (
-                  <View className="flex-row items-center gap-2">
-                    <Text className="font-bold text-gray-700 dark:text-gray-200">
-                      {viaStation.name}
-                    </Text>
-                    <LineBadge
-                      color={viaStation.lineColor}
-                      line={viaStation.line}
-                    />
-                  </View>
-                ) : (
-                  <Text className="text-gray-500 text-sm">
-                    {i18n.t("stationSelect.viaShort")} ({i18n.t("via.optional")}
-                    )
-                  </Text>
-                )}
-              </View>
-            </Pressable>
+              onShow={() => setShowVia(true)}
+              showVia={showVia}
+              viaStation={viaStation}
+            />
           </View>
 
-          {recentStations.length > 0 && (
-            <View className="mb-8">
-              <View className="mb-4 flex-row items-center justify-between">
-                <View className="flex-row items-center gap-2">
-                  <Clock color="#6B7280" size={16} />
-                  <Text className="font-bold text-gray-900 text-lg dark:text-gray-100">
-                    {i18n.t("stationSelect.recentStations")}
-                  </Text>
-                </View>
-                <Pressable
-                  className="flex-row items-center gap-1 rounded-full bg-gray-100 px-3 py-1 active:bg-gray-200 dark:bg-gray-800"
-                  onPress={handleClearRecent}
-                >
-                  <Trash2 color="#9CA3AF" size={12} />
-                  <Text className="font-medium text-gray-500 text-xs">
-                    {i18n.t("settings.clearRecentSearch")}
-                  </Text>
-                </Pressable>
-              </View>
-              <ScrollView
-                className="-mx-6 px-6"
-                horizontal
-                showsHorizontalScrollIndicator={false}
-              >
-                <View className="flex-row gap-3">
-                  {recentStations.map((station) => (
-                    <Pressable
-                      className="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm active:bg-gray-50 dark:border-gray-700 dark:bg-gray-800"
-                      key={station.id}
-                      onPress={() => handleRecentPress(station)}
-                    >
-                      <Text className="mb-2 font-bold text-base text-gray-900 dark:text-gray-100">
-                        {station.name}
-                      </Text>
-                      <LineBadge
-                        color={station.lineColor}
-                        line={station.line}
-                      />
-                    </Pressable>
-                  ))}
-                </View>
-              </ScrollView>
-            </View>
-          )}
+          <RecentStationsList
+            onClear={handleClearRecent}
+            onPress={handleRecentPress}
+            stations={recentStations}
+          />
 
           <View>
             <Pressable

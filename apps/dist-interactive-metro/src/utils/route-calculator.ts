@@ -336,7 +336,29 @@ export function recommendRoutes(
   nearbyStations: NearbyStation[],
   destination: Station,
 ): RouteRecommendation[] {
-  return nearbyStations
+  // Group nearby stations by line
+  const byLine = new Map<string, NearbyStation[]>();
+  for (const s of nearbyStations) {
+    const arr = byLine.get(s.station.line) ?? [];
+    arr.push(s);
+    byLine.set(s.station.line, arr);
+  }
+
+  // Strategy: For each line, keep at most 2 closest stations.
+  // If the user is exactly between them, both are valid.
+  // Otherwise, if one is significantly closer, we could theoretically keep just one,
+  // but keeping 2 is a safe "top results" bet.
+  const filteredNearby: NearbyStation[] = [];
+  for (const lineStations of byLine.values()) {
+    // Sort by walking distance within each line
+    const sorted = [...lineStations].sort(
+      (a, b) => a.walkingMinutes - b.walkingMinutes,
+    );
+    // Add top 2 closest for each line
+    filteredNearby.push(...sorted.slice(0, 2));
+  }
+
+  return filteredNearby
     .map((departure) => {
       const route = calculateRoute(departure.station, destination);
       return {
@@ -346,5 +368,6 @@ export function recommendRoutes(
         totalMinutes: departure.walkingMinutes + route.totalTime,
       };
     })
-    .sort((a, b) => a.totalMinutes - b.totalMinutes);
+    .sort((a, b) => a.totalMinutes - b.totalMinutes)
+    .slice(0, 5); // Return top 5 overall best recommendations
 }

@@ -20,6 +20,7 @@ import { addRecentStation, getRecentStations } from "@/data/recent-stations";
 import { useStations } from "@/data/station-store";
 import { lines } from "@/data/stations";
 import i18n from "@/i18n";
+import { matchChoseong } from "@/utils/hangul";
 
 const ITEM_HEIGHT = 88;
 
@@ -42,11 +43,24 @@ export default function StationSelectScreen() {
   const searchResults = useMemo(() => {
     const term = keyword.trim().toLowerCase();
     if (!term) return [];
-    return stations.filter(
-      (s) =>
-        s.name.toLowerCase().includes(term) ||
-        s.line.toLowerCase().includes(term),
-    );
+
+    const isLineOnlySearch = /^\d+$/.test(term);
+
+    return stations.filter((s) => {
+      const name = s.name.toLowerCase();
+      const line = s.line.toLowerCase();
+
+      const nameMatch = name.includes(term) || matchChoseong(s.name, term);
+      if (nameMatch) return true;
+
+      if (line.includes(term)) return true;
+
+      if (isLineOnlySearch) {
+        const lineNumbers = s.line.match(/\d+/g);
+        return lineNumbers?.includes(term);
+      }
+      return false;
+    });
   }, [keyword, stations]);
 
   const filterByLine = useCallback(
