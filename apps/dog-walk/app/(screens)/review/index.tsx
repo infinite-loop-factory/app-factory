@@ -11,13 +11,10 @@ import CustomSafeAreaView from "@/components/CustomSafeAreaView";
 import HeaderBar from "@/components/HeaderBar";
 import ImageModal from "@/components/modal/ImageModal";
 import ReviewItem from "@/components/molecules/ReviewItem";
-import { useThemeColor } from "@/hooks/useThemeColor";
 
 export default function ReviewScreen() {
   const { courseId } = useLocalSearchParams();
   const userInfo = useAtomValue(userAtom);
-
-  const primary500Color = useThemeColor({}, "--color-primary-500");
 
   const { data: reviewData, fetchNextPage } = useFindCourseReviewsInfinite(
     Number(courseId),
@@ -83,7 +80,6 @@ export default function ReviewScreen() {
               setReviewImages={setReviewImages}
               setSelectedImageIndex={setSelectedImageIndex}
               setShowImageModal={setShowImageModal}
-              starIconColor={primary500Color}
             />
           )}
         />

@@ -8,7 +8,6 @@ import { TouchableOpacity, View } from "react-native";
 import { useDeleteReview } from "@/api/reactQuery/review/useDeleteReview";
 import { useFindLatestCourseReviews } from "@/api/reactQuery/review/useFindLatestCourseReviews";
 import { userAtom } from "@/atoms/userAtom";
-import { useThemeColor } from "@/hooks/useThemeColor";
 import ReviewScoreCard from "../card/ReviewScoreCard";
 import ImageModal from "../modal/ImageModal";
 import ReviewItem from "../molecules/ReviewItem";
@@ -22,7 +21,6 @@ interface ReviewsProps {
 }
 
 export default function Reviews({ courseId, rate }: ReviewsProps) {
-  const primary500Color = useThemeColor({}, "--color-primary-500");
   const userInfo = useAtomValue(userAtom);
 
   const { data = [] } = useFindLatestCourseReviews(courseId);
@@ -74,7 +72,6 @@ export default function Reviews({ courseId, rate }: ReviewsProps) {
         courseId={courseId}
         onPressReviewWrite={onPressReviewWrite}
         rate={rate}
-        starIconColor={primary500Color}
       />
 
       <View className="items-end">
@@ -106,7 +103,6 @@ export default function Reviews({ courseId, rate }: ReviewsProps) {
             setReviewImages={setReviewImages}
             setSelectedImageIndex={setSelectedImageIndex}
             setShowImageModal={setShowImageModal}
-            starIconColor={primary500Color}
           />
         ))}
       </VStack>
