@@ -59,22 +59,95 @@ const ENDPOINT_DEFS: Pick<EndpointHealth, "id" | "label" | "path">[] = [
 
 // ── Param builders ─────────────────────────────────────────────
 
-function findTransferPair(
-  codeMap: KricCodeMap,
-): [KricStationRef, KricStationRef] | null {
-  const nameMap = new Map<string, KricStationRef[]>();
-  for (const [key, ref] of Object.entries(codeMap)) {
-    const name = key.split("|")[0];
-    if (name) {
-      if (!nameMap.has(name)) nameMap.set(name, []);
-      nameMap.get(name)?.push(ref);
+async function testDirection(
+  fromRef: KricStationRef,
+  toRef: KricStationRef,
+  prevStinCd: string | undefined,
+  nextStinCd: string | undefined,
+) {
+  if (!(prevStinCd && nextStinCd)) return null;
+  try {
+    const items = await fetchTransferMovement({
+      railOprIsttCd: fromRef.railOprIsttCd,
+      lnCd: fromRef.lnCd,
+      stinCd: fromRef.stinCd,
+      prevStinCd,
+      chthTgtLn: toRef.lnCd,
+      chtnNextStinCd: nextStinCd,
+    });
+    return items.length > 0 ? items : null;
+  } catch {
+    return null;
+  }
+}
+
+async function testHubCombination(
+  fromRef: KricStationRef,
+  toRef: KricStationRef,
+) {
+  try {
+    const fromLineItems = await fetchSubwayRouteInfo({
+      mreaWideCd: "01",
+      lnCd: fromRef.lnCd,
+    });
+    const toLineItems = await fetchSubwayRouteInfo({
+      mreaWideCd: "01",
+      lnCd: toRef.lnCd,
+    });
+
+    const fromIdx = fromLineItems.findIndex((i) => i.stinCd === fromRef.stinCd);
+    const toIdx = toLineItems.findIndex((i) => i.stinCd === toRef.stinCd);
+    if (fromIdx === -1 || toIdx === -1) return null;
+
+    const res1 = await testDirection(
+      fromRef,
+      toRef,
+      fromLineItems[fromIdx - 1]?.stinCd,
+      toLineItems[toIdx + 1]?.stinCd,
+    );
+    if (res1) return res1;
+
+    return await testDirection(
+      fromRef,
+      toRef,
+      fromLineItems[fromIdx + 1]?.stinCd,
+      toLineItems[toIdx - 1]?.stinCd,
+    );
+  } catch {
+    return null;
+  }
+}
+
+async function testHub(hub: string, codeMap: KricCodeMap) {
+  const refs = Object.entries(codeMap)
+    .filter(([key]) => key.startsWith(`${hub}|`))
+    .map(([_, ref]) => ref);
+
+  if (refs.length < 2) return null;
+
+  for (let i = 0; i < refs.length; i++) {
+    for (let j = 0; j < refs.length; j++) {
+      if (i === j) continue;
+      const fromRef = refs[i];
+      const toRef = refs[j];
+      if (!(fromRef && toRef)) continue;
+
+      const result = await testHubCombination(fromRef, toRef);
+      if (result) return result;
     }
   }
-  const pair = [...nameMap.values()].find((refs) => refs.length >= 2);
-  if (pair?.[0] && pair[1]) {
-    return [pair[0], pair[1]];
-  }
   return null;
+}
+
+async function testTransferMovement(codeMap: KricCodeMap) {
+  const CANDIDATES = ["서울역", "신도림", "고속터미널", "동대문역사문화공원"];
+
+  for (const hub of CANDIDATES) {
+    const result = await testHub(hub, codeMap);
+    if (result) return { items: result };
+  }
+
+  return { items: [] };
 }
 
 async function checkEndpoint(
@@ -84,56 +157,54 @@ async function checkEndpoint(
 ): Promise<{ items: unknown[]; skipped?: boolean }> {
   const firstEntry = Object.values(codeMap)[0];
 
-  switch (id) {
-    case "subwayRouteInfo": {
-      const items = await fetchSubwayRouteInfo({ mreaWideCd: "01", lnCd: "2" });
-      return { items };
+  try {
+    switch (id) {
+      case "subwayRouteInfo": {
+        const items = await fetchSubwayRouteInfo({
+          mreaWideCd: "01",
+          lnCd: "2",
+        });
+        return { items };
+      }
+      case "subwayTimetable": {
+        if (!firstEntry) return { items: [], skipped: true };
+        const items = await fetchSubwayTimetable({
+          railOprIsttCd: firstEntry.railOprIsttCd,
+          dayCd,
+          lnCd: firstEntry.lnCd,
+          stinCd: firstEntry.stinCd,
+        });
+        return { items };
+      }
+      case "stationTimetable": {
+        if (!firstEntry) return { items: [], skipped: true };
+        const items = await fetchStationTimetable({
+          railOprIsttCd: firstEntry.railOprIsttCd,
+          dayCd,
+          lnCd: firstEntry.lnCd,
+          stinCd: firstEntry.stinCd,
+        });
+        return { items };
+      }
+      case "stationTransferInfo": {
+        if (!firstEntry) return { items: [], skipped: true };
+        const items = await fetchStationTransferInfo({
+          railOprIsttCd: firstEntry.railOprIsttCd,
+          lnCd: firstEntry.lnCd,
+          stinCd: firstEntry.stinCd,
+        });
+        return { items };
+      }
+      case "transferMovement":
+        return await testTransferMovement(codeMap);
+      default:
+        return { items: [], skipped: true };
     }
-    case "subwayTimetable": {
-      if (!firstEntry) return { items: [], skipped: true };
-      const items = await fetchSubwayTimetable({
-        railOprIsttCd: firstEntry.railOprIsttCd,
-        dayCd,
-        lnCd: firstEntry.lnCd,
-        stinCd: firstEntry.stinCd,
-      });
-      return { items };
+  } catch (err) {
+    if (err instanceof Error && err.message.includes("error 03")) {
+      return { items: [] };
     }
-    case "stationTimetable": {
-      if (!firstEntry) return { items: [], skipped: true };
-      const items = await fetchStationTimetable({
-        railOprIsttCd: firstEntry.railOprIsttCd,
-        dayCd,
-        lnCd: firstEntry.lnCd,
-        stinCd: firstEntry.stinCd,
-      });
-      return { items };
-    }
-    case "stationTransferInfo": {
-      if (!firstEntry) return { items: [], skipped: true };
-      const items = await fetchStationTransferInfo({
-        railOprIsttCd: firstEntry.railOprIsttCd,
-        lnCd: firstEntry.lnCd,
-        stinCd: firstEntry.stinCd,
-      });
-      return { items };
-    }
-    case "transferMovement": {
-      const pair = findTransferPair(codeMap);
-      if (!pair) return { items: [], skipped: true };
-      const [from, to] = pair;
-      const items = await fetchTransferMovement({
-        railOprIsttCd: from.railOprIsttCd,
-        lnCd: from.lnCd,
-        stinCd: from.stinCd,
-        prevStinCd: from.stinCd,
-        chthTgtLn: to.lnCd,
-        chtnNextStinCd: to.stinCd,
-      });
-      return { items };
-    }
-    default:
-      return { items: [], skipped: true };
+    throw err;
   }
 }
 
