@@ -1,8 +1,15 @@
 import { useEffect, useRef, useState } from "react";
-import { Modal } from "react-native";
 import { Box } from "@/components/ui/box";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
+import {
+  Modal,
+  ModalBackdrop,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+} from "@/components/ui/modal";
 import { Text } from "@/components/ui/text";
 import {
   hasRequiredLocationPermissions,
@@ -77,54 +84,55 @@ export function LocationPermissionGate() {
     }
   };
 
-  if (!(user && visible)) {
+  if (!user) {
     return null;
   }
 
   return (
-    <Modal animationType="fade" transparent visible={visible}>
-      <Box
-        className="flex-1 items-center justify-end bg-background-dark/60 px-4 pb-10"
-        style={{ backgroundColor: "rgba(15, 23, 42, 0.55)" }}
-      >
-        <Box className="w-full max-w-md gap-4 rounded-2xl border border-outline-100 bg-background-0 p-6 shadow-soft-2">
-          <Text className="font-bold text-primary-600 text-xs uppercase tracking-[1.5px]">
-            {i18n.t("location.disclosure.badge")}
-          </Text>
-          <Heading className="font-bold text-2xl text-typography-950">
-            {i18n.t("location.disclosure.title")}
-          </Heading>
+    <Modal isOpen={visible} onClose={() => setVisible(false)}>
+      <ModalBackdrop />
+      <ModalContent className="max-w-md rounded-2xl">
+        <ModalHeader>
+          <Box className="gap-1.5">
+            <Text className="font-bold text-primary-600 text-xs uppercase tracking-[1.5px]">
+              {i18n.t("location.disclosure.badge")}
+            </Text>
+            <Heading className="font-bold text-2xl text-typography-950">
+              {i18n.t("location.disclosure.title")}
+            </Heading>
+          </Box>
+        </ModalHeader>
+        <ModalBody>
           <Text className="text-base text-typography-700 leading-7">
             {i18n.t("location.disclosure.message")}
           </Text>
-
-          <Box className="gap-3 pt-2">
-            <Button
-              action="primary"
-              className="h-12 rounded-2xl"
-              disabled={isRequesting}
-              onPress={() => void handleRequestPermission()}
-            >
-              <ButtonText>
-                {isRequesting
-                  ? i18n.t("location.disclosure.requesting")
-                  : i18n.t("location.disclosure.primary")}
-              </ButtonText>
-            </Button>
-            <Button
-              action="secondary"
-              className="h-12 rounded-2xl border border-outline-200 bg-background-0 data-[active=true]:bg-background-100 data-[hover=true]:bg-background-50"
-              disabled={isRequesting}
-              onPress={() => setVisible(false)}
-              variant="outline"
-            >
-              <ButtonText className="font-semibold text-typography-900">
-                {i18n.t("location.disclosure.secondary")}
-              </ButtonText>
-            </Button>
-          </Box>
-        </Box>
-      </Box>
+        </ModalBody>
+        <ModalFooter className="flex-col gap-2">
+          <Button
+            action="primary"
+            className="h-12 w-full rounded-2xl"
+            isDisabled={isRequesting}
+            onPress={() => void handleRequestPermission()}
+          >
+            <ButtonText>
+              {isRequesting
+                ? i18n.t("location.disclosure.requesting")
+                : i18n.t("location.disclosure.primary")}
+            </ButtonText>
+          </Button>
+          <Button
+            action="secondary"
+            className="h-12 w-full rounded-2xl border border-outline-200 bg-background-0 data-[active=true]:bg-background-100 data-[hover=true]:bg-background-50"
+            isDisabled={isRequesting}
+            onPress={() => setVisible(false)}
+            variant="outline"
+          >
+            <ButtonText className="font-semibold text-typography-900">
+              {i18n.t("location.disclosure.secondary")}
+            </ButtonText>
+          </Button>
+        </ModalFooter>
+      </ModalContent>
     </Modal>
   );
 }
