@@ -1,0 +1,5 @@
+# Maestro E2E Test Configuration
+# Run: maestro test maestro/flows/
+
+appId: com.gracefullight.countrytracker
+name: Country Tracker E2E Tests

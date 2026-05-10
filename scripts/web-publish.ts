@@ -8,6 +8,58 @@ const appsDir = path.join(process.cwd(), "apps");
 const distDir = path.join(process.cwd(), "dist");
 const baseUrl = "https://infinite-loop-factory.github.io/app-factory/";
 const appListFileName = "app-list.json";
+const docsPagesDirName = "docs/pages";
+
+function markdownToHtml(md: string, slug: string, appName: string): string {
+  const lines = md.split("\n");
+  let body = "";
+  let title = slug;
+
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (!trimmed) {
+      body += "\n";
+      continue;
+    }
+    if (trimmed.startsWith("# ")) {
+      title = trimmed.slice(2);
+      body += `<h1>${escapeHtml(title)}</h1>\n`;
+    } else if (trimmed.startsWith("## ")) {
+      body += `<h2>${escapeHtml(trimmed.slice(3))}</h2>\n`;
+    } else if (trimmed.startsWith("### ")) {
+      body += `<h3>${escapeHtml(trimmed.slice(4))}</h3>\n`;
+    } else {
+      body += `<p>${escapeHtml(trimmed)}</p>\n`;
+    }
+  }
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>${escapeHtml(title)} - ${escapeHtml(appName)}</title>
+<style>
+body{font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;max-width:640px;margin:0 auto;padding:2rem 1rem;line-height:1.7;color:#1a1a1a;background:#fff}
+h1{font-size:1.75rem;margin-bottom:.25rem}
+h2{font-size:1.25rem;margin-top:2rem}
+h3{font-size:1.1rem;margin-top:1.5rem}
+p{margin:.5rem 0;color:#374151}
+@media(prefers-color-scheme:dark){body{background:#0f172a;color:#e2e8f0}p{color:#94a3b8}}
+</style>
+</head>
+<body>
+${body}</body>
+</html>`;
+}
+
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
 
 // Ensure dist dir exists
 if (!fs.existsSync(distDir)) {
@@ -45,6 +97,36 @@ function getApps() {
   });
 }
 
+function getPackageName(appDir: string): string | undefined {
+  const packageJson = JSON.parse(
+    fs.readFileSync(path.join(appsDir, appDir, "package.json"), "utf-8"),
+  );
+  return packageJson.name.split("/").pop();
+}
+
+function buildStaticPages() {
+  for (const app of getApps()) {
+    const pagesDir = path.join(appsDir, app, docsPagesDirName);
+    if (!fs.existsSync(pagesDir)) continue;
+
+    const packageName = getPackageName(app);
+    if (!packageName) continue;
+
+    const mdFiles = fs.readdirSync(pagesDir).filter((f) => f.endsWith(".md"));
+
+    for (const mdFile of mdFiles) {
+      const slug = mdFile.replace(/\.md$/, "");
+      const md = fs.readFileSync(path.join(pagesDir, mdFile), "utf-8");
+      const html = markdownToHtml(md, slug, packageName);
+      const outDir = path.join(distDir, packageName, slug);
+      fs.mkdirSync(outDir, { recursive: true });
+      fs.writeFileSync(path.join(outDir, "index.html"), html);
+      // biome-ignore lint/suspicious/noConsole: script output
+      console.log(`  Static page: ${packageName}/${slug}`);
+    }
+  }
+}
+
 (async () => {
   const { values } = parseArgs({
     args: process.argv.slice(2),
@@ -69,11 +151,7 @@ function getApps() {
       continue;
     }
 
-    const packageJson = JSON.parse(
-      fs.readFileSync(path.join(appPath, "package.json"), "utf-8"),
-    );
-    const packageName = packageJson.name.split("/").pop();
-
+    const packageName = getPackageName(app);
     if (!packageName) continue;
 
     // biome-ignore lint/suspicious/noConsole: script output
@@ -103,6 +181,8 @@ function getApps() {
       }
     }
   }
+
+  buildStaticPages();
 
   const allApps = uniq([...existingApps.map((d) => d.name), ...builtApps]).map(
     (name) => ({ name }),

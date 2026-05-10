@@ -1,0 +1,31 @@
+appId: com.gracefullight.countrytracker
+name: Settings Navigation
+tags:
+  - requires-auth
+---
+- launchApp
+
+# Navigate to Settings tab
+- tapOn: "Settings"
+
+# Verify settings elements
+- assertVisible: "Preferences"
+- assertVisible: "Visa Alerts"
+
+# Navigate to Visa Alerts
+- tapOn: "Visa Alerts"
+- assertVisible: "Set visa-free day limits"
+- back
+
+# Navigate to Denylist
+- scrollUntilVisible:
+    element: "Denylist Countries"
+    direction: DOWN
+- tapOn: "Denylist Countries"
+- back
+
+# Verify logout button
+- scrollUntilVisible:
+    element: "Logout"
+    direction: DOWN
+- assertVisible: "Logout"

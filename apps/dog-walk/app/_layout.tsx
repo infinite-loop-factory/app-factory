@@ -16,6 +16,7 @@ import "react-native-reanimated";
 import "@/i18n";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { StatusBar } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { configureGoogleSignin } from "@/config/google";
 import { AuthProvider } from "@/contexts/AuthProvider";
@@ -78,6 +79,11 @@ export default function RootLayout() {
         >
           <QueryClientProvider client={queryClient}>
             <AuthProvider>
+              <StatusBar
+                backgroundColor="white"
+                barStyle="dark-content"
+                translucent={false}
+              />
               <Stack>
                 <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
                 <Stack.Screen

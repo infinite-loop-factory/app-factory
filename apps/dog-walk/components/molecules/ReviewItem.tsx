@@ -1,7 +1,7 @@
 import type { ReviewDataType } from "@/types/review";
 
-import { Star } from "lucide-react-native";
-import { Image, TouchableOpacity } from "react-native";
+import { Star, Trash2 } from "lucide-react-native";
+import { Alert, Image, TouchableOpacity } from "react-native";
 import Images from "@/assets/images";
 import dayjs from "@/library/dayjs";
 import { maskName } from "@/utils/string";
@@ -13,6 +13,8 @@ import { VStack } from "../ui/vstack";
 interface ReviewItemProps {
   reviewData: ReviewDataType;
   starIconColor: string;
+  currentUserId?: string;
+  onDelete?: (reviewId: number) => void;
   setReviewImages: React.Dispatch<React.SetStateAction<string[]>>;
   setShowImageModal: React.Dispatch<React.SetStateAction<boolean>>;
   setSelectedImageIndex: React.Dispatch<React.SetStateAction<number>>;
@@ -21,11 +23,25 @@ interface ReviewItemProps {
 export default function ReviewItem({
   reviewData,
   starIconColor,
+  currentUserId,
+  onDelete,
   setReviewImages,
   setShowImageModal,
   setSelectedImageIndex,
 }: ReviewItemProps) {
   const images = reviewData.images ? JSON.parse(reviewData.images) : [];
+  const isMyReview = currentUserId === reviewData.user_id;
+
+  const handleDelete = () => {
+    Alert.alert("리뷰 삭제", "리뷰를 삭제하시겠습니까?", [
+      { text: "취소", style: "cancel" },
+      {
+        text: "삭제",
+        style: "destructive",
+        onPress: () => onDelete?.(reviewData.id),
+      },
+    ]);
+  };
 
   return (
     <VStack className="gap-2 rounded-xl border border-slate-100 bg-white p-4">
@@ -38,7 +54,7 @@ export default function ReviewItem({
               : Images.defaultProfileImage
           }
         />
-        <VStack>
+        <VStack className="flex-1">
           <Text className="font-medium">{maskName(reviewData.users.name)}</Text>
           <HStack className="items-center gap-1">
             {[...Array(5)].map((_, i) => (
@@ -56,6 +72,11 @@ export default function ReviewItem({
             </Text>
           </HStack>
         </VStack>
+        {isMyReview && onDelete && (
+          <TouchableOpacity onPress={handleDelete}>
+            <Icon as={Trash2} className="h-5 w-5 text-slate-400" />
+          </TouchableOpacity>
+        )}
       </HStack>
       <Text className="text-slate-700 leading-relaxed" size="sm">
         {reviewData.content}

@@ -24,12 +24,11 @@ import "@/features/location/location-task";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useNetworkState } from "expo-network";
 import { useRef } from "react";
+import { Platform } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { LocationPermissionDeniedToast } from "@/components/toasts/location-permission-denied";
-import { useToast } from "@/components/ui/toast";
-import { startLocationTask } from "@/features/location/location-permission";
 import { flushLocationQueueIfAny } from "@/features/location/location-task";
+import { flushVisitQueue } from "@/utils/offline-queue";
 
 const navigationIntegration = null;
 /* Sentry.reactNavigationIntegration({
@@ -66,7 +65,6 @@ function RootLayout() {
   });
   const net = useNetworkState();
   const wasConnectedRef = useRef(false);
-  const toast = useToast();
 
   useEffect(() => {
     if (navigationRef && navigationIntegration) {
@@ -81,19 +79,10 @@ function RootLayout() {
   }, [loaded]);
 
   useEffect(() => {
-    colorScheme.set(savedTheme);
+    if (Platform.OS !== "web") {
+      colorScheme.set(savedTheme);
+    }
   }, [savedTheme]);
-
-  useEffect(() => {
-    startLocationTask({
-      onPermissionDenied: () => {
-        toast.show({
-          duration: 3000,
-          render: LocationPermissionDeniedToast,
-        });
-      },
-    });
-  }, [toast]);
 
   useEffect(() => {
     const connected =
@@ -101,6 +90,9 @@ function RootLayout() {
     if (connected && !wasConnectedRef.current) {
       flushLocationQueueIfAny().catch((_e) => {
         /* ignore error */
+      });
+      flushVisitQueue().catch((_e) => {
+        /* best-effort */
       });
     }
     wasConnectedRef.current = connected;

@@ -7,7 +7,7 @@ import { useDeleteCourse } from "@/api/reactQuery/course/useDeleteCourse";
 import { useFindMyCoursesInfinite } from "@/api/reactQuery/course/useFindMyCoursesInfinite";
 import { userAtom } from "@/atoms/userAtom";
 import OptionsActionsheet from "@/components/actionsheet/OptionsActionsheet";
-import CustomSafeAreaView from "@/components/CustomSafeAriaView";
+import CustomSafeAreaView from "@/components/CustomSafeAreaView";
 import { getGlobalHandleToast } from "@/components/CustomToast";
 import MyCourseCard from "@/components/card/MyCourseCard";
 import MyCourseCardSkeleton from "@/components/card/MyCourseCardSkeleton";

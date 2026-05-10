@@ -21,6 +21,7 @@ import {
   findCountryLocation,
   findCountryLocationByCode,
 } from "@/features/map/utils/country-locations";
+import { buildSummaryQueryParams } from "@/features/map/utils/summary-query-params";
 import { useAuthUser } from "@/hooks/use-auth-user";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import i18n from "@/lib/i18n";
@@ -66,22 +67,24 @@ export default function MapScreen() {
     "primary-500",
   ]);
 
+  const summaryQueryParams = useMemo(
+    () =>
+      buildSummaryQueryParams({
+        filterMode,
+        selectedYear,
+        startDate,
+        endDate,
+      }),
+    [endDate, filterMode, selectedYear, startDate],
+  );
+
   const {
     data: summaryRows = [],
     isLoading: isYearSummaryLoading,
     isError: isYearSummaryError,
   } = useVisitedCountrySummariesQuery({
     userId: user?.id ?? null,
-    year: filterMode === "year" ? selectedYear : null,
-    // Pass date strings if filterMode is range
-    startDate:
-      filterMode === "range" && startDate
-        ? startDate.toFormat("yyyy-MM-dd")
-        : undefined,
-    endDate:
-      filterMode === "range" && endDate
-        ? endDate.toFormat("yyyy-MM-dd")
-        : undefined,
+    ...summaryQueryParams,
   });
 
   const countrySummaries = useMemo<CountryYearSummary[]>(() => {
@@ -288,7 +291,7 @@ export default function MapScreen() {
       <Box className="relative w-full flex-1 overflow-hidden">
         {/* Map */}
         <Box className="absolute inset-0 h-full w-full">
-          <MapGlobe ref={mapGlobeRef} year={selectedYear} />
+          <MapGlobe ref={mapGlobeRef} {...summaryQueryParams} />
         </Box>
 
         {/* Map Overlay Controls */}

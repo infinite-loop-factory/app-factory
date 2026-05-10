@@ -1,4 +1,4 @@
-import type { Feature, FeatureCollection, Polygon, Position } from "geojson";
+import type { FeatureCollection, Polygon, Position } from "geojson";
 import type { PointerEvent } from "react";
 import type {
   AnimationState,
@@ -33,7 +33,8 @@ import {
   VISITED_FILL_OPACITY,
   VISITED_STROKE_WIDTH_WEB,
 } from "@/features/map/constants/style";
-import { useVisitedCountrySummariesQuery } from "@/features/map/hooks/use-visited-country-summaries";
+import { useVisitedCountryCodes } from "@/features/map/hooks/use-visited-country-codes";
+import { animateToBrowserLocation } from "@/features/map/utils/browser-geolocation";
 import {
   getCountryPolygon,
   normalizeCountryCode,
@@ -45,11 +46,13 @@ import i18n from "@/lib/i18n";
 const easeInOut = (t: number) => (t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t);
 
 type MapGlobeProps = {
-  year: number;
+  year: number | null;
+  startDate?: string;
+  endDate?: string;
 };
 
 const MapGlobeComponent = forwardRef<MapGlobeRef, MapGlobeProps>(
-  ({ year }, ref) => {
+  ({ year, startDate, endDate }, ref) => {
     const { user } = useAuthUser();
     const [primary, outline] = useThemeColor(["primary-500", "outline-400"]);
     const [rotate, setRotate] = useState<[number, number, number]>([0, 0, 0]);
@@ -80,43 +83,31 @@ const MapGlobeComponent = forwardRef<MapGlobeRef, MapGlobeProps>(
 
     useEffect(() => () => stopAnimation(), [stopAnimation]);
 
-    const emptyFeatureCollection: FeatureCollection<
+    const { data: visitedCodes = [] } = useVisitedCountryCodes({
+      userId: user?.id ?? null,
+      year,
+      startDate,
+      endDate,
+    });
+
+    const visitedFeatureCollection: FeatureCollection<
       Polygon,
       { country_code: string }
-    > = { type: "FeatureCollection", features: [] };
-
-    const { data: visitedFeatureCollection = emptyFeatureCollection } =
-      useVisitedCountrySummariesQuery<
-        FeatureCollection<Polygon, { country_code: string }>
-      >({
-        userId: user?.id ?? null,
-        year,
-        select: (summaries) => {
-          const features: Feature<Polygon, { country_code: string }>[] = [];
-          const uniqueCodes = Array.from(
-            new Set(
-              summaries.map((summary) => summary.countryCode).filter(Boolean),
-            ),
-          ) as string[];
-
-          for (const raw of uniqueCodes) {
-            const normalized = normalizeCountryCode(raw);
-            if (!normalized) continue;
-            const poly = getCountryPolygon(normalized);
-            if (!poly) continue;
-            for (const ring of poly.coordinates) {
-              const ringCoords = ring as unknown as Position[];
-              features.push({
-                type: "Feature",
-                properties: { country_code: normalized },
-                geometry: { type: "Polygon", coordinates: [ringCoords] },
-              });
-            }
-          }
-
-          return { type: "FeatureCollection", features };
-        },
-      });
+    > = {
+      type: "FeatureCollection",
+      features: visitedCodes.flatMap((code) => {
+        const poly = getCountryPolygon(code);
+        if (!poly) return [];
+        return poly.coordinates.map((ring) => ({
+          type: "Feature" as const,
+          properties: { country_code: code },
+          geometry: {
+            type: "Polygon" as const,
+            coordinates: [ring as unknown as Position[]],
+          },
+        }));
+      }),
+    };
 
     const clamp = useCallback(
       (v: number, min: number, max: number) => Math.max(min, Math.min(max, v)),
@@ -198,7 +189,14 @@ const MapGlobeComponent = forwardRef<MapGlobeRef, MapGlobeProps>(
         zoomIn: () => setScale((s) => Math.min(s * 1.5, 800)),
         zoomOut: () => setScale((s) => Math.max(s / 1.5, 100)),
         animateToUserLocation: () => {
-          // Web implementation or stub
+          const geolocation =
+            typeof navigator === "undefined" ? null : navigator.geolocation;
+          animateToBrowserLocation({
+            geolocation,
+            onSuccess: ({ latitude, longitude }) => {
+              startRotationAnimation(latitude, longitude, 1400);
+            },
+          });
         },
       }),
       [startRotationAnimation],

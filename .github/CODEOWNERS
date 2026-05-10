@@ -2,19 +2,15 @@
 * @infinite-loop-factory/app-factory
 
 # apps
-/apps/cafe @ckrbqja
 /apps/country-tracker @gracefullight
-/apps/delivery @ckrbqja
 /apps/dog-walk @Lim-Ji-Hyeon
-/apps/question-card @JAM-PARK
-/apps/reaction-speed-test @JAM-PARK
 
 # packages
 
 # scripts
 
 # turbo
-/turbo/generator/config.ts @gracefullight @ckrbqja
+/turbo/generator/config.ts @gracefullight
 
 # settings
 /.husky @gracefullight

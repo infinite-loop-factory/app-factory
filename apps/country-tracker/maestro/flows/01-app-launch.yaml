@@ -1,0 +1,10 @@
+appId: com.gracefullight.countrytracker
+name: App Launch and Login Screen
+---
+- launchApp
+- assertVisible: "Start Your Journey"
+- assertVisible: "Sign in with Apple"
+- assertVisible: "Login with Google"
+- assertVisible: "Login with Facebook"
+- assertVisible: "Terms of Service"
+- assertVisible: "Privacy Policy"

@@ -3,8 +3,10 @@ import { useAtomValue } from "jotai/react";
 import { Dog, PlusCircle } from "lucide-react-native";
 import { useCallback } from "react";
 import { ScrollView, View } from "react-native";
+import { useDeleteDog } from "@/api/reactQuery/dogs/useDeleteDog";
 import { useFindDogs } from "@/api/reactQuery/dogs/useFindDogs";
 import { userAtom } from "@/atoms/userAtom";
+import { getGlobalHandleToast } from "./CustomToast";
 import DogInfoCard from "./card/DogInfoCard";
 import ProfileMenuItem from "./ProfileMenuItem";
 import SectionTitle from "./SectionTitle";
@@ -20,6 +22,17 @@ export default function ProfileView() {
   const userInfo = useAtomValue(userAtom);
 
   const { data: dogsData, refetch: refetchDogsData } = useFindDogs(userInfo.id);
+  const { mutateAsync: deleteDog } = useDeleteDog();
+
+  const handleDeleteDog = async (dogId: number) => {
+    try {
+      await deleteDog(dogId);
+      await refetchDogsData();
+      getGlobalHandleToast("반려견이 삭제되었습니다.");
+    } catch {
+      getGlobalHandleToast("삭제에 실패했습니다.");
+    }
+  };
 
   useFocusEffect(
     useCallback(() => {
@@ -94,9 +107,11 @@ export default function ProfileView() {
                 birthdate={data.birthdate}
                 breed={data.breed}
                 gender={data.gender}
+                id={data.id}
                 imageUrl={data.image_url}
                 key={data.id}
                 name={data.name}
+                onDelete={handleDeleteDog}
               />
             ))}
           </VStack>

@@ -1,8 +1,8 @@
 import type { CountryItem } from "@/types/country-item";
 
 import { DateTime } from "luxon";
-import { normalizeCountryCode } from "@/features/map/utils/normalize-country-code";
 import { countryCodeToFlagEmoji } from "@/utils/country-code-to-flag-emoji";
+import { normalizeCountryCode } from "@/utils/country-codes/normalize-country-code";
 import { formatIsoDate } from "@/utils/format-date";
 
 export type LocationRecord = {

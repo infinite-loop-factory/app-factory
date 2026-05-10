@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  font-family: "Pretendard", sans-serif;
+}
+
+body {
+  font-family: "Pretendard", sans-serif;
+}

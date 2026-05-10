@@ -10,3 +10,6 @@ dist/
 
 .serena
 .playwright-mcp
+
+.omc/
+.agents/state/

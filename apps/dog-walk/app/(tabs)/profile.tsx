@@ -1,7 +1,7 @@
 import { useAtomValue } from "jotai/react";
 import { userAtom } from "@/atoms/userAtom";
 import AuthRequiredView from "@/components/AuthRequiredView";
-import CustomSafeAreaView from "@/components/CustomSafeAriaView";
+import CustomSafeAreaView from "@/components/CustomSafeAreaView";
 import HeaderBar from "@/components/HeaderBar";
 import ProfileView from "@/components/ProfileView";
 

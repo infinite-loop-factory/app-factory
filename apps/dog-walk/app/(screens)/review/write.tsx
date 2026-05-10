@@ -16,7 +16,7 @@ import { useFindCourse } from "@/api/reactQuery/course/useFindCourse";
 import { useInsertReview } from "@/api/reactQuery/review/useInsertReview";
 import { userAtom } from "@/atoms/userAtom";
 import RatingSelector from "@/components/atoms/RatingSelector";
-import CustomSafeAreaView from "@/components/CustomSafeAriaView";
+import CustomSafeAreaView from "@/components/CustomSafeAreaView";
 import { getGlobalHandleToast } from "@/components/CustomToast";
 import CoursePreviewCard from "@/components/card/CoursePreviewCard";
 import HeaderBar from "@/components/HeaderBar";

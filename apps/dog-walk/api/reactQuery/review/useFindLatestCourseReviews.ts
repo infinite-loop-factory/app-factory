@@ -18,6 +18,7 @@ const findLatestCourseReviews = async (courseId: number) => {
   `,
     )
     .eq("course_id", courseId)
+    .is("deleted_at", null)
     .order("created_at", { ascending: false })
     .limit(3);
 

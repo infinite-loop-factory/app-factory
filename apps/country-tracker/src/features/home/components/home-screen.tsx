@@ -6,28 +6,22 @@ import {
   BottomSheetModal,
   BottomSheetView,
 } from "@gorhom/bottom-sheet";
+import { FlashList } from "@shopify/flash-list";
 import { useQuery } from "@tanstack/react-query";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import { useSetAtom } from "jotai";
 import {
   CalendarDays,
   Globe2,
   Plus,
   Search,
+  Share2,
   SlidersHorizontal,
 } from "lucide-react-native";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import {
-  FlatList,
-  Image,
-  Pressable,
-  ScrollView,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Pressable, ScrollView, TouchableOpacity, View } from "react-native";
 import { themeAtom } from "@/atoms/theme.atom";
 import ParallaxScrollView from "@/components/parallax-scroll-view";
-import { Badge, BadgeText } from "@/components/ui/badge";
 import { Box } from "@/components/ui/box";
 import { Button, ButtonIcon, ButtonText } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
@@ -35,13 +29,17 @@ import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
-import { locationQueryKeys } from "@/features/location/apis/query-keys";
+import { queryKeys } from "@/constants/query-keys";
+import { ShareStatsModal } from "@/features/home/components/share-stats-modal";
+import { SwipeableCountryCard } from "@/features/home/components/swipeable-country-card";
+import { useDeleteVisitMutation } from "@/features/home/hooks/use-delete-visit";
 import { fetchVisitedCountries } from "@/features/map/apis/fetch-visited-countries";
 import { useThemeColor } from "@/hooks/use-theme-color";
+import { useWidgetSync } from "@/hooks/use-widget-sync";
 import i18n from "@/lib/i18n";
 import supabase from "@/lib/supabase";
-import { getFlagUri, getStayDays, resolveRegion } from "@/utils/country-region";
-import { formatIsoDate } from "@/utils/format-date";
+import { getStayDays, resolveRegion } from "@/utils/country-region";
+import { triggerHaptic } from "@/utils/haptics";
 
 type FilterOption =
   | "recent"
@@ -61,28 +59,18 @@ export default function HomeScreen() {
   const [userLoaded, setUserLoaded] = useState(false);
   const bottomSheetRef = useRef<BottomSheetModal>(null);
   const sheetSnapPoints = useMemo(() => ["48%"], []);
+  const deleteVisitMutation = useDeleteVisitMutation();
+  const [shareVisible, setShareVisible] = useState(false);
 
-  const [
-    screenBg,
-    cardBg,
-    borderColor,
-    textMuted,
-    textStrong,
-    primaryColor,
-    warningSurface,
-    warningText,
-    secondarySurface,
-  ] = useThemeColor([
-    "background-50",
-    "background",
-    "outline-100",
-    "typography-400",
-    "typography-900",
-    "primary-300",
-    "warning-0",
-    "warning-600",
-    "secondary-0",
-  ]);
+  const [screenBg, cardBg, borderColor, textMuted, textStrong, primaryColor] =
+    useThemeColor([
+      "background-50",
+      "background",
+      "outline-100",
+      "typography-400",
+      "typography-900",
+      "primary-300",
+    ]);
 
   useEffect(() => {
     setSelectedFilter(activeFilter);
@@ -98,7 +86,7 @@ export default function HomeScreen() {
 
   const { data, isLoading, isError } = useQuery({
     queryKey: [
-      ...locationQueryKeys.visitedCountries(searchText),
+      ...queryKeys.location.visitedCountries(searchText),
       currentUser?.id ?? "guest",
     ],
     enabled: Boolean(currentUser?.id),
@@ -118,6 +106,7 @@ export default function HomeScreen() {
     currentUser?.user_metadata?.full_name ?? i18n.t("home.default-name");
 
   const safeCountries = data ?? [];
+  useWidgetSync(safeCountries);
 
   const trackedDays = useMemo(
     () => safeCountries.reduce((sum, item) => sum + getStayDays(item), 0),
@@ -178,7 +167,14 @@ export default function HomeScreen() {
 
   const renderFilterChip = useCallback(
     (option: FilterOption, isActive: boolean, onPress: () => void) => (
-      <Pressable className="mr-3 mb-2" key={option} onPress={onPress}>
+      <Pressable
+        className="mr-3 mb-2"
+        key={option}
+        onPress={() => {
+          triggerHaptic("light");
+          onPress();
+        }}
+      >
         <Box
           className="rounded-full border px-4 py-2"
           style={{
@@ -198,63 +194,30 @@ export default function HomeScreen() {
     [borderColor, cardBg, filterLabels, screenBg, textMuted, textStrong],
   );
 
-  const renderCountryCard = (item: CountryItem) => {
-    const flagUri = getFlagUri(item.country_code);
-    const stayDays = getStayDays(item);
-    const lastVisited = formatIsoDate(item.endDate, {
-      format: "LLL yyyy",
-      fallback: "--",
-    });
+  const handleDeleteVisit = useCallback(
+    (item: CountryItem) => {
+      deleteVisitMutation.mutate(item);
+    },
+    [deleteVisitMutation],
+  );
 
-    return (
-      <Box
-        className="mb-3 flex-row items-center justify-between rounded-2xl border px-3 py-3"
+  const renderCountryCard = useCallback(
+    (item: CountryItem) => (
+      <SwipeableCountryCard
+        item={item}
         key={item.id}
-        style={{ backgroundColor: cardBg, borderColor }}
-      >
-        <Box className="flex-row items-center gap-3">
-          <Box
-            className="h-14 w-14 items-center justify-center overflow-hidden rounded-xl border"
-            style={{ backgroundColor: secondarySurface, borderColor }}
-          >
-            {flagUri ? (
-              <Image
-                alt={`${item.country} flag`}
-                className="h-full w-full"
-                source={{ uri: flagUri }}
-              />
-            ) : (
-              <Text className="text-2xl" style={{ color: textStrong }}>
-                {item.flag}
-              </Text>
-            )}
-          </Box>
-          <Box>
-            <Text
-              className="font-semibold text-lg"
-              style={{ color: textStrong }}
-            >
-              {item.country}
-            </Text>
-            <Box className="mt-1 flex-row items-center gap-1">
-              <Text className="text-xs" style={{ color: textMuted }}>
-                {i18n.t("home.list.last-visit", { date: lastVisited })}
-              </Text>
-            </Box>
-          </Box>
-        </Box>
-        <Badge
-          className="rounded-full"
-          size="sm"
-          style={{ backgroundColor: warningSurface }}
-        >
-          <BadgeText style={{ color: warningText }}>
-            {i18n.t("home.list.stay-days", { count: stayDays })}
-          </BadgeText>
-        </Badge>
-      </Box>
-    );
-  };
+        onDelete={handleDeleteVisit}
+        onPress={() => {
+          triggerHaptic("light");
+          router.push({
+            pathname: "/country-detail/[code]",
+            params: { code: item.country_code },
+          } as never);
+        }}
+      />
+    ),
+    [handleDeleteVisit],
+  );
 
   return (
     <ParallaxScrollView>
@@ -410,16 +373,21 @@ export default function HomeScreen() {
             >
               {i18n.t("home.stats.countries")}
             </Heading>
-            <Link asChild href="/map">
-              <Pressable className="flex-row items-center gap-1">
-                <Text
-                  className="font-semibold text-sm"
-                  style={{ color: primaryColor }}
-                >
-                  {i18n.t("home.actions.view-map")}
-                </Text>
+            <Box className="flex-row items-center gap-3">
+              <Pressable hitSlop={8} onPress={() => setShareVisible(true)}>
+                <Share2 color={primaryColor} size={18} />
               </Pressable>
-            </Link>
+              <Link asChild href="/map">
+                <Pressable className="flex-row items-center gap-1">
+                  <Text
+                    className="font-semibold text-sm"
+                    style={{ color: primaryColor }}
+                  >
+                    {i18n.t("home.actions.view-map")}
+                  </Text>
+                </Pressable>
+              </Link>
+            </Box>
           </Box>
 
           <Box className="px-1 py-2">
@@ -441,7 +409,7 @@ export default function HomeScreen() {
                     </Text>
                   </View>
                 ) : (
-                  <FlatList
+                  <FlashList<CountryItem>
                     contentContainerStyle={{ paddingVertical: 4 }}
                     data={sortedCountries}
                     keyExtractor={(item) => item.id}
@@ -546,6 +514,12 @@ export default function HomeScreen() {
           </BottomSheetModal>
         </VStack>
       </Box>
+      <ShareStatsModal
+        countries={safeCountries}
+        onClose={() => setShareVisible(false)}
+        userName={greetingName}
+        visible={shareVisible}
+      />
     </ParallaxScrollView>
   );
 }

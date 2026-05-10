@@ -6,8 +6,8 @@ import ko from "./locales/ko.json";
 
 // Set the key-value pairs for the different languages you want to support.
 const translations = {
-  en,
-  ko,
+    en,
+    ko,
 };
 const i18n = new I18n(translations);
 

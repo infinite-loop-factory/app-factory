@@ -12,11 +12,11 @@
   },
   "devDependencies": {
     "@biomejs/biome": "catalog:",
+    "@clack/prompts": "^1.1.0",
     "@commitlint/cli": "^20.2.0",
     "@commitlint/config-conventional": "^20.2.0",
     "@commitlint/types": "^20.2.0",
     "@infinite-loop-factory/config-typescript": "workspace:^",
-    "@inquirer/prompts": "^8.1.0",
     "@turbo/gen": "^2.5.8",
     "@types/node": "^24",
     "chalk": "^5.6.2",
@@ -44,6 +44,14 @@
         "react-dom": "19.x",
         "react-native-safe-area-context": "5.x"
       }
+    },
+    "overrides": {
+      "expo": "54.0.33",
+      "expo-modules-autolinking>commander": "^7.2.0",
+      "react-native": "0.81.5",
+      "react-native-safe-area-context": "5.6.2",
+      "react-native-svg": "15.12.1",
+      "react-native-worklets": "0.5.1"
     },
     "patchedDependencies": {
       "@gluestack-ui/toast": "patches/@gluestack-ui__toast.patch"

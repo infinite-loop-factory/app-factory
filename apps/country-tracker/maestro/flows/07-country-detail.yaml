@@ -1,0 +1,24 @@
+appId: com.gracefullight.countrytracker
+name: Country Detail Screen
+tags:
+  - requires-auth
+  - requires-data
+---
+- launchApp
+- assertVisible: "My Travels"
+
+# Tap first country card to open detail
+# This requires at least one visit to exist
+- tapOn:
+    index: 0
+    text: ".*"
+    below: "Countries"
+
+# Verify detail screen
+- assertVisible: "Visit History"
+- assertVisible: "Visits"
+- assertVisible: "Days"
+
+# Go back
+- back
+- assertVisible: "My Travels"

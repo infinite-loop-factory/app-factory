@@ -63,7 +63,6 @@ App Factory는 여러 애플리케이션과 공유 패키지를 관리하는 모
 - **delivery**: 배달 서비스 앱
 - **dog-walk**: 반려동물 산책 앱
 - **playlist**: 음악 플레이리스트 앱
-- **reaction-speed-test**: 반응속도 테스트 게임
 
 각 `apps/*` 내의 `package.json` 파일을 참조하면 해당 애플리케이션의 구체적인 의존성을 확인할 수 있습니다.
 
@@ -111,12 +110,12 @@ turbo run start --filter=cafe
 
 현재 `apps/` 디렉토리에는 다음과 같은 애플리케이션들이 있습니다:
 
-- `cafe`
+- `app-cafe`
+- `cat-meetup`
 - `country-tracker`
-- `delivery`
+- `dist-interactive-metro`
 - `dog-walk`
-- `playlist`
-- `reaction-speed-test`
+- `shake-it`
 
 각 애플리케이션의 `package.json`에서 사용 가능한 스크립트를 확인하세요.
 

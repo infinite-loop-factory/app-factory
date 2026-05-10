@@ -13,19 +13,22 @@ import {
 import { endPointAtom, startPointAtom } from "@/atoms/pointAtom";
 import { userAtom } from "@/atoms/userAtom";
 import AuthRequiredView from "@/components/AuthRequiredView";
-import CustomSafeAreaView from "@/components/CustomSafeAriaView";
+import CustomSafeAreaView from "@/components/CustomSafeAreaView";
 import DatePickerModal from "@/components/DatePickerModal";
 import HeaderBar from "@/components/HeaderBar";
 import DatePicker from "@/components/molecules/DatePicker";
+import { TAB_BAR_HEIGHT } from "@/components/organisms/CustomTabBar";
 import SectionTitle from "@/components/SectionTitle";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
 import { Textarea, TextareaInput } from "@/components/ui/textarea";
+import { useKeyboardHeight } from "@/hooks/useKeyboardHeight";
 import { useRegisterWalkingCourse } from "@/hooks/useRegisterWalkingCourse";
 
 export default function AddScreen() {
   const userInfo = useAtomValue(userAtom);
   const isLoggedIn = Boolean(userInfo.accessToken);
+  const keyboardHeight = useKeyboardHeight();
 
   const [startPoint, setStartPoint] = useAtom(startPointAtom);
   const [endPoint, setEndPoint] = useAtom(endPointAtom);
@@ -199,7 +202,10 @@ export default function AddScreen() {
           </Textarea>
         </SectionTitle>
       </ScrollView>
-      <View className="p-3">
+      <View
+        className="p-3"
+        style={{ paddingBottom: TAB_BAR_HEIGHT, marginBottom: keyboardHeight }}
+      >
         <Button
           className="rounded-xl"
           isDisabled={!isRegistrationEnabled}

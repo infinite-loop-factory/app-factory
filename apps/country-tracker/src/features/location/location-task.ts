@@ -159,12 +159,51 @@ export async function flushLocationQueueIfAny(): Promise<void> {
   await flushQueueWith([]);
 }
 
+async function handleCountryChange(
+  latestRow: QueuedLocation | undefined,
+): Promise<void> {
+  if (!latestRow) return;
+  const prevCountry = await AsyncStorage.getItem("last-country-code");
+  const newCountry = latestRow.country_code?.toLowerCase();
+  if (prevCountry && newCountry && prevCountry !== newCountry) {
+    import("expo-notifications")
+      .then((Notifications) =>
+        Notifications.cancelScheduledNotificationAsync(
+          `visa-alert-${prevCountry}`,
+        ),
+      )
+      .catch((_e) => {
+        /* best-effort */
+      });
+  }
+  if (newCountry) {
+    await AsyncStorage.setItem("last-country-code", newCountry);
+  }
+}
+
+async function updateWidgetData(
+  latestRow: QueuedLocation | undefined,
+): Promise<void> {
+  if (!latestRow) return;
+  const { writeWidgetData, buildWidgetData, readWidgetData } = await import(
+    "@/utils/widget-bridge"
+  );
+  const cached = await readWidgetData();
+  await writeWidgetData(
+    buildWidgetData({
+      countriesVisited: cached?.countriesVisited ?? 0,
+      currentCountry: latestRow.country,
+      currentCountryCode: latestRow.country_code,
+      recentCountries: cached?.recentCountries,
+    }),
+  );
+}
+
 TaskManager.defineTask<LocationTaskData>(
   LOCATION_TASK_NAME,
   async ({ data, error }) => {
     if (error) {
       console.error("Location task error:", error);
-      console.error(error);
       return;
     }
 
@@ -196,14 +235,21 @@ TaskManager.defineTask<LocationTaskData>(
         return;
       }
 
+      const latestRow = filtered[filtered.length - 1];
+      if (last) {
+        await handleCountryChange(latestRow);
+      }
+
       const res = await flushQueueWith(filtered);
       if (!res.ok) {
-        console.error("Failed to insert locations:", res.error);
-        console.error("Failed to insert locations (background)");
+        console.error("Failed to insert locations (background):", res.error);
+      } else {
+        updateWidgetData(latestRow).catch((_e) => {
+          /* best-effort */
+        });
       }
     } catch (err) {
       console.error("Unexpected error during location insert:", err);
-      console.error(err);
     }
   },
 );

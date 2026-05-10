@@ -1,0 +1,19 @@
+appId: com.gracefullight.countrytracker
+name: Map Navigation
+tags:
+  - requires-auth
+---
+- launchApp
+
+# Navigate to Map tab
+- tapOn: "Map"
+
+# Verify map screen elements
+- assertVisible: "Countries"
+- assertVisible: "Days Abroad"
+
+# Test search on map
+- tapOn: "Search for a country"
+- inputText: "Korea"
+- tapOn: "Korea"
+- back

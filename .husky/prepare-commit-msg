@@ -1,1 +1,1 @@
-pnpm devmoji -e
+mise exec -- pnpm devmoji -e

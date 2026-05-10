@@ -95,13 +95,28 @@ function startWebLocationTracking(
 }
 
 async function requestLocationPermissions(): Promise<boolean> {
-  const foreground = await Location.requestForegroundPermissionsAsync();
+  const currentForeground = await Location.getForegroundPermissionsAsync();
+  const foreground = currentForeground.granted
+    ? currentForeground
+    : await Location.requestForegroundPermissionsAsync();
   if (foreground.status !== "granted") {
     return false;
   }
 
-  const background = await Location.requestBackgroundPermissionsAsync();
+  const currentBackground = await Location.getBackgroundPermissionsAsync();
+  const background = currentBackground.granted
+    ? currentBackground
+    : await Location.requestBackgroundPermissionsAsync();
   return background.status === "granted";
+}
+
+export async function hasRequiredLocationPermissions(): Promise<boolean> {
+  const [foreground, background] = await Promise.all([
+    Location.getForegroundPermissionsAsync(),
+    Location.getBackgroundPermissionsAsync(),
+  ]);
+
+  return foreground.status === "granted" && background.status === "granted";
 }
 
 async function ensureBackgroundUpdatesRegistered() {

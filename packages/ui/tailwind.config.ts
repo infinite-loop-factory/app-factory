@@ -4,6 +4,7 @@ import type { Config } from "tailwindcss";
 import nativewind from "nativewind/preset";
 
 export default {
+  darkMode: "class",
   content: ["src/**/*.{js,jsx,ts,tsx}"],
   presets: [nativewind],
   plugins: [],

@@ -5,8 +5,8 @@ import type {
 } from "@/features/map/types/map-summary";
 
 import { useQuery } from "@tanstack/react-query";
+import { queryKeys } from "@/constants/query-keys";
 import { fetchYearSummaries } from "@/features/map/apis/fetch-year-summaries";
-import { mapQueryKeys } from "@/features/map/apis/query-keys";
 
 interface UseVisitedCountrySummariesQueryParams<T> {
   userId: string | null;
@@ -22,7 +22,7 @@ export function useVisitedCountrySummariesQuery<T = CountryYearSummary[]>(
   const { userId, year, startDate, endDate, select } = params;
 
   return useQuery({
-    queryKey: mapQueryKeys.visitedCountrySummaries({
+    queryKey: queryKeys.map.visitedCountrySummaries({
       userId,
       year: year ?? "all",
       startDate,

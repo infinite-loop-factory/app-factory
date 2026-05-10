@@ -1,1 +1,1 @@
-pnpm commitlint --edit $1
+mise exec -- pnpm commitlint --edit "$1"

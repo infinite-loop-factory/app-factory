@@ -9,6 +9,7 @@ const fetchDogs = async (userId: string) => {
     .from("dogs")
     .select("*")
     .eq("user_id", userId)
+    .is("deleted_at", null)
     .order("created_at", { ascending: true });
 
   if (error) throw error;
