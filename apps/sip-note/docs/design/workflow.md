@@ -19,7 +19,7 @@
 | Export | 내부 URL / 폴더 / Canva / PDF / PPTX / 단독 HTML | git diff |
 | **연결점** | "Handoff to Claude Code" 한 번의 명령으로 bundle 전달 | bundle 수신 후 실제 코드 적용 |
 
-핵심: **시각 작업은 Claude Design 에서**, **코드 적용은 Claude Code 에서**. 두 도구는 *handoff bundle* 로 이어진다.
+핵심: **시각 작업은 Claude Design 이 선행**, **코드 적용은 Claude Code 가 후행**. 두 도구는 *handoff bundle* 로 이어진다. 시뮬레이터 캡처는 Phase 마무리 + ad-hoc 트리거 시에만 (ADR-0011).
 
 ---
 
@@ -52,23 +52,24 @@ Claude Design 은 코드베이스를 읽어 디자인 시스템을 자동 추출
 ## 2. 전체 흐름 — 한 화면 작업의 lifecycle
 
 ```
-[Claude Code]                     [Claude Design]                   [Claude Code]
-1. 코드 골격 작성        ───▶    2. 화면 디자인 / 시스템 정의
-   (TODO Phase N)                    - 입력: 코드 + docs/design/context.md
-                                     - 산출: 목업 + 토큰 + 컴포넌트 변형
-                                     - 반복: inline 코멘트 / sliders 로 refine
-                                                  │
-                                                  ▼
-                                  3. "Handoff to Claude Code"
-                                     bundle 생성 (URL / 단독 HTML / 토큰 JSON)
-                                                  │
-                                                  ▼
-                                                              4. handoff bundle 수신
-                                                                 - 토큰을 tailwind.config.ts 에 반영
-                                                                 - 컴포넌트 코드를 src/ 에 적용
-                                                                 - checkpoint-phase-N.md 에 기록
-                                                              5. AUDIT (Responsive / WCAG / Slop)
-                                                              6. 커밋
+[Claude Design]                                         [Claude Code]
+1. PRD 화면 목록 + DESIGN.lite + context 첨부
+   - 가설 분기 화면 (ADR-0009): 가설 3 × 시안 5
+   - 일반 화면: 단일 시안 + follow-up 으로 정제
+                          │
+                          ▼
+2. inline 코멘트 / spacing·color slider 로 refine
+   (anti-pattern 6 종 재점검, 댓글 묶음 → 1 회 호출)
+                          │
+                          ▼
+3. "Handoff to Claude Code" bundle 생성
+   (URL / 단독 HTML / 토큰 JSON)
+                          │
+                          ▼
+                                              4. bundle 변환 후 적용 (§5 7 룰)
+                                              5. Phase 마무리 시뮬레이터 캡처 + AUDIT 4 종
+                                                 (ad-hoc 트리거 발생 시 즉시 추가 캡처)
+                                              6. checkpoint-phase-N.md 작성 + 커밋
 ```
 
 체크포인트 통과 후에만 다음 Phase 로 진행한다.
@@ -309,7 +310,14 @@ Bundle 이 어떤 형태로 오든 다음을 강제한다.
 
 ## 6. AUDIT (체크포인트 통과 기준)
 
-각 Phase 종료 시 Claude Code 가 다음 4 단계 검증 후 다음 Phase 진입을 허용한다.
+각 Phase 종료 시 Claude Code 가 다음 4 단계 검증 후 다음 Phase 진입을 허용한다. 시뮬레이터 캡처는 **Phase 마무리 + ad-hoc 트리거 4 종** 에만 수행 (ADR-0011).
+
+| 트리거 | 시점 |
+|---|---|
+| Phase 마무리 (의무) | 코드 적용 완료 직후 1 회 — AUDIT 게이트 |
+| AI slop 6 종 의심 | 의심 즉시 |
+| WCAG 자동 계산과 실제 화면 차이 감지 | 의심 즉시 |
+| 사용자 명시 요청 | 요청 즉시 |
 
 1. **Responsive** — 375px / 768px / 1024px 캡처 (Expo 시뮬레이터 또는 web 빌드)
 2. **WCAG AA** — 텍스트/배경 대비비 4.5:1 이상, 모든 인터랙티브 요소 visible focus state
@@ -386,3 +394,5 @@ Bundle 이 어떤 형태로 오든 다음을 강제한다.
 - **Claude Design 이 시각, Claude Code 가 코드** — 역할을 섞지 말 것
 - **Handoff bundle 은 그대로 쓰지 말고 룰을 통과시켜라** — 시맨틱 토큰 / 8px 스케일 / Gluestack 우선
 - **각 Phase 마다 체크포인트 문서 1 개** — 다음 Phase 진입의 통행증
+- **Claude Design 선행, 시뮬레이터 캡처는 Phase 마무리 + ad-hoc 트리거** (ADR-0011)
+- **Figma 역방향 푸시는 v1 out of scope** (ADR-0007). 재검토 트리거: 디자이너 팀 합류 / 스토어 스크린샷 ≥ 5

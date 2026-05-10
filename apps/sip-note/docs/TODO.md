@@ -29,35 +29,41 @@
 | 디자인 컨텍스트 | [`./design/context.md`](./design/context.md) | 톤 / 안티패턴 / 카테고리 |
 | PRD | [`./prd-drink-diary.md`](./prd-drink-diary.md) | 화면 / 데이터 / 흐름 |
 | 디자인 시스템 | [`../DESIGN.md`](../DESIGN.md) | 토큰 / 컴포넌트 anchor |
-| 현재 화면 스크린샷 | iOS / Android 시뮬레이터 캡처 | 375px 우선, 토큰 미적용 / 불일치 부위 식별용 |
+| (선택) Phase 마무리 시뮬레이터 캡처 | iOS / Android 시뮬레이터 | Claude Design 선행 (ADR-0011) — Phase 마무리 + ad-hoc 트리거 시에만 |
 
 ### 6 단계 흐름
 
-1. **Claude Code (이 CLI)**: 현재 Phase 의 화면들을 시뮬레이터로 띄워 스크린샷
-   캡처. 빈 상태 / 로딩 / 에러 / 권한 거부 화면도 포함.
-2. **Claude Design (web)**: <https://claude.ai/design> 진입 → "Connect codebase"
-   로 `apps/sip-note/` 연결 → `docs/design/context.md` + 스크린샷 첨부 →
-   [`design/workflow.md`](./design/workflow.md) 의 Phase 별 프롬프트 그대로 붙여넣기.
-3. **Refine**: inline 코멘트 / spacing·color slider 로 다듬기. 안티패턴 6 종 재점검.
-4. **Handoff**: Claude Design 의 "Handoff to Claude Code" 실행 →
+1. **Claude Design (web)**: <https://claude.ai/design> 진입 →
+   `apps/sip-note/docs/prd-drink-diary.md` 의 화면 목록 + `DESIGN.lite.md` +
+   `docs/design/context.md` 첨부 → [`design/workflow.md`](./design/workflow.md) 의
+   Phase 별 프롬프트 붙여넣기. 가설 분기 화면 (ADR-0009) 은 가설 3 × 시안 5,
+   나머지는 단일 시안 + follow-up 으로 정제.
+2. **Refine**: inline 코멘트 / spacing·color slider 로 다듬기. 안티패턴 6 종
+   재점검. 댓글 묶음 → 1 회 호출로 토큰 절약 (ADR-0010, 화면당 ≤ 4 호출).
+3. **Handoff**: Claude Design 의 "Handoff to Claude Code" 실행 →
    `apps/sip-note/docs/design/sip-note-design-system/` 에 번들 압축 해제 (gitignore 됨,
    reference 전용). HTML 프로토타입 + 토큰 패치 + 컴포넌트 코드 포함.
-5. **Claude Code (이 CLI) 적용**: 번들 경로와 Phase 번호 명시해 적용 요청.
+4. **Claude Code (이 CLI) 적용**: 번들 경로와 Phase 번호 명시해 적용 요청.
    - 시맨틱 토큰만 / 8pt 그리드 / Gluestack 우선 / 다크 우선 룰 통과 후 적용
    - 카테고리 컬러는 `colors.cat.*` 네임스페이스 유지
    - 번들의 web 컴포넌트는 RN + NativeWind 로 변환
-6. **AUDIT + 체크포인트 문서**: 다음 4 단계 확인 후 `design/checkpoint-phase-N.md`
-   작성, 커밋 메시지 `docs(sip-note): 📚 design checkpoint phase N`.
+5. **AUDIT (Phase 마무리 + ad-hoc 트리거 시)**: 시뮬레이터로 다음 4 단계 검증.
+   ad-hoc 트리거: AI slop 의심 / WCAG 실제 화면 차이 / 사용자 명시 요청 (ADR-0011).
    - **Responsive** — 375 / 768 / 1024 px 캡처
    - **WCAG AA** — 본문 4.5:1, 큰 텍스트·인터랙티브 3:1 이상
    - **Nielsen 10** — 빈 상태 / 에러 / 되돌리기 / 시스템 상태 가시성
    - **AI slop check** — purple→blue 그라데이션, 카드 안 카드, body 16px 미만,
      hover-only, prefers-reduced-motion 무시, gradient+glassmorphism+blur 3종 결합 — 0 건
+6. **체크포인트 문서 + 커밋**: `design/checkpoint-phase-N.md` 작성 (스크린샷 /
+   AUDIT / Decisions / Open Issues / **Re-verification** 5 섹션 — Re-verification
+   에는 캡처 여부, ad-hoc 트리거 발생, 발견된 불일치 기록), 커밋 메시지
+   `docs(sip-note): 📚 design checkpoint phase N`.
 
 ### 산출물
 
 - `apps/sip-note/docs/design/checkpoint-phase-{0..4}.md` — Phase 별 1 개
-  (스크린샷 / AUDIT / Decisions / Open Issues 4 섹션)
+  (스크린샷 / AUDIT / Decisions / Open Issues / Re-verification 5 섹션 —
+  Re-verification 은 Phase 마무리 캡처 여부, ad-hoc 트리거 발생, 발견된 불일치)
 - 갱신된 `apps/sip-note/DESIGN.md` (필요 시 토큰·컴포넌트 추가)
 - 갱신된 `apps/sip-note/tailwind.config.ts` / `src/global.css` (토큰 패치 적용 시)
 - `apps/sip-note/src/components/ui-domain/` 하위 anchor 컴포넌트 보강
@@ -153,8 +159,8 @@
   - 헤더 (back / 위시리스트 ♥ 토글) + 카테고리 chip / 이름 / 주소 / 방문 횟수 + 노트 리스트 + "이 장소에 기록 추가" CTA (Compose 에 placeId prefill)
 - [x] 도시/리전 방문 통계 집계 쿼리 (Phase 4 통계에 재사용)
   - 마이그레이션 v3: `places.city`,`region` + 인덱스. `placeRepo` 에 `listCityVisitStats` / `listRegionVisitStats` / `listPlaceVisitStats` / `getVisitTotals` 추가 (derived-table join 으로 visit×note 곱셈 회피). UI 입력 필드는 디자인 체크포인트 후 별도 PR.
-- [ ] **디자인 체크포인트** — 지도 / 바텀시트 / 장소 상세 → claude design
-  - 후속 PR — Claude Design handoff 받아 적용 + `checkpoint-phase-2.md` 작성. caption-size brand light 토큰 스왑 (Phase 1 carry-over) 도 함께.
+- [x] **디자인 체크포인트** — 지도 / 바텀시트 / 장소 상세 → claude design
+  - 적용 완료 (2026-05-10). Phase 2 시그니처 = MapPin 잔 글리프 미니 (H2) + PlaceDetailHero. caption-size brand light 스왑 (Phase 1 §6 carry-over) 동시 처리. ADR-0011 의 첫 본격 적용 사이클 — `checkpoint-phase-2.md` 참조. 시뮬레이터 의무 캡처 9 컷은 Re-verification 으로 carry-over.
 - [ ] 지오펜싱 알림 — 위시리스트 장소 근처 푸시 (`expo-task-manager` + `expo-notifications`)
   - Phase 2 carry-over — 별도 PR
 
