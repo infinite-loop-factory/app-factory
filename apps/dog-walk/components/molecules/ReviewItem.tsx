@@ -12,7 +12,6 @@ import { VStack } from "../ui/vstack";
 
 interface ReviewItemProps {
   reviewData: ReviewDataType;
-  starIconColor: string;
   currentUserId?: string;
   onDelete?: (reviewId: number) => void;
   onEdit?: (reviewData: ReviewDataType) => void;
@@ -23,7 +22,6 @@ interface ReviewItemProps {
 
 export default function ReviewItem({
   reviewData,
-  starIconColor,
   currentUserId,
   onDelete,
   onEdit,
@@ -62,10 +60,7 @@ export default function ReviewItem({
             {[...Array(5)].map((_, i) => (
               <Icon
                 as={Star}
-                className={`h-4 w-4 ${i < Math.floor(reviewData.rate) ? "text-primary-500" : "text-slate-300"}`}
-                fill={
-                  i < Math.floor(reviewData.rate) ? `rgb(${starIconColor})` : ""
-                }
+                className={`h-4 w-4 ${i < Math.floor(reviewData.rate) ? "fill-yellow-400 text-yellow-400" : "fill-slate-200 text-slate-200"}`}
                 key={`review_${reviewData.id}_${i}`}
               />
             ))}

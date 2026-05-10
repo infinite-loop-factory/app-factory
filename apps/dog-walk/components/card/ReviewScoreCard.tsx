@@ -14,7 +14,6 @@ interface ReviewScoreCardProps {
   courseId: number;
   rate: number;
   count: number;
-  starIconColor: string;
   onPressReviewWrite: (event: GestureResponderEvent) => void;
 }
 
@@ -22,7 +21,6 @@ export default function ReviewScoreCard({
   courseId,
   rate,
   count,
-  starIconColor,
   onPressReviewWrite,
 }: ReviewScoreCardProps) {
   const userInfo = useAtomValue(userAtom);
@@ -42,8 +40,7 @@ export default function ReviewScoreCard({
           {[...Array(5)].map((_, i) => (
             <Icon
               as={Star}
-              className={`h-4 w-4 ${i < Math.floor(rate) ? "text-primary-500" : "text-slate-300"}`}
-              fill={i < Math.floor(rate) ? `rgb(${starIconColor})` : ""}
+              className={`h-4 w-4 ${i < Math.floor(rate) ? "fill-yellow-400 text-yellow-400" : "fill-slate-200 text-slate-200"}`}
               key={`rate_${i}_${rate}`}
             />
           ))}
