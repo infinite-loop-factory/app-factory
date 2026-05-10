@@ -30,6 +30,7 @@
     "ignoreUnknown": false,
     "includes": [
       "**",
+      "!**/.agents/hooks",
       "!**/.claude/hooks",
       "!**/.codex/hooks",
       "!**/.cursor/hooks",
