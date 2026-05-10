@@ -46,29 +46,53 @@
   "tasting": {
     "feed": {
       "title": "Tasting Feed",
-      "fab": "Add Note"
+      "fab": "Add Note",
+      "greeting": "Welcome back",
+      "searchPlaceholder": "Search notes, tags, memo",
+      "filterAll": "All",
+      "noResultsTitle": "No results",
+      "noResultsBody": "Try a different search or category",
+      "stats": {
+        "thisWeek": "This week",
+        "avgScore": "Avg score",
+        "yearTotal": "Year total"
+      }
     },
     "write": {
       "title": "New Note",
       "editTitle": "Edit Note"
     },
     "detail": {
-      "title": "Note Detail"
+      "title": "Note Detail",
+      "notFound": "Note not found",
+      "sectionInfo": "Info",
+      "photosCount": "{{count}} photos",
+      "noPhotos": "None"
     },
     "field": {
       "name": "Name",
       "namePlaceholder": "Enter beverage name",
       "category": "Category",
       "score": "Score",
+      "scoreHint": "0.5 step · whisky glass",
       "tags": "Tags",
       "tagsPlaceholder": "Enter tags",
       "memo": "Memo",
       "memoPlaceholder": "Write your tasting notes freely",
       "price": "Price",
+      "priceHint": "Optional",
       "priceUnitGlass": "Glass",
       "priceUnitBottle": "Bottle",
       "date": "Date",
-      "photos": "Photos"
+      "photos": "Photos",
+      "photosHint": "Optional · max 5"
+    },
+    "a11y": {
+      "removePhoto": "Remove photo",
+      "removeTag": "Remove {{label}}",
+      "scorePoint": "{{score}} points",
+      "score": "Score {{score}}",
+      "photoIndex": "Photo {{index}}"
     },
     "action": {
       "takePhoto": "Take Photo",
@@ -215,5 +239,9 @@
       "title": "Toward your first badge",
       "body": "Earn badges as you log"
     }
+  },
+  "notFound": {
+    "title": "Page not found",
+    "cta": "Go back home"
   }
 }

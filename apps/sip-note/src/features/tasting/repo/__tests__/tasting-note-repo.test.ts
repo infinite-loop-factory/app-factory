@@ -5,7 +5,7 @@ jest.mock("@/db/client", () => ({
 }));
 
 import { getDb } from "@/db/client";
-import { create, get, list, remove, update } from "../tastingNoteRepo";
+import { create, get, list, remove, update } from "../tasting-note-repo";
 
 type MockDb = {
   runAsync: jest.Mock;

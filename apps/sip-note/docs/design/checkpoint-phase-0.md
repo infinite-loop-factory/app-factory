@@ -1,7 +1,7 @@
 # Phase 0 — Design Checkpoint
 
 - Date: 2026-04-26
-- Claude Design bundle: [`docs/sip-note-design-system/`](./sip-note-design-system/) (README + chats + project)
+- Claude Design bundle: [`docs/design/sip-note-design-system/`](./sip-note-design-system/) (README + chats + project)
 - Branch: `feature/sip-note-foundation`
 
 ## Scope
@@ -48,7 +48,7 @@ TODO Phase 0 마지막 항목 **"디자인 시스템 토큰 정리 — claude de
 
 ## Open issues / Carry-over
 
-- **Phase 1 시각 회귀** — Home / Compose / Detail 화면 미구현. 다음 체크포인트 (`design-checkpoint-phase-1.md`) 에서 actual 스크린샷 + brand-on-bg 라이트 측정값 추가.
+- **Phase 1 시각 회귀** — Home / Compose / Detail 화면 미구현. 다음 체크포인트 (`checkpoint-phase-1.md`) 에서 actual 스크린샷 + brand-on-bg 라이트 측정값 추가.
 - **anchor 컴포넌트 6 종** (`Card` / `FAB` / `BottomSheet` / `ScoreSlider` / `Tag` / `MapPin`) — 토큰만 확정. 실제 구현은 Phase 1+ 에서.
 - **JetBrains Mono** — `fontFamily.mono` 에 fallback 으로 등록했지만 실제 ttf 미번들. 필요해지면 Phase 1 에서 추가.
 - **`Sip Note Design System.html`** (handoff 의 두 번째 HTML) — 화면 미리보기 / Voice 가이드 등 추가 정보가 들어있을 것. 추후 참조 가능.

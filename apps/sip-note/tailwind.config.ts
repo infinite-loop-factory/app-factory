@@ -120,7 +120,7 @@ export default {
           "system-ui",
           "sans-serif",
         ],
-        mono: ["JetBrainsMono", "SpaceMono", "ui-monospace", "monospace"],
+        mono: ["JetBrainsMono", "ui-monospace", "monospace"],
       },
       fontSize: {
         display: ["34px", { lineHeight: "1.18", letterSpacing: "-0.02em" }],
