@@ -16,8 +16,10 @@ import {
   useState,
 } from "react";
 import { Pressable, Text, View } from "react-native";
+import { PlaceCategoryChip } from "@/features/place/components/place-category-chip";
 import * as placeRepo from "@/features/place/repo/place-repo";
 import * as tastingRepo from "@/features/tasting/repo/tasting-note-repo";
+import { useThemeColors } from "@/hooks/use-theme-colors";
 import i18n from "@/i18n";
 import { haptic } from "@/lib/haptics";
 
@@ -34,6 +36,7 @@ export const PlaceSummarySheet = forwardRef<
   PlaceSummarySheetProps
 >(({ onViewDetail }, ref) => {
   const sheetRef = useRef<BottomSheetModal>(null);
+  const colors = useThemeColors();
   const [place, setPlace] = useState<Place | null>(null);
   const [latestNote, setLatestNote] = useState<TastingNote | null>(null);
 
@@ -72,7 +75,9 @@ export const PlaceSummarySheet = forwardRef<
   return (
     <BottomSheetModal
       backdropComponent={renderBackdrop}
+      backgroundStyle={{ backgroundColor: colors.surfaceRaised }}
       enablePanDownToClose
+      handleIndicatorStyle={{ backgroundColor: colors.borderStrong }}
       index={0}
       ref={sheetRef}
       snapPoints={snapPoints}
@@ -80,16 +85,8 @@ export const PlaceSummarySheet = forwardRef<
       <BottomSheetView className="px-4 pt-3 pb-8">
         {place ? (
           <View>
-            {place.category && (
-              <View className="mb-2 flex-row">
-                <View className="rounded-pill bg-surface-sunken px-2 py-0.5">
-                  <Text className="font-text text-caption text-text-muted">
-                    {i18n.t(`placeCategory.${place.category}` as const)}
-                  </Text>
-                </View>
-              </View>
-            )}
-            <Text className="font-semibold font-text text-h3 text-text">
+            {place.category && <PlaceCategoryChip category={place.category} />}
+            <Text className="mt-2 font-semibold font-text text-h3 text-text">
               {place.name}
             </Text>
             {place.address && (
@@ -102,27 +99,29 @@ export const PlaceSummarySheet = forwardRef<
             </Text>
 
             {latestNote && (
-              <View className="mt-4 rounded-md border border-border-subtle bg-surface-sunken p-3">
-                <Text className="font-text text-caption text-text-muted">
-                  {i18n.t("place.detail.recentNote")}
+              <View className="mt-4">
+                <Text className="font-semibold font-text text-overline text-text-subtle tracking-wider">
+                  {i18n.t("place.detail.recentNote").toUpperCase()}
                 </Text>
-                <Text
-                  className="mt-1 font-medium font-text text-body text-text"
-                  numberOfLines={1}
-                >
-                  {latestNote.name}
-                </Text>
-                {latestNote.score != null && (
-                  <Text className="mt-0.5 font-text text-caption text-text-muted">
-                    ★ {latestNote.score}
+                <View className="mt-1 flex-row items-baseline gap-2">
+                  <Text
+                    className="flex-1 font-medium font-text text-body text-text"
+                    numberOfLines={1}
+                  >
+                    {latestNote.name}
                   </Text>
-                )}
+                  {latestNote.score != null && (
+                    <Text className="font-text text-bodySm text-text-muted">
+                      ★ {latestNote.score}
+                    </Text>
+                  )}
+                </View>
               </View>
             )}
 
             <Pressable
               accessibilityRole="button"
-              className="mt-4 h-12 items-center justify-center rounded-md bg-brand"
+              className="mt-5 h-12 items-center justify-center rounded-md bg-brand active:opacity-80"
               onPress={handleViewDetail}
             >
               <Text className="font-medium font-text text-body text-text-onBrand">

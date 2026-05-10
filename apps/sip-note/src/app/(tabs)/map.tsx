@@ -2,6 +2,7 @@ import type { PlaceSummarySheetRef } from "@/components/place-summary-sheet";
 import type { Place, PlaceCategory } from "@/features/place/repo/types";
 
 import { useFocusEffect, useRouter } from "expo-router";
+import { useColorScheme } from "nativewind";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import MapView, { Marker } from "react-native-maps";
@@ -155,6 +156,10 @@ type FilterChipProps = {
 };
 
 function FilterChip({ label, active, onPress }: FilterChipProps) {
+  // caption text-brand light 4.18:1 → brand-strong 6.89:1 swap (Phase 1 §6).
+  const { colorScheme } = useColorScheme();
+  const activeText =
+    colorScheme === "light" ? "text-brand-strong" : "text-brand";
   return (
     <Pressable
       accessibilityRole="button"
@@ -169,7 +174,7 @@ function FilterChip({ label, active, onPress }: FilterChipProps) {
       <Text
         className={
           active
-            ? "font-medium font-text text-brand text-caption"
+            ? `font-medium font-text text-caption ${activeText}`
             : "font-text text-caption text-text-muted"
         }
       >

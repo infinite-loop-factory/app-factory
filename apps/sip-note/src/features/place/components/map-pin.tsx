@@ -1,6 +1,7 @@
 import type { PlaceCategory } from "@/features/place/repo/types";
 
 import { View } from "react-native";
+import { GlassVessel } from "@/components/ui-domain/glass-vessel";
 
 const FILL: Record<PlaceCategory, string> = {
   bar: "bg-place-bar",
@@ -25,9 +26,29 @@ export type MapPinProps = {
   isWishlist: boolean;
 };
 
+/**
+ * Map pin — Phase 2 signature: 잔 글리프 미니 (visited) / 빈 핀 + dot (wishlist).
+ * visited: place.* 채움 + 1px bg outline + 중앙 GlassVessel (Phase 1 시그니처 연장).
+ * wishlist: bg 표면 + place.* 2px outline + 중앙 dot.
+ */
 export function MapPin({ category, isWishlist }: MapPinProps) {
   const c = category ?? "etc";
-  const visitedClass = `h-7 w-7 rounded-full border-2 border-bg ${FILL[c]}`;
-  const wishlistClass = `h-7 w-7 rounded-full border-2 bg-bg ${RING[c]}`;
-  return <View className={isWishlist ? wishlistClass : visitedClass} />;
+
+  if (isWishlist) {
+    return (
+      <View
+        className={`h-7 w-7 items-center justify-center rounded-pill border-2 bg-bg ${RING[c]}`}
+      >
+        <View className={`h-2 w-2 rounded-pill ${FILL[c]}`} />
+      </View>
+    );
+  }
+
+  return (
+    <View
+      className={`h-7 w-7 items-center justify-center rounded-pill border border-bg ${FILL[c]}`}
+    >
+      <GlassVessel animate={false} fill={1} size={12} />
+    </View>
+  );
 }
