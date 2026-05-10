@@ -181,7 +181,7 @@ See `resources/memory-schema.md` for memory file formats.
 
 ### Agent-to-Agent Review Loop (PHASE 4.5)
 
-After each agent completes, enter an iterative review loop — not a single-pass verification.
+After each agent completes, enter an iterative review loop, not a single-pass verification.
 
 ### Loop Flow
 
@@ -210,7 +210,7 @@ Before requesting external review, the implementation agent must:
 ⚠️ **Quality judgment is NOT performed in this step.**
 Design quality, architecture alignment, and acceptance criteria satisfaction
 are evaluated exclusively in [3] Cross-Review by the QA agent.
-Reason: Self-evaluation bias — agents consistently overrate their own output
+Reason: Self-evaluation bias causes agents to consistently overrate their own output
 (ref: Anthropic harness design research).
 
 **[2] Automated Verify**:

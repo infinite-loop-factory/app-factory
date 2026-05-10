@@ -21,8 +21,9 @@ import {
   writeFileSync,
 } from "node:fs";
 import { basename, dirname, join } from "node:path";
-import { toPosixPath } from "./fs-utils.ts";
-import { makePromptOutput, resolveGitRoot, type Vendor } from "./types.ts";
+import { resolveGitRoot, toPosixPath } from "./fs-utils.ts";
+import { makePromptOutput } from "./hook-output.ts";
+import type { Vendor } from "./types.ts";
 
 const MAX_SKILLS = 3;
 const SESSION_TTL_MS = 60 * 60 * 1000;

@@ -62,7 +62,9 @@ Execute by naming the workflow in your prompt. Keywords are auto-detected via ho
 | brainstorm | `brainstorm.md` | Design-first ideation |
 | review | `review.md` | QA audit |
 | debug | `debug.md` | Root cause + minimal fix |
+| deepsec | `deepsec.md` | Drive `oma-deepsec` end-to-end (setup / scan / pr-review / matchers / triage) |
 | scm | `scm.md` | SCM + Git operations + Conventional Commits |
+| docs | `docs.md` | Documentation drift verify + sync |
 
 To execute: read and follow `.agents/workflows/{name}.md` step by step.
 
@@ -75,8 +77,8 @@ Deactivate: say "workflow done".
 
 ## Rules
 
-1. **Do not modify `.agents/` files** — SSOT protection
-2. Workflows execute via keyword detection or explicit naming — never self-initiated
+1. **Do not modify `.agents/` files** (SSOT protection).
+2. Workflows execute via keyword detection or explicit naming, never self-initiated.
 3. Response language follows `.agents/oma-config.yaml`
 
 ## Project Rules

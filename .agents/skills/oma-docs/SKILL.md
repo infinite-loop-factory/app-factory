@@ -16,9 +16,9 @@ Detect broken references in `docs/**/*.md` (verify mode) and propose LLM-generat
 - A workflow hook checks `docs.auto_verify: true` and runs `oma docs verify --json` at completion.
 
 ### When to use
-- After a refactor, rename, or file deletion — to find stale references in docs.
-- Before a release — to confirm that CLI commands, file paths, and config keys in docs still exist.
-- After a significant git diff — to discover which docs reference the changed files and may need updating.
+- After a refactor, rename, or file deletion, to find stale references in docs.
+- Before a release, to confirm that CLI commands, file paths, and config keys in docs still exist.
+- After a significant git diff, to discover which docs reference the changed files and may need updating.
 - Routine drift check on any docs-heavy repo.
 
 ### When NOT to use
@@ -44,15 +44,15 @@ Detect broken references in `docs/**/*.md` (verify mode) and propose LLM-generat
 - Docs modified only on explicit user approval; `doc-refs.json` regenerated after applies.
 
 ### Dependencies
-- `cli/commands/docs/extract.ts` — markdown AST + L2 pattern extractor.
-- `cli/commands/docs/resolve.ts` — deterministic broken-ref checker.
-- `cli/commands/docs/reporter.ts` — markdown/JSON report renderer (LLM-optional).
-- `cli/commands/docs/sync-propose.ts` — git diff intake, reverse lookup, LLM patch proposer with secret redaction.
-- `cli/io/llm.ts` — thin Anthropic Messages wrapper used by reporter and sync proposer.
-- `docs/generated/doc-refs.json` — single-direction reference index (git-tracked, regenerated on every verify run).
-- `docs/generated/url-drift.json` — lychee-produced URL drift report (written by background lychee spawn; gitignored or tracked at user discretion).
-- `lychee` — external Rust tool for URL link checking. Detected on PATH; install via `brew install lychee` or see https://github.com/lycheeverse/lychee#installation. Optional but recommended.
-- `.agents/oma-config.yaml` — `docs.auto_verify` (workflow hook opt-in) and `docs.check_urls` (URL checking on/off, default true) toggles.
+- `cli/commands/docs/extract.ts`: markdown AST + L2 pattern extractor.
+- `cli/commands/docs/resolve.ts`: deterministic broken-ref checker.
+- `cli/commands/docs/reporter.ts`: markdown/JSON report renderer (LLM-optional).
+- `cli/commands/docs/sync-propose.ts`: git diff intake, reverse lookup, LLM patch proposer with secret redaction.
+- `cli/io/llm.ts`: thin Anthropic Messages wrapper used by reporter and sync proposer.
+- `docs/generated/doc-refs.json`: single-direction reference index (git-tracked, regenerated on every verify run).
+- `docs/generated/url-drift.json`: lychee-produced URL drift report (written by background lychee spawn; gitignored or tracked at user discretion).
+- `lychee`: external Rust tool for URL link checking. Detected on PATH; install via `brew install lychee` or see https://github.com/lycheeverse/lychee#installation. Optional but recommended.
+- `.agents/oma-config.yaml`: `docs.auto_verify` (workflow hook opt-in) and `docs.check_urls` (URL checking on/off, default true) toggles.
 
 ### Control-flow features
 - Mode is selected from the first argument: `verify` or `sync`.
@@ -112,10 +112,10 @@ Detect broken references in `docs/**/*.md` (verify mode) and propose LLM-generat
 | Notify hook summary | `NOTIFY` | 1-3 line stdout summary for workflow hooks |
 
 ### Tools and instruments
-- `cli/commands/docs/extract.ts` — `remark` + `unified` markdown AST, L2 pattern extraction, escape hatch filter, `docs/generated/doc-refs.json` writer.
-- `cli/commands/docs/resolve.ts` — case-sensitive file existence, `which` for CLI tokens, `package.json` scripts lookup, ripgrep/git grep for env vars, `oma-config.yaml` deep-path check. Per-target dedupe caches (cli by first token, env, config) and per-directory listing cache for file resolution. URL kind is filtered out by the verify command and delegated to lychee.
-- `cli/commands/docs/reporter.ts` — deterministic markdown + JSON renderer. **No LLM call.** Friendly summary, severity tagging, fix prioritization are the host LLM's responsibility.
-- `cli/commands/docs/sync-propose.ts` — git diff intake, reverse index build, secret-pattern + gitignore file exclusion. Returns candidate docs with matched refs only. **No LLM call.** Patch synthesis is the host LLM's responsibility.
+- `cli/commands/docs/extract.ts`: `remark` + `unified` markdown AST, L2 pattern extraction, escape hatch filter, `docs/generated/doc-refs.json` writer.
+- `cli/commands/docs/resolve.ts`: case-sensitive file existence, `which` for CLI tokens, `package.json` scripts lookup, ripgrep/git grep for env vars, `oma-config.yaml` deep-path check. Per-target dedupe caches (cli by first token, env, config) and per-directory listing cache for file resolution. URL kind is filtered out by the verify command and delegated to lychee.
+- `cli/commands/docs/reporter.ts`: deterministic markdown + JSON renderer. **No LLM call.** Friendly summary, severity tagging, fix prioritization are the host LLM's responsibility.
+- `cli/commands/docs/sync-propose.ts`: git diff intake, reverse index build, secret-pattern + gitignore file exclusion. Returns candidate docs with matched refs only. **No LLM call.** Patch synthesis is the host LLM's responsibility.
 - External: [`lychee`](https://github.com/lycheeverse/lychee) (background URL link checking; install via `brew install lychee`).
 
 ### Host-LLM contract
@@ -126,7 +126,7 @@ After `oma docs verify --json`:
 1. Read the JSON drift report.
 2. Group findings by severity / urgency (host-LLM judgment).
 3. Suggest fixes per finding, prioritizing files most central to the project.
-4. If the user asks for natural-language summary, host LLM produces it from the JSON — never from cached prose.
+4. If the user asks for natural-language summary, host LLM produces it from the JSON, never from cached prose.
 
 After `oma docs sync <range> --json`:
 1. Read the candidate doc list (each entry: `{ doc, changedFiles, matchedRefs }`).
@@ -136,7 +136,7 @@ After `oma docs sync <range> --json`:
 
 ### Canonical command path
 
-**verify mode** — drift check against the current codebase:
+**verify mode** runs a drift check against the current codebase:
 
 ```bash
 # Default: scan all docs/**/*.md, render markdown to stdout.
@@ -166,7 +166,7 @@ oma docs verify --urls-sync
 # and does NOT affect this exit code.
 ```
 
-**sync mode** — propose patches for docs affected by a git diff (always interactive, never auto-applies):
+**sync mode** proposes patches for docs affected by a git diff (always interactive, never auto-applies):
 
 ```bash
 # Default: staged changes (--cached), fallback HEAD~1..HEAD
@@ -180,7 +180,7 @@ oma docs sync main..feature-branch
 # Sync regenerates docs/generated/doc-refs.json after applying any patches.
 ```
 
-**Workflow hook (opt-in)** — runs verify automatically at workflow completion when `docs.auto_verify: true` in `oma-config.yaml`:
+**Workflow hook (opt-in)** runs verify automatically at workflow completion when `docs.auto_verify: true` in `oma-config.yaml`:
 
 ```bash
 # Hook command emitted by /scm, /work, /ultrawork
@@ -210,22 +210,22 @@ oma docs verify --json
 
 ### Guardrails
 
-1. **Never modify `.agents/`** — CLAUDE.md SSOT protection applies in all modes.
-2. **Never auto-apply sync patches** — sync is always interactive; `[y]` confirm required per doc.
-3. **LLM unavailable → graceful degradation** — verify falls back to raw JSON; sync falls back to candidate-list-only (no proposals). Neither mode blocks on LLM availability.
-4. **Response language follows `oma-config.yaml` `language`** — user-facing report text is localized; code, paths, JSON keys, and CLI commands stay in English.
-5. **Secret-bearing files excluded from sync output** — `.env*`, `*.pem`, `*.key`, `id_rsa*`, and gitignored files never appear in candidate `changedFiles` lists. Host LLM never sees secret file paths.
-6. **URL link checking delegated to lychee** — when `docs.check_urls=true` (default), URL refs are checked by `lychee` running in the background; results land in `docs/generated/url-drift.json`. If `lychee` is missing, an install hint is printed and URL checking is skipped (no internal HEAD fallback).
-7. **No direct LLM API calls from the CLI** — the CLI never imports vendor SDKs, never reads API keys, never makes outbound LLM requests. All synthesis, patch drafting, and natural-language framing is the host LLM's responsibility (mirrors `oma-scholar`'s pattern). This makes `oma-docs` vendor-agnostic: works identically under Claude Code / Codex / Gemini / Qwen / Antigravity.
-7. **Hook is warn-only in v1** — broken refs never block workflow completion; `docs.auto_verify: false` by default (explicit opt-in required).
-8. **Escape hatch respected** — `<!-- oma-docs:ignore-start -->` / `<!-- oma-docs:ignore-end -->` blocks and frontmatter `oma-docs: skip` are honored; no ref extraction from ignored regions.
+1. **Never modify `.agents/`**: CLAUDE.md SSOT protection applies in all modes.
+2. **Never auto-apply sync patches**: sync is always interactive; `[y]` confirm required per doc.
+3. **LLM unavailable → graceful degradation**: verify falls back to raw JSON; sync falls back to candidate-list-only (no proposals). Neither mode blocks on LLM availability.
+4. **Response language follows `oma-config.yaml` `language`**: user-facing report text is localized; code, paths, JSON keys, and CLI commands stay in English.
+5. **Secret-bearing files excluded from sync output**: `.env*`, `*.pem`, `*.key`, `id_rsa*`, and gitignored files never appear in candidate `changedFiles` lists. Host LLM never sees secret file paths.
+6. **URL link checking delegated to lychee**: when `docs.check_urls=true` (default), URL refs are checked by `lychee` running in the background; results land in `docs/generated/url-drift.json`. If `lychee` is missing, an install hint is printed and URL checking is skipped (no internal HEAD fallback).
+7. **No direct LLM API calls from the CLI**: the CLI never imports vendor SDKs, never reads API keys, never makes outbound LLM requests. All synthesis, patch drafting, and natural-language framing is the host LLM's responsibility (mirrors `oma-scholar`'s pattern). This makes `oma-docs` vendor-agnostic: works identically under Claude Code / Codex / Gemini / Qwen / Antigravity.
+7. **Hook is warn-only in v1**: broken refs never block workflow completion; `docs.auto_verify: false` by default (explicit opt-in required).
+8. **Escape hatch respected**: `<!-- oma-docs:ignore-start -->` / `<!-- oma-docs:ignore-end -->` blocks and frontmatter `oma-docs: skip` are honored; no ref extraction from ignored regions.
 
 ### v1 scope note
 v1 covers `verify` and `sync` (broken-only classification, L2 ref extraction). The following are explicitly deferred to v2: `create` mode (generate missing docs), multilingual sync (deeper `oma-translator` integration), L3 symbol-level extraction (Tree-sitter/LSP), GitHub Action wrapper, `block` hook mode.
 
 ## References
-- Design doc: `docs/plans/designs/008-oma-docs.md` — full architecture, schema spec, decision log, edge cases.
+- Design doc: `docs/plans/designs/008-oma-docs.md` (full architecture, schema spec, decision log, edge cases).
 - Schema spec: `doc-refs.json` v1 schema defined in design doc § doc-refs.json Schema.
 - Workflow hook integration: design doc § Workflow Hook Integration.
-- Migration: `deepinit` Step 6 retirement — design doc § Migration: deepinit Step 6.
+- Migration: `deepinit` Step 6 retirement, design doc § Migration: deepinit Step 6.
 - Adjacent skills: `oma-translator` (v2 multilingual), `oma-skill-creator` (SSL-lite validation).
