@@ -87,7 +87,7 @@ export function LocationPermissionGate() {
         className="flex-1 items-center justify-end bg-background-dark/60 px-4 pb-10"
         style={{ backgroundColor: "rgba(15, 23, 42, 0.55)" }}
       >
-        <Box className="w-full max-w-md gap-4 rounded-[28px] border border-outline-100 bg-background-0 p-6 shadow-soft-2">
+        <Box className="w-full max-w-md gap-4 rounded-2xl border border-outline-100 bg-background-0 p-6 shadow-soft-2">
           <Text className="font-bold text-primary-600 text-xs uppercase tracking-[1.5px]">
             {i18n.t("location.disclosure.badge")}
           </Text>
@@ -112,13 +112,15 @@ export function LocationPermissionGate() {
               </ButtonText>
             </Button>
             <Button
-              action="default"
-              className="h-12 rounded-2xl border border-outline-200 bg-background-0"
+              action="secondary"
+              className="h-12 rounded-2xl border border-outline-200 bg-background-0 data-[active=true]:bg-background-100 data-[hover=true]:bg-background-50"
               disabled={isRequesting}
               onPress={() => setVisible(false)}
               variant="outline"
             >
-              <ButtonText>{i18n.t("location.disclosure.secondary")}</ButtonText>
+              <ButtonText className="font-semibold text-typography-900">
+                {i18n.t("location.disclosure.secondary")}
+              </ButtonText>
             </Button>
           </Box>
         </Box>

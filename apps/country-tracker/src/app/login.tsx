@@ -6,8 +6,10 @@ import * as QueryParams from "expo-auth-session/build/QueryParams";
 import * as Linking from "expo-linking";
 import { Stack, useRouter } from "expo-router";
 import * as WebBrowser from "expo-web-browser";
-import { Chrome, Facebook } from "lucide-react-native";
+import { Github } from "lucide-react-native";
 import { useEffect, useState } from "react";
+import { AppleIcon } from "@/components/apple-icon";
+import { GoogleIcon } from "@/components/google-icon";
 import { Box } from "@/components/ui/box";
 import {
   Button,
@@ -15,7 +17,6 @@ import {
   ButtonSpinner,
   ButtonText,
 } from "@/components/ui/button";
-import { Divider } from "@/components/ui/divider";
 import { Heading } from "@/components/ui/heading";
 import { Image } from "@/components/ui/image";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -38,25 +39,26 @@ const redirectTo = makeRedirectUri();
 const OAUTH_PROVIDERS: {
   key: Provider;
   labelKey: string;
-  icon?: typeof Chrome | typeof Facebook;
-  variant: "apple" | "google" | "facebook";
+  icon?: typeof GoogleIcon | typeof Github | typeof AppleIcon;
+  variant: "apple" | "google" | "github";
 }[] = [
   {
     key: "apple",
     labelKey: "login.apple",
+    icon: AppleIcon,
     variant: "apple",
   },
   {
     key: "google",
     labelKey: "login.google",
-    icon: Chrome,
+    icon: GoogleIcon,
     variant: "google",
   },
   {
-    key: "facebook",
-    labelKey: "login.facebook",
-    icon: Facebook,
-    variant: "facebook",
+    key: "github",
+    labelKey: "login.github",
+    icon: Github,
+    variant: "github",
   },
 ];
 
@@ -87,18 +89,11 @@ const createSessionFromUrl = async (url: string) => {
 const getButtonStyles = (variant: string) => {
   switch (variant) {
     case "apple":
+    case "github":
       return {
         button:
-          "h-12 w-full rounded-xl border border-typography-900 bg-typography-900 px-4",
+          "h-12 w-full rounded-xl border border-typography-900 bg-typography-900 px-4 data-[hover=true]:bg-typography-800 data-[active=true]:bg-typography-700 data-[focus=true]:bg-typography-900",
         buttonStyle: undefined,
-        buttonVariant: "solid" as const,
-        icon: "text-typography-0",
-        text: "ml-3 font-bold text-lg text-typography-0",
-      };
-    case "facebook":
-      return {
-        button: "h-12 w-full rounded-xl px-4",
-        buttonStyle: { backgroundColor: "#1877F2" },
         buttonVariant: "solid" as const,
         icon: "text-typography-0",
         text: "ml-3 font-bold text-lg text-typography-0",
@@ -106,7 +101,7 @@ const getButtonStyles = (variant: string) => {
     default: // google
       return {
         button:
-          "h-12 w-full rounded-xl border border-outline-200 bg-background-0 px-4",
+          "h-12 w-full rounded-xl border border-outline-200 bg-background-0 px-4 data-[hover=true]:bg-background-50 data-[active=true]:bg-background-100",
         buttonStyle: undefined,
         buttonVariant: "outline" as const,
         icon: "text-typography-700",
@@ -139,8 +134,14 @@ function OAuthProviderButton({
     >
       <Box className="w-full flex-row items-center justify-center">
         {isPending && <ButtonSpinner className={styles.icon} />}
-        {!isPending && provider.icon && (
-          <ButtonIcon as={provider.icon} className={styles.icon} size="md" />
+        {!isPending && provider.variant === "google" && (
+          <GoogleIcon size={20} />
+        )}
+        {!isPending && provider.variant === "apple" && (
+          <AppleIcon color="#FFFFFF" size={18} />
+        )}
+        {!isPending && provider.variant === "github" && (
+          <ButtonIcon as={Github} className={styles.icon} size="md" />
         )}
         <ButtonText className={styles.text}>
           {i18n.t(provider.labelKey)}
@@ -219,28 +220,23 @@ export default function LoginPage() {
   return (
     <>
       <Stack.Screen options={{ headerShown: false }} />
-      <Box className="flex-1 items-center justify-center bg-background-light px-4 py-8 dark:bg-background-dark">
-        <Box className="absolute -top-16 -left-20 h-56 w-56 rounded-full bg-primary-100 opacity-40" />
-        <Box className="absolute -right-20 -bottom-16 h-56 w-56 rounded-full bg-primary-200 opacity-30" />
-
-        <Box className="w-full max-w-sm overflow-hidden rounded-3xl border border-outline-100 bg-background-0 shadow-soft-2">
-          <Box className="h-1.5 w-full bg-primary-300" />
+      <Box className="flex-1 items-center justify-center bg-background-50 px-4 py-8">
+        <Box className="w-full max-w-sm overflow-hidden rounded-2xl border border-outline-100 bg-background-0 shadow-soft-1">
+          <Box className="h-1.5 w-full bg-primary-500" />
 
           <VStack className="items-center px-6 py-8" space="xl">
-            <Box className="h-14 w-14 items-center justify-center rounded-2xl bg-primary-50">
-              <Image
-                alt="country tracker logo"
-                className="h-8 w-8"
-                resizeMode="contain"
-                source={require("@/assets/images/icon.png")}
-              />
-            </Box>
+            <Image
+              alt="country tracker logo"
+              className="h-16 w-16"
+              resizeMode="contain"
+              source={require("@/assets/images/icon.png")}
+            />
 
-            <VStack className="w-full items-center" space="sm">
-              <Heading className="text-center font-bold text-4xl text-typography-950 dark:text-typography-0">
+            <VStack className="w-full items-center" space="xs">
+              <Heading className="text-center font-bold text-3xl text-typography-900">
                 {i18n.t("login.hero-title")}
               </Heading>
-              <Text className="text-center text-typography-600 text-xl dark:text-typography-300">
+              <Text className="text-center text-base text-typography-600">
                 {i18n.t("login.hero-subtitle")}
               </Text>
             </VStack>
@@ -266,9 +262,7 @@ export default function LoginPage() {
               )}
             </VStack>
 
-            <Divider className="bg-outline-100" />
-
-            <Box className="flex-row items-center justify-center gap-5">
+            <Box className="flex-row items-center justify-center gap-6">
               <Button
                 action="default"
                 className="px-0"
@@ -289,12 +283,6 @@ export default function LoginPage() {
                   {i18n.t("login.privacy")}
                 </Text>
               </Button>
-            </Box>
-
-            <Box className="mt-1 flex-row items-center gap-2">
-              <Text className="text-center text-typography-500 text-xs">
-                {i18n.t("login.security-note")}
-              </Text>
             </Box>
           </VStack>
         </Box>

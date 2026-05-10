@@ -17,7 +17,7 @@ export function ErrorBanner({ message }: ErrorBannerProps) {
   if (!message) return null;
   return (
     <FormControlError
-      className="items-start rounded-3xl border px-4 py-3"
+      className="items-start rounded-xl border px-4 py-3"
       style={{ borderColor: errorColor, backgroundColor: errorSurface }}
     >
       <FormControlErrorIcon as={AlertCircle} size="sm" />

@@ -1,7 +1,8 @@
 {
   "common": {
     "cancel": "취소",
-    "done": "완료"
+    "done": "완료",
+    "save": "저장"
   },
   "welcome": "환영합니다",
 
@@ -269,6 +270,7 @@
     "apple": "Apple로 로그인",
     "google": "구글 로그인",
     "facebook": "페이스북 로그인",
+    "github": "GitHub 로그인",
     "terms": "이용약관",
     "privacy": "개인정보처리방침",
     "security-note": "OAuth 로그인만 지원하며 비밀번호는 앱에 저장되지 않습니다.",

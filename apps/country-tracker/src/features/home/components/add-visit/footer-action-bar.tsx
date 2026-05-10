@@ -26,7 +26,7 @@ export function FooterActionBar({
           </Text>
         </Pressable>
         <Pressable
-          className={`flex-[1.5] flex-row items-center justify-center gap-2 rounded-xl bg-primary-300 px-5 py-3.5 shadow-lg shadow-primary-300/20 active:opacity-90 ${isSubmitDisabled ? "opacity-50" : ""}`}
+          className={`flex-[1.5] flex-row items-center justify-center gap-2 rounded-xl bg-primary-500 px-5 py-3.5 active:bg-primary-600 ${isSubmitDisabled ? "opacity-50" : ""}`}
           disabled={isSubmitDisabled || isSubmitting}
           onPress={onSubmit}
         >

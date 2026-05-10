@@ -14,7 +14,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   splash: {
     image: "./src/assets/images/splash.png",
     resizeMode: "contain",
-    backgroundColor: "#ffffff",
+    backgroundColor: "#FAF7F2",
   },
   ios: {
     supportsTablet: true,
@@ -32,7 +32,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   android: {
     adaptiveIcon: {
       foregroundImage: "./src/assets/images/adaptive-icon.png",
-      backgroundColor: "#ffffff",
+      backgroundColor: "#FAF7F2",
     },
     package: "com.gracefullight.countrytracker",
   },

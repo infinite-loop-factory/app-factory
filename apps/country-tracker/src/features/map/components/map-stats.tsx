@@ -12,25 +12,27 @@ interface MapStatsProps {
 export function MapStats({ countryCount, totalDays }: MapStatsProps) {
   const [accentColor] = useThemeColor(["primary-500"]);
 
+  const [mutedColor] = useThemeColor(["typography-500"]);
+
   return (
     <Box className="flex-row gap-3">
-      <Box className="flex-1 flex-col items-center gap-1 rounded-xl border border-outline-200 bg-background-50 p-3 text-center dark:border-outline-700 dark:bg-background-800/50">
-        <Text className="font-bold text-2xl text-typography-900 leading-tight">
+      <Box className="flex-[2] flex-col items-center gap-1 rounded-xl border border-outline-200 bg-background-50 p-4 text-center dark:border-outline-700 dark:bg-background-800/50">
+        <Text className="font-bold text-3xl text-typography-900 leading-tight">
           {countryCount}
         </Text>
-        <Box className="flex-row items-center gap-1.5 opacity-80">
-          <Globe color={accentColor} size={14} />
-          <Text className="font-medium text-typography-600 text-xs uppercase tracking-wide dark:text-typography-300">
+        <Box className="flex-row items-center gap-1.5">
+          <Globe color={accentColor} size={16} />
+          <Text className="font-semibold text-typography-700 text-xs uppercase tracking-wide dark:text-typography-300">
             {i18n.t("map.stats.countries")}
           </Text>
         </Box>
       </Box>
       <Box className="flex-1 flex-col items-center gap-1 rounded-xl border border-outline-200 bg-background-50 p-3 text-center dark:border-outline-700 dark:bg-background-800/50">
-        <Text className="font-bold text-2xl text-typography-900 leading-tight">
+        <Text className="font-semibold text-2xl text-typography-900 leading-tight">
           {totalDays}
         </Text>
         <Box className="flex-row items-center gap-1.5 opacity-80">
-          <PlaneTakeoff color={accentColor} size={14} />
+          <PlaneTakeoff color={mutedColor} size={14} />
           <Text className="font-medium text-typography-600 text-xs uppercase tracking-wide dark:text-typography-300">
             {i18n.t("map.stats.days-abroad")}
           </Text>
