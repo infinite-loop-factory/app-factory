@@ -1,282 +1,128 @@
-import type { Station } from "@/types/station";
+import type { NearbyStation, Station } from "@/types/station";
+import type { RouteRecommendation } from "@/utils/route-calculator";
 
-import { useFocusEffect, useRouter } from "expo-router";
+import * as Location from "expo-location";
+import { useRouter } from "expo-router";
 import {
-  ArrowDownUp,
-  Circle,
+  AlertCircle,
+  ChevronRight,
   Clock,
+  Footprints,
   MapPin,
   Navigation,
-  Plus,
-  Trash2,
-  X,
+  RefreshCw,
+  Route,
+  Zap,
 } from "lucide-react-native";
-import { useCallback, useState } from "react";
-import { Pressable, ScrollView, Text, View } from "react-native";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import {
+  ActivityIndicator,
+  Pressable,
+  ScrollView,
+  Text,
+  View,
+} from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ElevatedCard } from "@/components/ui/elevated-card";
 import { GradientBackground } from "@/components/ui/gradient-background";
 import { LineBadge } from "@/components/ui/line-badge";
 import { useRouteSearch } from "@/context/route-search-context";
-import { clearRecentStations, getRecentStations } from "@/data/recent-stations";
+import { useStations } from "@/data/station-store";
 import i18n from "@/i18n";
+import { findNearestStations, formatDistance } from "@/utils/geo";
+import { recommendRoutes } from "@/utils/route-calculator";
 
-// ── Sub-components ──────────────────────────────────────────
+// ── Location helpers ────────────────────────────────────────
 
-interface StationInputProps {
-  label: string;
-  station: Station | null;
-  placeholder: string;
-  type: "start" | "end";
-  onPress: () => void;
-  onClear: () => void;
-}
+type LocationState =
+  | { status: "loading" }
+  | { status: "ready"; nearby: NearbyStation[] }
+  | { status: "denied" }
+  | { status: "error" };
 
-function StationInput({
-  label,
-  station,
-  placeholder,
-  type,
-  onPress,
-  onClear,
-}: StationInputProps) {
-  const isStart = type === "start";
-  return (
-    <View className="relative">
-      <Pressable
-        className={`relative flex-row items-center py-5 pr-14 pl-14 active:bg-blue-50/50 dark:active:bg-blue-900/20 ${
-          station ? "bg-white dark:bg-gray-800" : "bg-gray-50 dark:bg-gray-900"
-        }`}
-        onPress={onPress}
-      >
-        <View className="absolute top-1/2 left-5 z-10 -translate-y-1/2">
-          {isStart ? (
-            <View
-              className="h-4 w-4 rounded-full border-2 border-white bg-blue-500"
-              style={{
-                shadowColor: "#3B82F6",
-                shadowOffset: { width: 0, height: 0 },
-                shadowOpacity: 0.5,
-                shadowRadius: 4,
-              }}
-            />
-          ) : (
-            <MapPin color="#F59E0B" fill="#F59E0B" size={18} />
-          )}
-        </View>
-        <View className="flex-1">
-          <Text className="mb-1 font-medium text-gray-400 text-xs uppercase tracking-wider">
-            {label}
-          </Text>
-          {station ? (
-            <View className="flex-row items-center gap-2">
-              <Text className="font-bold text-gray-900 text-lg dark:text-gray-100">
-                {station.name}
-              </Text>
-              <LineBadge color={station.lineColor} line={station.line} />
-            </View>
-          ) : (
-            <Text className="text-gray-400 text-lg">{placeholder}</Text>
-          )}
-        </View>
-      </Pressable>
-      {station && (
-        <Pressable
-          className="absolute top-1/2 right-4 z-20 h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-gray-100 active:bg-gray-200 dark:bg-gray-700"
-          onPress={onClear}
-        >
-          <X color="#9CA3AF" size={16} />
-        </Pressable>
-      )}
-    </View>
+const NEARBY_COUNT = 4;
+
+async function resolveNearbyStations(
+  stations: Station[],
+): Promise<LocationState> {
+  const { status } = await Location.requestForegroundPermissionsAsync();
+  if (status !== "granted") return { status: "denied" };
+
+  const location = await Location.getCurrentPositionAsync({
+    accuracy: Location.Accuracy.Balanced,
+  });
+  const nearby = findNearestStations(
+    location.coords.latitude,
+    location.coords.longitude,
+    stations,
+    NEARBY_COUNT,
   );
+  return { status: "ready", nearby };
 }
 
-function RecentStationsList({
-  stations,
-  onPress,
-  onClear,
-}: {
-  stations: Station[];
-  onPress: (s: Station) => void;
-  onClear: () => void;
-}) {
-  if (stations.length === 0) return null;
+// ── Main component ──────────────────────────────────────────
 
-  return (
-    <View className="mb-8">
-      <View className="mb-4 flex-row items-center justify-between">
-        <View className="flex-row items-center gap-2">
-          <Clock color="#6B7280" size={16} />
-          <Text className="font-bold text-gray-900 text-lg dark:text-gray-100">
-            {i18n.t("stationSelect.recentStations")}
-          </Text>
-        </View>
-        <Pressable
-          className="flex-row items-center gap-1 rounded-full bg-gray-100 px-3 py-1 active:bg-gray-200 dark:bg-gray-800"
-          onPress={onClear}
-        >
-          <Trash2 color="#9CA3AF" size={12} />
-          <Text className="font-medium text-gray-500 text-xs">
-            {i18n.t("settings.clearRecentSearch")}
-          </Text>
-        </Pressable>
-      </View>
-      <ScrollView
-        className="-mx-6 px-6"
-        horizontal
-        showsHorizontalScrollIndicator={false}
-      >
-        <View className="flex-row gap-3">
-          {stations.map((station) => (
-            <Pressable
-              className="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm active:bg-gray-50 dark:border-gray-700 dark:bg-gray-800"
-              key={station.id}
-              onPress={() => onPress(station)}
-            >
-              <Text className="mb-2 font-bold text-base text-gray-900 dark:text-gray-100">
-                {station.name}
-              </Text>
-              <LineBadge color={station.lineColor} line={station.line} />
-            </Pressable>
-          ))}
-        </View>
-      </ScrollView>
-    </View>
-  );
-}
-
-function ViaInput({
-  viaStation,
-  showVia,
-  onPress,
-  onClear,
-  onShow,
-}: {
-  viaStation: Station | null;
-  showVia: boolean;
-  onPress: () => void;
-  onClear: () => void;
-  onShow: () => void;
-}) {
-  if (!(showVia || viaStation)) {
-    return (
-      <View className="mt-4 items-center">
-        <Pressable
-          className="flex-row items-center gap-1.5 rounded-full px-4 py-2 active:bg-gray-100 dark:active:bg-gray-800"
-          onPress={onShow}
-        >
-          <Plus color="#6B7280" size={16} />
-          <Text className="font-medium text-gray-500 text-sm">
-            {i18n.t("stationSelect.addVia", { defaultValue: "경유지 추가" })}
-          </Text>
-        </Pressable>
-      </View>
-    );
-  }
-
-  return (
-    <View className="mt-4 flex-row items-center gap-2">
-      <Pressable
-        className={`flex-1 flex-row items-center rounded-2xl border-2 border-dashed px-4 py-3 active:bg-gray-50 dark:active:bg-gray-800 ${
-          viaStation ? "border-blue-200 bg-blue-50/30" : "border-gray-200"
-        }`}
-        onPress={onPress}
-      >
-        <Circle
-          className="mr-3"
-          color={viaStation ? "#3B82F6" : "#9CA3AF"}
-          size={16}
-        />
-        <View className="flex-1">
-          {viaStation ? (
-            <View className="flex-row items-center gap-2">
-              <Text className="font-bold text-gray-700 dark:text-gray-200">
-                {viaStation.name}
-              </Text>
-              <LineBadge color={viaStation.lineColor} line={viaStation.line} />
-            </View>
-          ) : (
-            <Text className="text-gray-500 text-sm">
-              {i18n.t("stationSelect.viaShort")} ({i18n.t("via.optional")})
-            </Text>
-          )}
-        </View>
-      </Pressable>
-      <Pressable
-        className="h-12 w-12 items-center justify-center rounded-2xl bg-gray-100 active:bg-gray-200 dark:bg-gray-800"
-        onPress={onClear}
-      >
-        <X color="#9CA3AF" size={20} />
-      </Pressable>
-    </View>
-  );
-}
-
-// ── Main Component ──────────────────────────────────────────
-
-export default function RouteGuideTab() {
+export default function GoNowTab() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const {
-    startStation,
-    viaStation,
-    endStation,
-    swapStations,
-    setStartStation,
-    setViaStation,
-    setEndStation,
-    canSearch,
-  } = useRouteSearch();
+  const { endStation, setStartStation } = useRouteSearch();
+  const stations = useStations();
 
-  const [recentStations, setRecentStations] = useState<Station[]>([]);
-  const [showVia, setShowVia] = useState(!!viaStation);
+  const [locationState, setLocationState] = useState<LocationState>({
+    status: "loading",
+  });
 
-  useFocusEffect(
-    useCallback(() => {
-      getRecentStations().then(setRecentStations);
-    }, []),
-  );
+  useEffect(() => {
+    let cancelled = false;
+    if (stations.length === 0) return;
 
-  const handleStationSelect = useCallback(
-    (type: "start" | "via" | "end") => {
+    resolveNearbyStations(stations)
+      .then((s) => {
+        if (!cancelled) setLocationState(s);
+      })
+      .catch(() => {
+        if (!cancelled) setLocationState({ status: "error" });
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [stations]);
+
+  const recommendations: RouteRecommendation[] = useMemo(() => {
+    if (locationState.status !== "ready" || !endStation) return [];
+    return recommendRoutes(locationState.nearby, endStation);
+  }, [locationState, endStation]);
+
+  const handleRefresh = useCallback(() => {
+    if (stations.length === 0) return;
+    setLocationState({ status: "loading" });
+    resolveNearbyStations(stations)
+      .then(setLocationState)
+      .catch(() => setLocationState({ status: "error" }));
+  }, [stations]);
+
+  const handleSelectDestination = useCallback(() => {
+    router.push({
+      pathname: "/station-select",
+      params: { type: "end" },
+    });
+  }, [router]);
+
+  const handleTapRoute = useCallback(
+    (rec: RouteRecommendation) => {
+      setStartStation(rec.departure.station);
       router.push({
-        pathname: "/station-select",
-        params: { type },
+        pathname: "/route-result",
+        params: {
+          start: rec.departure.station.id,
+          end: endStation?.id ?? "",
+        },
       });
     },
-    [router],
+    [setStartStation, endStation, router],
   );
 
-  const handleRecentPress = useCallback(
-    (station: Station) => {
-      if (!startStation) {
-        setStartStation(station);
-      } else if (!endStation && startStation.id !== station.id) {
-        setEndStation(station);
-      } else {
-        setStartStation(station);
-      }
-    },
-    [startStation, endStation, setStartStation, setEndStation],
-  );
-
-  const handleClearRecent = useCallback(async () => {
-    await clearRecentStations();
-    setRecentStations([]);
-  }, []);
-
-  const handleSearch = useCallback(() => {
-    if (!(canSearch && startStation && endStation)) return;
-    router.push({
-      pathname: "/route-result",
-      params: {
-        start: startStation.id,
-        end: endStation.id,
-        ...(viaStation && { via: viaStation.id }),
-      },
-    });
-  }, [canSearch, startStation, endStation, viaStation, router]);
+  const isReady = locationState.status === "ready";
 
   return (
     <GradientBackground>
@@ -289,105 +135,309 @@ export default function RouteGuideTab() {
         showsVerticalScrollIndicator={false}
       >
         <View className="px-6">
-          <View className="mb-8">
+          {/* Header */}
+          <View className="mb-6">
             <Text className="mb-2 font-bold text-3xl text-gray-900 dark:text-gray-100">
-              {i18n.t("homeScreen.title")}
+              {i18n.t("goNow.title")}
             </Text>
             <Text className="text-base text-gray-500 dark:text-gray-400">
-              {i18n.t("homeScreen.subtitle")}
+              {i18n.t("goNow.subtitle")}
             </Text>
           </View>
 
-          <View className="mb-8">
-            <ElevatedCard className="overflow-hidden p-0">
-              <View>
-                <StationInput
-                  label={i18n.t("stationSelect.departureShort")}
-                  onClear={() => setStartStation(null)}
-                  onPress={() => handleStationSelect("start")}
-                  placeholder={i18n.t("homeScreen.departurePlaceholder")}
-                  station={startStation}
-                  type="start"
-                />
-
-                <View className="relative h-2 items-center justify-center">
-                  <View className="h-full w-[2px] bg-gray-100 dark:bg-gray-700" />
-                  <Pressable
-                    className="absolute z-20 h-10 w-10 items-center justify-center rounded-full border-4 border-white bg-gray-50 shadow-sm active:bg-gray-100 dark:border-gray-800 dark:bg-gray-700"
-                    onPress={swapStations}
-                  >
-                    <ArrowDownUp color="#6B7280" size={18} />
-                  </Pressable>
-                </View>
-
-                <StationInput
-                  label={i18n.t("stationSelect.arrivalShort")}
-                  onClear={() => setEndStation(null)}
-                  onPress={() => handleStationSelect("end")}
-                  placeholder={i18n.t("homeScreen.arrivalPlaceholder")}
-                  station={endStation}
-                  type="end"
-                />
-              </View>
-            </ElevatedCard>
-
-            <ViaInput
-              onClear={() => {
-                setViaStation(null);
-                setShowVia(false);
-              }}
-              onPress={() => handleStationSelect("via")}
-              onShow={() => setShowVia(true)}
-              showVia={showVia}
-              viaStation={viaStation}
-            />
-          </View>
-
-          <RecentStationsList
-            onClear={handleClearRecent}
-            onPress={handleRecentPress}
-            stations={recentStations}
+          {/* Location Status Bar */}
+          <GpsStatusBar
+            isReady={isReady}
+            nearbyCount={
+              locationState.status === "ready" ? locationState.nearby.length : 0
+            }
+            onRefresh={handleRefresh}
+            status={locationState.status}
           />
 
-          <View>
-            <Pressable
-              className={`w-full flex-row items-center justify-center gap-3 rounded-2xl py-4.5 ${
-                canSearch
-                  ? "bg-blue-600 shadow-blue-500/40 active:bg-blue-700"
-                  : "bg-gray-200 dark:bg-gray-700"
-              }`}
-              disabled={!canSearch}
-              onPress={handleSearch}
-              style={{
-                shadowColor: canSearch ? "#3B82F6" : "transparent",
-                shadowOffset: { width: 0, height: 8 },
-                shadowOpacity: canSearch ? 0.3 : 0,
-                shadowRadius: 12,
-                elevation: canSearch ? 8 : 0,
-              }}
-            >
-              <Navigation
-                color={canSearch ? "#FFFFFF" : "#9CA3AF"}
-                fill={canSearch ? "#FFFFFF" : "transparent"}
-                size={22}
-              />
-              <Text
-                className={`font-bold text-xl ${
-                  canSearch ? "text-white" : "text-gray-400 dark:text-gray-500"
-                }`}
+          {/* Destination Hero */}
+          <View className="mb-8">
+            <View className="mb-3 flex-row items-center gap-2">
+              <Zap color="#F59E0B" fill="#F59E0B" size={16} />
+              <Text className="font-bold text-gray-900 text-sm dark:text-gray-100">
+                {i18n.t("goNow.destinationTitle")}
+              </Text>
+            </View>
+            <Pressable onPress={handleSelectDestination}>
+              <ElevatedCard
+                className={`overflow-hidden p-0 ${endStation ? "border-2 border-amber-400" : ""}`}
+                style={{
+                  shadowColor: endStation ? "#F59E0B" : "#000",
+                  shadowOpacity: endStation ? 0.2 : 0.05,
+                  shadowRadius: endStation ? 12 : 8,
+                }}
               >
-                {i18n.t("homeScreen.search")}
-              </Text>
+                <View className="flex-row items-center py-5 pr-6 pl-14">
+                  <View className="absolute top-1/2 left-5 z-10 -translate-y-1/2">
+                    <MapPin color="#F59E0B" fill="#F59E0B" size={20} />
+                  </View>
+                  <View className="flex-1">
+                    <Text className="mb-1 font-medium text-gray-400 text-xs uppercase tracking-wider">
+                      {i18n.t("goNow.destination")}
+                    </Text>
+                    {endStation ? (
+                      <View className="flex-row items-center gap-2">
+                        <Text className="font-bold text-gray-900 text-xl dark:text-gray-100">
+                          {endStation.name}
+                        </Text>
+                        <LineBadge
+                          color={endStation.lineColor}
+                          line={endStation.line}
+                        />
+                      </View>
+                    ) : (
+                      <Text className="text-gray-400 text-lg">
+                        {i18n.t("goNow.destinationPlaceholder")}
+                      </Text>
+                    )}
+                  </View>
+                  <ChevronRight color="#D1D5DB" size={24} />
+                </View>
+              </ElevatedCard>
             </Pressable>
-
-            {!canSearch && (
-              <Text className="mt-4 text-center font-medium text-gray-400 text-sm">
-                {i18n.t("homeScreen.searchHint")}
-              </Text>
-            )}
           </View>
+
+          {/* Results Area */}
+          {endStation && locationState.status === "loading" && (
+            <ElevatedCard className="py-10">
+              <ActivityIndicator color="#2563EB" size="large" />
+              <Text className="mt-4 text-center font-medium text-gray-500">
+                {i18n.t("goNow.calculatingRoutes")}
+              </Text>
+            </ElevatedCard>
+          )}
+
+          {locationState.status === "denied" && (
+            <LocationFallback onRetry={handleRefresh} variant="denied" />
+          )}
+
+          {locationState.status === "error" && (
+            <LocationFallback onRetry={handleRefresh} variant="error" />
+          )}
+
+          {recommendations.length > 0 && (
+            <View>
+              <View className="mb-4 flex-row items-center justify-between">
+                <View className="flex-row items-center gap-2">
+                  <Route color="#2563EB" size={18} />
+                  <Text className="font-bold text-gray-900 text-lg dark:text-gray-100">
+                    {i18n.t("goNow.recommendedRoutes")}
+                  </Text>
+                </View>
+              </View>
+              <View className="gap-4">
+                {recommendations.map((rec, index) => (
+                  <RouteCard
+                    index={index}
+                    key={`rec-${rec.departure.station.id}-${rec.departure.station.line}`}
+                    onPress={handleTapRoute}
+                    rec={rec}
+                  />
+                ))}
+              </View>
+            </View>
+          )}
+
+          {!endStation && isReady && (
+            <View className="mt-8 items-center rounded-2xl border-2 border-gray-200 border-dashed bg-white/50 p-8 dark:border-gray-800 dark:bg-gray-900/50">
+              <Navigation className="mb-4" color="#D1D5DB" size={48} />
+              <Text className="text-center font-medium text-gray-500 text-sm">
+                {i18n.t("goNow.selectDestinationHint")}
+              </Text>
+            </View>
+          )}
         </View>
       </ScrollView>
     </GradientBackground>
+  );
+}
+
+// ── Sub-components ──────────────────────────────────────────
+
+function GpsStatusBar({
+  status,
+  isReady,
+  nearbyCount,
+  onRefresh,
+}: {
+  status: LocationState["status"];
+  isReady: boolean;
+  nearbyCount: number;
+  onRefresh: () => void;
+}) {
+  return (
+    <View className="mb-6 flex-row items-center justify-between rounded-2xl bg-white/80 p-4 shadow-sm dark:bg-gray-800/80">
+      <View className="flex-row items-center gap-3">
+        {status === "loading" && (
+          <>
+            <ActivityIndicator color="#2563EB" size="small" />
+            <Text className="font-medium text-gray-600 text-sm dark:text-gray-300">
+              {i18n.t("goNow.locating")}
+            </Text>
+          </>
+        )}
+        {isReady && (
+          <>
+            <View className="h-3 w-3 rounded-full bg-green-500 shadow-sm" />
+            <Text className="font-bold text-gray-800 text-sm dark:text-gray-100">
+              {i18n.t("goNow.locationReady", { count: nearbyCount })}
+            </Text>
+          </>
+        )}
+        {(status === "denied" || status === "error") && (
+          <>
+            <View
+              className={`h-3 w-3 rounded-full ${status === "denied" ? "bg-amber-500" : "bg-red-500"}`}
+            />
+            <Text className="font-medium text-gray-600 text-sm dark:text-gray-300">
+              {status === "denied"
+                ? i18n.t("goNow.permissionDenied")
+                : i18n.t("goNow.locationError")}
+            </Text>
+          </>
+        )}
+      </View>
+      {(isReady || status === "error") && (
+        <Pressable
+          accessibilityLabel={i18n.t("goNow.refresh")}
+          className="h-8 w-8 items-center justify-center rounded-full bg-gray-50 active:bg-gray-200 dark:bg-gray-700 dark:active:bg-gray-600"
+          onPress={onRefresh}
+        >
+          <RefreshCw color="#6B7280" size={16} />
+        </Pressable>
+      )}
+    </View>
+  );
+}
+
+const RANK_LABELS = ["최적", "추천", "추천", "추천"] as const;
+const RANK_COLORS = ["#2563EB", "#64748B", "#64748B", "#64748B"] as const;
+
+function RouteCard({
+  rec,
+  index,
+  onPress,
+}: {
+  rec: RouteRecommendation;
+  index: number;
+  onPress: (rec: RouteRecommendation) => void;
+}) {
+  const isBest = index === 0;
+  return (
+    <Pressable onPress={() => onPress(rec)}>
+      <ElevatedCard
+        className={`p-5 ${isBest ? "border-2 border-blue-100 bg-white" : "bg-white/80"}`}
+      >
+        {/* Rank & Time */}
+        <View className="mb-4 flex-row items-center justify-between">
+          <View className="flex-row items-center gap-2.5">
+            <View
+              className="rounded-full px-2.5 py-0.5"
+              style={{ backgroundColor: RANK_COLORS[index] ?? "#64748B" }}
+            >
+              <Text className="font-bold text-[10px] text-white uppercase">
+                {RANK_LABELS[index] ?? `${index + 1}TH`}
+              </Text>
+            </View>
+            <Text
+              className={`font-bold text-2xl ${isBest ? "text-blue-600" : "text-gray-900 dark:text-gray-100"}`}
+            >
+              {rec.totalMinutes}
+              <Text className="font-medium text-gray-500 text-sm">분</Text>
+            </Text>
+          </View>
+          <ChevronRight color="#D1D5DB" size={20} />
+        </View>
+
+        {/* Breakdown Row */}
+        <View className="mb-5 flex-row items-center gap-3">
+          <View className="flex-row items-center gap-1.5 rounded-full bg-gray-50 px-3 py-1.5 dark:bg-gray-900/50">
+            <Footprints color="#6B7280" size={14} />
+            <Text className="font-medium text-gray-600 text-xs dark:text-gray-400">
+              도보 {rec.walkingMinutes}분
+            </Text>
+          </View>
+          <View className="flex-row items-center gap-1.5 rounded-full bg-gray-50 px-3 py-1.5 dark:bg-gray-900/50">
+            <Clock color="#6B7280" size={14} />
+            <Text className="font-medium text-gray-600 text-xs dark:text-gray-400">
+              지하철 {rec.route.totalTime}분
+            </Text>
+          </View>
+          {rec.route.transfers > 0 && (
+            <View className="flex-row items-center gap-1.5 rounded-full bg-gray-50 px-3 py-1.5 dark:bg-gray-900/50">
+              <Text className="font-medium text-gray-600 text-xs dark:text-gray-400">
+                환승 {rec.route.transfers}회
+              </Text>
+            </View>
+          )}
+        </View>
+
+        {/* Departure Station Detail */}
+        <View className="flex-row items-center gap-3 rounded-2xl bg-blue-50/50 p-4 dark:bg-blue-900/10">
+          <View className="h-10 w-10 items-center justify-center rounded-full bg-white shadow-sm dark:bg-gray-800">
+            <Navigation color="#2563EB" fill="#2563EB" size={18} />
+          </View>
+          <View className="flex-1">
+            <View className="flex-row items-center gap-2">
+              <Text className="font-bold text-base text-gray-900 dark:text-gray-100">
+                {rec.departure.station.name}
+              </Text>
+              <LineBadge
+                color={rec.departure.station.lineColor}
+                line={rec.departure.station.line}
+                size="sm"
+              />
+            </View>
+            <Text className="font-medium text-blue-600 text-xs">
+              현위치에서 {formatDistance(rec.departure.distanceM)}
+            </Text>
+          </View>
+        </View>
+      </ElevatedCard>
+    </Pressable>
+  );
+}
+
+function LocationFallback({
+  variant,
+  onRetry,
+}: {
+  variant: "denied" | "error";
+  onRetry: () => void;
+}) {
+  const isDenied = variant === "denied";
+  return (
+    <ElevatedCard className="mb-6 p-6">
+      <View className="items-center">
+        <View
+          className={`mb-4 h-16 w-16 items-center justify-center rounded-full ${isDenied ? "bg-amber-100" : "bg-red-100"}`}
+        >
+          <AlertCircle color={isDenied ? "#D97706" : "#DC2626"} size={32} />
+        </View>
+        <Text className="mb-2 font-bold text-gray-900 text-lg dark:text-gray-100">
+          {isDenied
+            ? i18n.t("goNow.permissionDenied")
+            : i18n.t("goNow.locationError")}
+        </Text>
+        <Text className="mb-6 text-center text-gray-500 text-sm leading-5">
+          {isDenied
+            ? i18n.t("goNow.permissionDeniedHint")
+            : i18n.t("goNow.locationErrorHint")}
+        </Text>
+        <Pressable
+          className="w-full rounded-2xl bg-blue-600 py-4 shadow-blue-500/30 shadow-lg active:bg-blue-700"
+          onPress={onRetry}
+        >
+          <Text className="text-center font-bold text-base text-white">
+            {i18n.t("goNow.retry")}
+          </Text>
+        </Pressable>
+      </View>
+    </ElevatedCard>
   );
 }

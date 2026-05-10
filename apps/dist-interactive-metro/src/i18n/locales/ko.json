@@ -3,8 +3,7 @@
   "home": "홈",
   "tabs": {
     "goNow": "지금 출발",
-    "routeGuide": "경로안내",
-    "notifications": "알림",
+    "routeGuide": "경로 검색",
     "favorites": "즐겨찾기",
     "settings": "설정"
   },
@@ -76,11 +75,6 @@
   },
   "settings": {
     "description": "앱 환경을 설정하고 개인화하세요",
-    "notificationSettings": "알림 설정",
-    "notificationComingSoon": "준비 중인 기능입니다",
-    "comingSoon": "향후 업데이트에서 지원 예정",
-    "defaultHome": "기본 화면 설정",
-    "defaultHomeDescription": "앱 실행 시 기본으로 보여질 화면을 선택하세요",
     "appInfo": "앱 정보",
     "version": "버전",
     "madeBy": "제작",
@@ -91,9 +85,6 @@
     "confirmClearFavorites": "즐겨찾기를 모두 삭제하시겠습니까?",
     "cancel": "취소",
     "confirm": "삭제"
-  },
-  "notificationSettings": {
-    "placeholder": "알림 설정 화면입니다. (미구현)"
   },
   "notFound": {
     "title": "화면을 찾을 수 없습니다",
@@ -148,16 +139,6 @@
     "direction": "방면",
     "loading": "배차 정보 불러오는 중…",
     "noUpcoming": "오늘 이후 열차 없음"
-  },
-  "notifications": {
-    "description": "즐겨찾기 경로의 다음 열차 정보",
-    "emptyTitle": "즐겨찾기가 없습니다",
-    "emptyDescription": "즐겨찾기에 경로를 추가하면 다음 열차 시각이 여기에 표시됩니다",
-    "comingSoonTitle": "알림 기능은 준비 중입니다",
-    "comingSoonDescription": "향후 업데이트를 통해 실시간 운행 정보, 즐겨찾기 경로의 지연 알림 등의 기능이 추가될 예정입니다.",
-    "addFavorites": "경로 즐겨찾기 추가하기",
-    "nextTrains": "다음 열차",
-    "from": "출발역"
   },
   "transferInfo": {
     "walkingDistance": "{{distance}}m 도보",

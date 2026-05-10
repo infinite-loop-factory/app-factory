@@ -336,29 +336,17 @@ export function recommendRoutes(
   nearbyStations: NearbyStation[],
   destination: Station,
 ): RouteRecommendation[] {
-  // Group nearby stations by line
-  const byLine = new Map<string, NearbyStation[]>();
+  // Strategy: For each line, keep only the single closest station.
+  // This drastically reduces redundant paths from the same line.
+  const closestByLine = new Map<string, NearbyStation>();
   for (const s of nearbyStations) {
-    const arr = byLine.get(s.station.line) ?? [];
-    arr.push(s);
-    byLine.set(s.station.line, arr);
+    const existing = closestByLine.get(s.station.line);
+    if (!existing || s.walkingMinutes < existing.walkingMinutes) {
+      closestByLine.set(s.station.line, s);
+    }
   }
 
-  // Strategy: For each line, keep at most 2 closest stations.
-  // If the user is exactly between them, both are valid.
-  // Otherwise, if one is significantly closer, we could theoretically keep just one,
-  // but keeping 2 is a safe "top results" bet.
-  const filteredNearby: NearbyStation[] = [];
-  for (const lineStations of byLine.values()) {
-    // Sort by walking distance within each line
-    const sorted = [...lineStations].sort(
-      (a, b) => a.walkingMinutes - b.walkingMinutes,
-    );
-    // Add top 2 closest for each line
-    filteredNearby.push(...sorted.slice(0, 2));
-  }
-
-  return filteredNearby
+  const allPossible = Array.from(closestByLine.values())
     .map((departure) => {
       const route = calculateRoute(departure.station, destination);
       return {
@@ -368,6 +356,18 @@ export function recommendRoutes(
         totalMinutes: departure.walkingMinutes + route.totalTime,
       };
     })
-    .sort((a, b) => a.totalMinutes - b.totalMinutes)
-    .slice(0, 5); // Return top 5 overall best recommendations
+    .sort((a, b) => a.totalMinutes - b.totalMinutes);
+
+  if (allPossible.length === 0) return [];
+
+  // Filter strategy:
+  // 1. Keep the absolute best route.
+  // 2. Discard any route that is 30+ minutes slower than the best route.
+  // 3. Limit to top 4 high-quality candidates.
+  const bestTotal = allPossible[0]?.totalMinutes ?? 0;
+  const THRESHOLD = 30;
+
+  return allPossible
+    .filter((r) => r.totalMinutes < bestTotal + THRESHOLD)
+    .slice(0, 4);
 }
