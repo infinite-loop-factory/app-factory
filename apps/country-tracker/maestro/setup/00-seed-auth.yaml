@@ -33,7 +33,14 @@ env:
 # 3. 매직 deep link로 setSession 발동
 - openLink: "country-tracker://e2e-auth?access_token=${output.ACCESS_TOKEN}&refresh_token=${output.REFRESH_TOKEN}"
 
-# 4. 세션 적용 → 홈 진입 확인
+# 4. iOS 시스템 다이얼로그 "Open in 'Country Tracker'?" 확인 (있을 때만)
+- runFlow:
+    when:
+      visible: "Open"
+    commands:
+      - tapOn: "Open"
+
+# 5. 세션 적용 → 홈 진입 확인
 - waitForAnimationToEnd:
     timeout: 4000
 - assertVisible: "My Travels"

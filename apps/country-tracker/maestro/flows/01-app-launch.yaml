@@ -5,6 +5,6 @@ name: App Launch and Login Screen
 - assertVisible: "Start Your Journey"
 - assertVisible: "Sign in with Apple"
 - assertVisible: "Login with Google"
-- assertVisible: "Login with Facebook"
+- assertVisible: "Login with GitHub"
 - assertVisible: "Terms of Service"
 - assertVisible: "Privacy Policy"
