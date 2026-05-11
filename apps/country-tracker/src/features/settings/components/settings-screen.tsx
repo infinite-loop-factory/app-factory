@@ -134,14 +134,17 @@ export default function SettingsScreen() {
                 <AvatarImage source={{ uri: user.user_metadata.avatar_url }} />
               ) : null}
             </Avatar>
-            <Box className="flex-1 gap-1">
-              <Box className="flex-row items-center gap-2">
-                <Text
-                  className="font-bold text-typography-950 text-xl"
-                  numberOfLines={1}
-                >
-                  {userName}
-                </Text>
+            <Box className="flex-1 gap-1" style={{ minWidth: 0 }}>
+              <Text
+                className="font-bold text-typography-950 text-xl"
+                numberOfLines={1}
+              >
+                {userName}
+              </Text>
+              <Text className="text-sm text-typography-500" numberOfLines={1}>
+                {userEmail}
+              </Text>
+              <Box className="mt-1 self-start">
                 <Badge
                   className="rounded-full bg-primary-50 px-2 py-0.5"
                   size="sm"
@@ -151,9 +154,6 @@ export default function SettingsScreen() {
                   </BadgeText>
                 </Badge>
               </Box>
-              <Text className="text-base text-typography-500" numberOfLines={1}>
-                {userEmail}
-              </Text>
             </Box>
           </Box>
           <ChevronRight color={chevronColor} size={22} />
@@ -178,7 +178,7 @@ export default function SettingsScreen() {
             </Text>
           </Box>
           <Box className="flex-row items-center gap-2">
-            <Text className="font-normal text-base text-secondary-600">
+            <Text className="font-normal text-base text-typography-500">
               {isKorean
                 ? i18n.t("settings.preferences.language-value-ko")
                 : i18n.t("settings.preferences.language-value-en")}
@@ -201,7 +201,7 @@ export default function SettingsScreen() {
             </Text>
           </Box>
           <Box className="flex-row items-center gap-2">
-            <Text className="font-normal text-base text-secondary-600">
+            <Text className="font-normal text-base text-typography-500">
               {nationality || i18n.t("settings.nationality.not-set")}
             </Text>
             <ChevronRight color={chevronColor} size={18} />
@@ -368,7 +368,7 @@ export default function SettingsScreen() {
                 autoCapitalize="characters"
                 autoFocus
                 maxLength={3}
-                onChangeText={setNationalityDraft}
+                onChangeText={(text) => setNationalityDraft(text.toUpperCase())}
                 onSubmitEditing={submitNationality}
                 placeholder="KR"
                 returnKeyType="done"

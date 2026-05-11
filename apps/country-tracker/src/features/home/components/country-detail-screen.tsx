@@ -3,11 +3,20 @@ import type { CountryItem } from "@/types/country-item";
 import { useQuery } from "@tanstack/react-query";
 import { router } from "expo-router";
 import { ChevronLeft, Edit3, Trash2 } from "lucide-react-native";
-import { useCallback } from "react";
-import { Alert, Pressable, ScrollView, View } from "react-native";
+import { useCallback, useState } from "react";
+import { Pressable, ScrollView, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import {
+  AlertDialog,
+  AlertDialogBackdrop,
+  AlertDialogBody,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+} from "@/components/ui/alert-dialog";
 import { Badge, BadgeText } from "@/components/ui/badge";
 import { Box } from "@/components/ui/box";
+import { Button, ButtonText } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
 import { Image } from "@/components/ui/image";
 import { Text } from "@/components/ui/text";
@@ -37,18 +46,18 @@ export function CountryDetailScreen({ countryCode }: Props) {
     textMuted,
     textStrong,
     primaryColor,
-    warningSurface,
-    warningText,
+    badgeSurface,
+    badgeText,
     errorColor,
   ] = useThemeColor([
     "background-50",
     "background",
     "outline-100",
-    "typography-400",
+    "typography-500",
     "typography-900",
-    "primary-300",
-    "warning-0",
-    "warning-600",
+    "primary-500",
+    "primary-50",
+    "primary-600",
     "error-500",
   ]);
 
@@ -97,28 +106,18 @@ export function CountryDetailScreen({ countryCode }: Props) {
     });
   }, []);
 
-  const handleDelete = useCallback(
-    (item: CountryItem) => {
-      triggerHaptic("medium");
-      const stayDays = getStayDays(item);
-      Alert.alert(
-        i18n.t("home.delete-visit.title"),
-        i18n.t("home.delete-visit.message", {
-          count: stayDays,
-          country: item.country,
-        }),
-        [
-          { text: i18n.t("home.delete-visit.cancel"), style: "cancel" },
-          {
-            text: i18n.t("home.delete-visit.confirm"),
-            style: "destructive",
-            onPress: () => deleteVisit(item),
-          },
-        ],
-      );
-    },
-    [deleteVisit],
-  );
+  const [deleteTarget, setDeleteTarget] = useState<CountryItem | null>(null);
+  const deleteStayDays = deleteTarget ? getStayDays(deleteTarget) : 0;
+
+  const handleDelete = useCallback((item: CountryItem) => {
+    triggerHaptic("medium");
+    setDeleteTarget(item);
+  }, []);
+
+  const confirmDelete = useCallback(() => {
+    if (deleteTarget) deleteVisit(deleteTarget);
+    setDeleteTarget(null);
+  }, [deleteVisit, deleteTarget]);
 
   return (
     <View className="flex-1" style={{ backgroundColor: screenBg }}>
@@ -172,14 +171,22 @@ export function CountryDetailScreen({ countryCode }: Props) {
             { label: i18n.t("country-detail.last-visit"), value: lastVisit },
           ].map((stat) => (
             <Box
-              className="flex-1 items-center rounded-xl border px-2 py-3"
+              className="flex-1 items-center rounded-xl border px-2 py-3 shadow-sm"
               key={stat.label}
               style={{ backgroundColor: cardBg, borderColor }}
             >
-              <Text className="font-bold text-lg" style={{ color: textStrong }}>
+              <Text
+                className="font-bold text-base"
+                numberOfLines={1}
+                style={{ color: textStrong }}
+              >
                 {stat.value}
               </Text>
-              <Text className="mt-1 text-xs" style={{ color: textMuted }}>
+              <Text
+                className="mt-1 text-[11px] uppercase tracking-wide"
+                numberOfLines={1}
+                style={{ color: textMuted }}
+              >
                 {stat.label}
               </Text>
             </Box>
@@ -221,11 +228,14 @@ export function CountryDetailScreen({ countryCode }: Props) {
                     {isSameDay ? start : `${start} — ${end}`}
                   </Text>
                   <Badge
-                    className="mt-1 self-start rounded-full"
+                    className="mt-1 self-start rounded-full px-3 py-1"
                     size="sm"
-                    style={{ backgroundColor: warningSurface }}
+                    style={{ backgroundColor: badgeSurface }}
                   >
-                    <BadgeText style={{ color: warningText }}>
+                    <BadgeText
+                      className="font-semibold"
+                      style={{ color: badgeText }}
+                    >
                       {i18n.t("home.list.stay-days", { count: stayDays })}
                     </BadgeText>
                   </Badge>
@@ -251,6 +261,48 @@ export function CountryDetailScreen({ countryCode }: Props) {
           </Box>
         )}
       </ScrollView>
+      <AlertDialog
+        isOpen={deleteTarget !== null}
+        onClose={() => setDeleteTarget(null)}
+      >
+        <AlertDialogBackdrop />
+        <AlertDialogContent className="max-w-sm rounded-2xl">
+          <AlertDialogHeader>
+            <Heading className="font-bold text-lg text-typography-900">
+              {i18n.t("home.delete-visit.title")}
+            </Heading>
+          </AlertDialogHeader>
+          <AlertDialogBody>
+            <Text className="text-base text-typography-600">
+              {deleteTarget
+                ? i18n.t("home.delete-visit.message", {
+                    count: deleteStayDays,
+                    country: deleteTarget.country,
+                  })
+                : ""}
+            </Text>
+          </AlertDialogBody>
+          <AlertDialogFooter className="gap-2">
+            <Button
+              action="secondary"
+              className="flex-1 border border-outline-200"
+              onPress={() => setDeleteTarget(null)}
+              variant="outline"
+            >
+              <ButtonText className="font-semibold text-typography-900">
+                {i18n.t("home.delete-visit.cancel")}
+              </ButtonText>
+            </Button>
+            <Button
+              action="negative"
+              className="flex-1"
+              onPress={confirmDelete}
+            >
+              <ButtonText>{i18n.t("home.delete-visit.confirm")}</ButtonText>
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </View>
   );
 }

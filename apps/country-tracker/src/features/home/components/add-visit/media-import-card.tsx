@@ -1,7 +1,8 @@
 import type { GeoCoordinates } from "@/features/home/utils/exif";
 
 import { Image as ImageIcon, MapPin } from "lucide-react-native";
-import { ActivityIndicator, Pressable, View } from "react-native";
+import { Pressable, View } from "react-native";
+import { Spinner } from "@/components/ui/spinner";
 import { Text } from "@/components/ui/text";
 import { addVisitFormOptions } from "@/features/home/constants/add-visit-form";
 import { withForm } from "@/features/home/hooks/create-app-form";
@@ -110,7 +111,7 @@ export const MediaImportCard = withForm({
             onPress={handlePickPhoto}
           >
             {isLoading ? (
-              <ActivityIndicator color={brandColor} />
+              <Spinner color={brandColor} />
             ) : (
               <>
                 <ImageIcon color={brandColor} size={20} />
@@ -126,7 +127,7 @@ export const MediaImportCard = withForm({
             onPress={handlePrefill}
           >
             {isLoading ? (
-              <ActivityIndicator color={brandColor} />
+              <Spinner color={brandColor} />
             ) : (
               <>
                 <MapPin color={brandColor} size={20} />

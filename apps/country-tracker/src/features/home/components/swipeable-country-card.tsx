@@ -31,21 +31,25 @@ export function SwipeableCountryCard({
     borderColor,
     textMuted,
     textStrong,
-    warningSurface,
-    warningText,
+    badgeSurface,
+    badgeText,
+    badgeFilledSurface,
+    badgeFilledText,
     secondarySurface,
     errorColor,
     primaryColor,
   ] = useThemeColor([
     "background",
     "outline-100",
-    "typography-400",
+    "typography-500",
     "typography-900",
-    "warning-0",
-    "warning-600",
+    "primary-50",
+    "primary-600",
+    "primary-500",
+    "typography-0",
     "secondary-0",
     "error-500",
-    "primary-300",
+    "primary-500",
   ]);
 
   const flagUri = getFlagUri(item.country_code);
@@ -95,7 +99,7 @@ export function SwipeableCountryCard({
   const cardContent = (
     <TouchableOpacity activeOpacity={0.7} onPress={() => onPress(item)}>
       <Box
-        className="mb-3 flex-row items-center justify-between rounded-2xl border px-3 py-3"
+        className="mb-3 flex-row items-center justify-between rounded-2xl border px-3 py-3 shadow-sm"
         style={{ backgroundColor: cardBg, borderColor }}
       >
         <Box className="flex-row items-center gap-3">
@@ -136,25 +140,22 @@ export function SwipeableCountryCard({
         </Box>
         <Box className="items-end gap-1">
           <Badge
-            className="rounded-full"
+            className="rounded-full px-3 py-1"
             size="sm"
-            style={{ backgroundColor: warningSurface }}
+            style={{
+              backgroundColor:
+                stayDays >= 30 ? badgeFilledSurface : badgeSurface,
+            }}
           >
-            <BadgeText style={{ color: warningText }}>
+            <BadgeText
+              className="font-semibold"
+              style={{
+                color: stayDays >= 30 ? badgeFilledText : badgeText,
+              }}
+            >
               {i18n.t("home.list.stay-days", { count: stayDays })}
             </BadgeText>
           </Badge>
-          {Platform.OS === "web" && (
-            <TouchableOpacity
-              hitSlop={8}
-              onPress={(e) => {
-                e.stopPropagation();
-                onDelete(item);
-              }}
-            >
-              <Trash2 color={errorColor} size={16} />
-            </TouchableOpacity>
-          )}
         </Box>
       </Box>
     </TouchableOpacity>

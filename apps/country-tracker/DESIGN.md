@@ -204,6 +204,29 @@ White surface, hairline top border, 64 height. Active tab: Amber 500 icon + Ambe
 
 Pill, radius 999, padding 2/8, eyebrow type. Pro: `bg-primary-50` + `text-primary-600`. Status badges use Success/Warning/Danger 50-tint bg + 700-tint text.
 
+### Switch
+
+| State | Track | Thumb |
+|---|---|---|
+| On | Amber 500 (`primary-500`) | White (`#FFFFFF`) |
+| Off | Edge (`outline-200`) | White (`#FFFFFF`) |
+
+**Web parity rule (mandatory).** `react-native-web` ignores `thumbColor` when `value === true` and falls back to `activeThumbColor` (RNW default = `#009688` teal, which violates the single-accent rule). Always pass BOTH props when using `Switch`:
+
+```tsx
+<Switch
+  // @ts-expect-error react-native-web specific prop
+  activeThumbColor="#FFFFFF"
+  thumbColor="#FFFFFF"
+  trackColor={{ false: trackOff, true: trackOn }}
+  ios_backgroundColor={trackOff}
+  value={value}
+  onValueChange={setValue}
+/>
+```
+
+Never rely on the default RN Switch tint — it bleeds iOS Material teal into our palette.
+
 ---
 
 ## 7. Motion

@@ -1,7 +1,17 @@
 import { ChevronDown, Search, X } from "lucide-react-native";
 import { useState } from "react";
-import { FlatList, Modal, Pressable, TextInput, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Pressable, TextInput, View } from "react-native";
+import {
+  Actionsheet,
+  ActionsheetBackdrop,
+  ActionsheetContent,
+  ActionsheetDragIndicator,
+  ActionsheetDragIndicatorWrapper,
+  ActionsheetFlatList,
+  ActionsheetItem,
+  ActionsheetItemText,
+} from "@/components/ui/actionsheet";
+import { Box } from "@/components/ui/box";
 import { Text } from "@/components/ui/text";
 import { addVisitFormOptions } from "@/features/home/constants/add-visit-form";
 import { withForm } from "@/features/home/hooks/create-app-form";
@@ -11,12 +21,13 @@ import {
 } from "@/features/home/utils/country-options";
 import i18n from "@/lib/i18n";
 
+type CountryOption = (typeof COUNTRY_OPTIONS)[number];
+
 export const CountrySelectField = withForm({
   ...addVisitFormOptions,
   render: ({ form }) => {
-    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
-    const insets = useSafeAreaInsets();
 
     return (
       <form.AppField name="selectedCountry">
@@ -32,7 +43,12 @@ export const CountrySelectField = withForm({
 
           const handleSelect = (code: string) => {
             form.setFieldValue("selectedCountry", code);
-            setIsModalVisible(false);
+            setIsOpen(false);
+            setSearchQuery("");
+          };
+
+          const closeSheet = () => {
+            setIsOpen(false);
             setSearchQuery("");
           };
 
@@ -42,109 +58,91 @@ export const CountrySelectField = withForm({
                 {i18n.t("home.add-visit.country-label") ??
                   "Which country did you visit?"}
               </Text>
-              <View className="relative">
-                <Pressable
-                  className="h-12 w-full flex-row items-center justify-between rounded-xl border border-slate-200 bg-white px-4 dark:border-slate-700 dark:bg-slate-800"
-                  onPress={() => setIsModalVisible(true)}
+              <Pressable
+                className="h-12 w-full flex-row items-center justify-between rounded-xl border border-slate-200 bg-white px-4 dark:border-slate-700 dark:bg-slate-800"
+                onPress={() => setIsOpen(true)}
+              >
+                <Text
+                  className={`flex-1 text-base ${
+                    selectedOption
+                      ? "text-slate-900 dark:text-white"
+                      : "text-slate-400 dark:text-slate-500"
+                  }`}
                 >
-                  <Text
-                    className={`flex-1 text-base ${
-                      selectedOption
-                        ? "text-slate-900 dark:text-white"
-                        : "text-slate-400 dark:text-slate-500"
-                    }`}
-                  >
-                    {selectedOption
-                      ? `${selectedOption.flag} ${selectedOption.label}`
-                      : (i18n.t("home.add-visit.country-placeholder") ??
-                        "Select country")}
-                  </Text>
-                  <ChevronDown
-                    className="text-slate-500 dark:text-slate-400"
-                    size={20}
-                  />
-                </Pressable>
-
-                <Modal
-                  animationType="slide"
-                  onRequestClose={() => setIsModalVisible(false)}
-                  transparent
-                  visible={isModalVisible}
-                >
-                  <Pressable
-                    className="flex-1 bg-black/50"
-                    onPress={() => setIsModalVisible(false)}
-                  >
-                    <Pressable
-                      className="mt-auto h-[75%] w-full rounded-t-3xl bg-white dark:bg-slate-900"
-                      onPress={(e) => e.stopPropagation()}
-                    >
-                      <View className="flex-row items-center gap-3 border-slate-200 border-b px-4 pt-5 pb-4 dark:border-slate-800">
-                        <View className="flex-1 flex-row items-center gap-2 rounded-xl bg-slate-100 px-3 py-2 dark:bg-slate-800">
-                          <Search
-                            className="text-slate-500 dark:text-slate-400"
-                            size={20}
-                          />
-                          <TextInput
-                            autoFocus
-                            className="flex-1 text-base text-slate-900 dark:text-white"
-                            onChangeText={setSearchQuery}
-                            placeholder={
-                              i18n.t("home.add-visit.search-country") ??
-                              "Search country..."
-                            }
-                            placeholderTextColor="#94a3b8"
-                            value={searchQuery}
-                          />
-                          {searchQuery.length > 0 && (
-                            <Pressable onPress={() => setSearchQuery("")}>
-                              <X
-                                className="text-slate-500 dark:text-slate-400"
-                                size={16}
-                              />
-                            </Pressable>
-                          )}
-                        </View>
-                        <Pressable onPress={() => setIsModalVisible(false)}>
-                          <Text className="font-bold text-base text-primary-500">
-                            {i18n.t("common.cancel") ?? "Cancel"}
-                          </Text>
-                        </Pressable>
-                      </View>
-
-                      <FlatList
-                        contentContainerStyle={{
-                          paddingBottom: insets.bottom + 20,
-                        }}
-                        data={filteredOptions}
-                        keyboardShouldPersistTaps="handled"
-                        keyExtractor={(item) => item.code}
-                        renderItem={({ item }) => (
-                          <Pressable
-                            className={`flex-row items-center justify-between border-slate-100 border-b px-4 py-3 active:bg-slate-50 dark:border-slate-800 dark:active:bg-slate-800 ${
-                              selectedCountry === item.code
-                                ? "bg-primary-50 dark:bg-primary-900/20"
-                                : ""
-                            }`}
-                            onPress={() => handleSelect(item.code)}
-                          >
-                            <Text className="text-base text-slate-900 dark:text-white">
-                              {item.flag} {item.label}
-                            </Text>
-                            {selectedCountry === item.code && (
-                              <View className="size-2 rounded-full bg-primary-500" />
-                            )}
-                          </Pressable>
-                        )}
-                      />
-                    </Pressable>
-                  </Pressable>
-                </Modal>
-              </View>
+                  {selectedOption
+                    ? `${selectedOption.flag} ${selectedOption.label}`
+                    : (i18n.t("home.add-visit.country-placeholder") ??
+                      "Select country")}
+                </Text>
+                <ChevronDown
+                  className="text-slate-500 dark:text-slate-400"
+                  size={20}
+                />
+              </Pressable>
               <Text className="pl-1 text-slate-400 text-xs dark:text-slate-500">
                 {i18n.t("home.add-visit.country-helper") ??
                   "Search by name or let smart fill suggest it for you."}
               </Text>
+
+              <Actionsheet isOpen={isOpen} onClose={closeSheet}>
+                <ActionsheetBackdrop />
+                <ActionsheetContent className="h-[75%] rounded-t-3xl">
+                  <ActionsheetDragIndicatorWrapper>
+                    <ActionsheetDragIndicator />
+                  </ActionsheetDragIndicatorWrapper>
+                  <Box className="w-full flex-row items-center gap-3 border-outline-100 border-b px-1 pt-2 pb-3">
+                    <Box className="flex-1 flex-row items-center gap-2 rounded-xl bg-background-50 px-3 py-2">
+                      <Search className="text-typography-500" size={20} />
+                      <TextInput
+                        autoFocus
+                        className="flex-1 text-base text-typography-900"
+                        onChangeText={setSearchQuery}
+                        placeholder={
+                          i18n.t("home.add-visit.search-country") ??
+                          "Search country..."
+                        }
+                        placeholderTextColor="#94a3b8"
+                        value={searchQuery}
+                      />
+                      {searchQuery.length > 0 && (
+                        <Pressable onPress={() => setSearchQuery("")}>
+                          <X className="text-typography-500" size={16} />
+                        </Pressable>
+                      )}
+                    </Box>
+                    <Pressable onPress={closeSheet}>
+                      <Text className="font-bold text-base text-primary-600">
+                        {i18n.t("common.cancel") ?? "Cancel"}
+                      </Text>
+                    </Pressable>
+                  </Box>
+                  <ActionsheetFlatList
+                    data={filteredOptions}
+                    keyboardShouldPersistTaps="handled"
+                    keyExtractor={(item: unknown) =>
+                      (item as CountryOption).code
+                    }
+                    renderItem={({ item }) => {
+                      const option = item as CountryOption;
+                      const isSelected = selectedCountry === option.code;
+                      return (
+                        <ActionsheetItem
+                          className={isSelected ? "bg-primary-50" : ""}
+                          onPress={() => handleSelect(option.code)}
+                        >
+                          <ActionsheetItemText className="text-base text-typography-900">
+                            {option.flag} {option.label}
+                          </ActionsheetItemText>
+                          {isSelected ? (
+                            <Box className="ml-auto size-2 rounded-full bg-primary-500" />
+                          ) : null}
+                        </ActionsheetItem>
+                      );
+                    }}
+                    style={{ width: "100%" }}
+                  />
+                </ActionsheetContent>
+              </Actionsheet>
             </View>
           );
         }}

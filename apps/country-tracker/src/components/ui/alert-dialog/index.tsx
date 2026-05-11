@@ -136,7 +136,7 @@ const AlertDialog = React.forwardRef<
       {...props}
       className={alertDialogStyle({ class: className })}
       context={{ size }}
-      pointerEvents="box-none"
+      style={[{ pointerEvents: "box-none" }, props.style]}
     />
   );
 });
@@ -161,7 +161,6 @@ const AlertDialogContent = React.forwardRef<
         scale: 0.9,
         opacity: 0,
       }}
-      pointerEvents="auto"
       ref={ref}
       transition={{
         type: "spring",
@@ -180,6 +179,7 @@ const AlertDialogContent = React.forwardRef<
         size,
         class: className,
       })}
+      style={[{ pointerEvents: "auto" }, props.style]}
     />
   );
 });

@@ -21,7 +21,8 @@
     },
     "stats": {
       "countries": "국가 수",
-      "days-tracked": "추적 일수"
+      "days-tracked": "추적 일수",
+      "days-tracked-short": "일수"
     },
     "filters": {
       "recent": "최근",
@@ -204,7 +205,8 @@
     "view-trips": "상세 보기",
     "stats": {
       "countries": "국가",
-      "days-abroad": "해외 체류일"
+      "days-abroad": "해외 체류일",
+      "days-abroad-short": "체류일"
     },
     "filters": {
       "all-time": "전체 기간",

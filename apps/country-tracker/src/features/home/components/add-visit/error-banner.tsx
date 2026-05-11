@@ -1,11 +1,8 @@
 import type { ErrorBannerProps } from "@/features/home/types/add-visit-screen";
 
 import { AlertCircle } from "lucide-react-native";
-import {
-  FormControlError,
-  FormControlErrorIcon,
-  FormControlErrorText,
-} from "@/components/ui/form-control";
+import { Box } from "@/components/ui/box";
+import { Text } from "@/components/ui/text";
 import { useThemeColor } from "@/hooks/use-theme-color";
 
 export function ErrorBanner({ message }: ErrorBannerProps) {
@@ -16,12 +13,14 @@ export function ErrorBanner({ message }: ErrorBannerProps) {
 
   if (!message) return null;
   return (
-    <FormControlError
-      className="items-start rounded-xl border px-4 py-3"
+    <Box
+      className="flex-row items-start gap-2 rounded-xl border px-4 py-3"
       style={{ borderColor: errorColor, backgroundColor: errorSurface }}
     >
-      <FormControlErrorIcon as={AlertCircle} size="sm" />
-      <FormControlErrorText size="sm">{message}</FormControlErrorText>
-    </FormControlError>
+      <AlertCircle color={errorColor} size={16} />
+      <Text className="flex-1 text-sm" style={{ color: errorColor }}>
+        {message}
+      </Text>
+    </Box>
   );
 }

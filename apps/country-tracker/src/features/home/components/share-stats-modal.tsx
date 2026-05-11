@@ -4,7 +4,6 @@ import { X } from "lucide-react-native";
 import { Box } from "@/components/ui/box";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
-import { Icon } from "@/components/ui/icon";
 import {
   Modal,
   ModalBackdrop,
@@ -64,7 +63,7 @@ export function ShareStatsModal({
             {i18n.t("share.title")}
           </Heading>
           <ModalCloseButton>
-            <Icon as={X} size="md" />
+            <X color="#4B5363" size={20} />
           </ModalCloseButton>
         </ModalHeader>
         <ModalBody>
