@@ -6,7 +6,8 @@ tags:
 - launchApp
 
 # Navigate to Map tab
-- tapOn: "Map"
+- tapOn:
+    id: "tab-map"
 
 # Verify map screen elements
 - assertVisible: "Countries"

@@ -9,7 +9,8 @@ tags:
 # Settings → 테마 토글 → 각 화면 시각적 확인
 
 - launchApp
-- tapOn: "Settings"
+- tapOn:
+    id: "tab-settings"
 - waitForAnimationToEnd:
     timeout: 1500
 
@@ -28,17 +29,20 @@ tags:
 - assertVisible: "Preferences"
 
 # 각 화면 다크모드 동작 확인
-- tapOn: "Home"
+- tapOn:
+    id: "tab-home"
 - waitForAnimationToEnd:
     timeout: 1500
 - assertVisible: "My Travels"
 
-- tapOn: "Map"
+- tapOn:
+    id: "tab-map"
 - waitForAnimationToEnd:
     timeout: 1500
 - assertVisible: "Countries"
 
-- tapOn: "Settings"
+- tapOn:
+    id: "tab-settings"
 - waitForAnimationToEnd:
     timeout: 1500
 

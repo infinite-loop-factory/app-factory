@@ -13,7 +13,7 @@ tags:
 
 # Add visit 진입 (FAB)
 - tapOn:
-    id: "Plus"
+    id: "home-add-fab"
 - waitForAnimationToEnd:
     timeout: 1500
 - assertVisible: "Add a New Visit"

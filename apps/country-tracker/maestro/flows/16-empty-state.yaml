@@ -23,16 +23,18 @@ tags:
 
 # FAB로 첫 visit 추가 흐름 진입 가능 확인
 - assertVisible:
-    id: "Plus"
+    id: "home-add-fab"
 
 # Map 탭으로 이동 → 동일한 빈 상태
-- tapOn: "Map"
+- tapOn:
+    id: "tab-map"
 - waitForAnimationToEnd:
     timeout: 1500
 - assertVisible: "Countries"
 
 # 다시 홈
-- tapOn: "Home"
+- tapOn:
+    id: "tab-home"
 - waitForAnimationToEnd:
     timeout: 1500
 - assertVisible: "My Travels"

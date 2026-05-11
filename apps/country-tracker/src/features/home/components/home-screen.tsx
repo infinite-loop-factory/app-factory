@@ -255,10 +255,12 @@ export default function HomeScreen() {
           </Box>
           <Link asChild href="/add-visit">
             <Button
+              accessibilityLabel="home-add-fab"
               action="primary"
               className="h-12 w-12 items-center justify-center rounded-full p-0 shadow-sm"
               size="md"
               style={{ backgroundColor: primaryColor }}
+              testID="home-add-fab"
               variant="solid"
             >
               <ButtonIcon as={Plus} color={screenBg} />

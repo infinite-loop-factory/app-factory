@@ -29,20 +29,23 @@ tags:
 - tapOn: "Cancel"
 
 # 4. Map 탭
-- tapOn: "Map"
+- tapOn:
+    id: "tab-map"
 - waitForAnimationToEnd:
     timeout: 1500
 - assertVisible: "Countries"
 
 # 5. Settings 탭
-- tapOn: "Settings"
+- tapOn:
+    id: "tab-settings"
 - waitForAnimationToEnd:
     timeout: 1500
 - assertVisible: "Preferences"
 - assertVisible: "Visa Alerts"
 
 # 6. 다시 홈
-- tapOn: "Home"
+- tapOn:
+    id: "tab-home"
 - waitForAnimationToEnd:
     timeout: 1500
 - assertVisible: "My Travels"

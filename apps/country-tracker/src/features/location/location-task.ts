@@ -210,7 +210,6 @@ TaskManager.defineTask<LocationTaskData>(
   LOCATION_TASK_NAME,
   async ({ data, error }) => {
     if (error) {
-      console.error("Location task error:", error);
       return;
     }
 

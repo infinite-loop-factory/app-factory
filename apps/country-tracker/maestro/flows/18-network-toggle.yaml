@@ -20,7 +20,7 @@ tags:
 # 1. 비행기 모드 ON (수동)
 # 2. Add visit 시도
 - tapOn:
-    id: "Plus"
+    id: "home-add-fab"
 - waitForAnimationToEnd:
     timeout: 1500
 

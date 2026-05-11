@@ -6,10 +6,19 @@ tags:
 - launchApp
 
 # Navigate to Settings tab
-- tapOn: "Settings"
+- tapOn:
+    id: "tab-settings"
+- waitForAnimationToEnd:
+    timeout: 1500
 
-# Verify settings elements
+# Settings 화면 헤더 확인 (위쪽으로 스크롤되어 있을 수 있음)
+- scrollUntilVisible:
+    element: "Preferences"
+    direction: UP
 - assertVisible: "Preferences"
+- scrollUntilVisible:
+    element: "Visa Alerts"
+    direction: DOWN
 - assertVisible: "Visa Alerts"
 
 # Navigate to Visa Alerts

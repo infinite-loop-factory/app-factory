@@ -30,4 +30,4 @@ tags:
 
 # Test add visit button (FAB)
 - tapOn:
-    id: "Plus"
+    id: "home-add-fab"

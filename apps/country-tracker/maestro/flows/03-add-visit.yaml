@@ -7,7 +7,7 @@ tags:
 
 # Navigate to add visit
 - tapOn:
-    id: "Plus"
+    id: "home-add-fab"
 
 # Verify add visit screen
 - assertVisible: "Add a New Visit"

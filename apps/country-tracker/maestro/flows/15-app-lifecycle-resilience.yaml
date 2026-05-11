@@ -27,12 +27,14 @@ tags:
       - assertVisible: "My Travels"
 
 # 모든 사이클 후 정상 동작 확인 (탭 이동)
-- tapOn: "Map"
+- tapOn:
+    id: "tab-map"
 - waitForAnimationToEnd:
     timeout: 1500
 - assertVisible: "Countries"
 
-- tapOn: "Settings"
+- tapOn:
+    id: "tab-settings"
 - waitForAnimationToEnd:
     timeout: 1500
 - assertVisible: "Preferences"

@@ -7,7 +7,8 @@ tags:
 # 신규 modal/alert-dialog 프리미티브로 마이그레이션된 visa-limits-screen 검증
 
 - launchApp
-- tapOn: "Settings"
+- tapOn:
+    id: "tab-settings"
 - waitForAnimationToEnd:
     timeout: 1500
 

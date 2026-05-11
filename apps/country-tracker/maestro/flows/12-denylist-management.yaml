@@ -10,7 +10,8 @@ tags:
 # 2. 국가 추가/제거 흐름
 
 - launchApp
-- tapOn: "Settings"
+- tapOn:
+    id: "tab-settings"
 - waitForAnimationToEnd:
     timeout: 1500
 

@@ -9,7 +9,8 @@ tags:
 # Map 화면의 share 버튼에서 진입
 
 - launchApp
-- tapOn: "Map"
+- tapOn:
+    id: "tab-map"
 - waitForAnimationToEnd:
     timeout: 2000
 

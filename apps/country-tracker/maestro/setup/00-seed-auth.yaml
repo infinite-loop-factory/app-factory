@@ -60,7 +60,7 @@ env:
 - waitForAnimationToEnd:
     timeout: 4000
 
-# 6. dev 빌드 한정: developer menu 닫기 (production 빌드에선 Continue 버튼 없음 → skip)
+# 6. dev 빌드 한정: developer info modal 닫기 (있을 때만)
 - runFlow:
     when:
       visible:
@@ -69,5 +69,21 @@ env:
       - tapOn: "Continue"
       - waitForAnimationToEnd:
           timeout: 1500
+
+# 7. dev 빌드: 앱 재진입으로 잔존 dev menu 회피 + 세션 active 상태로 home 진입
+- launchApp:
+    clearState: false
+- waitForAnimationToEnd:
+    timeout: 3000
+
+# 8. dev 빌드: LogBox console.error 오버레이가 떴으면 Dismiss
+- runFlow:
+    when:
+      visible:
+        text: "Dismiss"
+    commands:
+      - tapOn: "Dismiss"
+      - waitForAnimationToEnd:
+          timeout: 1000
 
 - assertVisible: "My Travels"
