@@ -9,6 +9,9 @@ export const env = createEnv({
     EXPO_PUBLIC_SUPABASE_ANON_KEY: z.string().min(1),
     EXPO_PUBLIC_APP_STORE_URL: z.url().optional(),
     EXPO_PUBLIC_PLAY_STORE_URL: z.url().optional(),
+    EXPO_PUBLIC_E2E_MODE: z
+      .union([z.literal("true"), z.literal("false")])
+      .optional(),
   },
   runtimeEnv: process.env,
   emptyStringAsUndefined: true,

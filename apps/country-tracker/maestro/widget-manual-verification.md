@@ -2,6 +2,62 @@
 
 maestro는 iOS 홈스크린 위젯 자동화를 지원하지 않습니다. 아래 절차로 수동 검증하세요.
 
+## E2E 인증 설정 (필수 사전 단계)
+
+`requires-auth` 태그가 붙은 모든 플로우는 사전 인증이 필요합니다. OAuth 화면(Apple/Google/Facebook)을 maestro로 자동화하지 않고, **매직 deep link로 Supabase 세션을 직접 주입**합니다.
+
+### 1. 빌드 시점 — E2E 모드 활성화
+
+development 또는 preview 빌드에서만 활성화. **production 빌드는 절대 활성화 금지**.
+
+```bash
+# .env.e2e (gitignored)
+EXPO_PUBLIC_E2E_MODE=true
+EXPO_PUBLIC_SENTRY_DSN=...
+EXPO_PUBLIC_SUPABASE_URL=...
+EXPO_PUBLIC_SUPABASE_ANON_KEY=...
+
+# Dev 빌드 실행
+cp .env.e2e .env && pnpm ios
+```
+
+이중 가드: `src/features/e2e/utils/is-e2e-enabled.ts`
+- `__DEV__` (production bundle에선 false → dead code elimination)
+- `EXPO_PUBLIC_E2E_MODE === "true"`
+
+### 2. maestro 실행 시점 — 세션 주입
+
+`maestro/setup/00-seed-auth.yaml` 플로우가 Supabase REST `password` grant로 토큰을 얻은 뒤 `country-tracker://e2e-auth?access_token=…&refresh_token=…` deep link로 `supabase.auth.setSession()` 호출.
+
+```bash
+# E2E 전용 테스트 계정 자격증명 (CI: GitHub Actions secrets)
+export MAESTRO_E2E_SUPABASE_URL='https://xxx.supabase.co'
+export MAESTRO_E2E_SUPABASE_ANON_KEY='eyJ...'
+export MAESTRO_E2E_TEST_EMAIL='e2e@country-tracker.test'
+export MAESTRO_E2E_TEST_PASSWORD='********'
+
+# 한 번만 실행 (이후 flows는 clearState: false 로 세션 재사용)
+maestro test maestro/setup/00-seed-auth.yaml
+
+# 인증 의존 플로우 실행
+maestro test maestro/flows/
+```
+
+### 3. 테스트 계정 운영 가이드
+
+- Supabase Auth에서 **Email + Password** provider 활성화 (테스트 계정 1개 전용)
+- 이메일 도메인은 `.test` TLD 사용 권장 (외부 도달 불가)
+- 비밀번호는 1Password / Vault / GitHub Actions secrets로 관리
+- 테스트 visits 데이터: 매 런 후 cleanup 또는 read-only fixture
+- production Supabase 프로젝트와 **분리된 staging 프로젝트** 사용 강력 권장
+
+### 4. 안전 점검 체크리스트
+
+배포 전 반드시 확인:
+- [ ] production 빌드 산출물에 `e2e-auth.tsx` 경로가 dead code로 제거됐는지 (`grep e2e-auth ios/main.jsbundle` 또는 hermes bytecode dump)
+- [ ] `EXPO_PUBLIC_E2E_MODE` 환경변수가 production EAS 빌드 secret/env에 **존재하지 않는지**
+- [ ] App Store Connect / Play Console 빌드는 development 키 없이 production 키로만 서명
+
 ## 관련 자동화 플로우 (`maestro/flows/`)
 
 | # | 파일 | 영역 | 태그 |
