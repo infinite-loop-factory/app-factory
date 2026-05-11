@@ -1,9 +1,15 @@
+import type { SwipeableMethods } from "react-native-gesture-handler/ReanimatedSwipeable";
+import type { SharedValue } from "react-native-reanimated";
 import type { CountryItem } from "@/types/country-item";
 
 import { Trash2 } from "lucide-react-native";
 import { useRef } from "react";
-import { Animated, Platform, TouchableOpacity } from "react-native";
-import { Swipeable } from "react-native-gesture-handler";
+import { Platform, TouchableOpacity } from "react-native";
+import ReanimatedSwipeable from "react-native-gesture-handler/ReanimatedSwipeable";
+import Animated, {
+  interpolate,
+  useAnimatedStyle,
+} from "react-native-reanimated";
 import { Badge, BadgeText } from "@/components/ui/badge";
 import { Box } from "@/components/ui/box";
 import { Image } from "@/components/ui/image";
@@ -20,12 +26,52 @@ interface SwipeableCountryCardProps {
   onPress: (item: CountryItem) => void;
 }
 
+function DeleteAction({
+  dragX,
+  errorColor,
+  onPress,
+}: {
+  dragX: SharedValue<number>;
+  errorColor: string;
+  onPress: () => void;
+}) {
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [
+      {
+        scale: interpolate(dragX.value, [-80, 0], [1, 0], "clamp"),
+      },
+    ],
+  }));
+
+  return (
+    <TouchableOpacity
+      onPress={onPress}
+      style={{
+        backgroundColor: errorColor,
+        justifyContent: "center",
+        alignItems: "center",
+        width: 80,
+        borderTopRightRadius: 16,
+        borderBottomRightRadius: 16,
+        marginBottom: 12,
+      }}
+    >
+      <Animated.View style={animatedStyle}>
+        <Trash2 color="white" size={22} />
+        <Text className="mt-1 text-center font-semibold text-white text-xs">
+          {i18n.t("home.delete-visit.confirm")}
+        </Text>
+      </Animated.View>
+    </TouchableOpacity>
+  );
+}
+
 export function SwipeableCountryCard({
   item,
   onDelete,
   onPress,
 }: SwipeableCountryCardProps) {
-  const swipeableRef = useRef<Swipeable>(null);
+  const swipeableRef = useRef<SwipeableMethods>(null);
   const [
     cardBg,
     borderColor,
@@ -60,41 +106,19 @@ export function SwipeableCountryCard({
   });
 
   const renderRightActions = (
-    _progress: Animated.AnimatedInterpolation<number>,
-    dragX: Animated.AnimatedInterpolation<number>,
-  ) => {
-    const scale = dragX.interpolate({
-      inputRange: [-80, 0],
-      outputRange: [1, 0],
-      extrapolate: "clamp",
-    });
-
-    return (
-      <TouchableOpacity
-        onPress={() => {
-          swipeableRef.current?.close();
-          triggerHaptic("medium");
-          onDelete(item);
-        }}
-        style={{
-          backgroundColor: errorColor,
-          justifyContent: "center",
-          alignItems: "center",
-          width: 80,
-          borderTopRightRadius: 16,
-          borderBottomRightRadius: 16,
-          marginBottom: 12,
-        }}
-      >
-        <Animated.View style={{ transform: [{ scale }] }}>
-          <Trash2 color="white" size={22} />
-          <Text className="mt-1 text-center font-semibold text-white text-xs">
-            {i18n.t("home.delete-visit.confirm")}
-          </Text>
-        </Animated.View>
-      </TouchableOpacity>
-    );
-  };
+    _progress: SharedValue<number>,
+    dragX: SharedValue<number>,
+  ) => (
+    <DeleteAction
+      dragX={dragX}
+      errorColor={errorColor ?? "#ef4444"}
+      onPress={() => {
+        swipeableRef.current?.close();
+        triggerHaptic("medium");
+        onDelete(item);
+      }}
+    />
+  );
 
   const cardContent = (
     <TouchableOpacity activeOpacity={0.7} onPress={() => onPress(item)}>
@@ -166,7 +190,7 @@ export function SwipeableCountryCard({
   }
 
   return (
-    <Swipeable
+    <ReanimatedSwipeable
       friction={2}
       overshootRight={false}
       ref={swipeableRef}
@@ -174,6 +198,6 @@ export function SwipeableCountryCard({
       rightThreshold={40}
     >
       {cardContent}
-    </Swipeable>
+    </ReanimatedSwipeable>
   );
 }

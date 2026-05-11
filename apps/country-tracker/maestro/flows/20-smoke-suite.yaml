@@ -14,7 +14,7 @@ tags:
 # 1. 홈 화면 진입
 - assertVisible: "My Travels"
 - assertVisible: "Countries"
-- assertVisible: "Days Tracked"
+- assertVisible: "Days"
 
 # 2. 검색 동작
 - tapOn: "Search destination..."

@@ -24,11 +24,27 @@ env:
 - runScript:
     file: ../scripts/seed-session.js
 
-# 2. 앱 colds-tart (이전 세션 클리어)
+# 2. 앱 cold-start (이전 세션 클리어)
 - launchApp:
     clearState: true
 - waitForAnimationToEnd:
-    timeout: 2000
+    timeout: 3000
+
+# 2-1. dev 빌드면 dev launcher 화면이 뜸 → Metro 서버 탭하여 JS 번들 로드
+#      release 빌드면 이 단계는 visible 매칭 없으므로 스킵됨
+- runFlow:
+    when:
+      visible: "DEVELOPMENT SERVERS"
+    commands:
+      - tapOn:
+          text: "http://localhost:8081"
+      - runFlow:
+          when:
+            visible: "Open"
+          commands:
+            - tapOn: "Open"
+      - waitForAnimationToEnd:
+          timeout: 8000
 
 # 3. 매직 deep link로 setSession 발동
 - openLink: "country-tracker://e2e-auth?access_token=${output.ACCESS_TOKEN}&refresh_token=${output.REFRESH_TOKEN}"
@@ -43,4 +59,15 @@ env:
 # 5. 세션 적용 → 홈 진입 확인
 - waitForAnimationToEnd:
     timeout: 4000
+
+# 6. dev 빌드 한정: developer menu 닫기 (production 빌드에선 Continue 버튼 없음 → skip)
+- runFlow:
+    when:
+      visible:
+        text: "Continue"
+    commands:
+      - tapOn: "Continue"
+      - waitForAnimationToEnd:
+          timeout: 1500
+
 - assertVisible: "My Travels"

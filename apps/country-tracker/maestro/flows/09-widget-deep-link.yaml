@@ -27,4 +27,4 @@ tags:
 # 홈 화면으로 진입 확인
 - assertVisible: "My Travels"
 - assertVisible: "Countries"
-- assertVisible: "Days Tracked"
+- assertVisible: "Days"

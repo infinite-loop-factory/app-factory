@@ -7,7 +7,7 @@ tags:
 - launchApp
 - assertVisible: "My Travels"
 - assertVisible: "Countries"
-- assertVisible: "Days Tracked"
+- assertVisible: "Days"
 
 # Test search input
 - tapOn: "Search destination..."
