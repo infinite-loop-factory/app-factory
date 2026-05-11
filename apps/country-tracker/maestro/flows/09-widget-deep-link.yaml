@@ -1,0 +1,30 @@
+appId: com.gracefullight.countrytracker
+name: Widget Deep Link Entry
+tags:
+  - widget
+  - deep-link
+---
+# 위젯 탭 시 발생하는 deep link로 앱이 정상 진입하는지 검증
+# URL scheme: country-tracker://home
+# 위젯의 widgetURL(SwiftUI) / clickAction='OPEN_APP'(Android)이 트리거하는 URL과 동일
+
+- launchApp:
+    clearState: false
+- waitForAnimationToEnd:
+    timeout: 2000
+
+# 앱을 백그라운드로
+- pressKey: Home
+- waitForAnimationToEnd:
+    timeout: 1500
+
+# 위젯 탭과 동등한 deep link 호출
+- openLink: country-tracker://home
+
+- waitForAnimationToEnd:
+    timeout: 3000
+
+# 홈 화면으로 진입 확인
+- assertVisible: "My Travels"
+- assertVisible: "Countries"
+- assertVisible: "Days Tracked"

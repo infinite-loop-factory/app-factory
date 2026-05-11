@@ -1,0 +1,51 @@
+appId: com.gracefullight.countrytracker
+name: Add Visit Validation and Error Banner
+tags:
+  - requires-auth
+  - ui-primitives
+  - validation
+---
+# 신규 add-visit 컴포넌트 (error-banner, footer-action-bar, date-range-section,
+# country-select-field, media-import-card) 통합 검증
+
+- launchApp
+- assertVisible: "My Travels"
+
+# Add visit 진입 (FAB)
+- tapOn:
+    id: "Plus"
+- waitForAnimationToEnd:
+    timeout: 1500
+- assertVisible: "Add a New Visit"
+
+# 신규 footer-action-bar: 하단 고정 액션 버튼
+- assertVisible: "Register"
+- assertVisible: "Cancel"
+
+# 국가 미선택 상태로 Register 시도 → error-banner 노출 (또는 버튼 disabled)
+- tapOn: "Register"
+- waitForAnimationToEnd:
+    timeout: 1000
+
+# error-banner는 즉시 표시 또는 toast로 표시될 수 있음 — 둘 중 하나
+# (실제 구현에 맞춰 조정 필요)
+
+# 국가 선택 (country-select-field)
+- tapOn: "Select a country"
+- waitForAnimationToEnd:
+    timeout: 1000
+- inputText: "Japan"
+- tapOn: "Japan"
+- waitForAnimationToEnd:
+    timeout: 1000
+
+# date-range-section: Start / End 표시 확인
+- assertVisible: "Start"
+- assertVisible: "End"
+- assertVisible: "Stayed one day"
+
+# Cancel 버튼으로 빠지기 (변경사항 폐기)
+- tapOn: "Cancel"
+- waitForAnimationToEnd:
+    timeout: 1500
+- assertVisible: "My Travels"

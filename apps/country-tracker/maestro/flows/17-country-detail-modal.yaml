@@ -1,0 +1,47 @@
+appId: com.gracefullight.countrytracker
+name: Country Detail and Edit Modal
+tags:
+  - requires-auth
+  - requires-data
+  - ui-primitives
+---
+# country-detail-screen + swipeable-country-card 통합 검증
+# (모달/액션 시트 프리미티브 마이그레이션 반영)
+
+- launchApp
+- assertVisible: "My Travels"
+
+# 첫 country 카드 진입
+- tapOn:
+    index: 0
+    text: ".*"
+    below: "Countries"
+- waitForAnimationToEnd:
+    timeout: 1500
+
+# Country detail 화면
+- assertVisible: "Visit History"
+- assertVisible: "Visits"
+- assertVisible: "Days"
+
+# Visit 항목이 있다면 길게 눌러서 액션 시트 (또는 메뉴) 표시
+- longPressOn:
+    index: 0
+    below: "Visit History"
+- waitForAnimationToEnd:
+    timeout: 1000
+
+# 액션 시트 또는 modal 표시 — Edit/Delete 선택지 노출
+# (실제 UI 따라 selector 조정 필요)
+
+# 백그라운드 탭으로 닫기
+- back
+- waitForAnimationToEnd:
+    timeout: 1000
+
+# detail 화면으로 복귀
+- assertVisible: "Visit History"
+
+# 뒤로 → 홈
+- back
+- assertVisible: "My Travels"

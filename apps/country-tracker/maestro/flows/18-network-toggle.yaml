@@ -1,0 +1,50 @@
+appId: com.gracefullight.countrytracker
+name: Network Resilience and Offline Queue
+tags:
+  - requires-auth
+  - network
+  - offline
+---
+# 네트워크 토글 시 useNetworkState 기반 flushVisitQueue/flushLocationQueueIfAny 흐름 검증
+# (위젯 sync는 AsyncStorage fallback로 동작해야 함)
+# 사전 조건: 디바이스에서 비행기 모드 토글 가능
+
+- launchApp
+- waitForAnimationToEnd:
+    timeout: 2000
+- assertVisible: "My Travels"
+
+# 오프라인 상태에서 visit 추가 시도 (queue에 적재되어야 함)
+# 실제 비행기 모드 토글은 maestro 자동화 한계 → 수동 토글 가이드용 케이스
+
+# 1. 비행기 모드 ON (수동)
+# 2. Add visit 시도
+- tapOn:
+    id: "Plus"
+- waitForAnimationToEnd:
+    timeout: 1500
+
+- tapOn: "Select a country"
+- inputText: "Japan"
+- tapOn: "Japan"
+- waitForAnimationToEnd:
+    timeout: 1000
+
+- tapOn: "Stayed one day"
+- tapOn: "Register"
+- waitForAnimationToEnd:
+    timeout: 2000
+
+# 3. 비행기 모드 OFF (수동) → queue flush 자동 발동
+# 4. 동기화 완료 후 country가 표시됨
+- assertVisible: "My Travels"
+
+# 백그라운드/포그라운드로 재진입하면 위젯 sync가 새 데이터 반영
+- pressKey: Home
+- waitForAnimationToEnd:
+    timeout: 1000
+- launchApp:
+    clearState: false
+- waitForAnimationToEnd:
+    timeout: 2000
+- assertVisible: "My Travels"

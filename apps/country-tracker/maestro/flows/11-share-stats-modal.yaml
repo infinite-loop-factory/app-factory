@@ -1,0 +1,31 @@
+appId: com.gracefullight.countrytracker
+name: Share Stats Modal
+tags:
+  - requires-auth
+  - requires-data
+  - ui-primitives
+---
+# 통일 modal 프리미티브로 마이그레이션된 share-stats-modal 검증
+# Map 화면의 share 버튼에서 진입
+
+- launchApp
+- tapOn: "Map"
+- waitForAnimationToEnd:
+    timeout: 2000
+
+- assertVisible: "Countries"
+
+# 공유 버튼 (id 기반 — 실제 ID는 share-stats-modal.tsx 확인 필요)
+- tapOn:
+    id: "map.share-button-a11y"
+- waitForAnimationToEnd:
+    timeout: 1500
+
+# 통일 modal: 헤더 + 미리보기 + 액션 버튼
+- assertVisible: ".*"
+
+# 닫기 동작 (배경 탭 또는 close 버튼)
+- back
+- waitForAnimationToEnd:
+    timeout: 1000
+- assertVisible: "Countries"

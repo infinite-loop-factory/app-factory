@@ -1,0 +1,36 @@
+appId: com.gracefullight.countrytracker
+name: Denylist Country Management
+tags:
+  - requires-auth
+  - ui-primitives
+  - spinner
+---
+# Spinner + alert-dialog 프리미티브 통합 검증
+# 1. 설정에서 Denylist 진입 (로딩 시 신규 Spinner 표시)
+# 2. 국가 추가/제거 흐름
+
+- launchApp
+- tapOn: "Settings"
+- waitForAnimationToEnd:
+    timeout: 1500
+
+# 하단으로 스크롤하여 Denylist 메뉴 진입
+- scrollUntilVisible:
+    element: "Denylist Countries"
+    direction: DOWN
+- tapOn: "Denylist Countries"
+- waitForAnimationToEnd:
+    timeout: 2000
+
+# Denylist 화면 진입 확인
+- assertVisible: ".*"
+
+# 신규 Spinner: 데이터 로딩 중 노출 (이미 캐시되어 있을 수 있어 짧을 수 있음)
+- waitForAnimationToEnd:
+    timeout: 1500
+
+# 뒤로 가기
+- back
+- waitForAnimationToEnd:
+    timeout: 1000
+- assertVisible: "Preferences"

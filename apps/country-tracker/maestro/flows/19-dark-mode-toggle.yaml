@@ -1,0 +1,52 @@
+appId: com.gracefullight.countrytracker
+name: Dark Mode Toggle Across Screens
+tags:
+  - requires-auth
+  - theme
+  - ui-primitives
+---
+# 신규 ThemedShell + UI 프리미티브 (modal/alert/spinner)의 다크모드 대응 검증
+# Settings → 테마 토글 → 각 화면 시각적 확인
+
+- launchApp
+- tapOn: "Settings"
+- waitForAnimationToEnd:
+    timeout: 1500
+
+# 테마 토글 (System / Light / Dark)
+- assertVisible: "Preferences"
+
+# 테마 옵션 탭 (i18n에 따라 라벨 조정 필요)
+- scrollUntilVisible:
+    element: "Dark"
+    direction: DOWN
+- tapOn: "Dark"
+- waitForAnimationToEnd:
+    timeout: 1000
+
+# 다크모드 적용 확인 (화면 그대로 - assertion은 시각 검증 대체로 무난한 텍스트 노출)
+- assertVisible: "Preferences"
+
+# 각 화면 다크모드 동작 확인
+- tapOn: "Home"
+- waitForAnimationToEnd:
+    timeout: 1500
+- assertVisible: "My Travels"
+
+- tapOn: "Map"
+- waitForAnimationToEnd:
+    timeout: 1500
+- assertVisible: "Countries"
+
+- tapOn: "Settings"
+- waitForAnimationToEnd:
+    timeout: 1500
+
+# 라이트로 복귀
+- scrollUntilVisible:
+    element: "Light"
+    direction: UP
+- tapOn: "Light"
+- waitForAnimationToEnd:
+    timeout: 1000
+- assertVisible: "Preferences"

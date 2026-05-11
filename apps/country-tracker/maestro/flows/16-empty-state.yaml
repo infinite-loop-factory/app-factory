@@ -1,0 +1,48 @@
+appId: com.gracefullight.countrytracker
+name: Empty State for New User
+tags:
+  - requires-auth
+  - empty-state
+  - widget
+---
+# 방문 데이터가 0개인 신규 사용자 흐름
+# 위젯 빈 상태 ("여행을 기록해보세요") + 홈 화면 empty state 모두 검증
+# 사전 조건: visits이 0개인 테스트 계정으로 로그인되어 있을 것
+
+- launchApp
+- waitForAnimationToEnd:
+    timeout: 2000
+
+- assertVisible: "My Travels"
+
+# 빈 상태 메시지 확인 (i18n: home.no-visited-countries)
+- assertVisible: "Start tracking your journey by adding your first visit!"
+
+# 통계: 0개국 / 0일
+- assertVisible: "0"
+
+# FAB로 첫 visit 추가 흐름 진입 가능 확인
+- assertVisible:
+    id: "Plus"
+
+# Map 탭으로 이동 → 동일한 빈 상태
+- tapOn: "Map"
+- waitForAnimationToEnd:
+    timeout: 1500
+- assertVisible: "Countries"
+
+# 다시 홈
+- tapOn: "Home"
+- waitForAnimationToEnd:
+    timeout: 1500
+- assertVisible: "My Travels"
+
+# 빈 상태에서 백그라운드/재진입 시 위젯 sync는 EMPTY_SNAPSHOT으로 동작
+- pressKey: Home
+- waitForAnimationToEnd:
+    timeout: 1500
+- launchApp:
+    clearState: false
+- waitForAnimationToEnd:
+    timeout: 2000
+- assertVisible: "My Travels"

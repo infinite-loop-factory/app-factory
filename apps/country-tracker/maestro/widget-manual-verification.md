@@ -2,6 +2,38 @@
 
 maestro는 iOS 홈스크린 위젯 자동화를 지원하지 않습니다. 아래 절차로 수동 검증하세요.
 
+## 관련 자동화 플로우 (`maestro/flows/`)
+
+| # | 파일 | 영역 | 태그 |
+|---|---|---|---|
+| 08 | `08-widget-render.yaml` | 앱 lifecycle ↔ useWidgetSync 호출 | `widget`, `lifecycle` |
+| 09 | `09-widget-deep-link.yaml` | `country-tracker://home` deep link | `widget`, `deep-link` |
+| 10 | `10-delete-visit-modal.yaml` | 통일 alert-dialog (삭제 확인) | `ui-primitives` |
+| 11 | `11-share-stats-modal.yaml` | 통일 modal (지도 공유) | `ui-primitives` |
+| 12 | `12-denylist-management.yaml` | spinner + denylist 화면 | `ui-primitives`, `spinner` |
+| 13 | `13-visa-limits-modal.yaml` | 비자 한도 add/cancel 모달 | `ui-primitives` |
+| 14 | `14-add-visit-error-banner.yaml` | 신규 add-visit 컴포넌트 묶음 | `ui-primitives`, `validation` |
+| 15 | `15-app-lifecycle-resilience.yaml` | 백/포그 5회 반복 (메모리 누수) | `lifecycle`, `widget` |
+| 16 | `16-empty-state.yaml` | visits 0개 사용자 흐름 (위젯 EMPTY_SNAPSHOT) | `empty-state`, `widget` |
+| 17 | `17-country-detail-modal.yaml` | country detail + 액션 시트 | `ui-primitives` |
+| 18 | `18-network-toggle.yaml` | 오프라인 큐 + 위젯 fallback (수동 비행기 모드 토글) | `network`, `offline` |
+| 19 | `19-dark-mode-toggle.yaml` | ThemedShell + UI 프리미티브 다크모드 | `theme` |
+| 20 | `20-smoke-suite.yaml` | 핵심 경로 압축 (CI smoke) | `smoke`, `critical` |
+
+### 실행 예
+```bash
+# 전체 플로우
+maestro test maestro/flows/
+
+# 위젯 관련만
+maestro test --include-tags=widget maestro/flows/
+
+# CI smoke
+maestro test maestro/flows/20-smoke-suite.yaml
+```
+
+
+
 ## iOS (시뮬레이터 / 디바이스)
 
 ### 사전

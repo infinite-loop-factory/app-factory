@@ -1,0 +1,42 @@
+appId: com.gracefullight.countrytracker
+name: App Lifecycle Resilience
+tags:
+  - requires-auth
+  - lifecycle
+  - widget
+---
+# 백그라운드/포그라운드 전환 시 useWidgetSync, ThemedShell, query 캐시가
+# 안정적으로 동작하는지 검증 (반복 사이클)
+
+- launchApp
+- waitForAnimationToEnd:
+    timeout: 2000
+- assertVisible: "My Travels"
+
+# 5회 백그라운드/포그라운드 사이클
+- repeat:
+    times: 5
+    commands:
+      - pressKey: Home
+      - waitForAnimationToEnd:
+          timeout: 1000
+      - launchApp:
+          clearState: false
+      - waitForAnimationToEnd:
+          timeout: 1500
+      - assertVisible: "My Travels"
+
+# 모든 사이클 후 정상 동작 확인 (탭 이동)
+- tapOn: "Map"
+- waitForAnimationToEnd:
+    timeout: 1500
+- assertVisible: "Countries"
+
+- tapOn: "Settings"
+- waitForAnimationToEnd:
+    timeout: 1500
+- assertVisible: "Preferences"
+
+- back
+- waitForAnimationToEnd:
+    timeout: 1000

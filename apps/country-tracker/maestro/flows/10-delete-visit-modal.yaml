@@ -1,0 +1,37 @@
+appId: com.gracefullight.countrytracker
+name: Delete Visit Confirmation Modal
+tags:
+  - requires-auth
+  - requires-data
+  - ui-primitives
+---
+# 신규 alert-dialog 프리미티브로 마이그레이션된 삭제 확인 다이얼로그 검증
+# country 카드 long-press → swipeable delete 또는 detail의 delete 버튼
+
+- launchApp
+- assertVisible: "My Travels"
+
+# 첫 country 카드 스와이프하여 삭제 버튼 노출 (또는 long press)
+- swipe:
+    from:
+      index: 0
+      below: "Countries"
+    direction: LEFT
+- waitForAnimationToEnd:
+    timeout: 1500
+
+# 삭제 버튼 탭 → alert dialog 표시
+- tapOn: "Delete"
+- waitForAnimationToEnd:
+    timeout: 1000
+
+# 신규 alert-dialog 프리미티브: 제목/메시지/액션 버튼 확인
+- assertVisible: "Delete Visit"
+- assertVisible: "Cancel"
+
+# Cancel로 닫기 → 카드는 그대로
+- tapOn: "Cancel"
+- waitForAnimationToEnd:
+    timeout: 1000
+- assertNotVisible: "Delete Visit"
+- assertVisible: "My Travels"
