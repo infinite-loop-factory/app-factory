@@ -19,6 +19,11 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ios: {
     supportsTablet: true,
     bundleIdentifier: "com.gracefullight.countrytracker",
+    entitlements: {
+      "com.apple.security.application-groups": [
+        "group.com.gracefullight.countrytracker",
+      ],
+    },
     infoPlist: {
       UIBackgroundModes: ["location", "fetch"],
       NSLocationWhenInUseUsageDescription:
@@ -57,6 +62,25 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     "expo-router",
     "expo-font",
     "expo-notifications",
+    "@bacons/apple-targets",
+    [
+      "react-native-android-widget",
+      {
+        widgets: [
+          {
+            name: "CountryWidget",
+            label: "Country Tracker",
+            minWidth: "180dp",
+            minHeight: "180dp",
+            targetCellWidth: 2,
+            targetCellHeight: 2,
+            description: "최근 방문국가 표시",
+            previewImage: "./src/assets/images/widget-preview.png",
+            updatePeriodMillis: 0,
+          },
+        ],
+      },
+    ],
   ],
   experiments: {
     tsconfigPaths: true,

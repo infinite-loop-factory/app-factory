@@ -36,7 +36,6 @@ import { SwipeableCountryCard } from "@/features/home/components/swipeable-count
 import { useDeleteVisitMutation } from "@/features/home/hooks/use-delete-visit";
 import { fetchVisitedCountries } from "@/features/map/apis/fetch-visited-countries";
 import { useThemeColor } from "@/hooks/use-theme-color";
-import { useWidgetSync } from "@/hooks/use-widget-sync";
 import i18n from "@/lib/i18n";
 import supabase from "@/lib/supabase";
 import { getStayDays, resolveRegion } from "@/utils/country-region";
@@ -108,7 +107,6 @@ export default function HomeScreen() {
     currentUser?.user_metadata?.full_name ?? i18n.t("home.default-name");
 
   const safeCountries = data ?? [];
-  useWidgetSync(safeCountries);
 
   const trackedDays = useMemo(
     () => safeCountries.reduce((sum, item) => sum + getStayDays(item), 0),
@@ -228,7 +226,7 @@ export default function HomeScreen() {
     >
       <VStack className="pt-2" space="lg">
         <Box
-          className="flex-row items-center justify-between rounded-2xl border px-4 py-4"
+          className="flex-row items-center justify-between rounded-2xl border px-4 py-4 shadow-sm"
           style={{ backgroundColor: cardBg, borderColor }}
         >
           <Box className="flex-row items-center gap-3">
@@ -270,8 +268,8 @@ export default function HomeScreen() {
 
         <Box className="flex-row gap-3">
           <Box
-            className="flex-[2] rounded-2xl border px-5 py-5"
-            style={{ backgroundColor: cardBg, borderColor }}
+            className="rounded-2xl border px-5 py-5 shadow-sm"
+            style={{ backgroundColor: cardBg, borderColor, flex: 2 }}
           >
             <Box className="mb-3 flex-row items-center gap-2">
               <Globe2 color={primaryColor} size={20} />
@@ -290,16 +288,17 @@ export default function HomeScreen() {
             </Text>
           </Box>
           <Box
-            className="flex-1 rounded-2xl border px-4 py-5"
-            style={{ backgroundColor: cardBg, borderColor }}
+            className="rounded-2xl border px-4 py-5 shadow-sm"
+            style={{ backgroundColor: cardBg, borderColor, flex: 1 }}
           >
             <Box className="mb-3 flex-row items-center gap-2">
               <CalendarDays color={textMuted} size={16} />
               <Text
                 className="font-semibold text-xs tracking-wide"
+                numberOfLines={1}
                 style={{ color: textMuted }}
               >
-                {i18n.t("home.stats.days-tracked").toUpperCase()}
+                {i18n.t("home.stats.days-tracked-short").toUpperCase()}
               </Text>
             </Box>
             <Text
@@ -378,7 +377,10 @@ export default function HomeScreen() {
         </Box>
 
         <Box className="flex-row items-center justify-between px-1">
-          <Heading className="font-bold text-xl" style={{ color: textStrong }}>
+          <Heading
+            className="font-semibold text-lg"
+            style={{ color: textStrong }}
+          >
             {i18n.t("home.stats.countries")}
           </Heading>
           <Box className="flex-row items-center gap-3">

@@ -266,6 +266,8 @@ PODS:
   - EXTaskManager (14.0.9):
     - ExpoModulesCore
     - UMAppLoader
+  - ExtensionStorage (1.0.0):
+    - ExpoModulesCore
   - EXUpdatesInterface (2.0.0):
     - ExpoModulesCore
   - FBLazyVector (0.81.5)
@@ -2339,7 +2341,7 @@ DEPENDENCIES:
   - ExpoFileSystem (from `../../../node_modules/expo-file-system/ios`)
   - ExpoFont (from `../../../node_modules/expo-font/ios`)
   - ExpoHaptics (from `../../../node_modules/expo-haptics/ios`)
-  - ExpoHead (from `../node_modules/expo-router/ios`)
+  - ExpoHead (from `../../../node_modules/expo-router/ios`)
   - ExpoImagePicker (from `../../../node_modules/expo-image-picker/ios`)
   - ExpoKeepAwake (from `../../../node_modules/expo-keep-awake/ios`)
   - ExpoLinking (from `../../../node_modules/expo-linking/ios`)
@@ -2352,6 +2354,7 @@ DEPENDENCIES:
   - ExpoSystemUI (from `../../../node_modules/expo-system-ui/ios`)
   - ExpoWebBrowser (from `../../../node_modules/expo-web-browser/ios`)
   - EXTaskManager (from `../../../node_modules/expo-task-manager/ios`)
+  - "ExtensionStorage (from `../../../node_modules/@bacons/apple-targets/ios`)"
   - EXUpdatesInterface (from `../../../node_modules/expo-updates-interface/ios`)
   - FBLazyVector (from `../../../node_modules/react-native/Libraries/FBLazyVector`)
   - hermes-engine (from `../../../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec`)
@@ -2468,7 +2471,7 @@ EXTERNAL SOURCES:
   ExpoHaptics:
     :path: "../../../node_modules/expo-haptics/ios"
   ExpoHead:
-    :path: "../node_modules/expo-router/ios"
+    :path: "../../../node_modules/expo-router/ios"
   ExpoImagePicker:
     :path: "../../../node_modules/expo-image-picker/ios"
   ExpoKeepAwake:
@@ -2493,6 +2496,8 @@ EXTERNAL SOURCES:
     :path: "../../../node_modules/expo-web-browser/ios"
   EXTaskManager:
     :path: "../../../node_modules/expo-task-manager/ios"
+  ExtensionStorage:
+    :path: "../../../node_modules/@bacons/apple-targets/ios"
   EXUpdatesInterface:
     :path: "../../../node_modules/expo-updates-interface/ios"
   FBLazyVector:
@@ -2685,6 +2690,7 @@ SPEC CHECKSUMS:
   ExpoSystemUI: 2ad325f361a2fcd96a464e8574e19935c461c9cc
   ExpoWebBrowser: 17b064c621789e41d4816c95c93f429b84971f52
   EXTaskManager: 6f1a66e4c8cc6df6e24c3d90928704bc3013eae5
+  ExtensionStorage: 5796de20bf181317c376d693fedb64c6781a33ba
   EXUpdatesInterface: 5adf50cb41e079c861da6d9b4b954c3db9a50734
   FBLazyVector: e95a291ad2dadb88e42b06e0c5fb8262de53ec12
   hermes-engine: 9f4dfe93326146a1c99eb535b1cb0b857a3cd172
@@ -2766,6 +2772,6 @@ SPEC CHECKSUMS:
   UMAppLoader: 145337733539f9af9b3dd97eeaa7f3bd97cacb23
   Yoga: 5934998fbeaef7845dbf698f698518695ab4cd1a
 
-PODFILE CHECKSUM: e01e4c067b3b71928cfb5b7d07f97f81bc8d115e
+PODFILE CHECKSUM: d7c0aa936801c26cbc1b5efe26e0c61786fa2272
 
 COCOAPODS: 1.16.2
