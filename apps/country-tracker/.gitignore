@@ -16,3 +16,4 @@ expo-env.d.ts
 .env
 .env.e2e
 maestro/.maestro-session*
+*.swp
