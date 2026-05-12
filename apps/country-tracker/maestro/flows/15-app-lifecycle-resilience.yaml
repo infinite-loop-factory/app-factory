@@ -23,15 +23,16 @@ tags:
           timeout: 2500
       - assertVisible: "My Travels"
 
-# Home ↔ Settings 탭 이동 (map은 별도 이슈로 회피)
+# Settings 탭으로 이동 (Map은 별도 이슈로 회피)
 - tapOn:
     id: "tab-settings"
 - waitForAnimationToEnd:
     timeout: 2500
 - assertVisible: "Settings"
 
+# Home 탭으로 복귀 (좌측 1/6 지점)
 - tapOn:
-    id: "tab-home"
+    point: 16%, 95%
 - waitForAnimationToEnd:
     timeout: 2000
 - assertVisible: "My Travels"

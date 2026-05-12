@@ -15,7 +15,8 @@ tags:
 
 - assertVisible: "Japan"
 
-- back
+- tapOn:
+    id: "country-detail-back"
 - waitForAnimationToEnd:
-    timeout: 1500
+    timeout: 2000
 - assertVisible: "My Travels"

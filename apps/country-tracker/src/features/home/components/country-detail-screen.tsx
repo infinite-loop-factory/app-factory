@@ -127,9 +127,11 @@ export function CountryDetailScreen({ countryCode }: Props) {
         style={{ paddingTop: insets.top + 12 }}
       >
         <Pressable
+          accessibilityLabel="country-detail-back"
           className="h-10 w-10 items-center justify-center rounded-full border"
           onPress={() => router.back()}
           style={{ borderColor, backgroundColor: cardBg }}
+          testID="country-detail-back"
         >
           <ChevronLeft color={textStrong} size={20} />
         </Pressable>

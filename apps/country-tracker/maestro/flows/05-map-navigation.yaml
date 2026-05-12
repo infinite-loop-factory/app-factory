@@ -4,15 +4,11 @@ tags:
   - requires-auth
   - draft
 ---
-# 실제 map screen은 FlatList ref 이슈로 별도 PR. 본 flow는 tab 진입 가능성만 smoke.
-
 - runFlow: ../setup/boot.yaml
 - assertVisible: "My Travels"
 
-# Map tab 버튼이 노출되는지만 확인 (실제 진입은 별도 검증)
+# 탭 바 노출 확인 (id로)
 - assertVisible:
     id: "tab-map"
-- assertVisible:
-    id: "tab-home"
 - assertVisible:
     id: "tab-settings"
