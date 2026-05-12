@@ -1,7 +1,16 @@
 appId: com.gracefullight.countrytracker
 name: App Launch and Login Screen
 ---
-- launchApp
+- launchApp:
+    clearState: true
+- runFlow:
+    when:
+      visible:
+        text: "Continue"
+    commands:
+      - tapOn: "Continue"
+      - waitForAnimationToEnd:
+          timeout: 1500
 - assertVisible: "Start Your Journey"
 - assertVisible: "Sign in with Apple"
 - assertVisible: "Login with Google"

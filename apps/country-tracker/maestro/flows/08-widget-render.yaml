@@ -13,8 +13,7 @@ tags:
 # 2. 백그라운드 진입 후 재진입 시 재동기화
 # 3. 위젯 task handler가 등록되어 있어 OS 위젯 요청 처리 가능
 
-- launchApp:
-    clearState: false
+- runFlow: ../setup/boot.yaml
 - waitForAnimationToEnd:
     timeout: 3000
 
@@ -27,8 +26,7 @@ tags:
     timeout: 2000
 
 # 앱 재진입 → AppState 'active' 트리거 → useWidgetSync 발동
-- launchApp:
-    clearState: false
+- runFlow: ../setup/boot.yaml
 - waitForAnimationToEnd:
     timeout: 3000
 - assertVisible: "My Travels"
@@ -37,8 +35,7 @@ tags:
 - pressKey: Home
 - waitForAnimationToEnd:
     timeout: 1500
-- launchApp:
-    clearState: false
+- runFlow: ../setup/boot.yaml
 - waitForAnimationToEnd:
     timeout: 2000
 - assertVisible: "My Travels"

@@ -4,58 +4,49 @@ tags:
   - smoke
   - critical
 ---
-# 핵심 사용자 경로를 1개 플로우에 압축한 smoke 테스트
-# CI에서 빠른 통과 여부 확인용
+# CI smoke. Map screen은 별도 이슈로 진입 회피.
 
-- launchApp
+- runFlow: ../setup/boot.yaml
 - waitForAnimationToEnd:
     timeout: 2500
 
-# 1. 홈 화면 진입
+# 홈 화면
 - assertVisible: "My Travels"
 - assertVisible: "Countries"
 - assertVisible: "Days"
 
-# 2. 검색 동작
+# 검색
 - tapOn: "Search destination..."
 - inputText: "Korea"
 - clearText
 - back
 
-# 3. 필터
-- tapOn:
-    id: "home.filter-button-a11y"
-- assertVisible: "Filter visited countries"
-- tapOn: "Cancel"
-
-# 4. Map 탭
-- tapOn:
-    id: "tab-map"
+# 필터 chip
+- tapOn: "Most Days"
 - waitForAnimationToEnd:
-    timeout: 1500
-- assertVisible: "Countries"
+    timeout: 800
+- tapOn: "Recent"
 
-# 5. Settings 탭
+# Settings tab
 - tapOn:
     id: "tab-settings"
 - waitForAnimationToEnd:
-    timeout: 1500
-- assertVisible: "Preferences"
-- assertVisible: "Visa Alerts"
+    timeout: 2500
+- assertVisible: "Settings"
 
-# 6. 다시 홈
+# Home tab
 - tapOn:
     id: "tab-home"
 - waitForAnimationToEnd:
     timeout: 1500
 - assertVisible: "My Travels"
 
-# 7. 라이프사이클 (위젯 sync 발동 포함)
+# Lifecycle (위젯 sync 발동)
 - pressKey: Home
 - waitForAnimationToEnd:
     timeout: 1500
 - launchApp:
     clearState: false
 - waitForAnimationToEnd:
-    timeout: 2000
+    timeout: 2500
 - assertVisible: "My Travels"

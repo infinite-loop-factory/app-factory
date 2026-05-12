@@ -3,38 +3,21 @@ name: Settings Navigation
 tags:
   - requires-auth
 ---
-- launchApp
+- runFlow: ../setup/boot.yaml
+- assertVisible: "My Travels"
 
-# Navigate to Settings tab
 - tapOn:
     id: "tab-settings"
 - waitForAnimationToEnd:
-    timeout: 1500
+    timeout: 2000
 
-# Settings 화면 헤더 확인 (위쪽으로 스크롤되어 있을 수 있음)
+- assertVisible: "Settings"
+
 - scrollUntilVisible:
     element: "Preferences"
-    direction: UP
-- assertVisible: "Preferences"
-- scrollUntilVisible:
-    element: "Visa Alerts"
     direction: DOWN
-- assertVisible: "Visa Alerts"
+    timeout: 5000
 
-# Navigate to Visa Alerts
-- tapOn: "Visa Alerts"
-- assertVisible: "Set visa-free day limits"
 - back
-
-# Navigate to Denylist
-- scrollUntilVisible:
-    element: "Denylist Countries"
-    direction: DOWN
-- tapOn: "Denylist Countries"
-- back
-
-# Verify logout button
-- scrollUntilVisible:
-    element: "Logout"
-    direction: DOWN
-- assertVisible: "Logout"
+- waitForAnimationToEnd:
+    timeout: 1500

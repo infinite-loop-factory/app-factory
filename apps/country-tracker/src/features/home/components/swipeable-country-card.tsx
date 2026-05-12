@@ -121,7 +121,12 @@ export function SwipeableCountryCard({
   );
 
   const cardContent = (
-    <TouchableOpacity activeOpacity={0.7} onPress={() => onPress(item)}>
+    <TouchableOpacity
+      accessibilityLabel={`country-card-${item.country_code}`}
+      activeOpacity={0.7}
+      onPress={() => onPress(item)}
+      testID={`country-card-${item.country_code}`}
+    >
       <Box
         className="mb-3 flex-row items-center justify-between rounded-2xl border px-3 py-3 shadow-sm"
         style={{ backgroundColor: cardBg, borderColor }}

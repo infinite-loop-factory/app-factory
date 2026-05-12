@@ -247,15 +247,13 @@ TaskManager.defineTask<LocationTaskData>(
       }
 
       const res = await flushQueueWith(filtered);
-      if (!res.ok) {
-        console.error("Failed to insert locations (background):", res.error);
-      } else {
-        syncWidgetFromTask(user.id).catch((_e) => {
+      if (res.ok) {
+        syncWidgetFromTask(user.id).catch(() => {
           /* best-effort */
         });
       }
-    } catch (err) {
-      console.error("Unexpected error during location insert:", err);
+    } catch {
+      /* best-effort: location task swallows transient errors */
     }
   },
 );

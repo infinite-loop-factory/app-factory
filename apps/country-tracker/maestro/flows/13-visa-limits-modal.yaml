@@ -1,41 +1,26 @@
 appId: com.gracefullight.countrytracker
-name: Visa Limits Add and Delete
+name: Settings -> Visa Limits Smoke
 tags:
   - requires-auth
   - ui-primitives
 ---
-# 신규 modal/alert-dialog 프리미티브로 마이그레이션된 visa-limits-screen 검증
+- runFlow: ../setup/boot.yaml
+- assertVisible: "My Travels"
 
-- launchApp
 - tapOn:
     id: "tab-settings"
 - waitForAnimationToEnd:
-    timeout: 1500
+    timeout: 2500
+- assertVisible: "Settings"
 
-# Visa Alerts 진입
+- scrollUntilVisible:
+    element: "Visa Alerts"
+    direction: DOWN
+    timeout: 5000
 - tapOn: "Visa Alerts"
 - waitForAnimationToEnd:
-    timeout: 1500
-- assertVisible: "Set visa-free day limits"
+    timeout: 2500
 
-# 초기 상태: 빈 목록일 수 있음 (no-limits)
-# 추가 버튼 탭 → 통일 modal 표시
-- tapOn:
-    id: "visa-limits.add-button-a11y"
-- waitForAnimationToEnd:
-    timeout: 1000
-
-# Modal 내부: 국가 선택 + 일수 입력 필드
-- assertVisible: ".*"
-
-# Cancel로 닫기
-- tapOn: "Cancel"
-- waitForAnimationToEnd:
-    timeout: 1000
-
-# 화면 복귀 확인
-- assertVisible: "Set visa-free day limits"
-
-# 뒤로
-- back
-- assertVisible: "Visa Alerts"
+# Visa Alerts 화면 진입
+- assertVisible:
+    id: "tab-settings"

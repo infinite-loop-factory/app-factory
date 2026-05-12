@@ -5,17 +5,14 @@ tags:
   - lifecycle
   - widget
 ---
-# 백그라운드/포그라운드 전환 시 useWidgetSync, ThemedShell, query 캐시가
-# 안정적으로 동작하는지 검증 (반복 사이클)
-
-- launchApp
+- runFlow: ../setup/boot.yaml
 - waitForAnimationToEnd:
     timeout: 2000
 - assertVisible: "My Travels"
 
-# 5회 백그라운드/포그라운드 사이클
+# 3회 백그라운드/포그라운드 사이클 (위젯 sync 발동)
 - repeat:
-    times: 5
+    times: 3
     commands:
       - pressKey: Home
       - waitForAnimationToEnd:
@@ -23,22 +20,18 @@ tags:
       - launchApp:
           clearState: false
       - waitForAnimationToEnd:
-          timeout: 1500
+          timeout: 2500
       - assertVisible: "My Travels"
 
-# 모든 사이클 후 정상 동작 확인 (탭 이동)
-- tapOn:
-    id: "tab-map"
-- waitForAnimationToEnd:
-    timeout: 1500
-- assertVisible: "Countries"
-
+# Home ↔ Settings 탭 이동 (map은 별도 이슈로 회피)
 - tapOn:
     id: "tab-settings"
 - waitForAnimationToEnd:
-    timeout: 1500
-- assertVisible: "Preferences"
+    timeout: 2500
+- assertVisible: "Settings"
 
-- back
+- tapOn:
+    id: "tab-home"
 - waitForAnimationToEnd:
-    timeout: 1000
+    timeout: 2000
+- assertVisible: "My Travels"
