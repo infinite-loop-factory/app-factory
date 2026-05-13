@@ -15,6 +15,8 @@
  *   3. A routes list per line  (routCd / routNm / stationCount) that
  *      captures branch lines (e.g. 5호선 방화지선).
  *
+ *   4. Station coordinates (latitude/longitude) fetched from the stationInfo endpoint.
+ *
  * Results are cached in AsyncStorage (TTL = 24 h) so the API is not
  * called on every launch.
  */
@@ -22,7 +24,11 @@
 import type { Station } from "@/types/station";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { fetchSubwayRouteInfo, type SubwayRouteInfoItem } from "@/lib/kric-api";
+import {
+  fetchStationInfo,
+  fetchSubwayRouteInfo,
+  type SubwayRouteInfoItem,
+} from "@/lib/kric-api";
 import {
   getAllStations,
   getDynamicStations,
@@ -155,12 +161,13 @@ const SYNC_TARGETS: SyncTarget[] = [
     appLine: "신분당선",
     lineNumber: "S",
     lineColor: "#D4003B",
-    // Static bundle only has 6 stations; API provides all ~18 stations.
-    // setDynamicStations() deduplicates by name|line, so the 6 static entries
-    // remain and the remaining stations are appended from the API.
     dynamic: true,
   },
 ];
+
+/** Maps app-facing line name → KRIC lnCd (e.g. "1호선" → "1", "공항철도" → "A1"). */
+export const APP_LINE_TO_LN_CD: Readonly<Record<string, string>> =
+  Object.fromEntries(SYNC_TARGETS.map((t) => [t.appLine, t.lnCd]));
 
 // ── Storage keys ─────────────────────────────────────────────
 
@@ -234,20 +241,73 @@ function buildStationId(railOprIsttCd: string, stinCd: string): string {
   return `kric_${railOprIsttCd}_${stinCd}`;
 }
 
+/** Strips KRIC's parenthetical location notes, e.g. "교대(법원.검찰청)" → "교대". */
+function stripParenSuffix(name: string): string {
+  const idx = name.indexOf("(");
+  return idx > 0 ? name.slice(0, idx).trimEnd() : name;
+}
+
+async function syncCoordinates(
+  items: SubwayRouteInfoItem[],
+): Promise<Record<string, { lat: number; lon: number }>> {
+  const coords: Record<string, { lat: number; lon: number }> = {};
+
+  // Fetch coordinates for each unique station in this batch
+  const uniqueStations = Array.from(
+    new Set(
+      items.map((item) => `${item.railOprIsttCd}|${item.lnCd}|${item.stinCd}`),
+    ),
+  );
+
+  const tasks = uniqueStations.map(async (key) => {
+    const [railOprIsttCd, lnCd, stinCd] = key.split("|");
+    if (!(railOprIsttCd && lnCd && stinCd)) return;
+
+    try {
+      const info = await fetchStationInfo({
+        railOprIsttCd,
+        lnCd,
+        stinCd,
+      });
+      const first = info[0];
+      if (first?.stinLocLat && first?.stinLocLon) {
+        coords[stinCd] = {
+          lat: Number.parseFloat(first.stinLocLat),
+          lon: Number.parseFloat(first.stinLocLon),
+        };
+      }
+    } catch {
+      // Ignore coordinate fetch errors for individual stations
+    }
+  });
+
+  await Promise.allSettled(tasks);
+  return coords;
+}
+
 function itemsToStation(
   items: SubwayRouteInfoItem[],
   target: SyncTarget,
+  coordsMap: Record<string, { lat: number; lon: number }>,
 ): Station[] {
   return items
     .slice()
     .sort((a, b) => Number(a.stinConsOrdr) - Number(b.stinConsOrdr))
-    .map((item) => ({
-      id: buildStationId(item.railOprIsttCd, item.stinCd),
-      name: item.stinNm,
-      line: target.appLine,
-      lineNumber: target.lineNumber,
-      lineColor: target.lineColor,
-    }));
+    .map((item) => {
+      const s: Station = {
+        id: buildStationId(item.railOprIsttCd, item.stinCd),
+        name: stripParenSuffix(item.stinNm),
+        line: target.appLine,
+        lineNumber: target.lineNumber,
+        lineColor: target.lineColor,
+      };
+      const c = coordsMap[item.stinCd];
+      if (c) {
+        s.latitude = c.lat;
+        s.longitude = c.lon;
+      }
+      return s;
+    });
 }
 
 function buildCodeMapEntries(
@@ -256,8 +316,8 @@ function buildCodeMapEntries(
 ): KricCodeMap {
   const map: KricCodeMap = {};
   for (const item of items) {
-    const key = `${item.stinNm}|${kricLnCd}`;
-    map[key] = {
+    const stinNm = stripParenSuffix(item.stinNm);
+    map[`${stinNm}|${kricLnCd}`] = {
       stinCd: item.stinCd,
       railOprIsttCd: item.railOprIsttCd,
       lnCd: item.lnCd,
@@ -386,16 +446,21 @@ export async function syncKricStations(
 
       if (items.length === 0) return;
 
+      // Fetch coordinates for these stations
+      const coordsMap = await syncCoordinates(items);
+
       // Build KRIC code map entries for every line (needed for timetable API)
       Object.assign(codeMap, buildCodeMapEntries(items, target.lnCd));
 
       // Build route entries (captures branch lines like 5호선 방화지선)
       routes.push(...buildRouteEntries(items, target));
 
-      // Only add to dynamic station store for lines missing from static bundle
-      if (target.dynamic) {
-        dynamicStations.push(...itemsToStation(items, target));
-      }
+      // Always process stations to capture potential coordinate updates
+      const stations = itemsToStation(items, target, coordsMap);
+
+      // Add all synced stations to the dynamic pool so they enrich/override
+      // static bundle data with fresh API-sourced info (like coordinates).
+      dynamicStations.push(...stations);
 
       linesSucceeded++;
     } catch (err) {
@@ -411,8 +476,7 @@ export async function syncKricStations(
   setDynamicStations(dynamicStations);
   _codeMap = codeMap;
   _routes = routes;
-  // Save the already-deduped list so the cache never contains duplicates
-  // of stations that exist in both the static bundle and the API response.
+
   await saveToCache(getDynamicStations(), codeMap, routes);
 
   return {
@@ -446,11 +510,14 @@ export async function mergeLineRouteInfo(
 
   const target = SYNC_TARGETS.find((t) => t.lnCd === lnCd);
   let stationsAdded = 0;
-  if (target?.dynamic) {
+  if (target) {
+    // Refresh coordinates
+    const coordsMap = await syncCoordinates(items);
+
     const existing = getDynamicStations().filter(
       (s) => s.line !== target.appLine,
     );
-    const newStations = itemsToStation(items, target);
+    const newStations = itemsToStation(items, target, coordsMap);
     setDynamicStations([...existing, ...newStations]);
     stationsAdded = newStations.length;
   }

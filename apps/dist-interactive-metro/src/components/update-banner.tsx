@@ -6,10 +6,10 @@ import { useUpdateBanner } from "@/context/update-banner-context";
 // ── Colour map ────────────────────────────────────────────────
 
 const BG: Record<string, string> = {
-  success: "#16a34a",
-  info: "#2563eb",
-  warning: "#d97706",
-  error: "#dc2626",
+  success: "#10B981", // Emerald 500
+  info: "#3B82F6", // Blue 500
+  warning: "#F59E0B", // Amber 500
+  error: "#EF4444", // Red 500
 };
 
 const ICON: Record<string, string> = {
@@ -24,7 +24,7 @@ const ICON: Record<string, string> = {
 export function UpdateBanner() {
   const { visible, message, type, hideBanner } = useUpdateBanner();
   const insets = useSafeAreaInsets();
-  const translateY = useRef(new Animated.Value(-120)).current;
+  const translateY = useRef(new Animated.Value(-150)).current;
   const timerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   useEffect(() => {
@@ -34,14 +34,14 @@ export function UpdateBanner() {
       Animated.spring(translateY, {
         toValue: 0,
         useNativeDriver: true,
-        damping: 18,
-        stiffness: 200,
+        damping: 20,
+        stiffness: 150,
       }).start();
-      timerRef.current = setTimeout(hideBanner, 4500);
+      timerRef.current = setTimeout(hideBanner, 4000);
     } else {
       Animated.timing(translateY, {
-        toValue: -120,
-        duration: 220,
+        toValue: -150,
+        duration: 300,
         useNativeDriver: true,
       }).start();
     }
@@ -60,6 +60,8 @@ export function UpdateBanner() {
         top: 0,
         transform: [{ translateY }],
         zIndex: 9999,
+        paddingHorizontal: 16,
+        paddingTop: insets.top + 8,
       }}
     >
       <View
@@ -67,27 +69,56 @@ export function UpdateBanner() {
           alignItems: "center",
           backgroundColor: BG[type] ?? BG.info,
           flexDirection: "row",
-          gap: 10,
-          paddingBottom: 12,
+          gap: 12,
+          paddingVertical: 12,
           paddingHorizontal: 16,
-          paddingTop: insets.top + 10,
+          borderRadius: 20,
+          shadowColor: "#000",
+          shadowOffset: { width: 0, height: 4 },
+          shadowOpacity: 0.15,
+          shadowRadius: 10,
+          elevation: 6,
         }}
       >
-        <Text style={{ color: "white", fontSize: 14, fontWeight: "700" }}>
-          {ICON[type]}
-        </Text>
+        <View
+          style={{
+            width: 24,
+            height: 24,
+            borderRadius: 12,
+            backgroundColor: "rgba(255,255,255,0.2)",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Text style={{ color: "white", fontSize: 14, fontWeight: "800" }}>
+            {ICON[type]}
+          </Text>
+        </View>
         <Text
           style={{
             color: "white",
             flex: 1,
-            fontSize: 13,
-            fontWeight: "500",
+            fontSize: 14,
+            fontWeight: "600",
           }}
         >
           {message}
         </Text>
-        <Pressable hitSlop={12} onPress={hideBanner}>
-          <Text style={{ color: "rgba(255,255,255,0.8)", fontSize: 16 }}>
+        <Pressable
+          hitSlop={12}
+          onPress={hideBanner}
+          style={({ pressed }) => ({
+            opacity: pressed ? 0.6 : 1,
+            padding: 4,
+          })}
+        >
+          <Text
+            style={{
+              color: "rgba(255,255,255,0.7)",
+              fontSize: 18,
+              fontWeight: "bold",
+            }}
+          >
             ✕
           </Text>
         </Pressable>

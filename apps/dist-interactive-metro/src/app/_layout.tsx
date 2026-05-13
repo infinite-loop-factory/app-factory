@@ -156,10 +156,6 @@ export default function RootLayout() {
                     name="station-select"
                     options={hiddenHeaderOptions}
                   />
-                  <Stack.Screen
-                    name="notification-settings"
-                    options={hiddenHeaderOptions}
-                  />
                   <Stack.Screen name="+not-found" />
                 </Stack>
                 <UpdateBanner />
