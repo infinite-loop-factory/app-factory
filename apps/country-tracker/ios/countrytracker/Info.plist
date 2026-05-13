@@ -48,15 +48,21 @@
     <dict>
       <key>NSAllowsArbitraryLoads</key>
       <false/>
+      <key>NSAllowsLocalNetworking</key>
+      <true/>
     </dict>
+    <key>NSCameraUsageDescription</key>
+    <string>Allow $(PRODUCT_NAME) to access your camera</string>
     <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-    <string>Allow background location so we can automatically save visits while the app is not active. Your data stays in your account and you can delete it anytime.</string>
+    <string>앱이 활성화되지 않아도 자동으로 방문 기록을 저장하려면 백그라운드 위치 권한이 필요합니다. 데이터는 내 계정에 보관되며 언제든 삭제할 수 있어요.</string>
     <key>NSLocationAlwaysUsageDescription</key>
-    <string>Allow $(PRODUCT_NAME) to access your location</string>
+    <string>여행 중 국경을 넘을 때 자동으로 방문 기록을 저장하기 위해 백그라운드 위치 접근이 필요합니다.</string>
     <key>NSLocationWhenInUseUsageDescription</key>
-    <string>We use your location to update visited countries and show your travel history on the map. You can disable this at any time in Settings.</string>
+    <string>방문 국가 업데이트와 지도 표시를 위해 위치 정보가 필요합니다. 설정에서 언제든지 비활성화할 수 있어요.</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>Allow $(PRODUCT_NAME) to access your microphone</string>
     <key>NSPhotoLibraryUsageDescription</key>
-    <string>Select a travel photo to automatically fill in the country and date from its metadata.</string>
+    <string>Allow $(PRODUCT_NAME) to access your photos</string>
     <key>NSUserActivityTypes</key>
     <array>
       <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>

@@ -13,10 +13,10 @@ export const nationalityAtom = atom(
   },
 );
 
-// Initialize from storage
-AsyncStorage.getItem(NATIONALITY_KEY).then((val) => {
-  if (val) {
-    // Direct store set will happen on first read
-    baseAtom.init = val;
-  }
-});
+if (typeof window !== "undefined") {
+  AsyncStorage.getItem(NATIONALITY_KEY).then((val) => {
+    if (val) {
+      baseAtom.init = val;
+    }
+  });
+}

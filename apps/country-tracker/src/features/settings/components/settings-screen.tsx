@@ -10,18 +10,34 @@ import {
   FileText,
   Flag,
   Globe2,
-  PlaneTakeoff,
   ShieldAlert,
 } from "lucide-react-native";
-import { Alert } from "react-native";
+import { useState } from "react";
+import { ScrollView } from "react-native";
+import { useReducedMotion } from "react-native-reanimated";
 import { nationalityAtom } from "@/atoms/nationality.atom";
 import ParallaxScrollView from "@/components/parallax-scroll-view";
+import {
+  Avatar,
+  AvatarFallbackText,
+  AvatarImage,
+} from "@/components/ui/avatar";
 import { Badge, BadgeText } from "@/components/ui/badge";
 import { Box } from "@/components/ui/box";
-import { Button } from "@/components/ui/button";
+import { Button, ButtonText } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { Divider } from "@/components/ui/divider";
 import { Heading } from "@/components/ui/heading";
 import { Image } from "@/components/ui/image";
+import { Input, InputField } from "@/components/ui/input";
+import {
+  Modal,
+  ModalBackdrop,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+} from "@/components/ui/modal";
 import { Text } from "@/components/ui/text";
 import {
   Toast,
@@ -42,9 +58,10 @@ export default function SettingsScreen() {
   const [nationality, setNationality] = useAtom(nationalityAtom);
 
   const [iconColor, chevronColor] = useThemeColor([
-    "typography-0",
+    "primary-600",
     "typography-300",
   ]);
+  const reduceMotion = useReducedMotion();
 
   const isKorean = i18n.locale === "ko";
   const userName =
@@ -84,66 +101,76 @@ export default function SettingsScreen() {
     router.replace("/login");
   };
 
-  return (
-    <ParallaxScrollView>
+  const [isNationalityModalOpen, setNationalityModalOpen] = useState(false);
+  const [nationalityDraft, setNationalityDraft] = useState("");
+
+  const openNationalityModal = () => {
+    setNationalityDraft(nationality ?? "");
+    setNationalityModalOpen(true);
+  };
+
+  const closeNationalityModal = () => setNationalityModalOpen(false);
+
+  const submitNationality = () => {
+    const trimmed = nationalityDraft.trim().toUpperCase();
+    if (trimmed) void setNationality(trimmed);
+    closeNationalityModal();
+  };
+
+  const content = (
+    <>
       <Box className="-mx-4 mb-5 border-outline-100 border-b px-5 pt-2 pb-3">
         <Heading className="font-bold text-3xl text-typography-950">
           {i18n.t("settings.title")}
         </Heading>
       </Box>
 
-      <Box className="mx-1 rounded-2xl border border-outline-100 bg-background-0 shadow-xs">
+      <Card className="mx-1 rounded-2xl border border-outline-100 bg-background-0 p-0 shadow-xs">
         <Box className="flex-row items-center justify-between px-4 py-4">
           <Box className="flex-row items-center gap-4">
-            <Box className="h-16 w-16 overflow-hidden rounded-full border border-outline-100">
-              <Image
-                alt="avatar"
-                className="h-full w-full"
-                source={
-                  user?.user_metadata?.avatar_url
-                    ? { uri: user.user_metadata.avatar_url }
-                    : require("@/assets/images/icon.png")
-                }
-              />
-            </Box>
-            <Box className="flex-1">
+            <Avatar className="border border-outline-100" size="lg">
+              <AvatarFallbackText>{userName}</AvatarFallbackText>
+              {user?.user_metadata?.avatar_url ? (
+                <AvatarImage source={{ uri: user.user_metadata.avatar_url }} />
+              ) : null}
+            </Avatar>
+            <Box className="flex-1 gap-1" style={{ minWidth: 0 }}>
               <Text
                 className="font-bold text-typography-950 text-xl"
                 numberOfLines={1}
               >
                 {userName}
               </Text>
-              <Text className="text-base text-secondary-600" numberOfLines={1}>
+              <Text className="text-sm text-typography-500" numberOfLines={1}>
                 {userEmail}
               </Text>
+              <Box className="mt-1 self-start">
+                <Badge
+                  className="rounded-full bg-primary-50 px-2 py-0.5"
+                  size="sm"
+                >
+                  <BadgeText className="font-semibold text-primary-600 text-xs">
+                    {i18n.t("settings.profile.pro-member")}
+                  </BadgeText>
+                </Badge>
+              </Box>
             </Box>
           </Box>
           <ChevronRight color={chevronColor} size={22} />
         </Box>
-      </Box>
+      </Card>
 
-      <Box className="mx-1 mt-3 flex-row items-center justify-between px-4">
-        <Text className="font-semibold text-secondary-700 text-sm uppercase tracking-wide">
-          {i18n.t("settings.profile.plan")}
-        </Text>
-        <Badge className="rounded-lg bg-primary-100 px-3 py-1" size="sm">
-          <BadgeText className="font-bold text-primary-500 text-sm">
-            {i18n.t("settings.profile.pro-member")}
-          </BadgeText>
-        </Badge>
-      </Box>
-
-      <Text className="mx-5 mt-8 mb-3 font-bold text-secondary-700 text-sm uppercase tracking-wide">
+      <Text className="mx-5 mt-8 mb-3 font-semibold text-typography-500 text-xs uppercase tracking-wide">
         {i18n.t("settings.preferences.title")}
       </Text>
-      <Box className="mx-1 overflow-hidden rounded-2xl border border-outline-100 bg-background-0 shadow-xs">
+      <Card className="mx-1 overflow-hidden rounded-2xl border border-outline-100 bg-background-0 p-0 shadow-xs">
         <Button
           action="default"
           className="h-14 w-full justify-between rounded-none bg-transparent px-4"
           onPress={() => void handleLanguageSetting()}
         >
           <Box className="flex-row items-center gap-3.5">
-            <Box className="h-8 w-8 items-center justify-center rounded-md bg-secondary-500">
+            <Box className="h-8 w-8 items-center justify-center rounded-md bg-primary-50">
               <Globe2 color={iconColor} size={17} />
             </Box>
             <Text className="font-medium text-base text-typography-900">
@@ -151,7 +178,7 @@ export default function SettingsScreen() {
             </Text>
           </Box>
           <Box className="flex-row items-center gap-2">
-            <Text className="font-normal text-base text-secondary-600">
+            <Text className="font-normal text-base text-typography-500">
               {isKorean
                 ? i18n.t("settings.preferences.language-value-ko")
                 : i18n.t("settings.preferences.language-value-en")}
@@ -163,20 +190,10 @@ export default function SettingsScreen() {
         <Button
           action="default"
           className="h-14 w-full justify-between rounded-none bg-transparent px-4"
-          onPress={() => {
-            Alert.prompt(
-              i18n.t("settings.nationality.title"),
-              i18n.t("settings.nationality.message"),
-              (value) => {
-                if (value) void setNationality(value.toUpperCase());
-              },
-              "plain-text",
-              nationality || "",
-            );
-          }}
+          onPress={openNationalityModal}
         >
           <Box className="flex-row items-center gap-3.5">
-            <Box className="h-8 w-8 items-center justify-center rounded-md bg-primary-500">
+            <Box className="h-8 w-8 items-center justify-center rounded-md bg-primary-50">
               <Flag color={iconColor} size={17} />
             </Box>
             <Text className="font-medium text-base text-typography-900">
@@ -184,7 +201,7 @@ export default function SettingsScreen() {
             </Text>
           </Box>
           <Box className="flex-row items-center gap-2">
-            <Text className="font-normal text-base text-secondary-600">
+            <Text className="font-normal text-base text-typography-500">
               {nationality || i18n.t("settings.nationality.not-set")}
             </Text>
             <ChevronRight color={chevronColor} size={18} />
@@ -197,7 +214,7 @@ export default function SettingsScreen() {
           onPress={() => router.push("/settings/visa-limits" as never)}
         >
           <Box className="flex-row items-center gap-3.5">
-            <Box className="h-8 w-8 items-center justify-center rounded-md bg-error-500">
+            <Box className="h-8 w-8 items-center justify-center rounded-md bg-primary-50">
               <ShieldAlert color={iconColor} size={17} />
             </Box>
             <Text className="font-medium text-base text-typography-900">
@@ -213,7 +230,7 @@ export default function SettingsScreen() {
           onPress={() => router.push("/settings/denylist")}
         >
           <Box className="flex-row items-center gap-3.5">
-            <Box className="h-8 w-8 items-center justify-center rounded-md bg-warning-500">
+            <Box className="h-8 w-8 items-center justify-center rounded-md bg-primary-50">
               <Ban color={iconColor} size={17} />
             </Box>
             <Text className="font-medium text-base text-typography-900">
@@ -229,7 +246,7 @@ export default function SettingsScreen() {
           onPress={() => router.push("/settings/license")}
         >
           <Box className="flex-row items-center gap-3.5">
-            <Box className="h-8 w-8 items-center justify-center rounded-md bg-success-500">
+            <Box className="h-8 w-8 items-center justify-center rounded-md bg-primary-50">
               <FileText color={iconColor} size={17} />
             </Box>
             <Text className="font-medium text-base text-typography-900">
@@ -238,19 +255,19 @@ export default function SettingsScreen() {
           </Box>
           <ChevronRight color={chevronColor} size={18} />
         </Button>
-      </Box>
+      </Card>
 
-      <Text className="mx-5 mt-8 mb-3 font-bold text-secondary-700 text-sm uppercase tracking-wide">
+      <Text className="mx-5 mt-8 mb-3 font-semibold text-typography-500 text-xs uppercase tracking-wide">
         {i18n.t("settings.support.title")}
       </Text>
-      <Box className="mx-1 overflow-hidden rounded-2xl border border-outline-100 bg-background-0 shadow-xs">
+      <Card className="mx-1 overflow-hidden rounded-2xl border border-outline-100 bg-background-0 p-0 shadow-xs">
         <Button
           action="default"
           className="h-14 w-full justify-between rounded-none bg-transparent px-4"
           onPress={() => router.push("/support" as never)}
         >
           <Box className="flex-row items-center gap-3.5">
-            <Box className="h-8 w-8 items-center justify-center rounded-md bg-info-500">
+            <Box className="h-8 w-8 items-center justify-center rounded-md bg-primary-50">
               <CircleHelp color={iconColor} size={17} />
             </Box>
             <Text className="font-medium text-base text-typography-900">
@@ -266,7 +283,7 @@ export default function SettingsScreen() {
           onPress={() => router.push("/privacy" as never)}
         >
           <Box className="flex-row items-center gap-3.5">
-            <Box className="h-8 w-8 items-center justify-center rounded-md bg-primary-500">
+            <Box className="h-8 w-8 items-center justify-center rounded-md bg-primary-50">
               <ShieldAlert color={iconColor} size={17} />
             </Box>
             <Text className="font-medium text-base text-typography-900">
@@ -282,7 +299,7 @@ export default function SettingsScreen() {
           onPress={() => router.push("/terms" as never)}
         >
           <Box className="flex-row items-center gap-3.5">
-            <Box className="h-8 w-8 items-center justify-center rounded-md bg-secondary-500">
+            <Box className="h-8 w-8 items-center justify-center rounded-md bg-primary-50">
               <FileText color={iconColor} size={17} />
             </Box>
             <Text className="font-medium text-base text-typography-900">
@@ -291,9 +308,9 @@ export default function SettingsScreen() {
           </Box>
           <ExternalLink color={chevronColor} size={18} />
         </Button>
-      </Box>
+      </Card>
 
-      <Box className="mx-1 mt-10 overflow-hidden rounded-2xl border border-outline-100 bg-background-0 shadow-xs">
+      <Card className="mx-1 mt-10 overflow-hidden rounded-2xl border border-outline-100 bg-background-0 p-0 shadow-xs">
         <Button
           action="default"
           className="h-14 w-full items-center justify-center rounded-none bg-transparent px-4"
@@ -303,13 +320,16 @@ export default function SettingsScreen() {
             {i18n.t("settings.logout")}
           </Text>
         </Button>
-      </Box>
+      </Card>
 
       <Box className="mt-12 mb-10 items-center justify-center gap-3">
         <Box className="flex-row items-center gap-2">
-          <Box className="h-6 w-6 items-center justify-center rounded-md bg-primary-400">
-            <PlaneTakeoff color={iconColor} size={14} />
-          </Box>
+          <Image
+            alt="country tracker logo"
+            className="h-7 w-7"
+            resizeMode="contain"
+            source={require("@/assets/images/icon.png")}
+          />
           <Text className="font-bold text-typography-900 text-xl">
             {i18n.t("settings.footer.app-name")}
           </Text>
@@ -321,6 +341,63 @@ export default function SettingsScreen() {
           })}
         </Text>
       </Box>
-    </ParallaxScrollView>
+    </>
+  );
+
+  return (
+    <>
+      {reduceMotion ? (
+        <ScrollView>{content}</ScrollView>
+      ) : (
+        <ParallaxScrollView>{content}</ParallaxScrollView>
+      )}
+      <Modal isOpen={isNationalityModalOpen} onClose={closeNationalityModal}>
+        <ModalBackdrop />
+        <ModalContent className="max-w-sm rounded-2xl">
+          <ModalHeader>
+            <Heading className="font-bold text-lg text-typography-900">
+              {i18n.t("settings.nationality.title")}
+            </Heading>
+          </ModalHeader>
+          <ModalBody>
+            <Text className="mb-3 text-sm text-typography-600">
+              {i18n.t("settings.nationality.message")}
+            </Text>
+            <Input className="rounded-xl">
+              <InputField
+                autoCapitalize="characters"
+                autoFocus
+                maxLength={3}
+                onChangeText={(text) => setNationalityDraft(text.toUpperCase())}
+                onSubmitEditing={submitNationality}
+                placeholder="KR"
+                returnKeyType="done"
+                value={nationalityDraft}
+              />
+            </Input>
+          </ModalBody>
+          <ModalFooter className="gap-2">
+            <Button
+              action="secondary"
+              className="flex-1 border border-outline-200"
+              onPress={closeNationalityModal}
+              variant="outline"
+            >
+              <ButtonText className="font-semibold text-typography-900">
+                {i18n.t("common.cancel")}
+              </ButtonText>
+            </Button>
+            <Button
+              action="primary"
+              className="flex-1"
+              isDisabled={!nationalityDraft.trim()}
+              onPress={submitNationality}
+            >
+              <ButtonText>{i18n.t("common.save")}</ButtonText>
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </>
   );
 }

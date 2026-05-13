@@ -26,15 +26,11 @@ export function MapOverlay({
   return (
     <Box
       className="absolute inset-0 z-10 flex-col justify-between p-4"
-      pointerEvents="box-none"
-      style={{ paddingBottom: bottomInset + 16 }}
+      style={{ paddingBottom: bottomInset + 16, pointerEvents: "box-none" }}
     >
       {/* Floating Search Bar */}
-      <Box className="mx-auto w-full max-w-md shadow-lg">
-        <Input
-          className="h-12 w-full rounded-xl border-0 bg-background-0 shadow-lg dark:bg-background-900"
-          size="lg"
-        >
+      <Box className="mx-auto w-full max-w-md overflow-hidden rounded-xl bg-background-0 shadow-lg dark:bg-background-900">
+        <Input className="h-12 w-full border-0 bg-transparent" size="lg">
           <InputSlot className="pl-4">
             <InputIcon as={Search} className="text-typography-400" />
           </InputSlot>

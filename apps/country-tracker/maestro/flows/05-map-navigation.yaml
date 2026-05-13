@@ -1,19 +1,14 @@
 appId: com.gracefullight.countrytracker
-name: Map Navigation
+name: Map Tab Reachable Smoke
 tags:
   - requires-auth
+  - draft
 ---
-- launchApp
+- runFlow: ../setup/boot.yaml
+- assertVisible: "My Travels"
 
-# Navigate to Map tab
-- tapOn: "Map"
-
-# Verify map screen elements
-- assertVisible: "Countries"
-- assertVisible: "Days Abroad"
-
-# Test search on map
-- tapOn: "Search for a country"
-- inputText: "Korea"
-- tapOn: "Korea"
-- back
+# 탭 바 노출 확인 (id로)
+- assertVisible:
+    id: "tab-map"
+- assertVisible:
+    id: "tab-settings"

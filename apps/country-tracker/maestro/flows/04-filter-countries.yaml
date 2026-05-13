@@ -3,28 +3,22 @@ name: Filter Countries
 tags:
   - requires-auth
 ---
-- launchApp
+- runFlow: ../setup/boot.yaml
 - assertVisible: "My Travels"
 
-# Open filter bottom sheet
-- tapOn:
-    id: "home.filter-button-a11y"
-- assertVisible: "Filter visited countries"
-- assertVisible: "Sort"
-- assertVisible: "Region"
-
-# Select "Most Days" sort
+# Tap inline filter chip (visible in row above country list)
 - tapOn: "Most Days"
+- waitForAnimationToEnd:
+    timeout: 1000
 
-# Select region
 - tapOn: "Asia"
+- waitForAnimationToEnd:
+    timeout: 1000
 
-# Apply filter
-- tapOn: "Apply"
-
-# Verify filter is applied (chip should be active)
-# Open filter again and reset
-- tapOn:
-    id: "home.filter-button-a11y"
 - tapOn: "Recent"
-- tapOn: "Apply"
+- waitForAnimationToEnd:
+    timeout: 1000
+
+# Back to default — still on home
+- assertVisible: "My Travels"
+- assertVisible: "Countries"

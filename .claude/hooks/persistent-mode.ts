@@ -21,13 +21,10 @@ import {
   writeFileSync,
 } from "node:fs";
 import { join } from "node:path";
+import { resolveGitRoot } from "./fs-utils.ts";
+import { makeBlockOutput } from "./hook-output.ts";
 import { isDeactivationRequest } from "./keyword-detector.ts";
-import {
-  type ModeState,
-  makeBlockOutput,
-  resolveGitRoot,
-  type Vendor,
-} from "./types.ts";
+import type { ModeState, Vendor } from "./types.ts";
 
 const MAX_REINFORCEMENTS = 5;
 const STALE_HOURS = 2;

@@ -3,7 +3,7 @@ import type { CountryYearSummary } from "@/features/map/types/map-summary";
 import { ArrowRight, CalendarDays } from "lucide-react-native";
 import { memo } from "react";
 import { Box } from "@/components/ui/box";
-import { Button, ButtonIcon, ButtonText } from "@/components/ui/button";
+import { Button, ButtonText } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
 import { Text } from "@/components/ui/text";
 import { useThemeColor } from "@/hooks/use-theme-color";
@@ -50,11 +50,7 @@ function CountrySummaryItemInner({ item, onPress }: CountrySummaryItemProps) {
             <ButtonText className="font-bold text-primary-500 text-sm">
               {i18n.t("map.view-trips")}
             </ButtonText>
-            <ButtonIcon
-              as={ArrowRight}
-              className="text-primary-500"
-              size="sm"
-            />
+            <ArrowRight color="#CC8214" size={14} />
           </Button>
         </Box>
 

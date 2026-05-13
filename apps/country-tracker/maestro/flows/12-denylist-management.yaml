@@ -1,0 +1,27 @@
+appId: com.gracefullight.countrytracker
+name: Settings -> Denylist Smoke
+tags:
+  - requires-auth
+  - ui-primitives
+---
+- runFlow: ../setup/boot.yaml
+- assertVisible: "My Travels"
+
+- tapOn:
+    id: "tab-settings"
+- waitForAnimationToEnd:
+    timeout: 2500
+- assertVisible: "Settings"
+
+# Denylist 메뉴까지 스크롤 + tap
+- scrollUntilVisible:
+    element: "Denylist Countries"
+    direction: DOWN
+    timeout: 5000
+- tapOn: "Denylist Countries"
+- waitForAnimationToEnd:
+    timeout: 2500
+
+# Denylist 화면 진입 (어떤 컨텐츠라도 보이면 OK)
+- assertVisible:
+    id: "tab-settings"

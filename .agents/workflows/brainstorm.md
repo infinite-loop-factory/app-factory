@@ -1,8 +1,8 @@
 ---
-description: Design-first ideation workflow — explore user intent, clarify constraints, propose approaches, and produce an approved design document before planning
+description: Design-first ideation workflow that explores user intent, clarifies constraints, proposes approaches, and produces an approved design document before planning
 ---
 
-# MANDATORY RULES — VIOLATION IS FORBIDDEN
+# MANDATORY RULES: VIOLATION IS FORBIDDEN
 
 - **Response language follows `language` setting in `.agents/oma-config.yaml` if configured.**
 - **NEVER skip steps.** Execute from Step 1 in order.
@@ -70,7 +70,7 @@ Each section requires explicit user approval before moving to the next.
 
 Before saving the design, run an independent critique round to surface suppressed issues.
 
-Groupthink and authority bias hide real gaps. A blind round where each perspective critiques independently — without seeing others' feedback — surfaces issues the consensus round would have buried.
+Groupthink and authority bias hide real gaps. A blind round, where each perspective critiques independently without seeing others' feedback, surfaces issues the consensus round would have buried.
 
 **Procedure:**
 
@@ -82,13 +82,13 @@ Groupthink and authority bias hide real gaps. A blind round where each perspecti
 2. **Independent critique**: for each lens, produce 2-3 concrete criticisms of the Step 4 design without reference to other lenses' feedback. Cover missing items in their specialty, overlaps/redundancies, naming issues, implementation risks.
 
 3. **Consolidate and dedupe** into a unique issue list. Classify:
-   - **Tier 1** — critical gap, must resolve before save
-   - **Tier 2** — enhancement, should resolve or explicitly defer
-   - **Tier 3** — nice-to-have, defer to next version
+   - **Tier 1**: critical gap, must resolve before save
+   - **Tier 2**: enhancement, should resolve or explicitly defer
+   - **Tier 3**: nice-to-have, defer to next version
 
 4. **Check for suppressed compromises**: for each prior design decision where a reviewer voted `⚠️→✅`, verify the objection was answered on principle (regulatory, consumer, architectural) rather than overridden by majority. Restore any principled objection that was suppressed.
 
-5. **Resolve Tier 1 issues** by updating Step 4 design — either new sections in existing files, new files, or explicit out-of-scope declarations.
+5. **Resolve Tier 1 issues** by updating Step 4 design with either new sections in existing files, new files, or explicit out-of-scope declarations.
 
 6. **Present resolved design** to the user for final approval before Step 6.
 
@@ -100,7 +100,7 @@ Skip only if the design is trivially small (1-2 files, low stakes). Otherwise ma
 
 // turbo
 Save the approved design:
-1. Write to `docs/plans/designs/<NNN>-<feature-name>.md` where `<NNN>` is the next zero-padded 3-digit number (`ls docs/plans/designs/ | grep -E '^[0-9]{3}-' | tail -1`). Do not append `-design` to the filename — the folder already encodes type.
+1. Write to `docs/plans/designs/<NNN>-<feature-name>.md` where `<NNN>` is the next zero-padded 3-digit number (`ls docs/plans/designs/ | grep -E '^[0-9]{3}-' | tail -1`). Do not append `-design` to the filename; the folder already encodes type.
 2. Use memory write tool to record design summary for future reference.
 
 ---

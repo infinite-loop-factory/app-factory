@@ -4,7 +4,7 @@ Copy-paste ready patterns. Use these as starting points, adapt to the specific t
 
 ---
 
-## Next.js 16 framework canonicals (use these — never the legacy alternatives)
+## Next.js 16 framework canonicals (use these, never the legacy alternatives)
 
 ```tsx
 // ✅ Internal nav: <Link>, never <a href="/...">
@@ -30,7 +30,7 @@ import Image from "next/image";
 
 Baseline for an interactive surface. Adjust colors via theme tokens; verify
 the resulting contrast ratio against the actual `--card` / `--foreground` /
-`--muted-foreground` values (theme tokens alone do NOT guarantee 4.5:1 — the
+`--muted-foreground` values (theme tokens alone do NOT guarantee 4.5:1; the
 designer / token system has to make them so).
 
 ```tsx
@@ -67,12 +67,12 @@ export function Card({ title, description, onClick }: CardProps) {
 ```
 
 Accessibility checklist for interactive surfaces:
-- **Semantic element** — `<button>`, `<a>`, `<Link>`. Never `<div onClick>`.
-- **Keyboard reachable** — implicit when using semantic elements.
-- **Visible focus** — `focus-visible:ring-2 ring-offset-2` (or equivalent). Never strip the outline without replacing it.
-- **Accessible name** — visible text inside the element IS the name. Add `aria-label` ONLY for icon-only buttons (e.g., `<button aria-label="Close">×</button>`); when visible text exists, `aria-label` overrides it and is an anti-pattern.
-- **Contrast** — verify the actual color values against background reach 4.5:1 (normal text) or 3:1 (large text >= 18pt or 14pt bold). Run an axe/Lighthouse pass; theme tokens are not a proof.
-- **Heading semantics** — keep heading tags (`<h1>`-`<h6>`) outside interactive elements. Inside a button, use `<span>` with type-scale classes; promote to a heading at the surrounding section level.
+- **Semantic element**: `<button>`, `<a>`, `<Link>`. Never `<div onClick>`.
+- **Keyboard reachable**: implicit when using semantic elements.
+- **Visible focus**: `focus-visible:ring-2 ring-offset-2` (or equivalent). Never strip the outline without replacing it.
+- **Accessible name**: visible text inside the element IS the name. Add `aria-label` ONLY for icon-only buttons (e.g., `<button aria-label="Close">×</button>`); when visible text exists, `aria-label` overrides it and is an anti-pattern.
+- **Contrast**: verify the actual color values against background reach 4.5:1 (normal text) or 3:1 (large text >= 18pt or 14pt bold). Run an axe/Lighthouse pass; theme tokens are not a proof.
+- **Heading semantics**: keep heading tags (`<h1>`-`<h6>`) outside interactive elements. Inside a button, use `<span>` with type-scale classes; promote to a heading at the surrounding section level.
 
 ---
 

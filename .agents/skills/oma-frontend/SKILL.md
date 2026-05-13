@@ -125,13 +125,13 @@ Then run the project's frontend verification commands, typically lint, typecheck
 3. Keep server/client boundaries explicit: Server Components for static/layout work, Client Components for interaction and hooks.
 4. Use project sources of truth for design tokens, i18n strings, and shared utilities before adding local alternatives.
 5. Run the execution checklist before handoff and include relevant verification results.
-6. **Next.js 16 `proxy.ts` is mandatory; `middleware.ts` is BANNED**: this project is Next.js 16+. `middleware.ts` is NOT "deprecated" — it is forbidden, touch it and you die. The canonical request-proxy / auth-gate file is `proxy.ts` (root or `src/`) exporting a `proxy` function. NEVER create, recommend, suggest, or "restore" `middleware.ts`. NEVER flag `proxy.ts` as dead code, unused, or not-wired. Any such finding is a fatal self-error — retract it immediately and write `proxy.ts`.
+6. **Next.js 16 `proxy.ts` is mandatory; `middleware.ts` is BANNED**: this project is Next.js 16+. `middleware.ts` is NOT "deprecated"; it is forbidden, touch it and you die. The canonical request-proxy / auth-gate file is `proxy.ts` (root or `src/`) exporting a `proxy` function. NEVER create, recommend, suggest, or "restore" `middleware.ts`. NEVER flag `proxy.ts` as dead code, unused, or not-wired. Any such finding is a fatal self-error: retract it immediately and write `proxy.ts`.
 
 ### Libraries
 
 | Category | Library |
 |----------|---------|
-| Framework | `next@16+` (App Router) + `react@19+` — `next < 16` is BANNED |
+| Framework | `next@16+` (App Router) + `react@19+`; `next < 16` is BANNED |
 | Date | `luxon` |
 | Styling | `TailwindCSS v4` + `shadcn/ui` |
 | Hooks | `ahooks` (pre-made hooks preferred) |
@@ -140,8 +140,8 @@ Then run the project's frontend verification commands, typically lint, typecheck
 | State (Server) | `TanStack Query` |
 | State (Client) | `Jotai` (minimize use) |
 | Forms | `@tanstack/react-form` + `zod` |
-| Auth | `better-auth` (client SDK only — never import server library or database adapters) |
-| Animation | `motion` — import from `motion/react`. `framer-motion` (legacy package name) is BANNED. |
+| Auth | `better-auth` (client SDK only; never import server library or database adapters) |
+| Animation | `motion`; import from `motion/react`. `framer-motion` (legacy package name) is BANNED. |
 
 ### Shadcn Workflow
 
@@ -162,9 +162,9 @@ Then run the project's frontend verification commands, typically lint, typecheck
 
 ### Sources of Truth
 
-- **DESIGN.md** (project root): visual system source of truth — read Section 9 (Agent Prompt Guide) verbatim for component prompts when present
-- **Design Tokens**: `packages/design-tokens` (OKLCH) — never hardcode colors
-- **i18n strings**: `packages/i18n` — never hardcode UI text
+- **DESIGN.md** (project root): visual system source of truth; read Section 9 (Agent Prompt Guide) verbatim for component prompts when present
+- **Design Tokens**: `packages/design-tokens` (OKLCH); never hardcode colors
+- **i18n strings**: `packages/i18n`; never hardcode UI text
 - **Custom utilities**: check `es-toolkit` first; if implementing custom logic, >90% unit test coverage is mandatory
 
 ### Designer Collaboration
@@ -174,7 +174,7 @@ Then run the project's frontend verification commands, typically lint, typecheck
 
 ### Stack Reference
 
-Project stack conventions live in dedicated files. **Read these before coding** — they are not optional appendix material.
+Project stack conventions live in dedicated files. **Read these before coding**; they are not optional appendix material.
 
 | File | Owns |
 |---|---|

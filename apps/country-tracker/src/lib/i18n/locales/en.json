@@ -1,7 +1,8 @@
 {
   "common": {
     "cancel": "Cancel",
-    "done": "Done"
+    "done": "Done",
+    "save": "Save"
   },
   "welcome": "Welcome",
 
@@ -20,7 +21,8 @@
     },
     "stats": {
       "countries": "Countries",
-      "days-tracked": "Days Tracked"
+      "days-tracked": "Days Tracked",
+      "days-tracked-short": "Days"
     },
     "filters": {
       "recent": "Recent",
@@ -41,7 +43,10 @@
     },
     "list": {
       "last-visit": "%{date}",
-      "stay-days": "%{count} Days"
+      "stay-days": {
+        "one": "%{count} day",
+        "other": "%{count} days"
+      }
     },
     "error-loading": "Failed to load visited countries.",
     "no-visited-countries": "No visited countries yet",
@@ -128,7 +133,8 @@
     "view-trips": "View Trips",
     "stats": {
       "countries": "Countries",
-      "days-abroad": "Days Abroad"
+      "days-abroad": "Days Abroad",
+      "days-abroad-short": "Days"
     },
     "filters": {
       "all-time": "All Time",
@@ -275,6 +281,7 @@
     "apple": "Sign in with Apple",
     "google": "Login with Google",
     "facebook": "Login with Facebook",
+    "github": "Login with GitHub",
     "terms": "Terms of Service",
     "privacy": "Privacy Policy",
     "security-note": "OAuth only. No password is stored in app.",

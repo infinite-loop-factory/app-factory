@@ -2,7 +2,7 @@
 description: Ralph - persistent self-referential execution loop wrapping ultrawork with independent verifier verification
 ---
 
-# MANDATORY RULES — VIOLATION IS FORBIDDEN
+# MANDATORY RULES: VIOLATION IS FORBIDDEN
 
 - **Response language follows `language` setting in `.agents/oma-config.yaml` if configured.**
 - **NEVER skip phases.** Execute from Phase 0 in order. Explicitly report completion of each phase to the user before proceeding to the next.
@@ -51,7 +51,7 @@ criteria:
 
 **Rules:**
 - Every criterion must be mechanically verifiable (test pass, build success, file exists, command output)
-- Reject subjective criteria ("looks good", "feels right") — ask the user to rephrase
+- Reject subjective criteria ("looks good", "feels right"). Ask the user to rephrase.
 - Present criteria to the user for confirmation before proceeding
 
 ### Step 0.3: Initialize Session
@@ -85,7 +85,7 @@ Delegate to the ultrawork workflow:
 1. Read and follow `.agents/workflows/ultrawork.md` step by step.
 2. Pass the prepared input as the task description.
 3. Ultrawork handles all vendor-specific agent spawning internally.
-4. Wait for ultrawork to complete all 5 phases (PLAN → IMPL → VERIFY → REFINE → SHIP).
+4. Wait for ultrawork to complete all 5 phases (PLAN, IMPL, VERIFY, REFINE, SHIP).
 
 ### Step 1.3: Record EXEC Completion
 
@@ -102,10 +102,10 @@ Delegate to the ultrawork workflow:
 
 For **EVERY criterion regardless of current status** (including PASS from prior iterations), execute the verification method defined in Phase 0:
 
-- Run tests → check pass/fail count
-- Run build → check exit code
-- Check file existence → verify path
-- Run specific commands → check output
+- Run tests, then check pass/fail count
+- Run build, then check exit code
+- Check file existence and verify path
+- Run specific commands, then check output
 
 **Why re-verify PASS criteria**: ultrawork modifies shared code (utils, configs, migrations, dependencies). A PASS in iteration N may regress in iteration N+1 when fixing other criteria. Without re-verification, "DONE" can ship silent regressions.
 
@@ -147,13 +147,13 @@ remaining:
 Before updating any criterion, capture the current `status` into `previous_status`. Then apply the transition rules in order:
 
 1. **Verification passed** → `PASS`. Reset `regressed_at_iteration` to null.
-2. **Verification failed AND `previous_status == PASS`** → `REGRESSED`. Set `regressed_at_iteration: {current_iteration}`. Do NOT increment `fail_count` on the first regression — regression is treated as a distinct first-class signal, not a normal failure streak. Subsequent consecutive failures of the same criterion follow rules 3-4.
+2. **Verification failed AND `previous_status == PASS`** → `REGRESSED`. Set `regressed_at_iteration: {current_iteration}`. Do NOT increment `fail_count` on the first regression; regression is treated as a distinct first-class signal, not a normal failure streak. Subsequent consecutive failures of the same criterion follow rules 3-4.
 3. **Verification failed AND not a regression AND `fail_count < 3`** → `FAIL`. Increment `fail_count`.
 4. **Verification failed AND `fail_count >= 3`** → `BLOCKED`.
 
 **Decision Gate impact**:
 - `REGRESSED` is treated as `FAIL` for verdict computation (verdict becomes FAIL, REPLAN triggers).
-- `REGRESSED` is NOT counted toward "DONE" — only `PASS` and `BLOCKED` count.
+- `REGRESSED` is NOT counted toward "DONE"; only `PASS` and `BLOCKED` count.
 
 ---
 
@@ -212,7 +212,7 @@ If `current_iteration >= max_iterations`:
 From the JUDGE result, collect criteria with status `FAIL` or `REGRESSED`. Treat the two classes separately:
 
 1. **FAIL** (first-time or persistent failures): list each with its reason and suggested_action
-2. **REGRESSED** (previously PASS, now FAIL): list each with previous-pass iteration, the inter-iteration diff that likely caused the regression, and a regression-specific suggested_action
+2. **REGRESSED** (previously PASS, now FAIL): list each with previous-pass iteration, the inter-iteration diff that likely caused the regression, and a regression-specific suggested_action.
 3. Include previous iteration's JUDGE evidence as context
 4. Explicitly state which criteria are PASS (do not re-implement, but do not exclude from next JUDGE either)
 5. Explicitly state which criteria are BLOCKED (do not retry)

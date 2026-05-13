@@ -2,9 +2,17 @@ import { router } from "expo-router";
 import { useAtomValue } from "jotai";
 import { ChevronLeft, Plus, Trash2 } from "lucide-react-native";
 import { useCallback, useState } from "react";
-import { Alert, FlatList, Pressable, View } from "react-native";
+import { FlatList, Pressable, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { nationalityAtom } from "@/atoms/nationality.atom";
+import {
+  AlertDialog,
+  AlertDialogBackdrop,
+  AlertDialogBody,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+} from "@/components/ui/alert-dialog";
 import { Box } from "@/components/ui/box";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
@@ -39,6 +47,10 @@ export function VisaLimitsScreen() {
   const [selectedCountry, setSelectedCountry] = useState("");
   const [maxDays, setMaxDays] = useState("90");
   const [alertBefore, setAlertBefore] = useState("7");
+  const [deleteTarget, setDeleteTarget] = useState<{
+    id: string;
+    countryCode: string;
+  } | null>(null);
 
   const handleAdd = useCallback(() => {
     if (!selectedCountry) return;
@@ -53,23 +65,16 @@ export function VisaLimitsScreen() {
     setAlertBefore("7");
   }, [selectedCountry, maxDays, alertBefore, upsertLimit]);
 
-  const handleDelete = useCallback(
-    (id: string, countryCode: string) => {
-      Alert.alert(
-        i18n.t("visa.delete.title"),
-        i18n.t("visa.delete.message", { country: countryCode.toUpperCase() }),
-        [
-          { text: i18n.t("common.cancel"), style: "cancel" },
-          {
-            text: i18n.t("visa.delete.confirm"),
-            style: "destructive",
-            onPress: () => deleteLimit(id),
-          },
-        ],
-      );
-    },
-    [deleteLimit],
-  );
+  const handleDelete = useCallback((id: string, countryCode: string) => {
+    setDeleteTarget({ id, countryCode });
+  }, []);
+
+  const confirmDelete = useCallback(() => {
+    if (deleteTarget) {
+      deleteLimit(deleteTarget.id);
+    }
+    setDeleteTarget(null);
+  }, [deleteLimit, deleteTarget]);
 
   return (
     <View className="flex-1" style={{ backgroundColor: screenBg }}>
@@ -213,6 +218,47 @@ export function VisaLimitsScreen() {
           </Button>
         </Box>
       )}
+      <AlertDialog
+        isOpen={deleteTarget !== null}
+        onClose={() => setDeleteTarget(null)}
+      >
+        <AlertDialogBackdrop />
+        <AlertDialogContent className="max-w-sm rounded-2xl">
+          <AlertDialogHeader>
+            <Heading className="font-bold text-lg text-typography-900">
+              {i18n.t("visa.delete.title")}
+            </Heading>
+          </AlertDialogHeader>
+          <AlertDialogBody>
+            <Text className="text-base text-typography-600">
+              {deleteTarget
+                ? i18n.t("visa.delete.message", {
+                    country: deleteTarget.countryCode.toUpperCase(),
+                  })
+                : ""}
+            </Text>
+          </AlertDialogBody>
+          <AlertDialogFooter className="gap-2">
+            <Button
+              action="secondary"
+              className="flex-1 border border-outline-200"
+              onPress={() => setDeleteTarget(null)}
+              variant="outline"
+            >
+              <ButtonText className="font-semibold text-typography-900">
+                {i18n.t("common.cancel")}
+              </ButtonText>
+            </Button>
+            <Button
+              action="negative"
+              className="flex-1"
+              onPress={confirmDelete}
+            >
+              <ButtonText>{i18n.t("visa.delete.confirm")}</ButtonText>
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </View>
   );
 }

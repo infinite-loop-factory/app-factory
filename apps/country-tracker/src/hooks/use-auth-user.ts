@@ -53,10 +53,10 @@ export function useAuthUser() {
           avatar_url,
         });
         if (error) {
-          console.error("Failed to upsert user:", error);
+          /* upsert error: best-effort, fail silently */
         }
-      } catch (err) {
-        console.error("Unexpected error during user upsert:", err);
+      } catch {
+        /* best-effort */
       }
     };
     upsertUser();

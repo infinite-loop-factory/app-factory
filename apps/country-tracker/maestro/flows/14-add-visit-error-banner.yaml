@@ -1,0 +1,30 @@
+appId: com.gracefullight.countrytracker
+name: Add Visit Form Components
+tags:
+  - requires-auth
+  - ui-primitives
+---
+- runFlow: ../setup/boot.yaml
+- assertVisible: "My Travels"
+
+- tapOn:
+    id: "home-add-fab"
+- waitForAnimationToEnd:
+    timeout: 2500
+
+- assertVisible: "Add a New Visit"
+- assertVisible: "Register"
+- assertVisible: "Cancel"
+- assertVisible: "Start"
+- assertVisible: "End"
+
+- tapOn: "Cancel"
+- waitForAnimationToEnd:
+    timeout: 2500
+
+# launchApp으로 home 복귀 보장 (modal 잔존 시 안전망)
+- launchApp:
+    clearState: false
+- waitForAnimationToEnd:
+    timeout: 2000
+- assertVisible: "My Travels"

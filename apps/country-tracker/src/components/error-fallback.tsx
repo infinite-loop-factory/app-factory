@@ -50,8 +50,15 @@ export function ErrorFallback({ error, resetError }: ErrorFallbackProps) {
             {errorMessage}
           </Text>
         )}
-        <Button className="mt-4" onPress={resetError} variant="outline">
-          <ButtonText>{i18n.t("error.retry")}</ButtonText>
+        <Button
+          action="secondary"
+          className="mt-4 border border-outline-200 data-[hover=true]:bg-background-50"
+          onPress={resetError}
+          variant="outline"
+        >
+          <ButtonText className="font-semibold text-typography-900">
+            {i18n.t("error.retry")}
+          </ButtonText>
         </Button>
       </VStack>
     </View>

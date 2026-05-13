@@ -41,8 +41,7 @@ export function usePrefillLocationMutation() {
 
         const { latitude, longitude } = latest.coords;
         return { coords: { latitude, longitude } };
-      } catch (error) {
-        console.error("Failed to fetch current location", error);
+      } catch (_error) {
         return { error: i18n.t("home.add-visit.errors.location-failed") };
       }
     },

@@ -1,7 +1,7 @@
-# JUDGE Protocol — Independent Verifier
+# JUDGE Protocol: Independent Verifier
 
 This protocol governs how the JUDGE phase operates in the ralph workflow.
-The verifier MUST be independent from the implementer — evaluate only evidence, not intent.
+The verifier MUST be independent from the implementer; evaluate only evidence, not intent.
 
 ---
 
@@ -10,7 +10,7 @@ The verifier MUST be independent from the implementer — evaluate only evidence
 1. **Evidence-based only**: Every judgment must cite concrete evidence (test output, build log, file path, command result)
 2. **No subjective assessment**: "Looks correct" or "should work" is NOT valid evidence
 3. **Mechanical verification**: Use the verification method defined in the criterion, not alternative methods
-4. **Independent perspective**: Judge as if you did not implement the code — verify what IS, not what was intended
+4. **Independent perspective**: Judge as if you did not implement the code; verify what IS, not what was intended
 
 ---
 
@@ -47,9 +47,9 @@ verdict: PASS | FAIL
 ### Status Definitions
 
 - **PASS**: Verification method executed successfully, evidence confirms criterion is met
-- **FAIL**: Verification method executed, evidence shows criterion is NOT met (and this is not a regression — either first failure or persistent failure with `previous_status != PASS`)
-- **REGRESSED**: Verification failed AND the criterion's `previous_status` was `PASS`. This is a distinct signal from FAIL — emitted exactly once on the PASS → FAIL transition. On subsequent failures, the criterion follows the normal FAIL → BLOCKED progression.
-- **BLOCKED**: Criterion has failed 3 consecutive times across iterations — no further retries
+- **FAIL**: Verification method executed, evidence shows criterion is NOT met (and this is not a regression: either first failure or persistent failure with `previous_status != PASS`)
+- **REGRESSED**: Verification failed AND the criterion's `previous_status` was `PASS`. This is a distinct signal from FAIL, emitted exactly once on the PASS → FAIL transition. On subsequent failures, the criterion follows the normal FAIL → BLOCKED progression.
+- **BLOCKED**: Criterion has failed 3 consecutive times across iterations; no further retries
 
 ### Verdict Rules
 
@@ -72,7 +72,7 @@ remaining:
 
 ### Suggested Action Guidelines
 
-- Be specific: "Fix TypeError in Form.tsx:42 — `props.onChange` is undefined" not "fix the error"
+- Be specific: "Fix TypeError in Form.tsx:42, `props.onChange` is undefined" not "fix the error"
 - Reference exact files and line numbers when available
 - If the same failure recurred, suggest a DIFFERENT approach than the previous iteration
 - If approaching BLOCKED threshold (fail_count = 2), flag it:
@@ -98,7 +98,7 @@ When marking BLOCKED:
 
 1. Run all verification commands in parallel when possible
 2. Collect all results before producing the JUDGE result
-3. Do NOT stop at the first failure — verify ALL criteria every iteration (including criteria with `previous_status == PASS`)
+3. Do NOT stop at the first failure; verify ALL criteria every iteration (including criteria with `previous_status == PASS`)
 4. Record raw command output as evidence (not summaries)
 
 ---
@@ -109,7 +109,7 @@ A regression is detected when a criterion that was `PASS` in an earlier iteratio
 
 ### Why this matters
 
-Ralph's EXEC phase delegates implementation to ultrawork, which freely modifies shared code (utilities, configs, migrations, dependencies). A PASS in iteration N can be silently invalidated by a change ultrawork makes while fixing other criteria in iteration N+1. Re-verifying every criterion every iteration — and labeling PASS → FAIL transitions explicitly — closes this gap.
+Ralph's EXEC phase delegates implementation to ultrawork, which freely modifies shared code (utilities, configs, migrations, dependencies). A PASS in iteration N can be silently invalidated by a change ultrawork makes while fixing other criteria in iteration N+1. Re-verifying every criterion every iteration, and labeling PASS → FAIL transitions explicitly, closes this gap.
 
 ### Detection rule
 
