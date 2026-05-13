@@ -1,0 +1,27 @@
+appId: com.gracefullight.countrytracker
+name: Home Stats Visible
+tags:
+  - requires-auth
+  - widget
+---
+# 빈 상태 전용 계정 검증은 별도 PR. 여기선 홈 통계 렌더 + 위젯 sync 트리거 안정성 확인.
+
+- runFlow: ../setup/boot.yaml
+- waitForAnimationToEnd:
+    timeout: 2000
+
+- assertVisible: "My Travels"
+- assertVisible: "Countries"
+- assertVisible: "Days"
+
+- assertVisible:
+    id: "home-add-fab"
+
+# 백그라운드/재진입 시 widget sync 안정
+- pressKey: Home
+- waitForAnimationToEnd:
+    timeout: 1500
+- runFlow: ../setup/boot.yaml
+- waitForAnimationToEnd:
+    timeout: 2000
+- assertVisible: "My Travels"

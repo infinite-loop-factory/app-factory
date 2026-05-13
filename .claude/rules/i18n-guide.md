@@ -2,6 +2,7 @@
 description: Response language rules for agents and workflows
 ---
 
+
 # i18n Guide — Response Language Rules
 
 Rules for determining and applying response language across agents and workflows.
@@ -18,6 +19,18 @@ Response language is determined by the following priority:
 # .agents/oma-config.yaml
 language: ko  # ko, en, ja, zh, ...
 ```
+
+## Translation Voice
+
+When translating user-facing content, the `translation_voice` field in `.agents/oma-config.yaml` controls global rhythm and formality. It is applied on top of `oma-translator` content-type persona routing.
+
+| Value | Effect |
+|---|---|
+| `formal` | strict complete sentences, no fragments, formal register only |
+| `balanced` (default) | content-type defaults — fragments only in label/cell positions |
+| `interpreter` | punchy, audience-first, spoken cadence; fragments allowed when natural |
+
+Workflows that translate user-facing content should respect this setting via the `oma-translator` skill rather than hardcoding a tone.
 
 ## What to Localize
 

@@ -1,6 +1,6 @@
 import type { ReviewDataType } from "@/types/review";
 
-import { Star, Trash2 } from "lucide-react-native";
+import { Pencil, Star, Trash2 } from "lucide-react-native";
 import { Alert, Image, TouchableOpacity } from "react-native";
 import Images from "@/assets/images";
 import dayjs from "@/library/dayjs";
@@ -12,9 +12,9 @@ import { VStack } from "../ui/vstack";
 
 interface ReviewItemProps {
   reviewData: ReviewDataType;
-  starIconColor: string;
   currentUserId?: string;
   onDelete?: (reviewId: number) => void;
+  onEdit?: (reviewData: ReviewDataType) => void;
   setReviewImages: React.Dispatch<React.SetStateAction<string[]>>;
   setShowImageModal: React.Dispatch<React.SetStateAction<boolean>>;
   setSelectedImageIndex: React.Dispatch<React.SetStateAction<number>>;
@@ -22,9 +22,9 @@ interface ReviewItemProps {
 
 export default function ReviewItem({
   reviewData,
-  starIconColor,
   currentUserId,
   onDelete,
+  onEdit,
   setReviewImages,
   setShowImageModal,
   setSelectedImageIndex,
@@ -60,10 +60,7 @@ export default function ReviewItem({
             {[...Array(5)].map((_, i) => (
               <Icon
                 as={Star}
-                className={`h-4 w-4 ${i < Math.floor(reviewData.rate) ? "text-primary-500" : "text-slate-300"}`}
-                fill={
-                  i < Math.floor(reviewData.rate) ? `rgb(${starIconColor})` : ""
-                }
+                className={`h-4 w-4 ${i < Math.floor(reviewData.rate) ? "fill-yellow-400 text-yellow-400" : "fill-slate-200 text-slate-200"}`}
                 key={`review_${reviewData.id}_${i}`}
               />
             ))}
@@ -72,10 +69,19 @@ export default function ReviewItem({
             </Text>
           </HStack>
         </VStack>
-        {isMyReview && onDelete && (
-          <TouchableOpacity onPress={handleDelete}>
-            <Icon as={Trash2} className="h-5 w-5 text-slate-400" />
-          </TouchableOpacity>
+        {isMyReview && (
+          <HStack className="gap-2">
+            {onEdit && (
+              <TouchableOpacity onPress={() => onEdit(reviewData)}>
+                <Icon as={Pencil} className="h-5 w-5 text-slate-400" />
+              </TouchableOpacity>
+            )}
+            {onDelete && (
+              <TouchableOpacity onPress={handleDelete}>
+                <Icon as={Trash2} className="h-5 w-5 text-slate-400" />
+              </TouchableOpacity>
+            )}
+          </HStack>
         )}
       </HStack>
       <Text className="text-slate-700 leading-relaxed" size="sm">

@@ -1,6 +1,6 @@
 import type { SQLiteDatabase } from "expo-sqlite";
 
-import { migration001Init } from "./001_init";
+import { migration001Init } from "./001-init";
 
 export type Migration = {
   version: number;

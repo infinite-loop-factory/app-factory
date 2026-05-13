@@ -1,7 +1,8 @@
 import type { FooterActionsProps } from "@/features/home/types/add-visit-screen";
 
 import { Plus } from "lucide-react-native";
-import { ActivityIndicator, Platform, Pressable, View } from "react-native";
+import { Platform, Pressable, View } from "react-native";
+import { Spinner } from "@/components/ui/spinner";
 import { Text } from "@/components/ui/text";
 import i18n from "@/lib/i18n";
 
@@ -26,12 +27,12 @@ export function FooterActionBar({
           </Text>
         </Pressable>
         <Pressable
-          className={`flex-[1.5] flex-row items-center justify-center gap-2 rounded-xl bg-primary-300 px-5 py-3.5 shadow-lg shadow-primary-300/20 active:opacity-90 ${isSubmitDisabled ? "opacity-50" : ""}`}
+          className={`flex-[1.5] flex-row items-center justify-center gap-2 rounded-xl bg-primary-500 px-5 py-3.5 active:bg-primary-600 ${isSubmitDisabled ? "opacity-50" : ""}`}
           disabled={isSubmitDisabled || isSubmitting}
           onPress={onSubmit}
         >
           {isSubmitting ? (
-            <ActivityIndicator color="white" />
+            <Spinner color="white" />
           ) : (
             <>
               <Plus color="white" size={20} />

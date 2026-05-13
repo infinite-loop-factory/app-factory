@@ -1,5 +1,6 @@
 import { Redirect, Slot } from "expo-router";
-import { ActivityIndicator, View } from "react-native";
+import { View } from "react-native";
+import { Spinner } from "@/components/ui/spinner";
 import { LocationPermissionGate } from "@/features/location/components/location-permission-gate";
 import { useAuthUser } from "@/hooks/use-auth-user";
 
@@ -9,7 +10,7 @@ export default function AppLayout() {
   if (loading) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <ActivityIndicator size="large" />
+        <Spinner size="large" />
       </View>
     );
   }

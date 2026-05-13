@@ -4,11 +4,19 @@ import DateTimePicker, {
 import { Calendar, CalendarDays } from "lucide-react-native";
 import { DateTime } from "luxon";
 import { useState } from "react";
-import { Dimensions, Modal, Platform, Pressable, View } from "react-native";
+import { Dimensions, Platform, Pressable, View } from "react-native";
 import {
   type EdgeInsets,
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
+import {
+  Actionsheet,
+  ActionsheetBackdrop,
+  ActionsheetContent,
+  ActionsheetDragIndicator,
+  ActionsheetDragIndicatorWrapper,
+} from "@/components/ui/actionsheet";
+import { Box } from "@/components/ui/box";
 import { Switch } from "@/components/ui/switch";
 import { Text } from "@/components/ui/text";
 import { addVisitFormOptions } from "@/features/home/constants/add-visit-form";
@@ -49,63 +57,50 @@ const DatePickerModal = ({
 }: DatePickerModalProps) => {
   if (!activePicker) return null;
 
-  return (
-    <View>
-      {Platform.OS === "ios" ? (
-        <Modal
-          animationType="slide"
-          onRequestClose={() => setActivePicker(null)}
-          transparent
-          visible={!!activePicker}
-        >
-          <Pressable
-            className="flex-1 justify-end bg-black/50"
-            onPress={() => setActivePicker(null)}
-          >
-            <Pressable
-              className="w-full items-center overflow-hidden rounded-t-2xl bg-white dark:bg-slate-900"
-              onPress={(e) => e.stopPropagation()}
-              style={{ paddingBottom: insets.bottom }}
-            >
-              <View className="w-full flex-row justify-end border-slate-100 border-b p-2 dark:border-slate-800">
-                <Pressable
-                  className="p-2"
-                  onPress={() => setActivePicker(null)}
-                >
-                  <Text className="font-bold text-primary-500">
-                    {i18n.t("common.done")}
-                  </Text>
-                </Pressable>
-              </View>
-              <DateTimePicker
-                accentColor={accentColor}
-                display="inline"
-                mode="date"
-                onChange={handleDateChange}
-                style={{
-                  height: 320,
-                  width: Dimensions.get("window").width,
-                }}
-                value={
-                  activePicker === "start"
-                    ? startDate.toJSDate()
-                    : endDate.toJSDate()
-                }
-              />
+  if (Platform.OS === "ios") {
+    return (
+      <Actionsheet
+        isOpen={!!activePicker}
+        onClose={() => setActivePicker(null)}
+      >
+        <ActionsheetBackdrop />
+        <ActionsheetContent style={{ paddingBottom: insets.bottom }}>
+          <ActionsheetDragIndicatorWrapper>
+            <ActionsheetDragIndicator />
+          </ActionsheetDragIndicatorWrapper>
+          <Box className="w-full flex-row justify-end border-outline-100 border-b p-2">
+            <Pressable className="p-2" onPress={() => setActivePicker(null)}>
+              <Text className="font-bold text-primary-600">
+                {i18n.t("common.done")}
+              </Text>
             </Pressable>
-          </Pressable>
-        </Modal>
-      ) : (
-        <DateTimePicker
-          display="default"
-          mode="date"
-          onChange={handleDateChange}
-          value={
-            activePicker === "start" ? startDate.toJSDate() : endDate.toJSDate()
-          }
-        />
-      )}
-    </View>
+          </Box>
+          <DateTimePicker
+            accentColor={accentColor}
+            display="inline"
+            mode="date"
+            onChange={handleDateChange}
+            style={{ height: 320, width: Dimensions.get("window").width }}
+            value={
+              activePicker === "start"
+                ? startDate.toJSDate()
+                : endDate.toJSDate()
+            }
+          />
+        </ActionsheetContent>
+      </Actionsheet>
+    );
+  }
+
+  return (
+    <DateTimePicker
+      display="default"
+      mode="date"
+      onChange={handleDateChange}
+      value={
+        activePicker === "start" ? startDate.toJSDate() : endDate.toJSDate()
+      }
+    />
   );
 };
 
@@ -117,6 +112,8 @@ const DateRangeInputs = ({
 }: DateRangeInputsProps) => {
   const insets = useSafeAreaInsets();
   const accentColor = useThemeColor("primary-500").replace(/ /g, ",");
+  const switchTrackOn = `rgb(${accentColor})`;
+  const switchTrackOff = `rgb(${useThemeColor("outline-200").replace(/ /g, ",")})`;
 
   const startDate = startDateStr
     ? DateTime.fromISO(startDateStr)
@@ -221,12 +218,17 @@ const DateRangeInputs = ({
           </Text>
         </View>
         <Switch
+          // @ts-expect-error react-native-web specific prop for active thumb color
+          activeThumbColor="#FFFFFF"
+          ios_backgroundColor={switchTrackOff}
           onValueChange={(val) => {
             form.setFieldValue("sameDay", val);
             if (val) {
               form.setFieldValue("endDate", startDate.toISO());
             }
           }}
+          thumbColor="#FFFFFF"
+          trackColor={{ false: switchTrackOff, true: switchTrackOn }}
           value={!!sameDay}
         />
       </View>

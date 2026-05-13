@@ -98,8 +98,8 @@ export function AddVisitScreen({ editData }: AddVisitScreenProps) {
         form.setFieldValue("selectedCountry", normalizedCode);
         form.setFieldValue("countryNameOverride", country);
       }
-    } catch (error) {
-      console.error("Failed to resolve country from coordinates", error);
+    } catch {
+      /* best-effort */
     }
   };
 

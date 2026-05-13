@@ -20,6 +20,7 @@ import {
 } from "lucide-react-native";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Pressable, ScrollView, TouchableOpacity, View } from "react-native";
+import { useReducedMotion } from "react-native-reanimated";
 import { themeAtom } from "@/atoms/theme.atom";
 import ParallaxScrollView from "@/components/parallax-scroll-view";
 import { Box } from "@/components/ui/box";
@@ -35,7 +36,6 @@ import { SwipeableCountryCard } from "@/features/home/components/swipeable-count
 import { useDeleteVisitMutation } from "@/features/home/hooks/use-delete-visit";
 import { fetchVisitedCountries } from "@/features/map/apis/fetch-visited-countries";
 import { useThemeColor } from "@/hooks/use-theme-color";
-import { useWidgetSync } from "@/hooks/use-widget-sync";
 import i18n from "@/lib/i18n";
 import supabase from "@/lib/supabase";
 import { getStayDays, resolveRegion } from "@/utils/country-region";
@@ -67,10 +67,11 @@ export default function HomeScreen() {
       "background-50",
       "background",
       "outline-100",
-      "typography-400",
+      "typography-500",
       "typography-900",
-      "primary-300",
+      "primary-500",
     ]);
+  const reduceMotion = useReducedMotion();
 
   useEffect(() => {
     setSelectedFilter(activeFilter);
@@ -106,7 +107,6 @@ export default function HomeScreen() {
     currentUser?.user_metadata?.full_name ?? i18n.t("home.default-name");
 
   const safeCountries = data ?? [];
-  useWidgetSync(safeCountries);
 
   const trackedDays = useMemo(
     () => safeCountries.reduce((sum, item) => sum + getStayDays(item), 0),
@@ -219,307 +219,328 @@ export default function HomeScreen() {
     [handleDeleteVisit],
   );
 
-  return (
-    <ParallaxScrollView>
-      <Box
-        className="-mx-4 flex-1 px-4 pb-10"
-        style={{ backgroundColor: screenBg }}
-      >
-        <VStack className="pt-2" space="lg">
+  const content = (
+    <Box
+      className="-mx-4 flex-1 px-4 pb-10"
+      style={{ backgroundColor: screenBg }}
+    >
+      <VStack className="pt-2" space="lg">
+        <Box
+          className="flex-row items-center justify-between rounded-2xl border px-4 py-4 shadow-sm"
+          style={{ backgroundColor: cardBg, borderColor }}
+        >
+          <Box className="flex-row items-center gap-3">
+            <Box
+              className="h-12 w-12 items-center justify-center rounded-full"
+              style={{ backgroundColor: borderColor }}
+            >
+              <Text
+                className="font-bold text-lg"
+                style={{ color: primaryColor }}
+              >
+                {greetingName.charAt(0).toUpperCase()}
+              </Text>
+            </Box>
+            <Box>
+              <Heading
+                className="font-bold text-2xl"
+                style={{ color: textStrong }}
+              >
+                {i18n.t("home.title")}
+              </Heading>
+              <Text className="mt-1 text-sm" style={{ color: textMuted }}>
+                {i18n.t("home.subtitle", { name: greetingName })}
+              </Text>
+            </Box>
+          </Box>
+          <Link asChild href="/add-visit">
+            <Button
+              accessibilityLabel="home-add-fab"
+              action="primary"
+              className="h-12 w-12 items-center justify-center rounded-full p-0 shadow-sm"
+              size="md"
+              style={{ backgroundColor: primaryColor }}
+              testID="home-add-fab"
+              variant="solid"
+            >
+              <ButtonIcon as={Plus} color={screenBg} />
+            </Button>
+          </Link>
+        </Box>
+
+        <Box className="flex-row gap-3">
           <Box
-            className="flex-row items-center justify-between rounded-3xl border px-4 py-4"
+            className="rounded-2xl border px-5 py-5 shadow-sm"
+            style={{ backgroundColor: cardBg, borderColor, flex: 2 }}
+          >
+            <Box className="mb-3 flex-row items-center gap-2">
+              <Globe2 color={primaryColor} size={20} />
+              <Text
+                className="font-semibold text-xs tracking-wide"
+                style={{ color: textStrong }}
+              >
+                {i18n.t("home.stats.countries").toUpperCase()}
+              </Text>
+            </Box>
+            <Text
+              className="font-bold text-4xl"
+              style={{ color: textStrong, fontVariant: ["tabular-nums"] }}
+            >
+              {safeCountries.length}
+            </Text>
+          </Box>
+          <Box
+            className="rounded-2xl border px-4 py-5 shadow-sm"
+            style={{ backgroundColor: cardBg, borderColor, flex: 1 }}
+          >
+            <Box className="mb-3 flex-row items-center gap-2">
+              <CalendarDays color={textMuted} size={16} />
+              <Text
+                className="font-semibold text-xs tracking-wide"
+                numberOfLines={1}
+                style={{ color: textMuted }}
+              >
+                {i18n.t("home.stats.days-tracked-short").toUpperCase()}
+              </Text>
+            </Box>
+            <Text
+              className="font-semibold text-2xl"
+              style={{ color: textStrong, fontVariant: ["tabular-nums"] }}
+            >
+              {trackedDays}
+            </Text>
+          </Box>
+        </Box>
+
+        <Box>
+          <Input
+            className="rounded-2xl border px-4 shadow-sm"
+            size="xl"
             style={{ backgroundColor: cardBg, borderColor }}
           >
-            <Box className="flex-row items-center gap-3">
-              <Box
-                className="h-12 w-12 items-center justify-center rounded-full"
-                style={{ backgroundColor: borderColor }}
+            <InputSlot className="pl-2">
+              <InputIcon as={() => <Search color={textMuted} />} />
+            </InputSlot>
+            <InputField
+              accessibilityLabel={i18n.t("home.search-a11y")}
+              className="text-base"
+              onChangeText={(value) => setSearchText(value)}
+              onSubmitEditing={() => setSearchText(searchText.trim())}
+              placeholder={i18n.t("home.search")}
+              placeholderTextColor={textMuted}
+              style={{ color: textStrong }}
+              value={searchText}
+            />
+            <InputSlot
+              accessibilityLabel={i18n.t("home.filter-button-a11y")}
+              className="pr-2"
+            >
+              <TouchableOpacity
+                accessibilityRole="button"
+                hitSlop={8}
+                onPress={openFilterSheet}
               >
+                <SlidersHorizontal color={textMuted} />
+              </TouchableOpacity>
+            </InputSlot>
+          </Input>
+          <ScrollView
+            className="mt-3"
+            contentContainerStyle={{
+              paddingRight: 8,
+              alignItems: "center",
+            }}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+          >
+            {(["recent", "mostDays"] as FilterOption[]).map((option) =>
+              renderFilterChip(option, activeFilter === option, () =>
+                setActiveFilter(option),
+              ),
+            )}
+            <Box
+              className="mr-3 mb-2 h-6 w-px self-center"
+              style={{ backgroundColor: borderColor }}
+            />
+            {(
+              [
+                "europe",
+                "asia",
+                "americas",
+                "africa",
+                "oceania",
+              ] as FilterOption[]
+            ).map((option) =>
+              renderFilterChip(option, activeFilter === option, () =>
+                setActiveFilter(option),
+              ),
+            )}
+          </ScrollView>
+        </Box>
+
+        <Box className="flex-row items-center justify-between px-1">
+          <Heading
+            className="font-semibold text-lg"
+            style={{ color: textStrong }}
+          >
+            {i18n.t("home.stats.countries")}
+          </Heading>
+          <Box className="flex-row items-center gap-3">
+            <Pressable hitSlop={8} onPress={() => setShareVisible(true)}>
+              <Share2 color={primaryColor} size={18} />
+            </Pressable>
+            <Link asChild href="/map">
+              <Pressable className="flex-row items-center gap-1">
                 <Text
-                  className="font-bold text-lg"
+                  className="font-semibold text-sm"
                   style={{ color: primaryColor }}
                 >
-                  {greetingName.charAt(0).toUpperCase()}
+                  {i18n.t("home.actions.view-map")}
                 </Text>
-              </Box>
-              <Box>
-                <Heading
-                  className="font-bold text-2xl"
-                  style={{ color: textStrong }}
-                >
-                  {i18n.t("home.title")}
-                </Heading>
-                <Text className="mt-1 text-sm" style={{ color: textMuted }}>
-                  {i18n.t("home.subtitle", { name: greetingName })}
-                </Text>
-              </Box>
-            </Box>
-            <Link asChild href="/add-visit">
-              <Button
-                action="primary"
-                className="h-12 w-12 items-center justify-center rounded-full p-0 shadow-sm"
-                size="md"
-                style={{ backgroundColor: primaryColor }}
-                variant="solid"
-              >
-                <ButtonIcon as={Plus} color={screenBg} />
-              </Button>
+              </Pressable>
             </Link>
           </Box>
+        </Box>
 
-          <Box className="flex-row gap-3">
-            <Box
-              className="flex-1 rounded-2xl border px-4 py-4"
-              style={{ backgroundColor: cardBg, borderColor }}
-            >
-              <Box className="mb-2 flex-row items-center gap-2">
-                <Globe2 color={primaryColor} size={18} />
-                <Text
-                  className="font-semibold text-xs"
-                  style={{ color: textStrong }}
-                >
-                  {i18n.t("home.stats.countries").toUpperCase()}
-                </Text>
-              </Box>
-              <Text
-                className="font-extrabold text-3xl"
-                style={{ color: textStrong }}
-              >
-                {safeCountries.length}
+        <Box className="px-1 py-2">
+          {isError ? (
+            <Box className="items-center justify-center p-6">
+              <Text className="text-lg" style={{ color: textStrong }}>
+                {i18n.t("home.error-loading")}
               </Text>
             </Box>
-            <Box
-              className="flex-1 rounded-2xl border px-4 py-4"
-              style={{ backgroundColor: cardBg, borderColor }}
-            >
-              <Box className="mb-2 flex-row items-center gap-2">
-                <CalendarDays color={primaryColor} size={18} />
-                <Text
-                  className="font-semibold text-xs"
-                  style={{ color: textStrong }}
-                >
-                  {i18n.t("home.stats.days-tracked").toUpperCase()}
-                </Text>
-              </Box>
-              <Text
-                className="font-extrabold text-3xl"
-                style={{ color: textStrong }}
-              >
-                {trackedDays}
-              </Text>
-            </Box>
-          </Box>
-
-          <Box>
-            <Input
-              className="rounded-2xl border px-4 shadow-sm"
-              size="xl"
-              style={{ backgroundColor: cardBg, borderColor }}
-            >
-              <InputSlot className="pl-2">
-                <InputIcon as={() => <Search color={textMuted} />} />
-              </InputSlot>
-              <InputField
-                accessibilityLabel={i18n.t("home.search-a11y")}
-                className="text-base"
-                onChangeText={(value) => setSearchText(value)}
-                onSubmitEditing={() => setSearchText(searchText.trim())}
-                placeholder={i18n.t("home.search")}
-                placeholderTextColor={textMuted}
-                style={{ color: textStrong }}
-                value={searchText}
-              />
-              <InputSlot
-                accessibilityLabel={i18n.t("home.filter-button-a11y")}
-                className="pr-2"
-              >
-                <TouchableOpacity
-                  accessibilityRole="button"
-                  hitSlop={8}
-                  onPress={openFilterSheet}
-                >
-                  <SlidersHorizontal color={textMuted} />
-                </TouchableOpacity>
-              </InputSlot>
-            </Input>
-            <ScrollView
-              className="mt-3"
-              contentContainerStyle={{ paddingRight: 8 }}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-            >
-              {(
-                [
-                  "recent",
-                  "mostDays",
-                  "europe",
-                  "asia",
-                  "americas",
-                  "africa",
-                  "oceania",
-                ] as FilterOption[]
-              ).map((option) =>
-                renderFilterChip(option, activeFilter === option, () =>
-                  setActiveFilter(option),
-                ),
-              )}
-            </ScrollView>
-          </Box>
-
-          <Box className="flex-row items-center justify-between px-1">
-            <Heading
-              className="font-bold text-xl"
-              style={{ color: textStrong }}
-            >
-              {i18n.t("home.stats.countries")}
-            </Heading>
-            <Box className="flex-row items-center gap-3">
-              <Pressable hitSlop={8} onPress={() => setShareVisible(true)}>
-                <Share2 color={primaryColor} size={18} />
-              </Pressable>
-              <Link asChild href="/map">
-                <Pressable className="flex-row items-center gap-1">
+          ) : (
+            <Skeleton className="w-full" isLoaded={userLoaded && !isLoading}>
+              {isEmpty ? (
+                <View className="items-center justify-center px-6 py-10">
                   <Text
-                    className="font-semibold text-sm"
-                    style={{ color: primaryColor }}
+                    className="text-center font-semibold text-base"
+                    style={{ color: textStrong }}
                   >
-                    {i18n.t("home.actions.view-map")}
+                    {i18n.t("home.no-visited-countries")}
                   </Text>
-                </Pressable>
-              </Link>
-            </Box>
-          </Box>
-
-          <Box className="px-1 py-2">
-            {isError ? (
-              <Box className="items-center justify-center p-6">
-                <Text className="text-lg" style={{ color: textStrong }}>
-                  {i18n.t("home.error-loading")}
-                </Text>
-              </Box>
-            ) : (
-              <Skeleton className="w-full" isLoaded={userLoaded && !isLoading}>
-                {isEmpty ? (
-                  <View className="items-center justify-center px-6 py-10">
-                    <Text
-                      className="text-center font-semibold text-base"
-                      style={{ color: textStrong }}
-                    >
-                      {i18n.t("home.no-visited-countries")}
-                    </Text>
-                  </View>
-                ) : (
-                  <FlashList<CountryItem>
-                    contentContainerStyle={{ paddingVertical: 4 }}
-                    data={sortedCountries}
-                    keyExtractor={(item) => item.id}
-                    renderItem={({ item }) => renderCountryCard(item)}
-                    scrollEnabled={false}
-                    showsVerticalScrollIndicator={false}
-                  />
-                )}
-              </Skeleton>
-            )}
-          </Box>
-          <BottomSheetModal
-            backdropComponent={(backdropProps) => (
-              <BottomSheetBackdrop
-                {...backdropProps}
-                appearsOnIndex={0}
-                disappearsOnIndex={-1}
-                opacity={0.4}
-              />
-            )}
-            backgroundStyle={{ backgroundColor: cardBg }}
-            handleIndicatorStyle={{ backgroundColor: borderColor }}
-            ref={bottomSheetRef}
-            snapPoints={sheetSnapPoints}
+                </View>
+              ) : (
+                <FlashList<CountryItem>
+                  contentContainerStyle={{ paddingVertical: 4 }}
+                  data={sortedCountries}
+                  keyExtractor={(item) => item.id}
+                  renderItem={({ item }) => renderCountryCard(item)}
+                  scrollEnabled={false}
+                  showsVerticalScrollIndicator={false}
+                />
+              )}
+            </Skeleton>
+          )}
+        </Box>
+        <BottomSheetModal
+          backdropComponent={(backdropProps) => (
+            <BottomSheetBackdrop
+              {...backdropProps}
+              appearsOnIndex={0}
+              disappearsOnIndex={-1}
+              opacity={0.4}
+            />
+          )}
+          backgroundStyle={{ backgroundColor: cardBg }}
+          handleIndicatorStyle={{ backgroundColor: borderColor }}
+          ref={bottomSheetRef}
+          snapPoints={sheetSnapPoints}
+        >
+          <BottomSheetView
+            style={{
+              paddingHorizontal: 20,
+              paddingVertical: 16,
+              gap: 16,
+            }}
           >
-            <BottomSheetView
-              style={{
-                paddingHorizontal: 20,
-                paddingVertical: 16,
-                gap: 16,
-              }}
-            >
-              <Box className="gap-1">
-                <Text
-                  className="font-semibold text-base"
-                  style={{ color: textStrong }}
-                >
-                  {i18n.t("home.filter-sheet.title")}
-                </Text>
-                <Text className="text-sm" style={{ color: textMuted }}>
-                  {i18n.t("home.filter-sheet.subtitle")}
-                </Text>
-              </Box>
+            <Box className="gap-1">
+              <Text
+                className="font-semibold text-base"
+                style={{ color: textStrong }}
+              >
+                {i18n.t("home.filter-sheet.title")}
+              </Text>
+              <Text className="text-sm" style={{ color: textMuted }}>
+                {i18n.t("home.filter-sheet.subtitle")}
+              </Text>
+            </Box>
 
-              <Box style={{ gap: 8 }}>
-                <Text
-                  className="font-semibold text-sm"
-                  style={{ color: textStrong }}
-                >
-                  {i18n.t("home.filter-sheet.sort")}
-                </Text>
-                <Box className="flex-row flex-wrap">
-                  {(["recent", "mostDays"] as FilterOption[]).map((option) =>
-                    renderFilterChip(option, selectedFilter === option, () =>
-                      setSelectedFilter(option),
-                    ),
-                  )}
-                </Box>
+            <Box style={{ gap: 8 }}>
+              <Text
+                className="font-semibold text-sm"
+                style={{ color: textStrong }}
+              >
+                {i18n.t("home.filter-sheet.sort")}
+              </Text>
+              <Box className="flex-row flex-wrap">
+                {(["recent", "mostDays"] as FilterOption[]).map((option) =>
+                  renderFilterChip(option, selectedFilter === option, () =>
+                    setSelectedFilter(option),
+                  ),
+                )}
               </Box>
+            </Box>
 
-              <Box style={{ gap: 8 }}>
-                <Text
-                  className="font-semibold text-sm"
-                  style={{ color: textStrong }}
-                >
-                  {i18n.t("home.filter-sheet.region")}
-                </Text>
-                <Box className="flex-row flex-wrap">
-                  {(
-                    [
-                      "europe",
-                      "asia",
-                      "americas",
-                      "africa",
-                      "oceania",
-                    ] as FilterOption[]
-                  ).map((option) =>
-                    renderFilterChip(option, selectedFilter === option, () =>
-                      setSelectedFilter(option),
-                    ),
-                  )}
-                </Box>
+            <Box style={{ gap: 8 }}>
+              <Text
+                className="font-semibold text-sm"
+                style={{ color: textStrong }}
+              >
+                {i18n.t("home.filter-sheet.region")}
+              </Text>
+              <Box className="flex-row flex-wrap">
+                {(
+                  [
+                    "europe",
+                    "asia",
+                    "americas",
+                    "africa",
+                    "oceania",
+                  ] as FilterOption[]
+                ).map((option) =>
+                  renderFilterChip(option, selectedFilter === option, () =>
+                    setSelectedFilter(option),
+                  ),
+                )}
               </Box>
+            </Box>
 
-              <Box className="flex-row gap-3">
-                <Button
-                  action="secondary"
-                  className="flex-1"
-                  onPress={closeFilterSheet}
-                  style={{ borderColor, backgroundColor: cardBg }}
-                  variant="outline"
-                >
-                  <ButtonText style={{ color: textStrong }}>
-                    {i18n.t("home.filter-sheet.cancel")}
-                  </ButtonText>
-                </Button>
-                <Button className="flex-1" onPress={applyFilter}>
-                  <ButtonText>{i18n.t("home.filter-sheet.apply")}</ButtonText>
-                </Button>
-              </Box>
-            </BottomSheetView>
-          </BottomSheetModal>
-        </VStack>
-      </Box>
+            <Box className="flex-row gap-3">
+              <Button
+                action="secondary"
+                className="flex-1"
+                onPress={closeFilterSheet}
+                style={{ borderColor, backgroundColor: cardBg }}
+                variant="outline"
+              >
+                <ButtonText style={{ color: textStrong }}>
+                  {i18n.t("home.filter-sheet.cancel")}
+                </ButtonText>
+              </Button>
+              <Button className="flex-1" onPress={applyFilter}>
+                <ButtonText>{i18n.t("home.filter-sheet.apply")}</ButtonText>
+              </Button>
+            </Box>
+          </BottomSheetView>
+        </BottomSheetModal>
+      </VStack>
+    </Box>
+  );
+
+  return (
+    <>
+      {reduceMotion ? (
+        <ScrollView>{content}</ScrollView>
+      ) : (
+        <ParallaxScrollView>{content}</ParallaxScrollView>
+      )}
       <ShareStatsModal
         countries={safeCountries}
         onClose={() => setShareVisible(false)}
         userName={greetingName}
         visible={shareVisible}
       />
-    </ParallaxScrollView>
+    </>
   );
 }

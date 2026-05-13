@@ -20,20 +20,24 @@ export default function SupportPage() {
         footer={
           <Box className="gap-3">
             <Button
-              action="default"
-              className="h-12 w-full justify-center rounded-2xl border border-outline-200 bg-background-0"
+              action="secondary"
+              className="h-12 w-full justify-center rounded-2xl border border-outline-200 bg-background-0 data-[hover=true]:bg-background-50"
               onPress={() => router.push("/privacy" as never)}
               variant="outline"
             >
-              <ButtonText>{i18n.t("login.privacy")}</ButtonText>
+              <ButtonText className="font-semibold text-typography-900">
+                {i18n.t("login.privacy")}
+              </ButtonText>
             </Button>
             <Button
-              action="default"
-              className="h-12 w-full justify-center rounded-2xl border border-outline-200 bg-background-0"
+              action="secondary"
+              className="h-12 w-full justify-center rounded-2xl border border-outline-200 bg-background-0 data-[hover=true]:bg-background-50"
               onPress={() => router.push("/terms" as never)}
               variant="outline"
             >
-              <ButtonText>{i18n.t("login.terms")}</ButtonText>
+              <ButtonText className="font-semibold text-typography-900">
+                {i18n.t("login.terms")}
+              </ButtonText>
             </Button>
             <Button
               action="primary"

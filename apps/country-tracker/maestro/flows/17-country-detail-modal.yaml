@@ -1,0 +1,22 @@
+appId: com.gracefullight.countrytracker
+name: Country Detail Open
+tags:
+  - requires-auth
+  - requires-data
+  - ui-primitives
+---
+- runFlow: ../setup/boot.yaml
+- assertVisible: "My Travels"
+
+- tapOn:
+    id: "country-card-JP"
+- waitForAnimationToEnd:
+    timeout: 2500
+
+- assertVisible: "Japan"
+
+- tapOn:
+    id: "country-detail-back"
+- waitForAnimationToEnd:
+    timeout: 2000
+- assertVisible: "My Travels"

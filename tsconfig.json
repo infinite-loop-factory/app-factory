@@ -1,7 +1,6 @@
 {
   "files": [],
   "references": [
-    { "path": "./apps/app-cafe" },
     { "path": "./apps/country-tracker" },
     { "path": "./apps/dog-walk" }
   ]

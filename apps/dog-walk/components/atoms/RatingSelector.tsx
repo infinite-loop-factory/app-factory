@@ -13,8 +13,8 @@ export default function RatingSelector({ rate, setRate }: RatingSelectorProps) {
   const RateIconStyle = tva({
     variants: {
       variant: {
-        default: "h-8 w-8 text-typography-500",
-        active: "h-8 w-8 text-yellow-400",
+        default: "h-8 w-8 text-slate-200 fill-slate-200",
+        active: "h-8 w-8 text-yellow-400 fill-yellow-400",
       },
     },
     defaultVariants: {

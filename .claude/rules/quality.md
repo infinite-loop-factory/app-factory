@@ -1,6 +1,8 @@
 ---
-description: "Quality assurance standards for security (OWASP), performance, accessibility (WCAG), and code quality reviews"
+description: Quality assurance standards for security (OWASP), performance,
+  accessibility (WCAG), and code quality reviews
 ---
+
 
 # Quality Assurance Standards
 

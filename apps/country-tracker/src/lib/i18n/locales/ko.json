@@ -1,7 +1,8 @@
 {
   "common": {
     "cancel": "취소",
-    "done": "완료"
+    "done": "완료",
+    "save": "저장"
   },
   "welcome": "환영합니다",
 
@@ -20,7 +21,8 @@
     },
     "stats": {
       "countries": "국가 수",
-      "days-tracked": "추적 일수"
+      "days-tracked": "추적 일수",
+      "days-tracked-short": "일수"
     },
     "filters": {
       "recent": "최근",
@@ -203,7 +205,8 @@
     "view-trips": "상세 보기",
     "stats": {
       "countries": "국가",
-      "days-abroad": "해외 체류일"
+      "days-abroad": "해외 체류일",
+      "days-abroad-short": "체류일"
     },
     "filters": {
       "all-time": "전체 기간",
@@ -269,6 +272,7 @@
     "apple": "Apple로 로그인",
     "google": "구글 로그인",
     "facebook": "페이스북 로그인",
+    "github": "GitHub 로그인",
     "terms": "이용약관",
     "privacy": "개인정보처리방침",
     "security-note": "OAuth 로그인만 지원하며 비밀번호는 앱에 저장되지 않습니다.",

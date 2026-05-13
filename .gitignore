@@ -12,3 +12,7 @@ dist/
 .playwright-mcp
 
 .omc/
+.agents/state/
+
+# oma docs generated artifacts
+docs/generated/

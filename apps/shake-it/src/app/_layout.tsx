@@ -37,7 +37,8 @@ export default function RootLayout() {
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
         <Stack>
           <Stack.Screen name="index" options={{ headerShown: false }} />
-          <Stack.Screen name="explore" options={{ headerShown: false }} />
+          <Stack.Screen name="food" options={{ title: "오늘 뭐 먹지?" }} />
+          <Stack.Screen name="lotto" options={{ title: "로또 번호 추첨" }} />
           <Stack.Screen name="+not-found" />
         </Stack>
       </ThemeProvider>

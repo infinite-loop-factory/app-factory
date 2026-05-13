@@ -1,0 +1,89 @@
+appId: com.gracefullight.countrytracker
+name: E2E Auth Setup
+tags:
+  - setup
+env:
+  MAESTRO_E2E_SUPABASE_URL: ${MAESTRO_E2E_SUPABASE_URL}
+  MAESTRO_E2E_SUPABASE_ANON_KEY: ${MAESTRO_E2E_SUPABASE_ANON_KEY}
+  MAESTRO_E2E_TEST_EMAIL: ${MAESTRO_E2E_TEST_EMAIL}
+  MAESTRO_E2E_TEST_PASSWORD: ${MAESTRO_E2E_TEST_PASSWORD}
+---
+# 한 번 실행하여 Supabase 세션을 앱에 주입.
+# 이후 모든 flows는 clearState: false 로 세션 재사용.
+#
+# 사전 조건:
+#   - 앱이 EXPO_PUBLIC_E2E_MODE=true 로 빌드되어 있어야 함
+#     (development/preview 빌드 한정; production 빌드는 __DEV__=false 로 차단)
+#   - 위 env 변수가 maestro 실행 환경에 노출되어 있어야 함
+#
+# 실행 예:
+#   maestro test -e MAESTRO_E2E_TEST_EMAIL=... -e MAESTRO_E2E_TEST_PASSWORD=... \
+#     maestro/setup/00-seed-auth.yaml
+
+# 1. Supabase REST API로 password grant → access/refresh 토큰 획득
+- runScript:
+    file: ../scripts/seed-session.js
+
+# 2. 앱 cold-start (이전 세션 클리어)
+- launchApp:
+    clearState: true
+- waitForAnimationToEnd:
+    timeout: 3000
+
+# 2-1. dev 빌드면 dev launcher 화면이 뜸 → Metro 서버 탭하여 JS 번들 로드
+#      release 빌드면 이 단계는 visible 매칭 없으므로 스킵됨
+- runFlow:
+    when:
+      visible: "DEVELOPMENT SERVERS"
+    commands:
+      - tapOn:
+          text: "http://localhost:8081"
+      - runFlow:
+          when:
+            visible: "Open"
+          commands:
+            - tapOn: "Open"
+      - waitForAnimationToEnd:
+          timeout: 8000
+
+# 3. 매직 deep link로 setSession 발동
+- openLink: "country-tracker://e2e-auth?access_token=${output.ACCESS_TOKEN}&refresh_token=${output.REFRESH_TOKEN}"
+
+# 4. iOS 시스템 다이얼로그 "Open in 'Country Tracker'?" 확인 (있을 때만)
+- runFlow:
+    when:
+      visible: "Open"
+    commands:
+      - tapOn: "Open"
+
+# 5. 세션 적용 → 홈 진입 확인
+- waitForAnimationToEnd:
+    timeout: 4000
+
+# 6. dev 빌드 한정: developer info modal 닫기 (있을 때만)
+- runFlow:
+    when:
+      visible:
+        text: "Continue"
+    commands:
+      - tapOn: "Continue"
+      - waitForAnimationToEnd:
+          timeout: 1500
+
+# 7. dev 빌드: 앱 재진입으로 잔존 dev menu 회피 + 세션 active 상태로 home 진입
+- launchApp:
+    clearState: false
+- waitForAnimationToEnd:
+    timeout: 3000
+
+# 8. dev 빌드: LogBox console.error 오버레이가 떴으면 Dismiss
+- runFlow:
+    when:
+      visible:
+        text: "Dismiss"
+    commands:
+      - tapOn: "Dismiss"
+      - waitForAnimationToEnd:
+          timeout: 1000
+
+- assertVisible: "My Travels"

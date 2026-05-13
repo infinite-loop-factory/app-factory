@@ -1,0 +1,30 @@
+appId: com.gracefullight.countrytracker
+name: Settings Reachable for Theme
+tags:
+  - requires-auth
+  - theme
+  - ui-primitives
+  - draft
+---
+# 다크모드 토글 selector는 settings screen 내부 구조 의존.
+# 본 플로우는 Settings 진입 + Preferences 영역 노출까지만 smoke.
+# 실제 토글 검증은 별도 PR.
+
+- runFlow: ../setup/boot.yaml
+- assertVisible: "My Travels"
+
+- tapOn:
+    id: "tab-settings"
+- waitForAnimationToEnd:
+    timeout: 2000
+- assertVisible: "Settings"
+
+- scrollUntilVisible:
+    element: "Preferences"
+    direction: DOWN
+    timeout: 5000
+- assertVisible: "Preferences"
+
+- back
+- waitForAnimationToEnd:
+    timeout: 1500

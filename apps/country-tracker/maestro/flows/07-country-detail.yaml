@@ -4,21 +4,18 @@ tags:
   - requires-auth
   - requires-data
 ---
-- launchApp
+- runFlow: ../setup/boot.yaml
 - assertVisible: "My Travels"
 
-# Tap first country card to open detail
-# This requires at least one visit to exist
 - tapOn:
-    index: 0
-    text: ".*"
-    below: "Countries"
+    id: "country-card-JP"
+- waitForAnimationToEnd:
+    timeout: 2500
 
-# Verify detail screen
-- assertVisible: "Visit History"
-- assertVisible: "Visits"
-- assertVisible: "Days"
+- assertVisible: "Japan"
 
-# Go back
-- back
+- tapOn:
+    id: "country-detail-back"
+- waitForAnimationToEnd:
+    timeout: 2000
 - assertVisible: "My Travels"

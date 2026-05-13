@@ -4,10 +4,11 @@ import type { CountryYearSummary } from "@/features/map/types/map-summary";
 import BottomSheet, { BottomSheetFlatList } from "@gorhom/bottom-sheet";
 import { DateTime } from "luxon";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ActivityIndicator, Alert } from "react-native";
+import { Alert } from "react-native";
 import { ThemedView } from "@/components/themed-view";
 import { Box } from "@/components/ui/box";
 import { Button, ButtonText } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 import { Text } from "@/components/ui/text";
 import { CountrySummaryItem } from "@/features/map/components/country-summary-item";
 import { MapDateRangePickerSheet } from "@/features/map/components/map-date-range-picker-sheet";
@@ -265,7 +266,7 @@ export default function MapScreen() {
 
       {isYearSummaryLoading && (
         <Box className="mt-3 flex-row items-center">
-          <ActivityIndicator color={accentColor} size="small" />
+          <Spinner color={accentColor} size="small" />
           <Text className="ml-2 text-sm text-typography-500">
             {i18n.t("map.summary.loading")}
           </Text>

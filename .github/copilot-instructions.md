@@ -110,7 +110,6 @@ turbo run start --filter=cafe
 
 현재 `apps/` 디렉토리에는 다음과 같은 애플리케이션들이 있습니다:
 
-- `app-cafe`
 - `cat-meetup`
 - `country-tracker`
 - `dist-interactive-metro`

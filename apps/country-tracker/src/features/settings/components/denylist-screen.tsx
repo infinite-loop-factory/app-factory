@@ -1,10 +1,11 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import React, { useEffect, useMemo, useState } from "react";
-import { ActivityIndicator, View } from "react-native";
+import { View } from "react-native";
 import ParallaxScrollView from "@/components/parallax-scroll-view";
 import { Box } from "@/components/ui/box";
 import { Divider } from "@/components/ui/divider";
+import { Spinner } from "@/components/ui/spinner";
 import { Switch } from "@/components/ui/switch";
 import { Text } from "@/components/ui/text";
 import { queryKeys } from "@/constants/query-keys";
@@ -59,13 +60,13 @@ export default function DenylistScreen() {
   const { user } = useAuthUser();
   const queryClient = useQueryClient();
 
-  const [background, borderColor, textColor, highlightColor, switchBgColor] =
+  const [background, borderColor, textColor, switchTrackOn, switchTrackOff] =
     useThemeColor([
       "background",
       "outline-200",
       "typography",
-      "primary-400",
-      "background-100",
+      "primary-500",
+      "outline-200",
     ]);
 
   const { data: allCountries, isLoading: isLoadingCountries } = useQuery({
@@ -124,7 +125,7 @@ export default function DenylistScreen() {
         style={{ backgroundColor: background, borderColor }}
       >
         {isLoading ? (
-          <ActivityIndicator className="p-8" size="large" />
+          <Spinner className="p-8" size="large" />
         ) : (
           allCountries?.map((country, index) => {
             const isDenylisted = denylistSet.has(country.country_code);
@@ -139,12 +140,17 @@ export default function DenylistScreen() {
                   </Text>
                   <Switch
                     accessibilityLabel={i18n.t("settings.denylist.switch-a11y")}
-                    ios_backgroundColor={switchBgColor}
+                    // @ts-expect-error react-native-web specific prop for active thumb color
+                    activeThumbColor="#FFFFFF"
+                    ios_backgroundColor={switchTrackOff}
                     onValueChange={() =>
                       handleToggle(country.country_code, isDenylisted)
                     }
-                    thumbColor={highlightColor}
-                    trackColor={{ false: switchBgColor, true: switchBgColor }}
+                    thumbColor="#FFFFFF"
+                    trackColor={{
+                      false: switchTrackOff,
+                      true: switchTrackOn,
+                    }}
                     value={isDenylisted}
                   />
                 </View>

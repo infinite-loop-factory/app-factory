@@ -1,0 +1,38 @@
+appId: com.gracefullight.countrytracker
+name: App Lifecycle Resilience
+tags:
+  - requires-auth
+  - lifecycle
+  - widget
+---
+- runFlow: ../setup/boot.yaml
+- waitForAnimationToEnd:
+    timeout: 2000
+- assertVisible: "My Travels"
+
+# 3회 백그라운드/포그라운드 사이클 (위젯 sync 발동)
+- repeat:
+    times: 3
+    commands:
+      - pressKey: Home
+      - waitForAnimationToEnd:
+          timeout: 1000
+      - launchApp:
+          clearState: false
+      - waitForAnimationToEnd:
+          timeout: 2500
+      - assertVisible: "My Travels"
+
+# Settings 탭으로 이동 (Map은 별도 이슈로 회피)
+- tapOn:
+    id: "tab-settings"
+- waitForAnimationToEnd:
+    timeout: 2500
+- assertVisible: "Settings"
+
+# Home 탭으로 복귀 (좌측 1/6 지점)
+- tapOn:
+    point: 16%, 95%
+- waitForAnimationToEnd:
+    timeout: 2000
+- assertVisible: "My Travels"

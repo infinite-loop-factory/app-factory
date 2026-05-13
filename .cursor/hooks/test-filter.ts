@@ -1,17 +1,30 @@
 // PreToolUse hook — Filter test output to show only failures
 // Works with: Claude Code, Codex CLI, Gemini CLI, Qwen Code
 
+import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
-import { resolveGitRoot, type Vendor } from "./types.ts";
+import { resolveGitRoot } from "./fs-utils.ts";
+import { makePreToolOutput } from "./hook-output.ts";
+import type { Vendor } from "./types.ts";
 
 // --- Vendor detection (same logic as keyword-detector.ts) ---
 
+function inferVendorFromScriptPath(): Vendor | null {
+  const path = import.meta.filename;
+  if (path.includes(`${join(".cursor", "hooks")}`)) return "cursor";
+  if (path.includes(`${join(".qwen", "hooks")}`)) return "qwen";
+  if (path.includes(`${join(".claude", "hooks")}`)) return "claude";
+  if (path.includes(`${join(".gemini", "hooks")}`)) return "gemini";
+  if (path.includes(`${join(".codex", "hooks")}`)) return "codex";
+  return null;
+}
+
 function detectVendor(input: Record<string, unknown>): Vendor {
   const event = input.hook_event_name as string | undefined;
+  const byScriptPath = inferVendorFromScriptPath();
+  if (byScriptPath) return byScriptPath;
   if (event === "BeforeTool") return "gemini";
-  if (event === "PreToolUse") {
-    if ("session_id" in input && !("sessionId" in input)) return "codex";
-  }
+  if (event === "PreToolUse" && "session_id" in input) return "codex";
   if (process.env.QWEN_PROJECT_DIR) return "qwen";
   return "claude";
 }
@@ -101,7 +114,15 @@ interface PreToolUseInput {
 
 // --- Main ---
 
-const raw = await Bun.stdin.text();
+// Use fd 0 (sync) instead of Bun.stdin.text() — works under both Bun and
+// Node, and avoids stdin-buffering timing differences between hosts.
+// Fallback: when OMA_HOOK_INPUT_FILE is set, read from that file. This
+// makes the hook testable from environments (vitest worker pools under
+// bun) where piping stdin to a child process is unreliable.
+const inputFile = process.env.OMA_HOOK_INPUT_FILE;
+const raw = inputFile
+  ? readFileSync(inputFile, "utf-8")
+  : readFileSync(0, "utf-8");
 if (!raw.trim()) process.exit(0);
 
 const input: PreToolUseInput = JSON.parse(raw);
@@ -131,11 +152,16 @@ const filterScript = join(
   "filter-test-output.sh",
 );
 
+// Skip filtering if the script doesn't exist (hooks not fully installed)
+if (!existsSync(filterScript)) process.exit(0);
+
 // Rewrite command to pipe through filter
 const filteredCmd = `set -o pipefail; (${command}) 2>&1 | bash "${filterScript}"`;
 
 // Return updated input with all original fields preserved
-const _updatedInput: Record<string, unknown> = {
+const updatedInput: Record<string, unknown> = {
   ...input.tool_input,
   command: filteredCmd,
 };
+
+console.log(makePreToolOutput(vendor, updatedInput));

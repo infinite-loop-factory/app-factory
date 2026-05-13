@@ -8,7 +8,13 @@
 - **Response language**: Follows `language` in `.agents/oma-config.yaml`
 - **Skills**: `.agents/skills/` (domain specialists)
 - **Workflows**: `.agents/workflows/` (multi-step orchestration)
-- **Subagents**: `@agent-name` (defined in `.gemini/agents/`) or `oma agent:spawn {agent} {prompt} {sessionId}`
+- **Subagents**: Same-vendor native dispatch via `.gemini/agents/{name}.md`; cross-vendor or unsupported cases fall back to `oma agent:spawn {agent} {prompt} {sessionId}`
+
+## Per-Agent Dispatch
+
+1. Resolve `target_vendor_for_agent` from `.agents/oma-config.yaml`.
+2. If `target_vendor_for_agent === current_runtime_vendor`, use the runtime's native subagent path.
+3. If vendors differ, or native subagents are unavailable, use `oma agent:spawn` for that agent only.
 
 ## Workflows
 
@@ -23,7 +29,9 @@ Execute by naming the workflow in your prompt. Keywords are auto-detected via ho
 | brainstorm | `brainstorm.md` | Design-first ideation |
 | review | `review.md` | QA audit |
 | debug | `debug.md` | Root cause + minimal fix |
+| deepsec | `deepsec.md` | Drive `oma-deepsec` end-to-end (setup / scan / pr-review / matchers / triage) |
 | scm | `scm.md` | SCM + Git operations + Conventional Commits |
+| docs | `docs.md` | Documentation drift verify + sync |
 
 To execute: read and follow `.agents/workflows/{name}.md` step by step.
 
@@ -36,8 +44,8 @@ Deactivate: say "workflow done".
 
 ## Rules
 
-1. **Do not modify `.agents/` files** — SSOT protection
-2. Workflows execute via keyword detection or explicit naming — never self-initiated
+1. **Do not modify `.agents/` files** (SSOT protection).
+2. Workflows execute via keyword detection or explicit naming, never self-initiated.
 3. Response language follows `.agents/oma-config.yaml`
 
 ## Project Rules

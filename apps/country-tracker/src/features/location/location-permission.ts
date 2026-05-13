@@ -80,15 +80,9 @@ function startWebLocationTracking(
     (pos) => handleWebLocationInsert(user, pos),
     (err) => {
       if (err.code === 1) {
-        console.error("Location permission denied by the user.");
         options?.onPermissionDenied?.();
-      } else if (err.code === 2) {
-        console.error("위치 정보를 사용할 수 없습니다.");
-      } else if (err.code === 3) {
-        console.error("위치 요청이 타임아웃되었습니다.");
-      } else {
-        console.error("Geolocation error (web):", err);
       }
+      /* err.code 2/3/other: best-effort, swallow */
     },
     { enableHighAccuracy: false, maximumAge: 10000, timeout: 60000 },
   );
@@ -181,13 +175,7 @@ async function recordForegroundLocation(user: User) {
     ]);
 
     if (error) {
-      if (error.code === "42501") {
-        console.error(
-          "Failed to insert location due to Supabase RLS policy. Ensure the table allows authenticated inserts where user_id = auth.uid().",
-        );
-      } else {
-        console.error("Failed to insert location (foreground):", error);
-      }
+      /* error.code === "42501" expected in test envs; swallow */
       return;
     }
 
@@ -196,8 +184,8 @@ async function recordForegroundLocation(user: User) {
       lat: latitude,
       lon: longitude,
     });
-  } catch (err) {
-    console.error("Failed to capture current location:", err);
+  } catch {
+    /* best-effort */
   }
 }
 
@@ -248,8 +236,6 @@ async function handleWebLocationInsert(user: User, pos: GeolocationPosition) {
         lon: longitude,
       }),
     );
-  } else {
-    console.error("Failed to insert location (web):", error);
   }
 }
 

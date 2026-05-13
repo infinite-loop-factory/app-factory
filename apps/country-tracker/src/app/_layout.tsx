@@ -28,6 +28,7 @@ import { Platform } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { flushLocationQueueIfAny } from "@/features/location/location-task";
+import { useWidgetSync } from "@/features/widget/hooks/use-widget-sync";
 import { flushVisitQueue } from "@/utils/offline-queue";
 
 const navigationIntegration = null;
@@ -57,26 +58,12 @@ const queryClient = new QueryClient({
   },
 });
 
-function RootLayout() {
-  const navigationRef = useNavigationContainerRef();
+function ThemedShell({ children }: { children: React.ReactNode }) {
   const savedTheme = useAtomValue(themeAtom);
-  const [loaded] = useFonts({
-    SpaceMono: require("@/assets/fonts/SpaceMono-Regular.ttf"),
-  });
   const net = useNetworkState();
   const wasConnectedRef = useRef(false);
 
-  useEffect(() => {
-    if (navigationRef && navigationIntegration) {
-      // navigationIntegration.registerNavigationContainer(navigationRef);
-    }
-  }, [navigationRef]);
-
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
+  useWidgetSync();
 
   useEffect(() => {
     if (Platform.OS !== "web") {
@@ -98,6 +85,39 @@ function RootLayout() {
     wasConnectedRef.current = connected;
   }, [net.isConnected, net.isInternetReachable]);
 
+  return (
+    <GluestackUIProvider mode={savedTheme}>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <BottomSheetModalProvider>
+          <ThemeProvider
+            value={savedTheme === "dark" ? DarkTheme : DefaultTheme}
+          >
+            <WebviewLayout>{children}</WebviewLayout>
+          </ThemeProvider>
+        </BottomSheetModalProvider>
+      </GestureHandlerRootView>
+    </GluestackUIProvider>
+  );
+}
+
+function RootLayout() {
+  const navigationRef = useNavigationContainerRef();
+  const [loaded] = useFonts({
+    SpaceMono: require("@/assets/fonts/SpaceMono-Regular.ttf"),
+  });
+
+  useEffect(() => {
+    if (navigationRef && navigationIntegration) {
+      // navigationIntegration.registerNavigationContainer(navigationRef);
+    }
+  }, [navigationRef]);
+
+  useEffect(() => {
+    if (loaded) {
+      SplashScreen.hideAsync();
+    }
+  }, [loaded]);
+
   if (!loaded) {
     return null;
   }
@@ -107,19 +127,9 @@ function RootLayout() {
       <JotaiProvider store={store}>
         <SafeAreaProvider>
           <QueryClientProvider client={queryClient}>
-            <GluestackUIProvider mode={savedTheme}>
-              <GestureHandlerRootView style={{ flex: 1 }}>
-                <BottomSheetModalProvider>
-                  <ThemeProvider
-                    value={savedTheme === "dark" ? DarkTheme : DefaultTheme}
-                  >
-                    <WebviewLayout>
-                      <Slot />
-                    </WebviewLayout>
-                  </ThemeProvider>
-                </BottomSheetModalProvider>
-              </GestureHandlerRootView>
-            </GluestackUIProvider>
+            <ThemedShell>
+              <Slot />
+            </ThemedShell>
           </QueryClientProvider>
         </SafeAreaProvider>
       </JotaiProvider>

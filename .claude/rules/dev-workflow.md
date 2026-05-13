@@ -1,6 +1,8 @@
 ---
-description: "Monorepo developer workflow standards - mise tasks, git hooks, CI/CD, release automation"
+description: Monorepo developer workflow standards - mise tasks, git hooks,
+  CI/CD, release automation
 ---
+
 
 # Developer Workflow Standards
 
