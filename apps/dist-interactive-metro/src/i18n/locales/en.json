@@ -109,7 +109,10 @@
     "confirmClearRecent": "Clear recent search history?",
     "confirmClearFavorites": "Delete all favorites?",
     "cancel": "Cancel",
-    "confirm": "Delete"
+    "confirm": "Delete",
+    "language": "Language",
+    "languageKo": "한국어",
+    "languageEn": "English"
   },
   "notificationSettings": {
     "placeholder": "Notification settings screen. (Not yet implemented)"

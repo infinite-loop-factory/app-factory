@@ -1,17 +1,20 @@
 import {
   ChevronRight,
+  Globe,
   Info,
   Settings as SettingsIcon,
 } from "lucide-react-native";
 import { useCallback } from "react";
 import { Alert, Pressable, ScrollView, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useLanguage } from "@/context/language-context";
 import { clearAllFavorites } from "@/data/favorites";
 import { clearRecentStations } from "@/data/recent-stations";
 import i18n from "@/i18n";
 
 export default function SettingsTab() {
   const insets = useSafeAreaInsets();
+  const { locale, setLocale } = useLanguage();
 
   const handleClearRecent = useCallback(() => {
     Alert.alert(i18n.t("settings.confirmClearRecent"), "", [
@@ -62,6 +65,41 @@ export default function SettingsTab() {
         </View>
 
         <View className="gap-4">
+          {/* Language */}
+          <SettingsCard
+            icon={<Globe color="#6B7280" size={20} />}
+            title={i18n.t("settings.language")}
+          >
+            <View className="flex-row gap-3 p-4">
+              {(["ko", "en"] as const).map((lang) => {
+                const isActive = locale === lang;
+                const label =
+                  lang === "ko"
+                    ? i18n.t("settings.languageKo")
+                    : i18n.t("settings.languageEn");
+                return (
+                  <Pressable
+                    className={`flex-1 items-center rounded-xl py-2.5 ${
+                      isActive ? "bg-blue-600" : "bg-gray-100 dark:bg-gray-800"
+                    }`}
+                    key={lang}
+                    onPress={() => setLocale(lang)}
+                  >
+                    <Text
+                      className={`font-medium text-base ${
+                        isActive
+                          ? "text-white"
+                          : "text-gray-700 dark:text-gray-300"
+                      }`}
+                    >
+                      {label}
+                    </Text>
+                  </Pressable>
+                );
+              })}
+            </View>
+          </SettingsCard>
+
           {/* App info */}
           <SettingsCard
             icon={<Info color="#6B7280" size={20} />}
