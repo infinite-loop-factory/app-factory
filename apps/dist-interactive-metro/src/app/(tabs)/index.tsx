@@ -25,7 +25,7 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ElevatedCard } from "@/components/ui/elevated-card";
 import { GradientBackground } from "@/components/ui/gradient-background";
-import { LineBadge } from "@/components/ui/line-badge";
+import { StationLineBadges } from "@/components/ui/station-line-badges";
 import { useRouteSearch } from "@/context/route-search-context";
 import { useStations } from "@/data/station-store";
 import { useStationTimetable } from "@/hooks/use-station-timetable";
@@ -186,10 +186,7 @@ export default function GoNowTab() {
                         <Text className="font-bold text-gray-900 text-xl dark:text-gray-100">
                           {endStation.name}
                         </Text>
-                        <LineBadge
-                          color={endStation.lineColor}
-                          line={endStation.line}
-                        />
+                        <StationLineBadges station={endStation} />
                       </View>
                     ) : (
                       <Text className="text-gray-400 text-lg">
@@ -434,11 +431,7 @@ function RouteCard({
               <Text className="font-bold text-base text-gray-900 dark:text-gray-100">
                 {rec.departure.station.name}
               </Text>
-              <LineBadge
-                color={rec.departure.station.lineColor}
-                line={rec.departure.station.line}
-                size="sm"
-              />
+              <StationLineBadges size="sm" station={rec.departure.station} />
             </View>
             <Text className="font-medium text-blue-600 text-xs">
               현위치에서 {formatDistance(rec.departure.distanceM)}

@@ -25,7 +25,7 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ElevatedCard } from "@/components/ui/elevated-card";
 import { GradientBackground } from "@/components/ui/gradient-background";
-import { LineBadge } from "@/components/ui/line-badge";
+import { StationLineBadges } from "@/components/ui/station-line-badges";
 import {
   addFavoriteRoute,
   findFavoriteRoute,
@@ -206,10 +206,7 @@ function CollapsibleRouteSegment({ group }: CollapsibleRouteSegmentProps) {
               <Text className="font-semibold text-gray-900 text-lg dark:text-gray-100">
                 {start.station.name}
               </Text>
-              <LineBadge
-                color={start.station.lineColor}
-                line={start.station.line}
-              />
+              <StationLineBadges station={start.station} />
             </View>
           </View>
 
@@ -539,10 +536,7 @@ export default function RouteResultScreen() {
                   >
                     {startStation.name}
                   </Text>
-                  <LineBadge
-                    color={startStation.lineColor}
-                    line={startStation.line}
-                  />
+                  <StationLineBadges station={startStation} />
                 </View>
 
                 <View className="flex-1 items-center justify-center pt-2">
@@ -569,10 +563,7 @@ export default function RouteResultScreen() {
                   >
                     {endStation.name}
                   </Text>
-                  <LineBadge
-                    color={endStation.lineColor}
-                    line={endStation.line}
-                  />
+                  <StationLineBadges station={endStation} />
                 </View>
               </View>
             </View>
@@ -701,10 +692,7 @@ export default function RouteResultScreen() {
                         <Text className="font-bold text-gray-900 text-lg dark:text-gray-100">
                           {endStation.name}
                         </Text>
-                        <LineBadge
-                          color={endStation.lineColor}
-                          line={endStation.line}
-                        />
+                        <StationLineBadges station={endStation} />
                       </View>
                       <Text className="mt-1 text-gray-400 text-xs">
                         {i18n.t("stationSelect.arrivalShort")}

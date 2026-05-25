@@ -13,7 +13,7 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { EmptyState } from "@/components/ui/empty-state";
-import { LineBadge } from "@/components/ui/line-badge";
+import { StationLineBadges } from "@/components/ui/station-line-badges";
 import { useRouteSearch } from "@/context/route-search-context";
 import { getFavoriteRoutes } from "@/data/favorites";
 import { useStationTimetable } from "@/hooks/use-station-timetable";
@@ -106,10 +106,7 @@ function FavoriteTrainCard({ route, onSearch }: FavoriteTrainCardProps) {
               >
                 {route.startStation.name}
               </Text>
-              <LineBadge
-                color={route.startStation.lineColor}
-                line={route.startStation.line}
-              />
+              <StationLineBadges size="sm" station={route.startStation} />
             </View>
             <Text className="text-gray-400 text-sm">→</Text>
             <View className="flex-1 items-end">
@@ -119,10 +116,7 @@ function FavoriteTrainCard({ route, onSearch }: FavoriteTrainCardProps) {
               >
                 {route.endStation.name}
               </Text>
-              <LineBadge
-                color={route.endStation.lineColor}
-                line={route.endStation.line}
-              />
+              <StationLineBadges size="sm" station={route.endStation} />
             </View>
           </View>
           <Pressable

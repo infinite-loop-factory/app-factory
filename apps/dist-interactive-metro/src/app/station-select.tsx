@@ -14,7 +14,7 @@ import {
   View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { LineBadge } from "@/components/ui/line-badge";
+import { StationLineBadges } from "@/components/ui/station-line-badges";
 import { useRouteSearch } from "@/context/route-search-context";
 import { addRecentStation, getRecentStations } from "@/data/recent-stations";
 import { useStations } from "@/data/station-store";
@@ -119,19 +119,7 @@ export default function StationSelectScreen() {
           <Text className="mb-1.5 font-bold text-gray-900 text-lg dark:text-gray-100">
             {item.name}
           </Text>
-          <View className="flex-row items-center gap-2">
-            <LineBadge color={item.lineColor} line={item.line} size="sm" />
-            {item.connections && item.connections.length > 0 && (
-              <View className="flex-row items-center gap-1 rounded-full bg-gray-50 px-2 py-0.5 dark:bg-gray-900">
-                <Text className="font-bold text-[10px] text-gray-400">
-                  TRANSFERS
-                </Text>
-                <Text className="text-gray-600 text-xs dark:text-gray-400">
-                  {item.connections.join(", ")}
-                </Text>
-              </View>
-            )}
-          </View>
+          <StationLineBadges size="sm" station={item} />
         </View>
         <View className="h-8 w-8 items-center justify-center rounded-full bg-gray-50 dark:bg-gray-800">
           {keyword.trim() ? (

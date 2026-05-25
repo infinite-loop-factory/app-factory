@@ -154,12 +154,13 @@ function expandNode(
   });
 }
 
-function dijkstra(
+/** Finds the shortest path from startId to ANY id in endIds. */
+function dijkstraToAny(
   graph: EdgeMap,
   startId: string,
-  endId: string,
+  endIds: Set<string>,
 ): DijkstraResult | null {
-  if (startId === endId) {
+  if (endIds.has(startId)) {
     return {
       path: [startId],
       transferEdges: new Set(),
@@ -182,7 +183,7 @@ function dijkstra(
     const curr = queue.dequeue();
     if (!curr) continue;
 
-    if (curr.id === endId) {
+    if (endIds.has(curr.id)) {
       return {
         path: curr.path,
         transferEdges: curr.transferEdges,
@@ -292,6 +293,15 @@ function getStationMap(stations: Station[]): Map<string, Station> {
 
 // ── Public API ───────────────────────────────────────────────
 
+/** Collect all station IDs that share the given station name (all line variants). */
+function collectEndIds(name: string, stations: Station[]): Set<string> {
+  const ids = new Set<string>();
+  for (const s of stations) {
+    if (s.name === name) ids.add(s.id);
+  }
+  return ids;
+}
+
 export function calculateRoute(
   start: Station,
   end: Station,
@@ -301,26 +311,36 @@ export function calculateRoute(
   const graph = buildGraph(stations);
   const stationMap = getStationMap(stations);
 
+  // Treat every line variant of the same physical station as a valid endpoint.
+  const endIds = collectEndIds(end.name, stations);
+
   if (via) {
-    const leg1 = dijkstra(graph, start.id, via.id);
-    const leg2 = dijkstra(graph, via.id, end.id);
-    if (leg1 && leg2) {
-      const combined: DijkstraResult = {
-        path: [...leg1.path, ...leg2.path.slice(1)],
-        transferEdges: new Set([...leg1.transferEdges, ...leg2.transferEdges]),
-        totalHops: leg1.totalHops + leg2.totalHops,
-        totalTransfers: leg1.totalTransfers + leg2.totalTransfers,
-      };
-      return buildRouteInfo(combined, stationMap);
+    const viaIds = collectEndIds(via.name, stations);
+    const leg1 = dijkstraToAny(graph, start.id, viaIds);
+    if (leg1) {
+      const reachedViaId = leg1.path[leg1.path.length - 1] ?? start.id;
+      const leg2 = dijkstraToAny(graph, reachedViaId, endIds);
+      if (leg2) {
+        const combined: DijkstraResult = {
+          path: [...leg1.path, ...leg2.path.slice(1)],
+          transferEdges: new Set([
+            ...leg1.transferEdges,
+            ...leg2.transferEdges,
+          ]),
+          totalHops: leg1.totalHops + leg2.totalHops,
+          totalTransfers: leg1.totalTransfers + leg2.totalTransfers,
+        };
+        return buildRouteInfo(combined, stationMap);
+      }
     }
     // If path through 'via' fails, calculate direct route but mark as failed
-    const direct = dijkstra(graph, start.id, end.id);
+    const direct = dijkstraToAny(graph, start.id, endIds);
     if (direct) {
       return { ...buildRouteInfo(direct, stationMap), viaFailed: true };
     }
   }
 
-  const result = dijkstra(graph, start.id, end.id);
+  const result = dijkstraToAny(graph, start.id, endIds);
   if (!result) {
     return {
       segments: [{ station: start }, { station: end }],
@@ -336,17 +356,10 @@ export function recommendRoutes(
   nearbyStations: NearbyStation[],
   destination: Station,
 ): RouteRecommendation[] {
-  // Strategy: For each line, keep only the single closest station.
-  // This drastically reduces redundant paths from the same line.
-  const closestByLine = new Map<string, NearbyStation>();
-  for (const s of nearbyStations) {
-    const existing = closestByLine.get(s.station.line);
-    if (!existing || s.walkingMinutes < existing.walkingMinutes) {
-      closestByLine.set(s.station.line, s);
-    }
-  }
-
-  const allPossible = Array.from(closestByLine.values())
+  // Compute a route from every nearby station.
+  // Stations with the same physical name (different lines) dedup after sorting
+  // so the best total-time variant survives.
+  const sorted = nearbyStations
     .map((departure) => {
       const route = calculateRoute(departure.station, destination);
       return {
@@ -358,12 +371,17 @@ export function recommendRoutes(
     })
     .sort((a, b) => a.totalMinutes - b.totalMinutes);
 
+  // Dedup by departure station name: same physical station on multiple lines
+  // produces one entry — the one with the shorter total time (first after sort).
+  const seen = new Set<string>();
+  const allPossible = sorted.filter((r) => {
+    if (seen.has(r.departure.station.name)) return false;
+    seen.add(r.departure.station.name);
+    return true;
+  });
+
   if (allPossible.length === 0) return [];
 
-  // Filter strategy:
-  // 1. Keep the absolute best route.
-  // 2. Discard any route that is 30+ minutes slower than the best route.
-  // 3. Limit to top 4 high-quality candidates.
   const bestTotal = allPossible[0]?.totalMinutes ?? 0;
   const THRESHOLD = 30;
 

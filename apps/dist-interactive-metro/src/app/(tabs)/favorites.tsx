@@ -12,7 +12,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { FlatList, Pressable, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { EmptyState } from "@/components/ui/empty-state";
-import { LineBadge } from "@/components/ui/line-badge";
+import { StationLineBadges } from "@/components/ui/station-line-badges";
 import { useRouteSearch } from "@/context/route-search-context";
 import { getFavoriteRoutes, removeFavoriteRoute } from "@/data/favorites";
 import i18n from "@/i18n";
@@ -108,10 +108,7 @@ export default function FavoritesTab() {
               >
                 {route.startStation.name}
               </Text>
-              <LineBadge
-                color={route.startStation.lineColor}
-                line={route.startStation.line}
-              />
+              <StationLineBadges station={route.startStation} />
             </View>
 
             <View className="mx-4 items-center justify-center">
@@ -125,10 +122,7 @@ export default function FavoritesTab() {
               >
                 {route.endStation.name}
               </Text>
-              <LineBadge
-                color={route.endStation.lineColor}
-                line={route.endStation.line}
-              />
+              <StationLineBadges station={route.endStation} />
             </View>
           </View>
 
@@ -140,11 +134,7 @@ export default function FavoritesTab() {
               <Text className="font-semibold text-gray-700 text-sm dark:text-gray-300">
                 {route.viaStation.name}
               </Text>
-              <LineBadge
-                color={route.viaStation.lineColor}
-                line={route.viaStation.line}
-                size="sm"
-              />
+              <StationLineBadges size="sm" station={route.viaStation} />
             </View>
           )}
 
