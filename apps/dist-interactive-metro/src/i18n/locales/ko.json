@@ -138,7 +138,8 @@
     "departure": "출발",
     "direction": "방면",
     "loading": "배차 정보 불러오는 중…",
-    "noUpcoming": "오늘 이후 열차 없음"
+    "noUpcoming": "오늘 이후 열차 없음",
+    "now": "지금"
   },
   "transferInfo": {
     "walkingDistance": "{{distance}}m 도보",

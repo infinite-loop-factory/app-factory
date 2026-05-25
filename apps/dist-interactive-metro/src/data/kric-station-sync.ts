@@ -172,7 +172,7 @@ export const APP_LINE_TO_LN_CD: Readonly<Record<string, string>> =
 // ── Storage keys ─────────────────────────────────────────────
 
 const STORAGE_DYNAMIC = "@kric/dynamic_stations_v1";
-const STORAGE_CODE_MAP = "@kric/station_code_map_v1";
+const STORAGE_CODE_MAP = "@kric/station_code_map_v2"; // v2: added stinConsOrdr
 const STORAGE_ROUTES = "@kric/routes_v1";
 const STORAGE_SYNC_TS = "@kric/last_sync_ts_v1";
 const STORAGE_CHECKSUM = "@kric/data_checksum_v1";
@@ -186,6 +186,8 @@ export interface KricStationRef {
   stinCd: string;
   railOprIsttCd: string;
   lnCd: string;
+  /** Station order along the line (from stinConsOrdr) — used for direction filtering */
+  stinConsOrdr: number;
 }
 
 /** Lookup map: "<stinNm>|<kricLnCd>" → KricStationRef */
@@ -214,6 +216,23 @@ export function getKricRef(
   kricLnCd: string,
 ): KricStationRef | null {
   return _codeMap[`${stationName}|${kricLnCd}`] ?? null;
+}
+
+/**
+ * Reverse lookup: given a raw KRIC stinCd and line code, return the
+ * stinConsOrdr for that station. Used to determine travel direction when
+ * filtering timetable items by tmnStinCd.
+ */
+export function getStinConsOrdrByCd(
+  stinCd: string,
+  kricLnCd: string,
+): number | undefined {
+  for (const [key, ref] of Object.entries(_codeMap)) {
+    if (key.endsWith(`|${kricLnCd}`) && ref.stinCd === stinCd) {
+      return ref.stinConsOrdr;
+    }
+  }
+  return undefined;
 }
 
 export function getKricCodeMap(): KricCodeMap {
@@ -321,6 +340,7 @@ function buildCodeMapEntries(
       stinCd: item.stinCd,
       railOprIsttCd: item.railOprIsttCd,
       lnCd: item.lnCd,
+      stinConsOrdr: Number(item.stinConsOrdr),
     };
   }
   return map;
@@ -419,15 +439,19 @@ export async function syncKricStations(
   opts: { force?: boolean } = {},
 ): Promise<SyncResult> {
   if (!opts.force && (await isCacheValid())) {
-    await loadFromCache();
-    return {
-      dynamicStationsAdded: 0,
-      codeMapEntries: Object.keys(_codeMap).length,
-      routeEntries: _routes.length,
-      linesSucceeded: 0,
-      linesFailed: 0,
-      errors: [],
-    };
+    const loaded = await loadFromCache();
+    if (loaded) {
+      return {
+        dynamicStationsAdded: 0,
+        codeMapEntries: Object.keys(_codeMap).length,
+        routeEntries: _routes.length,
+        linesSucceeded: 0,
+        linesFailed: 0,
+        errors: [],
+      };
+    }
+    // Cache timestamp was valid but data was missing/corrupt — fall through
+    // to a fresh sync (e.g. after a storage key schema bump).
   }
 
   const dynamicStations: Station[] = [];

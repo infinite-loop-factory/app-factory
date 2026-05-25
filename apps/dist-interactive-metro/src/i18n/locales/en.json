@@ -90,7 +90,8 @@
     "departure": "Departs",
     "direction": "direction",
     "loading": "Loading timetable…",
-    "noUpcoming": "No more trains today"
+    "noUpcoming": "No more trains today",
+    "now": "now"
   },
   "settings": {
     "description": "Customize and personalize your app",

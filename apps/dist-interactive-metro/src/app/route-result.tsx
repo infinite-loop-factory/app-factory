@@ -83,14 +83,21 @@ interface DepartureStripProps {
   stationName: string;
   lineName: string;
   lineColor: string;
+  destinationStationName?: string;
 }
 
 function DepartureStrip({
   stationName,
   lineName,
   lineColor,
+  destinationStationName,
 }: DepartureStripProps) {
-  const { departures, loading } = useStationTimetable(stationName, lineName, 4);
+  const { departures, loading } = useStationTimetable(
+    stationName,
+    lineName,
+    4,
+    destinationStationName,
+  );
 
   function renderContent() {
     if (loading) {
@@ -115,12 +122,17 @@ function DepartureStrip({
         {departures.map((dep) => (
           <View
             className="flex-row items-center gap-1 rounded-full px-3 py-1"
-            key={dep.trnNo}
+            key={dep.dptTime}
             style={{ backgroundColor: `${lineColor}18` }}
           >
             <Clock color={lineColor} size={11} />
             <Text className="font-medium text-xs" style={{ color: lineColor }}>
               {dep.dptTime}
+            </Text>
+            <Text className="text-xs opacity-70" style={{ color: lineColor }}>
+              {dep.minutesFromNow === 0
+                ? i18n.t("timetable.now")
+                : `+${dep.minutesFromNow}분`}
             </Text>
           </View>
         ))}
@@ -610,6 +622,9 @@ export default function RouteResultScreen() {
 
             {/* Next departures */}
             <DepartureStrip
+              destinationStationName={
+                groupedSegments[0]?.end.station.name ?? endStation.name
+              }
               lineColor={startStation.lineColor}
               lineName={startStation.line}
               stationName={startStation.name}
