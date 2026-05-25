@@ -18,6 +18,7 @@ import {
   TextInput,
   View,
 } from "react-native";
+import { EndpointHealthChecker } from "@/components/dev/endpoint-health-checker";
 import { useSyncStatus } from "@/context/sync-status-context";
 import {
   getKricCodeMap,
@@ -673,10 +674,10 @@ function RouteInfoResult({ items }: { items: unknown[] }) {
           Code
         </Text>
       </View>
-      {rows.map((r, i) => (
+      {rows.map((r) => (
         <View
           className={`flex-row items-center gap-4 px-4 py-3 ${ROW_DIVIDER}`}
-          key={`${r.stinCd}-${i}`}
+          key={r.stinCd}
         >
           <Text className={`${MONO} w-8 text-right text-outline-400 text-sm`}>
             {r.stinConsOrdr}
@@ -721,12 +722,12 @@ function TimetableResult({
           </Text>
         ) : null}
       </View>
-      {rows.slice(0, 30).map((r, i) => {
+      {rows.slice(0, 30).map((r) => {
         const time = r.dptTm || r.arvTm;
         return (
           <View
             className={`flex-row items-center gap-4 px-4 py-3 ${ROW_DIVIDER}`}
-            key={`${r.trnNo}-${i}`}
+            key={r.trnNo}
           >
             <Text
               className={`${MONO} w-16 font-semibold text-sm text-typography-900`}
@@ -765,7 +766,10 @@ function TransferInfoResult({ items }: { items: unknown[] }) {
   return (
     <>
       {rows.map((r, i) => (
-        <View className={`px-4 py-4 ${ROW_DIVIDER}`} key={`${r.chtnLn}-${i}`}>
+        <View
+          className={`px-4 py-4 ${ROW_DIVIDER}`}
+          key={`transfer-${String(i)}`}
+        >
           <View className="mb-2 flex-row items-center justify-between">
             <Text className="font-semibold text-sm text-typography-900">
               {r.chtnLn}
@@ -803,13 +807,13 @@ function TransferMovementResult({ items }: { items: unknown[] }) {
   }[];
   return (
     <>
-      {rows.map((r, i) => {
+      {rows.map((r, _i) => {
         const hasElevator = r.elvtTpCd !== "" && r.elvtTpCd !== "0";
         const elevatorOk = r.elvtSttCd === "1";
         return (
           <View
             className={`px-4 py-4 ${ROW_DIVIDER}`}
-            key={`${r.chtnMvTpOrdr}-${i}`}
+            key={`step-${r.chtnMvTpOrdr}`}
           >
             <View className="flex-row items-start gap-3">
               <View className="mt-0.5 h-6 w-6 items-center justify-center rounded-full bg-primary-100">
@@ -1193,6 +1197,11 @@ export function ApiInspector() {
       <Text className="mb-4 font-semibold text-lg text-typography-900">
         API Inspector
       </Text>
+
+      {/* ── Endpoint Health ───────────────────────────────── */}
+      <View className="mb-6">
+        <EndpointHealthChecker />
+      </View>
 
       {/* Auth / Request debug panel */}
       <RequestDebugPanel preview={requestPreview} />

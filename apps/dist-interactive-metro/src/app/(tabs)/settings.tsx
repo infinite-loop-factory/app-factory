@@ -1,46 +1,17 @@
 import {
-  Bell,
   ChevronRight,
-  Home,
   Info,
   Settings as SettingsIcon,
 } from "lucide-react-native";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback } from "react";
 import { Alert, Pressable, ScrollView, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { clearAllFavorites } from "@/data/favorites";
 import { clearRecentStations } from "@/data/recent-stations";
 import i18n from "@/i18n";
-import {
-  type DefaultHomeTabId,
-  getDefaultHomeTab,
-  setDefaultHomeTab,
-} from "@/lib/default-home";
-
-const TAB_OPTIONS: { id: DefaultHomeTabId; label: () => string }[] = [
-  { id: "goNow", label: () => i18n.t("tabs.goNow") },
-  { id: "routeGuide", label: () => i18n.t("tabs.routeGuide") },
-  { id: "favorites", label: () => i18n.t("tabs.favorites") },
-];
 
 export default function SettingsTab() {
   const insets = useSafeAreaInsets();
-  const [defaultTab, setDefaultTab] = useState<DefaultHomeTabId>("routeGuide");
-
-  useEffect(() => {
-    getDefaultHomeTab()
-      .then(setDefaultTab)
-      .catch(() => {
-        /* ignore */
-      });
-  }, []);
-
-  const handleDefaultTabChange = useCallback(async (tab: DefaultHomeTabId) => {
-    setDefaultTab(tab);
-    await setDefaultHomeTab(tab).catch(() => {
-      /* ignore */
-    });
-  }, []);
 
   const handleClearRecent = useCallback(() => {
     Alert.alert(i18n.t("settings.confirmClearRecent"), "", [
@@ -91,43 +62,6 @@ export default function SettingsTab() {
         </View>
 
         <View className="gap-4">
-          {/* Default home tab */}
-          <SettingsCard
-            description={i18n.t("settings.defaultHomeDescription")}
-            icon={<Home color="#6B7280" size={20} />}
-            title={i18n.t("settings.defaultHome")}
-          >
-            {TAB_OPTIONS.map((opt) => (
-              <Pressable
-                accessibilityRole="radio"
-                accessibilityState={{ checked: defaultTab === opt.id }}
-                className="flex-row items-center justify-between border-gray-100 border-b px-4 py-3 active:bg-gray-50 dark:border-gray-800 dark:active:bg-gray-800"
-                key={opt.id}
-                onPress={() => handleDefaultTabChange(opt.id)}
-              >
-                <Text className="text-base text-gray-900 dark:text-gray-100">
-                  {opt.label()}
-                </Text>
-                {defaultTab === opt.id && (
-                  <View className="h-2 w-2 rounded-full bg-blue-600" />
-                )}
-              </Pressable>
-            ))}
-          </SettingsCard>
-
-          {/* Notification settings */}
-          <SettingsCard
-            description={i18n.t("settings.notificationComingSoon")}
-            icon={<Bell color="#6B7280" size={20} />}
-            title={i18n.t("settings.notificationSettings")}
-          >
-            <View className="items-center p-4">
-              <Text className="text-gray-400 text-sm dark:text-gray-500">
-                {i18n.t("settings.comingSoon")}
-              </Text>
-            </View>
-          </SettingsCard>
-
           {/* App info */}
           <SettingsCard
             icon={<Info color="#6B7280" size={20} />}
@@ -138,7 +72,7 @@ export default function SettingsTab() {
                 {i18n.t("settings.version")}
               </Text>
               <Text className="text-gray-500 text-sm dark:text-gray-500">
-                0.1.0
+                1.0.0
               </Text>
             </View>
             <View className="flex-row items-center justify-between px-4 py-3">
@@ -146,7 +80,7 @@ export default function SettingsTab() {
                 {i18n.t("settings.madeBy")}
               </Text>
               <Text className="text-gray-500 text-sm dark:text-gray-500">
-                dist-interactive-metro
+                Dist Interactive Metro
               </Text>
             </View>
           </SettingsCard>

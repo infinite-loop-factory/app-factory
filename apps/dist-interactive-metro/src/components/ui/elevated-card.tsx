@@ -1,24 +1,32 @@
 import type { ReactNode } from "react";
 
-import { View } from "react-native";
+import { View, type ViewStyle } from "react-native";
 
 interface ElevatedCardProps {
   children: ReactNode;
   className?: string;
+  style?: ViewStyle;
 }
 
-export function ElevatedCard({ children, className = "" }: ElevatedCardProps) {
+export function ElevatedCard({
+  children,
+  className = "",
+  style,
+}: ElevatedCardProps) {
   return (
     <View
       className={`bg-white dark:bg-gray-900 rounded-3xl p-6 shadow-xl ${className}`}
-      style={{
-        // RN shadow props for consistent cross-platform shadow
-        shadowColor: "#000",
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.1,
-        shadowRadius: 12,
-        elevation: 8,
-      }}
+      style={[
+        {
+          // RN shadow props for consistent cross-platform shadow
+          shadowColor: "#000",
+          shadowOffset: { width: 0, height: 4 },
+          shadowOpacity: 0.1,
+          shadowRadius: 12,
+          elevation: 8,
+        },
+        style,
+      ]}
     >
       {children}
     </View>

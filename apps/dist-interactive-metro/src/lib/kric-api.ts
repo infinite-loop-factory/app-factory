@@ -46,6 +46,9 @@ function extractItems<T>(raw: KricEnvelope<T>): T[] {
     throw new Error(`KRIC API error ${header.resultCode}: ${header.resultMsg}`);
   }
 
+  // subwayRouteInfo returns body as a flat array instead of { items: [...] }
+  if (Array.isArray(body)) return body as unknown as T[];
+
   const items = body?.items;
   // Handle empty-string sentinel some KRIC endpoints return
   if (!items || (items as unknown) === "") return [];
@@ -211,7 +214,33 @@ export function fetchStationTransferInfo(params: {
   );
 }
 
-// ── 5. vulnerableUserInfo / transferMovement ─────────────────
+// ── 5. convenientInfo / stationInfo ──────────────────────────
+// Detailed station metadata including GPS coordinates.
+
+export interface StationInfoItem {
+  railOprIsttCd: string;
+  lnCd: string;
+  stinCd: string;
+  stinNm: string;
+  /** Latitude (WGS84) */
+  stinLocLat?: string;
+  /** Longitude (WGS84) */
+  stinLocLon?: string;
+  /** Address */
+  stinAddr?: string;
+  /** Phone number */
+  stinTelNo?: string;
+}
+
+export function fetchStationInfo(params: {
+  railOprIsttCd: string;
+  lnCd: string;
+  stinCd: string;
+}): Promise<StationInfoItem[]> {
+  return get<StationInfoItem>("convenientInfo/stationInfo", params);
+}
+
+// ── 6. vulnerableUserInfo / transferMovement ─────────────────
 // Step-by-step accessible transfer path with elevator status.
 
 export interface TransferMovementItem {
