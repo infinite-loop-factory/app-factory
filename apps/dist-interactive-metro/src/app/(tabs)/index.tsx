@@ -28,6 +28,7 @@ import { GradientBackground } from "@/components/ui/gradient-background";
 import { LineBadge } from "@/components/ui/line-badge";
 import { useRouteSearch } from "@/context/route-search-context";
 import { useStations } from "@/data/station-store";
+import { useStationTimetable } from "@/hooks/use-station-timetable";
 import i18n from "@/i18n";
 import { findNearestStations, formatDistance } from "@/utils/geo";
 import { recommendRoutes } from "@/utils/route-calculator";
@@ -233,6 +234,7 @@ export default function GoNowTab() {
               <View className="gap-4">
                 {recommendations.map((rec, index) => (
                   <RouteCard
+                    destination={endStation!}
                     index={index}
                     key={`rec-${rec.departure.station.id}-${rec.departure.station.line}`}
                     onPress={handleTapRoute}
@@ -318,16 +320,46 @@ function GpsStatusBar({
 const RANK_LABELS = ["최적", "추천", "추천", "추천"] as const;
 const RANK_COLORS = ["#2563EB", "#64748B", "#64748B", "#64748B"] as const;
 
+function formatArrivalTime(totalMinutes: number): string {
+  const arrival = new Date(Date.now() + totalMinutes * 60_000);
+  const h = arrival.getHours().toString().padStart(2, "0");
+  const m = arrival.getMinutes().toString().padStart(2, "0");
+  return `${h}:${m}`;
+}
+
 function RouteCard({
   rec,
   index,
+  destination,
   onPress,
 }: {
   rec: RouteRecommendation;
   index: number;
+  destination: Station;
   onPress: (rec: RouteRecommendation) => void;
 }) {
   const isBest = index === 0;
+
+  const { departures } = useStationTimetable(
+    rec.departure.station.name,
+    rec.departure.station.line,
+    5,
+    destination.name,
+  );
+
+  // First train we can actually board after walking to the station
+  const catchable = departures.find(
+    (d) => d.minutesFromNow >= rec.walkingMinutes,
+  );
+  const waitMinutes =
+    catchable != null ? catchable.minutesFromNow - rec.walkingMinutes : null;
+  const realTotalMinutes =
+    waitMinutes != null
+      ? rec.walkingMinutes + waitMinutes + rec.route.totalTime
+      : null;
+  const displayTotal = realTotalMinutes ?? rec.totalMinutes;
+  const arrivalTime = formatArrivalTime(displayTotal);
+
   return (
     <Pressable onPress={() => onPress(rec)}>
       <ElevatedCard
@@ -347,21 +379,36 @@ function RouteCard({
             <Text
               className={`font-bold text-2xl ${isBest ? "text-blue-600" : "text-gray-900 dark:text-gray-100"}`}
             >
-              {rec.totalMinutes}
+              {displayTotal}
               <Text className="font-medium text-gray-500 text-sm">분</Text>
             </Text>
           </View>
-          <ChevronRight color="#D1D5DB" size={20} />
+          <View className="flex-row items-center gap-2">
+            <View className="rounded-lg bg-gray-100 px-2.5 py-1 dark:bg-gray-700">
+              <Text className="font-bold text-gray-700 text-sm dark:text-gray-200">
+                도착 {arrivalTime}
+              </Text>
+            </View>
+            <ChevronRight color="#D1D5DB" size={20} />
+          </View>
         </View>
 
         {/* Breakdown Row */}
-        <View className="mb-5 flex-row items-center gap-3">
+        <View className="mb-5 flex-row flex-wrap items-center gap-2">
           <View className="flex-row items-center gap-1.5 rounded-full bg-gray-50 px-3 py-1.5 dark:bg-gray-900/50">
             <Footprints color="#6B7280" size={14} />
             <Text className="font-medium text-gray-600 text-xs dark:text-gray-400">
               도보 {rec.walkingMinutes}분
             </Text>
           </View>
+          {waitMinutes != null && (
+            <View className="flex-row items-center gap-1.5 rounded-full bg-amber-50 px-3 py-1.5 dark:bg-amber-900/20">
+              <Clock color="#D97706" size={14} />
+              <Text className="font-medium text-amber-700 text-xs dark:text-amber-400">
+                대기 {waitMinutes}분
+              </Text>
+            </View>
+          )}
           <View className="flex-row items-center gap-1.5 rounded-full bg-gray-50 px-3 py-1.5 dark:bg-gray-900/50">
             <Clock color="#6B7280" size={14} />
             <Text className="font-medium text-gray-600 text-xs dark:text-gray-400">
