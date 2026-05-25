@@ -4,6 +4,7 @@
   "tabs": {
     "goNow": "지금 출발",
     "routeGuide": "경로 검색",
+    "notifications": "알림",
     "favorites": "즐겨찾기",
     "settings": "설정"
   },
@@ -72,6 +73,14 @@
     "today": "오늘",
     "yesterday": "어제",
     "daysAgo": "{{count}}일 전"
+  },
+  "notifications": {
+    "description": "즐겨찾기 경로의 다음 출발 열차",
+    "emptyTitle": "즐겨찾기가 없습니다",
+    "emptyDescription": "즐겨찾기에 경로를 추가하면 다음 열차 정보를 여기서 볼 수 있습니다",
+    "addFavorites": "즐겨찾기 추가",
+    "nextTrains": "다음 열차",
+    "from": "출발"
   },
   "settings": {
     "description": "앱 환경을 설정하고 개인화하세요",

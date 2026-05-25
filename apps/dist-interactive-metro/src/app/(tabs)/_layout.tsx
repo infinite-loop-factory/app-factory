@@ -41,6 +41,18 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+        name="notifications"
+        options={{
+          title: i18n.t("tabs.notifications"),
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon
+              color={color}
+              name={focused ? "notifications" : "notifications-outline"}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
         name="favorites"
         options={{
           title: i18n.t("tabs.favorites"),
