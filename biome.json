@@ -28,7 +28,15 @@
   },
   "files": {
     "ignoreUnknown": false,
-    "includes": ["**"]
+    "includes": [
+      "**",
+      "!**/.agents/hooks",
+      "!**/.claude/hooks",
+      "!**/.codex/hooks",
+      "!**/.cursor/hooks",
+      "!**/.gemini/hooks",
+      "!**/.qwen/hooks"
+    ]
   },
   "formatter": {
     "attributePosition": "auto",

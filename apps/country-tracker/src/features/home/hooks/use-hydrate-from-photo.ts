@@ -48,8 +48,7 @@ export function useHydrateFromPhotoMutation() {
         }
 
         return { coords: extractedCoords, date: photoDate ?? undefined };
-      } catch (error) {
-        console.error("Failed to extract EXIF data", error);
+      } catch (_error) {
         return { error: i18n.t("home.add-visit.errors.photo-failed") };
       }
     },

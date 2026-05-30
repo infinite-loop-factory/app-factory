@@ -1,0 +1,26 @@
+appId: com.gracefullight.countrytracker
+name: Settings -> Visa Limits Smoke
+tags:
+  - requires-auth
+  - ui-primitives
+---
+- runFlow: ../setup/boot.yaml
+- assertVisible: "My Travels"
+
+- tapOn:
+    id: "tab-settings"
+- waitForAnimationToEnd:
+    timeout: 2500
+- assertVisible: "Settings"
+
+- scrollUntilVisible:
+    element: "Visa Alerts"
+    direction: DOWN
+    timeout: 5000
+- tapOn: "Visa Alerts"
+- waitForAnimationToEnd:
+    timeout: 2500
+
+# Visa Alerts 화면 진입
+- assertVisible:
+    id: "tab-settings"

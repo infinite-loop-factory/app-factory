@@ -1,0 +1,22 @@
+appId: com.gracefullight.countrytracker
+name: Network Resilience Smoke
+tags:
+  - requires-auth
+  - network
+  - draft
+---
+# 비행기 모드 토글은 maestro 자동화 한계라 본 플로우는 lifecycle smoke로만 수행.
+# 오프라인 큐/위젯 fallback 정밀 검증은 수동 + 별도 통합 테스트로.
+
+- runFlow: ../setup/boot.yaml
+- waitForAnimationToEnd:
+    timeout: 2000
+- assertVisible: "My Travels"
+
+- pressKey: Home
+- waitForAnimationToEnd:
+    timeout: 1500
+- runFlow: ../setup/boot.yaml
+- waitForAnimationToEnd:
+    timeout: 2000
+- assertVisible: "My Travels"

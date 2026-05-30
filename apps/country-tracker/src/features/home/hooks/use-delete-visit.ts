@@ -4,6 +4,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useGlobalToast } from "@/hooks/use-global-toast";
 import i18n from "@/lib/i18n";
 import supabase from "@/lib/supabase";
+import { getStayDays } from "@/utils/country-region";
 import { triggerHaptic } from "@/utils/haptics";
 
 export function useDeleteVisitMutation() {
@@ -21,12 +22,15 @@ export function useDeleteVisitMutation() {
         throw error;
       }
     },
-    onSuccess: () => {
+    onSuccess: (_data, item) => {
       triggerHaptic("success");
       showToast(
         "success",
         i18n.t("home.delete-visit.toast.success-title"),
-        i18n.t("home.delete-visit.toast.success-description"),
+        i18n.t("home.delete-visit.toast.success-description", {
+          count: getStayDays(item),
+          country: item.country,
+        }),
       );
       queryClient.invalidateQueries({
         queryKey: ["location", "visited-countries"],

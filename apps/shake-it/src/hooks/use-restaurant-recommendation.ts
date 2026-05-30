@@ -152,7 +152,7 @@ export function useRestaurantRecommendation() {
     async (
       location: Location | null,
       refreshLocation: RefreshLocation,
-      radius = APP_CONFIG.DEFAULT_SEARCH_RADIUS,
+      radius: number = APP_CONFIG.DEFAULT_SEARCH_RADIUS,
     ) => {
       if (isRecommending || isSelectingRestaurant) {
         return;

@@ -1,8 +1,8 @@
 ---
-description: Manage MCP tools with natural language commands — list, enable, disable tools and tool groups
+description: Manage MCP tools with natural language commands to list, enable, and disable tools and tool groups
 ---
 
-# MANDATORY RULES — VIOLATION IS FORBIDDEN
+# MANDATORY RULES: VIOLATION IS FORBIDDEN
 
 - **Response language follows `language` setting in `.agents/oma-config.yaml` if configured.**
 - **NEVER skip steps.** Execute from Step 1 in order.
@@ -17,7 +17,7 @@ description: Manage MCP tools with natural language commands — list, enable, d
 ## Step 1: Show Current Status
 
 1. Read `.agents/mcp.json` (project configuration)
-2. Read `~/.gemini/settings.json` if exists (Gemini CLI global settings) — optional
+2. Read `~/.gemini/settings.json` if exists (Gemini CLI global settings); optional
 3. Display status for each MCP server:
    - `available_tools: null` → "All enabled (no restrictions)"
    - `available_tools: [...]` → "N tools enabled" + list

@@ -7,10 +7,10 @@ Follow this guide to use context efficiently.
 
 ## Core Principles
 
-1. **No full file reads** — Read only necessary functions/classes
-2. **No duplicate reads** — Do not re-read files already read
-3. **Lazy resource loading** — Load resources only when needed
-4. **Maintain records** — Note read files and symbols in progress
+1. **No full file reads**: Read only necessary functions/classes
+2. **No duplicate reads**: Do not re-read files already read
+3. **Lazy resource loading**: Load resources only when needed
+4. **Maintain records**: Note read files and symbols in progress
 
 ---
 
@@ -124,7 +124,7 @@ This approach:
 Long-running agents degrade in quality as context fills up. Rather than passively
 responding to symptoms, agents must actively detect and reset.
 Detection is the **Orchestrator's responsibility** via external observation.
-Individual agents do NOT self-monitor for anxiety — they focus on their task.
+Individual agents do NOT self-monitor for anxiety; they focus on their task.
 
 ### Detection (Orchestrator Only)
 

@@ -1,3 +1,5 @@
+import type { ReviewDataType } from "@/types/review";
+
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useAtomValue } from "jotai";
@@ -6,7 +8,6 @@ import { TouchableOpacity, View } from "react-native";
 import { useDeleteReview } from "@/api/reactQuery/review/useDeleteReview";
 import { useFindLatestCourseReviews } from "@/api/reactQuery/review/useFindLatestCourseReviews";
 import { userAtom } from "@/atoms/userAtom";
-import { useThemeColor } from "@/hooks/useThemeColor";
 import ReviewScoreCard from "../card/ReviewScoreCard";
 import ImageModal from "../modal/ImageModal";
 import ReviewItem from "../molecules/ReviewItem";
@@ -20,7 +21,6 @@ interface ReviewsProps {
 }
 
 export default function Reviews({ courseId, rate }: ReviewsProps) {
-  const primary500Color = useThemeColor({}, "--color-primary-500");
   const userInfo = useAtomValue(userAtom);
 
   const { data = [] } = useFindLatestCourseReviews(courseId);
@@ -32,6 +32,19 @@ export default function Reviews({ courseId, rate }: ReviewsProps) {
 
   const handleDelete = (reviewId: number) => {
     deleteReview(reviewId, { onSuccess: () => router.back() });
+  };
+
+  const handleEdit = (reviewData: ReviewDataType) => {
+    router.push({
+      pathname: "/(screens)/review/edit" as never,
+      params: {
+        reviewId: reviewData.id,
+        courseId,
+        initialRate: reviewData.rate,
+        initialContent: reviewData.content,
+        initialImages: reviewData.images ?? "[]",
+      },
+    });
   };
 
   const onPressCloseModal = () => {
@@ -59,7 +72,6 @@ export default function Reviews({ courseId, rate }: ReviewsProps) {
         courseId={courseId}
         onPressReviewWrite={onPressReviewWrite}
         rate={rate}
-        starIconColor={primary500Color}
       />
 
       <View className="items-end">
@@ -86,11 +98,11 @@ export default function Reviews({ courseId, rate }: ReviewsProps) {
             currentUserId={userInfo.id}
             key={`review_${reviewData.id}`}
             onDelete={handleDelete}
+            onEdit={handleEdit}
             reviewData={reviewData}
             setReviewImages={setReviewImages}
             setSelectedImageIndex={setSelectedImageIndex}
             setShowImageModal={setShowImageModal}
-            starIconColor={primary500Color}
           />
         ))}
       </VStack>

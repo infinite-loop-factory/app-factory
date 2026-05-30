@@ -11,13 +11,10 @@ import CustomSafeAreaView from "@/components/CustomSafeAreaView";
 import HeaderBar from "@/components/HeaderBar";
 import ImageModal from "@/components/modal/ImageModal";
 import ReviewItem from "@/components/molecules/ReviewItem";
-import { useThemeColor } from "@/hooks/useThemeColor";
 
 export default function ReviewScreen() {
   const { courseId } = useLocalSearchParams();
   const userInfo = useAtomValue(userAtom);
-
-  const primary500Color = useThemeColor({}, "--color-primary-500");
 
   const { data: reviewData, fetchNextPage } = useFindCourseReviewsInfinite(
     Number(courseId),
@@ -26,6 +23,19 @@ export default function ReviewScreen() {
 
   const handleDelete = (reviewId: number) => {
     deleteReview(reviewId, { onSuccess: () => router.back() });
+  };
+
+  const handleEdit = (reviewData: ReviewDataType) => {
+    router.push({
+      pathname: "/(screens)/review/edit" as never,
+      params: {
+        reviewId: reviewData.id,
+        courseId,
+        initialRate: reviewData.rate,
+        initialContent: reviewData.content,
+        initialImages: reviewData.images ?? "[]",
+      },
+    });
   };
 
   const [reviewList, setReviewList] = useState<ReviewDataType[]>([]);
@@ -65,11 +75,11 @@ export default function ReviewScreen() {
               currentUserId={userInfo.id}
               key={`course_review_${item.id}`}
               onDelete={handleDelete}
+              onEdit={handleEdit}
               reviewData={item}
               setReviewImages={setReviewImages}
               setSelectedImageIndex={setSelectedImageIndex}
               setShowImageModal={setShowImageModal}
-              starIconColor={primary500Color}
             />
           )}
         />

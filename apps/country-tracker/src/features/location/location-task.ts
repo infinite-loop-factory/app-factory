@@ -181,29 +181,35 @@ async function handleCountryChange(
   }
 }
 
-async function updateWidgetData(
-  latestRow: QueuedLocation | undefined,
-): Promise<void> {
-  if (!latestRow) return;
-  const { writeWidgetData, buildWidgetData, readWidgetData } = await import(
-    "@/utils/widget-bridge"
-  );
-  const cached = await readWidgetData();
-  await writeWidgetData(
-    buildWidgetData({
-      countriesVisited: cached?.countriesVisited ?? 0,
-      currentCountry: latestRow.country,
-      currentCountryCode: latestRow.country_code,
-      recentCountries: cached?.recentCountries,
-    }),
-  );
+async function syncWidgetFromTask(userId: string): Promise<void> {
+  try {
+    const { buildWidgetSnapshot } = await import(
+      "@/features/widget/utils/build-snapshot"
+    );
+    const { syncWidget } = await import("@/features/widget/apis/widget-bridge");
+    const { fetchYearSummaries } = await import(
+      "@/features/map/apis/fetch-year-summaries"
+    );
+    const rows = await fetchYearSummaries(userId, null);
+    const normalized = rows.map((row) => ({
+      country: row.country ?? "",
+      countryCode: (row.country_code ?? "").toUpperCase(),
+      flag: "",
+      totalDays: Number(row.total_days ?? 0),
+      visitCount: Number(row.visit_count ?? 0),
+      latestVisit: row.latest_visit,
+      ranges: [],
+    }));
+    await syncWidget(buildWidgetSnapshot(normalized));
+  } catch {
+    /* best-effort */
+  }
 }
 
 TaskManager.defineTask<LocationTaskData>(
   LOCATION_TASK_NAME,
   async ({ data, error }) => {
     if (error) {
-      console.error("Location task error:", error);
       return;
     }
 
@@ -241,15 +247,13 @@ TaskManager.defineTask<LocationTaskData>(
       }
 
       const res = await flushQueueWith(filtered);
-      if (!res.ok) {
-        console.error("Failed to insert locations (background):", res.error);
-      } else {
-        updateWidgetData(latestRow).catch((_e) => {
+      if (res.ok) {
+        syncWidgetFromTask(user.id).catch(() => {
           /* best-effort */
         });
       }
-    } catch (err) {
-      console.error("Unexpected error during location insert:", err);
+    } catch {
+      /* best-effort: location task swallows transient errors */
     }
   },
 );

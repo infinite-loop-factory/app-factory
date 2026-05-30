@@ -3,7 +3,7 @@ import { Calendar, Check, ChevronDown } from "lucide-react-native";
 import { ScrollView } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Box } from "@/components/ui/box";
-import { Button, ButtonIcon, ButtonText } from "@/components/ui/button";
+import { Button, ButtonText } from "@/components/ui/button";
 import i18n from "@/lib/i18n";
 
 interface MapHeaderProps {
@@ -66,9 +66,7 @@ export function MapHeader({
             >
               {i18n.t("map.filters.all-time")}
             </ButtonText>
-            {filterMode === "all" && (
-              <ButtonIcon as={Check} className="text-typography-0" size="sm" />
-            )}
+            {filterMode === "all" && <Check color="white" size={14} />}
           </Button>
 
           {/* Year Picker */}
@@ -96,14 +94,9 @@ export function MapHeader({
             >
               {selectedYear}
             </ButtonText>
-            <ButtonIcon
-              as={ChevronDown}
-              className={
-                filterMode === "year"
-                  ? "text-typography-0"
-                  : "text-typography-500"
-              }
-              size="sm"
+            <ChevronDown
+              color={filterMode === "year" ? "white" : "#8B93A1"}
+              size={14}
             />
           </Button>
 
@@ -135,14 +128,9 @@ export function MapHeader({
                 ? `${startDate} ~ ${endDate}`
                 : i18n.t("map.filters.select-dates")}
             </ButtonText>
-            <ButtonIcon
-              as={Calendar}
-              className={
-                filterMode === "range"
-                  ? "text-typography-0"
-                  : "text-typography-500"
-              }
-              size="sm"
+            <Calendar
+              color={filterMode === "range" ? "white" : "#8B93A1"}
+              size={14}
             />
           </Button>
         </ScrollView>

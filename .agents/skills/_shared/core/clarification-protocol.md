@@ -91,7 +91,7 @@ Status: BLOCKED (awaiting clarification)
 
 ## Required Verification Items
 
-If any of the items below are unclear, **do not assume** — explicitly record them.
+If any of the items below are unclear, **do not assume**; explicitly record them.
 
 ### Common to All Agents
 | Item | Verification Question | Default (if assumed) | Uncertainty |

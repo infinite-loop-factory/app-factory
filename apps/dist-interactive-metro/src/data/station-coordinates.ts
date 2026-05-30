@@ -237,4 +237,11 @@ export const stationCoordinates: Record<
   "1004": { latitude: 37.449, longitude: 127.0553 }, // 청계산입구
   "1005": { latitude: 37.3945, longitude: 127.1108 }, // 판교
   "1006": { latitude: 37.3666, longitude: 127.1065 }, // 정자
+  "1007": { latitude: 37.3501, longitude: 127.1089 }, // 미금
+  "1008": { latitude: 37.3375, longitude: 127.1031 }, // 동천
+  "1009": { latitude: 37.3274, longitude: 127.0965 }, // 수지구청
+  "1010": { latitude: 37.3112, longitude: 127.0818 }, // 성복
+  "1011": { latitude: 37.2977, longitude: 127.0691 }, // 상현
+  "1012": { latitude: 37.2886, longitude: 127.0515 }, // 광교중앙
+  "1013": { latitude: 37.3021, longitude: 127.0444 }, // 광교
 };

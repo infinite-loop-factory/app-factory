@@ -4,9 +4,16 @@
       {
         "hooks": [
           {
+            "name": "keyword-detector",
             "type": "command",
-            "command": "\"/Users/gracefullight/.bun/bin/bun\" .codex/hooks/keyword-detector.ts",
+            "command": "bun .codex/hooks/keyword-detector.ts",
             "timeout": 5
+          },
+          {
+            "name": "skill-injector",
+            "type": "command",
+            "command": "bun .codex/hooks/skill-injector.ts",
+            "timeout": 3
           }
         ]
       }
@@ -15,8 +22,9 @@
       {
         "hooks": [
           {
+            "name": "test-filter",
             "type": "command",
-            "command": "\"/Users/gracefullight/.bun/bin/bun\" .codex/hooks/test-filter.ts",
+            "command": "bun .codex/hooks/test-filter.ts",
             "timeout": 5
           }
         ],
@@ -27,8 +35,9 @@
       {
         "hooks": [
           {
+            "name": "persistent-mode",
             "type": "command",
-            "command": "\"/Users/gracefullight/.bun/bin/bun\" .codex/hooks/persistent-mode.ts",
+            "command": "bun .codex/hooks/persistent-mode.ts",
             "timeout": 5
           }
         ]

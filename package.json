@@ -46,7 +46,8 @@
       }
     },
     "overrides": {
-      "expo": "54.0.33",
+      "expo": "54.0.34",
+      "expo-linking": "8.0.12",
       "expo-modules-autolinking>commander": "^7.2.0",
       "react-native": "0.81.5",
       "react-native-safe-area-context": "5.6.2",
