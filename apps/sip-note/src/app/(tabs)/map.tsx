@@ -1,7 +1,7 @@
 import type { PlaceSummarySheetRef } from "@/components/place-summary-sheet";
 import type { Place, PlaceCategory } from "@/features/place/repo/types";
 
-import { useFocusEffect, useRouter } from "expo-router";
+import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
 import { useColorScheme } from "nativewind";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
@@ -37,6 +37,17 @@ export default function MapScreen() {
   const [region, setRegion] = useState(DEFAULT_REGION);
   const [category, setCategory] = useState<PlaceCategory | null>(null);
   const [showWishlist, setShowWishlist] = useState(false);
+
+  // dev 전용: `sip-note:///map?present=<placeId>` 진입 시 해당 장소 요약 시트를
+  // 자동 present. 네이티브 Marker 좌표 탭이 불안정한 e2e(A7/9컷)에서 시트 흐름을
+  // 결정화하기 위함. 프로덕션에는 영향 없음(파라미터 미전달).
+  const { present } = useLocalSearchParams<{ present?: string }>();
+  const presentedRef = useRef(false);
+  useEffect(() => {
+    if (!(__DEV__ && present) || presentedRef.current) return;
+    presentedRef.current = true;
+    sheetRef.current?.present(present);
+  }, [present]);
 
   useEffect(() => {
     let alive = true;

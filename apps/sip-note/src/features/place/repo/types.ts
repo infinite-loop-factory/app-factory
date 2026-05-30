@@ -18,6 +18,8 @@ export type Place = {
 };
 
 export type PlaceInput = {
+  /** Optional deterministic id (e2e seed only); falls back to a generated UUID. */
+  id?: string;
   name: string;
   category?: PlaceCategory | null;
   latitude?: number | null;

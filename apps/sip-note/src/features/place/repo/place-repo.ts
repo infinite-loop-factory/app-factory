@@ -46,7 +46,7 @@ function rowToPlace(row: PlaceRow): Place {
 
 export async function create(input: PlaceInput): Promise<Place> {
   const db = await getDb();
-  const id = generateId();
+  const id = input.id ?? generateId();
   const now = Date.now();
 
   await db.runAsync(
