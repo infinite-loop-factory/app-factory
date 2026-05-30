@@ -1,0 +1,86 @@
+# sip-note — A6 Map Pins (empty-state subset)
+#
+# 지도 탭 진입 + FilterBar (전체 / 위시리스트 / placeCategory 6 종) + 빈 상태 안내 카드.
+# 핀 / BottomSheet / 카테고리 활성 시 marker 변화 검증은 place seed (≥4 핀) 부재로 본 flow 에서 제외 →
+# `helpers/seed-tasting-fixtures.yaml` 도입 후 본 flow 확장 또는 `map-pins-seeded.yaml` 신설.
+#
+# 검증 항목 (clearState 직후 = places 0 건):
+#   - 홈 → 지도 탭 전환
+#   - "전체" 칩 default active
+#   - placeCategory 6 종 (바 / 펍, 증류소, 와이너리, 브루어리, 레스토랑, 기타)
+#   - 위시리스트 칩
+#   - 빈 상태 안내 카드 (`empty.map.title = "아직 방문한 장소가 없어요"`)
+#   - 카테고리 칩 토글 (바 / 펍 활성 → 해제)
+#   - 위시리스트 칩 토글
+#
+# 실행 (cwd = apps/sip-note):
+#   ~/.maestro/bin/maestro test e2e/flows/map-pins.yaml
+
+appId: com.infiniteloopfactory.sipnote
+name: map pins
+---
+- launchApp:
+    clearState: true
+    permissions:
+      all: allow
+- extendedWaitUntil:
+    visible: "테이스팅 피드"
+    timeout: 60000
+
+# 지도 탭 — bottom tab Pressable.
+# expo-router/react-navigation 의 탭 버튼은 inner TextView (clickable=false) 만 hierarchy
+# 에 노출돼 텍스트 selector tap 으론 부모 Pressable onPress 가 발화되지 않는다.
+# 절대 좌표 (Pixel_8 1080x2400 기준 — 탭 Pressable 중심) 로 우회.
+- tapOn:
+    point: "810,2273"
+- extendedWaitUntil:
+    visible: "위시리스트"
+    timeout: 15000
+
+# placeCategory 칩 노출 — 좌측부터 보이는 4 종 즉시 검증
+- assertVisible: "위시리스트"
+- assertVisible: "바 / 펍"
+- assertVisible: "증류소"
+- assertVisible: "와이너리"
+- assertVisible: "브루어리"
+# 우측 칩 (레스토랑 / 기타) 은 viewport 밖 — FilterBar 영역 내 explicit horizontal swipe.
+# scrollUntilVisible 의 default swipe 는 화면 중앙이라 상단 FilterBar 를 못 움직임.
+- swipe:
+    start: "85%,9%"
+    end: "20%,9%"
+- assertVisible: "레스토랑"
+- swipe:
+    start: "85%,9%"
+    end: "20%,9%"
+- assertVisible: "기타"
+
+# 빈 상태 카드 — places 0 건일 때만 노출
+- assertVisible: "아직 방문한 장소가 없어요"
+
+- takeScreenshot:
+    path: e2e/.maestro-output/map-pins-empty
+
+# 카테고리 토글 — 바 / 펍 활성화 → 다시 눌러 해제
+# (chip 6 종 노출 위해 우측 스크롤된 상태 → FilterBar 영역 내 좌측 swipe 로 복귀)
+- swipe:
+    start: "20%,9%"
+    end: "85%,9%"
+- swipe:
+    start: "20%,9%"
+    end: "85%,9%"
+- tapOn:
+    text: "바 / 펍"
+    retryTapIfNoChange: true
+- assertVisible: "바 / 펍"
+- tapOn:
+    text: "바 / 펍"
+    retryTapIfNoChange: true
+
+# 위시리스트 칩 토글
+- tapOn:
+    text: "위시리스트"
+    retryTapIfNoChange: true
+- assertVisible: "위시리스트"
+- tapOn:
+    text: "위시리스트"
+    retryTapIfNoChange: true

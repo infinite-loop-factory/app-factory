@@ -15,9 +15,11 @@ name: home smoke
 ---
 - launchApp:
     clearState: true
-- assertVisible:
-    text: "테이스팅 피드"
-    timeout: 30000
+- extendedWaitUntil:
+    visible: "테이스팅 피드"
+    timeout: 60000
 - assertVisible: "아직 기록이 없어요"
 - assertVisible: "기록 추가"
-- takeScreenshot: home-smoke-empty
+# 호출 cwd = apps/sip-note 가정 (README 참조)
+- takeScreenshot:
+    path: e2e/.maestro-output/home-smoke-empty

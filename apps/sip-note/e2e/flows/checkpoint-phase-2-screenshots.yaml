@@ -1,0 +1,152 @@
+# sip-note — C. ADR-0011 Phase 2 Re-verification 9컷 자동화
+#
+# checkpoint-phase-2.md §Re-verification 의 의무 캡처 9장을 단일 flow 로 생성한다.
+# seed(고정 fixture) + dev theme 오버라이드로 다크 5 / 라이트 4 를 결정적으로 캡처.
+# 출력: e2e/.maestro-output/checkpoint-phase-2-01..09.png
+#
+# ⚠️ 지도 핀(cut 1·2)은 map.tsx DEFAULT_REGION(서울 37.5665,126.978) 기준 seed 좌표에
+#    의존한다. 에뮬레이터에 다른 geo fix 가 설정돼 있으면 핀이 화면 밖으로 밀릴 수 있으니
+#    실행 전 1회: `adb emu geo fix 126.978 37.5665` 권장 (getCurrentPosition null 이면 불필요).
+#
+# 실행 (cwd = apps/sip-note):
+#   ~/.maestro/bin/maestro test e2e/flows/checkpoint-phase-2-screenshots.yaml
+appId: com.infiniteloopfactory.sipnote
+name: checkpoint phase 2 screenshots
+---
+- launchApp:
+    clearState: true
+    permissions:
+      all: allow
+- extendedWaitUntil:
+    visible: "테이스팅 피드"
+    timeout: 60000
+- runFlow: helpers/seed-tasting-fixtures.yaml
+
+# === cut 1 — 지도 다크: 필터 비활성, 4 카테고리 핀 + wishlist 1 ===
+- openLink:
+    link: "sip-note:///map"
+- extendedWaitUntil:
+    visible: "위시리스트"
+    timeout: 15000
+- takeScreenshot:
+    path: e2e/.maestro-output/checkpoint-phase-2-01
+
+# === cut 2 — 지도 라이트: bar 필터 활성 ===
+- runFlow:
+    file: helpers/set-theme.yaml
+    env:
+      MODE: light
+- openLink:
+    link: "sip-note:///map"
+- extendedWaitUntil:
+    visible: "바 / 펍"
+    timeout: 15000
+- tapOn:
+    text: "바 / 펍"
+    retryTapIfNoChange: true
+- takeScreenshot:
+    path: e2e/.maestro-output/checkpoint-phase-2-02
+
+# === cut 3 — BottomSheet peek 25% 다크 ===
+- runFlow:
+    file: helpers/set-theme.yaml
+    env:
+      MODE: dark
+- openLink:
+    link: "sip-note:///map?present=e2e-bar"
+- extendedWaitUntil:
+    visible: "Aged Oak Bar"
+    timeout: 15000
+- assertVisible: "3회 방문"
+- takeScreenshot:
+    path: e2e/.maestro-output/checkpoint-phase-2-03
+
+# === cut 4 — BottomSheet half 50% 다크 (latestNote inline) ===
+- swipe:
+    start: "50%,82%"
+    end: "50%,42%"
+- extendedWaitUntil:
+    visible: "최근 기록"
+    timeout: 5000
+- assertVisible: "Lagavulin 16"
+- takeScreenshot:
+    path: e2e/.maestro-output/checkpoint-phase-2-04
+
+# === cut 5 — BottomSheet half 50% 라이트 ===
+- runFlow:
+    file: helpers/set-theme.yaml
+    env:
+      MODE: light
+- openLink:
+    link: "sip-note:///map?present=e2e-bar"
+- extendedWaitUntil:
+    visible: "Aged Oak Bar"
+    timeout: 15000
+- swipe:
+    start: "50%,82%"
+    end: "50%,42%"
+- extendedWaitUntil:
+    visible: "최근 기록"
+    timeout: 5000
+- takeScreenshot:
+    path: e2e/.maestro-output/checkpoint-phase-2-05
+
+# === cut 6 — PlaceDetail 다크: place.bar + 노트 3건 ===
+- runFlow:
+    file: helpers/set-theme.yaml
+    env:
+      MODE: dark
+- openLink:
+    link: "sip-note:///place/e2e-bar"
+- extendedWaitUntil:
+    visible: "Aged Oak Bar"
+    timeout: 15000
+- assertVisible: "Lagavulin 16"
+- takeScreenshot:
+    path: e2e/.maestro-output/checkpoint-phase-2-06
+
+# === cut 7 — PlaceDetail 라이트: place.distillery + 빈 상태 (addNote CTA) ===
+- runFlow:
+    file: helpers/set-theme.yaml
+    env:
+      MODE: light
+- openLink:
+    link: "sip-note:///place/e2e-distillery"
+- extendedWaitUntil:
+    visible: "Highland Distillery"
+    timeout: 15000
+- assertVisible: "이 장소의 기록이 아직 없어요"
+- assertVisible: "이 장소에 기록 추가"
+- takeScreenshot:
+    path: e2e/.maestro-output/checkpoint-phase-2-07
+
+# === cut 8 — PlaceDetail 다크: place.winery + 노트 다수 (스크롤) ===
+- runFlow:
+    file: helpers/set-theme.yaml
+    env:
+      MODE: dark
+- openLink:
+    link: "sip-note:///place/e2e-winery"
+- extendedWaitUntil:
+    visible: "Sunset Winery"
+    timeout: 15000
+- scrollUntilVisible:
+    element:
+      text: "Riesling"
+    direction: DOWN
+    timeout: 10000
+    visibilityPercentage: 50
+- takeScreenshot:
+    path: e2e/.maestro-output/checkpoint-phase-2-08
+
+# === cut 9 — 홈 라이트 + DayDivider (caption brand-strong 스왑) ===
+- runFlow:
+    file: helpers/set-theme.yaml
+    env:
+      MODE: light
+- extendedWaitUntil:
+    visible: "Today"
+    timeout: 15000
+- assertVisible: "Lagavulin 16"
+- takeScreenshot:
+    path: e2e/.maestro-output/checkpoint-phase-2-09

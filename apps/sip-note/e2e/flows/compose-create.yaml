@@ -1,0 +1,62 @@
+# sip-note — A2 Compose Create
+#
+# 새 노트 골든 패스: FAB → Compose → 카테고리 6 종 노출 → 위스키 선택 →
+# 이름 입력 → 저장 → 피드 복귀 + 카드 1 건.
+#
+# 점수/태그/메모/사진/장소/가격 등 부가 필드는 별도 flow 또는 본 flow 의 후속 PR 에서 확장.
+# 여기선 isValid = (category && name) 의 최소 통과 경로를 검증.
+#
+# 사전 조건: dev client 설치 + AVD 부팅 (e2e/README.md 참조).
+# 실행 (cwd = apps/sip-note):
+#   ~/.maestro/bin/maestro test e2e/flows/compose-create.yaml
+
+appId: com.infiniteloopfactory.sipnote
+name: compose create
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible: "테이스팅 피드"
+    timeout: 60000
+- extendedWaitUntil:
+    visible: "아직 기록이 없어요"
+    timeout: 10000
+
+# FAB 진입 — accessibilityLabel = i18n tasting.feed.fab
+# maestro hierarchy-based tap 이 dev 빌드에서 첫 1~2 회 무시되는 케이스 회피 (retryTapIfNoChange).
+- tapOn:
+    text: "기록 추가"
+    retryTapIfNoChange: true
+- extendedWaitUntil:
+    visible: "새 기록"
+    timeout: 10000
+
+# 카테고리 칩 6 종 노출 검증
+- assertVisible: "위스키"
+- assertVisible: "와인"
+- assertVisible: "맥주"
+- assertVisible: "사케"
+- assertVisible: "칵테일"
+- assertVisible: "기타"
+
+# 위스키 선택
+- tapOn: "위스키"
+
+# 이름 입력 (TextInput placeholder 매치)
+- tapOn: "주류 이름을 입력하세요"
+- inputText: "Glenfiddich 12"
+
+# 저장 — header 우측 고정. isValid=true 이므로 활성화.
+# (Maestro inputText 는 ADB 입력이라 키보드 dismiss 가 별도 필요 없음 —
+#  hideKeyboard 는 Android 에서 ESC → 키보드 없으면 BACK 네비를 일으키므로 사용 금지.)
+- tapOn: "저장"
+
+# 피드 복귀 + 빈 상태 사라짐 + 이름 노출
+- extendedWaitUntil:
+    visible: "테이스팅 피드"
+    timeout: 10000
+- assertNotVisible: "아직 기록이 없어요"
+- assertVisible: "Glenfiddich 12"
+
+- takeScreenshot:
+    path: e2e/.maestro-output/compose-create-feed

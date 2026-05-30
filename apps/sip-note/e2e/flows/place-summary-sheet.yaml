@@ -1,0 +1,65 @@
+# sip-note — A7 Place Summary Sheet (bottom sheet peek/half + 상세 보기 CTA)
+#
+# 네이티브 Marker 좌표 탭이 불안정하므로(test-plan §발견 이슈) dev present 딥링크로
+# 시트를 결정적으로 띄운다: `sip-note:///map?present=e2e-bar` → map.tsx 가 해당 장소
+# 요약 시트를 자동 present (src/app/(tabs)/map.tsx, __DEV__ 가드).
+#
+# 검증 항목:
+#   1) seed → 지도 present 딥링크 → 시트 peek: PlaceCategoryChip(바 / 펍) + 장소명 + "3회 방문"
+#   2) 25% → 50% 드래그 → "최근 기록" + latestNote(Lagavulin 16) inline
+#   3) "상세 보기" CTA → /place/e2e-bar (장소 상세) 진입
+#
+# 실행 (cwd = apps/sip-note):
+#   ~/.maestro/bin/maestro test e2e/flows/place-summary-sheet.yaml
+appId: com.infiniteloopfactory.sipnote
+name: place summary sheet
+---
+- launchApp:
+    clearState: true
+    permissions:
+      all: allow
+- extendedWaitUntil:
+    visible: "테이스팅 피드"
+    timeout: 60000
+- runFlow: helpers/seed-tasting-fixtures.yaml
+
+# --- (0) 지도 탭을 탭바 point-tap 으로 먼저 워밍 ---
+# /map 으로 cold 딥링크하면 GMS MapsCoreDynamite 모듈 미로드 상태에서 MapView native
+# init 가 앱을 죽인다(test-plan §발견 이슈 #3). A6 처럼 탭바 진입(point-tap)으로 먼저
+# MapView 를 띄워 dynamite 를 로드시키면, 이후 present 딥링크 remount 는 안전하다.
+- tapOn:
+    point: "810,2273"
+- extendedWaitUntil:
+    visible: "위시리스트"
+    timeout: 15000
+
+# --- (1) present 딥링크 → 시트 peek 25% (프로세스 워밍 후라 안전) ---
+- openLink:
+    link: "sip-note:///map?present=e2e-bar"
+- extendedWaitUntil:
+    visible: "Aged Oak Bar"
+    timeout: 15000
+- assertVisible: "바 / 펍"
+- assertVisible: "3회 방문"
+- takeScreenshot:
+    path: e2e/.maestro-output/place-summary-sheet-peek
+
+# --- (2) 25% → 50% 드래그 → latestNote inline ---
+- swipe:
+    start: "50%,82%"
+    end: "50%,42%"
+- extendedWaitUntil:
+    visible: "최근 기록"
+    timeout: 5000
+- assertVisible: "Lagavulin 16"
+- takeScreenshot:
+    path: e2e/.maestro-output/place-summary-sheet-half
+
+# --- (3) "상세 보기" → 장소 상세 ---
+- tapOn:
+    text: "상세 보기"
+    retryTapIfNoChange: true
+- extendedWaitUntil:
+    visible: "이 장소에 기록 추가"
+    timeout: 10000
+- assertVisible: "Aged Oak Bar"

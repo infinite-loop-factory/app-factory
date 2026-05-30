@@ -1,0 +1,17 @@
+# sip-note — Helper: 결정적 fixture 시딩 (subflow 전용)
+#
+# `sip-note:///dev?seed=default` 딥링크로 src/app/dev.tsx → seedFixtures() 실행.
+# place 5개(방문 4: bar/distillery/winery/brewery + 위시리스트 1) + 노트 11건을
+# 고정 id·서울 근방 좌표로 생성한다 (src/features/dev/seed-fixtures.ts).
+#
+# ⚠️ 호출 측(parent flow)이 먼저 `launchApp` 으로 앱을 띄운 뒤 runFlow 로 부른다.
+#    단독 실행용이 아님. seed 완료는 홈 피드에 seeded 노트가 노출되는 것으로 판정.
+appId: com.infiniteloopfactory.sipnote
+name: seed tasting fixtures
+---
+- openLink:
+    link: "sip-note:///dev?seed=default"
+# dev.tsx 가 seed 후 router.replace("/") → 홈 피드. 최신 노트(Lagavulin 16) 노출로 완료 판정.
+- extendedWaitUntil:
+    visible: "Lagavulin 16"
+    timeout: 30000
