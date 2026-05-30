@@ -6,11 +6,52 @@
 
 ```
 e2e/
-├── README.md           — 이 문서
+├── README.md                            — 이 문서
+├── test-plan.md                         — flow 매트릭스 · 검증 회차 · 발견 이슈
 ├── flows/
-│   └── home-smoke.yaml — 첫 smoke (앱 launch + 홈 + FAB 노출)
-└── (helpers/)          — 추후 db seed 등
+│   ├── home-smoke.yaml                  — A1 launch + 홈 + FAB
+│   ├── compose-create.yaml              — A2 작성 골든
+│   ├── compose-edit-delete.yaml         — A3 수정/삭제
+│   ├── feed-search-filter.yaml          — A4 검색/필터
+│   ├── map-pins.yaml                    — A6 지도 진입 + FilterBar
+│   ├── compose-location-tagging.yaml    — A9 PlacePicker
+│   ├── error-not-found.yaml             — B5 not-found 딥링크
+│   ├── place-summary-sheet.yaml         — A7 시트 peek/half + 상세 보기
+│   ├── place-detail.yaml                — A8 장소 상세 + 위시리스트 + addNote
+│   ├── theme-light.yaml                 — B3 라이트 테마 오버라이드
+│   ├── checkpoint-phase-2-screenshots.yaml — C ADR-0011 9 컷
+│   └── helpers/
+│       ├── seed-tasting-fixtures.yaml   — dev 딥링크 결정적 시딩 (subflow)
+│       └── set-theme.yaml               — dev 딥링크 테마 오버라이드 (env MODE)
+└── (.maestro-output/)                   — takeScreenshot 산출물 (gitignore)
 ```
+
+## 결정적 시딩 / 테마 (dev 딥링크)
+
+`places` 는 UI(PlacePicker)로만 생성되고 핀은 `getCurrentPosition()` 좌표에 의존하므로,
+에뮬레이터 단일 위치로는 9 컷의 *서로 다른 카테고리 핀 4 + 위시리스트* 를 만들 수 없다.
+또한 `_layout.tsx` 가 dark 우선 정책으로 강제 다크라 adb uimode 로는 라이트 전환이 안 된다.
+→ `__DEV__` 전용 딥링크 라우트 `src/app/dev.tsx` 로 둘 다 결정화한다.
+
+| 딥링크 | 동작 | 구현 |
+|---|---|---|
+| `sip-note:///dev?seed=default` | 고정 id·서울 근방 좌표로 place 5 + 노트 11 시딩 | `src/features/dev/seed-fixtures.ts` |
+| `sip-note:///dev?theme=light` / `dark` | nativewind `setColorScheme` 전역 오버라이드 (강제-다크 위로) | `src/app/dev.tsx` |
+| `sip-note:///map?present=<placeId>` | 지도 요약 시트 자동 present (마커 좌표 탭 회피) | `src/app/(tabs)/map.tsx` (`__DEV__`) |
+| `sip-note:///place/<id>` | 장소 상세 직행 (실 스택 라우트) | — |
+
+helper 는 subflow 전용 — 호출 flow 가 먼저 `launchApp` 후 `runFlow` 로 부른다.
+
+```yaml
+- runFlow: helpers/seed-tasting-fixtures.yaml
+- runFlow:
+    file: helpers/set-theme.yaml
+    env:
+      MODE: light   # 또는 dark
+```
+
+> 고정 place id: `e2e-bar`(노트 3) · `e2e-distillery`(빈) · `e2e-winery`(노트 6) ·
+> `e2e-brewery`(노트 1) · `e2e-wish`(위시리스트). 멱등 — 시딩 시 기존 `e2e-*` 제거 후 재삽입.
 
 ## 사전 조건 (1 회)
 
@@ -44,26 +85,25 @@ npx expo run:android --device Pixel_8
 
 ## 실행
 
-### Smoke 1 개
+### Smoke 1 개 (반드시 `apps/sip-note` cwd 에서 실행)
 
 ```bash
-~/.maestro/bin/maestro test apps/sip-note/e2e/flows/home-smoke.yaml
+cd apps/sip-note
+~/.maestro/bin/maestro test e2e/flows/home-smoke.yaml
 ```
 
 ### 디렉토리 전체
 
 ```bash
-~/.maestro/bin/maestro test apps/sip-note/e2e/flows/
+cd apps/sip-note
+~/.maestro/bin/maestro test e2e/flows/
 ```
 
-### 스크린샷 출력
+### 스크린샷 출력 위치
 
-기본: `~/.maestro/tests/<run-id>/<screenshot-name>.png`. 원하는 위치로 출력하려면:
-
-```bash
-~/.maestro/bin/maestro test --output e2e/.maestro-output/run-$(date +%Y%m%d-%H%M%S) \
-  apps/sip-note/e2e/flows/home-smoke.yaml
-```
+`takeScreenshot.path: e2e/.maestro-output/<name>` 패턴으로 *cwd 기준 상대* 저장.
+**호출 cwd 가 `apps/sip-note` 이어야 함** — 다른 cwd 에서 호출하면 path 가 어긋난다.
+Maestro 자체 로그 / json report 는 `~/.maestro/tests/<run-id>/` 에 별도 저장.
 
 ## Selector 전략
 
@@ -85,10 +125,18 @@ ADR-0011 의 *Phase 마무리 의무 캡처 9 컷* 은 본 e2e 의 별도 flow (
 | `Element not found: ...` | metro 가 stale → `pnpm --filter sip-note start --clear` |
 | 한글 텍스트 매치 실패 | i18n 키 변경 / 줄바꿈 / 공백. `maestro studio` 로 hierarchy 확인 |
 | 첫 launch timeout | `timeout: 30000` (30s) 도 부족하면 시뮬레이터 cold start. AVD 미리 부팅 |
+| **지도 진입 시 앱이 런처로 튕김** | AVD 의 GMS `dl-MapsCoreDynamite` 모듈 파손 (`MapView` native init crash, test-plan §발견 이슈 #3). `adb logcat \| grep MapsCoreDynamite` 로 확인. cold boot 미복구 시 **Maps 포함 AVD 재생성** 필요. 지도 무관 flow(A8·B3·9컷 cut 6~9)는 정상 |
+| `dev?theme` 가 안 먹힘 | 구버전: `_layout.tsx` 강제-다크 effect 재발화로 오버라이드 즉시 환원. ref 가드(최초 1회) 적용본인지 확인 |
+
+## 지도 의존 flow 와 환경 전제
+
+지도 진입(`/map` cold 딥링크 또는 탭 진입)은 GMS Maps 모듈이 정상이어야 한다. 본 레포 검증 시점
+(2026-05-30) Pixel_8 AVD 의 `dl-MapsCoreDynamite` 부재로 A6·A7·9 컷 cut 1~5 가 env-block 되었다.
+지도 의존 flow 는 항상 **탭바 point-tap 으로 먼저 워밍**한 뒤 present 딥링크를 쓴다 (cold `/map` 딥링크는
+첫 MapView mount 가 dynamite 미로드 상태에서 crash; 워밍 후 remount 는 안전).
 
 ## 다음 작업 (carry-over)
 
-- `flows/compose-tasting.yaml` — Phase 1 작성 골든 패스
-- `flows/map-and-place.yaml` — Phase 2 지도 → 핀 → BottomSheet → PlaceDetail
-- `flows/checkpoint-phase-2-screenshots.yaml` — 9 컷 자동화 (지도 dark/light, BottomSheet peek/half, PlaceDetail 3 종, 홈 라이트 brand-strong)
-- `helpers/seed-tasting-fixtures.yaml` — DB seed (compose flow 후 후속 flow 가 데이터 가정)
+- **9 컷 cut 1~5** — 정상 Maps AVD 에서 `checkpoint-phase-2-screenshots.yaml` 재실행 시 자동 채워짐
+- `flows/photo-attach.yaml` (A5) — 갤러리 + 권한 grant
+- `flows/permission-denied.yaml` (B1) / `i18n-locale-switch.yaml` (B2) / `db-fresh-install.yaml` (B4)
