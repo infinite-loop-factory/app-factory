@@ -45,13 +45,15 @@ name: map pins
 - assertVisible: "브루어리"
 # 우측 칩 (레스토랑 / 기타) 은 viewport 밖 — FilterBar 영역 내 explicit horizontal swipe.
 # scrollUntilVisible 의 default swipe 는 화면 중앙이라 상단 FilterBar 를 못 움직임.
+# y=6% (chip 행 중심 ≈136px/2400) — 9% 는 chip 행(y 112~160) 아래라 MapView 가 swipe 를
+# pan 으로 흡수한다(지도 렌더 시. 빈 지도일 땐 경합 없어 우연히 통과했음).
 - swipe:
-    start: "85%,9%"
-    end: "20%,9%"
+    start: "85%,6%"
+    end: "20%,6%"
 - assertVisible: "레스토랑"
 - swipe:
-    start: "85%,9%"
-    end: "20%,9%"
+    start: "85%,6%"
+    end: "20%,6%"
 - assertVisible: "기타"
 
 # 빈 상태 카드 — places 0 건일 때만 노출
@@ -63,11 +65,11 @@ name: map pins
 # 카테고리 토글 — 바 / 펍 활성화 → 다시 눌러 해제
 # (chip 6 종 노출 위해 우측 스크롤된 상태 → FilterBar 영역 내 좌측 swipe 로 복귀)
 - swipe:
-    start: "20%,9%"
-    end: "85%,9%"
+    start: "20%,6%"
+    end: "85%,6%"
 - swipe:
-    start: "20%,9%"
-    end: "85%,9%"
+    start: "20%,6%"
+    end: "85%,6%"
 - tapOn:
     text: "바 / 펍"
     retryTapIfNoChange: true

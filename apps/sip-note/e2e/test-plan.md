@@ -54,7 +54,7 @@
 | **A4** | `feed-search-filter.yaml` ✅ | 인-flow 노트 2 건 (위스키 / 와인) → 카테고리 단일 토글 / 카테고리 교체 (위스키→맥주) / 결과 0 건 빈 상태 / 토글 해제 / 텍스트 검색 ("Cab") / 검색어 지우기 | A2 패턴 인라인 사용 (≥2 노트) | Medium | ✅ PASS (2026-05-10, Pixel_8, 37/37 step + 스크린샷 `e2e/.maestro-output/feed-search-filter-no-results.png`) |
 | **A5** | `photo-attach.yaml` | Compose 사진 슬롯 → 갤러리 선택 (Android emulator gallery) → 압축 1600px → 슬롯 노출 → 다중 사진 → 제거 | A2 + 권한 grant | Medium | ⏸ flow yaml 미작성 — 검증 보류 |
 | **A6** | `map-pins.yaml` ✅ | 지도 탭 진입 + FilterBar (전체 / 위시리스트 / placeCategory 6 종 — 좌측 4 즉시 / 우측 2 swipe) + 빈 상태 안내 카드 + 카테고리 / 위시리스트 칩 토글 (places 0 건 subset). 핀 / BottomSheet / 카테고리 활성 marker 변화는 place seed 부재로 본 flow 제외 → `helpers/seed-tasting-fixtures.yaml` 도입 후 본 flow 확장 또는 `map-pins-seeded.yaml` 신설 | — (clearState 직후 검증) | High | ✅ PASS (2026-05-10 9회차, Pixel_8, 22/22 step + 스크린샷 `e2e/.maestro-output/map-pins-empty.png`). 탭 진입은 `point: "810,2273"`, FilterBar swipe 는 y=9% 영역에서 직접 swipe |
-| **A7** | `place-summary-sheet.yaml` ✅⛔ | 탭바 워밍 → `map?present=e2e-bar` 시트 peek 25% (PlaceCategoryChip + "3회 방문") → 드래그 half 50% (latestNote `Lagavulin 16`) → "상세 보기" CTA → place/[id] | seed + dev present 딥링크 | High | ⛔ **blocked** (발견 이슈 #3 해소됐으나 **#5(Maps API 키 부재)로 지도 빈 화면**). flow 작성 완료, 시트 present 메커니즘 코드 검증됨. `google_apis` AVD + `GOOGLE_MAPS_API_KEY` 둘 다 충족 시 PASS 예상 |
+| **A7** | `place-summary-sheet.yaml` ✅ | 탭바 워밍 → `map?present=e2e-bar` 시트 peek 25% (PlaceCategoryChip + "3회 방문") → 드래그 half 50% (latestNote `Lagavulin 16`) → "상세 보기" CTA → place/[id] | seed + dev present 딥링크 | High | ✅ **PASS** (2026-05-31, `Pixel_8_Maps_e2e`, FAILED 0). 이슈 #3·#5 해소 후 실지도+시트 렌더. 상세 도달 확인은 주소(`서울 중구 을지로 1`, 상세 전용·상단)로 — addNote CTA 는 폴드 아래라 회피(A8 lesson 동일) |
 | **A8** | `place-detail.yaml` ✅ | `place/e2e-bar` → `<PlaceDetailHero>` + 노트 리스트 → wishlist ♡→♥ 토글 (content-desc) → `place/e2e-distillery` 빈 상태 + addNote CTA → Compose (placeId prefill) → 저장 → 복귀 시 노트 1 건 | seed + place 딥링크 | High | ✅ PASS (2026-05-30 10회차, Pixel_8, 25/25 step + 스크린샷 `place-detail-bar.png` / `place-detail-empty.png`). 마커 탭 불필요 (실 스택 라우트 딥링크) |
 | **A9** | `compose-location-tagging.yaml` ✅ | Compose → place picker → 빈 검색 + "+ 새 장소 추가" → newForm (장소 이름 / 카테고리 6 종) → 저장 → modal close → Compose place 라벨 노출 → 노트 저장 → 피드 카드 ※ 위치 권한 / 좌표 자동 / 지도 핀 추가는 환경 이슈 #2 영향으로 본 flow 에서 제외 | A2 패턴 인라인 사용 | Medium | ✅ PASS (2026-05-10, Pixel_8, 31/31 step + 스크린샷 `e2e/.maestro-output/compose-location-tagging-feed.png`) |
 
@@ -72,7 +72,8 @@
 
 `flows/checkpoint-phase-2-screenshots.yaml` 단일 flow 로 자동화. 결과는 `e2e/.maestro-output/checkpoint-phase-2-NN.png` 9 개 + `docs/design/checkpoint-phase-2.md` §Re-verification 표 첨부.
 
-> **검증 결과 (2026-05-30 → 2026-05-31 갱신)**: 🟡 `checkpoint-phase-2-screenshots.yaml` 단일 flow 작성 완료 + seed/set-theme helper 도입. cut 6·7·8·9(place detail · 홈 라이트)는 기기 검증. cut 1~5(지도·BottomSheet)는 **두 전제** 충족 필요: (1) `google_apis` AVD — 이슈 #3 dynamite crash 해소(2026-05-31 완료), (2) `GOOGLE_MAPS_API_KEY` — 이슈 #5, 키 없으면 지도 빈 화면(config 배선 완료, 키 발급 대기). 둘 다 충족 시 5 컷 자동 채워짐.
+> **검증 결과 (2026-05-30 → 2026-05-31 갱신)**: 이슈 #3·#5 해소 후 `Pixel_8_Maps_e2e`(google_apis + `GOOGLE_MAPS_API_KEY`)에서 재실행. **cut 1~5(지도·BottomSheet) — 이전 env-block 전부 실렌더 검증**(cut 1·2 지도 1.3~1.6MB 타일, cut 3~5 시트). cut 6(place 다크) 통과. cut 8·9(winery 다크·홈 라이트) 통과.
+> ⚠️ **cut 7(place.distillery 라이트) 잔여 이슈**: `set-theme(light)` 의 nativewind `setColorScheme` 재렌더가 직후 place 딥링크 네비게이션을 홈으로 되돌리는 **결정적 레이스**. dark cut(6·8)은 앱 기본이 강제-다크라 setColorScheme no-op → 영향 없음. light place(cut 7) 만 발생. 수동(am start + ~1s 간격)으로는 정상 진입 확인. flow 자동화 안정화는 별도(테마 전환과 place 네비를 단일 원자 딥링크로 합치거나, dev.tsx replace 를 재렌더 후로 deferring하는 방향. 본 PR 범위 밖).
 
 | # | 컷 | 의무 |
 |---|---|---|
@@ -138,8 +139,8 @@ B1 / B2 / B4 / B5 (병렬)
 | A3 compose-edit-delete | ✅ PASS | 8회차 재검증 — 발견 이슈 #1 코드 해소 (`useFocusEffect`), BACK 우회 제거 |
 | A4 feed-search-filter | ✅ PASS | 인-flow 노트 2 건 + 카테고리 / 검색 / 빈 상태 |
 | A5 photo-attach | ⏸ 미진행 | Android emulator gallery 진입 + 권한 grant 필요 — 별도 helper 도입 후 작성 |
-| A6 map-pins | 🟢 지도 렌더 검증 / 🟡 swipe nit | 2026-05-31: 이슈 #3·#5 해소 후 **실지도 렌더 확인**(서울 타일 + Google Maps API init + FilterChip 6종). flow 가 지도 진입·즉시노출 칩(전체·위시리스트·바/펍·증류소·와이너리·브루어리) 전부 COMPLETED. 잔여 1건 `레스토랑`(swipe 노출) FAILED — **지도 무관**: 지도가 살아나며 FilterBar 오버레이 가로 swipe 를 MapView pan 이 흡수. swipe 좌표/제스처 분리 튜닝 필요(별도) |
-| A7 place-summary-sheet | 🟡 재검증 대기 | flow·시트 present 메커니즘 코드 검증 완료. 이슈 #3·#5 해소·키 적용본에서 재실행 시 PASS 예상 |
+| A6 map-pins | ✅ PASS | 2026-05-31: 이슈 #3·#5 해소 후 **실지도 렌더 + 23/23 step PASS**(`Pixel_8_Maps_e2e`). FilterBar swipe y 9%→6% 교정 — 9% 는 chip 행(112~160px) 아래라 MapView 가 가로 swipe 를 pan 으로 흡수(지도 렌더 시 경합; 빈 지도일 땐 우연 통과)했음. 레스토랑·기타 노출 + 카테고리/위시리스트 토글 전부 COMPLETED |
+| A7 place-summary-sheet | ✅ PASS | 2026-05-31 — 이슈 #3·#5 해소 후 `Pixel_8_Maps_e2e` FAILED 0. 시트 peek→half→상세(주소 앵커) |
 | A8 place-detail | ✅ PASS | 10회차 — `place/e2e-bar` 딥링크 + 위시리스트 토글 + addNote prefill. 마커 탭 불필요 |
 | A9 compose-location-tagging | ✅ PASS | PlacePicker 흐름 (좌표 자동 / 지도 핀 추가는 제외) |
 | B1 permission-denied | ⏸ 미진행 | maestro launchApp `permissions` 옵션으로 deny + 시나리오 케이스 별 작성 필요 |
@@ -147,12 +148,12 @@ B1 / B2 / B4 / B5 (병렬)
 | B3 theme-light | ✅ PASS | 10회차 — `dev?theme=light` 오버라이드 (발견 이슈 #4 해소). 실제 라이트 렌더 확인 |
 | B4 db-fresh-install | ⏸ 미진행 | A1 과 본질 동일 (clearState 후 home empty 검증). 마이그레이션 v1→v3 직접 검증은 SQLite 쿼리 helper 필요 |
 | B5 error-not-found | ✅ PASS | stack 라우트 deep link 정상 (note 케이스). place 케이스는 후속 |
-| C 9 컷 | 🟡 부분 | flow 작성 완료. cut 6·7·8·9 기기 검증, cut 1~5 는 이슈 #3 해소 후 이슈 #5(API 키) 대기 |
+| C 9 컷 | 🟢 8/9 검증 | 2026-05-31 — cut 1~6·8·9 실렌더 검증(이전 env-block cut 1~5 포함). cut 7(light place) 만 테마-재렌더 vs 딥링크 네비 레이스로 flow 자동화 잔여(§C 참조, 수동 진입은 정상) |
 
-**요약**: ✅ 8 PASS (A1·A2·A3·A4·A8·A9·B3·B5) / 🟡 1 부분 (C: 4/9 컷) / 🟡 2 blocked-키대기 (A6·A7, 이슈 #3 해소·#5 대기) / ⏸ 5 미진행 (A5·B1·B2·B4 + C 잔여)
+**요약**: ✅ 10 PASS (A1·A2·A3·A4·A6·A7·A8·A9·B3·B5) / 🟢 1 거의완료 (C: 8/9 컷, cut 7 flow 레이스 잔여) / ⏸ 5 미진행 (A5·B1·B2·B4 + C cut7 안정화)
 
 **다음 우선순위**:
-1. **`GOOGLE_MAPS_API_KEY` 발급·리빌드** (이슈 #5) — Maps SDK for Android 키 발급 → `apps/sip-note/.env` → `expo prebuild -p android --clean` → `google_apis` AVD(`Pixel_8_Maps_e2e`)에서 A6·A7·9컷 cut 1~5 검증. (이슈 #3 dynamite 는 2026-05-31 해소 완료)
+1. **9컷 cut 7 안정화** — `set-theme(light)` 재렌더가 직후 place 딥링크를 삼키는 레이스. 테마+이동을 단일 원자 딥링크(`dev?theme&to=`)로 합치고 dev.tsx 의 replace 를 재렌더 커밋 후로 deferring하는 방향(별도 PR). 나머지 8컷은 자동 채워짐. (이슈 #3 dynamite·#5 API 키는 2026-05-31 해소 완료)
 2. A5 (photo-attach) / B1 / B2 / B4 작성
 3. helper 보강: `grant-permissions` / `clear-state` (현재 launchApp 옵션으로 대체 중)
 

@@ -59,7 +59,11 @@ name: place summary sheet
 - tapOn:
     text: "상세 보기"
     retryTapIfNoChange: true
+# 상세 도달 확인은 주소로 한다 — 주소는 상세 화면 전용(요약 시트엔 없음)이고 상단에 보인다.
+# addNote CTA("이 장소에 기록 추가")는 노트 다건일 때 폴드 아래라 assertVisible 회피(A8 lesson 동일).
 - extendedWaitUntil:
-    visible: "이 장소에 기록 추가"
+    visible: "서울 중구 을지로 1"
     timeout: 10000
 - assertVisible: "Aged Oak Bar"
+- takeScreenshot:
+    path: e2e/.maestro-output/place-summary-sheet-detail
