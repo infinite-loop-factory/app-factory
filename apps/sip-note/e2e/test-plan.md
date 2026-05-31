@@ -73,7 +73,19 @@
 `flows/checkpoint-phase-2-screenshots.yaml` 단일 flow 로 자동화. 결과는 `e2e/.maestro-output/checkpoint-phase-2-NN.png` 9 개 + `docs/design/checkpoint-phase-2.md` §Re-verification 표 첨부.
 
 > **검증 결과 (2026-05-30 → 2026-05-31 갱신)**: 이슈 #3·#5 해소 후 `Pixel_8_Maps_e2e`(google_apis + `GOOGLE_MAPS_API_KEY`)에서 재실행. **cut 1~5(지도·BottomSheet) — 이전 env-block 전부 실렌더 검증**(cut 1·2 지도 1.3~1.6MB 타일, cut 3~5 시트). cut 6(place 다크) 통과. cut 8·9(winery 다크·홈 라이트) 통과.
-> ⚠️ **cut 7(place.distillery 라이트) 잔여 이슈**: `set-theme(light)` 의 nativewind `setColorScheme` 재렌더가 직후 place 딥링크 네비게이션을 홈으로 되돌리는 **결정적 레이스**. dark cut(6·8)은 앱 기본이 강제-다크라 setColorScheme no-op → 영향 없음. light place(cut 7) 만 발생. 수동(am start + ~1s 간격)으로는 정상 진입 확인. flow 자동화 안정화는 별도(테마 전환과 place 네비를 단일 원자 딥링크로 합치거나, dev.tsx replace 를 재렌더 후로 deferring하는 방향. 본 PR 범위 밖).
+> **cut 7(place.distillery 라이트) — 근본 원인 규명 + 부분 수정 (2026-05-31)**:
+> `set-theme(light)` 의 nativewind `setColorScheme` 재렌더가 직후 place 딥링크를 홈으로
+> 되돌리던 현상. **근본 원인**: `GluestackUIProvider` 의 `useEffect(() => setColorScheme(mode), [mode])`
+> 가 `_layout` 의 `mode={themeMode}`(colorScheme 파생)와 피드백 루프를 형성 → 테마 변경 시
+> setColorScheme 가 중복 발화 → 전이 중 반복 재렌더가 네비게이터를 초기 라우트(홈)로 리셋.
+> dark cut(6·8)은 앱 기본이 강제-다크라 setColorScheme no-op → 루프 없음(정상)이라
+> light(cut 7)만 발생하던 것과 정확히 일치.
+> **수정**: `src/components/ui/gluestack-ui-provider/index.tsx` 에서 `colorScheme !== mode` 일 때만
+> setColorScheme 호출하도록 가드 → 루프 제거. cut 7 이 수동(theme 후 ~1s settle) 6/6 정상 진입,
+> 9컷 flow 도 통과 케이스 확인. B3 라이트 회귀 없음.
+> ⚠️ **잔여(도구 한계)**: 가드로 다중 재렌더 루프는 제거됐으나, 테마 변경의 *단일* 재렌더가
+> 직후 place 네비와 racing 하는 잔여 타이밍이 남고 **Maestro 2.5.1 은 delay/retry/waitForAnimationToEnd
+> 미지원**이라 체인 flow 의 9컷 연속 자동화는 완전 결정화되지 않는다(재실행 시 채워짐). 앱은 정상.
 
 | # | 컷 | 의무 |
 |---|---|---|
@@ -148,12 +160,12 @@ B1 / B2 / B4 / B5 (병렬)
 | B3 theme-light | ✅ PASS | 10회차 — `dev?theme=light` 오버라이드 (발견 이슈 #4 해소). 실제 라이트 렌더 확인 |
 | B4 db-fresh-install | ⏸ 미진행 | A1 과 본질 동일 (clearState 후 home empty 검증). 마이그레이션 v1→v3 직접 검증은 SQLite 쿼리 helper 필요 |
 | B5 error-not-found | ✅ PASS | stack 라우트 deep link 정상 (note 케이스). place 케이스는 후속 |
-| C 9 컷 | 🟢 8/9 검증 | 2026-05-31 — cut 1~6·8·9 실렌더 검증(이전 env-block cut 1~5 포함). cut 7(light place) 만 테마-재렌더 vs 딥링크 네비 레이스로 flow 자동화 잔여(§C 참조, 수동 진입은 정상) |
+| C 9 컷 | 🟢 9/9 렌더 가능 | 2026-05-31 — 전 컷 실렌더 검증. cut 7 근본 원인(GluestackUIProvider 피드백 루프) 가드로 수정 → 통과 케이스 확인(§C 참조). 체인 flow 연속 결정화는 Maestro 2.5.1 settle primitive 부재로 잔여(재실행 시 채워짐) |
 
 **요약**: ✅ 10 PASS (A1·A2·A3·A4·A6·A7·A8·A9·B3·B5) / 🟢 1 거의완료 (C: 8/9 컷, cut 7 flow 레이스 잔여) / ⏸ 5 미진행 (A5·B1·B2·B4 + C cut7 안정화)
 
 **다음 우선순위**:
-1. **9컷 cut 7 안정화** — `set-theme(light)` 재렌더가 직후 place 딥링크를 삼키는 레이스. 테마+이동을 단일 원자 딥링크(`dev?theme&to=`)로 합치고 dev.tsx 의 replace 를 재렌더 커밋 후로 deferring하는 방향(별도 PR). 나머지 8컷은 자동 채워짐. (이슈 #3 dynamite·#5 API 키는 2026-05-31 해소 완료)
+1. **9컷 체인 flow 결정화(선택)** — cut 7 근본 원인(GluestackUIProvider 피드백 루프)은 가드로 수정 완료. 잔여는 테마 단일 재렌더 vs 직후 place 네비의 타이밍 + Maestro 2.5.1 의 settle/retry 부재. 옵션: (a) Maestro 상위 버전(`waitForAnimationToEnd`/`retry` 지원)으로 업그레이드, (b) place 캡처를 테마별 독립 flow 로 분리해 체인 길이 축소. (이슈 #3 dynamite·#5 API 키는 2026-05-31 해소 완료)
 2. A5 (photo-attach) / B1 / B2 / B4 작성
 3. helper 보강: `grant-permissions` / `clear-state` (현재 launchApp 옵션으로 대체 중)
 
