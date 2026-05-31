@@ -38,8 +38,9 @@
 |---|---|---|---|---|
 | **#1** | `src/app/note/[id].tsx` `useEffect` 의존성 `[id]` | 편집(`/note/compose?noteId=...`) → `router.back()` 시 detail 가 refetch 되지 않아 stale 이름/메타 노출 | `useEffect` → `useFocusEffect(useCallback(...))` 로 전환. 화면 focus 마다 `repo.get(id)` 재호출 + 언마운트 가드 (`active` flag) | ✅ **RESOLVED** (2026-05-10 8회차). A3 단순화 후 29/29 PASS |
 | **#2** | dev 빌드 `expo-router` `Tabs` + Android `LogBox` overlay | 홈 → 지도 bottom-tab navigation 이 트리거되지 않음. RN LogBox 워닝 바가 화면 하단 hit-test 를 흡수 | `src/app/_layout.tsx` 에 `if (__DEV__) LogBox.ignoreAllLogs()` 추가 → 워닝 바 제거 (스크린샷 확인). dev 빌드 + maestro 조합의 잔여 first-tap 미스는 `retryTapIfNoChange: true` 로 보강 | ✅ **RESOLVED** (2026-05-10 8회차) |
-| **#3** | Android emulator (Pixel_8 AVD) — Google Play services Maps 모듈 | 지도 탭 진입 시 `react-native-maps` (`MapView`) 의 native init 가 `dl-MapsCoreDynamite` 모듈 파일을 못 찾아 (chimera 캐시 부재 — `... does not exist` / I/O error) 앱 프로세스가 런처로 튕김 | cold boot + GMS warm intent 로도 미복구. 모듈 파일 자체 부재로 transient 가 아니라 AVD GMS 이미지 파손 → **Maps 포함 AVD 재생성** 필요 (파괴적, 별도 처리) | 🔴 **REOPENED — env block** (2026-05-30 10회차). A6 baseline 동반 crash. 지도 의존 flow(A6·A7·9컷 cut 1~5) 전면 차단 |
+| **#3** | Android emulator — `google_apis_playstore` 이미지의 GMS Maps 다이너마이트 모듈 | 지도 탭 진입 시 `react-native-maps` (`MapView`) 의 native init 가 `dl-MapsCoreDynamite` 모듈 파일을 못 찾아 (chimera 미프로비저닝 — `... does not exist` / I/O error) 앱 프로세스가 런처로 튕김 | **근본 원인**: playstore 이미지는 다이너마이트 모듈을 런타임에 Play 로 내려받는데 미프로비저닝 상태였음(이미지 손상 아님). **해소**: 비-playstore `google_apis` 이미지 기반 AVD(`Pixel_8_Maps_e2e`) 신설 — `MapsDynamite.apk` 가 GMS 에 번들. 기존 Pixel_8 복제 후 이미지만 교체(해상도/좌표 보존). README §지도 의존 flow 참조 | ✅ **RESOLVED — env (2026-05-31)**. `google_apis` AVD 에서 dynamite 로드 확인, 지도 진입 시 런처-튕김 없이 `MainActivity` 생존. ⚠️ 단, 이 crash 가 가리고 있던 **발견 이슈 #5(Maps API 키 부재)** 가 후속 블로커로 드러남 |
 | **#4** | `src/app/_layout.tsx` 강제-다크 `useEffect(() => setColorScheme("dark"), [setColorScheme])` | nativewind `setColorScheme` 의 identity 가 매 렌더 변해 effect 가 재발화 → 이후의 `setColorScheme("light")` 오버라이드(dev?theme / 향후 설정)를 즉시 환원, 라이트 전환 불가 | `didInitTheme` ref 가드로 최초 1회만 강제 다크. dark 우선 정책 유지 + 오버라이드 가능 | ✅ **RESOLVED** (2026-05-30 10회차). B3 라이트 렌더 확인 |
+| **#5** | `apps/sip-note` — Google Maps SDK for Android API 키 미설정 (애초부터 부재; 과거 maps 키 커밋 `8cbfa40` 은 `apps/dog-walk` 것) | react-native-maps(Android, Google provider 전용)에서 키 부재 시 `MapView.<init>` 가 `API key not found` 로 soft-throw → 앱은 생존하나 **지도 화면이 빈 화면**(FilterBar 등 오버레이 노드도 미마운트). 이슈 #3(dynamite crash)이 이 단계 도달을 막아 가려져 있었음 | `app.config.ts` 에 `android.config.googleMaps.apiKey: process.env.GOOGLE_MAPS_API_KEY ?? ""` 추가(env 기반, 미설정 시 `""` fallback) + `.env.example`·`.gitignore` 정비. **사용자 액션**: Google Cloud 에서 "Maps SDK for Android" 키 발급 → `apps/sip-note/.env` 의 `GOOGLE_MAPS_API_KEY` → `expo prebuild -p android --clean` 리빌드 | ✅ **RESOLVED (2026-05-31)** — 키 발급·`.env` 적용·`prebuild --clean` 리빌드 후 `Pixel_8_Maps_e2e` 에서 **실지도 렌더 검증**(서울 타일 + `Google Maps Android API` init 성공, `API key not found` 소멸). debug keystore SHA-1 불변(`5E:8F:…`) 확인 → 등록 키 제한 유효 |
 
 ---
 
@@ -53,7 +54,7 @@
 | **A4** | `feed-search-filter.yaml` ✅ | 인-flow 노트 2 건 (위스키 / 와인) → 카테고리 단일 토글 / 카테고리 교체 (위스키→맥주) / 결과 0 건 빈 상태 / 토글 해제 / 텍스트 검색 ("Cab") / 검색어 지우기 | A2 패턴 인라인 사용 (≥2 노트) | Medium | ✅ PASS (2026-05-10, Pixel_8, 37/37 step + 스크린샷 `e2e/.maestro-output/feed-search-filter-no-results.png`) |
 | **A5** | `photo-attach.yaml` | Compose 사진 슬롯 → 갤러리 선택 (Android emulator gallery) → 압축 1600px → 슬롯 노출 → 다중 사진 → 제거 | A2 + 권한 grant | Medium | ⏸ flow yaml 미작성 — 검증 보류 |
 | **A6** | `map-pins.yaml` ✅ | 지도 탭 진입 + FilterBar (전체 / 위시리스트 / placeCategory 6 종 — 좌측 4 즉시 / 우측 2 swipe) + 빈 상태 안내 카드 + 카테고리 / 위시리스트 칩 토글 (places 0 건 subset). 핀 / BottomSheet / 카테고리 활성 marker 변화는 place seed 부재로 본 flow 제외 → `helpers/seed-tasting-fixtures.yaml` 도입 후 본 flow 확장 또는 `map-pins-seeded.yaml` 신설 | — (clearState 직후 검증) | High | ✅ PASS (2026-05-10 9회차, Pixel_8, 22/22 step + 스크린샷 `e2e/.maestro-output/map-pins-empty.png`). 탭 진입은 `point: "810,2273"`, FilterBar swipe 는 y=9% 영역에서 직접 swipe |
-| **A7** | `place-summary-sheet.yaml` ✅⛔ | 탭바 워밍 → `map?present=e2e-bar` 시트 peek 25% (PlaceCategoryChip + "3회 방문") → 드래그 half 50% (latestNote `Lagavulin 16`) → "상세 보기" CTA → place/[id] | seed + dev present 딥링크 | High | ⛔ **env-block** (발견 이슈 #3 재발 — MapView crash). flow 작성 완료, 시트 present 메커니즘은 코드 검증됨. 정상 Maps AVD 에서 즉시 PASS 예상 |
+| **A7** | `place-summary-sheet.yaml` ✅⛔ | 탭바 워밍 → `map?present=e2e-bar` 시트 peek 25% (PlaceCategoryChip + "3회 방문") → 드래그 half 50% (latestNote `Lagavulin 16`) → "상세 보기" CTA → place/[id] | seed + dev present 딥링크 | High | ⛔ **blocked** (발견 이슈 #3 해소됐으나 **#5(Maps API 키 부재)로 지도 빈 화면**). flow 작성 완료, 시트 present 메커니즘 코드 검증됨. `google_apis` AVD + `GOOGLE_MAPS_API_KEY` 둘 다 충족 시 PASS 예상 |
 | **A8** | `place-detail.yaml` ✅ | `place/e2e-bar` → `<PlaceDetailHero>` + 노트 리스트 → wishlist ♡→♥ 토글 (content-desc) → `place/e2e-distillery` 빈 상태 + addNote CTA → Compose (placeId prefill) → 저장 → 복귀 시 노트 1 건 | seed + place 딥링크 | High | ✅ PASS (2026-05-30 10회차, Pixel_8, 25/25 step + 스크린샷 `place-detail-bar.png` / `place-detail-empty.png`). 마커 탭 불필요 (실 스택 라우트 딥링크) |
 | **A9** | `compose-location-tagging.yaml` ✅ | Compose → place picker → 빈 검색 + "+ 새 장소 추가" → newForm (장소 이름 / 카테고리 6 종) → 저장 → modal close → Compose place 라벨 노출 → 노트 저장 → 피드 카드 ※ 위치 권한 / 좌표 자동 / 지도 핀 추가는 환경 이슈 #2 영향으로 본 flow 에서 제외 | A2 패턴 인라인 사용 | Medium | ✅ PASS (2026-05-10, Pixel_8, 31/31 step + 스크린샷 `e2e/.maestro-output/compose-location-tagging-feed.png`) |
 
@@ -71,7 +72,7 @@
 
 `flows/checkpoint-phase-2-screenshots.yaml` 단일 flow 로 자동화. 결과는 `e2e/.maestro-output/checkpoint-phase-2-NN.png` 9 개 + `docs/design/checkpoint-phase-2.md` §Re-verification 표 첨부.
 
-> **검증 결과 (2026-05-30)**: 🟡 `checkpoint-phase-2-screenshots.yaml` 단일 flow 작성 완료 + seed/set-theme helper 도입. cut 6·7·8·9(place detail · 홈 라이트)는 기기 검증, cut 1~5(지도·BottomSheet)는 발견 이슈 #3 재발(MapView crash)로 env-block. 정상 Maps AVD 에서 재실행 시 5 컷 자동 채워짐.
+> **검증 결과 (2026-05-30 → 2026-05-31 갱신)**: 🟡 `checkpoint-phase-2-screenshots.yaml` 단일 flow 작성 완료 + seed/set-theme helper 도입. cut 6·7·8·9(place detail · 홈 라이트)는 기기 검증. cut 1~5(지도·BottomSheet)는 **두 전제** 충족 필요: (1) `google_apis` AVD — 이슈 #3 dynamite crash 해소(2026-05-31 완료), (2) `GOOGLE_MAPS_API_KEY` — 이슈 #5, 키 없으면 지도 빈 화면(config 배선 완료, 키 발급 대기). 둘 다 충족 시 5 컷 자동 채워짐.
 
 | # | 컷 | 의무 |
 |---|---|---|
@@ -137,8 +138,8 @@ B1 / B2 / B4 / B5 (병렬)
 | A3 compose-edit-delete | ✅ PASS | 8회차 재검증 — 발견 이슈 #1 코드 해소 (`useFocusEffect`), BACK 우회 제거 |
 | A4 feed-search-filter | ✅ PASS | 인-flow 노트 2 건 + 카테고리 / 검색 / 빈 상태 |
 | A5 photo-attach | ⏸ 미진행 | Android emulator gallery 진입 + 권한 grant 필요 — 별도 helper 도입 후 작성 |
-| A6 map-pins | 🔴 env-block | 10회차 — 발견 이슈 #3 재발(AVD `dl-MapsCoreDynamite` 부재). 코드/flow 무변경, Maps AVD 복구 시 PASS |
-| A7 place-summary-sheet | 🔴 env-block | flow 작성 완료. seed + `map?present` 시트 present 메커니즘 코드 검증. MapView crash 로 기기 검증 보류 |
+| A6 map-pins | 🟢 지도 렌더 검증 / 🟡 swipe nit | 2026-05-31: 이슈 #3·#5 해소 후 **실지도 렌더 확인**(서울 타일 + Google Maps API init + FilterChip 6종). flow 가 지도 진입·즉시노출 칩(전체·위시리스트·바/펍·증류소·와이너리·브루어리) 전부 COMPLETED. 잔여 1건 `레스토랑`(swipe 노출) FAILED — **지도 무관**: 지도가 살아나며 FilterBar 오버레이 가로 swipe 를 MapView pan 이 흡수. swipe 좌표/제스처 분리 튜닝 필요(별도) |
+| A7 place-summary-sheet | 🟡 재검증 대기 | flow·시트 present 메커니즘 코드 검증 완료. 이슈 #3·#5 해소·키 적용본에서 재실행 시 PASS 예상 |
 | A8 place-detail | ✅ PASS | 10회차 — `place/e2e-bar` 딥링크 + 위시리스트 토글 + addNote prefill. 마커 탭 불필요 |
 | A9 compose-location-tagging | ✅ PASS | PlacePicker 흐름 (좌표 자동 / 지도 핀 추가는 제외) |
 | B1 permission-denied | ⏸ 미진행 | maestro launchApp `permissions` 옵션으로 deny + 시나리오 케이스 별 작성 필요 |
@@ -146,12 +147,12 @@ B1 / B2 / B4 / B5 (병렬)
 | B3 theme-light | ✅ PASS | 10회차 — `dev?theme=light` 오버라이드 (발견 이슈 #4 해소). 실제 라이트 렌더 확인 |
 | B4 db-fresh-install | ⏸ 미진행 | A1 과 본질 동일 (clearState 후 home empty 검증). 마이그레이션 v1→v3 직접 검증은 SQLite 쿼리 helper 필요 |
 | B5 error-not-found | ✅ PASS | stack 라우트 deep link 정상 (note 케이스). place 케이스는 후속 |
-| C 9 컷 | 🟡 부분 | flow 작성 완료. cut 6·7·8·9 기기 검증, cut 1~5 env-block (발견 이슈 #3) |
+| C 9 컷 | 🟡 부분 | flow 작성 완료. cut 6·7·8·9 기기 검증, cut 1~5 는 이슈 #3 해소 후 이슈 #5(API 키) 대기 |
 
-**요약**: ✅ 8 PASS (A1·A2·A3·A4·A8·A9·B3·B5) / 🟡 1 부분 (C: 4/9 컷) / 🔴 2 env-block (A6·A7) / ⏸ 5 미진행 (A5·B1·B2·B4 + C 잔여)
+**요약**: ✅ 8 PASS (A1·A2·A3·A4·A8·A9·B3·B5) / 🟡 1 부분 (C: 4/9 컷) / 🟡 2 blocked-키대기 (A6·A7, 이슈 #3 해소·#5 대기) / ⏸ 5 미진행 (A5·B1·B2·B4 + C 잔여)
 
 **다음 우선순위**:
-1. **Maps AVD 복구** — `dl-MapsCoreDynamite` 정상 GMS 이미지로 AVD 재생성 → A6·A7·9컷 cut 1~5 즉시 검증
+1. **`GOOGLE_MAPS_API_KEY` 발급·리빌드** (이슈 #5) — Maps SDK for Android 키 발급 → `apps/sip-note/.env` → `expo prebuild -p android --clean` → `google_apis` AVD(`Pixel_8_Maps_e2e`)에서 A6·A7·9컷 cut 1~5 검증. (이슈 #3 dynamite 는 2026-05-31 해소 완료)
 2. A5 (photo-attach) / B1 / B2 / B4 작성
 3. helper 보강: `grant-permissions` / `clear-state` (현재 launchApp 옵션으로 대체 중)
 

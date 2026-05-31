@@ -125,18 +125,54 @@ ADR-0011 의 *Phase 마무리 의무 캡처 9 컷* 은 본 e2e 의 별도 flow (
 | `Element not found: ...` | metro 가 stale → `pnpm --filter sip-note start --clear` |
 | 한글 텍스트 매치 실패 | i18n 키 변경 / 줄바꿈 / 공백. `maestro studio` 로 hierarchy 확인 |
 | 첫 launch timeout | `timeout: 30000` (30s) 도 부족하면 시뮬레이터 cold start. AVD 미리 부팅 |
-| **지도 진입 시 앱이 런처로 튕김** | AVD 의 GMS `dl-MapsCoreDynamite` 모듈 파손 (`MapView` native init crash, test-plan §발견 이슈 #3). `adb logcat \| grep MapsCoreDynamite` 로 확인. cold boot 미복구 시 **Maps 포함 AVD 재생성** 필요. 지도 무관 flow(A8·B3·9컷 cut 6~9)는 정상 |
+| **지도 진입 시 앱이 런처로 튕김** | playstore AVD 의 GMS 가 `MapsDynamite` 모듈을 미프로비저닝 (`MapView` native init crash, test-plan §발견 이슈 #3). `adb logcat \| grep MapsCoreDynamite` 로 확인. **해결**: `google_apis`(비-playstore) 이미지 기반 AVD 사용 — 모듈이 GMS 에 번들됨. 아래 §지도 의존 flow 참조 |
+| **지도가 빈 화면(흰 화면)으로 뜸** | Maps API 키 부재 — `MapView.<init>` 가 `API key not found` 로 soft-throw(앱은 생존, 지도만 미렌더). `adb logcat \| grep "API key not found"` 로 확인. **해결**: `GOOGLE_MAPS_API_KEY` env 설정 후 prebuild 리빌드. 아래 §지도 의존 flow 참조 |
 | `dev?theme` 가 안 먹힘 | 구버전: `_layout.tsx` 강제-다크 effect 재발화로 오버라이드 즉시 환원. ref 가드(최초 1회) 적용본인지 확인 |
 
 ## 지도 의존 flow 와 환경 전제
 
-지도 진입(`/map` cold 딥링크 또는 탭 진입)은 GMS Maps 모듈이 정상이어야 한다. 본 레포 검증 시점
-(2026-05-30) Pixel_8 AVD 의 `dl-MapsCoreDynamite` 부재로 A6·A7·9 컷 cut 1~5 가 env-block 되었다.
+지도 진입(`/map` cold 딥링크 또는 탭 진입)이 정상 렌더되려면 **두 가지 전제**가 모두 충족돼야 한다.
+2026-05-30 시점엔 (1)이 (2)를 가려, dynamite crash 만 보였다. (1) 해소 후 (2)가 드러났다(2026-05-31).
+
+**(1) GMS Maps 다이너마이트 모듈 — `google_apis` AVD 사용**
+
+`google_apis_playstore` 이미지는 `MapsDynamite` 모듈을 런타임에 Play 로 내려받는데, 미프로비저닝 시
+`MapView` native init 가 `dl-MapsCoreDynamite ... does not exist` 로 앱을 죽인다. **비-playstore
+`google_apis` 이미지엔 모듈이 GMS 에 번들**되어 이 crash 가 없다(+ `adb root` 가능).
+
+```bash
+SDK=~/Library/Android/sdk
+"$SDK/cmdline-tools/latest/bin/sdkmanager" "system-images;android-35;google_apis;arm64-v8a"
+# 해상도/skin/좌표 보존을 위해 기존 Pixel_8 을 복제하고 이미지만 google_apis 로 교체하는 것을 권장.
+# (절대좌표 point:"810,2273" 등이 1080x2400 에 의존하므로 device 프로파일을 바꾸지 말 것.)
+"$SDK/emulator/emulator" -avd Pixel_8_Maps_e2e -no-snapshot-load
+```
+
+검증(2026-05-31): `Pixel_8_Maps_e2e`(google_apis) 에서 `MapsDynamite.apk` 로드 확인, 지도 탭 진입 시
+런처-튕김 없이 `MainActivity` 생존. dynamite crash 해소됨.
+
+**(2) Maps SDK for Android API 키 — `GOOGLE_MAPS_API_KEY`**
+
+react-native-maps(Android)는 Google provider 전용이라 키가 필수다. 미설정 시 `MapView.<init>` 가
+`API key not found` 로 soft-throw → 앱은 살지만 **지도 화면이 빈 화면**으로 렌더된다(FilterBar 등
+오버레이 노드도 미마운트). `app.config.ts` 의 `android.config.googleMaps.apiKey` 가 prebuild 시
+manifest `<meta-data com.google.android.geo.API_KEY>` 로 주입한다.
+
+```bash
+# 1) 키 발급: Google Cloud Console → "Maps SDK for Android" 활성화 → 사용자 인증 정보 → API 키
+# 2) apps/sip-note/.env 에 작성 (.env.example 참조, 절대 커밋 금지)
+echo 'GOOGLE_MAPS_API_KEY=AIza...' >> apps/sip-note/.env
+# 3) manifest 재생성 + 리빌드
+cd apps/sip-note && npx expo prebuild -p android --clean && npx expo run:android
+```
+
 지도 의존 flow 는 항상 **탭바 point-tap 으로 먼저 워밍**한 뒤 present 딥링크를 쓴다 (cold `/map` 딥링크는
-첫 MapView mount 가 dynamite 미로드 상태에서 crash; 워밍 후 remount 는 안전).
+첫 MapView mount 타이밍에 취약; 워밍 후 remount 가 안전).
 
 ## 다음 작업 (carry-over)
 
-- **9 컷 cut 1~5** — 정상 Maps AVD 에서 `checkpoint-phase-2-screenshots.yaml` 재실행 시 자동 채워짐
+- **9 컷 cut 1~5 / A6 / A7** — 위 (1)+(2) 충족 시(`google_apis` AVD + `GOOGLE_MAPS_API_KEY`)
+  `checkpoint-phase-2-screenshots.yaml`·`map-pins.yaml`·`place-summary-sheet.yaml` 재실행하면 채워짐.
+  키 없이는 빈 지도라 PASS 불가
 - `flows/photo-attach.yaml` (A5) — 갤러리 + 권한 grant
 - `flows/permission-denied.yaml` (B1) / `i18n-locale-switch.yaml` (B2) / `db-fresh-install.yaml` (B4)
