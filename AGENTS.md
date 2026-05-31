@@ -3,7 +3,7 @@
 This guide orients agents and contributors working inside the Turborepo monorepo. Keep this close while making changes; it distills the conventions the team expects.
 
 ## Project Structure & Module Organization
-- `apps/` holds Expo apps such as `country-tracker`, `playlist`, and `dog-walk`. Each app keeps feature code under `app/` with colocated assets and tests (or in `__tests__/`).
+- `apps/` holds Expo apps such as `cat-meetup`, `dog-walk`, and `sip-note`. Each app keeps feature code under `app/` with colocated assets and tests (or in `__tests__/`).
 - `packages/` contains shared libraries. Reach for `@infinite-loop-factory/common` for cross-app utilities, `@infinite-loop-factory/ui` for design primitives, and `config-typescript` for reusable build settings.
 - `turbo/` provides Turborepo generators and templates. Update these if you change scaffolding logic, otherwise leave untouched.
 

@@ -59,7 +59,6 @@ App Factory는 여러 애플리케이션과 공유 패키지를 관리하는 모
 ### 1.2. 현재 애플리케이션 목록
 
 - **cafe**: 카페 관리 앱
-- **country-tracker**: 여행 국가 추적 앱
 - **delivery**: 배달 서비스 앱
 - **dog-walk**: 반려동물 산책 앱
 - **playlist**: 음악 플레이리스트 앱
@@ -111,7 +110,6 @@ turbo run start --filter=cafe
 현재 `apps/` 디렉토리에는 다음과 같은 애플리케이션들이 있습니다:
 
 - `cat-meetup`
-- `country-tracker`
 - `dist-interactive-metro`
 - `dog-walk`
 - `shake-it`

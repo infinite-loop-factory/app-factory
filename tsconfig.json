@@ -1,7 +1,4 @@
 {
   "files": [],
-  "references": [
-    { "path": "./apps/country-tracker" },
-    { "path": "./apps/dog-walk" }
-  ]
+  "references": [{ "path": "./apps/dog-walk" }]
 }
