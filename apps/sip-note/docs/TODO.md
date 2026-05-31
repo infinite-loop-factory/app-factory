@@ -91,7 +91,7 @@
 - [x] `app.config.ts` 권한/플러그인 추가
   - camera, location (foreground + background), notifications, `expo-sqlite` plugin 등록
   - iOS `UIBackgroundModes: ["location", "fetch"]` 추가
-  - Maps API key 는 Phase 2 지도 렌더링 시점에 별도 추가
+  - [x] Maps API key — `app.config.ts` `android.config.googleMaps.apiKey` 를 `process.env.GOOGLE_MAPS_API_KEY` 에서 주입 (2026-05-31, env 기반·미설정 시 `""` fallback). `.env.example`·`.gitignore` 정비. 미설정 시 `MapView.<init>` 가 "API key not found" soft-throw → 지도 빈 화면이라 렌더에 필수. 발급: Google Cloud "Maps SDK for Android" → Android 앱 제한(패키지 + debug SHA-1 `5E:8F:…`)
 - [x] 폴더 구조 정립
   - `src/db/` (client, migrations, schema) — README 로 컨벤션 정의
   - `src/features/` — `{tasting,place,pairing,badge,my}/` 는 각 Phase 진행 시 생성
@@ -160,7 +160,12 @@
 - [x] 도시/리전 방문 통계 집계 쿼리 (Phase 4 통계에 재사용)
   - 마이그레이션 v3: `places.city`,`region` + 인덱스. `placeRepo` 에 `listCityVisitStats` / `listRegionVisitStats` / `listPlaceVisitStats` / `getVisitTotals` 추가 (derived-table join 으로 visit×note 곱셈 회피). UI 입력 필드는 디자인 체크포인트 후 별도 PR.
 - [x] **디자인 체크포인트** — 지도 / 바텀시트 / 장소 상세 → claude design
-  - 적용 완료 (2026-05-10). Phase 2 시그니처 = MapPin 잔 글리프 미니 (H2) + PlaceDetailHero. caption-size brand light 스왑 (Phase 1 §6 carry-over) 동시 처리. ADR-0011 의 첫 본격 적용 사이클 — `checkpoint-phase-2.md` 참조. 시뮬레이터 의무 캡처 9 컷은 Re-verification 으로 carry-over.
+  - 적용 완료 (2026-05-10). Phase 2 시그니처 = MapPin 잔 글리프 미니 (H2) + PlaceDetailHero. caption-size brand light 스왑 (Phase 1 §6 carry-over) 동시 처리. ADR-0011 의 첫 본격 적용 사이클 — `checkpoint-phase-2.md` 참조.
+  - 의무 캡처 9 컷: Maestro `checkpoint-phase-2-screenshots.yaml` 로 자동화 (2026-05-30, 발견 이슈 #4 해소). **9 컷 전부 실렌더 검증 (2026-05-31)** — 이전 env-block 이던 cut 1~5(지도·BottomSheet) 포함:
+    - 발견 이슈 #3(`dl-MapsCoreDynamite`): playstore AVD 의 GMS 다이너마이트 모듈 미프로비저닝 → **비-playstore `google_apis` 이미지 기반 `Pixel_8_Maps_e2e` AVD 신설**로 해소(모듈 GMS 번들).
+    - 발견 이슈 #5(Maps API 키 부재, 위 Phase 0 참조): 키 발급·`prebuild --clean` 리빌드 후 실지도 렌더.
+    - 발견 이슈(cut 7 라이트 place 딥링크 홈 리셋): `GluestackUIProvider` 의 `setColorScheme(mode)` 피드백 루프가 근본 원인 → `colorScheme !== mode` 가드로 수정. 9 컷 체인 flow 연속 결정화는 Maestro 2.5.1 의 settle/retry primitive 부재로 잔여(재실행 시 채움).
+    - 상세 `e2e/test-plan.md` §C / §발견 이슈 #3·#5, `e2e/README.md` §지도 의존 flow 참조.
 - [ ] 지오펜싱 알림 — 위시리스트 장소 근처 푸시 (`expo-task-manager` + `expo-notifications`)
   - Phase 2 carry-over — 별도 PR
 
