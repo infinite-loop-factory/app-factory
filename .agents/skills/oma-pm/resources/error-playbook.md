@@ -11,7 +11,7 @@ When you encounter a failure during planning, follow these recovery steps.
 1. Break down what you DO understand
 2. List specific assumptions you're making
 3. Create plan based on reasonable assumptions
-4. Mark assumptions clearly: `⚠️ Assumption: [description]`
+4. Mark assumptions clearly: `Assumption: [description]`
 5. **NEVER do this**: Create tasks while still ambiguous (agents will lose direction)
 
 ---

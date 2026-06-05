@@ -314,10 +314,10 @@ The following cells in `../matrix.md` have privacy-specific guidance from this f
 
 | Layer × Boundary | Privacy Status | Notes |
 |-----------------|---------------|-------|
-| L3 (Network) × any | ⚠️ Warning | IP addresses are GDPR Art. 4(1) personal data identifiers; mask or drop |
-| L4 (Transport) × any | ⚠️ Warning | Connection 5-tuple (src IP, dst IP, ports) can identify individuals |
+| L3 (Network) × any | Warning | IP addresses are GDPR Art. 4(1) personal data identifiers; mask or drop |
+| L4 (Transport) × any | Warning | Connection 5-tuple (src IP, dst IP, ports) can identify individuals |
 | L7 (Application) × multi-tenant | Primary coverage | Per-tenant data minimization; tenant ID must not leak across boundaries |
-| L7 × cross-application | ⚠️ Warning | Baggage crosses trust boundaries; apply filter at ingress (§4) |
+| L7 × cross-application | Warning | Baggage crosses trust boundaries; apply filter at ingress (§4) |
 | Release / feature flags × any | Overlap | Feature flag cohort membership may constitute profiling under GDPR Art. 4(4) |
 
 ---

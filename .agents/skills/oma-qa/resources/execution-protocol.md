@@ -11,7 +11,7 @@
 5. **After review**: add recurring issues to `../../_shared/core/lessons-learned.md`
 6. **If standards matter**: read `resources/iso-quality.md`
 
-**⚠️ Intelligent Escalation**: When uncertain, escalate early. Don't blindly proceed.
+**Intelligent Escalation**: When uncertain, escalate early. Don't blindly proceed.
 
 Follow these steps in order (adjust depth by difficulty).
 

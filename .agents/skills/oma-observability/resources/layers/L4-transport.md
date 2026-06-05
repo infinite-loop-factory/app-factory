@@ -250,10 +250,10 @@ From `../matrix.md §L4-transport`:
 
 | Cell | Symbol | Rationale |
 |------|--------|-----------|
-| L4 × cross-application × traces | ⚠️ | TCP is not trace-native; log socket 5-tuple for post-hoc correlation to L7 spans only |
-| L4 × * × profiles | ✅ | eBPF off-CPU profiling via Parca captures kernel socket overhead and network-wait; pprof output |
-| L4 × privacy (all boundaries) | ⚠️ | Source/destination IPs in TCP logs are PII (GDPR Art. 4(1)); apply masking at pipeline ingress |
-| L4 × SLO and L4 × release | ❌ | SLO budgets and release markers are application-layer; TCP health is infra-SLI fallback only |
+| L4 × cross-application × traces | PARTIAL | TCP is not trace-native; log socket 5-tuple for post-hoc correlation to L7 spans only |
+| L4 × * × profiles | PASS | eBPF off-CPU profiling via Parca captures kernel socket overhead and network-wait; pprof output |
+| L4 × privacy (all boundaries) | PARTIAL | Source/destination IPs in TCP logs are PII (GDPR Art. 4(1)); apply masking at pipeline ingress |
+| L4 × SLO and L4 × release | N/A | SLO budgets and release markers are application-layer; TCP health is infra-SLI fallback only |
 
 ---
 

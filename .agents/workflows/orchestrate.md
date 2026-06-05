@@ -1,5 +1,7 @@
 ---
+name: orchestrate
 description: Automated CLI-based parallel agent execution that spawns subagents via Gemini CLI, coordinates through MCP Memory, monitors progress, and runs verification
+disable-model-invocation: true
 ---
 
 # MANDATORY RULES: VIOLATION IS FORBIDDEN
@@ -28,6 +30,8 @@ The detected runtime vendor and each agent's target vendor determine how agents 
 1. Read `.agents/skills/oma-coordination/SKILL.md` and confirm Core Rules.
 2. Read `.agents/skills/_shared/core/context-loading.md` for resource loading strategy.
 3. Read `.agents/skills/_shared/runtime/memory-protocol.md` for memory protocol.
+4. Read `.agents/skills/_shared/runtime/event-spec.md` for L1 event protocol.
+5. Use the `oma_emit` helper documented in `.agents/skills/_shared/runtime/event-spec.md` for required L1 decisions. The helper wraps `oma state:emit`.
 
 ---
 
@@ -51,12 +55,12 @@ Look for a plan file:
 2. CLI 매핑 현황 표시:
 
    ```
-   📋 CLI 에이전트 매핑
+   CLI 에이전트 매핑
    ┌──────────┬─────────┐
    │ Agent    │ CLI     │
    ├──────────┼─────────┤
-   │ frontend │ gemini  │
-   │ backend  │ gemini  │
+   │ frontend │ codex   │
+   │ backend  │ codex   │
    │ mobile   │ claude  │
    │ pm       │ claude  │
    └──────────┴─────────┘
@@ -71,6 +75,13 @@ Look for a plan file:
 ## Step 3: Spawn Agents by Priority Tier
 
 // turbo
+Before spawning agents, emit and verify the required fan-out decision:
+
+```bash
+oma_emit "decision.made" '{"subject":"orchestrate.fanout-strategy","decision":"Spawn agents by priority tier using the loaded plan.","rationale":"The plan is available and determines which agents run in parallel."}'
+oma state:verify --workflow orchestrate --checkpoint fanout-strategy
+```
+
 For each priority tier (P0 first, then P1, etc.):
 
 - Each agent gets: task description, API contracts, relevant context from `_shared/core/context-loading.md`.
@@ -103,7 +114,7 @@ Spawn agents via **Agent tool** using `.claude/agents/{agent}.md` definitions.
 | tf-infra | `.claude/agents/tf-infra-engineer.md` |
 | docs | `.claude/agents/docs-curator.md` |
 
-- Include API contracts from `.agents/skills/_shared/api-contracts/` if they exist
+- Include API contracts from `.agents/skills/_shared/core/api-contracts/` if they exist
 - Load only task-relevant context (check codebase structure around affected domains)
 
 ### If Codex CLI and target vendor is Codex
@@ -187,6 +198,13 @@ bash .agents/skills/oma-orchestrator/scripts/verify.sh {agent-type} {workspace}
 // turbo
 After all agents complete, use memory read tool to read all `result-{agent}-{sessionId}.md` files.
 Compile summary: completed tasks, failed tasks, files changed, remaining issues.
+
+Emit and verify the required QA verdict decision before the final report:
+
+```bash
+oma_emit "decision.made" '{"subject":"orchestrate.qa-verdict","decision":"Accept completed agents or record change requests.","rationale":"Agent verification results have been collected and classified."}'
+oma state:verify --workflow orchestrate --checkpoint qa-verdict
+```
 
 ---
 
