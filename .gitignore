@@ -16,3 +16,7 @@ dist/
 
 # oma docs generated artifacts
 docs/generated/
+
+# oh-my-agent runtime (local artifacts — do not commit)
+.antigravitycli/
+.agents/results/

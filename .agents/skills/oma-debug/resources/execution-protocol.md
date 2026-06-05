@@ -10,7 +10,7 @@
 4. **Use reasoning templates**: for Complex bugs, use `../../_shared/core/reasoning-templates.md` (hypothesis loop, execution trace)
 5. **Budget context**: follow `../../_shared/core/context-budget.md` (use find_symbol, not read_file)
 
-**⚠️ Intelligent Escalation**: When uncertain, escalate early. Don't blindly proceed.
+**Intelligent Escalation**: When uncertain, escalate early. Don't blindly proceed.
 
 Follow these steps in order (adjust depth by difficulty).
 

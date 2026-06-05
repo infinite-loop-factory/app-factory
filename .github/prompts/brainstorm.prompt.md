@@ -1,5 +1,5 @@
 ---
-description: Design-first ideation workflow — explore user intent, clarify constraints, propose approaches, and produce an approved design document before planning
+description: Design-first ideation workflow that explores user intent, clarifies constraints, proposes approaches, and produces an approved design document before planning
 mode: agent
 ---
 <!-- oma:generated -->

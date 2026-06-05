@@ -226,10 +226,10 @@ The L3 row of `../matrix.md` covers 28 cells (4 boundaries × 7 signals). The fo
 
 | Boundary | metrics | logs | traces | profiles | cost | audit | privacy |
 |----------|---------|------|--------|----------|------|-------|---------|
-| multi-tenant | ✅ per-tenant egress byte/packet counters from VPC flow logs | ✅ VPC flow stream tagged by tenant CIDR | ⚠️ trace-ID egress tagging only; no native L3 trace context | ❌ N/A | ⚠️ egress byte attribution as cost proxy | ✅ VPC flow audit trail tagged by tenant | ⚠️ IP addresses are PII (GDPR/PIPA); mask before retention |
-| cross-application | ✅ inter-VPC peering flow metrics | ✅ VPC flow logs across peering / transit gateway | ⚠️ socket 5-tuple correlation to L7 spans only | ❌ N/A | ⚠️ cross-VPC egress cost proxy | ✅ inter-VPC flow audit for SOC2 network controls | ⚠️ source/destination IPs crossing app boundary are PII candidates |
-| slo | ❌ N/A; SLO belongs at L7 | ❌ N/A | ❌ N/A | ❌ N/A | ❌ N/A | ❌ N/A | ❌ N/A |
-| release | ❌ N/A | ❌ N/A | ❌ N/A | ❌ N/A | ❌ N/A | ❌ N/A | ❌ N/A |
+| multi-tenant | PASS per-tenant egress byte/packet counters from VPC flow logs | PASS VPC flow stream tagged by tenant CIDR | PARTIAL trace-ID egress tagging only; no native L3 trace context | N/A | PARTIAL egress byte attribution as cost proxy | PASS VPC flow audit trail tagged by tenant | PARTIAL IP addresses are PII (GDPR/PIPA); mask before retention |
+| cross-application | PASS inter-VPC peering flow metrics | PASS VPC flow logs across peering / transit gateway | PARTIAL socket 5-tuple correlation to L7 spans only | N/A | PARTIAL cross-VPC egress cost proxy | PASS inter-VPC flow audit for SOC2 network controls | PARTIAL source/destination IPs crossing app boundary are PII candidates |
+| slo | N/A; SLO belongs at L7 | N/A | N/A | N/A | N/A | N/A | N/A |
+| release | N/A | N/A | N/A | N/A | N/A | N/A | N/A |
 
 Notes:
 - **SLO cells**: all N/A. SLO error budgets are computed from L7 application metrics. If an L3 event (BGP hijack, PMTUD black hole) causes an SLO burn, the causal chain surfaces as an L7 error-rate spike first. Investigate via `../incident-forensics.md` 6-dimension localization.

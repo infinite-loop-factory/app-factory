@@ -323,13 +323,13 @@ These cells from `../matrix.md` have trace-specific behavior worth noting:
 
 | Layer | Boundary | Status | Rationale |
 |-------|----------|--------|-----------|
-| L3-network | cross-application | ⚠️ | L3 packets carry no trace context natively; use trace-ID tagging at egress only |
-| L4-transport | any | ⚠️ | TCP is not trace-native; trace context begins at mesh or L7 |
-| mesh | cross-application | ✅ | Primary trace origin; Envoy injects spans with zero application code changes |
-| L7-application | cross-application | ✅ | Primary; W3C `traceparent` on all outbound HTTP/gRPC calls |
-| L7-application | multi-tenant | ✅ | `tenant.id` propagated in W3C Baggage on every span |
-| L7-application | release | ✅ | `service.version` resource attribute on all spans; canary routing by version |
-| L7-application | slo | ⚠️ | Tail sampling must retain error traces within the error budget window; traces are forensic input, not the SLI computation source |
+| L3-network | cross-application | PARTIAL | L3 packets carry no trace context natively; use trace-ID tagging at egress only |
+| L4-transport | any | PARTIAL | TCP is not trace-native; trace context begins at mesh or L7 |
+| mesh | cross-application | PASS | Primary trace origin; Envoy injects spans with zero application code changes |
+| L7-application | cross-application | PASS | Primary; W3C `traceparent` on all outbound HTTP/gRPC calls |
+| L7-application | multi-tenant | PASS | `tenant.id` propagated in W3C Baggage on every span |
+| L7-application | release | PASS | `service.version` resource attribute on all spans; canary routing by version |
+| L7-application | slo | PARTIAL | Tail sampling must retain error traces within the error budget window; traces are forensic input, not the SLI computation source |
 
 ---
 

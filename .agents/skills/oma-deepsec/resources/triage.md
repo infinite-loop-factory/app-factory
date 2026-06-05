@@ -48,7 +48,7 @@ After revalidation, FP rate on `HIGH+` typically lands in the 10–29 % range.
 
 ## Refusals
 
-Models occasionally refuse to investigate a candidate (exploit-shaped source, content filter). After every batch deepsec asks the agent whether anything was skipped; `refused: true` appears in `RunMeta` and on the `FileRecord.refusal` field. The per-batch log shows a ⚠️ `refusal` marker.
+Models occasionally refuse to investigate a candidate (exploit-shaped source, content filter). After every batch deepsec asks the agent whether anything was skipped; `refused: true` appears in `RunMeta` and on the `FileRecord.refusal` field. The per-batch log shows a `refusal` marker.
 
 Handling:
 

@@ -50,7 +50,7 @@ docs:
 
 # Built-in: claude-only | codex-only | gemini-only | qwen-only | cursor-only | antigravity
 # (custom_presets entries are also valid)
-model_preset: claude-only
+model_preset: claude
 
 # Per-agent override (optional) — shallow-merged on top of the preset entry.
 # Agent ids: orchestrator, architecture, qa, pm, backend, frontend, mobile,

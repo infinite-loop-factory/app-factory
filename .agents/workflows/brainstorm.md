@@ -1,5 +1,7 @@
 ---
+name: brainstorm
 description: Design-first ideation workflow that explores user intent, clarifies constraints, proposes approaches, and produces an approved design document before planning
+disable-model-invocation: true
 ---
 
 # MANDATORY RULES: VIOLATION IS FORBIDDEN
@@ -17,6 +19,12 @@ description: Design-first ideation workflow that explores user intent, clarifies
 ---
 
 > **Vendor note:** This workflow executes inline (no subagent spawning). All vendors use their native code analysis and file tools.
+
+---
+
+## L1 Decision Events
+
+Use the `oma_emit` helper documented in `.agents/skills/_shared/runtime/event-spec.md` before required L1 decision checkpoints. The helper wraps `oma state:emit`.
 
 ---
 
@@ -47,10 +55,20 @@ Do NOT proceed to Step 3 until you have a clear understanding of the user's inte
 
 Present **2-3 distinct approaches** to solve the problem:
 - For each approach: summary, pros, cons, effort estimate (S/M/L)
+- **Label each approach as `tactical` (patch/workaround/quick win) or `structural` (root-cause/proper engineering).**
 - Highlight the **recommended approach** with rationale
 - Include a brief trade-off comparison matrix
 
+**Engineering-first default:** the recommended approach MUST be `structural` — addressing the root cause with proper engineering. Deadline pressure, effort delta, and "we'll fix it properly later" are NOT valid grounds for recommending tactical. Recommending `tactical` is only allowed when the problem itself is genuinely throwaway scope (e.g., one-line config flip, deprecated module being removed). The tighter the deadline, the more important it is to do it right the first time.
+
 **You MUST get user confirmation on the chosen approach before proceeding to Step 4.**
+
+After the user chooses an option, emit and verify the required option-selection decision:
+
+```bash
+oma_emit "decision.made" '{"subject":"brainstorm.option-selection","decision":"Proceed with the user-selected approach.","rationale":"The user selected one option after comparing alternatives and tradeoffs."}'
+oma state:verify --workflow brainstorm --checkpoint option-selection
+```
 
 ---
 
@@ -86,7 +104,7 @@ Groupthink and authority bias hide real gaps. A blind round, where each perspect
    - **Tier 2**: enhancement, should resolve or explicitly defer
    - **Tier 3**: nice-to-have, defer to next version
 
-4. **Check for suppressed compromises**: for each prior design decision where a reviewer voted `⚠️→✅`, verify the objection was answered on principle (regulatory, consumer, architectural) rather than overridden by majority. Restore any principled objection that was suppressed.
+4. **Check for suppressed compromises**: for each prior design decision where a reviewer voted `PARTIAL→PASS`, verify the objection was answered on principle (regulatory, consumer, architectural) rather than overridden by majority. Restore any principled objection that was suppressed.
 
 5. **Resolve Tier 1 issues** by updating Step 4 design with either new sections in existing files, new files, or explicit out-of-scope declarations.
 

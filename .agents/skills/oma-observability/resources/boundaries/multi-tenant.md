@@ -269,11 +269,11 @@ Quick navigation for multi-tenant boundary cells in `../matrix.md`:
 
 | Layer | Signal | Status | Artifact |
 |-------|--------|--------|----------|
-| L3-network | metrics | ✅ | VPC flow logs per tenant; egress bytes attributed by source CIDR mapped to `tenant.id` |
-| L7-application | traces | ✅ | W3C Baggage carries `tenant.id`; all spans tagged at ingress |
-| L7-application | cost | ✅ | OpenCost workload attribution via `tenant.id` pod label; per-tenant PromQL aggregation |
-| L7-application | privacy | ✅ | Per-tenant PII redaction rules; per-tenant residency routing |
-| L7-application | audit | ✅ | Per-tenant audit trail; erasure events on offboarding |
+| L3-network | metrics | PASS | VPC flow logs per tenant; egress bytes attributed by source CIDR mapped to `tenant.id` |
+| L7-application | traces | PASS | W3C Baggage carries `tenant.id`; all spans tagged at ingress |
+| L7-application | cost | PASS | OpenCost workload attribution via `tenant.id` pod label; per-tenant PromQL aggregation |
+| L7-application | privacy | PASS | Per-tenant PII redaction rules; per-tenant residency routing |
+| L7-application | audit | PASS | Per-tenant audit trail; erasure events on offboarding |
 
 ---
 

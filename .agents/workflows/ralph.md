@@ -1,5 +1,7 @@
 ---
+name: ralph
 description: Ralph - persistent self-referential execution loop wrapping ultrawork with independent verifier verification
+disable-model-invocation: true
 ---
 
 # MANDATORY RULES: VIOLATION IS FORBIDDEN
@@ -225,10 +227,10 @@ Compose a focused task description containing the remaining work, separating reg
 ## Ralph Iteration {N+1} — Remaining Work
 
 ### Already Complete (DO NOT re-implement; will be re-verified by JUDGE)
-- C1: <description> ✅
+- C1: <description> PASS
 
 ### Blocked (DO NOT retry)
-- C3: <description> 🚫 (failed 3x)
+- C3: <description> BLOCKED (failed 3x)
 
 ### Regressed (was passing — diagnose what broke it; minimal fix that preserves recent changes)
 - C4: <description>

@@ -193,16 +193,16 @@ Cross-ref: `../matrix.md` for full cell detail. Summary for the profiles signal 
 
 | Layer × Boundary | profiles cell | Rationale |
 |-----------------|---------------|-----------|
-| L3 × all | ❌ N/A | IP routing has no process-level profiling artifact |
-| L4 × multi-tenant | ✅ | eBPF CPU/off-CPU profiling covers socket-level overhead per process |
-| L4 × cross-application | ✅ | eBPF off-CPU shows network-wait time between services |
-| L4 × slo | ❌ N/A | SLO is application-defined; L4 profiles are diagnostic, not SLO inputs |
-| L4 × release | ❌ N/A | Release events are L7 constructs |
-| mesh × all | ⚠️ | Proxy CPU visible via eBPF on sidecar process; not mesh-native |
-| L7 × multi-tenant | ✅ | Per-tenant flamegraph via label-based isolation in Parca/Pyroscope |
-| L7 × cross-application | ✅ | Application-level profiling with trace_id correlation |
-| L7 × slo | ❌ N/A | SLO is computed from metrics; profiles are diagnostic |
-| L7 × release | ⚠️ | Pre/post-release profile diff for performance regression detection |
+| L3 × all | N/A | IP routing has no process-level profiling artifact |
+| L4 × multi-tenant | PASS | eBPF CPU/off-CPU profiling covers socket-level overhead per process |
+| L4 × cross-application | PASS | eBPF off-CPU shows network-wait time between services |
+| L4 × slo | N/A | SLO is application-defined; L4 profiles are diagnostic, not SLO inputs |
+| L4 × release | N/A | Release events are L7 constructs |
+| mesh × all | PARTIAL | Proxy CPU visible via eBPF on sidecar process; not mesh-native |
+| L7 × multi-tenant | PASS | Per-tenant flamegraph via label-based isolation in Parca/Pyroscope |
+| L7 × cross-application | PASS | Application-level profiling with trace_id correlation |
+| L7 × slo | N/A | SLO is computed from metrics; profiles are diagnostic |
+| L7 × release | PARTIAL | Pre/post-release profile diff for performance regression detection |
 
 ---
 

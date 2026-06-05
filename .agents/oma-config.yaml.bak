@@ -1,0 +1,105 @@
+# oh-my-agent — project config
+# Full schema: web/docs/guide/per-agent-models.md
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Global preferences
+# ─────────────────────────────────────────────────────────────────────────────
+
+# Response language (ko, en, ja, zh, ...)
+language: ko
+
+# Translation voice preference for oma-translator skill.
+#   formal      — technical writer / reporter style, complete sentences, no fragments,
+#                 strict 합니다체 / です・ます (best for legal, official docs)
+#   balanced    — content-type-based persona routing (default)
+#   interpreter — interpreter mindset across all content types: punchy, audience-first,
+#                 spoken cadence, fragments allowed when natural, drops formal padding
+# Affects persona resolution in `.agents/skills/oma-translator/SKILL.md` Stage 2.5.
+translation_voice: balanced
+
+# Date / time
+date_format: ISO
+timezone: Asia/Seoul
+
+# Auto-update the oh-my-agent CLI in the background when outdated.
+# Disable per-shell with OMA_SKIP_VERSION_CHECK=1.
+auto_update_cli: true
+
+# ─────────────────────────────────────────────────────────────────────────────
+# oma-docs documentation drift detection
+# ─────────────────────────────────────────────────────────────────────────────
+
+docs:
+  # When true, runs `oma docs verify --json` at the end of /scm, /work, /ultrawork.
+  # Warn-only — never blocks workflow completion. Default: false (opt-in).
+  # See `.agents/skills/oma-docs/SKILL.md` for full behavior.
+  auto_verify: false
+
+  # When true (default), URL link checking is delegated to `lychee` running
+  # in the background; results land in docs/generated/url-drift.json.
+  # If `lychee` is missing, `oma docs verify` prints an install hint and
+  # skips URL checking. Set to false to silence that hint and disable URL
+  # checks entirely (e.g., when you run lychee separately from CI).
+  # Install: `brew install lychee` (macOS) or see
+  # https://github.com/lycheeverse/lychee#installation for other platforms.
+  check_urls: true
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Model selection
+# ─────────────────────────────────────────────────────────────────────────────
+
+# Built-in: claude-only | codex-only | gemini-only | qwen-only | cursor-only | antigravity
+# (custom_presets entries are also valid)
+model_preset: claude-only
+
+# Per-agent override (optional) — shallow-merged on top of the preset entry.
+# Agent ids: orchestrator, architecture, qa, pm, backend, frontend, mobile,
+#            db, debug, tf-infra, retrieval
+# Each AgentSpec accepts:
+#   model:    "<owner>/<slug>"  required.  Slugs follow OpenRouter convention
+#             (https://openrouter.ai/models). Only models whose owning vendor
+#             ships a forkable CLI (claude, codex, gemini, qwen) are usable —
+#             API-only entries (api_only: true) are skipped. Custom slugs go
+#             in `models:` below.
+#   effort:   none | low | medium | high | xhigh   (ignored for cli-session models like Claude)
+#   thinking: true | false                          (vendor-dependent)
+#   memory:   user | project | local                (per-agent memory tier)
+# Example:
+# agents:
+#   backend:
+#     model: openai/gpt-5.5
+#     effort: high
+#   qa:
+#     model: anthropic/claude-sonnet-4-6
+
+# Inline custom model slugs (optional; replaces the legacy models.yaml file).
+# Example:
+# models:
+#   my-fast:
+#     cli: gemini
+#     cli_model: gemini-3-flash
+#     supports:
+#       native_dispatch_from: [gemini]
+
+# User-defined presets (optional). Use `extends:` to partially inherit a built-in.
+# Example:
+# custom_presets:
+#   my-team:
+#     extends: claude-only
+#     description: "Team A — sonnet base, codex backend"
+#     agent_defaults:
+#       backend: { model: openai/gpt-5.5, effort: high }
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Resolution order (when an agent runs):
+#   1. agents.<id>            — explicit per-agent override
+#   2. model_preset entry     — built-in or custom_presets[model_preset]
+#   3. preset.orchestrator    — fallback when an agent is missing from the preset
+# ─────────────────────────────────────────────────────────────────────────────
+vendors:
+  - claude
+  - codex
+  - copilot
+  - cursor
+  - gemini
+  - qwen

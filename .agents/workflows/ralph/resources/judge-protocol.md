@@ -76,7 +76,7 @@ remaining:
 - Reference exact files and line numbers when available
 - If the same failure recurred, suggest a DIFFERENT approach than the previous iteration
 - If approaching BLOCKED threshold (fail_count = 2), flag it:
-  `⚠️ Next failure will BLOCK this criterion`
+  `Next failure will BLOCK this criterion`
 
 ---
 

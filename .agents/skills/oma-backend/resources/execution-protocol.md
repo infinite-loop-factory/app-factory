@@ -9,7 +9,7 @@
    - Determine level: LOW → proceed | MEDIUM → present options | HIGH → ask immediately
 4. **Budget context**: follow `../../_shared/core/context-budget.md` (read symbols, not whole files)
 
-**⚠️ Intelligent Escalation**: When uncertain, escalate early. Don't blindly proceed.
+**Intelligent Escalation**: When uncertain, escalate early. Don't blindly proceed.
 
 Follow these steps in order (adjust depth by difficulty).
 

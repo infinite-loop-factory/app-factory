@@ -9,22 +9,24 @@ import type { Vendor } from "./types.ts";
 
 // --- Vendor detection (same logic as keyword-detector.ts) ---
 
-function inferVendorFromScriptPath(): Vendor | null {
-  const path = import.meta.filename;
-  if (path.includes(`${join(".cursor", "hooks")}`)) return "cursor";
-  if (path.includes(`${join(".qwen", "hooks")}`)) return "qwen";
-  if (path.includes(`${join(".claude", "hooks")}`)) return "claude";
-  if (path.includes(`${join(".gemini", "hooks")}`)) return "gemini";
-  if (path.includes(`${join(".codex", "hooks")}`)) return "codex";
-  return null;
-}
-
 function detectVendor(input: Record<string, unknown>): Vendor {
   const event = input.hook_event_name as string | undefined;
-  const byScriptPath = inferVendorFromScriptPath();
-  if (byScriptPath) return byScriptPath;
+  const _hookEventName = input.hookEventName as string | undefined;
+
+  // pi spawns this script from `.pi/extensions/oma/`; trust the script path.
+  if (import.meta.filename.includes(`${join(".pi", "extensions")}`))
+    return "pi";
+
+  if (process.env.GROK_WORKSPACE_ROOT) return "grok";
+  if (process.env.KIRO_PROJECT_DIR) return "kiro";
+
   if (event === "BeforeTool") return "gemini";
-  if (event === "PreToolUse" && "session_id" in input) return "codex";
+  if (event === "preToolUse" || _hookEventName === "preToolUse") return "kiro";
+  if (event === "PreToolUse" && process.env.ANTIGRAVITY_PROJECT_DIR)
+    return "antigravity";
+  if (event === "PreToolUse") {
+    if ("session_id" in input && !("sessionId" in input)) return "codex";
+  }
   if (process.env.QWEN_PROJECT_DIR) return "qwen";
   return "claude";
 }
@@ -38,8 +40,25 @@ function getProjectDir(vendor: Vendor, input: Record<string, unknown>): string {
     case "gemini":
       dir = process.env.GEMINI_PROJECT_DIR || process.cwd();
       break;
+    case "antigravity":
+      dir =
+        (input.cwd as string) ||
+        process.env.ANTIGRAVITY_PROJECT_DIR ||
+        process.env.AGY_PROJECT_DIR ||
+        process.cwd();
+      break;
     case "qwen":
       dir = process.env.QWEN_PROJECT_DIR || process.cwd();
+      break;
+    case "grok":
+      dir =
+        process.env.GROK_WORKSPACE_ROOT ||
+        (input.cwd as string) ||
+        process.cwd();
+      break;
+    case "kiro":
+      dir =
+        process.env.KIRO_PROJECT_DIR || (input.cwd as string) || process.cwd();
       break;
     default:
       dir = process.env.CLAUDE_PROJECT_DIR || process.cwd();
@@ -54,8 +73,18 @@ function getHookDir(vendor: Vendor): string {
       return ".codex/hooks";
     case "gemini":
       return ".gemini/hooks";
+    case "antigravity":
+      return ".gemini/antigravity-cli/hooks";
     case "qwen":
       return ".qwen/hooks";
+    case "grok":
+      return ".grok/hooks";
+    case "kiro":
+      return ".kiro/hooks";
+    case "pi":
+      // pi keeps the core scripts (and filter-test-output.sh) inside the
+      // bridge's directory extension, not a dedicated hooks dir.
+      return join(".pi", "extensions", "oma");
     default:
       return ".claude/hooks";
   }
