@@ -259,10 +259,10 @@ Cells from `../matrix.md` owned by this file:
 
 | Layer | Boundary | Status | Notes |
 |-------|----------|--------|-------|
-| L3-network | any | ✅ | VPC flow audit trail; who connected to what |
-| L4-transport | any | ⚠️ | Limited: connection-level only, no payload |
-| L7-application | multi-tenant | ✅ | Per-tenant audit trail; supports GDPR data subject right of access |
-| release | any | ✅ | Deployment audit: who deployed what when (actor, SHA, timestamp) |
+| L3-network | any | PASS | VPC flow audit trail; who connected to what |
+| L4-transport | any | PARTIAL | Limited: connection-level only, no payload |
+| L7-application | multi-tenant | PASS | Per-tenant audit trail; supports GDPR data subject right of access |
+| release | any | PASS | Deployment audit: who deployed what when (actor, SHA, timestamp) |
 | privacy | audit | overlap | See `privacy.md`; audit records data processing; privacy governs erasure |
 
 ---

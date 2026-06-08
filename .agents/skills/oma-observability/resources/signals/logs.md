@@ -226,16 +226,16 @@ Cells from `../matrix.md` owned by this file:
 
 | Layer | Boundary | Status | Artifact |
 |---|---|---|---|
-| L3-network | multi-tenant | ✅ | VPC flow log stream tagged by tenant CIDR |
-| L4-transport | multi-tenant | ✅ | TCP connection events per tenant socket namespace |
-| mesh | multi-tenant | ✅ | Envoy access logs with baggage-derived tenant tag |
-| mesh | cross-application | ✅ | Envoy access logs; `trace_id` correlation |
-| mesh | slo | ⚠️ | Burn-rate event source; metric-based SLI preferred |
-| mesh | release | ✅ | Deployment event with `service.version` tag |
-| L7-application | multi-tenant | ✅ | `tenant.id` on every record; OTel Collector `routing_connector` |
-| L7-application | cross-application | ✅ | `trace_id` + `span_id` enables log-trace join across services |
-| L7-application | slo | ⚠️ | Log-based SLI valid fallback; metric-based preferred |
-| L7-application | release | ✅ | Deployment SHA, version, rollout strategy as structured event |
+| L3-network | multi-tenant | PASS | VPC flow log stream tagged by tenant CIDR |
+| L4-transport | multi-tenant | PASS | TCP connection events per tenant socket namespace |
+| mesh | multi-tenant | PASS | Envoy access logs with baggage-derived tenant tag |
+| mesh | cross-application | PASS | Envoy access logs; `trace_id` correlation |
+| mesh | slo | PARTIAL | Burn-rate event source; metric-based SLI preferred |
+| mesh | release | PASS | Deployment event with `service.version` tag |
+| L7-application | multi-tenant | PASS | `tenant.id` on every record; OTel Collector `routing_connector` |
+| L7-application | cross-application | PASS | `trace_id` + `span_id` enables log-trace join across services |
+| L7-application | slo | PARTIAL | Log-based SLI valid fallback; metric-based preferred |
+| L7-application | release | PASS | Deployment SHA, version, rollout strategy as structured event |
 
 ---
 

@@ -46,7 +46,7 @@ export default function ImagePickerGroup({
     <HStack className="gap-2">
       {images.map((data, index) => (
         <TouchableOpacity
-          key={`image_${data.uri}_${index}`}
+          key={`image_${data.uri}`}
           onPress={() => {
             setShowImageOptionActionsheet(true);
             setSelectedImageIndex(index);

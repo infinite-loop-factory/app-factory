@@ -19,17 +19,17 @@ Follow this guide to use context efficiently.
 ### When Using Serena MCP (Recommended)
 
 ```
-❌ Bad: read_file("app/api/todos.py")          ← entire file 500 lines
-✅ Good: find_symbol("create_todo")             ← just that function 30 lines
-✅ Good: get_symbols_overview("app/api")        ← function list only
-✅ Good: find_referencing_symbols("TodoService") ← usage only
+Bad: read_file("app/api/todos.py")          ← entire file 500 lines
+Good: find_symbol("create_todo")             ← just that function 30 lines
+Good: get_symbols_overview("app/api")        ← function list only
+Good: find_referencing_symbols("TodoService") ← usage only
 ```
 
 ### When Reading Files Without Serena
 
 ```
-❌ Bad: Read entire file at once
-✅ Good: Check first 50 lines (imports + class definitions) → read additional functions as needed
+Bad: Read entire file at once
+Good: Check first 50 lines (imports + class definitions) → read additional functions as needed
 ```
 
 ---

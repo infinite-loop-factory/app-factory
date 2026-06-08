@@ -1,5 +1,5 @@
 ---
-description: Software architecture workflow — diagnose architecture problems, select the right analysis method, compare options, synthesize stakeholder input, and produce a recommendation, review, or ADR
+description: Software architecture workflow that diagnoses architecture problems, selects the right analysis method, compares options, synthesizes stakeholder input, and produces a recommendation, review, or ADR
 mode: agent
 ---
 <!-- oma:generated -->

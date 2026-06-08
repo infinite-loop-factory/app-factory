@@ -1,5 +1,7 @@
 ---
+name: scm
 description: SCM workflow for Git operations (branching/merge/conflict/worktree) plus Conventional Commit execution.
+disable-model-invocation: true
 ---
 
 # MANDATORY RULES: VIOLATION IS FORBIDDEN
@@ -10,6 +12,12 @@ description: SCM workflow for Git operations (branching/merge/conflict/worktree)
 ---
 
 > **Vendor note:** This workflow executes inline (no subagent spawning). All vendors use native git tooling available in their environment.
+
+---
+
+## L1 Decision Events
+
+Use the `oma_emit` helper documented in `.agents/skills/_shared/runtime/event-spec.md` before required L1 decision checkpoints. The helper wraps `oma state:emit`.
 
 ---
 
@@ -139,6 +147,11 @@ Do not create commits unless explicitly requested.
 ### Step 3B: Commit execution path
 
 1. Separate features if needed (different scope/type and >5 files).
+   After deciding the commit grouping, emit and verify the required split decision:
+   ```bash
+   oma_emit "decision.made" '{"subject":"scm.commit-split","decision":"Use the selected commit grouping for the current repository changes.","rationale":"The working tree was inspected and changes were grouped by scope/type before committing."}'
+   oma state:verify --workflow scm --checkpoint commit-split
+   ```
 2. Determine type.
 3. Determine scope.
 4. Write description (imperative, lowercase, <=72 chars, no trailing period).
@@ -150,7 +163,7 @@ If `oma-config.yaml` has `docs.auto_verify: true`:
 
 1. Run `oma docs verify --json` from the repo root.
 2. Capture the JSON output.
-3. If `broken.length === 0`: print `✓ docs verified clean (N docs)` summary to stdout and continue with workflow completion.
+3. If `broken.length === 0`: print `docs verified clean (N docs)` summary to stdout and continue with workflow completion.
 4. If `broken.length > 0`: print a 1-3 line summary identifying which docs have drift, and a hint `Run /oma-docs verify for the full report.` Continue with workflow completion (warn-only, never block).
 5. If `oma-docs` is not available (CLI command missing): skip silently.
 

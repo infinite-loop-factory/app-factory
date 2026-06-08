@@ -239,10 +239,10 @@ function CollapsibleRouteSegment({ group }: CollapsibleRouteSegmentProps) {
           {/* Expanded Intermediate Stations */}
           {isExpanded && intermediates.length > 0 && (
             <View className="mt-3 gap-3 border-gray-100 border-l-2 pl-4">
-              {intermediates.map((station, idx) => (
+              {intermediates.map((station) => (
                 <View
                   className="flex-row items-center gap-2"
-                  key={`int-${idx}-${station.station.id}`}
+                  key={`int-${station.station.id}`}
                 >
                   <View
                     className="h-2 w-2 rounded-full"
@@ -658,10 +658,10 @@ export default function RouteResultScreen() {
 
             <ElevatedCard className="p-5">
               <View>
-                {groupedSegments.map((group, index) => (
+                {groupedSegments.map((group) => (
                   <CollapsibleRouteSegment
                     group={group}
-                    key={`group-${index}-${group.start.station.id}`}
+                    key={`group-${group.start.station.id}`}
                   />
                 ))}
 

@@ -317,11 +317,11 @@ These cells from `resources/matrix.md` are the primary coverage drivers for this
 
 | matrix cell | symbol | artifact |
 |------------|--------|---------|
-| mesh × cross-application × traces | ✅ | Zero-code L7 trace continuity; primary use case of the mesh layer |
-| mesh × multi-tenant × traces | ✅ | `tenant.id` via W3C Baggage; proxy can enforce baggage scrubbing at gateway |
-| mesh × release × traces | ⚠️ | Canary routing rules are observable; `service.version` on spans; trace continuity requires OTel Operator CR |
-| mesh × privacy × * | ✅ | mTLS config observability; baggage scrubbing; SPIFFE identity in access log |
-| mesh × slo × metrics | ✅ | Envoy request rate + error rate are primary SLI sources |
+| mesh × cross-application × traces | PASS | Zero-code L7 trace continuity; primary use case of the mesh layer |
+| mesh × multi-tenant × traces | PASS | `tenant.id` via W3C Baggage; proxy can enforce baggage scrubbing at gateway |
+| mesh × release × traces | PARTIAL | Canary routing rules are observable; `service.version` on spans; trace continuity requires OTel Operator CR |
+| mesh × privacy × * | PASS | mTLS config observability; baggage scrubbing; SPIFFE identity in access log |
+| mesh × slo × metrics | PASS | Envoy request rate + error rate are primary SLI sources |
 
 ---
 

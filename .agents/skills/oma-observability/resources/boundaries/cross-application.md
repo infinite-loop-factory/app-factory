@@ -279,12 +279,12 @@ These cells from `../matrix.md` are primarily driven by this file:
 
 | Layer | Boundary | Signal | Symbol | Primary artifact |
 |-------|----------|--------|--------|-----------------|
-| mesh | cross-application | traces | ✅ | W3C `traceparent` in mesh proxy; zero-code injection |
-| L7-application | cross-application | traces | ✅ | OTel SDK W3C propagation; DDD `service.namespace` grouping |
-| L7-application | cross-application | privacy | ✅ | Baggage trust-boundary filtering at API gateway |
-| L7-application | cross-application | audit | ✅ | Correlation across audit events via `trace_id` + `request_id` |
-| L3-network | cross-application | traces | ⚠️ | L3 packets carry no trace context; tagging at egress only |
-| L4-transport | cross-application | traces | ⚠️ | TCP is not trace-native; trace context begins at mesh or L7 |
+| mesh | cross-application | traces | PASS | W3C `traceparent` in mesh proxy; zero-code injection |
+| L7-application | cross-application | traces | PASS | OTel SDK W3C propagation; DDD `service.namespace` grouping |
+| L7-application | cross-application | privacy | PASS | Baggage trust-boundary filtering at API gateway |
+| L7-application | cross-application | audit | PASS | Correlation across audit events via `trace_id` + `request_id` |
+| L3-network | cross-application | traces | PARTIAL | L3 packets carry no trace context; tagging at egress only |
+| L4-transport | cross-application | traces | PARTIAL | TCP is not trace-native; trace context begins at mesh or L7 |
 
 ---
 

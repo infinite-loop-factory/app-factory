@@ -10,7 +10,7 @@
 4. **Check lessons**: read cross-domain section in `../../_shared/core/lessons-learned.md`
 5. **If governance, risk, or formal planning matters**: read `resources/iso-planning.md`
 
-**⚠️ Intelligent Escalation**: When uncertain, escalate early. Don't blindly proceed.
+**Intelligent Escalation**: When uncertain, escalate early. Don't blindly proceed.
 
 Follow these steps in order (adjust depth by difficulty).
 
@@ -44,7 +44,7 @@ Follow these steps in order (adjust depth by difficulty).
 - Minimize dependencies for maximum parallel execution
 - Priority tiers: 1 = independent (run first), 2 = depends on tier 1, etc.
 - Complexity: Low / Medium / High / Very High
-- Save to `.agents/results/plan-{sessionId}.json` and `.agents/results/current-plan.md`
+- Save to `.agents/results/plan-{sessionId}.json` and `.agents/results/result-pm.md`
 
 ## Step 4: Validate Plan
 - Check: Can each task be done independently given its dependencies?
