@@ -130,5 +130,13 @@
   "board.qubit.collapsedSnake": "붕괴된 양자 필드 — 뱀",
   "board.qubit.collapsedInterference": "붕괴된 양자 필드 — 간섭",
   "notFound.title": "존재하지 않는 칸이에요",
-  "notFound.goHome": "보드로 돌아가기"
+  "notFound.goHome": "보드로 돌아가기",
+  "inspect.cellTitle": "{cell}번 칸",
+  "inspect.odds": "사다리 {ladder}% · 뱀 {snake}%",
+  "inspect.entangled": "얽힌 쌍 — 결과가 함께 정해져요",
+  "inspect.owner.you": "내 필드",
+  "inspect.owner.cpu": "상대 필드",
+  "inspect.collapsedLadder": "사다리가 됐어요 — {cell}번 칸까지 올라가요",
+  "inspect.collapsedSnake": "뱀이 됐어요 — {cell}번 칸까지 미끄러져요",
+  "inspect.collapsedInterference": "상쇄돼 사라졌어요 — 효과 없음"
 }

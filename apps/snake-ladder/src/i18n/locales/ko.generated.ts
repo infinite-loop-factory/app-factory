@@ -202,4 +202,16 @@ export default {
     title: "존재하지 않는 칸이에요",
     goHome: "보드로 돌아가기",
   },
+  inspect: {
+    cellTitle: "{cell}번 칸",
+    odds: "사다리 {ladder}% · 뱀 {snake}%",
+    entangled: "얽힌 쌍 — 결과가 함께 정해져요",
+    owner: {
+      you: "내 필드",
+      cpu: "상대 필드",
+    },
+    collapsedLadder: "사다리가 됐어요 — {cell}번 칸까지 올라가요",
+    collapsedSnake: "뱀이 됐어요 — {cell}번 칸까지 미끄러져요",
+    collapsedInterference: "상쇄돼 사라졌어요 — 효과 없음",
+  },
 } as const;

@@ -14,6 +14,8 @@ type GoldDiceControlsProps = {
   onSelectFace: (face: number) => void;
   onToggle: () => void;
   palette: CraftPalette;
+  /** Hide the shop CTA (e.g. right after a snake bite — no setback upsells). */
+  suppressCta?: boolean;
 };
 
 /** Gold dice panel when the player owns dice, shop CTA when they ran out. */
@@ -25,6 +27,7 @@ export function GoldDiceControls({
   onSelectFace,
   onToggle,
   palette,
+  suppressCta = false,
 }: GoldDiceControlsProps) {
   if (!canRoll) return null;
 
@@ -41,7 +44,7 @@ export function GoldDiceControls({
     );
   }
 
-  if (!isNativeStorePlatform()) return null;
+  if (suppressCta || !isNativeStorePlatform()) return null;
 
   return (
     <Link asChild href="/shop">

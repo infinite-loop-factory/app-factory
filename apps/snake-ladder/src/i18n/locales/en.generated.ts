@@ -203,4 +203,16 @@ export default {
     title: "This square doesn't exist",
     goHome: "Back to the board",
   },
+  inspect: {
+    cellTitle: "Cell {cell}",
+    odds: "Ladder {ladder}% · Snake {snake}%",
+    entangled: "Linked pair — outcomes are decided together",
+    owner: {
+      you: "Yours",
+      cpu: "Opponent's",
+    },
+    collapsedLadder: "Became a ladder — climbs to cell {cell}",
+    collapsedSnake: "Became a snake — slides to cell {cell}",
+    collapsedInterference: "Cancelled out — no effect",
+  },
 } as const;

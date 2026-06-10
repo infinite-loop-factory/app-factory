@@ -130,5 +130,13 @@
   "board.qubit.collapsedSnake": "Collapsed quantum field — snake",
   "board.qubit.collapsedInterference": "Collapsed quantum field — interference",
   "notFound.title": "This square doesn't exist",
-  "notFound.goHome": "Back to the board"
+  "notFound.goHome": "Back to the board",
+  "inspect.cellTitle": "Cell {cell}",
+  "inspect.odds": "Ladder {ladder}% · Snake {snake}%",
+  "inspect.entangled": "Linked pair — outcomes are decided together",
+  "inspect.owner.you": "Yours",
+  "inspect.owner.cpu": "Opponent's",
+  "inspect.collapsedLadder": "Became a ladder — climbs to cell {cell}",
+  "inspect.collapsedSnake": "Became a snake — slides to cell {cell}",
+  "inspect.collapsedInterference": "Cancelled out — no effect"
 }

@@ -105,6 +105,8 @@ type GameBoardProps = {
   cellSize: number;
   palette: CraftPalette;
   onCellPress?: (cell: number) => void;
+  /** Long-press a cell with qubits to inspect them. */
+  onCellLongPress?: (cell: number) => void;
   selectable?: boolean;
   connections?: ReturnType<typeof getSnakeLadderConnections>;
 };
@@ -141,6 +143,7 @@ function BoardCell({
   palette,
   selectable,
   onCellPress,
+  onCellLongPress,
   connections,
 }: {
   cell: number;
@@ -149,6 +152,7 @@ function BoardCell({
   palette: CraftPalette;
   selectable: boolean;
   onCellPress?: (cell: number) => void;
+  onCellLongPress?: (cell: number) => void;
   connections: ReturnType<typeof getSnakeLadderConnections>;
 }) {
   const { col, row } = cellToVisualCoord(cell);
@@ -166,8 +170,21 @@ function BoardCell({
   return (
     <Pressable
       accessibilityRole={selectable ? "button" : "none"}
-      disabled={!(selectable && onCellPress)}
-      onPress={() => onCellPress?.(cell)}
+      delayLongPress={220}
+      disabled={
+        !((selectable && onCellPress) || (qubits.length > 0 && onCellLongPress))
+      }
+      onLongPress={() => {
+        if (qubits.length > 0) onCellLongPress?.(cell);
+      }}
+      onPress={() => {
+        if (selectable) {
+          onCellPress?.(cell);
+          return;
+        }
+        // Outside placement, tapping a qubit cell inspects it.
+        if (qubits.length > 0) onCellLongPress?.(cell);
+      }}
       style={{
         position: "absolute",
         left: col * cellSize,
@@ -244,6 +261,7 @@ export function GameBoard({
   cellSize,
   palette,
   onCellPress,
+  onCellLongPress,
   selectable = false,
 }: GameBoardProps) {
   const boardWidth = BOARD_SIZE * cellSize;
@@ -294,6 +312,7 @@ export function GameBoard({
               cellSize={cellSize}
               connections={connections}
               key={cell}
+              onCellLongPress={onCellLongPress}
               onCellPress={onCellPress}
               palette={palette}
               selectable={selectable}

@@ -4,7 +4,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { useMemoizedFn } from "ahooks";
 import { LinearGradient } from "expo-linear-gradient";
 import { Link } from "expo-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Alert,
   ImageBackground,
@@ -24,6 +24,7 @@ import { GameBoard, getBoardCellSize } from "@/components/game-board";
 import { GoldDiceControls } from "@/components/gold-dice-controls";
 import { PlayerBadge } from "@/components/player-badge";
 import { QasmLogPanel } from "@/components/qasm-log-panel";
+import { QubitInspector } from "@/components/qubit-inspector";
 import { QubitSetupBar } from "@/components/qubit-setup-bar";
 import { RollButton } from "@/components/roll-button";
 import { TurnBanner } from "@/components/turn-banner";
@@ -72,6 +73,8 @@ export default function GameScreen() {
     null,
   );
   const [throwCharge, setThrowCharge] = useState(0.5);
+  const [inspectedCell, setInspectedCell] = useState<number | null>(null);
+  const inspectTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const playerName = useMemo(
     () =>
@@ -112,6 +115,19 @@ export default function GameScreen() {
 
   const slideFx = useSlideFx(state);
   const { resetRecorded } = useGameResultRecorder(state, recordGameResult);
+
+  const onCellLongPress = useMemoizedFn((cell: number) => {
+    setInspectedCell(cell);
+    if (inspectTimerRef.current) clearTimeout(inspectTimerRef.current);
+    inspectTimerRef.current = setTimeout(() => setInspectedCell(null), 5200);
+  });
+
+  useEffect(
+    () => () => {
+      if (inspectTimerRef.current) clearTimeout(inspectTimerRef.current);
+    },
+    [],
+  );
 
   const onCellPress = useMemoizedFn((cell: number) => {
     if (state.phase !== "setup" || state.currentPlayer !== 0) return;
@@ -180,6 +196,13 @@ export default function GameScreen() {
 
   const canRoll = canRollNow(state);
   const canConfirmPass = canConfirmPassNow(state);
+
+  // Don't upsell right after a setback — reviewers flagged it as a dark pattern.
+  const setbackMoment =
+    state.message === "play.snake" ||
+    state.message === "play.overshoot" ||
+    state.message === "play.overshootDone" ||
+    state.message === "play.interference";
 
   const goldActive = goldDiceEnabled && monetization.goldDiceCount > 0;
   // The rolling die wears the roller's color: cpu red, player blue/gold.
@@ -323,6 +346,7 @@ export default function GameScreen() {
             >
               <GameBoard
                 cellSize={cellSize}
+                onCellLongPress={onCellLongPress}
                 onCellPress={onCellPress}
                 palette={palette}
                 selectable={
@@ -335,6 +359,11 @@ export default function GameScreen() {
             </WoodPanel>
             <VictoryOverlay
               visible={state.phase === "gameover" && state.positions[0] >= 100}
+            />
+            <QubitInspector
+              cell={inspectedCell}
+              palette={palette}
+              qubits={state.qubits}
             />
           </BoardFx>
         </View>
@@ -384,6 +413,7 @@ export default function GameScreen() {
           onSelectFace={setGoldDesiredFace}
           onToggle={() => setGoldDiceEnabled((v) => !v)}
           palette={palette}
+          suppressCta={setbackMoment}
         />
 
         <QasmLogPanel logs={state.logs} palette={palette} />
