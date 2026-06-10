@@ -27,14 +27,8 @@ const LOGO_EMBLEM = require("@/assets/images/art/logo-emblem.png");
 export default function HomeScreen() {
   const router = useRouter();
   const { width } = useWindowDimensions();
-  const {
-    palette,
-    settings,
-    stats,
-    loaded,
-    onboardingComplete,
-    completeOnboarding,
-  } = useAppSettings();
+  const { palette, stats, loaded, onboardingComplete, completeOnboarding } =
+    useAppSettings();
 
   const features = [
     {
@@ -287,7 +281,6 @@ export default function HomeScreen() {
                 label={i18n.t("home.play")}
                 onPress={() => router.push("/game")}
                 pulsing
-                reducedMotion={settings.reducedMotion}
                 testID="home-play-button"
               />
 

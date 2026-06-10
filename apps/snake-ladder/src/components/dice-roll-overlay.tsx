@@ -1,5 +1,4 @@
 import type { DiceVariant } from "@/components/dice/dice-variant";
-import type { CraftPalette } from "@/game/constants/palettes";
 
 import { useCallback, useEffect, useState } from "react";
 import { StyleSheet, useWindowDimensions, View } from "react-native";
@@ -9,17 +8,14 @@ import Animated, {
   withSequence,
   withTiming,
 } from "react-native-reanimated";
-import { DiceFace } from "@/components/dice/dice-face";
 import { DiceResultPop } from "@/components/dice/dice-result-pop";
 import { DiceRollGl } from "@/components/dice/dice-roll-gl";
-import { rollDie } from "@/game/lib/game-helpers";
 import { resolveDiceAnimation } from "@/lib/dice-roll-bridge";
 
 type DiceRollOverlayProps = {
   rolling: boolean;
   value: number | null;
   durationMs: number;
-  palette: CraftPalette;
   /** Glass tint — matches whoever is rolling (player blue / cpu red / gold). */
   variant?: DiceVariant;
   /** Throw power 0..1 from the roll button hold. */
@@ -28,7 +24,6 @@ type DiceRollOverlayProps = {
   forcedValue?: number | null;
   /** Bounce impact (strength 0..1) — wire haptics/sound on top of the shake. */
   onImpact?: (strength: number) => void;
-  reducedMotion?: boolean;
 };
 
 const REVEAL_HOLD_MS = 680;
@@ -37,12 +32,10 @@ export function DiceRollOverlay({
   rolling,
   value,
   durationMs,
-  palette,
   variant = "default",
   charge = 0.5,
   forcedValue = null,
   onImpact: onImpactExternal,
-  reducedMotion = false,
 }: DiceRollOverlayProps) {
   const { width, height } = useWindowDimensions();
   const [visible, setVisible] = useState(false);
@@ -91,15 +84,6 @@ export function DiceRollOverlay({
   }, [rolling]);
 
   useEffect(() => {
-    if (!(rolling && reducedMotion)) return;
-    const die = rollDie();
-    const timer = setTimeout(() => {
-      void onRollComplete(die);
-    }, 280);
-    return () => clearTimeout(timer);
-  }, [onRollComplete, reducedMotion, rolling]);
-
-  useEffect(() => {
     if (rolling) return;
     if (value !== null) setRevealedValue(value);
     if (!visible) return;
@@ -108,22 +92,6 @@ export function DiceRollOverlay({
   }, [rolling, value, visible]);
 
   if (!visible) return null;
-
-  if (reducedMotion) {
-    const face = (revealedValue ?? value ?? 1) as 1 | 2 | 3 | 4 | 5 | 6;
-    return (
-      <View pointerEvents="none" style={styles.overlay}>
-        <View style={styles.stage}>
-          <DiceFace
-            face={face}
-            palette={palette}
-            size={120}
-            variant={variant}
-          />
-        </View>
-      </View>
-    );
-  }
 
   return (
     <View pointerEvents="none" style={styles.overlay}>

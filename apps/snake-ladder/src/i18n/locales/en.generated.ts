@@ -119,7 +119,6 @@ export default {
     theme: "Theme",
     haptics: "Haptics",
     sound: "Sound effects",
-    reducedMotion: "Reduce motion",
     option: {
       slow: "Slow",
       normal: "Normal",

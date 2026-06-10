@@ -41,14 +41,12 @@ function BoardCamera({
   cellSize,
   boardWidth,
   boardHeight,
-  reducedMotion,
   children,
 }: {
   state: GameState;
   cellSize: number;
   boardWidth: number;
   boardHeight: number;
-  reducedMotion: boolean;
   children: ReactNode;
 }) {
   const zoom = useSharedValue(1);
@@ -57,7 +55,7 @@ function BoardCamera({
 
   const focusPlayer =
     state.slidingPlayer ?? (state.isMoving ? state.currentPlayer : null);
-  const active = focusPlayer !== null && !reducedMotion;
+  const active = focusPlayer !== null;
   const focusCell = focusPlayer !== null ? state.positions[focusPlayer] : 1;
 
   useEffect(() => {
@@ -108,7 +106,6 @@ type GameBoardProps = {
   palette: CraftPalette;
   onCellPress?: (cell: number) => void;
   selectable?: boolean;
-  reducedMotion?: boolean;
   connections?: ReturnType<typeof getSnakeLadderConnections>;
 };
 
@@ -248,7 +245,6 @@ export function GameBoard({
   palette,
   onCellPress,
   selectable = false,
-  reducedMotion = false,
 }: GameBoardProps) {
   const boardWidth = BOARD_SIZE * cellSize;
   const boardHeight = BOARD_SIZE * cellSize;
@@ -288,7 +284,6 @@ export function GameBoard({
         boardHeight={boardHeight}
         boardWidth={boardWidth}
         cellSize={cellSize}
-        reducedMotion={reducedMotion}
         state={state}
       >
         {Array.from({ length: TOTAL_CELLS }, (_, index) => {
@@ -316,12 +311,7 @@ export function GameBoard({
           qubits={state.qubits}
         />
 
-        <PlayerTokenLayer
-          cellSize={cellSize}
-          palette={palette}
-          reducedMotion={reducedMotion}
-          state={state}
-        />
+        <PlayerTokenLayer cellSize={cellSize} palette={palette} state={state} />
 
         {pathPoints ? (
           <Svg

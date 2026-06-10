@@ -21,7 +21,6 @@ type TurnBannerProps = {
   activePlayer: 0 | 1 | null;
   opponentName: string;
   palette: CraftPalette;
-  reducedMotion?: boolean;
 };
 
 /** Pops a "Your turn!" pill over the board whenever the turn changes. */
@@ -29,7 +28,6 @@ export function TurnBanner({
   activePlayer,
   opponentName,
   palette,
-  reducedMotion = false,
 }: TurnBannerProps) {
   const [shown, setShown] = useState<{ player: 0 | 1; key: number } | null>(
     null,
@@ -47,7 +45,7 @@ export function TurnBanner({
     progress.set(
       withSequence(
         withTiming(1, {
-          duration: reducedMotion ? 80 : 240,
+          duration: 240,
           easing: Easing.out(Easing.back(1.8)),
         }),
         withDelay(
@@ -56,12 +54,9 @@ export function TurnBanner({
         ),
       ),
     );
-    const timer = setTimeout(
-      () => setShown(null),
-      (reducedMotion ? 80 : 240) + HOLD_MS + OUT_MS + 40,
-    );
+    const timer = setTimeout(() => setShown(null), 240 + HOLD_MS + OUT_MS + 40);
     return () => clearTimeout(timer);
-  }, [activePlayer, progress, reducedMotion]);
+  }, [activePlayer, progress]);
 
   const style = useAnimatedStyle(() => {
     const t = progress.get();

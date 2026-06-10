@@ -12,7 +12,6 @@ import Animated, {
 type ConfettiBurstProps = {
   active: boolean;
   colors: string[];
-  reducedMotion?: boolean;
 };
 
 type ParticleSpec = {
@@ -60,11 +59,9 @@ function buildParticles(
 function ConfettiParticle({
   spec,
   active,
-  reducedMotion,
 }: {
   spec: ParticleSpec;
   active: boolean;
-  reducedMotion: boolean;
 }) {
   const progress = useSharedValue(0);
 
@@ -77,12 +74,12 @@ function ConfettiParticle({
       withDelay(
         spec.delay,
         withTiming(1, {
-          duration: reducedMotion ? FLIGHT_MS * 0.6 : FLIGHT_MS,
+          duration: FLIGHT_MS,
           easing: Easing.out(Easing.quad),
         }),
       ),
     );
-  }, [active, progress, reducedMotion, spec.delay]);
+  }, [active, progress, spec.delay]);
 
   const style = useAnimatedStyle(() => {
     const t = progress.get() * (FLIGHT_MS / 1000);
@@ -105,11 +102,7 @@ function ConfettiParticle({
   return <Animated.View pointerEvents="none" style={style} />;
 }
 
-export function ConfettiBurst({
-  active,
-  colors,
-  reducedMotion = false,
-}: ConfettiBurstProps) {
+export function ConfettiBurst({ active, colors }: ConfettiBurstProps) {
   const { width, height } = useWindowDimensions();
   const particles = useMemo(
     () => buildParticles(width, height, colors),
@@ -131,12 +124,7 @@ export function ConfettiBurst({
       }}
     >
       {particles.map((spec) => (
-        <ConfettiParticle
-          active={active}
-          key={spec.id}
-          reducedMotion={reducedMotion}
-          spec={spec}
-        />
+        <ConfettiParticle active={active} key={spec.id} spec={spec} />
       ))}
     </View>
   );

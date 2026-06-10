@@ -7,7 +7,6 @@ export interface AppSettings {
   diceSpeed: DiceSpeed;
   soundEnabled: boolean;
   hapticsEnabled: boolean;
-  reducedMotion: boolean;
   theme: ThemeMode;
   /** Empty = localized default ("Computer" / "컴퓨터") */
   opponentNickname: string;
@@ -20,7 +19,6 @@ export const DEFAULT_SETTINGS: AppSettings = {
   diceSpeed: "normal",
   soundEnabled: true,
   hapticsEnabled: true,
-  reducedMotion: false,
   theme: "light",
   opponentNickname: "",
   playerNickname: "",
@@ -72,35 +70,21 @@ export interface ResolvedTimings {
   ladderStepMs: number;
   snakeStepMs: number;
   diceDurationMs: number;
-  /** Cinematic roll length (>= diceDurationMs when motion is enabled). */
+  /** Cinematic roll length (>= diceDurationMs). */
   diceRollDurationMs: number;
   cpuThinkMs: number;
 }
 
-function resolveDiceDurationMs(settings: AppSettings): number {
-  return Math.round(
-    DICE_DURATION_MS[settings.diceSpeed] * (settings.reducedMotion ? 0.5 : 1),
-  );
-}
-
 export function resolveTimings(settings: AppSettings): ResolvedTimings {
-  const motionScale = settings.reducedMotion ? 0.35 : 1;
-  const diceDurationMs = resolveDiceDurationMs(settings);
-  const diceRollDurationMs = settings.reducedMotion
-    ? diceDurationMs
-    : Math.max(diceDurationMs, 920);
+  const diceDurationMs = DICE_DURATION_MS[settings.diceSpeed];
 
   return {
-    hopMs: Math.round(MOVEMENT_HOP_MS[settings.movementSpeed] * motionScale),
-    ladderStepMs: Math.round(
-      MOVEMENT_LADDER_STEP_MS[settings.movementSpeed] * motionScale,
-    ),
-    snakeStepMs: Math.round(
-      MOVEMENT_SNAKE_STEP_MS[settings.movementSpeed] * motionScale,
-    ),
+    hopMs: MOVEMENT_HOP_MS[settings.movementSpeed],
+    ladderStepMs: MOVEMENT_LADDER_STEP_MS[settings.movementSpeed],
+    snakeStepMs: MOVEMENT_SNAKE_STEP_MS[settings.movementSpeed],
     diceDurationMs,
-    diceRollDurationMs,
-    cpuThinkMs: settings.reducedMotion ? 400 : 900,
+    diceRollDurationMs: Math.max(diceDurationMs, 920),
+    cpuThinkMs: 900,
   };
 }
 

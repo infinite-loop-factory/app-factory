@@ -8,10 +8,21 @@ appId: com.infinite-loop-factory.snake-ladder
 - runFlow: ../subflows/complete-setup.yaml
 - assertVisible:
     id: game-roll-button
-- tapOn:
-    id: game-roll-button
+# Tap until the press registers — a single tap can land mid-animation.
+- repeat:
+    times: 6
+    while:
+      visible:
+        id: game-roll-button
+    commands:
+      - tapOn:
+          id: game-roll-button
+      - extendedWaitUntil:
+          notVisible:
+            id: game-roll-button
+          timeout: 3000
+          optional: true
 - extendedWaitUntil:
     notVisible:
       id: game-roll-button
     timeout: 15000
-    optional: true

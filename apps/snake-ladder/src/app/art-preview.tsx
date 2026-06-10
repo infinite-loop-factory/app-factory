@@ -120,7 +120,6 @@ export default function ArtPreviewScreen() {
         <GameBoard
           cellSize={cellSize}
           palette={palette}
-          reducedMotion
           state={SHOWCASE_STATE}
         />
         <VictoryOverlay visible />

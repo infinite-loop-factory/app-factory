@@ -81,7 +81,6 @@ type PlayerTokenProps = {
   isActive: boolean;
   lifted: boolean;
   overlapped: boolean;
-  reducedMotion: boolean;
 };
 
 function tokenTarget(
@@ -106,17 +105,15 @@ function TokenGlow({
   size,
   color,
   active,
-  reducedMotion,
 }: {
   size: number;
   color: string;
   active: boolean;
-  reducedMotion: boolean;
 }) {
   const pulse = useSharedValue(0);
 
   useEffect(() => {
-    if (!active || reducedMotion) {
+    if (!active) {
       cancelAnimation(pulse);
       pulse.set(0);
       return;
@@ -132,7 +129,7 @@ function TokenGlow({
       ),
     );
     return () => cancelAnimation(pulse);
-  }, [active, pulse, reducedMotion]);
+  }, [active, pulse]);
 
   const style = useAnimatedStyle(() => {
     const t = pulse.get();
@@ -143,22 +140,6 @@ function TokenGlow({
   });
 
   if (!active) return null;
-  if (reducedMotion) {
-    return (
-      <View
-        pointerEvents="none"
-        style={{
-          position: "absolute",
-          bottom: 0,
-          width: size,
-          height: size * 0.5,
-          borderRadius: 999,
-          borderWidth: 2,
-          borderColor: `${color}66`,
-        }}
-      />
-    );
-  }
   return (
     <Animated.View
       pointerEvents="none"
@@ -185,7 +166,6 @@ export function PlayerToken({
   isActive,
   lifted,
   overlapped,
-  reducedMotion,
 }: PlayerTokenProps) {
   // Uniform pawn size — overlap is already handled by offset + z-order.
   const size = cellSize * 0.44;
@@ -201,11 +181,6 @@ export function PlayerToken({
   const mountedRef = useRef(false);
 
   useEffect(() => {
-    if (reducedMotion) {
-      x.set(target.x);
-      y.set(target.y);
-      return;
-    }
     if (!mountedRef.current) {
       mountedRef.current = true;
       x.set(target.x);
@@ -238,26 +213,12 @@ export function PlayerToken({
         withSpring(1, LAND_SPRING),
       ),
     );
-  }, [
-    cellSize,
-    hopY,
-    reducedMotion,
-    squashX,
-    squashY,
-    target.x,
-    target.y,
-    x,
-    y,
-  ]);
+  }, [cellSize, hopY, squashX, squashY, target.x, target.y, x, y]);
 
   useEffect(() => {
     const liftTarget = lifted ? -cellSize * 0.3 : 0;
-    if (reducedMotion) {
-      liftY.set(liftTarget);
-      return;
-    }
     liftY.set(withSpring(liftTarget, LAND_SPRING));
-  }, [cellSize, lifted, liftY, reducedMotion]);
+  }, [cellSize, lifted, liftY]);
 
   const style = useAnimatedStyle(() => ({
     transform: [
@@ -294,12 +255,7 @@ export function PlayerToken({
       ]}
       testID={`player-token-${player}`}
     >
-      <TokenGlow
-        active={isActive}
-        color={color}
-        reducedMotion={reducedMotion}
-        size={size * 1.4}
-      />
+      <TokenGlow active={isActive} color={color} size={size * 1.4} />
       <Animated.View style={squashStyle}>
         <PawnPiece color={color} size={size} />
       </Animated.View>
@@ -311,14 +267,12 @@ type PlayerTokenLayerProps = {
   state: GameState;
   cellSize: number;
   palette: CraftPalette;
-  reducedMotion: boolean;
 };
 
 export function PlayerTokenLayer({
   state,
   cellSize,
   palette,
-  reducedMotion,
 }: PlayerTokenLayerProps) {
   const overlapped = state.positions[0] === state.positions[1];
   const playing = state.phase === "play" && !state.gameOver;
@@ -345,7 +299,6 @@ export function PlayerTokenLayer({
           overlapped={overlapped}
           palette={palette}
           player={player}
-          reducedMotion={reducedMotion}
         />
       ))}
     </View>

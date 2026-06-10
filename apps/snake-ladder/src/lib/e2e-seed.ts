@@ -14,7 +14,6 @@ export function e2eGoldDiceCount(): number {
 
 export const E2E_SETTINGS = {
   ...DEFAULT_SETTINGS,
-  reducedMotion: true,
   movementSpeed: "fast" as const,
   diceSpeed: "fast" as const,
 };

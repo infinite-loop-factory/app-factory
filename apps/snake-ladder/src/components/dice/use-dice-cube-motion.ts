@@ -20,7 +20,6 @@ export const DICE_SETTLE_SPRING = { damping: 14, stiffness: 110, mass: 0.72 };
 
 type DiceMotionOptions = {
   size?: number;
-  reducedMotion?: boolean;
   /** Single visible face — settle upright (no cube orientation). */
   singleFace?: boolean;
 };
@@ -40,25 +39,7 @@ function startGroundRoll(
   translateX: ReturnType<typeof useSharedValue<number>>,
   translateY: ReturnType<typeof useSharedValue<number>>,
   drift: number,
-  reducedMotion: boolean,
 ) {
-  if (reducedMotion) {
-    rotX.set(
-      withRepeat(
-        withTiming(360, { duration: 800, easing: Easing.linear }),
-        -1,
-        false,
-      ),
-    );
-    rotY.set(0);
-    rotZ.set(0);
-    scale.set(1);
-    shadowScale.set(1);
-    translateX.set(0);
-    translateY.set(0);
-    return;
-  }
-
   translateY.set(0);
   scale.set(1);
 
@@ -122,7 +103,6 @@ export function useDiceCubeMotion(
   options: DiceMotionOptions = {},
 ) {
   const size = options.size ?? 72;
-  const reducedMotion = options.reducedMotion ?? false;
   const singleFace = options.singleFace ?? false;
   const drift = size * 0.22;
 
@@ -152,7 +132,6 @@ export function useDiceCubeMotion(
         translateX,
         translateY,
         drift,
-        reducedMotion,
       );
       return;
     }
@@ -165,7 +144,7 @@ export function useDiceCubeMotion(
     cancelAnimation(translateX);
     cancelAnimation(translateY);
 
-    const extraSpins = reducedMotion ? 1 : 2;
+    const extraSpins = 2;
     translateX.set(withSpring(0, DICE_SETTLE_SPRING));
     translateY.set(
       withSequence(
@@ -213,7 +192,6 @@ export function useDiceCubeMotion(
   }, [
     drift,
     singleFace,
-    reducedMotion,
     rolling,
     rotX,
     rotY,

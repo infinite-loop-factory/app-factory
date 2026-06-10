@@ -19,7 +19,6 @@ type BoardFxProps = {
   /** Increment to fire the effect again (one slide = one tick). */
   tick: number;
   palette: CraftPalette;
-  reducedMotion?: boolean;
   children: ReactNode;
 };
 
@@ -30,19 +29,13 @@ const FLASH_MS = 480;
  * Impact dressing around the board: a decaying shake + red flash when a
  * snake bites, a soft golden-green flash when a ladder lifts.
  */
-export function BoardFx({
-  kind,
-  tick,
-  palette,
-  reducedMotion = false,
-  children,
-}: BoardFxProps) {
+export function BoardFx({ kind, tick, palette, children }: BoardFxProps) {
   const shake = useSharedValue(1);
   const flash = useSharedValue(1);
   const flashColor = kind === "snake" ? palette.snake : palette.orbGlow;
 
   useEffect(() => {
-    if (tick === 0 || kind === null || reducedMotion) return;
+    if (tick === 0 || kind === null) return;
     flash.set(0);
     flash.set(
       withTiming(1, { duration: FLASH_MS, easing: Easing.out(Easing.quad) }),
@@ -51,7 +44,7 @@ export function BoardFx({
       shake.set(0);
       shake.set(withTiming(1, { duration: SHAKE_MS, easing: Easing.linear }));
     }
-  }, [tick, kind, reducedMotion, shake, flash]);
+  }, [tick, kind, shake, flash]);
 
   const shakeStyle = useAnimatedStyle(() => {
     const p = shake.get();

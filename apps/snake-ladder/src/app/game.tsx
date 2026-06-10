@@ -188,8 +188,7 @@ export default function GameScreen() {
     return goldActive ? ("gold" as const) : ("default" as const);
   })();
 
-  const showConfetti =
-    state.gameOver && state.positions[0] >= 100 && !settings.reducedMotion;
+  const showConfetti = state.gameOver && state.positions[0] >= 100;
 
   const confettiColors = [
     palette.orbGlow,
@@ -217,17 +216,12 @@ export default function GameScreen() {
           style={StyleSheet.absoluteFill}
         />
       </ImageBackground>
-      <ConfettiBurst
-        active={showConfetti}
-        colors={confettiColors}
-        reducedMotion={settings.reducedMotion}
-      />
-      {settings.reducedMotion ? null : <DiceGlPrewarm />}
+      <ConfettiBurst active={showConfetti} colors={confettiColors} />
+      <DiceGlPrewarm />
       <TurnBanner
         activePlayer={getActiveTurnPlayer(state)}
         opponentName={opponentName}
         palette={palette}
-        reducedMotion={settings.reducedMotion}
       />
       <View className="relative flex-1">
         <DiceRollOverlay
@@ -235,8 +229,6 @@ export default function GameScreen() {
           durationMs={timings.diceRollDurationMs}
           forcedValue={pendingForcedRoll}
           onImpact={(strength) => onFeedback({ type: "dice_impact", strength })}
-          palette={palette}
-          reducedMotion={settings.reducedMotion}
           rolling={state.isRolling}
           value={state.dice}
           variant={diceVariant}
@@ -316,12 +308,7 @@ export default function GameScreen() {
         </View>
 
         <View className="items-center px-4 pb-3">
-          <BoardFx
-            kind={slideFx.kind}
-            palette={palette}
-            reducedMotion={settings.reducedMotion}
-            tick={slideFx.tick}
-          >
+          <BoardFx kind={slideFx.kind} palette={palette} tick={slideFx.tick}>
             <WoodPanel
               contentStyle={{ padding: 8 }}
               edge={6}
@@ -338,7 +325,6 @@ export default function GameScreen() {
                 cellSize={cellSize}
                 onCellPress={onCellPress}
                 palette={palette}
-                reducedMotion={settings.reducedMotion}
                 selectable={
                   state.phase === "setup" &&
                   state.currentPlayer === 0 &&
@@ -348,7 +334,6 @@ export default function GameScreen() {
               />
             </WoodPanel>
             <VictoryOverlay
-              reducedMotion={settings.reducedMotion}
               visible={state.phase === "gameover" && state.positions[0] >= 100}
             />
           </BoardFx>
@@ -432,7 +417,6 @@ export default function GameScreen() {
               <DiceDisplay
                 gold={goldActive}
                 palette={palette}
-                reducedMotion={settings.reducedMotion}
                 rolling={false}
                 value={state.dice}
               />
@@ -444,7 +428,6 @@ export default function GameScreen() {
                 label={i18n.t("game.roll")}
                 onPress={rollDice}
                 pulsing
-                reducedMotion={settings.reducedMotion}
                 testID="game-roll-button"
               />
             ) : null}
@@ -455,7 +438,6 @@ export default function GameScreen() {
                 label={i18n.t("setup.passTurn")}
                 onPress={() => confirmPass()}
                 pulsing
-                reducedMotion={settings.reducedMotion}
                 testID="setup-pass-turn"
               />
             ) : null}
@@ -466,7 +448,6 @@ export default function GameScreen() {
                 label={i18n.t("game.playAgain")}
                 onPress={() => confirmNewGame(startNewGame)}
                 pulsing
-                reducedMotion={settings.reducedMotion}
               />
             ) : null}
           </LinearGradient>

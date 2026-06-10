@@ -15,14 +15,10 @@ const TROPHY = require("@/assets/images/art/victory-trophy.png");
 type VictoryOverlayProps = {
   /** Show the trophy — player won and the game is over. */
   visible: boolean;
-  reducedMotion?: boolean;
 };
 
 /** Trophy art that springs in over the board when the player wins. */
-export function VictoryOverlay({
-  visible,
-  reducedMotion = false,
-}: VictoryOverlayProps) {
+export function VictoryOverlay({ visible }: VictoryOverlayProps) {
   const scale = useSharedValue(0);
   const float = useSharedValue(0);
 
@@ -30,10 +26,6 @@ export function VictoryOverlay({
     if (!visible) {
       scale.set(0);
       float.set(0);
-      return;
-    }
-    if (reducedMotion) {
-      scale.set(withTiming(1, { duration: 150 }));
       return;
     }
     scale.set(withSpring(1, { damping: 11, stiffness: 160, mass: 0.9 }));
@@ -47,7 +39,7 @@ export function VictoryOverlay({
         false,
       ),
     );
-  }, [visible, reducedMotion, scale, float]);
+  }, [visible, scale, float]);
 
   const style = useAnimatedStyle(() => ({
     opacity: Math.min(1, scale.get() * 1.4),

@@ -16,7 +16,6 @@ describe("e2e seed", () => {
   });
 
   it("seeds fast motion settings for shorter Maestro runs", () => {
-    expect(E2E_SETTINGS.reducedMotion).toBe(true);
     expect(E2E_SETTINGS.movementSpeed).toBe("fast");
     expect(E2E_SETTINGS.diceSpeed).toBe("fast");
   });

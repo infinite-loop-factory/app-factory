@@ -29,7 +29,6 @@ type RollButtonProps = {
   testID?: string;
   /** Gentle attention pulse while waiting for the player's input. */
   pulsing?: boolean;
-  reducedMotion?: boolean;
 };
 
 export function RollButton({
@@ -40,7 +39,6 @@ export function RollButton({
   accessibilityLabel,
   testID,
   pulsing = false,
-  reducedMotion = false,
 }: RollButtonProps) {
   const pulse = useSharedValue(1);
   const sink = useSharedValue(0);
@@ -48,7 +46,7 @@ export function RollButton({
   const pressStartRef = useRef<number | null>(null);
 
   useEffect(() => {
-    if (!pulsing || reducedMotion) {
+    if (!pulsing) {
       cancelAnimation(pulse);
       pulse.set(withTiming(1, { duration: 120 }));
       return;
@@ -67,7 +65,7 @@ export function RollButton({
       ),
     );
     return () => cancelAnimation(pulse);
-  }, [pulse, pulsing, reducedMotion]);
+  }, [pulse, pulsing]);
 
   const wrapperStyle = useAnimatedStyle(() => ({
     transform: [{ scale: pulse.get() * (1 + charge.get() * 0.12) }],
@@ -90,7 +88,6 @@ export function RollButton({
         onPress={() => onPress(currentCharge())}
         onPressIn={() => {
           pressStartRef.current = Date.now();
-          if (reducedMotion) return;
           cancelAnimation(pulse);
           pulse.set(withTiming(1, { duration: 80 }));
           sink.set(withTiming(EDGE_HEIGHT - 1, { duration: 80 }));
@@ -102,10 +99,6 @@ export function RollButton({
           );
         }}
         onPressOut={() => {
-          if (reducedMotion) {
-            charge.set(0);
-            return;
-          }
           cancelAnimation(charge);
           charge.set(withTiming(0, { duration: 140 }));
           sink.set(withSpring(0, { damping: 14, stiffness: 360 }));

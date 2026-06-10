@@ -14,7 +14,6 @@ type DiceCubeGlProps = {
   palette: CraftPalette;
   size?: number;
   variant?: DiceVariant;
-  reducedMotion?: boolean;
 };
 
 /** expo-gl + three.js die — idle settle / tumble driven by useDiceCubeMotion. */
@@ -24,12 +23,10 @@ export function DiceCubeGl({
   palette,
   size = 72,
   variant = "default",
-  reducedMotion = false,
 }: DiceCubeGlProps) {
   const canvasHeight = size + 30;
   const motion = useDiceCubeMotion(value, rolling, {
     size,
-    reducedMotion,
     singleFace: false,
   });
   const motionRef = useRef(motion);

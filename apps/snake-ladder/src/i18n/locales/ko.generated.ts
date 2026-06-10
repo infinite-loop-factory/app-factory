@@ -119,7 +119,6 @@ export default {
     theme: "테마",
     haptics: "햅틱",
     sound: "효과음",
-    reducedMotion: "동작 줄이기",
     option: {
       slow: "느림",
       normal: "보통",

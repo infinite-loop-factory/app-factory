@@ -334,11 +334,6 @@ export default function SettingsScreen() {
           onChange={(soundEnabled) => updateSettings({ soundEnabled })}
           value={settings.soundEnabled}
         />
-        <ToggleRow
-          label={i18n.t("settings.reducedMotion")}
-          onChange={(reducedMotion) => updateSettings({ reducedMotion })}
-          value={settings.reducedMotion}
-        />
       </WoodPanel>
 
       <WoodPanel contentStyle={{ padding: 16, gap: 8 }} palette={palette}>
