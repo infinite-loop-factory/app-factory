@@ -1,11 +1,9 @@
-import type { CraftPalette } from "@/game/constants/palettes";
-import type { GameState } from "@/game/types";
 import type { GameFeedbackEvent } from "@/lib/game-feedback";
 
 import { MaterialIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { Link } from "expo-router";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import {
   Alert,
   ImageBackground,
@@ -16,13 +14,14 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { BoardFx, type BoardFxKind } from "@/components/board-fx";
+import { BoardFx } from "@/components/board-fx";
 import { ConfettiBurst } from "@/components/confetti-burst";
 import { DiceGlPrewarm } from "@/components/dice/dice-gl-prewarm";
 import { DiceDisplay } from "@/components/dice-display";
 import { DiceRollOverlay } from "@/components/dice-roll-overlay";
 import { GameBoard, getBoardCellSize } from "@/components/game-board";
-import { GoldDicePanel } from "@/components/gold-dice-panel";
+import { GoldDiceControls } from "@/components/gold-dice-controls";
+import { PlayerBadge } from "@/components/player-badge";
 import { QasmLogPanel } from "@/components/qasm-log-panel";
 import { QubitSetupBar } from "@/components/qubit-setup-bar";
 import { RollButton } from "@/components/roll-button";
@@ -35,186 +34,28 @@ import { darkenColor } from "@/lib/color";
 const FELT_TEXTURE = require("@/assets/images/textures/felt-table.jpg");
 const WOOD_TEXTURE = require("@/assets/images/textures/wood-planks.jpg");
 
+import { useCpuOpponent } from "@/game/hooks/use-cpu-opponent";
 import { useGameController } from "@/game/hooks/use-game-controller";
-import { pickCpuPlacementCell } from "@/game/lib/game-helpers";
+import { useGameResultRecorder } from "@/game/hooks/use-game-result-recorder";
+import { useSlideFx } from "@/game/hooks/use-slide-fx";
+import {
+  canConfirmPassNow,
+  canRollNow,
+  getActiveTurnPlayer,
+  isGameInProgress,
+  resolveStatusMessage,
+} from "@/game/lib/game-screen-helpers";
 import { useAppSettings } from "@/hooks/use-app-settings";
 import { useMonetization } from "@/hooks/use-monetization";
 import i18n from "@/i18n";
 import { dispatchGameFeedback } from "@/lib/feedback";
 import { rollGoldDie } from "@/lib/monetization/gold-dice";
 import { showInterstitialAd } from "@/lib/monetization/interstitial-ads";
-import { isNativeStorePlatform } from "@/lib/monetization/platform";
 import { resolveDisplayName } from "@/lib/settings";
-
-function getActiveTurnPlayer(state: GameState): 0 | 1 | null {
-  if (state.phase !== "play" || state.gameOver) return null;
-  return state.currentPlayer;
-}
-
-function isGameInProgress(state: GameState): boolean {
-  return (
-    state.phase !== "gameover" &&
-    (state.phase !== "setup" ||
-      state.qubits.length > 0 ||
-      state.positions[0] > 1 ||
-      state.positions[1] > 1)
-  );
-}
-
-function GoldDiceControls({
-  canRoll,
-  goldDiceCount,
-  desiredFace,
-  enabled,
-  onSelectFace,
-  onToggle,
-  palette,
-}: {
-  canRoll: boolean;
-  goldDiceCount: number;
-  desiredFace: number;
-  enabled: boolean;
-  onSelectFace: (face: number) => void;
-  onToggle: () => void;
-  palette: CraftPalette;
-}) {
-  if (!canRoll) return null;
-
-  if (goldDiceCount > 0) {
-    return (
-      <GoldDicePanel
-        balance={goldDiceCount}
-        desiredFace={desiredFace}
-        enabled={enabled}
-        onSelectFace={onSelectFace}
-        onToggle={onToggle}
-        palette={palette}
-      />
-    );
-  }
-
-  if (!isNativeStorePlatform()) return null;
-
-  return (
-    <Link asChild href="/shop">
-      <Pressable
-        accessibilityLabel={i18n.t("game.shopCta")}
-        accessibilityRole="button"
-        className="mx-4 mb-3"
-        style={{
-          backgroundColor: palette.frameWood,
-          borderRadius: 12,
-          paddingHorizontal: 16,
-          paddingVertical: 12,
-          borderWidth: 1.5,
-          borderColor: palette.orbGlow,
-          borderBottomWidth: 4,
-          borderBottomColor: palette.frameWoodEdge,
-        }}
-      >
-        <Text
-          style={{
-            color: palette.orbGlow,
-            fontWeight: "900",
-            textAlign: "center",
-            letterSpacing: 0.5,
-          }}
-        >
-          {i18n.t("game.shopCta")}
-        </Text>
-      </Pressable>
-    </Link>
-  );
-}
-
-function resolveStatusMessage(message: string, opponentName: string): string {
-  if (!(message.startsWith("setup.") || message.startsWith("play."))) {
-    return message;
-  }
-  if (
-    message === "setup.opponentTurn" ||
-    message === "play.opponentRoll" ||
-    message === "play.opponentWin"
-  ) {
-    return i18n.t(message, { name: opponentName });
-  }
-  return i18n.t(message);
-}
-
-function PlayerBadge({
-  name,
-  color,
-  position,
-  isActive,
-  palette,
-}: {
-  name: string;
-  color: string;
-  position: number;
-  isActive: boolean;
-  palette: CraftPalette;
-}) {
-  return (
-    <WoodPanel
-      contentStyle={{
-        flexDirection: "row",
-        alignItems: "center",
-        gap: 10,
-        paddingHorizontal: 14,
-        paddingVertical: 7,
-      }}
-      edge={4}
-      palette={palette}
-      radius={14}
-      style={{
-        borderWidth: 2,
-        borderColor: isActive ? color : "transparent",
-        opacity: isActive ? 1 : 0.8,
-        elevation: isActive ? 5 : 2,
-      }}
-    >
-      <View
-        style={{
-          width: 18,
-          height: 18,
-          borderRadius: 999,
-          backgroundColor: color,
-          borderWidth: 2,
-          borderColor: palette.cream,
-        }}
-      />
-      <View>
-        <Text
-          numberOfLines={1}
-          style={{
-            color: palette.creamMuted,
-            fontSize: 11,
-            fontFamily: GAME_FONT,
-            maxWidth: 96,
-          }}
-        >
-          {name}
-        </Text>
-        <Text
-          style={{
-            color: palette.cream,
-            fontSize: 21,
-            fontFamily: GAME_FONT,
-            lineHeight: 24,
-          }}
-        >
-          {position}
-        </Text>
-      </View>
-    </WoodPanel>
-  );
-}
 
 export default function GameScreen() {
   const { width } = useWindowDimensions();
   const cellSize = useMemo(() => getBoardCellSize(width), [width]);
-  const cpuBusyRef = useRef(false);
-  const recordedGameRef = useRef(false);
 
   const { settings, timings, palette, recordGameResult } = useAppSettings();
   const {
@@ -230,11 +71,6 @@ export default function GameScreen() {
     null,
   );
   const [throwCharge, setThrowCharge] = useState(0.5);
-  const [slideFx, setSlideFx] = useState<{
-    kind: BoardFxKind | null;
-    tick: number;
-  }>({ kind: null, tick: 0 });
-  const lastSlideCellRef = useRef<number | null>(null);
 
   const playerName = useMemo(
     () =>
@@ -276,20 +112,8 @@ export default function GameScreen() {
     [opponentName, state.message],
   );
 
-  // Fire board impact FX once per snake/ladder traversal.
-  useEffect(() => {
-    const cell = state.slidingFromCell;
-    if (cell === null) {
-      lastSlideCellRef.current = null;
-      return;
-    }
-    if (lastSlideCellRef.current === cell) return;
-    lastSlideCellRef.current = cell;
-    const qubit = state.qubits.find((q) => q.cell === cell);
-    if (qubit?.collapsed !== "snake" && qubit?.collapsed !== "ladder") return;
-    const kind: BoardFxKind = qubit.collapsed;
-    setSlideFx((prev) => ({ kind, tick: prev.tick + 1 }));
-  }, [state.slidingFromCell, state.qubits]);
+  const slideFx = useSlideFx(state);
+  const { resetRecorded } = useGameResultRecorder(state, recordGameResult);
 
   const onCellPress = useCallback(
     (cell: number) => {
@@ -334,13 +158,14 @@ export default function GameScreen() {
         notifyInterstitialShown();
       }
     }
-    recordedGameRef.current = false;
+    resetRecorded();
     setGoldDiceEnabled(false);
     reset();
   }, [
     notifyInterstitialShown,
     notifyNewGameStarted,
     reset,
+    resetRecorded,
     shouldShowInterstitial,
   ]);
 
@@ -370,83 +195,20 @@ export default function GameScreen() {
     ],
   );
 
-  useEffect(() => {
-    if (state.phase !== "setup" || state.currentPlayer !== 1) return;
-    if (cpuBusyRef.current) return;
-
-    const remaining = state.setupRemaining[1];
-    if (remaining.length === 0) return;
-
-    cpuBusyRef.current = true;
-    const timer = setTimeout(() => {
-      const cell = pickCpuPlacementCell(state);
-      const picked =
-        remaining[Math.floor(Math.random() * remaining.length)] ?? remaining[0];
-      const configIndex = picked;
-      if (cell !== null && configIndex !== undefined) {
-        placeCpuQubit(cell, configIndex);
-      }
-      cpuBusyRef.current = false;
-    }, timings.cpuThinkMs);
-
-    return () => {
-      clearTimeout(timer);
-      cpuBusyRef.current = false;
-    };
-  }, [placeCpuQubit, state, timings.cpuThinkMs]);
-
-  useEffect(() => {
-    if (state.phase !== "passing" || state.currentPlayer !== 1) return;
-    const timer = setTimeout(() => confirmPass(), timings.cpuThinkMs);
-    return () => clearTimeout(timer);
-  }, [confirmPass, state.currentPlayer, state.phase, timings.cpuThinkMs]);
-
-  useEffect(() => {
-    if (state.phase !== "play" || state.currentPlayer !== 1) return;
-    if (
-      state.isRolling ||
-      state.isMoving ||
-      state.isCollapsing ||
-      state.gameOver
-    ) {
-      return;
-    }
-    const timer = setTimeout(() => {
+  useCpuOpponent({
+    state,
+    timings,
+    placeCpuQubit,
+    confirmPass,
+    handleRoll,
+    onBeforeRoll: () => {
       setPendingForcedRoll(null);
       setThrowCharge(0.3 + Math.random() * 0.55);
-      void handleRoll();
-    }, timings.cpuThinkMs);
-    return () => clearTimeout(timer);
-  }, [
-    handleRoll,
-    state.currentPlayer,
-    state.gameOver,
-    state.isCollapsing,
-    state.isMoving,
-    state.isRolling,
-    state.phase,
-    timings.cpuThinkMs,
-  ]);
+    },
+  });
 
-  useEffect(() => {
-    if (!state.gameOver) {
-      recordedGameRef.current = false;
-      return;
-    }
-    if (recordedGameRef.current) return;
-    recordedGameRef.current = true;
-    recordGameResult(state.positions[0] >= 100);
-  }, [recordGameResult, state.gameOver, state.positions]);
-
-  const canRoll =
-    state.phase === "play" &&
-    state.currentPlayer === 0 &&
-    !state.isRolling &&
-    !state.isMoving &&
-    !state.isCollapsing &&
-    !state.gameOver;
-
-  const canConfirmPass = state.phase === "passing" && state.currentPlayer === 0;
+  const canRoll = canRollNow(state);
+  const canConfirmPass = canConfirmPassNow(state);
 
   const showConfetti =
     state.gameOver && state.positions[0] >= 100 && !settings.reducedMotion;
