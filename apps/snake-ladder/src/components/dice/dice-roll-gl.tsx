@@ -32,6 +32,8 @@ type DiceRollGlProps = {
   /** Tumble window before the die is allowed to settle. */
   durationMs: number;
   variant?: DiceVariant;
+  /** Throw power 0..1 — scales launch velocity, spin, and tumble length. */
+  charge?: number;
   /** Land on this face (gold dice); otherwise a fair roll is generated. */
   forcedValue?: number | null;
   /** Fired on each floor bounce with strength 0..1 — drive screen shake. */
@@ -65,6 +67,7 @@ export function DiceRollGl({
   height,
   durationMs,
   variant = "default",
+  charge = 0.5,
   forcedValue = null,
   onImpact,
   onRollComplete,
@@ -72,7 +75,7 @@ export function DiceRollGl({
   const rafRef = useRef<number | null>(null);
   const callbacksRef = useRef({ onImpact, onRollComplete });
   callbacksRef.current = { onImpact, onRollComplete };
-  const configRef = useRef({ durationMs, variant, forcedValue });
+  const configRef = useRef({ durationMs, variant, charge, forcedValue });
 
   useEffect(
     () => () => {
@@ -85,6 +88,7 @@ export function DiceRollGl({
     const {
       durationMs: tumbleMs,
       variant: dieVariant,
+      charge: power,
       forcedValue: forced,
     } = configRef.current;
     const bufferWidth = gl.drawingBufferWidth;
@@ -159,16 +163,18 @@ export function DiceRollGl({
     const target = FACE_ROTATIONS[value];
     const targetQuat = faceQuaternion(target.rotateX, target.rotateY);
 
+    const throwPower = Math.min(1, Math.max(0, power));
+    const spinScale = 0.8 + throwPower * 0.55;
     const position = new THREE.Vector3(0, -0.2, 0);
     const velocity = new THREE.Vector3(
-      (Math.random() - 0.5) * 2.4,
-      8.2 + Math.random() * 1.6,
+      (Math.random() - 0.5) * (1.8 + throwPower * 1.4),
+      7.0 + throwPower * 2.8 + Math.random() * 0.8,
       0,
     );
     const angularVelocity = new THREE.Vector3(
-      (Math.random() > 0.5 ? 1 : -1) * (9 + Math.random() * 6),
-      (Math.random() > 0.5 ? 1 : -1) * (7 + Math.random() * 6),
-      (Math.random() - 0.5) * 6,
+      (Math.random() > 0.5 ? 1 : -1) * (9 + Math.random() * 6) * spinScale,
+      (Math.random() > 0.5 ? 1 : -1) * (7 + Math.random() * 6) * spinScale,
+      (Math.random() - 0.5) * 6 * spinScale,
     );
     const quat = new THREE.Quaternion().setFromEuler(
       new THREE.Euler(
@@ -190,7 +196,7 @@ export function DiceRollGl({
     let elapsedMs = 0;
     let lastTime: number | null = null;
     const minTumbleMs = Math.min(620, tumbleMs * 0.65);
-    const maxTumbleMs = Math.max(900, tumbleMs);
+    const maxTumbleMs = Math.max(900, tumbleMs) + throwPower * 280;
 
     const startSettle = () => {
       phase = "settle";

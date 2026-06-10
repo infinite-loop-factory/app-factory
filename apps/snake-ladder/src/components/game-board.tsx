@@ -1,7 +1,16 @@
+import type { ReactNode } from "react";
 import type { CraftPalette } from "@/game/constants/palettes";
 import type { GameState } from "@/game/types";
 
+import { useEffect } from "react";
 import { Pressable, Text, View } from "react-native";
+import Animated, {
+  Easing,
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+  withTiming,
+} from "react-native-reanimated";
 import Svg, { Polyline } from "react-native-svg";
 import {
   BoardConnections,
@@ -12,9 +21,81 @@ import { QubitMarker } from "@/components/qubit-marker";
 import {
   BOARD_SIZE,
   cellToVisualCoord,
+  clamp,
   QUBIT_CONFIGS,
   TOTAL_CELLS,
 } from "@/game/constants/board";
+
+const CAMERA_ZOOM = 1.4;
+const CAMERA_EASE = { duration: 420, easing: Easing.out(Easing.cubic) };
+const CAMERA_SPRING = { damping: 26, stiffness: 160 } as const;
+
+/** Zooms toward the moving token while a hop or slide resolves. */
+function BoardCamera({
+  state,
+  cellSize,
+  boardWidth,
+  boardHeight,
+  reducedMotion,
+  children,
+}: {
+  state: GameState;
+  cellSize: number;
+  boardWidth: number;
+  boardHeight: number;
+  reducedMotion: boolean;
+  children: ReactNode;
+}) {
+  const zoom = useSharedValue(1);
+  const tx = useSharedValue(0);
+  const ty = useSharedValue(0);
+
+  const focusPlayer =
+    state.slidingPlayer ?? (state.isMoving ? state.currentPlayer : null);
+  const active = focusPlayer !== null && !reducedMotion;
+  const focusCell = focusPlayer !== null ? state.positions[focusPlayer] : 1;
+
+  useEffect(() => {
+    if (!active) {
+      zoom.set(withTiming(1, CAMERA_EASE));
+      tx.set(withTiming(0, CAMERA_EASE));
+      ty.set(withTiming(0, CAMERA_EASE));
+      return;
+    }
+    const { col, row } = cellToVisualCoord(focusCell);
+    const fx = col * cellSize + cellSize / 2;
+    const fy = row * cellSize + cellSize / 2;
+    const maxTx = ((CAMERA_ZOOM - 1) * boardWidth) / 2;
+    const maxTy = ((CAMERA_ZOOM - 1) * boardHeight) / 2;
+    zoom.set(withTiming(CAMERA_ZOOM, CAMERA_EASE));
+    tx.set(
+      withSpring(
+        clamp((boardWidth / 2 - fx) * CAMERA_ZOOM, -maxTx, maxTx),
+        CAMERA_SPRING,
+      ),
+    );
+    ty.set(
+      withSpring(
+        clamp((boardHeight / 2 - fy) * CAMERA_ZOOM, -maxTy, maxTy),
+        CAMERA_SPRING,
+      ),
+    );
+  }, [active, boardHeight, boardWidth, cellSize, focusCell, tx, ty, zoom]);
+
+  const style = useAnimatedStyle(() => ({
+    transform: [
+      { translateX: tx.get() },
+      { translateY: ty.get() },
+      { scale: zoom.get() },
+    ],
+  }));
+
+  return (
+    <Animated.View style={[{ width: boardWidth, height: boardHeight }, style]}>
+      {children}
+    </Animated.View>
+  );
+}
 
 type GameBoardProps = {
   state: GameState;
@@ -159,55 +240,63 @@ export function GameBoard({
         backgroundColor: palette.background,
       }}
     >
-      {Array.from({ length: TOTAL_CELLS }, (_, index) => {
-        const cell = TOTAL_CELLS - index;
-        return (
-          <BoardCell
-            cell={cell}
-            cellSize={cellSize}
-            connections={connections}
-            key={cell}
-            onCellPress={onCellPress}
-            palette={palette}
-            selectable={selectable}
-            state={state}
-          />
-        );
-      })}
-
-      <BoardConnections
-        activeFromCell={state.slidingFromCell}
+      <BoardCamera
         boardHeight={boardHeight}
         boardWidth={boardWidth}
         cellSize={cellSize}
-        palette={palette}
-        qubits={state.qubits}
-      />
-
-      <PlayerTokenLayer
-        cellSize={cellSize}
-        palette={palette}
         reducedMotion={reducedMotion}
         state={state}
-      />
+      >
+        {Array.from({ length: TOTAL_CELLS }, (_, index) => {
+          const cell = TOTAL_CELLS - index;
+          return (
+            <BoardCell
+              cell={cell}
+              cellSize={cellSize}
+              connections={connections}
+              key={cell}
+              onCellPress={onCellPress}
+              palette={palette}
+              selectable={selectable}
+              state={state}
+            />
+          );
+        })}
 
-      {pathPoints ? (
-        <Svg
-          height={boardHeight}
-          pointerEvents="none"
-          style={{ position: "absolute", top: 0, left: 0 }}
-          width={boardWidth}
-        >
-          <Polyline
-            fill="none"
-            opacity={0.85}
-            points={pathPoints}
-            stroke={palette.orbGlow}
-            strokeDasharray="4 4"
-            strokeWidth={2}
-          />
-        </Svg>
-      ) : null}
+        <BoardConnections
+          activeFromCell={state.slidingFromCell}
+          boardHeight={boardHeight}
+          boardWidth={boardWidth}
+          cellSize={cellSize}
+          palette={palette}
+          qubits={state.qubits}
+        />
+
+        <PlayerTokenLayer
+          cellSize={cellSize}
+          palette={palette}
+          reducedMotion={reducedMotion}
+          state={state}
+        />
+
+        {pathPoints ? (
+          <Svg
+            height={boardHeight}
+            pointerEvents="none"
+            style={{ position: "absolute", top: 0, left: 0 }}
+            width={boardWidth}
+          >
+            <Polyline
+              fill="none"
+              opacity={0.85}
+              points={pathPoints}
+              stroke={palette.orbGlow}
+              strokeDasharray="4 4"
+              strokeWidth={2}
+            />
+          </Svg>
+        ) : null}
+      </BoardCamera>
     </View>
   );
 }

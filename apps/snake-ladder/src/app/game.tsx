@@ -14,6 +14,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ConfettiBurst } from "@/components/confetti-burst";
+import { DiceGlPrewarm } from "@/components/dice/dice-gl-prewarm";
 import { DiceDisplay } from "@/components/dice-display";
 import { DiceRollOverlay } from "@/components/dice-roll-overlay";
 import { GameBoard, getBoardCellSize } from "@/components/game-board";
@@ -181,6 +182,7 @@ export default function GameScreen() {
   const [pendingForcedRoll, setPendingForcedRoll] = useState<number | null>(
     null,
   );
+  const [throwCharge, setThrowCharge] = useState(0.5);
 
   const playerName = useMemo(
     () =>
@@ -279,23 +281,27 @@ export default function GameScreen() {
     void beginNewGame();
   }, [beginNewGame]);
 
-  const rollDice = useCallback(() => {
-    if (goldDiceEnabled && monetization.goldDiceCount > 0) {
-      if (!consumeGoldDice(1)) return;
-      const forced = rollGoldDie(goldDesiredFace);
-      setPendingForcedRoll(forced);
-      void handleRoll(forced);
-      return;
-    }
-    setPendingForcedRoll(null);
-    void handleRoll();
-  }, [
-    consumeGoldDice,
-    goldDesiredFace,
-    goldDiceEnabled,
-    handleRoll,
-    monetization.goldDiceCount,
-  ]);
+  const rollDice = useCallback(
+    (charge: number) => {
+      setThrowCharge(charge);
+      if (goldDiceEnabled && monetization.goldDiceCount > 0) {
+        if (!consumeGoldDice(1)) return;
+        const forced = rollGoldDie(goldDesiredFace);
+        setPendingForcedRoll(forced);
+        void handleRoll(forced);
+        return;
+      }
+      setPendingForcedRoll(null);
+      void handleRoll();
+    },
+    [
+      consumeGoldDice,
+      goldDesiredFace,
+      goldDiceEnabled,
+      handleRoll,
+      monetization.goldDiceCount,
+    ],
+  );
 
   useEffect(() => {
     if (state.phase !== "setup" || state.currentPlayer !== 1) return;
@@ -340,6 +346,7 @@ export default function GameScreen() {
     }
     const timer = setTimeout(() => {
       setPendingForcedRoll(null);
+      setThrowCharge(0.3 + Math.random() * 0.55);
       void handleRoll();
     }, timings.cpuThinkMs);
     return () => clearTimeout(timer);
@@ -394,8 +401,10 @@ export default function GameScreen() {
         colors={confettiColors}
         reducedMotion={settings.reducedMotion}
       />
+      {settings.reducedMotion ? null : <DiceGlPrewarm />}
       <View className="relative flex-1">
         <DiceRollOverlay
+          charge={throwCharge}
           durationMs={timings.diceRollDurationMs}
           forcedValue={pendingForcedRoll}
           gold={goldDiceEnabled && monetization.goldDiceCount > 0}

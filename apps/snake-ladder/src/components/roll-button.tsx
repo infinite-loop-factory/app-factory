@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { Pressable, Text } from "react-native";
 import Animated, {
   cancelAnimation,
@@ -13,9 +13,13 @@ import Animated, {
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
+/** Hold this long for a full-power throw. */
+export const FULL_CHARGE_MS = 900;
+
 type RollButtonProps = {
   label: string;
-  onPress: () => void;
+  /** Receives hold charge 0..1 — quick taps roll at low power. */
+  onPress: (charge: number) => void;
   backgroundColor: string;
   accessibilityLabel: string;
   testID?: string;
@@ -35,6 +39,8 @@ export function RollButton({
 }: RollButtonProps) {
   const pulse = useSharedValue(1);
   const press = useSharedValue(1);
+  const charge = useSharedValue(0);
+  const pressStartRef = useRef<number | null>(null);
 
   useEffect(() => {
     if (!pulsing || reducedMotion) {
@@ -59,22 +65,44 @@ export function RollButton({
   }, [pulse, pulsing, reducedMotion]);
 
   const style = useAnimatedStyle(() => ({
-    transform: [{ scale: pulse.get() * press.get() }],
+    transform: [
+      { scale: pulse.get() * press.get() * (1 + charge.get() * 0.16) },
+    ],
   }));
+
+  const currentCharge = () => {
+    if (pressStartRef.current === null) return 0;
+    return Math.min(1, (Date.now() - pressStartRef.current) / FULL_CHARGE_MS);
+  };
 
   return (
     <AnimatedPressable
       accessibilityLabel={accessibilityLabel}
       accessibilityRole="button"
       className="rounded-2xl px-6 py-4"
-      onPress={onPress}
+      onPress={() => onPress(currentCharge())}
       onPressIn={() => {
-        press.set(reducedMotion ? 1 : withTiming(0.93, { duration: 90 }));
+        pressStartRef.current = Date.now();
+        if (reducedMotion) return;
+        cancelAnimation(pulse);
+        pulse.set(withTiming(1, { duration: 80 }));
+        press.set(withTiming(0.95, { duration: 80 }));
+        charge.set(
+          withTiming(1, {
+            duration: FULL_CHARGE_MS,
+            easing: Easing.out(Easing.quad),
+          }),
+        );
       }}
       onPressOut={() => {
-        press.set(
-          reducedMotion ? 1 : withSpring(1, { damping: 14, stiffness: 320 }),
-        );
+        if (reducedMotion) {
+          press.set(1);
+          charge.set(0);
+          return;
+        }
+        cancelAnimation(charge);
+        charge.set(withTiming(0, { duration: 140 }));
+        press.set(withSpring(1, { damping: 14, stiffness: 320 }));
       }}
       style={[{ backgroundColor }, style]}
       testID={testID}

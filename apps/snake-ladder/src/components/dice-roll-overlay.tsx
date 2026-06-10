@@ -20,6 +20,8 @@ type DiceRollOverlayProps = {
   durationMs: number;
   palette: CraftPalette;
   gold?: boolean;
+  /** Throw power 0..1 from the roll button hold. */
+  charge?: number;
   /** Land the animation on this face (gold dice pre-rolled result). */
   forcedValue?: number | null;
   /** Bounce impact (strength 0..1) — wire haptics/sound on top of the shake. */
@@ -35,6 +37,7 @@ export function DiceRollOverlay({
   durationMs,
   palette,
   gold = false,
+  charge = 0.5,
   forcedValue = null,
   onImpact: onImpactExternal,
   reducedMotion = false,
@@ -125,6 +128,7 @@ export function DiceRollOverlay({
       <View style={styles.scrim} />
       <Animated.View style={[styles.stage, shakeStyle]}>
         <DiceRollGl
+          charge={charge}
           durationMs={durationMs}
           forcedValue={forcedValue}
           height={height * 0.62}
