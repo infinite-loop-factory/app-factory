@@ -284,6 +284,35 @@ export default function HomeScreen() {
                 testID="home-play-button"
               />
 
+              <Pressable
+                accessibilityLabel={i18n.t("home.daily")}
+                accessibilityRole="button"
+                onPress={() => router.push("/game?mode=daily")}
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: 8,
+                  borderRadius: 999,
+                  borderWidth: 1.5,
+                  borderColor: `${palette.orbGlow}aa`,
+                  backgroundColor: "rgba(0,0,0,0.22)",
+                  paddingHorizontal: 18,
+                  paddingVertical: 10,
+                }}
+                testID="home-daily-button"
+              >
+                <MaterialIcons color={palette.orbGlow} name="event" size={18} />
+                <Text
+                  style={{
+                    color: palette.cream,
+                    fontFamily: GAME_FONT,
+                    fontSize: 15,
+                  }}
+                >
+                  {i18n.t("home.daily")}
+                </Text>
+              </Pressable>
+
               <Text
                 style={{
                   color: `${palette.creamMuted}cc`,

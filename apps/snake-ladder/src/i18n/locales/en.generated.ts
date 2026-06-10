@@ -3,7 +3,7 @@ export default {
   home: {
     title: "Snake & Ladder",
     subtitle:
-      "Quantum board game vs the computer. Place qubits, roll superposition dice, tunnel through rivals.",
+      "Snakes and ladders where every snake and ladder is rolled into being by a real quantum coin. Place your chance orbs and outsmart the computer.",
     play: "New Game",
     offline: "All quantum circuits run locally — no network required.",
     statsSummary: "{played} games · {rate}% win rate",
@@ -25,6 +25,7 @@ export default {
         body: "Land on the same cell as your opponent? Path-dependent interference may let you pass through.",
       },
     },
+    daily: "Daily Board",
   },
   game: {
     title: "Snake & Ladder",
@@ -45,14 +46,15 @@ export default {
     shopCta: "Get gold dice in the shop",
     log: {
       qasmTap: "Tap for circuit diagram",
+      title: "Quantum log",
     },
   },
   setup: {
-    pickQubit: "Pick a qubit, then tap a cell (6–95)",
+    pickQubit: "Pick a chance orb, then tap a cell (6–95)",
     entangledBadge: "⧗ entangled",
     passTurn: "Continue",
-    humanTurn: "Place your qubits on the board",
-    opponentTurn: "{name} is placing qubits…",
+    humanTurn: "Place your chance orbs on the board",
+    opponentTurn: "{name} is placing orbs…",
     confirmPass: "Tap Continue when ready",
     interference: "Interference! Your qubit cancelled the opponent's.",
   },
@@ -79,7 +81,7 @@ export default {
     subtitle: "Quantum Snakes & Ladders vs the computer — all on device.",
     step1: {
       title: "Place qubits",
-      body: "During setup, pick qubit types and tap cells 6–95 on the board.",
+      body: "During setup, pick chance orbs and tap cells 6–95 on the board. Green ring = ladder odds, red = snake.",
     },
     step2: {
       title: "Entangle & interfere",
@@ -214,5 +216,15 @@ export default {
     collapsedLadder: "Became a ladder — climbs to cell {cell}",
     collapsedSnake: "Became a snake — slides to cell {cell}",
     collapsedInterference: "Cancelled out — no effect",
+  },
+  daily: {
+    badge: "Daily #{num}",
+  },
+  share: {
+    button: "Share result",
+    header: "Quantum Snake & Ladder — Daily #{num}",
+    headerFree: "Quantum Snake & Ladder",
+    win: "Won in {count} rolls 🏆",
+    lose: "Lost after {count} rolls 🐍",
   },
 } as const;

@@ -3,12 +3,13 @@ import type { GameFeedbackEvent } from "@/lib/game-feedback";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useMemoizedFn } from "ahooks";
 import { LinearGradient } from "expo-linear-gradient";
-import { Link } from "expo-router";
+import { Link, useLocalSearchParams } from "expo-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Alert,
   ImageBackground,
   Pressable,
+  Share,
   StyleSheet,
   Text,
   useWindowDimensions,
@@ -41,10 +42,16 @@ import { useGameController } from "@/game/hooks/use-game-controller";
 import { useGameResultRecorder } from "@/game/hooks/use-game-result-recorder";
 import { useSlideFx } from "@/game/hooks/use-slide-fx";
 import {
+  generateDailyPlacements,
+  getDailyNumber,
+  getDailySeed,
+} from "@/game/lib/daily";
+import {
   canConfirmPassNow,
   canRollNow,
   getActiveTurnPlayer,
   isGameInProgress,
+  isSetbackMessage,
   resolveStatusMessage,
 } from "@/game/lib/game-screen-helpers";
 import { useAppSettings } from "@/hooks/use-app-settings";
@@ -75,6 +82,10 @@ export default function GameScreen() {
   const [throwCharge, setThrowCharge] = useState(0.5);
   const [inspectedCell, setInspectedCell] = useState<number | null>(null);
   const inspectTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const { mode } = useLocalSearchParams<{ mode?: string }>();
+  const isDaily = mode === "daily";
+  const rollCountRef = useRef(0);
+  const journeyRef = useRef<string[]>([]);
 
   const playerName = useMemo(
     () =>
@@ -92,6 +103,7 @@ export default function GameScreen() {
   );
 
   const onFeedback = useMemoizedFn((event: GameFeedbackEvent) => {
+    if (event.type === "tunnel") journeyRef.current.push("⚡");
     dispatchGameFeedback(event, {
       hapticsEnabled: settings.hapticsEnabled,
       soundEnabled: settings.soundEnabled,
@@ -106,6 +118,7 @@ export default function GameScreen() {
     confirmPass,
     handleRoll,
     reset,
+    startPresetGame,
   } = useGameController({ timings, onFeedback });
 
   const msg = useMemo(
@@ -115,6 +128,18 @@ export default function GameScreen() {
 
   const slideFx = useSlideFx(state);
   const { resetRecorded } = useGameResultRecorder(state, recordGameResult);
+
+  useEffect(() => {
+    if (!isDaily) return;
+    rollCountRef.current = 0;
+    journeyRef.current = [];
+    startPresetGame(generateDailyPlacements(getDailySeed(new Date())));
+  }, [isDaily, startPresetGame]);
+
+  useEffect(() => {
+    if (slideFx.tick === 0 || slideFx.kind === null) return;
+    journeyRef.current.push(slideFx.kind === "ladder" ? "🪜" : "🐍");
+  }, [slideFx]);
 
   const onCellLongPress = useMemoizedFn((cell: number) => {
     setInspectedCell(cell);
@@ -162,6 +187,12 @@ export default function GameScreen() {
     }
     resetRecorded();
     setGoldDiceEnabled(false);
+    rollCountRef.current = 0;
+    journeyRef.current = [];
+    if (isDaily) {
+      startPresetGame(generateDailyPlacements(getDailySeed(new Date())));
+      return;
+    }
     reset();
   });
 
@@ -170,6 +201,7 @@ export default function GameScreen() {
   });
 
   const rollDice = useMemoizedFn((charge: number) => {
+    rollCountRef.current += 1;
     setThrowCharge(charge);
     if (goldDiceEnabled && monetization.goldDiceCount > 0) {
       if (!consumeGoldDice(1)) return;
@@ -180,6 +212,20 @@ export default function GameScreen() {
     }
     setPendingForcedRoll(null);
     void handleRoll();
+  });
+
+  const shareResult = useMemoizedFn(() => {
+    const won = state.positions[0] >= 100;
+    const header = isDaily
+      ? i18n.t("share.header", { num: getDailyNumber(new Date()) })
+      : i18n.t("share.headerFree");
+    const result = i18n.t(won ? "share.win" : "share.lose", {
+      count: rollCountRef.current,
+    });
+    const journey = journeyRef.current.slice(0, 14).join("");
+    void Share.share({
+      message: [header, result, journey].filter(Boolean).join("\n"),
+    });
   });
 
   useCpuOpponent({
@@ -198,11 +244,7 @@ export default function GameScreen() {
   const canConfirmPass = canConfirmPassNow(state);
 
   // Don't upsell right after a setback — reviewers flagged it as a dark pattern.
-  const setbackMoment =
-    state.message === "play.snake" ||
-    state.message === "play.overshoot" ||
-    state.message === "play.overshootDone" ||
-    state.message === "play.interference";
+  const setbackMoment = isSetbackMessage(state.message);
 
   const goldActive = goldDiceEnabled && monetization.goldDiceCount > 0;
   // The rolling die wears the roller's color: cpu red, player blue/gold.
@@ -286,7 +328,9 @@ export default function GameScreen() {
               textShadowRadius: 2,
             }}
           >
-            {i18n.t("game.title")}
+            {isDaily
+              ? i18n.t("daily.badge", { num: getDailyNumber(new Date()) })
+              : i18n.t("game.title")}
           </Text>
           <Pressable
             accessibilityLabel={i18n.t("game.restart")}
@@ -472,13 +516,35 @@ export default function GameScreen() {
               />
             ) : null}
             {state.phase === "gameover" ? (
-              <RollButton
-                accessibilityLabel={i18n.t("game.playAgain")}
-                backgroundColor={palette.orbGlow}
-                label={i18n.t("game.playAgain")}
-                onPress={() => confirmNewGame(startNewGame)}
-                pulsing
-              />
+              <View
+                style={{ flexDirection: "row", alignItems: "center", gap: 10 }}
+              >
+                <Pressable
+                  accessibilityLabel={i18n.t("share.button")}
+                  accessibilityRole="button"
+                  onPress={shareResult}
+                  style={{
+                    width: 46,
+                    height: 46,
+                    borderRadius: 999,
+                    alignItems: "center",
+                    justifyContent: "center",
+                    backgroundColor: palette.playerYou,
+                    borderTopWidth: 1.5,
+                    borderTopColor: "rgba(255,255,255,0.35)",
+                  }}
+                  testID="game-share-button"
+                >
+                  <MaterialIcons color="#fff" name="ios-share" size={22} />
+                </Pressable>
+                <RollButton
+                  accessibilityLabel={i18n.t("game.playAgain")}
+                  backgroundColor={palette.orbGlow}
+                  label={i18n.t("game.playAgain")}
+                  onPress={() => confirmNewGame(startNewGame)}
+                  pulsing
+                />
+              </View>
             ) : null}
           </LinearGradient>
         </ImageBackground>

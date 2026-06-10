@@ -5,6 +5,7 @@
  * biome-ignore-all lint/suspicious/noNonNullAssertedOptionalChain: measurement rows
  */
 
+import type { DailyPlacement } from "@/game/lib/daily";
 import type {
   CollapseParams,
   GamePhase,
@@ -34,6 +35,8 @@ import {
   computeDisplacement,
   createInitialState,
   INITIAL_SETUP,
+  linkEntangledQubits,
+  nextQubitId,
   resetQubitIdCounter,
   rollDie,
   sleep,
@@ -482,6 +485,31 @@ export function useGameController(options: GameControllerOptions = {}) {
     });
   }, []);
 
+  /** Skip setup and jump straight to play with a fixed layout (daily board). */
+  const startPresetGame = useCallback((placements: DailyPlacement[]) => {
+    resetQubitIdCounter();
+    logsRef.current = [];
+    collapsingRef.current = false;
+    const qubits = linkEntangledQubits(
+      placements.map((p) => ({
+        id: nextQubitId(),
+        cell: p.cell,
+        owner: p.owner,
+        configIndex: p.configIndex,
+        collapsed: null,
+      })),
+    );
+    setState({
+      ...createInitialState(),
+      qubits,
+      setupRemaining: [[], []],
+      phase: "play" as GamePhase,
+      message: "play.humanRoll",
+      logs: [],
+      paths: [[1], [1]],
+    });
+  }, []);
+
   return {
     state,
     selectQubit,
@@ -490,5 +518,6 @@ export function useGameController(options: GameControllerOptions = {}) {
     confirmPass,
     handleRoll,
     reset,
+    startPresetGame,
   };
 }

@@ -3,7 +3,7 @@ export default {
   home: {
     title: "Snake & Ladder",
     subtitle:
-      "컴퓨터와 대결하는 양자 보드게임. 큐비트를 배치하고, 중첩 주사위를 굴리며, 터널링으로 상대를 통과하세요.",
+      "뱀과 사다리가 매판 진짜 양자 동전으로 만들어지는 보드게임. 확률 구슬을 놓고 컴퓨터를 이겨보세요.",
     play: "새 게임",
     offline: "모든 양자 연산은 기기 내 로컬에서 실행됩니다 — 네트워크 불필요.",
     statsSummary: "{played}판 · 승률 {rate}%",
@@ -25,6 +25,7 @@ export default {
         body: "상대와 같은 칸? 경로에 따라 간섭으로 통과할 수 있습니다.",
       },
     },
+    daily: "오늘의 보드",
   },
   game: {
     title: "Snake & Ladder",
@@ -45,14 +46,15 @@ export default {
     shopCta: "상점에서 골드 주사위 구매",
     log: {
       qasmTap: "탭하면 회로도 보기",
+      title: "양자 기록",
     },
   },
   setup: {
-    pickQubit: "큐비트를 고른 뒤 칸(6–95)을 탭하세요",
+    pickQubit: "확률 구슬을 고른 뒤 칸(6–95)을 탭하세요",
     entangledBadge: "⧗ 얽힘",
     passTurn: "계속",
-    humanTurn: "보드에 큐비트를 배치하세요",
-    opponentTurn: "{name}이(가) 큐비트를 배치 중…",
+    humanTurn: "확률 구슬을 보드에 놓아주세요",
+    opponentTurn: "{name}이(가) 구슬을 놓는 중…",
     confirmPass: "준비되면 계속을 누르세요",
     interference: "간섭! 상대 큐비트가 상쇄되었습니다.",
   },
@@ -79,7 +81,7 @@ export default {
     subtitle: "컴퓨터와 대결하는 양자 뱀·사다리 — 기기 안에서만 실행됩니다.",
     step1: {
       title: "큐비트 배치",
-      body: "셋업 단계에서 큐비트 종류를 고른 뒤 보드 6–95번 칸을 탭하세요.",
+      body: "셋업 단계에서 확률 구슬을 골라 보드 6–95번 칸에 놓으세요. 초록 링은 사다리, 빨간 링은 뱀 확률이에요.",
     },
     step2: {
       title: "얽힘·간섭",
@@ -213,5 +215,15 @@ export default {
     collapsedLadder: "사다리가 됐어요 — {cell}번 칸까지 올라가요",
     collapsedSnake: "뱀이 됐어요 — {cell}번 칸까지 미끄러져요",
     collapsedInterference: "상쇄돼 사라졌어요 — 효과 없음",
+  },
+  daily: {
+    badge: "오늘의 보드 #{num}",
+  },
+  share: {
+    button: "결과 공유",
+    header: "양자 뱀사다리 — 오늘의 보드 #{num}",
+    headerFree: "양자 뱀사다리",
+    win: "{count}번 굴려서 승리 🏆",
+    lose: "{count}번 굴리고 패배 🐍",
   },
 } as const;

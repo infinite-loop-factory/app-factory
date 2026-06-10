@@ -32,6 +32,19 @@ export function canConfirmPassNow(state: GameState): boolean {
   return state.phase === "passing" && state.currentPlayer === 0;
 }
 
+/**
+ * True right after a bad beat (snake / overshoot / interference).
+ * Used to suppress shop upsells — never monetize frustration.
+ */
+export function isSetbackMessage(message: string): boolean {
+  return (
+    message === "play.snake" ||
+    message === "play.overshoot" ||
+    message === "play.overshootDone" ||
+    message === "play.interference"
+  );
+}
+
 export function resolveStatusMessage(
   message: string,
   opponentName: string,
