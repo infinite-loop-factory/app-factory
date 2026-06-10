@@ -1,0 +1,17 @@
+appId: com.infinite-loop-factory.snake-ladder
+---
+- launchApp:
+    clearState: true
+- runFlow: ../subflows/connect-metro.yaml
+- runFlow: ../subflows/dismiss-onboarding.yaml
+- runFlow: ../subflows/start-game.yaml
+- runFlow: ../subflows/complete-setup.yaml
+- assertVisible:
+    id: game-roll-button
+- tapOn:
+    id: game-roll-button
+- extendedWaitUntil:
+    notVisible:
+      id: game-roll-button
+    timeout: 15000
+    optional: true

@@ -1,0 +1,36 @@
+{
+  "bundleIds": {
+    "ios": "com.infinite-loop-factory.snake-ladder",
+    "android": "com.infiniteloopfactory.snakeladder"
+  },
+  "products": [
+    {
+      "id": "snake_ladder_gold_10",
+      "type": "consumable",
+      "name": "Gold Dice x10",
+      "priceKRW": 1500,
+      "grantGoldDice": 10
+    },
+    {
+      "id": "snake_ladder_gold_30",
+      "type": "consumable",
+      "name": "Gold Dice x30",
+      "priceKRW": 3300,
+      "grantGoldDice": 30
+    },
+    {
+      "id": "snake_ladder_gold_100",
+      "type": "consumable",
+      "name": "Gold Dice x100",
+      "priceKRW": 9900,
+      "grantGoldDice": 100
+    },
+    {
+      "id": "snake_ladder_ad_removal",
+      "type": "nonConsumable",
+      "name": "Ad Removal",
+      "priceKRW": 9900
+    }
+  ],
+  "notes": "Register matching SKUs in App Store Connect and Google Play Console. IDs must match src/lib/monetization/constants.ts."
+}

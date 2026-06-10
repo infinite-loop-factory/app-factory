@@ -1,0 +1,30 @@
+appId: com.infinite-loop-factory.snake-ladder
+---
+- openLink: exp+snake-ladder://expo-development-client/?url=http%3A%2F%2F127.0.0.1%3A8081
+- runFlow:
+    file: dismiss-att.yaml
+    optional: true
+- runFlow:
+    when:
+      visible: "Open"
+    optional: true
+    commands:
+      - tapOn: "Open"
+- extendedWaitUntil:
+    notVisible:
+      id: boot-screen
+    timeout: 60000
+    optional: true
+- extendedWaitUntil:
+    visible: "Snake & Ladder"
+    timeout: 120000
+- scrollUntilVisible:
+    element:
+      id: home-play-button
+    direction: DOWN
+    timeout: 90000
+    optional: true
+- extendedWaitUntil:
+    visible:
+      id: home-play-button
+    timeout: 90000

@@ -1,0 +1,9 @@
+appId: com.infinite-loop-factory.snake-ladder
+---
+# Optional taps avoid `when: visible` XCTest flakes (kAXErrorInvalidUIElement).
+- tapOn:
+    text: "Ask App Not to Track"
+    optional: true
+- tapOn:
+    text: "추적하지 않음"
+    optional: true

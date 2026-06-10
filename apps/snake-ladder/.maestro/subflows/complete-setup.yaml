@@ -1,0 +1,38 @@
+appId: com.infinite-loop-factory.snake-ladder
+---
+# Place all 5 qubits on distinct valid cells (6–95)
+- tapOn:
+    id: qubit-config-0
+- tapOn:
+    id: board-cell-10
+- extendedWaitUntil:
+    visible:
+      id: qubit-marker-cell-10
+    timeout: 15000
+- tapOn:
+    id: qubit-config-1
+- tapOn:
+    id: board-cell-20
+- tapOn:
+    id: qubit-config-2
+- tapOn:
+    id: board-cell-30
+- tapOn:
+    id: qubit-config-3
+- tapOn:
+    id: board-cell-40
+- tapOn:
+    id: qubit-config-4
+- tapOn:
+    id: board-cell-50
+# Wait for CPU setup + passing handoff back to human
+- extendedWaitUntil:
+    visible:
+      id: setup-pass-turn
+    timeout: 90000
+- tapOn:
+    id: setup-pass-turn
+- extendedWaitUntil:
+    visible:
+      id: game-roll-button
+    timeout: 90000

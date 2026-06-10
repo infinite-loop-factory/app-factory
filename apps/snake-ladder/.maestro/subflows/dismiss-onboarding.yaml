@@ -1,0 +1,9 @@
+appId: com.infinite-loop-factory.snake-ladder
+---
+- runFlow:
+    when:
+      visible:
+        id: onboarding-start-button
+    commands:
+      - tapOn:
+          id: onboarding-start-button

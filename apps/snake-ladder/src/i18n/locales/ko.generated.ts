@@ -1,0 +1,198 @@
+// Generated from ko.json — edit JSON then run: pnpm i18n:build
+export default {
+  home: {
+    title: "Snake & Ladder",
+    subtitle:
+      "컴퓨터와 대결하는 양자 보드게임. 큐비트를 배치하고, 중첩 주사위를 굴리며, 터널링으로 상대를 통과하세요.",
+    play: "새 게임",
+    offline: "모든 양자 연산은 기기 내 로컬에서 실행됩니다 — 네트워크 불필요.",
+    statsSummary: "{played}판 · 승률 {rate}%",
+    feature: {
+      dice: {
+        title: "양자 주사위",
+        body: "배치한 타일에 착지하면 큐비트 붕괴가 사다리/뱀을 결정합니다.",
+      },
+      entangle: {
+        title: "얽힘",
+        body: "큐비트 쌍을 얽혀 간섭 또는 연동 붕괴를 유도합니다.",
+      },
+      ladder: {
+        title: "벡터 슬라이드",
+        body: "사다리 상승·뱀 하강은 보드 격자 X/Y 벡터 굴림으로 계산됩니다.",
+      },
+      tunnel: {
+        title: "터널링",
+        body: "상대와 같은 칸? 경로에 따라 간섭으로 통과할 수 있습니다.",
+      },
+    },
+  },
+  game: {
+    title: "Snake & Ladder",
+    you: "나",
+    roll: "굴리기",
+    playAgain: "다시 하기",
+    back: "홈으로",
+    restart: "새 게임",
+    newGameTitle: "새 게임을 시작할까요?",
+    newGameMessage: "진행 중인 판은 저장되지 않습니다.",
+    newGameConfirm: "새 게임",
+    newGameCancel: "취소",
+    goldDice: {
+      balance: "골드 주사위: {count}개",
+      on: "골드 ON",
+      off: "골드 OFF",
+    },
+    shopCta: "상점에서 골드 주사위 구매",
+    log: {
+      qasmTap: "탭하면 회로도 보기",
+    },
+  },
+  setup: {
+    pickQubit: "큐비트를 고른 뒤 칸(6–95)을 탭하세요",
+    entangledBadge: "⧗ 얽힘",
+    passTurn: "계속",
+    humanTurn: "보드에 큐비트를 배치하세요",
+    opponentTurn: "{name}이(가) 큐비트를 배치 중…",
+    confirmPass: "준비되면 계속을 누르세요",
+    interference: "간섭! 상대 큐비트가 상쇄되었습니다.",
+  },
+  play: {
+    humanRoll: "내 턴 — 주사위를 굴리세요",
+    opponentRoll: "{name}이(가) 굴리는 중…",
+    moving: "이동 중…",
+    moved: "턴 종료",
+    collapsing: "양자 측정 중…",
+    ladder: "사다리! 올라갑니다…",
+    snake: "뱀! 미끄러집니다…",
+    interference: "간섭 — 이동 없음",
+    overshoot: "오버슈트! 되돌아갑니다…",
+    overshootDone: "100에 정확히 도착해야 승리합니다",
+    youWin: "승리!",
+    opponentWin: "{name} 승리!",
+  },
+  onboarding: {
+    title: "게임 방법",
+    subtitle: "컴퓨터와 대결하는 양자 뱀·사다리 — 기기 안에서만 실행됩니다.",
+    step1: {
+      title: "큐비트 배치",
+      body: "셋업 단계에서 큐비트 종류를 고른 뒤 보드 6–95번 칸을 탭하세요.",
+    },
+    step2: {
+      title: "얽힘·간섭",
+      body: "큐비트 쌍을 얽혀 붕괴 결과가 간섭하거나 함께 결정되게 할 수 있습니다.",
+    },
+    step3: {
+      title: "굴리기·붕괴",
+      body: "큐비트 칸에 착지하면 측정됩니다 — 사다리 상승, 뱀 하강, 또는 터널링 통과.",
+    },
+    start: "시작하기",
+  },
+  opponent: {
+    defaultName: "컴퓨터",
+  },
+  player: {
+    defaultName: "나",
+  },
+  settings: {
+    title: "설정",
+    stats: {
+      title: "통계",
+      played: "플레이: {count}판",
+      wins: "승리: {count}",
+      losses: "패배: {count}",
+      winRate: "승률: {rate}%",
+    },
+    movementSpeed: "이동 속도",
+    opponentNickname: "상대 닉네임",
+    opponentPreview: "상대 표시: {name}",
+    playerNickname: "내 닉네임",
+    playerPreview: "내 표시: {name}",
+    resetStats: "통계 초기화",
+    resetStatsTitle: "통계를 초기화할까요?",
+    resetStatsMessage: "승/패 기록이 모두 삭제됩니다.",
+    resetStatsConfirm: "초기화",
+    diceSpeed: "주사위 애니메이션",
+    theme: "테마",
+    haptics: "햅틱",
+    sound: "효과음",
+    reducedMotion: "동작 줄이기",
+    option: {
+      slow: "느림",
+      normal: "보통",
+      fast: "빠름",
+      light: "라이트",
+      dark: "다크",
+      system: "시스템",
+    },
+    monetization: {
+      title: "상점·아이템",
+      goldBalance: "골드 주사위: {count}개",
+      adRemoved: "이 기기에서 광고가 제거되었습니다",
+      adsEnabled: "3판마다 전면 광고가 표시될 수 있습니다",
+      openShop: "상점 열기",
+    },
+    legal: {
+      title: "법적 고지",
+      privacy: "개인정보처리방침",
+    },
+  },
+  privacy: {
+    title: "개인정보처리방침",
+    intro:
+      "Snake & Ladder는 기기 안에서 양자 연산을 수행합니다. 게임 서버를 운영하지 않으며 플레이 데이터를 수집하지 않습니다.",
+    section: {
+      data: {
+        title: "기기에 저장되는 데이터",
+        body: "설정, 승/패 통계, 골드 주사위 잔량, 광고 제거 상태는 AsyncStorage에 저장됩니다. 양자 회로는 로컬에서만 계산되며 업로드되지 않습니다.",
+      },
+      ads: {
+        title: "광고",
+        body: "iOS에서는 AdMob 전면 광고 전 App Tracking Transparency 동의를 요청할 수 있습니다. 광고 파트너는 정책에 따라 기기 식별자를 수집할 수 있습니다. 광고 제거 구매 시 전면 광고가 비활성화됩니다.",
+      },
+      iap: {
+        title: "인앱 결제",
+        body: "골드 주사위와 광고 제거는 Apple App Store 또는 Google Play에서 처리됩니다. iOS 영수증은 기기에서 검증한 뒤 아이템을 지급합니다. 구매 복원은 스토어가 처리합니다.",
+      },
+      contact: {
+        title: "문의",
+        body: "정책 관련 문의: github.com/infinite-loop-factory/app-factory 이슈 또는 스토어 등록 정보의 게시자 연락처를 이용해 주세요.",
+      },
+    },
+    publicUrl: "공개 URL: {url}",
+  },
+  shop: {
+    title: "상점",
+    goldBalance: "골드 주사위: {count}개",
+    goldDescription:
+      "골드 주사위는 원하는 눈이 50%, 나머지 각 10% 확률로 나옵니다. 사용 시 소모됩니다.",
+    goldPack: "골드 주사위 {count}개",
+    goldPackHint: "소모품 · 게임 중 사용",
+    adRemoval: "광고 제거",
+    adRemovalHint: "1회 구매 · 전면 광고 없음",
+    adRemovalOwned: "이 기기에서 광고가 제거되었습니다",
+    owned: "보유 중",
+    restore: "구매 복원",
+    restoring: "복원 중…",
+    restoreDone: "구매가 복원되었습니다",
+    restoreFailed: "구매 복원에 실패했습니다",
+    purchaseSuccess: "구매 완료",
+    purchaseFailed: "구매 실패",
+    goldAdded: "골드 주사위 {count}개가 추가되었습니다",
+    adRemovalActive: "광고가 제거되었습니다",
+    priceUnavailable: "—",
+    storeUnavailable: "지금은 스토어를 사용할 수 없습니다",
+    connectingStore: "스토어 연결 중…",
+    verificationFailed:
+      "구매를 검증하지 못했습니다. 아이템이 지급되지 않았습니다.",
+    webUnavailable: "인앱 결제는 iOS·Android 앱에서만 이용할 수 있습니다.",
+  },
+  board: {
+    qubit: {
+      active: "양자 필드",
+      entangled: "얽힌 양자 필드",
+      collapsedLadder: "붕괴된 양자 필드 — 사다리",
+      collapsedSnake: "붕괴된 양자 필드 — 뱀",
+      collapsedInterference: "붕괴된 양자 필드 — 간섭",
+    },
+  },
+} as const;

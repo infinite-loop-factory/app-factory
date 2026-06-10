@@ -1,0 +1,9 @@
+appId: com.infinite-loop-factory.snake-ladder
+---
+- extendedWaitUntil:
+    visible:
+      id: ${ID}
+    timeout: 60000
+- tapOn:
+    id: ${ID}
+    retryTapIfNoChange: true

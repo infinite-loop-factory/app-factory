@@ -1,0 +1,20 @@
+appId: com.infinite-loop-factory.snake-ladder
+---
+- launchApp:
+    clearState: true
+- runFlow: ../subflows/connect-metro.yaml
+- runFlow: ../subflows/dismiss-onboarding.yaml
+- tapOn:
+    id: home-settings-button
+- extendedWaitUntil:
+    visible:
+      id: settings-screen
+    timeout: 30000
+- assertVisible:
+    id: settings-stats-section
+- tapOn:
+    id: settings-back-button
+- extendedWaitUntil:
+    visible:
+      id: home-play-button
+    timeout: 30000

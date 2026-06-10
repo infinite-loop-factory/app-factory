@@ -1,0 +1,28 @@
+appId: com.infinite-loop-factory.snake-ladder
+---
+- launchApp:
+    clearState: true
+- runFlow: ../subflows/connect-metro.yaml
+- runFlow: ../subflows/dismiss-onboarding.yaml
+- runFlow: ../subflows/start-game.yaml
+- runFlow: ../subflows/complete-setup.yaml
+- runFlow: ../subflows/wait-for-roll-ready.yaml
+- assertVisible:
+    id: gold-dice-panel
+- assertVisible:
+    id: gold-dice-balance
+- tapOn:
+    id: gold-dice-toggle
+- extendedWaitUntil:
+    visible:
+      id: gold-dice-face-6
+    timeout: 15000
+- tapOn:
+    id: gold-dice-face-6
+- tapOn:
+    id: game-roll-button
+- extendedWaitUntil:
+    visible:
+      id: game-roll-button
+    timeout: 45000
+- assertVisible: "Gold dice: 9"
