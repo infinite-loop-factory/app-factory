@@ -187,7 +187,8 @@ export function PlayerToken({
   overlapped,
   reducedMotion,
 }: PlayerTokenProps) {
-  const size = player === 0 ? cellSize * 0.46 : cellSize * 0.4;
+  // Uniform pawn size — overlap is already handled by offset + z-order.
+  const size = cellSize * 0.44;
   const color = player === 0 ? palette.playerYou : palette.playerCpu;
   const target = tokenTarget(player, cell, cellSize, overlapped, size);
 

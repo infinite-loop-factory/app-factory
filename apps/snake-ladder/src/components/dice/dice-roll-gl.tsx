@@ -129,7 +129,11 @@ export function DiceRollGl({
     shadow.position.y = REST_Y - 0.58;
     scene.add(shadow);
 
-    const sparkColor = dieVariant === "gold" ? 0xffe082 : 0xeaf4ff;
+    const sparkColor = (() => {
+      if (dieVariant === "gold") return 0xffe082;
+      if (dieVariant === "cpu") return 0xffe2e2;
+      return 0xeaf4ff;
+    })();
     const particleGeometry = new THREE.PlaneGeometry(0.07, 0.07);
     const particles: Particle[] = [];
     const spawnSparks = (origin: THREE.Vector3, strength: number) => {

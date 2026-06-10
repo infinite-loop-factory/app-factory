@@ -181,6 +181,13 @@ export default function GameScreen() {
   const canRoll = canRollNow(state);
   const canConfirmPass = canConfirmPassNow(state);
 
+  const goldActive = goldDiceEnabled && monetization.goldDiceCount > 0;
+  // The rolling die wears the roller's color: cpu red, player blue/gold.
+  const diceVariant = (() => {
+    if (state.currentPlayer === 1) return "cpu" as const;
+    return goldActive ? ("gold" as const) : ("default" as const);
+  })();
+
   const showConfetti =
     state.gameOver && state.positions[0] >= 100 && !settings.reducedMotion;
 
@@ -227,12 +234,12 @@ export default function GameScreen() {
           charge={throwCharge}
           durationMs={timings.diceRollDurationMs}
           forcedValue={pendingForcedRoll}
-          gold={goldDiceEnabled && monetization.goldDiceCount > 0}
           onImpact={(strength) => onFeedback({ type: "dice_impact", strength })}
           palette={palette}
           reducedMotion={settings.reducedMotion}
           rolling={state.isRolling}
           value={state.dice}
+          variant={diceVariant}
         />
         <View className="flex-row items-center justify-between px-4 py-2">
           <Link asChild href="/">
@@ -423,7 +430,7 @@ export default function GameScreen() {
               <View style={{ width: 72, height: 102 }} />
             ) : (
               <DiceDisplay
-                gold={goldDiceEnabled && monetization.goldDiceCount > 0}
+                gold={goldActive}
                 palette={palette}
                 reducedMotion={settings.reducedMotion}
                 rolling={false}

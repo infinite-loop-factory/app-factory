@@ -1,3 +1,4 @@
+import type { DiceVariant } from "@/components/dice/dice-variant";
 import type { CraftPalette } from "@/game/constants/palettes";
 
 import { useCallback, useEffect, useState } from "react";
@@ -19,7 +20,8 @@ type DiceRollOverlayProps = {
   value: number | null;
   durationMs: number;
   palette: CraftPalette;
-  gold?: boolean;
+  /** Glass tint — matches whoever is rolling (player blue / cpu red / gold). */
+  variant?: DiceVariant;
   /** Throw power 0..1 from the roll button hold. */
   charge?: number;
   /** Land the animation on this face (gold dice pre-rolled result). */
@@ -36,7 +38,7 @@ export function DiceRollOverlay({
   value,
   durationMs,
   palette,
-  gold = false,
+  variant = "default",
   charge = 0.5,
   forcedValue = null,
   onImpact: onImpactExternal,
@@ -116,7 +118,7 @@ export function DiceRollOverlay({
             face={face}
             palette={palette}
             size={120}
-            variant={gold ? "gold" : "default"}
+            variant={variant}
           />
         </View>
       </View>
@@ -135,13 +137,13 @@ export function DiceRollOverlay({
           key={`roll-${rollKey}`}
           onImpact={onImpact}
           onRollComplete={onRollComplete}
-          variant={gold ? "gold" : "default"}
+          variant={variant}
           width={width}
         />
       </Animated.View>
       {revealedValue !== null ? (
         <DiceResultPop
-          gold={gold}
+          gold={variant === "gold"}
           key={`pop-${rollKey}`}
           value={revealedValue}
         />

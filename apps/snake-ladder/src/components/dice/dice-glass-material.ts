@@ -32,6 +32,16 @@ export const BLUE_GLASS_DICE: DiceGlassMaterial = {
   contactShadow: "rgba(28,72,168,0.42)",
 };
 
+/** Matches palette.playerCpu so the opponent's roll reads as theirs. */
+export const RED_GLASS_DICE: DiceGlassMaterial = {
+  faceLight: (face) => shadePair("#ffadad", "#d94f4f", "#8c1f1f", face)[0],
+  faceDark: (face) => shadePair("#ffadad", "#d94f4f", "#8c1f1f", face)[1],
+  edge: "#ffdede",
+  pip: "#fff7f7",
+  pipShadow: "rgba(90,12,12,0.55)",
+  contactShadow: "rgba(168,40,40,0.42)",
+};
+
 export const GOLD_GLASS_DICE: DiceGlassMaterial = {
   faceLight: (face) => shadePair("#ffe88c", "#d4a826", "#805808", face)[0],
   faceDark: (face) => shadePair("#ffe88c", "#d4a826", "#805808", face)[1],
@@ -42,7 +52,9 @@ export const GOLD_GLASS_DICE: DiceGlassMaterial = {
 };
 
 export function resolveDiceMaterial(
-  variant: "default" | "gold",
+  variant: "default" | "gold" | "cpu",
 ): DiceGlassMaterial {
-  return variant === "gold" ? GOLD_GLASS_DICE : BLUE_GLASS_DICE;
+  if (variant === "gold") return GOLD_GLASS_DICE;
+  if (variant === "cpu") return RED_GLASS_DICE;
+  return BLUE_GLASS_DICE;
 }
