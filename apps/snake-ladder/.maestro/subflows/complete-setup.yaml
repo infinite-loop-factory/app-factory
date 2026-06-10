@@ -30,8 +30,21 @@ appId: com.infinite-loop-factory.snake-ladder
     visible:
       id: setup-pass-turn
     timeout: 90000
-- tapOn:
-    id: setup-pass-turn
+# A single tap can land mid-layout while the setup bar swaps for the dice
+# dock — keep tapping until the button actually consumes the press.
+- repeat:
+    times: 6
+    while:
+      visible:
+        id: setup-pass-turn
+    commands:
+      - tapOn:
+          id: setup-pass-turn
+      - extendedWaitUntil:
+          notVisible:
+            id: setup-pass-turn
+          timeout: 3000
+          optional: true
 - extendedWaitUntil:
     visible:
       id: game-roll-button
