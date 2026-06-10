@@ -1,6 +1,7 @@
 export type GameFeedbackEvent =
   | { type: "selection" }
   | { type: "roll" }
+  | { type: "dice_impact"; strength: number }
   | { type: "hop" }
   | { type: "collapse" }
   | { type: "ladder_step" }

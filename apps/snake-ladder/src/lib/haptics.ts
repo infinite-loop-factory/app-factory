@@ -3,6 +3,8 @@ import * as Haptics from "expo-haptics";
 export type HapticEvent =
   | "selection"
   | "roll"
+  | "dice_impact_soft"
+  | "dice_impact_hard"
   | "hop"
   | "collapse"
   | "ladder"
@@ -23,6 +25,12 @@ export async function playGameHaptic(
       break;
     case "roll":
       await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+      break;
+    case "dice_impact_soft":
+      await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+      break;
+    case "dice_impact_hard":
+      await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
       break;
     case "hop":
       await Haptics.selectionAsync();

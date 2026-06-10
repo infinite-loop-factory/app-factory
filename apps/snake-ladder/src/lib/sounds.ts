@@ -10,6 +10,8 @@ type SoundKey = Exclude<
 const SOUND_SOURCES: Record<SoundKey, number> = {
   selection: require("@/assets/sounds/select.wav"),
   roll: require("@/assets/sounds/roll.wav"),
+  // Bounce impact reuses the hop tick at strength-scaled volume.
+  dice_impact: require("@/assets/sounds/hop.wav"),
   hop: require("@/assets/sounds/hop.wav"),
   collapse: require("@/assets/sounds/collapse.wav"),
   tunnel: require("@/assets/sounds/tunnel.wav"),
@@ -50,6 +52,12 @@ export function playGameSound(
     }
     if (event.type === "snake_step") {
       replay(getPlayer("snake", SLIDE_SOURCES.snake));
+      return;
+    }
+    if (event.type === "dice_impact") {
+      const player = getPlayer("dice_impact", SOUND_SOURCES.dice_impact);
+      player.volume = 0.4 + Math.min(1, Math.max(0, event.strength)) * 0.6;
+      replay(player);
       return;
     }
     const source = SOUND_SOURCES[event.type];

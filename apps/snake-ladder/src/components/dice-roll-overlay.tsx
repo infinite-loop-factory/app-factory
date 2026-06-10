@@ -9,6 +9,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { DiceFace } from "@/components/dice/dice-face";
+import { DiceResultPop } from "@/components/dice/dice-result-pop";
 import { DiceRollGl } from "@/components/dice/dice-roll-gl";
 import { rollDie } from "@/game/lib/game-helpers";
 import { resolveDiceAnimation } from "@/lib/dice-roll-bridge";
@@ -21,10 +22,12 @@ type DiceRollOverlayProps = {
   gold?: boolean;
   /** Land the animation on this face (gold dice pre-rolled result). */
   forcedValue?: number | null;
+  /** Bounce impact (strength 0..1) — wire haptics/sound on top of the shake. */
+  onImpact?: (strength: number) => void;
   reducedMotion?: boolean;
 };
 
-const REVEAL_HOLD_MS = 480;
+const REVEAL_HOLD_MS = 680;
 
 export function DiceRollOverlay({
   rolling,
@@ -33,6 +36,7 @@ export function DiceRollOverlay({
   palette,
   gold = false,
   forcedValue = null,
+  onImpact: onImpactExternal,
   reducedMotion = false,
 }: DiceRollOverlayProps) {
   const { width, height } = useWindowDimensions();
@@ -50,6 +54,7 @@ export function DiceRollOverlay({
 
   const onImpact = useCallback(
     (strength: number) => {
+      onImpactExternal?.(strength);
       const amp = 3 + strength * 9;
       shakeX.set(
         withSequence(
@@ -66,7 +71,7 @@ export function DiceRollOverlay({
         ),
       );
     },
-    [shakeX, shakeY],
+    [onImpactExternal, shakeX, shakeY],
   );
 
   const shakeStyle = useAnimatedStyle(() => ({
@@ -130,6 +135,13 @@ export function DiceRollOverlay({
           width={width}
         />
       </Animated.View>
+      {revealedValue !== null ? (
+        <DiceResultPop
+          gold={gold}
+          key={`pop-${rollKey}`}
+          value={revealedValue}
+        />
+      ) : null}
     </View>
   );
 }

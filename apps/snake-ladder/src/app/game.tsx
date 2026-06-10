@@ -399,6 +399,7 @@ export default function GameScreen() {
           durationMs={timings.diceRollDurationMs}
           forcedValue={pendingForcedRoll}
           gold={goldDiceEnabled && monetization.goldDiceCount > 0}
+          onImpact={(strength) => onFeedback({ type: "dice_impact", strength })}
           palette={palette}
           reducedMotion={settings.reducedMotion}
           rolling={state.isRolling}

@@ -9,6 +9,8 @@ function hapticForEvent(event: GameFeedbackEvent): HapticEvent | null {
       return "selection";
     case "roll":
       return "roll";
+    case "dice_impact":
+      return event.strength >= 0.5 ? "dice_impact_hard" : "dice_impact_soft";
     case "hop":
       return "hop";
     case "collapse":
