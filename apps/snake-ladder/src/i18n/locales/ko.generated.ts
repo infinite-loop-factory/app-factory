@@ -199,4 +199,8 @@ export default {
       collapsedInterference: "붕괴된 양자 필드 — 간섭",
     },
   },
+  notFound: {
+    title: "존재하지 않는 칸이에요",
+    goHome: "보드로 돌아가기",
+  },
 } as const;

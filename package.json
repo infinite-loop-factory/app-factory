@@ -56,7 +56,8 @@
       "react-native-worklets": "0.5.1"
     },
     "patchedDependencies": {
-      "@gluestack-ui/toast": "patches/@gluestack-ui__toast.patch"
+      "@gluestack-ui/toast": "patches/@gluestack-ui__toast.patch",
+      "react-native-css-interop": "patches/react-native-css-interop.patch"
     }
   }
 }

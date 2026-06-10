@@ -200,4 +200,8 @@ export default {
       collapsedInterference: "Collapsed quantum field — interference",
     },
   },
+  notFound: {
+    title: "This square doesn't exist",
+    goHome: "Back to the board",
+  },
 } as const;

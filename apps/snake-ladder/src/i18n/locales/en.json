@@ -129,5 +129,7 @@
   "board.qubit.entangled": "Entangled quantum field",
   "board.qubit.collapsedLadder": "Collapsed quantum field — ladder",
   "board.qubit.collapsedSnake": "Collapsed quantum field — snake",
-  "board.qubit.collapsedInterference": "Collapsed quantum field — interference"
+  "board.qubit.collapsedInterference": "Collapsed quantum field — interference",
+  "notFound.title": "This square doesn't exist",
+  "notFound.goHome": "Back to the board"
 }
