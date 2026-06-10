@@ -70,10 +70,33 @@ export function buildDie(variant: DiceVariant): THREE.Group {
  * three.js renderer on an expo-gl context. expo-gl exposes a WebGL2 context
  * without a DOM canvas; three only touches these canvas fields.
  */
+type PatchableGl = {
+  UNPACK_FLIP_Y_WEBGL?: number;
+  pixelStorei?: (pname: number, param: number | boolean) => void;
+  __pixelStoreiPatched?: boolean;
+};
+
+/**
+ * expo-gl only implements pixelStorei(UNPACK_FLIP_Y_WEBGL); three calls it
+ * with other parameters on every texture upload, spamming
+ * "EXGL: gl.pixelStorei() doesn't support this parameter yet!".
+ * Drop unsupported parameters before three sees the context.
+ */
+function patchPixelStorei(gl: PatchableGl): void {
+  if (gl.__pixelStoreiPatched || typeof gl.pixelStorei !== "function") return;
+  const original = gl.pixelStorei.bind(gl);
+  const flipY = gl.UNPACK_FLIP_Y_WEBGL;
+  gl.pixelStorei = (pname, param) => {
+    if (pname === flipY) original(pname, param);
+  };
+  gl.__pixelStoreiPatched = true;
+}
+
 export function createGlRenderer(gl: {
   drawingBufferWidth: number;
   drawingBufferHeight: number;
 }): THREE.WebGLRenderer {
+  patchPixelStorei(gl as PatchableGl);
   const width = gl.drawingBufferWidth;
   const height = gl.drawingBufferHeight;
   const renderer = new THREE.WebGLRenderer({
