@@ -47,6 +47,8 @@ PODS:
     - openiap (= 2.2.1)
   - ExpoKeepAwake (15.0.8):
     - ExpoModulesCore
+  - ExpoLinearGradient (15.0.8):
+    - ExpoModulesCore
   - ExpoLinking (8.0.12):
     - ExpoModulesCore
   - ExpoLocalization (17.0.8):
@@ -2105,6 +2107,7 @@ DEPENDENCIES:
   - ExpoHead (from `../../../node_modules/expo-router/ios`)
   - ExpoIap (from `../../../node_modules/expo-iap/ios`)
   - ExpoKeepAwake (from `../../../node_modules/expo-keep-awake/ios`)
+  - ExpoLinearGradient (from `../../../node_modules/expo-linear-gradient/ios`)
   - ExpoLinking (from `../../../node_modules/expo-linking/ios`)
   - ExpoLocalization (from `../../../node_modules/expo-localization/ios`)
   - ExpoModulesCore (from `../../../node_modules/expo-modules-core`)
@@ -2217,6 +2220,8 @@ EXTERNAL SOURCES:
     :path: "../../../node_modules/expo-iap/ios"
   ExpoKeepAwake:
     :path: "../../../node_modules/expo-keep-awake/ios"
+  ExpoLinearGradient:
+    :path: "../../../node_modules/expo-linear-gradient/ios"
   ExpoLinking:
     :path: "../../../node_modules/expo-linking/ios"
   ExpoLocalization:
@@ -2393,6 +2398,7 @@ SPEC CHECKSUMS:
   ExpoHead: 7e19b2272edf492262acf8afb391a295198a6b23
   ExpoIap: 1fefb7f5e5037394d42244cd08bbae39831f98e4
   ExpoKeepAwake: 55f75eca6499bb9e4231ebad6f3e9cb8f99c0296
+  ExpoLinearGradient: 809102bdb979f590083af49f7fa4805cd931bd58
   ExpoLinking: 2ef632ad5013e3f1568fae9408d56ab9af5efc55
   ExpoLocalization: d9168d5300a5b03e5e78b986124d11fb6ec3ebbd
   ExpoModulesCore: 9e6a5514828e7dd5ded9e99d33557be2d284e660
