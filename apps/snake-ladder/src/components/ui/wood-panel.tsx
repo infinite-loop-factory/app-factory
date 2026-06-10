@@ -16,6 +16,7 @@ type WoodPanelProps = {
   style?: StyleProp<ViewStyle>;
   contentStyle?: StyleProp<ViewStyle>;
   children: ReactNode;
+  testID?: string;
 };
 
 /** Real wood-grain surface, tinted to the palette and lit from the top. */
@@ -26,6 +27,7 @@ export function WoodPanel({
   style,
   contentStyle,
   children,
+  testID,
 }: WoodPanelProps) {
   return (
     <View
@@ -42,6 +44,7 @@ export function WoodPanel({
         },
         style,
       ]}
+      testID={testID}
     >
       <ImageBackground
         imageStyle={{ borderRadius: radius }}

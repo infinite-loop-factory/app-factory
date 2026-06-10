@@ -4,21 +4,22 @@ import {
   useIAP,
   verifyPurchase as verifyPurchaseSdk,
 } from "expo-iap";
-import { Link } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
   Platform,
   Pressable,
-  ScrollView,
   Text,
   View,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { ScreenShell } from "@/components/ui/screen-shell";
+import { WoodPanel } from "@/components/ui/wood-panel";
+import { GAME_FONT } from "@/game/constants/theme";
 import { useAppSettings } from "@/hooks/use-app-settings";
 import { useMonetization } from "@/hooks/use-monetization";
 import i18n from "@/i18n";
+import { lightenColor } from "@/lib/color";
 import {
   CONSUMABLE_PRODUCT_IDS,
   GOLD_DICE_BY_PRODUCT,
@@ -140,55 +141,45 @@ export default function ShopScreen() {
   };
 
   return (
-    <SafeAreaView
-      className="flex-1"
-      style={{ backgroundColor: palette.background }}
-    >
-      <ScrollView contentContainerStyle={{ gap: 20, padding: 24 }}>
-        <View className="flex-row items-center justify-between">
-          <Link asChild href="/">
-            <Pressable
-              accessibilityLabel={i18n.t("game.back")}
-              accessibilityRole="button"
-              className="h-10 w-10 items-center justify-center rounded-full"
-              style={{ backgroundColor: palette.card }}
-            >
-              <MaterialIcons color={palette.text} name="arrow-back" size={22} />
-            </Pressable>
-          </Link>
-          <Text
-            className="font-extrabold text-xl"
-            style={{ color: palette.text }}
-          >
-            {i18n.t("shop.title")}
+    <ScreenShell title={i18n.t("shop.title")}>
+      {!nativeStore ? (
+        <WoodPanel contentStyle={{ padding: 16 }} palette={palette}>
+          <Text style={{ color: palette.creamMuted, lineHeight: 22 }}>
+            {i18n.t("shop.webUnavailable")}
           </Text>
-          <View className="h-10 w-10" />
-        </View>
-
-        {!nativeStore ? (
-          <View
-            className="rounded-2xl border p-4"
-            style={{
-              backgroundColor: palette.card,
-              borderColor: palette.border,
+        </WoodPanel>
+      ) : (
+        <>
+          <WoodPanel
+            contentStyle={{
+              padding: 16,
+              flexDirection: "row",
+              alignItems: "center",
+              gap: 12,
             }}
+            palette={palette}
           >
-            <Text style={{ color: palette.textMuted, lineHeight: 22 }}>
-              {i18n.t("shop.webUnavailable")}
-            </Text>
-          </View>
-        ) : (
-          <>
             <View
-              className="rounded-2xl border p-4"
               style={{
-                backgroundColor: palette.card,
-                borderColor: palette.border,
+                width: 46,
+                height: 46,
+                borderRadius: 12,
+                alignItems: "center",
+                justifyContent: "center",
+                backgroundColor: "rgba(0,0,0,0.25)",
+                borderWidth: 1,
+                borderColor: `${palette.orbGlow}66`,
               }}
             >
+              <MaterialIcons color={palette.orbGlow} name="casino" size={26} />
+            </View>
+            <View style={{ flex: 1 }}>
               <Text
-                className="font-bold text-base"
-                style={{ color: palette.text }}
+                style={{
+                  color: palette.cream,
+                  fontFamily: GAME_FONT,
+                  fontSize: 16,
+                }}
               >
                 {i18n.t("shop.goldBalance", {
                   count: monetization.goldDiceCount,
@@ -196,100 +187,172 @@ export default function ShopScreen() {
               </Text>
               <Text
                 style={{
-                  color: palette.textMuted,
-                  marginTop: 6,
-                  lineHeight: 20,
+                  color: palette.creamMuted,
+                  marginTop: 4,
+                  fontSize: 12,
+                  lineHeight: 18,
                 }}
               >
                 {i18n.t("shop.goldDescription")}
               </Text>
             </View>
+          </WoodPanel>
 
-            {!connected ? (
-              <View className="items-center py-4">
-                <ActivityIndicator color={palette.ladder} />
-                <Text style={{ color: palette.textMuted, marginTop: 8 }}>
-                  {i18n.t("shop.connectingStore")}
-                </Text>
-              </View>
-            ) : null}
+          {!connected ? (
+            <View className="items-center py-4">
+              <ActivityIndicator color={palette.cream} />
+              <Text style={{ color: palette.creamMuted, marginTop: 8 }}>
+                {i18n.t("shop.connectingStore")}
+              </Text>
+            </View>
+          ) : null}
 
-            {CONSUMABLE_PRODUCT_IDS.map((sku) => (
-              <Pressable
-                accessibilityRole="button"
-                className="flex-row items-center justify-between rounded-2xl border p-4"
-                disabled={!connected}
-                key={sku}
-                onPress={() => void buy(sku)}
-                style={{
-                  backgroundColor: palette.card,
-                  borderColor: palette.border,
+          {CONSUMABLE_PRODUCT_IDS.map((sku) => (
+            <Pressable
+              accessibilityRole="button"
+              disabled={!connected}
+              key={sku}
+              onPress={() => void buy(sku)}
+            >
+              <WoodPanel
+                contentStyle={{
+                  padding: 16,
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  gap: 12,
                 }}
+                palette={palette}
               >
-                <View>
-                  <Text className="font-bold" style={{ color: palette.text }}>
-                    {i18n.t("shop.goldPack", {
-                      count: GOLD_DICE_BY_PRODUCT[sku] ?? 0,
-                    })}
-                  </Text>
-                  <Text style={{ color: palette.textMuted, fontSize: 12 }}>
-                    {i18n.t("shop.goldPackHint")}
-                  </Text>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    gap: 10,
+                    flex: 1,
+                  }}
+                >
+                  <MaterialIcons
+                    color={palette.orbGlow}
+                    name="casino"
+                    size={20}
+                  />
+                  <View style={{ flexShrink: 1 }}>
+                    <Text
+                      style={{
+                        color: palette.cream,
+                        fontFamily: GAME_FONT,
+                        fontSize: 15,
+                      }}
+                    >
+                      {i18n.t("shop.goldPack", {
+                        count: GOLD_DICE_BY_PRODUCT[sku] ?? 0,
+                      })}
+                    </Text>
+                    <Text style={{ color: palette.creamMuted, fontSize: 12 }}>
+                      {i18n.t("shop.goldPackHint")}
+                    </Text>
+                  </View>
                 </View>
                 <Text
-                  className="font-extrabold"
-                  style={{ color: palette.orbGlow }}
+                  style={{
+                    color: palette.orbGlow,
+                    fontFamily: GAME_FONT,
+                    fontSize: 17,
+                  }}
                 >
                   {priceFor(sku)}
                 </Text>
-              </Pressable>
-            ))}
+              </WoodPanel>
+            </Pressable>
+          ))}
 
-            <Pressable
-              accessibilityRole="button"
-              className="flex-row items-center justify-between rounded-2xl border p-4"
-              disabled={monetization.adRemovalPurchased || !connected}
-              onPress={() => void buy(IAP_PRODUCT_IDS.adRemoval)}
-              style={{
-                backgroundColor: palette.card,
-                borderColor: palette.border,
-                opacity: monetization.adRemovalPurchased ? 0.6 : 1,
+          <Pressable
+            accessibilityRole="button"
+            disabled={monetization.adRemovalPurchased || !connected}
+            onPress={() => void buy(IAP_PRODUCT_IDS.adRemoval)}
+            style={{ opacity: monetization.adRemovalPurchased ? 0.65 : 1 }}
+          >
+            <WoodPanel
+              contentStyle={{
+                padding: 16,
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: 12,
               }}
+              palette={palette}
             >
-              <View className="flex-1 pr-3">
-                <Text className="font-bold" style={{ color: palette.text }}>
-                  {i18n.t("shop.adRemoval")}
-                </Text>
-                <Text style={{ color: palette.textMuted, fontSize: 12 }}>
-                  {monetization.adRemovalPurchased
-                    ? i18n.t("shop.adRemovalOwned")
-                    : i18n.t("shop.adRemovalHint")}
-                </Text>
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: 10,
+                  flex: 1,
+                }}
+              >
+                <MaterialIcons
+                  color={lightenColor(palette.ladder, 0.35)}
+                  name="block"
+                  size={20}
+                />
+                <View style={{ flexShrink: 1 }}>
+                  <Text
+                    style={{
+                      color: palette.cream,
+                      fontFamily: GAME_FONT,
+                      fontSize: 15,
+                    }}
+                  >
+                    {i18n.t("shop.adRemoval")}
+                  </Text>
+                  <Text style={{ color: palette.creamMuted, fontSize: 12 }}>
+                    {monetization.adRemovalPurchased
+                      ? i18n.t("shop.adRemovalOwned")
+                      : i18n.t("shop.adRemovalHint")}
+                  </Text>
+                </View>
               </View>
               <Text
-                className="font-extrabold"
-                style={{ color: palette.ladder }}
+                style={{
+                  color: lightenColor(palette.ladder, 0.35),
+                  fontFamily: GAME_FONT,
+                  fontSize: 17,
+                }}
               >
                 {monetization.adRemovalPurchased
                   ? i18n.t("shop.owned")
                   : priceFor(IAP_PRODUCT_IDS.adRemoval)}
               </Text>
-            </Pressable>
+            </WoodPanel>
+          </Pressable>
 
-            <Pressable
-              accessibilityRole="button"
-              className="items-center rounded-2xl border px-4 py-3"
-              disabled={restoring || !connected}
-              onPress={() => void restore()}
-              style={{ borderColor: palette.border }}
+          <Pressable
+            accessibilityRole="button"
+            disabled={restoring || !connected}
+            onPress={() => void restore()}
+            style={{
+              alignItems: "center",
+              borderRadius: 14,
+              borderWidth: 1.5,
+              borderColor: "rgba(255,255,255,0.25)",
+              paddingHorizontal: 16,
+              paddingVertical: 12,
+              backgroundColor: "rgba(0,0,0,0.2)",
+            }}
+          >
+            <Text
+              style={{
+                color: palette.cream,
+                fontFamily: GAME_FONT,
+                fontSize: 14,
+              }}
             >
-              <Text style={{ color: palette.text, fontWeight: "700" }}>
-                {restoring ? i18n.t("shop.restoring") : i18n.t("shop.restore")}
-              </Text>
-            </Pressable>
-          </>
-        )}
-      </ScrollView>
-    </SafeAreaView>
+              {restoring ? i18n.t("shop.restoring") : i18n.t("shop.restore")}
+            </Text>
+          </Pressable>
+        </>
+      )}
+    </ScreenShell>
   );
 }

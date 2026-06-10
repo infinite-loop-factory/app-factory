@@ -1,23 +1,36 @@
 import type { DiceSpeed, MovementSpeed, ThemeMode } from "@/lib/settings";
 
-import { MaterialIcons } from "@expo/vector-icons";
 import { Link } from "expo-router";
-import {
-  Alert,
-  Pressable,
-  ScrollView,
-  Switch,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { Alert, Pressable, Switch, Text, TextInput, View } from "react-native";
+import { ScreenShell } from "@/components/ui/screen-shell";
+import { WoodPanel } from "@/components/ui/wood-panel";
+import { GAME_FONT } from "@/game/constants/theme";
 import { useAppSettings } from "@/hooks/use-app-settings";
 import { useMonetization } from "@/hooks/use-monetization";
 import i18n from "@/i18n";
+import { lightenColor } from "@/lib/color";
 import { isNativeStorePlatform } from "@/lib/monetization/platform";
 import { resolveDisplayName } from "@/lib/settings";
 import { winRate } from "@/lib/stats";
+
+const INPUT_BG = "rgba(0,0,0,0.28)";
+const INPUT_BORDER = "rgba(255,255,255,0.18)";
+
+function SectionTitle({ children }: { children: string }) {
+  const { palette } = useAppSettings();
+  return (
+    <Text
+      style={{
+        color: palette.cream,
+        fontFamily: GAME_FONT,
+        fontSize: 17,
+        marginBottom: 2,
+      }}
+    >
+      {children}
+    </Text>
+  );
+}
 
 function OptionRow<T extends string>({
   label,
@@ -36,7 +49,7 @@ function OptionRow<T extends string>({
     <View className="gap-2">
       <Text
         className="font-semibold text-sm"
-        style={{ color: palette.textMuted }}
+        style={{ color: palette.creamMuted }}
       >
         {label}
       </Text>
@@ -46,22 +59,25 @@ function OptionRow<T extends string>({
           return (
             <Pressable
               accessibilityRole="button"
+              accessibilityState={{ selected }}
               key={option}
               onPress={() => onChange(option)}
               style={{
-                paddingHorizontal: 12,
+                paddingHorizontal: 14,
                 paddingVertical: 8,
                 borderRadius: 999,
                 borderWidth: 1,
-                borderColor: palette.border,
-                backgroundColor: selected ? palette.playerYou : palette.card,
+                borderColor: selected
+                  ? lightenColor(palette.playerYou, 0.35)
+                  : INPUT_BORDER,
+                backgroundColor: selected ? palette.playerYou : INPUT_BG,
               }}
             >
               <Text
                 style={{
-                  color: selected ? "#fff" : palette.text,
-                  fontWeight: "700",
-                  fontSize: 12,
+                  color: selected ? "#fff" : palette.cream,
+                  fontFamily: GAME_FONT,
+                  fontSize: 13,
                 }}
               >
                 {i18n.t(`settings.option.${option}`)}
@@ -86,16 +102,65 @@ function ToggleRow({
   const { palette } = useAppSettings();
 
   return (
-    <View className="flex-row items-center justify-between py-2">
-      <Text className="font-semibold text-base" style={{ color: palette.text }}>
+    <View className="flex-row items-center justify-between py-1">
+      <Text
+        className="font-semibold text-base"
+        style={{ color: palette.cream }}
+      >
         {label}
       </Text>
       <Switch
         onValueChange={onChange}
         thumbColor="#fff"
-        trackColor={{ false: palette.border, true: palette.ladder }}
+        trackColor={{ false: "rgba(0,0,0,0.4)", true: palette.ladder }}
         value={value}
       />
+    </View>
+  );
+}
+
+function NicknameField({
+  label,
+  value,
+  placeholder,
+  preview,
+  onChange,
+}: {
+  label: string;
+  value: string;
+  placeholder: string;
+  preview: string;
+  onChange: (next: string) => void;
+}) {
+  const { palette } = useAppSettings();
+
+  return (
+    <View className="gap-2">
+      <Text
+        className="font-semibold text-sm"
+        style={{ color: palette.creamMuted }}
+      >
+        {label}
+      </Text>
+      <TextInput
+        autoCapitalize="words"
+        autoCorrect={false}
+        maxLength={16}
+        onChangeText={onChange}
+        placeholder={placeholder}
+        placeholderTextColor={`${palette.creamMuted}99`}
+        style={{
+          borderWidth: 1,
+          borderColor: INPUT_BORDER,
+          borderRadius: 12,
+          paddingHorizontal: 14,
+          paddingVertical: 10,
+          color: palette.cream,
+          backgroundColor: INPUT_BG,
+        }}
+        value={value}
+      />
+      <Text style={{ color: palette.creamMuted, fontSize: 12 }}>{preview}</Text>
     </View>
   );
 }
@@ -132,240 +197,166 @@ export default function SettingsScreen() {
   };
 
   return (
-    <SafeAreaView
-      className="flex-1"
-      style={{ backgroundColor: palette.background }}
+    <ScreenShell
+      backTestID="settings-back-button"
+      scrollTestID="settings-screen"
+      title={i18n.t("settings.title")}
     >
-      <ScrollView
-        contentContainerStyle={{ gap: 20, padding: 24 }}
-        contentInsetAdjustmentBehavior="automatic"
-        testID="settings-screen"
+      <WoodPanel
+        contentStyle={{ padding: 16, gap: 8 }}
+        palette={palette}
+        testID="settings-stats-section"
       >
-        <View className="flex-row items-center justify-between">
-          <Link asChild href="/">
-            <Pressable
-              accessibilityLabel={i18n.t("game.back")}
-              accessibilityRole="button"
-              className="h-10 w-10 items-center justify-center rounded-full"
-              style={{ backgroundColor: palette.card }}
-              testID="settings-back-button"
-            >
-              <MaterialIcons color={palette.text} name="arrow-back" size={22} />
-            </Pressable>
-          </Link>
+        <SectionTitle>{i18n.t("settings.stats.title")}</SectionTitle>
+        <Text style={{ color: palette.creamMuted }}>
+          {i18n.t("settings.stats.played", { count: stats.gamesPlayed })}
+        </Text>
+        <Text style={{ color: palette.creamMuted }}>
+          {i18n.t("settings.stats.wins", { count: stats.wins })}
+        </Text>
+        <Text style={{ color: palette.creamMuted }}>
+          {i18n.t("settings.stats.losses", { count: stats.losses })}
+        </Text>
+        <Text style={{ color: palette.cream, fontFamily: GAME_FONT }}>
+          {i18n.t("settings.stats.winRate", { rate })}
+        </Text>
+        <Pressable
+          accessibilityRole="button"
+          disabled={stats.gamesPlayed === 0}
+          onPress={confirmResetStats}
+          style={{
+            marginTop: 6,
+            alignSelf: "flex-start",
+            paddingHorizontal: 14,
+            paddingVertical: 8,
+            borderRadius: 999,
+            borderWidth: 1,
+            borderColor: lightenColor(palette.snake, 0.25),
+            backgroundColor: INPUT_BG,
+            opacity: stats.gamesPlayed === 0 ? 0.45 : 1,
+          }}
+        >
           <Text
-            className="font-extrabold text-xl"
-            style={{ color: palette.text }}
-          >
-            {i18n.t("settings.title")}
-          </Text>
-          <View className="h-10 w-10" />
-        </View>
-
-        <View
-          className="gap-3 rounded-2xl border p-4"
-          style={{ backgroundColor: palette.card, borderColor: palette.border }}
-          testID="settings-stats-section"
-        >
-          <Text className="font-bold text-base" style={{ color: palette.text }}>
-            {i18n.t("settings.stats.title")}
-          </Text>
-          <Text style={{ color: palette.textMuted }}>
-            {i18n.t("settings.stats.played", { count: stats.gamesPlayed })}
-          </Text>
-          <Text style={{ color: palette.textMuted }}>
-            {i18n.t("settings.stats.wins", { count: stats.wins })}
-          </Text>
-          <Text style={{ color: palette.textMuted }}>
-            {i18n.t("settings.stats.losses", { count: stats.losses })}
-          </Text>
-          <Text style={{ color: palette.text }}>
-            {i18n.t("settings.stats.winRate", { rate })}
-          </Text>
-          <Pressable
-            accessibilityRole="button"
-            disabled={stats.gamesPlayed === 0}
-            onPress={confirmResetStats}
             style={{
-              marginTop: 8,
-              alignSelf: "flex-start",
-              paddingHorizontal: 12,
-              paddingVertical: 8,
-              borderRadius: 999,
-              borderWidth: 1,
-              borderColor: palette.border,
-              opacity: stats.gamesPlayed === 0 ? 0.5 : 1,
+              color: lightenColor(palette.snake, 0.4),
+              fontFamily: GAME_FONT,
+              fontSize: 13,
             }}
           >
-            <Text
-              style={{ color: palette.snake, fontWeight: "700", fontSize: 12 }}
-            >
-              {i18n.t("settings.resetStats")}
-            </Text>
-          </Pressable>
-        </View>
+            {i18n.t("settings.resetStats")}
+          </Text>
+        </Pressable>
+      </WoodPanel>
 
-        {nativeStore ? (
-          <View
-            className="gap-3 rounded-2xl border p-4"
-            style={{
-              backgroundColor: palette.card,
-              borderColor: palette.border,
-            }}
-          >
-            <Text
-              className="font-bold text-base"
-              style={{ color: palette.text }}
+      {nativeStore ? (
+        <WoodPanel contentStyle={{ padding: 16, gap: 8 }} palette={palette}>
+          <SectionTitle>{i18n.t("settings.monetization.title")}</SectionTitle>
+          <Text style={{ color: palette.creamMuted }}>
+            {i18n.t("settings.monetization.goldBalance", {
+              count: monetization.goldDiceCount,
+            })}
+          </Text>
+          <Text style={{ color: palette.creamMuted }}>
+            {monetization.adRemovalPurchased
+              ? i18n.t("settings.monetization.adRemoved")
+              : i18n.t("settings.monetization.adsEnabled")}
+          </Text>
+          <Link asChild href="/shop">
+            <Pressable
+              accessibilityRole="button"
+              style={{
+                marginTop: 4,
+                alignSelf: "flex-start",
+                borderRadius: 999,
+                paddingHorizontal: 16,
+                paddingVertical: 9,
+                backgroundColor: palette.orbGlow,
+                borderTopWidth: 1,
+                borderTopColor: "rgba(255,255,255,0.4)",
+              }}
             >
-              {i18n.t("settings.monetization.title")}
-            </Text>
-            <Text style={{ color: palette.textMuted }}>
-              {i18n.t("settings.monetization.goldBalance", {
-                count: monetization.goldDiceCount,
-              })}
-            </Text>
-            <Text style={{ color: palette.textMuted }}>
-              {monetization.adRemovalPurchased
-                ? i18n.t("settings.monetization.adRemoved")
-                : i18n.t("settings.monetization.adsEnabled")}
-            </Text>
-            <Link asChild href="/shop">
-              <Pressable
-                accessibilityRole="button"
-                className="mt-1 self-start rounded-full px-3 py-2"
-                style={{ backgroundColor: palette.orbGlow }}
+              <Text
+                style={{
+                  color: "#3a2c10",
+                  fontFamily: GAME_FONT,
+                  fontSize: 13,
+                }}
               >
-                <Text
-                  style={{
-                    color: palette.text,
-                    fontWeight: "700",
-                    fontSize: 12,
-                  }}
-                >
-                  {i18n.t("settings.monetization.openShop")}
-                </Text>
-              </Pressable>
-            </Link>
-          </View>
-        ) : null}
-
-        <View
-          className="gap-3 rounded-2xl border p-4"
-          style={{ backgroundColor: palette.card, borderColor: palette.border }}
-        >
-          <Text className="font-bold text-base" style={{ color: palette.text }}>
-            {i18n.t("settings.legal.title")}
-          </Text>
-          <Link asChild href="/privacy">
-            <Pressable accessibilityRole="button">
-              <Text style={{ color: palette.ladder, fontWeight: "700" }}>
-                {i18n.t("settings.legal.privacy")}
+                {i18n.t("settings.monetization.openShop")}
               </Text>
             </Pressable>
           </Link>
-        </View>
+        </WoodPanel>
+      ) : null}
 
-        <View
-          className="gap-4 rounded-2xl border p-4"
-          style={{ backgroundColor: palette.card, borderColor: palette.border }}
-        >
-          <View className="gap-2">
+      <WoodPanel contentStyle={{ padding: 16, gap: 14 }} palette={palette}>
+        <NicknameField
+          label={i18n.t("settings.playerNickname")}
+          onChange={(playerNickname) => updateSettings({ playerNickname })}
+          placeholder={i18n.t("player.defaultName")}
+          preview={i18n.t("settings.playerPreview", { name: playerPreview })}
+          value={settings.playerNickname}
+        />
+        <NicknameField
+          label={i18n.t("settings.opponentNickname")}
+          onChange={(opponentNickname) => updateSettings({ opponentNickname })}
+          placeholder={i18n.t("opponent.defaultName")}
+          preview={i18n.t("settings.opponentPreview", {
+            name: opponentPreview,
+          })}
+          value={settings.opponentNickname}
+        />
+        <OptionRow<MovementSpeed>
+          label={i18n.t("settings.movementSpeed")}
+          onChange={(movementSpeed) => updateSettings({ movementSpeed })}
+          options={["slow", "normal", "fast"]}
+          value={settings.movementSpeed}
+        />
+        <OptionRow<DiceSpeed>
+          label={i18n.t("settings.diceSpeed")}
+          onChange={(diceSpeed) => updateSettings({ diceSpeed })}
+          options={["slow", "normal", "fast"]}
+          value={settings.diceSpeed}
+        />
+        <OptionRow<ThemeMode>
+          label={i18n.t("settings.theme")}
+          onChange={(theme) => updateSettings({ theme })}
+          options={["light", "dark", "system"]}
+          value={settings.theme}
+        />
+        <ToggleRow
+          label={i18n.t("settings.haptics")}
+          onChange={(hapticsEnabled) => updateSettings({ hapticsEnabled })}
+          value={settings.hapticsEnabled}
+        />
+        <ToggleRow
+          label={i18n.t("settings.sound")}
+          onChange={(soundEnabled) => updateSettings({ soundEnabled })}
+          value={settings.soundEnabled}
+        />
+        <ToggleRow
+          label={i18n.t("settings.reducedMotion")}
+          onChange={(reducedMotion) => updateSettings({ reducedMotion })}
+          value={settings.reducedMotion}
+        />
+      </WoodPanel>
+
+      <WoodPanel contentStyle={{ padding: 16, gap: 8 }} palette={palette}>
+        <SectionTitle>{i18n.t("settings.legal.title")}</SectionTitle>
+        <Link asChild href="/privacy">
+          <Pressable accessibilityRole="button">
             <Text
-              className="font-semibold text-sm"
-              style={{ color: palette.textMuted }}
-            >
-              {i18n.t("settings.playerNickname")}
-            </Text>
-            <TextInput
-              autoCapitalize="words"
-              autoCorrect={false}
-              maxLength={16}
-              onChangeText={(playerNickname) =>
-                updateSettings({ playerNickname })
-              }
-              placeholder={i18n.t("player.defaultName")}
-              placeholderTextColor={palette.textMuted}
               style={{
-                borderWidth: 1,
-                borderColor: palette.border,
-                borderRadius: 12,
-                paddingHorizontal: 14,
-                paddingVertical: 10,
-                color: palette.text,
-                backgroundColor: palette.background,
+                color: lightenColor(palette.ladder, 0.35),
+                fontFamily: GAME_FONT,
+                fontSize: 14,
               }}
-              value={settings.playerNickname}
-            />
-            <Text style={{ color: palette.textMuted, fontSize: 12 }}>
-              {i18n.t("settings.playerPreview", { name: playerPreview })}
-            </Text>
-          </View>
-          <View className="gap-2">
-            <Text
-              className="font-semibold text-sm"
-              style={{ color: palette.textMuted }}
             >
-              {i18n.t("settings.opponentNickname")}
+              {i18n.t("settings.legal.privacy")}
             </Text>
-            <TextInput
-              autoCapitalize="words"
-              autoCorrect={false}
-              maxLength={16}
-              onChangeText={(opponentNickname) =>
-                updateSettings({ opponentNickname })
-              }
-              placeholder={i18n.t("opponent.defaultName")}
-              placeholderTextColor={palette.textMuted}
-              style={{
-                borderWidth: 1,
-                borderColor: palette.border,
-                borderRadius: 12,
-                paddingHorizontal: 14,
-                paddingVertical: 10,
-                color: palette.text,
-                backgroundColor: palette.background,
-              }}
-              value={settings.opponentNickname}
-            />
-            <Text style={{ color: palette.textMuted, fontSize: 12 }}>
-              {i18n.t("settings.opponentPreview", { name: opponentPreview })}
-            </Text>
-          </View>
-          <OptionRow<MovementSpeed>
-            label={i18n.t("settings.movementSpeed")}
-            onChange={(movementSpeed) => updateSettings({ movementSpeed })}
-            options={["slow", "normal", "fast"]}
-            value={settings.movementSpeed}
-          />
-          <OptionRow<DiceSpeed>
-            label={i18n.t("settings.diceSpeed")}
-            onChange={(diceSpeed) => updateSettings({ diceSpeed })}
-            options={["slow", "normal", "fast"]}
-            value={settings.diceSpeed}
-          />
-          <OptionRow<ThemeMode>
-            label={i18n.t("settings.theme")}
-            onChange={(theme) => updateSettings({ theme })}
-            options={["light", "dark", "system"]}
-            value={settings.theme}
-          />
-          <ToggleRow
-            label={i18n.t("settings.haptics")}
-            onChange={(hapticsEnabled) => updateSettings({ hapticsEnabled })}
-            value={settings.hapticsEnabled}
-          />
-          <ToggleRow
-            label={i18n.t("settings.sound")}
-            onChange={(soundEnabled) => updateSettings({ soundEnabled })}
-            value={settings.soundEnabled}
-          />
-          <ToggleRow
-            label={i18n.t("settings.reducedMotion")}
-            onChange={(reducedMotion) => updateSettings({ reducedMotion })}
-            value={settings.reducedMotion}
-          />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+          </Pressable>
+        </Link>
+      </WoodPanel>
+    </ScreenShell>
   );
 }
