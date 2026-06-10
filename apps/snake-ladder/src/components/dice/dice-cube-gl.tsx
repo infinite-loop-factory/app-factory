@@ -16,6 +16,9 @@ type DiceCubeGlProps = {
   variant?: DiceVariant;
 };
 
+/** Render the settle springs for this long after the last value change. */
+const SETTLE_RENDER_MS = 2200;
+
 /** expo-gl + three.js die — idle settle / tumble driven by useDiceCubeMotion. */
 export function DiceCubeGl({
   value,
@@ -32,6 +35,17 @@ export function DiceCubeGl({
   const motionRef = useRef(motion);
   motionRef.current = motion;
   const rafRef = useRef<number | null>(null);
+  // Render on demand: a parked RAF loop burns ~full core per GL context.
+  const rollingRef = useRef(rolling);
+  const wakeUntilRef = useRef(Date.now() + SETTLE_RENDER_MS);
+  const wakeRef = useRef<(() => void) | null>(null);
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: a value change must wake the render loop for the settle animation
+  useEffect(() => {
+    rollingRef.current = rolling;
+    wakeUntilRef.current = Date.now() + SETTLE_RENDER_MS;
+    wakeRef.current?.();
+  }, [rolling, value]);
 
   useEffect(
     () => () => {
@@ -74,7 +88,6 @@ export function DiceCubeGl({
     scene.add(shadow);
 
     const renderFrame = () => {
-      rafRef.current = requestAnimationFrame(renderFrame);
       const m = motionRef.current;
       // FACE_ROTATIONS are authored in screen coords (y down); three.js y is
       // up, so rotations about x/z flip sign while y keeps its direction.
@@ -92,6 +105,17 @@ export function DiceCubeGl({
       shadowMaterial.opacity = 0.2 + (1 - sh) * 0.32;
       renderer.render(scene, camera);
       gl.endFrameEXP();
+
+      if (rollingRef.current || Date.now() < wakeUntilRef.current) {
+        rafRef.current = requestAnimationFrame(renderFrame);
+      } else {
+        rafRef.current = null;
+      }
+    };
+    wakeRef.current = () => {
+      if (rafRef.current === null) {
+        rafRef.current = requestAnimationFrame(renderFrame);
+      }
     };
     renderFrame();
   };
