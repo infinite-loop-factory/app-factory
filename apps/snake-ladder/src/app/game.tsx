@@ -3,11 +3,14 @@ import type { GameState } from "@/game/types";
 import type { GameFeedbackEvent } from "@/lib/game-feedback";
 
 import { MaterialIcons } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
 import { Link } from "expo-router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   Alert,
+  ImageBackground,
   Pressable,
+  StyleSheet,
   Text,
   useWindowDimensions,
   View,
@@ -23,6 +26,13 @@ import { QasmLogPanel } from "@/components/qasm-log-panel";
 import { QubitSetupBar } from "@/components/qubit-setup-bar";
 import { RollButton } from "@/components/roll-button";
 import { TurnBanner } from "@/components/turn-banner";
+import { WoodPanel } from "@/components/ui/wood-panel";
+import { GAME_FONT } from "@/game/constants/theme";
+import { darkenColor } from "@/lib/color";
+
+const FELT_TEXTURE = require("@/assets/images/textures/felt-table.jpg");
+const WOOD_TEXTURE = require("@/assets/images/textures/wood-planks.jpg");
+
 import { useGameController } from "@/game/hooks/use-game-controller";
 import { pickCpuPlacementCell } from "@/game/lib/game-helpers";
 import { useAppSettings } from "@/hooks/use-app-settings";
@@ -143,24 +153,21 @@ function PlayerBadge({
   palette: CraftPalette;
 }) {
   return (
-    <View
-      style={{
+    <WoodPanel
+      contentStyle={{
         flexDirection: "row",
         alignItems: "center",
         gap: 10,
-        backgroundColor: palette.frameWood,
-        borderRadius: 14,
         paddingHorizontal: 14,
-        paddingVertical: 8,
+        paddingVertical: 7,
+      }}
+      edge={4}
+      palette={palette}
+      radius={14}
+      style={{
         borderWidth: 2,
-        borderColor: isActive ? color : palette.frameWoodEdge,
-        borderBottomWidth: 4,
-        borderBottomColor: palette.frameWoodEdge,
-        opacity: isActive ? 1 : 0.78,
-        shadowColor: "#000",
-        shadowOpacity: isActive ? 0.35 : 0.15,
-        shadowRadius: 5,
-        shadowOffset: { width: 0, height: 3 },
+        borderColor: isActive ? color : "transparent",
+        opacity: isActive ? 1 : 0.8,
         elevation: isActive ? 5 : 2,
       }}
     >
@@ -180,7 +187,7 @@ function PlayerBadge({
           style={{
             color: palette.creamMuted,
             fontSize: 11,
-            fontWeight: "700",
+            fontFamily: GAME_FONT,
             maxWidth: 96,
           }}
         >
@@ -189,15 +196,15 @@ function PlayerBadge({
         <Text
           style={{
             color: palette.cream,
-            fontSize: 20,
-            fontWeight: "900",
-            lineHeight: 23,
+            fontSize: 21,
+            fontFamily: GAME_FONT,
+            lineHeight: 24,
           }}
         >
           {position}
         </Text>
       </View>
-    </View>
+    </WoodPanel>
   );
 }
 
@@ -432,8 +439,22 @@ export default function GameScreen() {
   return (
     <SafeAreaView
       className="flex-1"
-      style={{ backgroundColor: palette.tableFelt }}
+      style={{ backgroundColor: palette.tableFeltDeep }}
     >
+      <ImageBackground
+        resizeMode="cover"
+        source={FELT_TEXTURE}
+        style={StyleSheet.absoluteFill}
+      >
+        <LinearGradient
+          colors={[
+            `${palette.tableFelt}59`,
+            `${palette.tableFelt}26`,
+            "rgba(0,0,0,0.5)",
+          ]}
+          style={StyleSheet.absoluteFill}
+        />
+      </ImageBackground>
       <ConfettiBurst
         active={showConfetti}
         colors={confettiColors}
@@ -478,9 +499,10 @@ export default function GameScreen() {
             </Pressable>
           </Link>
           <Text
-            className="font-extrabold text-lg"
             style={{
               color: palette.cream,
+              fontSize: 22,
+              fontFamily: GAME_FONT,
               letterSpacing: 1,
               textShadowColor: "rgba(0,0,0,0.3)",
               textShadowOffset: { width: 0, height: 2 },
@@ -532,16 +554,13 @@ export default function GameScreen() {
         </View>
 
         <View className="items-center px-4 pb-3">
-          <View
+          <WoodPanel
+            contentStyle={{ padding: 8 }}
+            edge={6}
+            palette={palette}
+            radius={22}
             style={{
-              backgroundColor: palette.frameWood,
-              borderRadius: 22,
-              padding: 8,
-              borderWidth: 2,
-              borderColor: palette.frameWoodEdge,
-              borderBottomWidth: 6,
-              shadowColor: "#000",
-              shadowOpacity: 0.4,
+              shadowOpacity: 0.45,
               shadowRadius: 10,
               shadowOffset: { width: 0, height: 6 },
               elevation: 8,
@@ -559,32 +578,27 @@ export default function GameScreen() {
               }
               state={state}
             />
-          </View>
+          </WoodPanel>
         </View>
 
-        <View
-          className="mx-4 mb-3"
-          style={{
-            backgroundColor: palette.frameWood,
-            borderRadius: 12,
-            paddingHorizontal: 16,
-            paddingVertical: 10,
-            borderWidth: 1.5,
-            borderColor: palette.frameWoodEdge,
-            borderBottomWidth: 4,
-          }}
+        <WoodPanel
+          contentStyle={{ paddingHorizontal: 16, paddingVertical: 9 }}
+          edge={4}
+          palette={palette}
+          radius={12}
+          style={{ marginHorizontal: 16, marginBottom: 10 }}
         >
           <Text
             style={{
               color: palette.cream,
-              fontWeight: "800",
-              fontSize: 15,
+              fontFamily: GAME_FONT,
+              fontSize: 16,
               textAlign: "center",
             }}
           >
             {msg}
           </Text>
-        </View>
+        </WoodPanel>
 
         {state.phase === "setup" && state.currentPlayer === 0 ? (
           <View className="px-4 pb-2">
@@ -614,53 +628,76 @@ export default function GameScreen() {
           palette={palette}
         />
 
-        <View className="flex-row items-center justify-center gap-6 px-4 pb-4">
-          {state.isRolling ? (
-            <View style={{ width: 72, height: 72 }} />
-          ) : (
-            <DiceDisplay
-              gold={goldDiceEnabled && monetization.goldDiceCount > 0}
-              palette={palette}
-              reducedMotion={settings.reducedMotion}
-              rolling={false}
-              value={state.dice}
-            />
-          )}
-          {canRoll ? (
-            <RollButton
-              accessibilityLabel={i18n.t("game.roll")}
-              backgroundColor={palette.playerYou}
-              label={i18n.t("game.roll")}
-              onPress={rollDice}
-              pulsing
-              reducedMotion={settings.reducedMotion}
-              testID="game-roll-button"
-            />
-          ) : null}
-          {canConfirmPass ? (
-            <RollButton
-              accessibilityLabel={i18n.t("setup.passTurn")}
-              backgroundColor={palette.ladder}
-              label={i18n.t("setup.passTurn")}
-              onPress={() => confirmPass()}
-              pulsing
-              reducedMotion={settings.reducedMotion}
-              testID="setup-pass-turn"
-            />
-          ) : null}
-          {state.phase === "gameover" ? (
-            <RollButton
-              accessibilityLabel={i18n.t("game.playAgain")}
-              backgroundColor={palette.orbGlow}
-              label={i18n.t("game.playAgain")}
-              onPress={() => confirmNewGame(startNewGame)}
-              pulsing
-              reducedMotion={settings.reducedMotion}
-            />
-          ) : null}
-        </View>
-
         <QasmLogPanel logs={state.logs} palette={palette} />
+
+        {/* bottom control dock */}
+        <ImageBackground
+          resizeMode="cover"
+          source={WOOD_TEXTURE}
+          style={{ marginTop: "auto" }}
+        >
+          <LinearGradient
+            colors={[
+              `${palette.frameWood}8c`,
+              `${palette.frameWood}b3`,
+              `${darkenColor(palette.frameWood, 0.7)}e6`,
+            ]}
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+              paddingHorizontal: 24,
+              paddingTop: 10,
+              paddingBottom: 14,
+              borderTopWidth: 2,
+              borderTopColor: "rgba(255,255,255,0.2)",
+            }}
+          >
+            {state.isRolling ? (
+              <View style={{ width: 72, height: 102 }} />
+            ) : (
+              <DiceDisplay
+                gold={goldDiceEnabled && monetization.goldDiceCount > 0}
+                palette={palette}
+                reducedMotion={settings.reducedMotion}
+                rolling={false}
+                value={state.dice}
+              />
+            )}
+            {canRoll ? (
+              <RollButton
+                accessibilityLabel={i18n.t("game.roll")}
+                backgroundColor={palette.playerYou}
+                label={i18n.t("game.roll")}
+                onPress={rollDice}
+                pulsing
+                reducedMotion={settings.reducedMotion}
+                testID="game-roll-button"
+              />
+            ) : null}
+            {canConfirmPass ? (
+              <RollButton
+                accessibilityLabel={i18n.t("setup.passTurn")}
+                backgroundColor={palette.ladder}
+                label={i18n.t("setup.passTurn")}
+                onPress={() => confirmPass()}
+                pulsing
+                reducedMotion={settings.reducedMotion}
+                testID="setup-pass-turn"
+              />
+            ) : null}
+            {state.phase === "gameover" ? (
+              <RollButton
+                accessibilityLabel={i18n.t("game.playAgain")}
+                backgroundColor={palette.orbGlow}
+                label={i18n.t("game.playAgain")}
+                onPress={() => confirmNewGame(startNewGame)}
+                pulsing
+                reducedMotion={settings.reducedMotion}
+              />
+            ) : null}
+          </LinearGradient>
+        </ImageBackground>
       </View>
     </SafeAreaView>
   );

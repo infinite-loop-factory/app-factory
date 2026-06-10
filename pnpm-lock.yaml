@@ -9,18 +9,27 @@ catalogs:
     '@biomejs/biome':
       specifier: ^2.4.16
       version: 2.4.16
+    es-toolkit:
+      specifier: ^1.40.0
+      version: 1.43.0
     lucide-react-native:
       specifier: ^0.525.0
       version: 0.525.0
     nativewind:
       specifier: ^4.1.23
       version: 4.1.23
+    react-native-css-interop:
+      specifier: 0.1.22
+      version: 0.1.22
     tailwindcss:
       specifier: 3.4.18
       version: 3.4.18
     type-fest:
       specifier: 5.0.1
       version: 5.0.1
+    typescript:
+      specifier: ^5.8.3
+      version: 5.9.3
 
 overrides:
   expo: 54.0.34
@@ -873,6 +882,9 @@ importers:
 
   apps/snake-ladder:
     dependencies:
+      '@expo-google-fonts/jua':
+        specifier: ^0.4.1
+        version: 0.4.1
       '@expo/metro-runtime':
         specifier: 6.1.2
         version: 6.1.2(expo@54.0.34)(react-dom@19.1.0(react@19.1.0))(react-native@0.81.5(@babel/core@7.28.0)(@react-native-community/cli@20.1.3(typescript@5.9.3))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)
@@ -921,6 +933,9 @@ importers:
       expo-iap:
         specifier: ^4.3.1
         version: 4.3.1(expo@54.0.34)(react-native@0.81.5(@babel/core@7.28.0)(@react-native-community/cli@20.1.3(typescript@5.9.3))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)
+      expo-linear-gradient:
+        specifier: ~15.0.8
+        version: 15.0.8(expo@54.0.34)(react-native@0.81.5(@babel/core@7.28.0)(@react-native-community/cli@20.1.3(typescript@5.9.3))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)
       expo-linking:
         specifier: 8.0.12
         version: 8.0.12(expo@54.0.34)(react-native@0.81.5(@babel/core@7.28.0)(@react-native-community/cli@20.1.3(typescript@5.9.3))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)
@@ -2353,6 +2368,9 @@ packages:
     engines: {node: '>=18'}
     cpu: [x64]
     os: [win32]
+
+  '@expo-google-fonts/jua@0.4.1':
+    resolution: {integrity: sha512-I6x3U8BSeMr8m+j7GMcI+3jkfnF6Umrn/moCdB0QrvUX/ecXN0yVse/sznE7uru/4VCDE5/3vsCIS9/zLRsGTQ==}
 
   '@expo/cli@54.0.24':
     resolution: {integrity: sha512-5xse1bEgnVUBhOrtttc6xTNJVvjyTRavpzuF0/0nuj+312vfSbk7EiRbG+xJ2pW/iZxnhLPJkFCrPYG0nmheAQ==}
@@ -10983,6 +11001,8 @@ snapshots:
 
   '@esbuild/win32-x64@0.27.2':
     optional: true
+
+  '@expo-google-fonts/jua@0.4.1': {}
 
   '@expo/cli@54.0.24(expo-router@6.0.23)(expo@54.0.34)(react-native@0.81.5(@babel/core@7.28.0)(@react-native-community/cli@20.1.3(typescript@5.9.3))(@types/react@19.1.17)(react@19.1.0))':
     dependencies:

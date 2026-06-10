@@ -10,6 +10,7 @@ import Animated, {
   withSequence,
   withTiming,
 } from "react-native-reanimated";
+import { GAME_FONT } from "@/game/constants/theme";
 import i18n from "@/i18n";
 
 const HOLD_MS = 850;
@@ -111,8 +112,11 @@ const styles = StyleSheet.create({
   },
   label: {
     color: "#fff",
-    fontSize: 22,
-    fontWeight: "900",
+    fontSize: 24,
+    fontFamily: GAME_FONT,
     letterSpacing: 0.5,
+    textShadowColor: "rgba(0,0,0,0.3)",
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 2,
   },
 });

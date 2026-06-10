@@ -2,8 +2,9 @@ import type { ReactNode } from "react";
 import type { CraftPalette } from "@/game/constants/palettes";
 import type { GameState } from "@/game/types";
 
+import { MaterialIcons } from "@expo/vector-icons";
 import { useEffect } from "react";
-import { Pressable, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import Animated, {
   Easing,
   useAnimatedStyle,
@@ -25,6 +26,8 @@ import {
   QUBIT_CONFIGS,
   TOTAL_CELLS,
 } from "@/game/constants/board";
+import { GAME_FONT } from "@/game/constants/theme";
+import { darkenColor } from "@/lib/color";
 
 const CAMERA_ZOOM = 1.4;
 /** Zoom-in locks on quickly; zoom-out relaxes a beat after the turn ends. */
@@ -154,6 +157,14 @@ function BoardCell({
   const { col, row } = cellToVisualCoord(cell);
   const qubits = state.qubits.filter((q) => q.cell === cell);
   const tint = destinationTint(cell, connections, palette);
+  const isGoal = cell === TOTAL_CELLS;
+  const isStart = cell === 1;
+  const overlayTint = (() => {
+    if (tint) return tint;
+    if (isGoal) return `${palette.orbGlow}66`;
+    if (isStart) return `${palette.ladder}40`;
+    return null;
+  })();
 
   return (
     <Pressable
@@ -166,22 +177,54 @@ function BoardCell({
         top: row * cellSize,
         width: cellSize,
         height: cellSize,
-        backgroundColor: tint ?? cellBackground(row, col, palette),
-        borderWidth: 0.5,
-        borderColor: `${palette.border}88`,
         alignItems: "center",
         justifyContent: "center",
       }}
       testID={`board-cell-${cell}`}
     >
+      {/* inset tile: top-lit rounded piece sitting on the dark board base */}
+      <View
+        pointerEvents="none"
+        style={{
+          position: "absolute",
+          left: 1,
+          top: 1,
+          right: 1,
+          bottom: 1,
+          borderRadius: Math.max(4, cellSize * 0.2),
+          backgroundColor: cellBackground(row, col, palette),
+          borderTopWidth: 1,
+          borderTopColor: "rgba(255,255,255,0.35)",
+          borderBottomWidth: 1.5,
+          borderBottomColor: "rgba(0,0,0,0.18)",
+          overflow: "hidden",
+        }}
+      >
+        {overlayTint ? (
+          <View
+            style={{
+              ...StyleSheet.absoluteFillObject,
+              backgroundColor: overlayTint,
+            }}
+          />
+        ) : null}
+      </View>
+      {isGoal ? (
+        <MaterialIcons
+          color={palette.orbGlow}
+          name="emoji-events"
+          size={cellSize * 0.5}
+          style={{ position: "absolute", bottom: 1, right: 2 }}
+        />
+      ) : null}
       <Text
         style={{
           position: "absolute",
-          top: 2,
+          top: 1,
           left: 4,
-          fontSize: Math.max(8, cellSize * 0.22),
-          color: palette.textMuted,
-          fontWeight: "600",
+          fontSize: Math.max(9, cellSize * 0.3),
+          color: `${palette.dicePip}99`,
+          fontFamily: GAME_FONT,
         }}
       >
         {cell}
@@ -234,12 +277,11 @@ export function GameBoard({
 
   return (
     <View
-      className="overflow-hidden rounded-2xl border-2"
+      className="overflow-hidden rounded-2xl"
       style={{
         width: boardWidth,
         height: boardHeight,
-        borderColor: palette.border,
-        backgroundColor: palette.background,
+        backgroundColor: darkenColor(palette.walnut, 0.55),
       }}
     >
       <BoardCamera

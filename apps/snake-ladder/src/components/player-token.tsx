@@ -13,7 +13,53 @@ import Animated, {
   withSpring,
   withTiming,
 } from "react-native-reanimated";
+import Svg, { Circle, Ellipse, Path } from "react-native-svg";
 import { cellToVisualCoord } from "@/game/constants/board";
+import { darkenColor, lightenColor } from "@/lib/color";
+
+/** Pawn aspect: a touch taller than the cell so pieces read as standing. */
+const PAWN_ASPECT = 1.3;
+
+function PawnPiece({ color, size }: { color: string; size: number }) {
+  const height = size * PAWN_ASPECT;
+  const outline = darkenColor(color, 0.62);
+  const body = lightenColor(color, 0.08);
+  return (
+    <Svg height={height} viewBox="0 0 100 130" width={size}>
+      {/* contact shadow */}
+      <Ellipse cx={50} cy={121} fill="rgba(0,0,0,0.28)" rx={34} ry={8} />
+      {/* base */}
+      <Ellipse
+        cx={50}
+        cy={113}
+        fill={body}
+        rx={32}
+        ry={11}
+        stroke={outline}
+        strokeWidth={5}
+      />
+      {/* body */}
+      <Path
+        d="M34 110 C34 78 41 60 50 50 C59 60 66 78 66 110 Z"
+        fill={body}
+        stroke={outline}
+        strokeLinejoin="round"
+        strokeWidth={5}
+      />
+      {/* head */}
+      <Circle
+        cx={50}
+        cy={32}
+        fill={body}
+        r={21}
+        stroke={outline}
+        strokeWidth={5}
+      />
+      {/* gloss */}
+      <Circle cx={42} cy={24} fill="rgba(255,255,255,0.5)" r={6.5} />
+    </Svg>
+  );
+}
 
 const FOLLOW_SPRING = {
   damping: 22,
@@ -46,11 +92,13 @@ function tokenTarget(
   size: number,
 ): { x: number; y: number } {
   const { col, row } = cellToVisualCoord(cell);
-  const shift = overlapped ? cellSize * 0.13 : 0;
+  const shift = overlapped ? cellSize * 0.14 : 0;
   const dir = player === 0 ? -1 : 1;
+  const height = size * PAWN_ASPECT;
   return {
     x: col * cellSize + (cellSize - size) / 2 + shift * dir,
-    y: row * cellSize + (cellSize - size) / 2 + shift * dir,
+    // Anchor the pawn's base near the cell floor so the head pokes above.
+    y: row * cellSize + cellSize - height + cellSize * 0.04 + shift * dir * 0.5,
   };
 }
 
@@ -101,8 +149,9 @@ function TokenGlow({
         pointerEvents="none"
         style={{
           position: "absolute",
+          bottom: 0,
           width: size,
-          height: size,
+          height: size * 0.5,
           borderRadius: 999,
           borderWidth: 2,
           borderColor: `${color}66`,
@@ -116,8 +165,9 @@ function TokenGlow({
       style={[
         {
           position: "absolute",
+          bottom: -size * 0.12,
           width: size,
-          height: size,
+          height: size * 0.5,
           borderRadius: 999,
           backgroundColor: `${color}55`,
         },
@@ -197,9 +247,9 @@ export function PlayerToken({
           top: 0,
           left: 0,
           width: size,
-          height: size,
+          height: size * PAWN_ASPECT,
           alignItems: "center",
-          justifyContent: "center",
+          justifyContent: "flex-end",
           zIndex: player === 0 ? 11 : 10,
         },
         style,
@@ -210,23 +260,9 @@ export function PlayerToken({
         active={isActive}
         color={color}
         reducedMotion={reducedMotion}
-        size={size * 1.5}
+        size={size * 1.4}
       />
-      <View
-        style={{
-          width: size,
-          height: size,
-          borderRadius: 999,
-          backgroundColor: color,
-          borderWidth: 2,
-          borderColor: palette.card,
-          shadowColor: "#000",
-          shadowOpacity: 0.25,
-          shadowRadius: 3,
-          shadowOffset: { width: 0, height: 2 },
-          elevation: 3,
-        }}
-      />
+      <PawnPiece color={color} size={size} />
     </Animated.View>
   );
 }

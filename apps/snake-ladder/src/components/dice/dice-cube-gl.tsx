@@ -50,8 +50,9 @@ export function DiceCubeGl({
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(30, width / height, 0.1, 20);
-    camera.position.set(0, 0.25, 3.1);
-    camera.lookAt(0, 0, 0);
+    // Tilted-down view — the result face lands on top per dice convention.
+    camera.position.set(0, 1.9, 2.7);
+    camera.lookAt(0, -0.05, 0);
 
     scene.add(new THREE.AmbientLight(0xffffff, 1.1));
     const keyLight = new THREE.DirectionalLight(0xffffff, 1.6);

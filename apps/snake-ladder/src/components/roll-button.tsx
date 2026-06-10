@@ -1,3 +1,4 @@
+import { LinearGradient } from "expo-linear-gradient";
 import { useEffect, useRef } from "react";
 import { Pressable, Text, View } from "react-native";
 import Animated, {
@@ -10,7 +11,8 @@ import Animated, {
   withSpring,
   withTiming,
 } from "react-native-reanimated";
-import { darkenColor } from "@/lib/color";
+import { GAME_FONT } from "@/game/constants/theme";
+import { darkenColor, lightenColor } from "@/lib/color";
 
 /** Hold this long for a full-power throw. */
 export const FULL_CHARGE_MS = 900;
@@ -123,31 +125,36 @@ export function RollButton({
             elevation: 5,
           }}
         >
-          <Animated.View
-            style={[
-              {
+          <Animated.View style={[{ borderRadius: 18 }, faceStyle]}>
+            <LinearGradient
+              colors={[
+                lightenColor(backgroundColor, 0.3),
                 backgroundColor,
+                darkenColor(backgroundColor, 0.88),
+              ]}
+              style={{
                 borderRadius: 18,
                 paddingHorizontal: 34,
-                paddingVertical: 15,
+                paddingVertical: 14,
                 alignItems: "center",
-              },
-              faceStyle,
-            ]}
-          >
-            <Text
-              style={{
-                color: "#fff",
-                fontSize: 18,
-                fontWeight: "900",
-                letterSpacing: 1.5,
-                textShadowColor: "rgba(0,0,0,0.35)",
-                textShadowOffset: { width: 0, height: 2 },
-                textShadowRadius: 2,
+                borderTopWidth: 1.5,
+                borderTopColor: "rgba(255,255,255,0.35)",
               }}
             >
-              {label}
-            </Text>
+              <Text
+                style={{
+                  color: "#fff",
+                  fontSize: 21,
+                  fontFamily: GAME_FONT,
+                  letterSpacing: 1.5,
+                  textShadowColor: "rgba(0,0,0,0.35)",
+                  textShadowOffset: { width: 0, height: 2 },
+                  textShadowRadius: 2,
+                }}
+              >
+                {label}
+              </Text>
+            </LinearGradient>
           </Animated.View>
         </View>
       </Pressable>

@@ -8,6 +8,7 @@ import Animated, {
   withSpring,
   withTiming,
 } from "react-native-reanimated";
+import { GAME_FONT } from "@/game/constants/theme";
 
 type DiceResultPopProps = {
   value: number;
@@ -52,8 +53,8 @@ const styles = StyleSheet.create({
     position: "absolute",
     alignSelf: "center",
     top: "18%",
-    fontSize: 96,
-    fontWeight: "900",
+    fontSize: 104,
+    fontFamily: GAME_FONT,
     textShadowOffset: { width: 0, height: 4 },
     textShadowRadius: 10,
     zIndex: 50,

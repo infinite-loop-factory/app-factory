@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "timestamp": "2026-06-10T18:04:24+10:00",
+  "options": {
+    "size": "1024x1024",
+    "quality": "auto",
+    "count": 1
+  },
+  "cost_estimate_usd": 0,
+  "runs": [
+    {
+      "vendor": "pollinations",
+      "model": "flux",
+      "strategy": "pollinations-api",
+      "strategy_attempts": [
+        {
+          "strategy": "pollinations-api",
+          "status": "ok",
+          "duration_ms": 4911
+        }
+      ],
+      "files": [
+        "/Users/gracefullight/workspace/app-factory/apps/snake-ladder/src/assets/images/textures/pollinations-flux-v6s834.jpg"
+      ],
+      "duration_ms": 4912,
+      "status": "ok"
+    }
+  ],
+  "prompt": "seamless warm walnut wood planks texture, top-down flat view, rich brown grain, soft even studio light, no objects, no text, tileable"
+}

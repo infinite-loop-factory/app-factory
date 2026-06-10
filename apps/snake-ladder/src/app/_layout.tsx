@@ -1,5 +1,6 @@
 import "../global.css";
 
+import { Jua_400Regular } from "@expo-google-fonts/jua";
 import {
   DarkTheme,
   DefaultTheme,
@@ -84,6 +85,7 @@ function AppBootstrap({ fontsLoaded }: { fontsLoaded: boolean }) {
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
+    Jua: Jua_400Regular,
   });
 
   return (

@@ -102,8 +102,9 @@ export function DiceRollGl({
       0.1,
       40,
     );
-    camera.position.set(0, 1.15, 4.6);
-    camera.lookAt(0, -0.1, 0);
+    // Look down at the table so the rolled (top) face reads clearly.
+    camera.position.set(0, 3.1, 3.7);
+    camera.lookAt(0, -0.3, 0);
 
     scene.add(new THREE.AmbientLight(0xffffff, 1.0));
     const keyLight = new THREE.DirectionalLight(0xffffff, 1.7);
