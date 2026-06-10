@@ -22,6 +22,7 @@ import { GoldDicePanel } from "@/components/gold-dice-panel";
 import { QasmLogPanel } from "@/components/qasm-log-panel";
 import { QubitSetupBar } from "@/components/qubit-setup-bar";
 import { RollButton } from "@/components/roll-button";
+import { TurnBanner } from "@/components/turn-banner";
 import { useGameController } from "@/game/hooks/use-game-controller";
 import { pickCpuPlacementCell } from "@/game/lib/game-helpers";
 import { useAppSettings } from "@/hooks/use-app-settings";
@@ -402,6 +403,12 @@ export default function GameScreen() {
         reducedMotion={settings.reducedMotion}
       />
       {settings.reducedMotion ? null : <DiceGlPrewarm />}
+      <TurnBanner
+        activePlayer={getActiveTurnPlayer(state)}
+        opponentName={opponentName}
+        palette={palette}
+        reducedMotion={settings.reducedMotion}
+      />
       <View className="relative flex-1">
         <DiceRollOverlay
           charge={throwCharge}

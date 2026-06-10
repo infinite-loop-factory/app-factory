@@ -56,6 +56,10 @@ export default {
     confirmPass: "Tap Continue when ready",
     interference: "Interference! Your qubit cancelled the opponent's.",
   },
+  turn: {
+    yours: "Your turn!",
+    opponent: "{name}'s turn",
+  },
   play: {
     humanRoll: "Your turn — roll the dice",
     opponentRoll: "{name} is rolling…",

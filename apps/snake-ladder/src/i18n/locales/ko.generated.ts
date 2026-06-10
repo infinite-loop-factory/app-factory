@@ -56,6 +56,10 @@ export default {
     confirmPass: "준비되면 계속을 누르세요",
     interference: "간섭! 상대 큐비트가 상쇄되었습니다.",
   },
+  turn: {
+    yours: "내 차례!",
+    opponent: "{name} 차례",
+  },
   play: {
     humanRoll: "내 턴 — 주사위를 굴리세요",
     opponentRoll: "{name}이(가) 굴리는 중…",

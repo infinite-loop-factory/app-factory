@@ -29,6 +29,8 @@
   "setup.opponentTurn": "{name} is placing qubits…",
   "setup.confirmPass": "Tap Continue when ready",
   "setup.interference": "Interference! Your qubit cancelled the opponent's.",
+  "turn.yours": "Your turn!",
+  "turn.opponent": "{name}'s turn",
   "play.humanRoll": "Your turn — roll the dice",
   "play.opponentRoll": "{name} is rolling…",
   "play.moving": "Moving…",
