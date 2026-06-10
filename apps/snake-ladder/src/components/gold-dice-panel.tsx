@@ -22,13 +22,20 @@ export function GoldDicePanel({
 }: GoldDicePanelProps) {
   return (
     <View
-      className="mx-4 mb-3 rounded-2xl border px-4 py-3"
-      style={{ backgroundColor: palette.card, borderColor: palette.border }}
+      className="mx-4 mb-3"
+      style={{
+        backgroundColor: palette.tableFeltDeep,
+        borderRadius: 14,
+        paddingHorizontal: 14,
+        paddingVertical: 10,
+        borderWidth: 1.5,
+        borderColor: palette.frameWoodEdge,
+      }}
       testID="gold-dice-panel"
     >
       <View className="flex-row items-center justify-between">
         <Text
-          style={{ color: palette.text, fontWeight: "700" }}
+          style={{ color: palette.orbGlow, fontWeight: "900", fontSize: 14 }}
           testID="gold-dice-balance"
         >
           {i18n.t("game.goldDice.balance", { count: balance })}
@@ -41,17 +48,22 @@ export function GoldDicePanel({
           accessibilityState={{ checked: enabled }}
           onPress={onToggle}
           style={{
-            paddingHorizontal: 10,
+            paddingHorizontal: 12,
             paddingVertical: 6,
             borderRadius: 999,
-            backgroundColor: enabled ? palette.orbGlow : palette.background,
-            borderWidth: 1,
-            borderColor: palette.border,
+            backgroundColor: enabled ? palette.orbGlow : palette.frameWood,
+            borderWidth: 1.5,
+            borderColor: palette.frameWoodEdge,
           }}
           testID="gold-dice-toggle"
         >
           <Text
-            style={{ color: palette.text, fontWeight: "700", fontSize: 12 }}
+            style={{
+              color: enabled ? "#3a2a06" : palette.creamMuted,
+              fontWeight: "900",
+              fontSize: 12,
+              letterSpacing: 0.5,
+            }}
           >
             {enabled ? i18n.t("game.goldDice.on") : i18n.t("game.goldDice.off")}
           </Text>
@@ -65,19 +77,26 @@ export function GoldDicePanel({
               key={face}
               onPress={() => onSelectFace(face)}
               style={{
-                width: 36,
-                height: 36,
-                borderRadius: 8,
+                width: 38,
+                height: 38,
+                borderRadius: 10,
                 alignItems: "center",
                 justifyContent: "center",
-                borderWidth: 1,
-                borderColor: palette.border,
+                borderWidth: 1.5,
+                borderColor: palette.frameWoodEdge,
+                borderBottomWidth: 3,
                 backgroundColor:
-                  desiredFace === face ? palette.orbGlow : palette.background,
+                  desiredFace === face ? palette.orbGlow : palette.frameWood,
               }}
               testID={`gold-dice-face-${face}`}
             >
-              <Text style={{ color: palette.text, fontWeight: "800" }}>
+              <Text
+                style={{
+                  color: desiredFace === face ? "#3a2a06" : palette.cream,
+                  fontWeight: "900",
+                  fontSize: 16,
+                }}
+              >
                 {face}
               </Text>
             </Pressable>

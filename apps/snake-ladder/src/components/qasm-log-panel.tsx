@@ -11,10 +11,11 @@ type QasmLogPanelProps = {
   palette: CraftPalette;
 };
 
+// Light tones — the log tray sits on dark felt in both themes.
 function logColor(type: LogEntry["type"], palette: CraftPalette): string {
-  if (type === "error") return palette.snake;
-  if (type === "qasm") return palette.interference;
-  return palette.textMuted;
+  if (type === "error") return "#ff9aa8";
+  if (type === "qasm") return "#c9b6f0";
+  return palette.creamMuted;
 }
 
 export function QasmLogPanel({ logs, palette }: QasmLogPanelProps) {
@@ -26,7 +27,10 @@ export function QasmLogPanel({ logs, palette }: QasmLogPanelProps) {
   return (
     <ScrollView
       className="mx-4 mb-4 max-h-56 rounded-xl border px-3 py-2"
-      style={{ backgroundColor: palette.card, borderColor: palette.border }}
+      style={{
+        backgroundColor: palette.tableFeltDeep,
+        borderColor: palette.frameWoodEdge,
+      }}
     >
       {recent.map((entry) => {
         const isQasm = entry.type === "qasm";

@@ -88,14 +88,24 @@ function GoldDiceControls({
       <Pressable
         accessibilityLabel={i18n.t("game.shopCta")}
         accessibilityRole="button"
-        className="mx-4 mb-3 rounded-2xl border px-4 py-3"
-        style={{ backgroundColor: palette.card, borderColor: palette.border }}
+        className="mx-4 mb-3"
+        style={{
+          backgroundColor: palette.frameWood,
+          borderRadius: 12,
+          paddingHorizontal: 16,
+          paddingVertical: 12,
+          borderWidth: 1.5,
+          borderColor: palette.orbGlow,
+          borderBottomWidth: 4,
+          borderBottomColor: palette.frameWoodEdge,
+        }}
       >
         <Text
           style={{
             color: palette.orbGlow,
-            fontWeight: "700",
+            fontWeight: "900",
             textAlign: "center",
+            letterSpacing: 0.5,
           }}
         >
           {i18n.t("game.shopCta")}
@@ -119,7 +129,7 @@ function resolveStatusMessage(message: string, opponentName: string): string {
   return i18n.t(message);
 }
 
-function TurnStatusRow({
+function PlayerBadge({
   name,
   color,
   position,
@@ -133,33 +143,60 @@ function TurnStatusRow({
   palette: CraftPalette;
 }) {
   return (
-    <View className="flex-row items-center gap-2">
+    <View
+      style={{
+        flexDirection: "row",
+        alignItems: "center",
+        gap: 10,
+        backgroundColor: palette.frameWood,
+        borderRadius: 14,
+        paddingHorizontal: 14,
+        paddingVertical: 8,
+        borderWidth: 2,
+        borderColor: isActive ? color : palette.frameWoodEdge,
+        borderBottomWidth: 4,
+        borderBottomColor: palette.frameWoodEdge,
+        opacity: isActive ? 1 : 0.78,
+        shadowColor: "#000",
+        shadowOpacity: isActive ? 0.35 : 0.15,
+        shadowRadius: 5,
+        shadowOffset: { width: 0, height: 3 },
+        elevation: isActive ? 5 : 2,
+      }}
+    >
       <View
         style={{
-          padding: 2,
+          width: 18,
+          height: 18,
           borderRadius: 999,
-          borderWidth: 1.5,
-          borderColor: isActive ? color : "transparent",
+          backgroundColor: color,
+          borderWidth: 2,
+          borderColor: palette.cream,
         }}
-      >
-        <View
+      />
+      <View>
+        <Text
+          numberOfLines={1}
           style={{
-            width: 12,
-            height: 12,
-            borderRadius: 999,
-            backgroundColor: color,
+            color: palette.creamMuted,
+            fontSize: 11,
+            fontWeight: "700",
+            maxWidth: 96,
           }}
-        />
+        >
+          {name}
+        </Text>
+        <Text
+          style={{
+            color: palette.cream,
+            fontSize: 20,
+            fontWeight: "900",
+            lineHeight: 23,
+          }}
+        >
+          {position}
+        </Text>
       </View>
-      <Text
-        style={{
-          color: isActive ? palette.text : palette.textMuted,
-          fontSize: 12,
-          fontWeight: isActive ? "700" : "400",
-        }}
-      >
-        {name} · {position}
-      </Text>
     </View>
   );
 }
@@ -395,7 +432,7 @@ export default function GameScreen() {
   return (
     <SafeAreaView
       className="flex-1"
-      style={{ backgroundColor: palette.background }}
+      style={{ backgroundColor: palette.tableFelt }}
     >
       <ConfettiBurst
         active={showConfetti}
@@ -427,14 +464,28 @@ export default function GameScreen() {
               accessibilityLabel={i18n.t("game.back")}
               accessibilityRole="button"
               className="h-10 w-10 items-center justify-center rounded-full"
-              style={{ backgroundColor: palette.card }}
+              style={{
+                backgroundColor: palette.frameWood,
+                borderWidth: 1.5,
+                borderColor: palette.frameWoodEdge,
+              }}
             >
-              <MaterialIcons color={palette.text} name="arrow-back" size={22} />
+              <MaterialIcons
+                color={palette.cream}
+                name="arrow-back"
+                size={22}
+              />
             </Pressable>
           </Link>
           <Text
             className="font-extrabold text-lg"
-            style={{ color: palette.text }}
+            style={{
+              color: palette.cream,
+              letterSpacing: 1,
+              textShadowColor: "rgba(0,0,0,0.3)",
+              textShadowOffset: { width: 0, height: 2 },
+              textShadowRadius: 2,
+            }}
           >
             {i18n.t("game.title")}
           </Text>
@@ -443,56 +494,103 @@ export default function GameScreen() {
             accessibilityRole="button"
             className="h-10 w-10 items-center justify-center rounded-full"
             onPress={() => confirmNewGame(startNewGame)}
-            style={{ backgroundColor: palette.card }}
+            style={{
+              backgroundColor: palette.frameWood,
+              borderWidth: 1.5,
+              borderColor: palette.frameWoodEdge,
+            }}
           >
-            <MaterialIcons color={palette.text} name="refresh" size={22} />
+            <MaterialIcons color={palette.cream} name="refresh" size={22} />
           </Pressable>
         </View>
 
-        <View className="items-center px-4 pb-3">
-          <GameBoard
-            cellSize={cellSize}
-            onCellPress={onCellPress}
+        <View className="flex-row items-center justify-between px-4 pb-2">
+          <PlayerBadge
+            color={palette.playerYou}
+            isActive={getActiveTurnPlayer(state) === 0}
+            name={playerName}
             palette={palette}
-            reducedMotion={settings.reducedMotion}
-            selectable={
-              state.phase === "setup" &&
-              state.currentPlayer === 0 &&
-              state.selectedConfigIndex !== null
-            }
-            state={state}
+            position={state.positions[0]}
+          />
+          <Text
+            style={{
+              color: palette.creamMuted,
+              fontSize: 14,
+              fontWeight: "900",
+              letterSpacing: 2,
+            }}
+          >
+            VS
+          </Text>
+          <PlayerBadge
+            color={palette.playerCpu}
+            isActive={getActiveTurnPlayer(state) === 1}
+            name={opponentName}
+            palette={palette}
+            position={state.positions[1]}
           />
         </View>
 
-        <View
-          className="mx-4 mb-3 rounded-2xl border px-4 py-3"
-          style={{ backgroundColor: palette.card, borderColor: palette.border }}
-        >
-          <Text style={{ color: palette.text, fontWeight: "600" }}>{msg}</Text>
-          <View className="mt-2 flex-row items-center gap-3">
-            {(
-              [
-                { player: 0, name: playerName, color: palette.playerYou },
-                { player: 1, name: opponentName, color: palette.playerCpu },
-              ] as const
-            ).map(({ player, name, color }) => (
-              <TurnStatusRow
-                color={color}
-                isActive={getActiveTurnPlayer(state) === player}
-                key={`turn-${player}`}
-                name={name}
-                palette={palette}
-                position={state.positions[player]}
-              />
-            ))}
+        <View className="items-center px-4 pb-3">
+          <View
+            style={{
+              backgroundColor: palette.frameWood,
+              borderRadius: 22,
+              padding: 8,
+              borderWidth: 2,
+              borderColor: palette.frameWoodEdge,
+              borderBottomWidth: 6,
+              shadowColor: "#000",
+              shadowOpacity: 0.4,
+              shadowRadius: 10,
+              shadowOffset: { width: 0, height: 6 },
+              elevation: 8,
+            }}
+          >
+            <GameBoard
+              cellSize={cellSize}
+              onCellPress={onCellPress}
+              palette={palette}
+              reducedMotion={settings.reducedMotion}
+              selectable={
+                state.phase === "setup" &&
+                state.currentPlayer === 0 &&
+                state.selectedConfigIndex !== null
+              }
+              state={state}
+            />
           </View>
+        </View>
+
+        <View
+          className="mx-4 mb-3"
+          style={{
+            backgroundColor: palette.frameWood,
+            borderRadius: 12,
+            paddingHorizontal: 16,
+            paddingVertical: 10,
+            borderWidth: 1.5,
+            borderColor: palette.frameWoodEdge,
+            borderBottomWidth: 4,
+          }}
+        >
+          <Text
+            style={{
+              color: palette.cream,
+              fontWeight: "800",
+              fontSize: 15,
+              textAlign: "center",
+            }}
+          >
+            {msg}
+          </Text>
         </View>
 
         {state.phase === "setup" && state.currentPlayer === 0 ? (
           <View className="px-4 pb-2">
             <Text
               className="mb-2 font-bold text-sm"
-              style={{ color: palette.textMuted }}
+              style={{ color: palette.cream }}
             >
               {i18n.t("setup.pickQubit")}
             </Text>
@@ -540,35 +638,25 @@ export default function GameScreen() {
             />
           ) : null}
           {canConfirmPass ? (
-            <Pressable
-              accessibilityRole="button"
-              className="rounded-2xl px-6 py-4"
-              onPress={confirmPass}
-              style={{ backgroundColor: palette.ladder }}
+            <RollButton
+              accessibilityLabel={i18n.t("setup.passTurn")}
+              backgroundColor={palette.ladder}
+              label={i18n.t("setup.passTurn")}
+              onPress={() => confirmPass()}
+              pulsing
+              reducedMotion={settings.reducedMotion}
               testID="setup-pass-turn"
-            >
-              <Text
-                className="font-extrabold text-base"
-                style={{ color: "#fff" }}
-              >
-                {i18n.t("setup.passTurn")}
-              </Text>
-            </Pressable>
+            />
           ) : null}
           {state.phase === "gameover" ? (
-            <Pressable
-              accessibilityRole="button"
-              className="rounded-2xl px-6 py-4"
+            <RollButton
+              accessibilityLabel={i18n.t("game.playAgain")}
+              backgroundColor={palette.orbGlow}
+              label={i18n.t("game.playAgain")}
               onPress={() => confirmNewGame(startNewGame)}
-              style={{ backgroundColor: palette.walnut }}
-            >
-              <Text
-                className="font-extrabold text-base"
-                style={{ color: "#fff" }}
-              >
-                {i18n.t("game.playAgain")}
-              </Text>
-            </Pressable>
+              pulsing
+              reducedMotion={settings.reducedMotion}
+            />
           ) : null}
         </View>
 

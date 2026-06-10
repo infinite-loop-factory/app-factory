@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { Pressable, Text } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import Animated, {
   cancelAnimation,
   Easing,
@@ -10,17 +10,19 @@ import Animated, {
   withSpring,
   withTiming,
 } from "react-native-reanimated";
-
-const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+import { darkenColor } from "@/lib/color";
 
 /** Hold this long for a full-power throw. */
 export const FULL_CHARGE_MS = 900;
+const EDGE_HEIGHT = 6;
 
 type RollButtonProps = {
   label: string;
   /** Receives hold charge 0..1 — quick taps roll at low power. */
   onPress: (charge: number) => void;
   backgroundColor: string;
+  /** Darker shade for the chunky 3D bottom edge — derived when omitted. */
+  edgeColor?: string;
   accessibilityLabel: string;
   testID?: string;
   /** Gentle attention pulse while waiting for the player's input. */
@@ -32,13 +34,14 @@ export function RollButton({
   label,
   onPress,
   backgroundColor,
+  edgeColor = darkenColor(backgroundColor, 0.6),
   accessibilityLabel,
   testID,
   pulsing = false,
   reducedMotion = false,
 }: RollButtonProps) {
   const pulse = useSharedValue(1);
-  const press = useSharedValue(1);
+  const sink = useSharedValue(0);
   const charge = useSharedValue(0);
   const pressStartRef = useRef<number | null>(null);
 
@@ -51,7 +54,7 @@ export function RollButton({
     pulse.set(
       withRepeat(
         withSequence(
-          withTiming(1.06, {
+          withTiming(1.05, {
             duration: 620,
             easing: Easing.inOut(Easing.quad),
           }),
@@ -64,10 +67,12 @@ export function RollButton({
     return () => cancelAnimation(pulse);
   }, [pulse, pulsing, reducedMotion]);
 
-  const style = useAnimatedStyle(() => ({
-    transform: [
-      { scale: pulse.get() * press.get() * (1 + charge.get() * 0.16) },
-    ],
+  const wrapperStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: pulse.get() * (1 + charge.get() * 0.12) }],
+  }));
+
+  const faceStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: sink.get() }],
   }));
 
   const currentCharge = () => {
@@ -76,40 +81,76 @@ export function RollButton({
   };
 
   return (
-    <AnimatedPressable
-      accessibilityLabel={accessibilityLabel}
-      accessibilityRole="button"
-      className="rounded-2xl px-6 py-4"
-      onPress={() => onPress(currentCharge())}
-      onPressIn={() => {
-        pressStartRef.current = Date.now();
-        if (reducedMotion) return;
-        cancelAnimation(pulse);
-        pulse.set(withTiming(1, { duration: 80 }));
-        press.set(withTiming(0.95, { duration: 80 }));
-        charge.set(
-          withTiming(1, {
-            duration: FULL_CHARGE_MS,
-            easing: Easing.out(Easing.quad),
-          }),
-        );
-      }}
-      onPressOut={() => {
-        if (reducedMotion) {
-          press.set(1);
-          charge.set(0);
-          return;
-        }
-        cancelAnimation(charge);
-        charge.set(withTiming(0, { duration: 140 }));
-        press.set(withSpring(1, { damping: 14, stiffness: 320 }));
-      }}
-      style={[{ backgroundColor }, style]}
-      testID={testID}
-    >
-      <Text className="font-extrabold text-base" style={{ color: "#fff" }}>
-        {label}
-      </Text>
-    </AnimatedPressable>
+    <Animated.View style={wrapperStyle}>
+      <Pressable
+        accessibilityLabel={accessibilityLabel}
+        accessibilityRole="button"
+        onPress={() => onPress(currentCharge())}
+        onPressIn={() => {
+          pressStartRef.current = Date.now();
+          if (reducedMotion) return;
+          cancelAnimation(pulse);
+          pulse.set(withTiming(1, { duration: 80 }));
+          sink.set(withTiming(EDGE_HEIGHT - 1, { duration: 80 }));
+          charge.set(
+            withTiming(1, {
+              duration: FULL_CHARGE_MS,
+              easing: Easing.out(Easing.quad),
+            }),
+          );
+        }}
+        onPressOut={() => {
+          if (reducedMotion) {
+            charge.set(0);
+            return;
+          }
+          cancelAnimation(charge);
+          charge.set(withTiming(0, { duration: 140 }));
+          sink.set(withSpring(0, { damping: 14, stiffness: 360 }));
+        }}
+        testID={testID}
+      >
+        {/* edge layer — the face sinks onto it when pressed */}
+        <View
+          style={{
+            backgroundColor: edgeColor,
+            borderRadius: 18,
+            paddingBottom: EDGE_HEIGHT,
+            shadowColor: "#000",
+            shadowOpacity: 0.3,
+            shadowRadius: 6,
+            shadowOffset: { width: 0, height: 4 },
+            elevation: 5,
+          }}
+        >
+          <Animated.View
+            style={[
+              {
+                backgroundColor,
+                borderRadius: 18,
+                paddingHorizontal: 34,
+                paddingVertical: 15,
+                alignItems: "center",
+              },
+              faceStyle,
+            ]}
+          >
+            <Text
+              style={{
+                color: "#fff",
+                fontSize: 18,
+                fontWeight: "900",
+                letterSpacing: 1.5,
+                textShadowColor: "rgba(0,0,0,0.35)",
+                textShadowOffset: { width: 0, height: 2 },
+                textShadowRadius: 2,
+              }}
+            >
+              {label}
+            </Text>
+          </Animated.View>
+        </View>
+      </Pressable>
+    </Animated.View>
   );
 }
