@@ -27,6 +27,7 @@ import { QubitSetupBar } from "@/components/qubit-setup-bar";
 import { RollButton } from "@/components/roll-button";
 import { TurnBanner } from "@/components/turn-banner";
 import { WoodPanel } from "@/components/ui/wood-panel";
+import { VictoryOverlay } from "@/components/victory-overlay";
 import { GAME_FONT } from "@/game/constants/theme";
 import { darkenColor } from "@/lib/color";
 
@@ -579,6 +580,10 @@ export default function GameScreen() {
               state={state}
             />
           </WoodPanel>
+          <VictoryOverlay
+            reducedMotion={settings.reducedMotion}
+            visible={state.phase === "gameover" && state.positions[0] >= 100}
+          />
         </View>
 
         <WoodPanel

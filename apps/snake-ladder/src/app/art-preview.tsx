@@ -4,6 +4,7 @@ import { Redirect } from "expo-router";
 import { useWindowDimensions, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { GameBoard, getBoardCellSize } from "@/components/game-board";
+import { VictoryOverlay } from "@/components/victory-overlay";
 import { useAppSettings } from "@/hooks/use-app-settings";
 
 /**
@@ -122,6 +123,7 @@ export default function ArtPreviewScreen() {
           reducedMotion
           state={SHOWCASE_STATE}
         />
+        <VictoryOverlay visible />
       </View>
     </SafeAreaView>
   );

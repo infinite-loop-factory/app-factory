@@ -2,6 +2,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { Link, useRouter } from "expo-router";
 import {
+  Image,
   ImageBackground,
   Pressable,
   ScrollView,
@@ -10,8 +11,6 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { AppLogo } from "@/components/app-logo";
-import { HeroEmblem } from "@/components/hero-emblem";
 import { OnboardingModal } from "@/components/onboarding-modal";
 import { RollButton } from "@/components/roll-button";
 import { WoodPanel } from "@/components/ui/wood-panel";
@@ -22,6 +21,8 @@ import { darkenColor } from "@/lib/color";
 import { winRate } from "@/lib/stats";
 
 const FELT_TEXTURE = require("@/assets/images/textures/felt-table.jpg");
+const HERO_ART = require("@/assets/images/art/hero-snake-ladder.png");
+const LOGO_EMBLEM = require("@/assets/images/art/logo-emblem.png");
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -159,7 +160,20 @@ export default function HomeScreen() {
 
               {/* hero */}
               <View style={{ alignItems: "center", gap: 10 }}>
-                <AppLogo palette={palette} size={84} />
+                <Image
+                  accessibilityIgnoresInvertColors
+                  resizeMode="contain"
+                  source={LOGO_EMBLEM}
+                  style={{
+                    width: 88,
+                    height: 88,
+                    borderRadius: 22,
+                    shadowColor: "#000",
+                    shadowOpacity: 0.4,
+                    shadowRadius: 8,
+                    shadowOffset: { width: 0, height: 5 },
+                  }}
+                />
                 <Text
                   style={{
                     color: palette.cream,
@@ -186,7 +200,19 @@ export default function HomeScreen() {
                 </Text>
               </View>
 
-              <HeroEmblem palette={palette} width={contentWidth * 0.86} />
+              <Image
+                accessibilityIgnoresInvertColors
+                resizeMode="contain"
+                source={HERO_ART}
+                style={{
+                  width: contentWidth * 0.8,
+                  height: contentWidth * 0.54,
+                  shadowColor: "#000",
+                  shadowOpacity: 0.45,
+                  shadowRadius: 14,
+                  shadowOffset: { width: 0, height: 10 },
+                }}
+              />
 
               {stats.gamesPlayed > 0 ? (
                 <WoodPanel
