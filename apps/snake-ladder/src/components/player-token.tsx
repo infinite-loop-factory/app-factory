@@ -195,6 +195,8 @@ export function PlayerToken({
   const y = useSharedValue(target.y);
   const hopY = useSharedValue(0);
   const liftY = useSharedValue(0);
+  const squashX = useSharedValue(1);
+  const squashY = useSharedValue(1);
   const mountedRef = useRef(false);
 
   useEffect(() => {
@@ -220,7 +222,32 @@ export function PlayerToken({
         withSpring(0, LAND_SPRING),
       ),
     );
-  }, [cellSize, hopY, reducedMotion, target.x, target.y, x, y]);
+    // Squash & stretch synced to the hop: stretch on rise, squash on land.
+    squashY.set(
+      withSequence(
+        withTiming(1.14, { duration: 70, easing: Easing.out(Easing.quad) }),
+        withTiming(0.82, { duration: 90, easing: Easing.in(Easing.quad) }),
+        withSpring(1, LAND_SPRING),
+      ),
+    );
+    squashX.set(
+      withSequence(
+        withTiming(0.9, { duration: 70, easing: Easing.out(Easing.quad) }),
+        withTiming(1.16, { duration: 90, easing: Easing.in(Easing.quad) }),
+        withSpring(1, LAND_SPRING),
+      ),
+    );
+  }, [
+    cellSize,
+    hopY,
+    reducedMotion,
+    squashX,
+    squashY,
+    target.x,
+    target.y,
+    x,
+    y,
+  ]);
 
   useEffect(() => {
     const liftTarget = lifted ? -cellSize * 0.3 : 0;
@@ -235,6 +262,16 @@ export function PlayerToken({
     transform: [
       { translateX: x.get() },
       { translateY: y.get() + hopY.get() + liftY.get() },
+    ],
+  }));
+
+  const pawnHeight = size * PAWN_ASPECT;
+  const squashStyle = useAnimatedStyle(() => ({
+    transform: [
+      // Pin the pawn's base while it squashes (scale is center-anchored).
+      { translateY: ((1 - squashY.get()) * pawnHeight) / 2 },
+      { scaleX: squashX.get() },
+      { scaleY: squashY.get() },
     ],
   }));
 
@@ -262,7 +299,9 @@ export function PlayerToken({
         reducedMotion={reducedMotion}
         size={size * 1.4}
       />
-      <PawnPiece color={color} size={size} />
+      <Animated.View style={squashStyle}>
+        <PawnPiece color={color} size={size} />
+      </Animated.View>
     </Animated.View>
   );
 }

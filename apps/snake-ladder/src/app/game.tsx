@@ -16,6 +16,7 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { BoardFx, type BoardFxKind } from "@/components/board-fx";
 import { ConfettiBurst } from "@/components/confetti-burst";
 import { DiceGlPrewarm } from "@/components/dice/dice-gl-prewarm";
 import { DiceDisplay } from "@/components/dice-display";
@@ -229,6 +230,11 @@ export default function GameScreen() {
     null,
   );
   const [throwCharge, setThrowCharge] = useState(0.5);
+  const [slideFx, setSlideFx] = useState<{
+    kind: BoardFxKind | null;
+    tick: number;
+  }>({ kind: null, tick: 0 });
+  const lastSlideCellRef = useRef<number | null>(null);
 
   const playerName = useMemo(
     () =>
@@ -269,6 +275,21 @@ export default function GameScreen() {
     () => resolveStatusMessage(state.message, opponentName),
     [opponentName, state.message],
   );
+
+  // Fire board impact FX once per snake/ladder traversal.
+  useEffect(() => {
+    const cell = state.slidingFromCell;
+    if (cell === null) {
+      lastSlideCellRef.current = null;
+      return;
+    }
+    if (lastSlideCellRef.current === cell) return;
+    lastSlideCellRef.current = cell;
+    const qubit = state.qubits.find((q) => q.cell === cell);
+    if (qubit?.collapsed !== "snake" && qubit?.collapsed !== "ladder") return;
+    const kind: BoardFxKind = qubit.collapsed;
+    setSlideFx((prev) => ({ kind, tick: prev.tick + 1 }));
+  }, [state.slidingFromCell, state.qubits]);
 
   const onCellPress = useCallback(
     (cell: number) => {
@@ -555,35 +576,42 @@ export default function GameScreen() {
         </View>
 
         <View className="items-center px-4 pb-3">
-          <WoodPanel
-            contentStyle={{ padding: 8 }}
-            edge={6}
+          <BoardFx
+            kind={slideFx.kind}
             palette={palette}
-            radius={22}
-            style={{
-              shadowOpacity: 0.45,
-              shadowRadius: 10,
-              shadowOffset: { width: 0, height: 6 },
-              elevation: 8,
-            }}
-          >
-            <GameBoard
-              cellSize={cellSize}
-              onCellPress={onCellPress}
-              palette={palette}
-              reducedMotion={settings.reducedMotion}
-              selectable={
-                state.phase === "setup" &&
-                state.currentPlayer === 0 &&
-                state.selectedConfigIndex !== null
-              }
-              state={state}
-            />
-          </WoodPanel>
-          <VictoryOverlay
             reducedMotion={settings.reducedMotion}
-            visible={state.phase === "gameover" && state.positions[0] >= 100}
-          />
+            tick={slideFx.tick}
+          >
+            <WoodPanel
+              contentStyle={{ padding: 8 }}
+              edge={6}
+              palette={palette}
+              radius={22}
+              style={{
+                shadowOpacity: 0.45,
+                shadowRadius: 10,
+                shadowOffset: { width: 0, height: 6 },
+                elevation: 8,
+              }}
+            >
+              <GameBoard
+                cellSize={cellSize}
+                onCellPress={onCellPress}
+                palette={palette}
+                reducedMotion={settings.reducedMotion}
+                selectable={
+                  state.phase === "setup" &&
+                  state.currentPlayer === 0 &&
+                  state.selectedConfigIndex !== null
+                }
+                state={state}
+              />
+            </WoodPanel>
+            <VictoryOverlay
+              reducedMotion={settings.reducedMotion}
+              visible={state.phase === "gameover" && state.positions[0] >= 100}
+            />
+          </BoardFx>
         </View>
 
         <WoodPanel
