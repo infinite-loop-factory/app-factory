@@ -17,6 +17,7 @@ import type {
 } from "@/lib/game-feedback";
 import type { ResolvedTimings } from "@/lib/settings";
 
+import { useLatest } from "ahooks";
 import { useCallback, useRef, useState } from "react";
 import { cellToCoord, coordToCell, TOTAL_CELLS } from "@/game/constants/board";
 import { GAME_TIMINGS } from "@/game/constants/theme";
@@ -70,14 +71,11 @@ export function useGameController(options: GameControllerOptions = {}) {
     onFeedback,
   } = options;
   const [state, setState] = useState<GameState>(() => createInitialState());
-  const stateRef = useRef(state);
-  stateRef.current = state;
+  const stateRef = useLatest(state);
   const logsRef = useRef<LogEntry[]>([]);
   const collapsingRef = useRef(false);
-  const timingsRef = useRef(timings);
-  timingsRef.current = timings;
-  const feedbackRef = useRef(onFeedback);
-  feedbackRef.current = onFeedback;
+  const timingsRef = useLatest(timings);
+  const feedbackRef = useLatest(onFeedback);
 
   const emitFeedback = useCallback((event: GameFeedbackEvent) => {
     feedbackRef.current?.(event);

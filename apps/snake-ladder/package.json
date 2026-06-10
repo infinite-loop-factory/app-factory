@@ -36,6 +36,7 @@
     "@kirkelliott/ket": "^0.5.0",
     "@react-native-async-storage/async-storage": "^2.2.0",
     "@react-navigation/native": "^7.1.14",
+    "ahooks": "^3.9.7",
     "clsx": "^2.1.1",
     "expo": "~54.0.34",
     "expo-audio": "~1.1.1",

@@ -1,9 +1,10 @@
 import type { GameFeedbackEvent } from "@/lib/game-feedback";
 
 import { MaterialIcons } from "@expo/vector-icons";
+import { useMemoizedFn } from "ahooks";
 import { LinearGradient } from "expo-linear-gradient";
 import { Link } from "expo-router";
-import { useCallback, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import {
   Alert,
   ImageBackground,
@@ -87,15 +88,12 @@ export default function GameScreen() {
     [settings.opponentNickname],
   );
 
-  const onFeedback = useCallback(
-    (event: GameFeedbackEvent) => {
-      dispatchGameFeedback(event, {
-        hapticsEnabled: settings.hapticsEnabled,
-        soundEnabled: settings.soundEnabled,
-      });
-    },
-    [settings.hapticsEnabled, settings.soundEnabled],
-  );
+  const onFeedback = useMemoizedFn((event: GameFeedbackEvent) => {
+    dispatchGameFeedback(event, {
+      hapticsEnabled: settings.hapticsEnabled,
+      soundEnabled: settings.soundEnabled,
+    });
+  });
 
   const {
     state,
@@ -115,42 +113,30 @@ export default function GameScreen() {
   const slideFx = useSlideFx(state);
   const { resetRecorded } = useGameResultRecorder(state, recordGameResult);
 
-  const onCellPress = useCallback(
-    (cell: number) => {
-      if (state.phase !== "setup" || state.currentPlayer !== 0) return;
-      if (state.selectedConfigIndex === null) return;
-      placeQubit(cell);
-      onFeedback({ type: "selection" });
-    },
-    [
-      onFeedback,
-      placeQubit,
-      state.currentPlayer,
-      state.phase,
-      state.selectedConfigIndex,
-    ],
-  );
+  const onCellPress = useMemoizedFn((cell: number) => {
+    if (state.phase !== "setup" || state.currentPlayer !== 0) return;
+    if (state.selectedConfigIndex === null) return;
+    placeQubit(cell);
+    onFeedback({ type: "selection" });
+  });
 
-  const confirmNewGame = useCallback(
-    (onConfirm: () => void) => {
-      if (!isGameInProgress(state)) {
-        onConfirm();
-        return;
-      }
+  const confirmNewGame = useMemoizedFn((onConfirm: () => void) => {
+    if (!isGameInProgress(state)) {
+      onConfirm();
+      return;
+    }
 
-      Alert.alert(i18n.t("game.newGameTitle"), i18n.t("game.newGameMessage"), [
-        { text: i18n.t("game.newGameCancel"), style: "cancel" },
-        {
-          text: i18n.t("game.newGameConfirm"),
-          style: "destructive",
-          onPress: onConfirm,
-        },
-      ]);
-    },
-    [state],
-  );
+    Alert.alert(i18n.t("game.newGameTitle"), i18n.t("game.newGameMessage"), [
+      { text: i18n.t("game.newGameCancel"), style: "cancel" },
+      {
+        text: i18n.t("game.newGameConfirm"),
+        style: "destructive",
+        onPress: onConfirm,
+      },
+    ]);
+  });
 
-  const beginNewGame = useCallback(async () => {
+  const beginNewGame = useMemoizedFn(async () => {
     notifyNewGameStarted();
     if (shouldShowInterstitial()) {
       const shown = await showInterstitialAd();
@@ -161,39 +147,24 @@ export default function GameScreen() {
     resetRecorded();
     setGoldDiceEnabled(false);
     reset();
-  }, [
-    notifyInterstitialShown,
-    notifyNewGameStarted,
-    reset,
-    resetRecorded,
-    shouldShowInterstitial,
-  ]);
+  });
 
-  const startNewGame = useCallback(() => {
+  const startNewGame = useMemoizedFn(() => {
     void beginNewGame();
-  }, [beginNewGame]);
+  });
 
-  const rollDice = useCallback(
-    (charge: number) => {
-      setThrowCharge(charge);
-      if (goldDiceEnabled && monetization.goldDiceCount > 0) {
-        if (!consumeGoldDice(1)) return;
-        const forced = rollGoldDie(goldDesiredFace);
-        setPendingForcedRoll(forced);
-        void handleRoll(forced);
-        return;
-      }
-      setPendingForcedRoll(null);
-      void handleRoll();
-    },
-    [
-      consumeGoldDice,
-      goldDesiredFace,
-      goldDiceEnabled,
-      handleRoll,
-      monetization.goldDiceCount,
-    ],
-  );
+  const rollDice = useMemoizedFn((charge: number) => {
+    setThrowCharge(charge);
+    if (goldDiceEnabled && monetization.goldDiceCount > 0) {
+      if (!consumeGoldDice(1)) return;
+      const forced = rollGoldDie(goldDesiredFace);
+      setPendingForcedRoll(forced);
+      void handleRoll(forced);
+      return;
+    }
+    setPendingForcedRoll(null);
+    void handleRoll();
+  });
 
   useCpuOpponent({
     state,

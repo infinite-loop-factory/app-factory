@@ -1,6 +1,7 @@
 import type { GameState } from "@/game/types";
 import type { ResolvedTimings } from "@/lib/settings";
 
+import { useLatest } from "ahooks";
 import { useEffect, useRef } from "react";
 import { pickCpuPlacementCell } from "@/game/lib/game-helpers";
 
@@ -24,8 +25,7 @@ export function useCpuOpponent({
   onBeforeRoll,
 }: CpuOpponentOptions) {
   const cpuBusyRef = useRef(false);
-  const onBeforeRollRef = useRef(onBeforeRoll);
-  onBeforeRollRef.current = onBeforeRoll;
+  const onBeforeRollRef = useLatest(onBeforeRoll);
 
   useEffect(() => {
     if (state.phase !== "setup" || state.currentPlayer !== 1) return;
