@@ -1,7 +1,7 @@
 import type { GameState } from "@/game/types";
 import type { ResolvedTimings } from "@/lib/settings";
 
-import { useLatest } from "ahooks";
+import { useLatest, useTimeout } from "ahooks";
 import { useEffect, useRef } from "react";
 import { pickCpuPlacementCell } from "@/game/lib/game-helpers";
 
@@ -27,6 +27,9 @@ export function useCpuOpponent({
   const cpuBusyRef = useRef(false);
   const onBeforeRollRef = useLatest(onBeforeRoll);
 
+  // Placement keeps a manual timer: the condition stays true across
+  // consecutive placements, so a delay-driven useTimeout would never
+  // re-arm between qubits and the CPU would stall after the first one.
   useEffect(() => {
     if (state.phase !== "setup" || state.currentPlayer !== 1) return;
     if (cpuBusyRef.current) return;
@@ -52,35 +55,27 @@ export function useCpuOpponent({
     };
   }, [placeCpuQubit, state, timings.cpuThinkMs]);
 
-  useEffect(() => {
-    if (state.phase !== "passing" || state.currentPlayer !== 1) return;
-    const timer = setTimeout(() => confirmPass(), timings.cpuThinkMs);
-    return () => clearTimeout(timer);
-  }, [confirmPass, state.currentPlayer, state.phase, timings.cpuThinkMs]);
+  // Pass + roll fire once per activation: their conditions flip false the
+  // moment the action starts, so the timeout re-arms cleanly next turn.
+  const shouldConfirmPass =
+    state.phase === "passing" && state.currentPlayer === 1;
+  useTimeout(
+    () => confirmPass(),
+    shouldConfirmPass ? timings.cpuThinkMs : undefined,
+  );
 
-  useEffect(() => {
-    if (state.phase !== "play" || state.currentPlayer !== 1) return;
-    if (
-      state.isRolling ||
-      state.isMoving ||
-      state.isCollapsing ||
-      state.gameOver
-    ) {
-      return;
-    }
-    const timer = setTimeout(() => {
+  const shouldRoll =
+    state.phase === "play" &&
+    state.currentPlayer === 1 &&
+    !state.isRolling &&
+    !state.isMoving &&
+    !state.isCollapsing &&
+    !state.gameOver;
+  useTimeout(
+    () => {
       onBeforeRollRef.current?.();
       void handleRoll();
-    }, timings.cpuThinkMs);
-    return () => clearTimeout(timer);
-  }, [
-    handleRoll,
-    state.currentPlayer,
-    state.gameOver,
-    state.isCollapsing,
-    state.isMoving,
-    state.isRolling,
-    state.phase,
-    timings.cpuThinkMs,
-  ]);
+    },
+    shouldRoll ? timings.cpuThinkMs : undefined,
+  );
 }

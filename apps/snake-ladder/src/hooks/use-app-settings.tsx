@@ -1,4 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useDebounceFn } from "ahooks";
 import { useColorScheme } from "nativewind";
 import {
   createContext,
@@ -62,13 +63,25 @@ export function AppSettingsProvider({ children }: { children: ReactNode }) {
     })();
   }, []);
 
-  const updateSettings = useCallback((patch: Partial<AppSettings>) => {
-    setSettings((prev) => {
-      const next = { ...prev, ...patch };
+  // Persist at most ~twice a second — nickname typing writes every keystroke
+  // otherwise. State updates stay synchronous; only the disk write debounces.
+  const { run: persistSettings } = useDebounceFn(
+    (next: AppSettings) => {
       void AsyncStorage.setItem(STORAGE_KEYS.settings, JSON.stringify(next));
-      return next;
-    });
-  }, []);
+    },
+    { wait: 400 },
+  );
+
+  const updateSettings = useCallback(
+    (patch: Partial<AppSettings>) => {
+      setSettings((prev) => {
+        const next = { ...prev, ...patch };
+        persistSettings(next);
+        return next;
+      });
+    },
+    [persistSettings],
+  );
 
   const recordGameResult = useCallback((won: boolean) => {
     setStats((prev) => {
