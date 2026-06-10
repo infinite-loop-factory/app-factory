@@ -1,42 +1,60 @@
 import { MaterialIcons } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
 import { Link, useRouter } from "expo-router";
-import { Pressable, ScrollView, Text, View } from "react-native";
+import {
+  ImageBackground,
+  Pressable,
+  ScrollView,
+  Text,
+  useWindowDimensions,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { AppLogo } from "@/components/app-logo";
+import { HeroEmblem } from "@/components/hero-emblem";
 import { OnboardingModal } from "@/components/onboarding-modal";
+import { RollButton } from "@/components/roll-button";
+import { WoodPanel } from "@/components/ui/wood-panel";
+import { GAME_FONT } from "@/game/constants/theme";
 import { useAppSettings } from "@/hooks/use-app-settings";
 import i18n from "@/i18n";
+import { darkenColor } from "@/lib/color";
 import { winRate } from "@/lib/stats";
+
+const FELT_TEXTURE = require("@/assets/images/textures/felt-table.jpg");
 
 export default function HomeScreen() {
   const router = useRouter();
-  const { palette, stats, loaded, onboardingComplete, completeOnboarding } =
-    useAppSettings();
+  const { width } = useWindowDimensions();
+  const {
+    palette,
+    settings,
+    stats,
+    loaded,
+    onboardingComplete,
+    completeOnboarding,
+  } = useAppSettings();
 
   const features = [
     {
       icon: "casino",
-      color: palette.walnut,
+      color: palette.orbGlow,
       titleKey: "home.feature.dice.title",
-      bodyKey: "home.feature.dice.body",
     },
     {
       icon: "hub",
       color: palette.interference,
       titleKey: "home.feature.entangle.title",
-      bodyKey: "home.feature.entangle.body",
     },
     {
       icon: "trending-up",
       color: palette.ladder,
       titleKey: "home.feature.ladder.title",
-      bodyKey: "home.feature.ladder.body",
     },
     {
       icon: "compare-arrows",
       color: palette.playerYou,
       titleKey: "home.feature.tunnel.title",
-      bodyKey: "home.feature.tunnel.body",
     },
   ] as const;
 
@@ -44,142 +62,223 @@ export default function HomeScreen() {
     return null;
   }
 
+  const contentWidth = Math.min(width - 48, 520);
+
   return (
-    <SafeAreaView
-      className="flex-1"
-      style={{ backgroundColor: palette.background }}
-    >
-      <OnboardingModal
-        onComplete={completeOnboarding}
-        palette={palette}
-        visible={!onboardingComplete}
-      />
-      <ScrollView
-        className="flex-1"
-        contentContainerStyle={{
-          flexGrow: 1,
-          gap: 24,
-          paddingHorizontal: 24,
-          paddingTop: 40,
-          paddingBottom: 32,
-        }}
-        contentInsetAdjustmentBehavior="automatic"
+    <View style={{ flex: 1, backgroundColor: palette.tableFeltDeep }}>
+      <ImageBackground
+        resizeMode="cover"
+        source={FELT_TEXTURE}
+        style={{ flex: 1 }}
       >
-        <View className="flex-row items-start justify-between gap-3">
-          <View className="flex-1 gap-3">
-            <AppLogo palette={palette} size={72} />
-            <Text
-              className="font-extrabold text-4xl"
-              style={{ color: palette.text, lineHeight: 44 }}
-            >
-              {i18n.t("home.title")}
-            </Text>
-            <Text
-              className="font-medium text-base"
-              style={{ color: palette.textMuted, lineHeight: 24 }}
-            >
-              {i18n.t("home.subtitle")}
-            </Text>
-          </View>
-          <View className="flex-row gap-2">
-            <Link asChild href="/shop">
-              <Pressable
-                accessibilityLabel={i18n.t("shop.title")}
-                accessibilityRole="button"
-                className="h-10 w-10 items-center justify-center rounded-full"
-                style={{ backgroundColor: palette.card }}
-                testID="home-shop-button"
-              >
-                <MaterialIcons
-                  color={palette.orbGlow}
-                  name="storefront"
-                  size={22}
-                />
-              </Pressable>
-            </Link>
-            <Link asChild href="/settings">
-              <Pressable
-                accessibilityRole="button"
-                className="h-10 w-10 items-center justify-center rounded-full"
-                style={{ backgroundColor: palette.card }}
-                testID="home-settings-button"
-              >
-                <MaterialIcons color={palette.text} name="settings" size={22} />
-              </Pressable>
-            </Link>
-          </View>
-        </View>
-
-        {stats.gamesPlayed > 0 ? (
-          <View
-            className="rounded-2xl border px-4 py-3"
-            style={{
-              backgroundColor: palette.card,
-              borderColor: palette.border,
-            }}
-          >
-            <Text className="font-bold text-sm" style={{ color: palette.text }}>
-              {i18n.t("home.statsSummary", {
-                played: stats.gamesPlayed,
-                rate: winRate(stats),
-              })}
-            </Text>
-          </View>
-        ) : null}
-
-        <View
-          className="gap-4 rounded-2xl border-2 p-5"
-          style={{
-            backgroundColor: palette.card,
-            borderColor: palette.border,
-          }}
+        <LinearGradient
+          colors={[
+            `${palette.tableFelt}55`,
+            `${palette.tableFelt}99`,
+            `${darkenColor(palette.tableFeltDeep, 0.8)}ee`,
+          ]}
+          style={{ flex: 1 }}
         >
-          {features.map((item) => (
-            <View className="flex-row items-start gap-3" key={item.titleKey}>
+          <SafeAreaView style={{ flex: 1 }}>
+            <OnboardingModal
+              onComplete={completeOnboarding}
+              palette={palette}
+              visible={!onboardingComplete}
+            />
+            <ScrollView
+              contentContainerStyle={{
+                flexGrow: 1,
+                alignItems: "center",
+                gap: 18,
+                paddingHorizontal: 24,
+                paddingTop: 12,
+                paddingBottom: 28,
+              }}
+              contentInsetAdjustmentBehavior="automatic"
+              style={{ flex: 1 }}
+            >
+              {/* top bar: shop + settings */}
               <View
-                className="mt-0.5 h-10 w-10 items-center justify-center rounded-xl"
-                style={{ backgroundColor: `${item.color}22` }}
+                style={{
+                  width: contentWidth,
+                  flexDirection: "row",
+                  justifyContent: "flex-end",
+                  gap: 10,
+                }}
               >
-                <MaterialIcons color={item.color} name={item.icon} size={22} />
+                {(
+                  [
+                    {
+                      href: "/shop" as const,
+                      icon: "storefront" as const,
+                      iconColor: palette.orbGlow,
+                      label: i18n.t("shop.title"),
+                      testID: "home-shop-button",
+                    },
+                    {
+                      href: "/settings" as const,
+                      icon: "settings" as const,
+                      iconColor: palette.cream,
+                      label: i18n.t("settings.title"),
+                      testID: "home-settings-button",
+                    },
+                  ] as const
+                ).map((item) => (
+                  <Link asChild href={item.href} key={item.testID}>
+                    <Pressable
+                      accessibilityLabel={item.label}
+                      accessibilityRole="button"
+                      style={{
+                        width: 44,
+                        height: 44,
+                        borderRadius: 999,
+                        alignItems: "center",
+                        justifyContent: "center",
+                        backgroundColor: palette.frameWood,
+                        borderTopWidth: 1.5,
+                        borderTopColor: "rgba(255,255,255,0.3)",
+                        borderBottomWidth: 2,
+                        borderBottomColor: palette.frameWoodEdge,
+                        shadowColor: "#000",
+                        shadowOpacity: 0.3,
+                        shadowRadius: 4,
+                        shadowOffset: { width: 0, height: 3 },
+                        elevation: 4,
+                      }}
+                      testID={item.testID}
+                    >
+                      <MaterialIcons
+                        color={item.iconColor}
+                        name={item.icon}
+                        size={22}
+                      />
+                    </Pressable>
+                  </Link>
+                ))}
               </View>
-              <View className="flex-1 gap-1">
+
+              {/* hero */}
+              <View style={{ alignItems: "center", gap: 10 }}>
+                <AppLogo palette={palette} size={84} />
                 <Text
-                  className="font-bold text-base"
-                  style={{ color: palette.text }}
+                  style={{
+                    color: palette.cream,
+                    fontFamily: GAME_FONT,
+                    fontSize: 42,
+                    textAlign: "center",
+                    textShadowColor: "rgba(0,0,0,0.45)",
+                    textShadowOffset: { width: 0, height: 3 },
+                    textShadowRadius: 4,
+                  }}
                 >
-                  {i18n.t(item.titleKey)}
+                  {i18n.t("home.title")}
                 </Text>
                 <Text
-                  className="font-medium text-sm"
-                  style={{ color: palette.textMuted, lineHeight: 20 }}
+                  style={{
+                    color: palette.creamMuted,
+                    fontSize: 14,
+                    lineHeight: 21,
+                    textAlign: "center",
+                    maxWidth: contentWidth * 0.92,
+                  }}
                 >
-                  {i18n.t(item.bodyKey)}
+                  {i18n.t("home.subtitle")}
                 </Text>
               </View>
-            </View>
-          ))}
-        </View>
 
-        <Pressable
-          accessibilityLabel={i18n.t("home.play")}
-          accessibilityRole="button"
-          className="items-center rounded-2xl px-6 py-4"
-          onPress={() => router.push("/game")}
-          style={{ backgroundColor: palette.ladder }}
-          testID="home-play-button"
-        >
-          <Text className="font-extrabold text-lg" style={{ color: "#fff" }}>
-            {i18n.t("home.play")}
-          </Text>
-        </Pressable>
+              <HeroEmblem palette={palette} width={contentWidth * 0.86} />
 
-        <Text
-          className="text-center text-xs"
-          style={{ color: palette.textMuted, lineHeight: 18 }}
-        >
-          {i18n.t("home.offline")}
-        </Text>
-      </ScrollView>
-    </SafeAreaView>
+              {stats.gamesPlayed > 0 ? (
+                <WoodPanel
+                  contentStyle={{ paddingHorizontal: 18, paddingVertical: 8 }}
+                  palette={palette}
+                  radius={999}
+                >
+                  <Text
+                    style={{
+                      color: palette.cream,
+                      fontFamily: GAME_FONT,
+                      fontSize: 14,
+                    }}
+                  >
+                    {i18n.t("home.statsSummary", {
+                      played: stats.gamesPlayed,
+                      rate: winRate(stats),
+                    })}
+                  </Text>
+                </WoodPanel>
+              ) : null}
+
+              {/* feature chips */}
+              <View
+                style={{
+                  width: contentWidth,
+                  flexDirection: "row",
+                  flexWrap: "wrap",
+                  justifyContent: "center",
+                  gap: 10,
+                }}
+              >
+                {features.map((item) => (
+                  <WoodPanel
+                    contentStyle={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      gap: 8,
+                      paddingHorizontal: 14,
+                      paddingVertical: 9,
+                    }}
+                    key={item.titleKey}
+                    palette={palette}
+                    radius={12}
+                    style={{ width: (contentWidth - 10) / 2 }}
+                  >
+                    <MaterialIcons
+                      color={item.color}
+                      name={item.icon}
+                      size={19}
+                    />
+                    <Text
+                      numberOfLines={1}
+                      style={{
+                        color: palette.cream,
+                        fontFamily: GAME_FONT,
+                        fontSize: 14,
+                        flexShrink: 1,
+                      }}
+                    >
+                      {i18n.t(item.titleKey)}
+                    </Text>
+                  </WoodPanel>
+                ))}
+              </View>
+
+              <View style={{ flexGrow: 1 }} />
+
+              <RollButton
+                accessibilityLabel={i18n.t("home.play")}
+                backgroundColor={palette.ladder}
+                label={i18n.t("home.play")}
+                onPress={() => router.push("/game")}
+                pulsing
+                reducedMotion={settings.reducedMotion}
+                testID="home-play-button"
+              />
+
+              <Text
+                style={{
+                  color: `${palette.creamMuted}cc`,
+                  fontSize: 12,
+                  lineHeight: 18,
+                  textAlign: "center",
+                }}
+              >
+                {i18n.t("home.offline")}
+              </Text>
+            </ScrollView>
+          </SafeAreaView>
+        </LinearGradient>
+      </ImageBackground>
+    </View>
   );
 }
