@@ -27,7 +27,9 @@ import {
 } from "@/game/constants/board";
 
 const CAMERA_ZOOM = 1.4;
-const CAMERA_EASE = { duration: 420, easing: Easing.out(Easing.cubic) };
+/** Zoom-in locks on quickly; zoom-out relaxes a beat after the turn ends. */
+const CAMERA_EASE_IN = { duration: 340, easing: Easing.out(Easing.cubic) };
+const CAMERA_EASE_OUT = { duration: 480, easing: Easing.out(Easing.cubic) };
 const CAMERA_SPRING = { damping: 26, stiffness: 160 } as const;
 
 /** Zooms toward the moving token while a hop or slide resolves. */
@@ -57,9 +59,9 @@ function BoardCamera({
 
   useEffect(() => {
     if (!active) {
-      zoom.set(withTiming(1, CAMERA_EASE));
-      tx.set(withTiming(0, CAMERA_EASE));
-      ty.set(withTiming(0, CAMERA_EASE));
+      zoom.set(withTiming(1, CAMERA_EASE_OUT));
+      tx.set(withTiming(0, CAMERA_EASE_OUT));
+      ty.set(withTiming(0, CAMERA_EASE_OUT));
       return;
     }
     const { col, row } = cellToVisualCoord(focusCell);
@@ -67,7 +69,7 @@ function BoardCamera({
     const fy = row * cellSize + cellSize / 2;
     const maxTx = ((CAMERA_ZOOM - 1) * boardWidth) / 2;
     const maxTy = ((CAMERA_ZOOM - 1) * boardHeight) / 2;
-    zoom.set(withTiming(CAMERA_ZOOM, CAMERA_EASE));
+    zoom.set(withTiming(CAMERA_ZOOM, CAMERA_EASE_IN));
     tx.set(
       withSpring(
         clamp((boardWidth / 2 - fx) * CAMERA_ZOOM, -maxTx, maxTx),

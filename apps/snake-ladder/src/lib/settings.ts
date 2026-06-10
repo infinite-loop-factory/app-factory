@@ -42,22 +42,23 @@ export function resolveOpponentName(
   return resolveDisplayName(nickname, fallback);
 }
 
+// Paced so the board camera (zoom-in ~340ms) catches the moving token.
 const MOVEMENT_HOP_MS: Record<MovementSpeed, number> = {
-  slow: 240,
-  normal: 120,
-  fast: 70,
+  slow: 280,
+  normal: 190,
+  fast: 110,
 };
 
 const MOVEMENT_LADDER_STEP_MS: Record<MovementSpeed, number> = {
-  slow: 130,
-  normal: 40,
-  fast: 35,
+  slow: 150,
+  normal: 90,
+  fast: 55,
 };
 
 const MOVEMENT_SNAKE_STEP_MS: Record<MovementSpeed, number> = {
-  slow: 110,
-  normal: 50,
-  fast: 30,
+  slow: 160,
+  normal: 100,
+  fast: 60,
 };
 
 const DICE_DURATION_MS: Record<DiceSpeed, number> = {
