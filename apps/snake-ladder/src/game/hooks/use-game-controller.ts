@@ -7,11 +7,9 @@
 
 import type {
   CollapseParams,
-  CollapseResult,
   GamePhase,
   GameState,
   LogEntry,
-  PlacedQubit,
 } from "@/game/types";
 import type {
   GameFeedbackEvent,
@@ -20,14 +18,13 @@ import type {
 import type { ResolvedTimings } from "@/lib/settings";
 
 import { useCallback, useRef, useState } from "react";
-import {
-  cellToCoord,
-  coordToCell,
-  isValidPlacement,
-  QUBIT_CONFIGS,
-  TOTAL_CELLS,
-} from "@/game/constants/board";
+import { cellToCoord, coordToCell, TOTAL_CELLS } from "@/game/constants/board";
 import { GAME_TIMINGS } from "@/game/constants/theme";
+import { measureCollapseOutcome } from "@/game/lib/collapse-measurement";
+import {
+  applyInterferenceCollapse,
+  applySettledCollapse,
+} from "@/game/lib/collapse-reducers";
 import {
   DEFAULT_ENTANGLEMENT_STRATEGY,
   type EntanglementStrategy,
@@ -36,14 +33,17 @@ import {
   computeDisplacement,
   createInitialState,
   INITIAL_SETUP,
-  linkEntangledQubits,
-  nextQubitId,
   resetQubitIdCounter,
   rollDie,
   sleep,
 } from "@/game/lib/game-helpers";
 import { runQuantumCircuit } from "@/game/lib/local-sim";
-import { buildSingleQubitQASM } from "@/game/lib/qasm-builder";
+import {
+  reduceConfirmPass,
+  reducePlaceCpuQubit,
+  reducePlaceQubit,
+  reduceSelectQubit,
+} from "@/game/lib/setup-reducers";
 import {
   BARRIER_THETA,
   buildTunnelQASM,
@@ -208,61 +208,16 @@ export function useGameController(options: GameControllerOptions = {}) {
       if (collapsingRef.current) return;
       collapsingRef.current = true;
       emitFeedback({ type: "collapse" });
-      const config = QUBIT_CONFIGS[qubit.configIndex]!;
       const partner = qubit.entangledPartnerId
         ? stateRef.current.qubits.find((q) => q.id === qubit.entangledPartnerId)
         : undefined;
-      const partnerStillEntangled =
-        config.entangled && partner && partner.collapsed === null;
 
-      let data: CollapseResult;
-      try {
-        if (partnerStillEntangled && partner) {
-          const partnerConfig = QUBIT_CONFIGS[partner.configIndex]!;
-          const params = config.entangledParams;
-          const thetaFromProb = (p: number) => 2 * Math.acos(Math.sqrt(p));
-          const ctx = params
-            ? {
-                thetaA: params.thetaA,
-                thetaB: params.thetaB,
-                phase: params.phase,
-              }
-            : {
-                thetaA: thetaFromProb(config.ladderProb),
-                thetaB: thetaFromProb(partnerConfig.ladderProb),
-              };
-          const qasm = entanglementStrategy.buildQASM(ctx);
-          addLog("info", `Measuring ENTANGLED qubit [${config.label}]...`);
-          for (const line of entanglementStrategy.describe(ctx)) {
-            addLog("info", line);
-          }
-          addLog("qasm", qasm);
-          const result = await runQuantumCircuit(qasm);
-          const parsed = entanglementStrategy.parseResult(result[0]!);
-          data = {
-            qubitId: qubit.id,
-            outcome: parsed.playerOutcome,
-            partnerId: qubit.entangledPartnerId,
-            partnerOutcome: parsed.partnerOutcome ?? undefined,
-          };
-        } else {
-          const qasm = buildSingleQubitQASM(config.ladderProb);
-          addLog(
-            "info",
-            `Measuring qubit [${config.label}] at cell ${qubit.cell}...`,
-          );
-          addLog("qasm", qasm);
-          const result = await runQuantumCircuit(qasm);
-          const measurement = result[0]?.[0]!;
-          const outcome: "snake" | "ladder" =
-            measurement === 0 ? "ladder" : "snake";
-          data = { qubitId: qubit.id, outcome };
-        }
-      } catch {
-        const fallback =
-          rollDie() <= Math.ceil(config.ladderProb * 6) ? "ladder" : "snake";
-        data = { qubitId: qubit.id, outcome: fallback };
-      }
+      const data = await measureCollapseOutcome({
+        qubit,
+        partner,
+        strategy: entanglementStrategy,
+        addLog,
+      });
 
       const { qubitId, outcome, partnerId, partnerOutcome } = data;
 
@@ -279,59 +234,31 @@ export function useGameController(options: GameControllerOptions = {}) {
             ? computeDisplacement(partnerSettled, partnerCell, addLog)
             : undefined;
 
-        setState((prev) => ({
-          ...prev,
-          qubits: prev.qubits.map((q) => {
-            if (q.id === qubitId) return { ...q, collapsed: "interference" };
-            if (partnerId && q.id === partnerId) {
-              if (partnerSettled && partnerDest !== undefined) {
-                return {
-                  ...q,
-                  collapsed: partnerSettled,
-                  destinationCell: partnerDest,
-                };
-              }
-              if (partnerOutcome === "interference") {
-                return { ...q, collapsed: "interference" };
-              }
-            }
-            return q;
+        setState((prev) =>
+          applyInterferenceCollapse(prev, {
+            qubitId,
+            partnerId,
+            partnerOutcome,
+            partnerSettled,
+            partnerDest,
+            player,
           }),
-          isCollapsing: false,
-          isMoving: false,
-          currentPlayer: (player === 0 ? 1 : 0) as 0 | 1,
-          message: "play.interference",
-        }));
+        );
         collapsingRef.current = false;
         return;
       }
 
       const newCell = computeDisplacement(outcome, targetCell, addLog);
-      setState((prev) => ({
-        ...prev,
-        qubits: prev.qubits.map((q) => {
-          if (q.id === qubitId) {
-            return { ...q, collapsed: outcome, destinationCell: newCell };
-          }
-          if (partnerId && q.id === partnerId && partnerOutcome) {
-            if (partnerOutcome !== "interference") {
-              const pCell = q.cell;
-              return {
-                ...q,
-                collapsed: partnerOutcome,
-                destinationCell: computeDisplacement(
-                  partnerOutcome,
-                  pCell,
-                  addLog,
-                ),
-              };
-            }
-            return { ...q, collapsed: "interference" };
-          }
-          return q;
+      setState((prev) =>
+        applySettledCollapse(prev, {
+          qubitId,
+          outcome,
+          newCell,
+          partnerId,
+          partnerOutcome,
+          addLog,
         }),
-        message: outcome === "ladder" ? "play.ladder" : "play.snake",
-      }));
+      );
 
       await slideToCell(player, targetCell, newCell, outcome === "ladder");
 
@@ -360,135 +287,19 @@ export function useGameController(options: GameControllerOptions = {}) {
   );
 
   const selectQubit = useCallback((configIndex: number) => {
-    setState((prev) => {
-      if (prev.phase !== "setup" || prev.currentPlayer !== 0) return prev;
-      if (!prev.setupRemaining[0].includes(configIndex)) return prev;
-      return { ...prev, selectedConfigIndex: configIndex };
-    });
+    setState((prev) => reduceSelectQubit(prev, configIndex));
   }, []);
 
   const placeQubit = useCallback((cell: number) => {
-    setState((prev) => {
-      if (prev.phase !== "setup" || prev.selectedConfigIndex === null)
-        return prev;
-      const player = prev.currentPlayer;
-      const ownCells = prev.qubits
-        .filter((q) => q.owner === player)
-        .map((q) => q.cell);
-      if (!isValidPlacement(cell, ownCells)) return prev;
-
-      const configIndex = prev.selectedConfigIndex;
-      const opponentQubit = prev.qubits.find(
-        (q) =>
-          q.cell === cell &&
-          q.owner !== player &&
-          q.collapsed !== "interference",
-      );
-      const collided = !!opponentQubit;
-
-      const newQubit: PlacedQubit = {
-        id: nextQubitId(),
-        cell,
-        owner: player,
-        configIndex,
-        collapsed: collided ? "interference" : null,
-      };
-
-      const baseQubits = collided
-        ? prev.qubits.map((q) =>
-            q.id === opponentQubit?.id
-              ? { ...q, collapsed: "interference" as const }
-              : q,
-          )
-        : prev.qubits;
-      const newQubits = [...baseQubits, newQubit];
-
-      const newRemaining: [number[], number[]] = [
-        [...prev.setupRemaining[0]],
-        [...prev.setupRemaining[1]],
-      ];
-      const idx = newRemaining[player].indexOf(configIndex);
-      newRemaining[player].splice(idx, 1);
-
-      const playerDone = newRemaining[player].length === 0;
-
-      if (playerDone && player === 0) {
-        return {
-          ...prev,
-          qubits: newQubits,
-          setupRemaining: newRemaining,
-          selectedConfigIndex: null,
-          phase: "passing" as GamePhase,
-          currentPlayer: 1 as const,
-          message: collided ? "setup.interference" : "setup.opponentTurn",
-        };
-      }
-
-      return {
-        ...prev,
-        qubits: newQubits,
-        setupRemaining: newRemaining,
-        selectedConfigIndex: null,
-        message: "setup.humanTurn",
-      };
-    });
+    setState((prev) => reducePlaceQubit(prev, cell));
   }, []);
 
   const placeCpuQubit = useCallback((cell: number, configIndex: number) => {
-    setState((prev) => {
-      if (prev.phase !== "setup" || prev.currentPlayer !== 1) return prev;
-      const newQubit: PlacedQubit = {
-        id: nextQubitId(),
-        cell,
-        owner: 1,
-        configIndex,
-        collapsed: null,
-      };
-      const newRemaining: [number[], number[]] = [
-        [...prev.setupRemaining[0]],
-        [...prev.setupRemaining[1]],
-      ];
-      const idx = newRemaining[1].indexOf(configIndex);
-      if (idx >= 0) newRemaining[1].splice(idx, 1);
-
-      const cpuDone = newRemaining[1].length === 0;
-      const newQubits = cpuDone
-        ? linkEntangledQubits([...prev.qubits, newQubit])
-        : [...prev.qubits, newQubit];
-
-      if (cpuDone) {
-        return {
-          ...prev,
-          qubits: newQubits,
-          setupRemaining: newRemaining,
-          phase: "passing" as GamePhase,
-          currentPlayer: 0 as const,
-          message: "setup.confirmPass",
-        };
-      }
-
-      return { ...prev, qubits: newQubits, setupRemaining: newRemaining };
-    });
+    setState((prev) => reducePlaceCpuQubit(prev, cell, configIndex));
   }, []);
 
   const confirmPass = useCallback(() => {
-    setState((prev) => {
-      if (prev.phase !== "passing") return prev;
-      if (prev.setupRemaining[prev.currentPlayer].length > 0) {
-        return {
-          ...prev,
-          phase: "setup" as GamePhase,
-          message:
-            prev.currentPlayer === 0 ? "setup.humanTurn" : "setup.opponentTurn",
-        };
-      }
-      return {
-        ...prev,
-        phase: "play" as GamePhase,
-        message:
-          prev.currentPlayer === 0 ? "play.humanRoll" : "play.opponentRoll",
-      };
-    });
+    setState((prev) => reduceConfirmPass(prev));
   }, []);
 
   const handleRoll = useCallback(
