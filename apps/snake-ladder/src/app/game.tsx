@@ -45,6 +45,7 @@ import {
   generateDailyPlacements,
   getDailyNumber,
   getDailySeed,
+  getDailyTheme,
 } from "@/game/lib/daily";
 import {
   canConfirmPassNow,
@@ -145,20 +146,25 @@ export default function GameScreen() {
   const slideFx = useSlideFx(state);
   const { resetRecorded } = useGameResultRecorder(state, recordGameResult);
 
-  useEffect(() => {
-    if (!isPreset) return;
+  const startPreset = useMemoizedFn(() => {
     rollCountRef.current = 0;
     journeyRef.current = [];
     dailyRecordedRef.current = false;
     setGoldDiceEnabled(false);
-    const seed = isRoom ? seedFromCode(roomCode) : getDailySeed(new Date());
-    startPresetGame(generateDailyPlacements(seed));
+    const now = new Date();
+    const seed = isRoom ? seedFromCode(roomCode) : getDailySeed(now);
+    const orbs = isRoom ? 5 : getDailyTheme(now).orbsPerPlayer;
+    startPresetGame(generateDailyPlacements(seed, orbs));
     if (!isRoom) {
       void recordDailyStart(seed).then((progress) => {
         dailyAttemptsRef.current = progress.attempts;
       });
     }
-  }, [isPreset, isRoom, roomCode, startPresetGame]);
+  });
+
+  useEffect(() => {
+    if (isPreset) startPreset();
+  }, [isPreset]);
 
   useEffect(() => {
     if (!(isDaily && state.gameOver) || dailyRecordedRef.current) return;
@@ -223,14 +229,7 @@ export default function GameScreen() {
     rollCountRef.current = 0;
     journeyRef.current = [];
     if (isPreset) {
-      dailyRecordedRef.current = false;
-      const seed = isRoom ? seedFromCode(roomCode) : getDailySeed(new Date());
-      startPresetGame(generateDailyPlacements(seed));
-      if (!isRoom) {
-        void recordDailyStart(seed).then((progress) => {
-          dailyAttemptsRef.current = progress.attempts;
-        });
-      }
+      startPreset();
       return;
     }
     reset();

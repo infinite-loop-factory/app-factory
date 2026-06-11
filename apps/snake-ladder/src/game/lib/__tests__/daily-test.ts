@@ -4,6 +4,7 @@ import {
   generateDailyPlacements,
   getDailyNumber,
   getDailySeed,
+  getDailyTheme,
 } from "@/game/lib/daily";
 
 describe("daily board", () => {
@@ -35,6 +36,28 @@ describe("daily board", () => {
         .sort();
       expect(configs).toEqual([0, 1, 2, 3, 4]);
     }
+  });
+
+  it("expands themed boards deterministically", () => {
+    const a = generateDailyPlacements(20260613, 7);
+    const b = generateDailyPlacements(20260613, 7);
+    expect(a).toEqual(b);
+    expect(a).toHaveLength(14);
+    expect(new Set(a.map((p) => p.cell)).size).toBe(14);
+    for (const owner of [0, 1] as const) {
+      const configs = a
+        .filter((p) => p.owner === owner)
+        .map((p) => p.configIndex);
+      expect(configs).toHaveLength(7);
+      // the full 0–4 set is always present; extras may repeat
+      expect(new Set(configs.slice(0, 5)).size).toBe(5);
+    }
+  });
+
+  it("flags weekends as the dense theme", () => {
+    expect(getDailyTheme(new Date(2026, 5, 13)).id).toBe("weekend"); // Sat
+    expect(getDailyTheme(new Date(2026, 5, 14)).orbsPerPlayer).toBe(7); // Sun
+    expect(getDailyTheme(new Date(2026, 5, 11)).id).toBe("classic"); // Thu
   });
 
   it("derives seed and number from the local date", () => {

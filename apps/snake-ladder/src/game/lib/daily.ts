@@ -11,6 +11,21 @@ export type DailyPlacement = {
   configIndex: number;
 };
 
+export type DailyTheme = {
+  id: "classic" | "weekend";
+  /** Orbs per player — weekends run a denser, wilder board. */
+  orbsPerPlayer: number;
+};
+
+/** Sat/Sun = "weekend chaos": 7 orbs each instead of 5. */
+export function getDailyTheme(date: Date): DailyTheme {
+  const day = date.getDay();
+  if (day === 0 || day === 6) {
+    return { id: "weekend", orbsPerPlayer: 7 };
+  }
+  return { id: "classic", orbsPerPlayer: 5 };
+}
+
 /** Deterministic 32-bit PRNG — tiny and good enough for layouts. */
 export function mulberry32(seed: number): () => number {
   let a = seed >>> 0;
@@ -50,24 +65,40 @@ function shuffled<T>(items: T[], rand: () => number): T[] {
 }
 
 /**
- * 10 distinct cells (5 per player) within the legal placement range, with
- * each player's five configs (0–4) in seed-shuffled order.
+ * Distinct cells (orbsPerPlayer each) within the legal placement range; each
+ * player's first five configs are the full 0–4 set in seed-shuffled order,
+ * extras (themed boards) draw deterministically from the same stream.
  */
-export function generateDailyPlacements(seed: number): DailyPlacement[] {
+export function generateDailyPlacements(
+  seed: number,
+  orbsPerPlayer = 5,
+): DailyPlacement[] {
   const rand = mulberry32(seed);
+  const total = orbsPerPlayer * 2;
   const cells = new Set<number>();
-  while (cells.size < 10) {
+  while (cells.size < total) {
     const cell =
       PLACEMENT_MIN + Math.floor(rand() * (PLACEMENT_MAX - PLACEMENT_MIN + 1));
     cells.add(cell);
   }
   const cellList = [...cells];
-  const youConfigs = shuffled([0, 1, 2, 3, 4], rand);
-  const cpuConfigs = shuffled([0, 1, 2, 3, 4], rand);
+  const buildConfigs = () => {
+    const base = shuffled([0, 1, 2, 3, 4], rand);
+    while (base.length < orbsPerPlayer) {
+      base.push(Math.floor(rand() * 5));
+    }
+    return base;
+  };
+  const youConfigs = buildConfigs();
+  const cpuConfigs = buildConfigs();
 
   return cellList.map((cell, index) => {
-    const owner: 0 | 1 = index < 5 ? 0 : 1;
+    const owner: 0 | 1 = index < orbsPerPlayer ? 0 : 1;
     const configs = owner === 0 ? youConfigs : cpuConfigs;
-    return { cell, owner, configIndex: configs[index % 5] as number };
+    return {
+      cell,
+      owner,
+      configIndex: configs[index % orbsPerPlayer] as number,
+    };
   });
 }
