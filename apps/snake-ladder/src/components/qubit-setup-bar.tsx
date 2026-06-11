@@ -13,6 +13,9 @@ type QubitSetupBarProps = {
   disabled?: boolean;
 };
 
+const CARD_WIDTH = 100;
+const CARD_GAP = 8;
+
 export function QubitSetupBar({
   remaining,
   selectedIndex,
@@ -22,9 +25,11 @@ export function QubitSetupBar({
 }: QubitSetupBarProps) {
   return (
     <ScrollView
-      contentContainerStyle={{ gap: 8, paddingHorizontal: 4 }}
+      contentContainerStyle={{ gap: CARD_GAP, paddingHorizontal: 4 }}
+      decelerationRate="fast"
       horizontal
       showsHorizontalScrollIndicator={false}
+      snapToInterval={CARD_WIDTH + CARD_GAP}
     >
       {remaining.map((configIndex) => {
         const config = QUBIT_CONFIGS[configIndex];
@@ -43,7 +48,7 @@ export function QubitSetupBar({
               borderWidth: 2,
               borderColor: selected ? palette.playerYou : palette.border,
               backgroundColor: selected ? palette.card : palette.background,
-              minWidth: 88,
+              width: CARD_WIDTH,
               alignItems: "center",
             }}
             testID={`qubit-config-${configIndex}`}
