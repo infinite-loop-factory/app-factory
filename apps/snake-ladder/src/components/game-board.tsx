@@ -53,8 +53,11 @@ function BoardCamera({
   const tx = useSharedValue(0);
   const ty = useSharedValue(0);
 
-  const focusPlayer =
+  const movingPlayer =
     state.slidingPlayer ?? (state.isMoving ? state.currentPlayer : null);
+  // Follow only the human token: zooming on the CPU's move is disorienting
+  // and hides your own position while you can't act anyway.
+  const focusPlayer = movingPlayer === 0 ? 0 : null;
   const active = focusPlayer !== null;
   const focusCell = focusPlayer !== null ? state.positions[focusPlayer] : 1;
 
