@@ -12,6 +12,8 @@
  *     are short ticks/chirps that read as rhythm when restarted.
  *   - roll is the shake+throw only; the per-bounce clacks come from the GL
  *     dice via dice_impact (impact.wav), so the two never double-hit.
+ *   - win.wav / lose.wav / bgm.wav are NOT generated here — they are musical
+ *     assets soundfont-rendered by generate-music.mts (pnpm music:build).
  */
 
 import { mkdirSync, writeFileSync } from "node:fs";
@@ -291,24 +293,6 @@ function barNote(
   return applyAttackRamp(out);
 }
 
-function marimba(rng: Rng, freq: number, decay = 0.3): Float64Array {
-  const partials: readonly Partial[] = [
-    [1, 1, decay],
-    [3.98, 0.32, decay * 0.45],
-    [9.95, 0.1, decay * 0.22],
-  ];
-  return barNote(rng, freq, decay * 3.2, partials);
-}
-
-function glockenspiel(rng: Rng, freq: number, decay = 0.55): Float64Array {
-  const partials: readonly Partial[] = [
-    [1, 1, decay],
-    [2.76, 0.22, decay * 0.5],
-    [5.4, 0.08, decay * 0.3],
-  ];
-  return barNote(rng, freq, decay * 2.6, partials, 0.1);
-}
-
 function svfBandpass(
   input: Float64Array,
   fCurve: Float64Array,
@@ -576,95 +560,6 @@ function makeTunnel(): Float64Array {
   return out;
 }
 
-/** Marimba arpeggio into a bright glockenspiel chord with sparkle echoes. */
-function makeWin(): Float64Array {
-  const rng = new Rng(99);
-  const sig = new Float64Array(samples(2.2));
-
-  const arpeggio: ReadonlyArray<readonly [number, number]> = [
-    [523.25, 0],
-    [659.25, 0.09],
-    [783.99, 0.18],
-    [1046.5, 0.27],
-  ];
-  for (const [freq, ts] of arpeggio) {
-    place(sig, ts, marimba(rng, freq, 0.26), 0.75);
-  }
-
-  for (const freq of [523.25, 783.99]) {
-    place(sig, 0.42, marimba(rng, freq, 0.55), 0.55);
-  }
-  for (const freq of [1046.5, 1318.5, 1568]) {
-    place(sig, 0.42, glockenspiel(rng, freq, 0.7), 0.45);
-  }
-
-  const sparkles: ReadonlyArray<readonly [number, number, number]> = [
-    [2093, 0.62, 0.16],
-    [2637, 0.8, 0.12],
-    [3136, 1, 0.09],
-  ];
-  for (const [freq, ts, amp] of sparkles) {
-    place(sig, ts, glockenspiel(rng, freq, 0.45), amp);
-  }
-  return sig;
-}
-
-/** Comedic wah-wah-womp: four descending soft-brass notes, last one droops. */
-function makeLose(): Float64Array {
-  const rng = new Rng(110);
-  const sig = new Float64Array(samples(1.5));
-
-  const womp = (freq: number, duration: number, droop = 0): Float64Array => {
-    const n = samples(duration);
-    const fCurve = new Float64Array(n);
-    for (let i = 0; i < n; i++) {
-      fCurve[i] = freq * 2 ** ((droop * i) / (n - 1) / 12);
-    }
-    const out = new Float64Array(n);
-    for (let h = 1; h <= 10; h++) {
-      const tone = glideSine(fCurve, h, rng.uniform(0, TWO_PI));
-      for (let i = 0; i < n; i++) {
-        const t = i / SR;
-        const cutoff = 320 + 900 * Math.exp(-t / 0.07);
-        const gain = 1 / h / (1 + ((h * freq) / cutoff) ** 4);
-        out[i] += gain * tone[i];
-      }
-    }
-    const release = Math.floor(0.025 * SR);
-    for (let i = 0; i < n; i++) {
-      const t = i / SR;
-      const tail = Math.min(1, (n - 1 - i) / release);
-      out[i] *=
-        Math.min(t / 0.018, 1) * Math.exp(-t / (duration * 0.55)) * tail;
-    }
-    return out;
-  };
-
-  const notes: ReadonlyArray<readonly [number, number]> = [
-    [196, 0],
-    [185, 0.26],
-    [174.6, 0.52],
-  ];
-  for (const [freq, ts] of notes) place(sig, ts, womp(freq, 0.26), 0.75);
-  place(sig, 0.78, womp(164.8, 0.62, -3), 0.85);
-
-  const tap = woodClack(rng, {
-    duration: 0.1,
-    modes: [
-      [480, 0.5, 0.9],
-      [860, 0.35, 0.6],
-      [1500, 0.15, 0.4],
-    ],
-    bodyDecay: 0.02,
-    brightness: 0.6,
-    thudHz: 190,
-    thudAmp: 0.15,
-    thudDecay: 0.016,
-  });
-  place(sig, 1.36, tap, 0.35);
-  return sig;
-}
-
 const SOUNDS: ReadonlyArray<readonly [string, () => Float64Array, number]> = [
   ["select.wav", makeSelect, 0.5],
   ["hop.wav", makeHop, 0.6],
@@ -674,8 +569,6 @@ const SOUNDS: ReadonlyArray<readonly [string, () => Float64Array, number]> = [
   ["snake.wav", makeSnake, 0.7],
   ["collapse.wav", makeCollapse, 0.72],
   ["tunnel.wav", makeTunnel, 0.62],
-  ["win.wav", makeWin, 0.9],
-  ["lose.wav", makeLose, 0.75],
 ];
 
 for (const [name, builder, peak] of SOUNDS) {

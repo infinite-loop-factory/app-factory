@@ -32,6 +32,7 @@ import { TurnBanner } from "@/components/turn-banner";
 import { WoodPanel } from "@/components/ui/wood-panel";
 import { VictoryOverlay } from "@/components/victory-overlay";
 import { GAME_FONT } from "@/game/constants/theme";
+import { startBgm, stopBgm } from "@/lib/bgm";
 
 const FELT_TEXTURE = require("@/assets/images/textures/felt-table.jpg");
 const _WOOD_TEXTURE = require("@/assets/images/textures/wood-planks.jpg");
@@ -126,6 +127,11 @@ export default function GameScreen() {
       ),
     [settings.opponentNickname],
   );
+
+  useEffect(() => {
+    startBgm(settings.soundEnabled);
+    return stopBgm;
+  }, [settings.soundEnabled]);
 
   const onFeedback = useMemoizedFn((event: GameFeedbackEvent) => {
     if (event.type === "tunnel") journeyRef.current.tunnels += 1;

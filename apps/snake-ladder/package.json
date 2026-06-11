@@ -16,6 +16,7 @@
     "maestro:screenshots": "maestro test .maestro/flows/screenshots.yaml",
     "maestro:settings": "maestro test .maestro/flows/settings.yaml",
     "maestro:smoke": "maestro test .maestro/flows/smoke.yaml",
+    "music:build": "node scripts/generate-music.mts",
     "screenshots:copy": "bash scripts/copy-epic-screenshots.sh",
     "sfx:build": "node scripts/generate-sfx.mts",
     "start": "expo start",
