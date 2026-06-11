@@ -24,11 +24,11 @@ export function LadderPath({
   const nx = -uy;
   const ny = ux;
 
-  const railGap = cellSize * 0.16;
-  const overhang = cellSize * 0.16;
+  const railGap = cellSize * 0.19;
+  const overhang = cellSize * 0.18;
   const railDark = darkenColor(stroke, 0.55);
   const railLight = lightenColor(stroke, 0.28);
-  const railBaseW = Math.max(2.4, cellSize * 0.085) * (emphasized ? 1.25 : 1);
+  const railBaseW = Math.max(2.8, cellSize * 0.105) * (emphasized ? 1.25 : 1);
   const railTopW = railBaseW * 0.52;
   const rungBaseW = Math.max(2, cellSize * 0.068);
   const rungTopW = rungBaseW * 0.5;
@@ -109,6 +109,16 @@ export function LadderPath({
             y1={rung.y + ny * railGap * 0.92}
             y2={rung.y - ny * railGap * 0.92}
           />
+          {/* joint bolts where the rung meets each rail */}
+          {[1, -1].map((side) => (
+            <Circle
+              cx={rung.x + nx * railGap * side}
+              cy={rung.y + ny * railGap * side}
+              fill={darkenColor(stroke, 0.4)}
+              key={`bolt-${side}`}
+              r={rungBaseW * 0.42}
+            />
+          ))}
         </G>
       ))}
 

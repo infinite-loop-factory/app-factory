@@ -3,7 +3,6 @@ import {
   Defs,
   Ellipse,
   G,
-  Line,
   LinearGradient,
   Path,
   Polyline,
@@ -44,9 +43,9 @@ function sampleSnakeSpine(
 
 /** Body half-width along the spine: neck → bulge → tapering tail. */
 function snakeWidthAt(t: number, cellSize: number): number {
-  const neck = cellSize * 0.105;
-  const body = cellSize * 0.155;
-  const tail = cellSize * 0.012;
+  const neck = cellSize * 0.115;
+  const body = cellSize * 0.175;
+  const tail = cellSize * 0.014;
   const ramp = Math.sin(Math.min(t / 0.3, 1) * (Math.PI / 2));
   const base = neck + (body - neck) * ramp;
   if (t <= 0.45) return base;
@@ -79,6 +78,63 @@ function snakeBodyPath(spine: Point[], cellSize: number): string {
   return `M${left[0]} L${left.slice(1).join(" L")} L${right.join(" L")} Z`;
 }
 
+/** Polyline offset from the spine by a fraction of the local body width. */
+function offsetPolyline(
+  spine: Point[],
+  cellSize: number,
+  factor: number,
+  tStart: number,
+  tEnd: number,
+): string {
+  const points: string[] = [];
+  const count = spine.length;
+  for (let i = 0; i < count; i += 1) {
+    const t = i / (count - 1);
+    if (t < tStart || t > tEnd) continue;
+    const p = spine[i];
+    if (!p) continue;
+    const prev = spine[i - 1] ?? p;
+    const next = spine[i + 1] ?? p;
+    const dx = next.x - prev.x;
+    const dy = next.y - prev.y;
+    const len = Math.hypot(dx, dy) || 1;
+    const w = snakeWidthAt(t, cellSize) * factor;
+    points.push(
+      `${(p.x + (-dy / len) * w).toFixed(2)},${(p.y + (dx / len) * w).toFixed(2)}`,
+    );
+  }
+  return points.join(" ");
+}
+
+/** Diamond chain along the back — the classic snakes-and-ladders dorsal motif. */
+function dorsalDiamond(
+  spine: Point[],
+  index: number,
+  cellSize: number,
+): string | null {
+  const p = spine[index];
+  const prev = spine[index - 1];
+  const next = spine[index + 1];
+  if (!(p && prev && next)) return null;
+  const dx = next.x - prev.x;
+  const dy = next.y - prev.y;
+  const len = Math.hypot(dx, dy) || 1;
+  const ux = dx / len;
+  const uy = dy / len;
+  const nx = -uy;
+  const ny = ux;
+  const t = index / (spine.length - 1);
+  const along = snakeWidthAt(t, cellSize) * 1.05;
+  const across = snakeWidthAt(t, cellSize) * 0.62;
+  return [
+    `M${(p.x + ux * along).toFixed(2)},${(p.y + uy * along).toFixed(2)}`,
+    `L${(p.x + nx * across).toFixed(2)},${(p.y + ny * across).toFixed(2)}`,
+    `L${(p.x - ux * along).toFixed(2)},${(p.y - uy * along).toFixed(2)}`,
+    `L${(p.x - nx * across).toFixed(2)},${(p.y - ny * across).toFixed(2)}`,
+    "Z",
+  ].join(" ");
+}
+
 export function SnakePath({
   id,
   from,
@@ -107,7 +163,7 @@ export function SnakePath({
   hdy /= hlen;
   const hnx = -hdy;
   const hny = hdx;
-  const headR = cellSize * 0.19;
+  const headR = cellSize * 0.23;
   const headCx = from.x + hdx * cellSize * 0.02;
   const headCy = from.y + hdy * cellSize * 0.02;
   const headAngle = (Math.atan2(hdy, hdx) * 180) / Math.PI;
@@ -135,10 +191,13 @@ export function SnakePath({
   const shadowDx = cellSize * 0.055;
   const shadowDy = cellSize * 0.09;
 
-  // Scale bands across the back, skipping neck and the thin tail tip.
-  const bands = spine
-    .map((p, i) => ({ p, i, t: i / (spine.length - 1) }))
-    .filter(({ i, t }) => i % 3 === 1 && t > 0.1 && t < 0.82);
+  // Dorsal diamonds across the back, skipping neck and the thin tail tip.
+  const diamondIndices = spine
+    .map((_, i) => i)
+    .filter((i) => {
+      const t = i / (spine.length - 1);
+      return i % 4 === 2 && t > 0.12 && t < 0.8;
+    });
 
   return (
     <G opacity={emphasized ? 1 : 0.96}>
@@ -190,40 +249,36 @@ export function SnakePath({
         strokeOpacity={0.55}
         strokeWidth={Math.max(0.8, cellSize * 0.02)}
       />
-      {/* belly highlight */}
+      {/* cylindrical shading: light rim on one flank, shadow on the other */}
       <Polyline
         fill="none"
-        points={spine
-          .slice(2, Math.floor(spine.length * 0.86))
-          .map((p) => `${p.x},${p.y}`)
-          .join(" ")}
+        points={offsetPolyline(spine, cellSize, 0.55, 0.04, 0.86)}
         stroke={belly}
         strokeLinecap="round"
         strokeLinejoin="round"
-        strokeOpacity={0.5}
+        strokeOpacity={0.55}
+        strokeWidth={Math.max(1.4, cellSize * 0.075)}
+      />
+      <Polyline
+        fill="none"
+        points={offsetPolyline(spine, cellSize, -0.62, 0.04, 0.88)}
+        stroke={dark}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeOpacity={0.4}
         strokeWidth={Math.max(1.2, cellSize * 0.06)}
       />
-      {/* scale bands */}
-      {bands.map(({ p, i, t }) => {
-        const prev = spine[i - 1] ?? p;
-        const next = spine[i + 1] ?? p;
-        const dx = next.x - prev.x;
-        const dy = next.y - prev.y;
-        const len = Math.hypot(dx, dy) || 1;
-        const nx = -dy / len;
-        const ny = dx / len;
-        const w = snakeWidthAt(t, cellSize) * 0.74;
+      {/* dorsal diamond chain */}
+      {diamondIndices.map((i) => {
+        const d = dorsalDiamond(spine, i, cellSize);
+        if (!d) return null;
+        const p = spine[i] as Point;
         return (
-          <Line
-            key={`band-${p.x.toFixed(1)}-${p.y.toFixed(1)}`}
-            stroke={band}
-            strokeLinecap="round"
-            strokeOpacity={0.32}
-            strokeWidth={Math.max(0.8, cellSize * 0.028)}
-            x1={p.x + nx * w}
-            x2={p.x - nx * w}
-            y1={p.y + ny * w}
-            y2={p.y - ny * w}
+          <Path
+            d={d}
+            fill={band}
+            fillOpacity={0.42}
+            key={`diamond-${p.x.toFixed(1)}-${p.y.toFixed(1)}`}
           />
         );
       })}
