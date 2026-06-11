@@ -17,8 +17,6 @@
   "game.roll": "Roll",
   "game.playAgain": "Play Again",
   "game.back": "Back to home",
-  "game.musicToggle": "Music on/off",
-  "game.soundToggle": "Sound effects on/off",
   "game.restart": "Start new game",
   "game.newGameTitle": "Start a new game?",
   "game.newGameMessage": "Your current match progress will be lost.",

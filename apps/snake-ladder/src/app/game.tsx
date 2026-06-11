@@ -22,6 +22,7 @@ import { DiceGlPrewarm } from "@/components/dice/dice-gl-prewarm";
 import { DiceRollOverlay } from "@/components/dice-roll-overlay";
 import { GameBoard, getBoardCellSize } from "@/components/game-board";
 import { GameDock } from "@/components/game-dock";
+import { GameSettingsSheet } from "@/components/game-settings-sheet";
 import { GoldDiceControls } from "@/components/gold-dice-controls";
 import { PlayerBadge } from "@/components/player-badge";
 import { QasmLogPanel } from "@/components/qasm-log-panel";
@@ -98,6 +99,7 @@ export default function GameScreen() {
   );
   const [throwCharge, setThrowCharge] = useState(0.5);
   const [inspectedCell, setInspectedCell] = useState<number | null>(null);
+  const [soundSheetOpen, setSoundSheetOpen] = useState(false);
   const inspectTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const { mode, code } = useLocalSearchParams<{
     mode?: string;
@@ -392,46 +394,18 @@ export default function GameScreen() {
           </Text>
           <View className="flex-row items-center gap-2">
             <Pressable
-              accessibilityLabel={i18n.t("game.musicToggle")}
+              accessibilityLabel={i18n.t("settings.title")}
               accessibilityRole="button"
               className="h-10 w-10 items-center justify-center rounded-full"
-              onPress={() =>
-                updateSettings({ musicEnabled: !settings.musicEnabled })
-              }
+              onPress={() => setSoundSheetOpen(true)}
               style={{
                 backgroundColor: palette.frameWood,
                 borderWidth: 1.5,
                 borderColor: palette.frameWoodEdge,
-                opacity: settings.musicEnabled ? 1 : 0.55,
               }}
-              testID="game-music-button"
+              testID="game-settings-button"
             >
-              <MaterialIcons
-                color={palette.cream}
-                name={settings.musicEnabled ? "music-note" : "music-off"}
-                size={22}
-              />
-            </Pressable>
-            <Pressable
-              accessibilityLabel={i18n.t("game.soundToggle")}
-              accessibilityRole="button"
-              className="h-10 w-10 items-center justify-center rounded-full"
-              onPress={() =>
-                updateSettings({ soundEnabled: !settings.soundEnabled })
-              }
-              style={{
-                backgroundColor: palette.frameWood,
-                borderWidth: 1.5,
-                borderColor: palette.frameWoodEdge,
-                opacity: settings.soundEnabled ? 1 : 0.55,
-              }}
-              testID="game-sound-button"
-            >
-              <MaterialIcons
-                color={palette.cream}
-                name={settings.soundEnabled ? "volume-up" : "volume-off"}
-                size={22}
-              />
+              <MaterialIcons color={palette.cream} name="settings" size={22} />
             </Pressable>
             <Pressable
               accessibilityLabel={i18n.t("game.restart")}
@@ -607,6 +581,15 @@ export default function GameScreen() {
         />
       </View>
       <ConfettiBurstGl active={showConfetti} colors={confettiColors} />
+      <GameSettingsSheet
+        hapticsEnabled={settings.hapticsEnabled}
+        musicEnabled={settings.musicEnabled}
+        onClose={() => setSoundSheetOpen(false)}
+        onUpdate={updateSettings}
+        palette={palette}
+        soundEnabled={settings.soundEnabled}
+        visible={soundSheetOpen}
+      />
     </SafeAreaView>
   );
 }

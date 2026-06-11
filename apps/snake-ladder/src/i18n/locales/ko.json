@@ -17,8 +17,6 @@
   "game.roll": "굴리기",
   "game.playAgain": "다시 하기",
   "game.back": "홈으로",
-  "game.musicToggle": "배경 음악 켜기/끄기",
-  "game.soundToggle": "효과음 켜기/끄기",
   "game.restart": "새 게임",
   "game.newGameTitle": "새 게임을 시작할까요?",
   "game.newGameMessage": "진행 중인 판은 저장되지 않습니다.",

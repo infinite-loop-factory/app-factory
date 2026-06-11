@@ -888,6 +888,9 @@ importers:
       '@expo-google-fonts/jua':
         specifier: ^0.4.1
         version: 0.4.1
+      '@expo/html-elements':
+        specifier: ^0.12.5
+        version: 0.12.5
       '@expo/metro-runtime':
         specifier: 6.1.2
         version: 6.1.2(expo@54.0.34)(react-dom@19.1.0(react@19.1.0))(react-native@0.81.5(@babel/core@7.28.0)(@react-native-community/cli@20.1.3(typescript@5.9.3))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)
@@ -906,6 +909,9 @@ importers:
       '@kirkelliott/ket':
         specifier: ^0.5.0
         version: 0.5.0
+      '@legendapp/motion':
+        specifier: ^2.4.0
+        version: 2.4.0(d39bcfbf1793c8eac0bd06fc9ea1e07a)
       '@react-native-async-storage/async-storage':
         specifier: ^2.2.0
         version: 2.2.0(react-native@0.81.5(@babel/core@7.28.0)(@react-native-community/cli@20.1.3(typescript@5.9.3))(@types/react@19.1.17)(react@19.1.0))
@@ -2430,6 +2436,9 @@ packages:
   '@expo/fingerprint@0.15.5':
     resolution: {integrity: sha512-mdVoAMcux1WlM6kd1RoWiHRNqKqS+J6mKmWQ/BKgeh937S/fcW58EE68O6nc4KDXtWi3PBeNHskOFcgyIuD4hw==}
     hasBin: true
+
+  '@expo/html-elements@0.12.5':
+    resolution: {integrity: sha512-28KWO88YKykKU7ke5sEQs5TivFRMs1Aktz13xxgqAf5rTgb+lka0VKVt3W2fG7ksbUQ407rtUqz7SEAq298NvQ==}
 
   '@expo/html-elements@0.4.2':
     resolution: {integrity: sha512-lNioCgdtOrCMMqzHY+PCTdyuWBTU4yMBlOzPSkS4YFIWt9bq0zexM2ZJkpybTXmowNdE3zHO93xxAmiA2yDi2w==}
@@ -11197,6 +11206,8 @@ snapshots:
       semver: 7.7.3
     transitivePeerDependencies:
       - supports-color
+
+  '@expo/html-elements@0.12.5': {}
 
   '@expo/html-elements@0.4.2': {}
 

@@ -36,8 +36,6 @@ export default {
     roll: "굴리기",
     playAgain: "다시 하기",
     back: "홈으로",
-    musicToggle: "배경 음악 켜기/끄기",
-    soundToggle: "효과음 켜기/끄기",
     restart: "새 게임",
     newGameTitle: "새 게임을 시작할까요?",
     newGameMessage: "진행 중인 판은 저장되지 않습니다.",
