@@ -1,6 +1,7 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import { Link, useRouter } from "expo-router";
+import { Link, useFocusEffect, useRouter } from "expo-router";
+import { useCallback, useState } from "react";
 import {
   Image,
   ImageBackground,
@@ -15,9 +16,11 @@ import { OnboardingModal } from "@/components/onboarding-modal";
 import { RollButton } from "@/components/roll-button";
 import { WoodPanel } from "@/components/ui/wood-panel";
 import { GAME_FONT } from "@/game/constants/theme";
+import { getDailySeed } from "@/game/lib/daily";
 import { useAppSettings } from "@/hooks/use-app-settings";
 import i18n from "@/i18n";
 import { darkenColor } from "@/lib/color";
+import { loadDailyProgress } from "@/lib/daily-progress";
 import { winRate } from "@/lib/stats";
 
 const FELT_TEXTURE = require("@/assets/images/textures/felt-table.jpg");
@@ -29,6 +32,15 @@ export default function HomeScreen() {
   const { width } = useWindowDimensions();
   const { palette, stats, loaded, onboardingComplete, completeOnboarding } =
     useAppSettings();
+  const [_dailyDone, setDailyDone] = useState(false);
+
+  useFocusEffect(
+    useCallback(() => {
+      void loadDailyProgress().then((progress) => {
+        setDailyDone(progress.completedSeed === getDailySeed(new Date()));
+      });
+    }, []),
+  );
 
   const features = [
     {

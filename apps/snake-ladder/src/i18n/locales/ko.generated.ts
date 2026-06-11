@@ -13,19 +13,21 @@ export default {
         body: "배치한 타일에 착지하면 큐비트 붕괴가 사다리/뱀을 결정합니다.",
       },
       entangle: {
-        title: "얽힘",
-        body: "큐비트 쌍을 얽혀 간섭 또는 연동 붕괴를 유도합니다.",
+        title: "쌍둥이 구슬",
+        body: "두 구슬이 운명을 공유해요 — 하나를 재면 둘 다 정해지거나, 함께 사라져요.",
       },
       ladder: {
-        title: "벡터 슬라이드",
-        body: "사다리 상승·뱀 하강은 보드 격자 X/Y 벡터 굴림으로 계산됩니다.",
+        title: "매판 새로운 보드",
+        body: "사다리가 어디로 오르고 뱀이 어디로 미끄러질지, 매판 새로 정해져요.",
       },
       tunnel: {
-        title: "터널링",
-        body: "상대와 같은 칸? 경로에 따라 간섭으로 통과할 수 있습니다.",
+        title: "유령 통과",
+        body: "상대와 같은 칸에 서면, 스르륵 통과해버릴 수도 있어요.",
       },
     },
     daily: "오늘의 보드",
+    dailyDone: "오늘 완료 ✓",
+    dailyHint: "오늘은 모두 같은 보드",
   },
   game: {
     title: "Snake & Ladder",
@@ -225,5 +227,7 @@ export default {
     headerFree: "양자 뱀사다리",
     win: "{count}번 굴려서 승리 🏆",
     lose: "{count}번 굴리고 패배 🐍",
+    streak: "🔥 {count}일 연속",
+    tryCount: " · {n}번째 시도",
   },
 } as const;

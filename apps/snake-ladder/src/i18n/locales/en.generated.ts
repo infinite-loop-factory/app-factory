@@ -13,19 +13,21 @@ export default {
         body: "Qubit collapse decides ladder vs snake when you land on a placed tile.",
       },
       entangle: {
-        title: "Entanglement",
-        body: "Pair qubits so outcomes can interfere or resolve together.",
+        title: "Linked Twins",
+        body: "Two orbs share one fate — measuring one decides both, or they cancel out.",
       },
       ladder: {
-        title: "Vector Slides",
-        body: "Ladders climb and snakes fall using X/Y vector rolls on the board grid.",
+        title: "New Board Every Game",
+        body: "Where each ladder climbs and each snake slides is rolled fresh every game.",
       },
       tunnel: {
-        title: "Tunneling",
-        body: "Land on the same cell as your opponent? Path-dependent interference may let you pass through.",
+        title: "Ghost Pass",
+        body: "Land on your rival and you might slip right through them.",
       },
     },
     daily: "Daily Board",
+    dailyDone: "Done today ✓",
+    dailyHint: "Same board for everyone today",
   },
   game: {
     title: "Snake & Ladder",
@@ -226,5 +228,7 @@ export default {
     headerFree: "Quantum Snake & Ladder",
     win: "Won in {count} rolls 🏆",
     lose: "Lost after {count} rolls 🐍",
+    streak: "🔥 {count}-day streak",
+    tryCount: " · try {n}",
   },
 } as const;
