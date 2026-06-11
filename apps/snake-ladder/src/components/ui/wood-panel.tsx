@@ -47,7 +47,7 @@ export function WoodPanel({
       testID={testID}
     >
       <ImageBackground
-        imageStyle={{ borderRadius: radius }}
+        imageStyle={{ borderRadius: radius, width: "100%", height: "100%" }}
         resizeMode="cover"
         source={WOOD_TEXTURE}
         style={{ borderRadius: radius, overflow: "hidden" }}

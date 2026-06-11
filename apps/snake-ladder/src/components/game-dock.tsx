@@ -40,6 +40,7 @@ export function GameDock({
 }: GameDockProps) {
   return (
     <ImageBackground
+      imageStyle={{ width: "100%", height: "100%" }}
       resizeMode="cover"
       source={WOOD_TEXTURE}
       style={{ marginTop: "auto" }}

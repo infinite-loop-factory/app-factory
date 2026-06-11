@@ -40,6 +40,7 @@ export function ScreenShell({
   return (
     <View style={{ flex: 1, backgroundColor: palette.tableFeltDeep }}>
       <ImageBackground
+        imageStyle={{ width: "100%", height: "100%" }}
         resizeMode="cover"
         source={FELT_TEXTURE}
         style={StyleSheet.absoluteFill}

@@ -17,7 +17,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { BoardFx } from "@/components/board-fx";
-import { ConfettiBurst } from "@/components/confetti-burst";
+import { ConfettiBurstGl } from "@/components/confetti-burst-gl";
 import { DiceGlPrewarm } from "@/components/dice/dice-gl-prewarm";
 import { DiceRollOverlay } from "@/components/dice-roll-overlay";
 import { GameBoard, getBoardCellSize } from "@/components/game-board";
@@ -36,6 +36,10 @@ import { startBgm, stopBgm } from "@/lib/bgm";
 
 const FELT_TEXTURE = require("@/assets/images/textures/felt-table.jpg");
 const _WOOD_TEXTURE = require("@/assets/images/textures/wood-planks.jpg");
+
+// react-native-web sizes ImageBackground's inner image to its intrinsic
+// 1024px without an explicit 100% — wide viewports showed a bare strip.
+const TEXTURE_FILL = { width: "100%", height: "100%" } as const;
 
 import { useCpuOpponent } from "@/game/hooks/use-cpu-opponent";
 import { useGameController } from "@/game/hooks/use-game-controller";
@@ -324,6 +328,7 @@ export default function GameScreen() {
       style={{ backgroundColor: palette.tableFeltDeep }}
     >
       <ImageBackground
+        imageStyle={TEXTURE_FILL}
         resizeMode="cover"
         source={FELT_TEXTURE}
         style={StyleSheet.absoluteFill}
@@ -337,7 +342,6 @@ export default function GameScreen() {
           style={StyleSheet.absoluteFill}
         />
       </ImageBackground>
-      <ConfettiBurst active={showConfetti} colors={confettiColors} />
       <DiceGlPrewarm />
       <TurnBanner
         activePlayer={getActiveTurnPlayer(state)}
@@ -601,6 +605,7 @@ export default function GameScreen() {
           rolling={state.isRolling}
         />
       </View>
+      <ConfettiBurstGl active={showConfetti} colors={confettiColors} />
     </SafeAreaView>
   );
 }
