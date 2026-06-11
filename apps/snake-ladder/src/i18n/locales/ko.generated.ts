@@ -170,6 +170,8 @@ export default {
     publicUrl: "공개 URL: {url}",
   },
   shop: {
+    unavailable:
+      "이 빌드에서는 스토어를 사용할 수 없어요. 앱을 최신 버전으로 업데이트해 주세요.",
     title: "상점",
     goldBalance: "골드 주사위: {count}개",
     goldDescription:

@@ -170,6 +170,8 @@ export default {
     publicUrl: "Public URL: {url}",
   },
   shop: {
+    unavailable:
+      "The store is not available in this build. Please update the app to the latest version.",
     title: "Shop",
     goldBalance: "Gold dice: {count}",
     goldDescription:
