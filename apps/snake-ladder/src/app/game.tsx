@@ -475,6 +475,7 @@ export default function GameScreen() {
                   state.currentPlayer === 0 &&
                   state.selectedConfigIndex !== null
                 }
+                slideFx={slideFx}
                 state={state}
               />
             </WoodPanel>

@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import type { CraftPalette } from "@/game/constants/palettes";
+import type { SlideFx } from "@/game/hooks/use-slide-fx";
 import type { GameState } from "@/game/types";
 
 import { MaterialIcons } from "@expo/vector-icons";
@@ -19,6 +20,7 @@ import {
 } from "@/components/board-connections";
 import { PlayerTokenLayer } from "@/components/player-token";
 import { QubitMarker } from "@/components/qubit-marker";
+import { SlideTrail } from "@/components/slide-trail";
 import {
   BOARD_SIZE,
   cellToVisualCoord,
@@ -112,6 +114,8 @@ type GameBoardProps = {
   onCellLongPress?: (cell: number) => void;
   selectable?: boolean;
   connections?: ReturnType<typeof getSnakeLadderConnections>;
+  /** Latched snake/ladder traversal info for the path trail effect. */
+  slideFx?: SlideFx;
 };
 
 function cellBackground(
@@ -266,6 +270,7 @@ export function GameBoard({
   onCellPress,
   onCellLongPress,
   selectable = false,
+  slideFx,
 }: GameBoardProps) {
   const boardWidth = BOARD_SIZE * cellSize;
   const boardHeight = BOARD_SIZE * cellSize;
@@ -334,6 +339,23 @@ export function GameBoard({
         />
 
         <PlayerTokenLayer cellSize={cellSize} palette={palette} state={state} />
+
+        {slideFx && slideFx.kind !== null && slideFx.fromCell !== null
+          ? (() => {
+              const conn = connections.find((q) => q.cell === slideFx.fromCell);
+              if (conn?.destinationCell === undefined) return null;
+              return (
+                <SlideTrail
+                  cellSize={cellSize}
+                  fromCell={slideFx.fromCell}
+                  key={`slide-trail-${slideFx.tick}`}
+                  kind={slideFx.kind}
+                  palette={palette}
+                  toCell={conn.destinationCell}
+                />
+              );
+            })()
+          : null}
 
         {pathPoints ? (
           <Svg
