@@ -61,6 +61,7 @@ import { dispatchGameFeedback } from "@/lib/feedback";
 import { rollGoldDie } from "@/lib/monetization/gold-dice";
 import { showInterstitialAd } from "@/lib/monetization/interstitial-ads";
 import { resolveDisplayName } from "@/lib/settings";
+import { buildShareMessage } from "@/lib/share";
 
 export default function GameScreen() {
   const { width } = useWindowDimensions();
@@ -133,6 +134,8 @@ export default function GameScreen() {
     if (!isDaily) return;
     rollCountRef.current = 0;
     journeyRef.current = [];
+    // Fair daily: everyone races the same board with fair dice only.
+    setGoldDiceEnabled(false);
     startPresetGame(generateDailyPlacements(getDailySeed(new Date())));
   }, [isDaily, startPresetGame]);
 
@@ -200,10 +203,14 @@ export default function GameScreen() {
     void beginNewGame();
   });
 
+  // Gold dice are locked out of daily mode — shared scores must be fair.
+  const goldActive =
+    !isDaily && goldDiceEnabled && monetization.goldDiceCount > 0;
+
   const rollDice = useMemoizedFn((charge: number) => {
     rollCountRef.current += 1;
     setThrowCharge(charge);
-    if (goldDiceEnabled && monetization.goldDiceCount > 0) {
+    if (goldActive) {
       if (!consumeGoldDice(1)) return;
       const forced = rollGoldDie(goldDesiredFace);
       setPendingForcedRoll(forced);
@@ -222,9 +229,12 @@ export default function GameScreen() {
     const result = i18n.t(won ? "share.win" : "share.lose", {
       count: rollCountRef.current,
     });
-    const journey = journeyRef.current.slice(0, 14).join("");
     void Share.share({
-      message: [header, result, journey].filter(Boolean).join("\n"),
+      message: buildShareMessage({
+        header,
+        result,
+        journey: journeyRef.current,
+      }),
     });
   });
 
@@ -246,7 +256,6 @@ export default function GameScreen() {
   // Don't upsell right after a setback — reviewers flagged it as a dark pattern.
   const setbackMoment = isSetbackMessage(state.message);
 
-  const goldActive = goldDiceEnabled && monetization.goldDiceCount > 0;
   // The rolling die wears the roller's color: cpu red, player blue/gold.
   const diceVariant = (() => {
     if (state.currentPlayer === 1) return "cpu" as const;
@@ -449,16 +458,18 @@ export default function GameScreen() {
           </View>
         ) : null}
 
-        <GoldDiceControls
-          canRoll={canRoll}
-          desiredFace={goldDesiredFace}
-          enabled={goldDiceEnabled}
-          goldDiceCount={monetization.goldDiceCount}
-          onSelectFace={setGoldDesiredFace}
-          onToggle={() => setGoldDiceEnabled((v) => !v)}
-          palette={palette}
-          suppressCta={setbackMoment}
-        />
+        {isDaily ? null : (
+          <GoldDiceControls
+            canRoll={canRoll}
+            desiredFace={goldDesiredFace}
+            enabled={goldDiceEnabled}
+            goldDiceCount={monetization.goldDiceCount}
+            onSelectFace={setGoldDesiredFace}
+            onToggle={() => setGoldDiceEnabled((v) => !v)}
+            palette={palette}
+            suppressCta={setbackMoment}
+          />
+        )}
 
         <QasmLogPanel logs={state.logs} palette={palette} />
 
