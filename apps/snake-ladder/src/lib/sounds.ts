@@ -10,8 +10,8 @@ type SoundKey = Exclude<
 const SOUND_SOURCES: Record<SoundKey, number> = {
   selection: require("@/assets/sounds/select.wav"),
   roll: require("@/assets/sounds/roll.wav"),
-  // Bounce impact reuses the hop tick at strength-scaled volume.
-  dice_impact: require("@/assets/sounds/hop.wav"),
+  // Dedicated die-landing clack, played at strength-scaled volume per bounce.
+  dice_impact: require("@/assets/sounds/impact.wav"),
   hop: require("@/assets/sounds/hop.wav"),
   collapse: require("@/assets/sounds/collapse.wav"),
   tunnel: require("@/assets/sounds/tunnel.wav"),
