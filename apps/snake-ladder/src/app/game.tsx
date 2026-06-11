@@ -57,6 +57,7 @@ import {
 import { useAppSettings } from "@/hooks/use-app-settings";
 import { useMonetization } from "@/hooks/use-monetization";
 import i18n from "@/i18n";
+import { recordDailyCompletion, recordDailyStart } from "@/lib/daily-progress";
 import { dispatchGameFeedback } from "@/lib/feedback";
 import { rollGoldDie } from "@/lib/monetization/gold-dice";
 import { showInterstitialAd } from "@/lib/monetization/interstitial-ads";
@@ -87,6 +88,9 @@ export default function GameScreen() {
   const isDaily = mode === "daily";
   const rollCountRef = useRef(0);
   const journeyRef = useRef<string[]>([]);
+  const dailyAttemptsRef = useRef(1);
+  const dailyStreakRef = useRef(0);
+  const dailyRecordedRef = useRef(false);
 
   const playerName = useMemo(
     () =>
@@ -134,10 +138,24 @@ export default function GameScreen() {
     if (!isDaily) return;
     rollCountRef.current = 0;
     journeyRef.current = [];
+    dailyRecordedRef.current = false;
     // Fair daily: everyone races the same board with fair dice only.
     setGoldDiceEnabled(false);
-    startPresetGame(generateDailyPlacements(getDailySeed(new Date())));
+    const seed = getDailySeed(new Date());
+    startPresetGame(generateDailyPlacements(seed));
+    void recordDailyStart(seed).then((progress) => {
+      dailyAttemptsRef.current = progress.attempts;
+    });
   }, [isDaily, startPresetGame]);
+
+  useEffect(() => {
+    if (!(isDaily && state.gameOver) || dailyRecordedRef.current) return;
+    dailyRecordedRef.current = true;
+    const now = new Date();
+    void recordDailyCompletion(getDailySeed(now), now).then((progress) => {
+      dailyStreakRef.current = progress.streak;
+    });
+  }, [isDaily, state.gameOver]);
 
   useEffect(() => {
     if (slideFx.tick === 0 || slideFx.kind === null) return;
@@ -193,7 +211,12 @@ export default function GameScreen() {
     rollCountRef.current = 0;
     journeyRef.current = [];
     if (isDaily) {
-      startPresetGame(generateDailyPlacements(getDailySeed(new Date())));
+      dailyRecordedRef.current = false;
+      const seed = getDailySeed(new Date());
+      startPresetGame(generateDailyPlacements(seed));
+      void recordDailyStart(seed).then((progress) => {
+        dailyAttemptsRef.current = progress.attempts;
+      });
       return;
     }
     reset();
@@ -226,12 +249,20 @@ export default function GameScreen() {
     const header = isDaily
       ? i18n.t("share.header", { num: getDailyNumber(new Date()) })
       : i18n.t("share.headerFree");
-    const result = i18n.t(won ? "share.win" : "share.lose", {
+    const tryNote =
+      isDaily && dailyAttemptsRef.current > 1
+        ? i18n.t("share.tryCount", { n: dailyAttemptsRef.current })
+        : "";
+    const result = `${i18n.t(won ? "share.win" : "share.lose", {
       count: rollCountRef.current,
-    });
+    })}${tryNote}`;
+    const streakLine =
+      isDaily && dailyStreakRef.current > 1
+        ? i18n.t("share.streak", { count: dailyStreakRef.current })
+        : "";
     void Share.share({
       message: buildShareMessage({
-        header,
+        header: streakLine ? `${header}\n${streakLine}` : header,
         result,
         journey: journeyRef.current,
       }),
