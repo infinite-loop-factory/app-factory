@@ -24,17 +24,28 @@ Grounded in deep market research (2026-06-11, 105-agent verified pipeline; all c
 - ⚠️ Room mode is bare (no rematch flow, no result compare)
 - ⚠️ No BGM; no weekly content cadence; no retention instrumentation
 
+## Owner decisions (fixed — do not relitigate)
+
+- **Gold dice stay purchasable.** IAP packs (10/30/100) are the primary acquisition
+  path; the bulk amounts and the 50% probability ARE the product design.
+- **Ad removal stays a paid IAP.**
+- The research's fairness requirement is already satisfied **without touching IAP**:
+  gold dice are structurally quarantined from daily/room (shared-score) modes, so the
+  "paid players win" perception risk that sank Ludo King reviews cannot attach to our
+  competitive surface. Purchases boost vs-CPU play only.
+
 ## Phases
 
 ### Phase 1 — Weaponize fairness (code-only, immediate)
-1. Surface the seed: daily/room header + share text carry the seed → "verify me".
-2. Reframe the quantum log as a fairness proof in copy ("every roll is a real circuit — inspect it").
-3. Gold dice acquisition shifts toward **rewarded video** (watch ad → 1 gold die), IAP becomes the bulk/convenience path. Gold stays vs-CPU-only.
+1. ✅ Surface the seed: daily/room games show the board seed → "verify me".
+2. ✅ Reframe the quantum log as a fairness proof in copy.
+3. (Optional, owner approval required) Rewarded video as an **additive faucet** —
+   watch an ad for 1 gold die as a taste that funnels into the 10/30/100 IAP packs.
+   Never replaces purchases; standard top-casual funnel design.
 
-### Phase 2 — Rewarded-first ad economy
-1. Add rewarded video unit (AdMob infra already present for interstitials).
+### Phase 2 — Ad cadence tuning (IAP untouched)
+1. (Optional) Add rewarded video unit alongside existing interstitials.
 2. Delay first interstitial of a session; keep ≤1 per 3 games / 60s cap.
-3. Optional: 24h ad-free window purchasable later if a soft currency ever ships.
 
 ### Phase 3 — Room polish (social = the moat)
 1. Rematch flow (same code, round counter).
