@@ -23,37 +23,54 @@ type ParticleSpec = {
   vy: number;
   gravity: number;
   spin: number;
+  flutter: number;
   delay: number;
   originX: number;
   originY: number;
 };
 
-const PARTICLE_COUNT = 52;
-const FLIGHT_MS = 2200;
+// Two cannons (bottom-left, bottom-right) each fire two volleys aimed at the
+// upper center of the screen — a "pop! pop!" victory salute, not a sprinkle.
+const PER_VOLLEY = 24;
+const VOLLEY_DELAYS_MS = [0, 280];
+const GRAVITY = 1150;
+const FLIGHT_MS = 2400;
 
 function buildParticles(
   width: number,
   height: number,
   colors: string[],
 ): ParticleSpec[] {
-  const originX = width * 0.5;
-  const originY = height * 0.72;
-  return Array.from({ length: PARTICLE_COUNT }, (_, index) => {
-    const spread = (index / PARTICLE_COUNT - 0.5) * 2;
-    return {
-      id: `confetti-${index}`,
-      color: colors[index % colors.length] ?? colors[0] ?? "#c9a227",
-      width: 6 + (index % 4) * 2,
-      height: 10 + (index % 3) * 3,
-      vx: spread * 220 + (Math.random() - 0.5) * 80,
-      vy: -320 - Math.random() * 180,
-      gravity: 920,
-      spin: (Math.random() - 0.5) * 720,
-      delay: Math.random() * 120,
-      originX,
-      originY,
-    };
-  });
+  const specs: ParticleSpec[] = [];
+  for (const side of [-1, 1] as const) {
+    const originX = side === -1 ? -width * 0.02 : width * 1.02;
+    const originY = height * 0.86;
+    VOLLEY_DELAYS_MS.forEach((volleyDelay, volley) => {
+      for (let k = 0; k < PER_VOLLEY; k++) {
+        // Aim each piece at a jittered point in the upper center, then solve
+        // the launch velocity that reaches it at tPeak under gravity.
+        const targetX = width * (0.5 + (Math.random() - 0.5) * 0.5);
+        const targetY = height * (0.14 + Math.random() * 0.24);
+        const tPeak = 0.5 + Math.random() * 0.2;
+        const jitter = 0.8 + Math.random() * 0.35;
+        specs.push({
+          id: `confetti-${side}-${volley}-${k}`,
+          color: colors[specs.length % colors.length] ?? "#c9a227",
+          width: 7 + (k % 4) * 2,
+          height: 12 + (k % 3) * 3,
+          vx: ((targetX - originX) / tPeak) * jitter,
+          vy: ((targetY - originY) / tPeak - 0.5 * GRAVITY * tPeak) * jitter,
+          gravity: GRAVITY,
+          spin: (Math.random() - 0.5) * 900,
+          flutter: (Math.random() - 0.5) * 800,
+          delay: volleyDelay + Math.random() * 90,
+          originX,
+          originY,
+        });
+      }
+    });
+  }
+  return specs;
 }
 
 function ConfettiParticle({
@@ -93,8 +110,11 @@ function ConfettiParticle({
       height: spec.height,
       backgroundColor: spec.color,
       borderRadius: 2,
-      opacity: interpolate(progress.get(), [0, 0.75, 1], [1, 1, 0]),
-      transform: [{ rotate: `${spec.spin * t}deg` }],
+      opacity: interpolate(progress.get(), [0, 0.05, 0.78, 1], [0, 1, 1, 0]),
+      transform: [
+        { rotate: `${spec.spin * t}deg` },
+        { rotateX: `${spec.flutter * t}deg` },
+      ],
     };
   });
 
