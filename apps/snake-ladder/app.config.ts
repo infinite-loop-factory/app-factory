@@ -25,7 +25,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   splash: {
     image: "./src/assets/images/icon.png",
     resizeMode: "contain",
-    backgroundColor: "#f4ece0",
+    backgroundColor: "#1e3a2c",
   },
   ios: {
     supportsTablet: true,
@@ -38,7 +38,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   android: {
     adaptiveIcon: {
       foregroundImage: "./src/assets/images/adaptive-icon.png",
-      backgroundColor: "#f4ece0",
+      backgroundColor: "#1e3a2c",
     },
     package: ANDROID_PACKAGE,
   },

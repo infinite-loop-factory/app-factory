@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "timestamp": "2026-06-12T09:43:24+10:00",
+  "options": {
+    "size": "1024x1024",
+    "quality": "high",
+    "count": 3
+  },
+  "cost_estimate_usd": 0.12,
+  "runs": [
+    {
+      "vendor": "codex",
+      "model": "gpt-image-2",
+      "strategy": "codex-exec-oauth",
+      "strategy_attempts": [
+        {
+          "strategy": "codex-exec-oauth",
+          "status": "ok",
+          "duration_ms": 45279
+        }
+      ],
+      "files": [
+        "/Users/gracefullight/workspace/app-factory/apps/snake-ladder/.art-work/icon/codex-gpt-image-2-yyl8bp-1.png",
+        "/Users/gracefullight/workspace/app-factory/apps/snake-ladder/.art-work/icon/codex-gpt-image-2-yyl8bp-2.png",
+        "/Users/gracefullight/workspace/app-factory/apps/snake-ladder/.art-work/icon/codex-gpt-image-2-yyl8bp-3.png"
+      ],
+      "duration_ms": 135892,
+      "status": "ok"
+    }
+  ],
+  "prompt": "Mobile game app icon, square full-bleed: a chunky warm wooden six-sided die with crisp white pips sits at center on a deep green felt table, a small friendly cartoon snake with a coral-red body coiled playfully around a tiny walnut wooden ladder leaning against the die. Cozy handcrafted board game aesthetic, deep green felt #33614a, warm walnut wood #7a4f23, cream accents #f6ecd8, soft top-down studio lighting with gentle shadows, rich saturated storybook illustration, rounded shapes, centered composition with comfortable margins, no text, no letters, no border, no watermark",
+  "reference_images": [
+    "/Users/gracefullight/workspace/app-factory/apps/snake-ladder/src/assets/images/textures/felt-table.jpg",
+    "/Users/gracefullight/workspace/app-factory/apps/snake-ladder/src/assets/images/textures/wood-planks.jpg"
+  ]
+}
