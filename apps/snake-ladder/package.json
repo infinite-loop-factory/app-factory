@@ -17,6 +17,7 @@
     "maestro:settings": "maestro test .maestro/flows/settings.yaml",
     "maestro:smoke": "maestro test .maestro/flows/smoke.yaml",
     "screenshots:copy": "bash scripts/copy-epic-screenshots.sh",
+    "sfx:build": "node scripts/generate-sfx.mts",
     "start": "expo start",
     "start:metro:e2e": "EXPO_PUBLIC_E2E=1 EXPO_PUBLIC_E2E_GOLD_DICE=10 expo start --port 8081",
     "pretest": "pnpm i18n:build",
