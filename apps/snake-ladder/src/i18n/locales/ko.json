@@ -150,5 +150,13 @@
   "home.dailyDone": "오늘 완료 ✓",
   "home.dailyHint": "오늘은 모두 같은 보드",
   "share.streak": "🔥 {count}일 연속",
-  "share.tryCount": " · {n}번째 시도"
+  "share.tryCount": " · {n}번째 시도",
+  "home.room": "룸 코드",
+  "room.title": "같은 보드로 대결하기",
+  "room.body": "친구와 같은 코드를 입력하면 모두 같은 보드를 받아요.",
+  "room.placeholder": "예: PIZZA",
+  "room.start": "시작",
+  "room.random": "랜덤 코드",
+  "room.badge": "룸 {code}",
+  "share.room": "양자 뱀사다리 — 룸 {code}"
 }

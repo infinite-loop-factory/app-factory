@@ -54,6 +54,7 @@ import {
   isSetbackMessage,
   resolveStatusMessage,
 } from "@/game/lib/game-screen-helpers";
+import { normalizeRoomCode, seedFromCode } from "@/game/lib/room";
 import { useAppSettings } from "@/hooks/use-app-settings";
 import { useMonetization } from "@/hooks/use-monetization";
 import i18n from "@/i18n";
@@ -84,8 +85,18 @@ export default function GameScreen() {
   const [throwCharge, setThrowCharge] = useState(0.5);
   const [inspectedCell, setInspectedCell] = useState<number | null>(null);
   const inspectTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const { mode } = useLocalSearchParams<{ mode?: string }>();
+  const { mode, code } = useLocalSearchParams<{
+    mode?: string;
+    code?: string;
+  }>();
   const isDaily = mode === "daily";
+  const roomCode =
+    mode === "room" && typeof code === "string" && code.length > 0
+      ? normalizeRoomCode(code)
+      : null;
+  const isRoom = roomCode !== null;
+  // Shared-seed modes: same board for everyone, fair dice only.
+  const isPreset = isDaily || isRoom;
   const rollCountRef = useRef(0);
   const journeyRef = useRef<string[]>([]);
   const dailyAttemptsRef = useRef(1);
@@ -135,18 +146,19 @@ export default function GameScreen() {
   const { resetRecorded } = useGameResultRecorder(state, recordGameResult);
 
   useEffect(() => {
-    if (!isDaily) return;
+    if (!isPreset) return;
     rollCountRef.current = 0;
     journeyRef.current = [];
     dailyRecordedRef.current = false;
-    // Fair daily: everyone races the same board with fair dice only.
     setGoldDiceEnabled(false);
-    const seed = getDailySeed(new Date());
+    const seed = isRoom ? seedFromCode(roomCode) : getDailySeed(new Date());
     startPresetGame(generateDailyPlacements(seed));
-    void recordDailyStart(seed).then((progress) => {
-      dailyAttemptsRef.current = progress.attempts;
-    });
-  }, [isDaily, startPresetGame]);
+    if (!isRoom) {
+      void recordDailyStart(seed).then((progress) => {
+        dailyAttemptsRef.current = progress.attempts;
+      });
+    }
+  }, [isPreset, isRoom, roomCode, startPresetGame]);
 
   useEffect(() => {
     if (!(isDaily && state.gameOver) || dailyRecordedRef.current) return;
@@ -210,13 +222,15 @@ export default function GameScreen() {
     setGoldDiceEnabled(false);
     rollCountRef.current = 0;
     journeyRef.current = [];
-    if (isDaily) {
+    if (isPreset) {
       dailyRecordedRef.current = false;
-      const seed = getDailySeed(new Date());
+      const seed = isRoom ? seedFromCode(roomCode) : getDailySeed(new Date());
       startPresetGame(generateDailyPlacements(seed));
-      void recordDailyStart(seed).then((progress) => {
-        dailyAttemptsRef.current = progress.attempts;
-      });
+      if (!isRoom) {
+        void recordDailyStart(seed).then((progress) => {
+          dailyAttemptsRef.current = progress.attempts;
+        });
+      }
       return;
     }
     reset();
@@ -226,9 +240,9 @@ export default function GameScreen() {
     void beginNewGame();
   });
 
-  // Gold dice are locked out of daily mode — shared scores must be fair.
+  // Gold dice are locked out of shared-seed modes — scores must be fair.
   const goldActive =
-    !isDaily && goldDiceEnabled && monetization.goldDiceCount > 0;
+    !isPreset && goldDiceEnabled && monetization.goldDiceCount > 0;
 
   const rollDice = useMemoizedFn((charge: number) => {
     rollCountRef.current += 1;
@@ -246,9 +260,13 @@ export default function GameScreen() {
 
   const shareResult = useMemoizedFn(() => {
     const won = state.positions[0] >= 100;
-    const header = isDaily
-      ? i18n.t("share.header", { num: getDailyNumber(new Date()) })
-      : i18n.t("share.headerFree");
+    const header = (() => {
+      if (isRoom) return i18n.t("share.room", { code: roomCode });
+      if (isDaily) {
+        return i18n.t("share.header", { num: getDailyNumber(new Date()) });
+      }
+      return i18n.t("share.headerFree");
+    })();
     const tryNote =
       isDaily && dailyAttemptsRef.current > 1
         ? i18n.t("share.tryCount", { n: dailyAttemptsRef.current })
@@ -368,9 +386,15 @@ export default function GameScreen() {
               textShadowRadius: 2,
             }}
           >
-            {isDaily
-              ? i18n.t("daily.badge", { num: getDailyNumber(new Date()) })
-              : i18n.t("game.title")}
+            {(() => {
+              if (isRoom) return i18n.t("room.badge", { code: roomCode });
+              if (isDaily) {
+                return i18n.t("daily.badge", {
+                  num: getDailyNumber(new Date()),
+                });
+              }
+              return i18n.t("game.title");
+            })()}
           </Text>
           <Pressable
             accessibilityLabel={i18n.t("game.restart")}
@@ -489,7 +513,7 @@ export default function GameScreen() {
           </View>
         ) : null}
 
-        {isDaily ? null : (
+        {isPreset ? null : (
           <GoldDiceControls
             canRoll={canRoll}
             desiredFace={goldDesiredFace}

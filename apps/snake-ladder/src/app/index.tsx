@@ -14,6 +14,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { OnboardingModal } from "@/components/onboarding-modal";
 import { RollButton } from "@/components/roll-button";
+import { RoomCodeModal } from "@/components/room-code-modal";
 import { WoodPanel } from "@/components/ui/wood-panel";
 import { GAME_FONT } from "@/game/constants/theme";
 import { getDailySeed } from "@/game/lib/daily";
@@ -32,7 +33,8 @@ export default function HomeScreen() {
   const { width } = useWindowDimensions();
   const { palette, stats, loaded, onboardingComplete, completeOnboarding } =
     useAppSettings();
-  const [_dailyDone, setDailyDone] = useState(false);
+  const [dailyDone, setDailyDone] = useState(false);
+  const [roomModalOpen, setRoomModalOpen] = useState(false);
 
   useFocusEffect(
     useCallback(() => {
@@ -91,6 +93,15 @@ export default function HomeScreen() {
               onComplete={completeOnboarding}
               palette={palette}
               visible={!onboardingComplete}
+            />
+            <RoomCodeModal
+              onClose={() => setRoomModalOpen(false)}
+              onStart={(roomCode) => {
+                setRoomModalOpen(false);
+                router.push(`/game?mode=room&code=${roomCode}`);
+              }}
+              palette={palette}
+              visible={roomModalOpen}
             />
             <ScrollView
               contentContainerStyle={{
@@ -287,41 +298,67 @@ export default function HomeScreen() {
 
               <View style={{ flexGrow: 1 }} />
 
+              <View style={{ alignItems: "center", gap: 6 }}>
+                <RollButton
+                  accessibilityLabel={i18n.t("home.daily")}
+                  backgroundColor={palette.orbGlow}
+                  label={i18n.t("home.daily")}
+                  onPress={() => router.push("/game?mode=daily")}
+                  pulsing={!dailyDone}
+                  testID="home-daily-button"
+                />
+                <Text
+                  style={{
+                    color: dailyDone ? palette.ladder : palette.creamMuted,
+                    fontFamily: GAME_FONT,
+                    fontSize: 12,
+                  }}
+                >
+                  {dailyDone
+                    ? i18n.t("home.dailyDone")
+                    : i18n.t("home.dailyHint")}
+                </Text>
+              </View>
+
               <RollButton
                 accessibilityLabel={i18n.t("home.play")}
                 backgroundColor={palette.ladder}
                 label={i18n.t("home.play")}
                 onPress={() => router.push("/game")}
-                pulsing
+                pulsing={false}
                 testID="home-play-button"
               />
 
               <Pressable
-                accessibilityLabel={i18n.t("home.daily")}
+                accessibilityLabel={i18n.t("home.room")}
                 accessibilityRole="button"
-                onPress={() => router.push("/game?mode=daily")}
+                onPress={() => setRoomModalOpen(true)}
                 style={{
                   flexDirection: "row",
                   alignItems: "center",
                   gap: 8,
                   borderRadius: 999,
                   borderWidth: 1.5,
-                  borderColor: `${palette.orbGlow}aa`,
+                  borderColor: "rgba(255,255,255,0.22)",
                   backgroundColor: "rgba(0,0,0,0.22)",
                   paddingHorizontal: 18,
-                  paddingVertical: 10,
+                  paddingVertical: 9,
                 }}
-                testID="home-daily-button"
+                testID="home-room-button"
               >
-                <MaterialIcons color={palette.orbGlow} name="event" size={18} />
+                <MaterialIcons
+                  color={palette.playerYou}
+                  name="group"
+                  size={17}
+                />
                 <Text
                   style={{
                     color: palette.cream,
                     fontFamily: GAME_FONT,
-                    fontSize: 15,
+                    fontSize: 14,
                   }}
                 >
-                  {i18n.t("home.daily")}
+                  {i18n.t("home.room")}
                 </Text>
               </Pressable>
 

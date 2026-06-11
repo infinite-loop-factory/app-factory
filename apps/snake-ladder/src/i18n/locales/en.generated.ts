@@ -28,6 +28,7 @@ export default {
     daily: "Daily Board",
     dailyDone: "Done today ✓",
     dailyHint: "Same board for everyone today",
+    room: "Room Code",
   },
   game: {
     title: "Snake & Ladder",
@@ -230,5 +231,14 @@ export default {
     lose: "Lost after {count} rolls 🐍",
     streak: "🔥 {count}-day streak",
     tryCount: " · try {n}",
+    room: "Quantum Snake & Ladder — Room {code}",
+  },
+  room: {
+    title: "Play a shared board",
+    body: "Enter the same code as your friends — everyone gets the same board.",
+    placeholder: "e.g. PIZZA",
+    start: "Start",
+    random: "Random code",
+    badge: "Room {code}",
   },
 } as const;

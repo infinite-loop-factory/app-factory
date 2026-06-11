@@ -28,6 +28,7 @@ export default {
     daily: "오늘의 보드",
     dailyDone: "오늘 완료 ✓",
     dailyHint: "오늘은 모두 같은 보드",
+    room: "룸 코드",
   },
   game: {
     title: "Snake & Ladder",
@@ -229,5 +230,14 @@ export default {
     lose: "{count}번 굴리고 패배 🐍",
     streak: "🔥 {count}일 연속",
     tryCount: " · {n}번째 시도",
+    room: "양자 뱀사다리 — 룸 {code}",
+  },
+  room: {
+    title: "같은 보드로 대결하기",
+    body: "친구와 같은 코드를 입력하면 모두 같은 보드를 받아요.",
+    placeholder: "예: PIZZA",
+    start: "시작",
+    random: "랜덤 코드",
+    badge: "룸 {code}",
   },
 } as const;

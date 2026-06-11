@@ -150,5 +150,13 @@
   "home.dailyDone": "Done today ✓",
   "home.dailyHint": "Same board for everyone today",
   "share.streak": "🔥 {count}-day streak",
-  "share.tryCount": " · try {n}"
+  "share.tryCount": " · try {n}",
+  "home.room": "Room Code",
+  "room.title": "Play a shared board",
+  "room.body": "Enter the same code as your friends — everyone gets the same board.",
+  "room.placeholder": "e.g. PIZZA",
+  "room.start": "Start",
+  "room.random": "Random code",
+  "room.badge": "Room {code}",
+  "share.room": "Quantum Snake & Ladder — Room {code}"
 }
