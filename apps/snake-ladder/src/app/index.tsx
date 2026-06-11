@@ -362,17 +362,6 @@ export default function HomeScreen() {
                   {i18n.t("home.room")}
                 </Text>
               </Pressable>
-
-              <Text
-                style={{
-                  color: `${palette.creamMuted}cc`,
-                  fontSize: 12,
-                  lineHeight: 18,
-                  textAlign: "center",
-                }}
-              >
-                {i18n.t("home.offline")}
-              </Text>
             </ScrollView>
           </SafeAreaView>
         </LinearGradient>

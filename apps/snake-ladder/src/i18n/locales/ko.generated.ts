@@ -5,7 +5,6 @@ export default {
     subtitle:
       "뱀과 사다리가 매판 진짜 양자 동전으로 만들어지는 보드게임. 확률 구슬을 놓고 컴퓨터를 이겨보세요.",
     play: "새 게임",
-    offline: "모든 양자 연산은 기기 내 로컬에서 실행됩니다 — 네트워크 불필요.",
     statsSummary: "{played}판 · 승률 {rate}%",
     feature: {
       dice: {

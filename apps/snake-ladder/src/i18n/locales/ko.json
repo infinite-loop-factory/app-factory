@@ -2,7 +2,6 @@
   "home.title": "Snake & Ladder",
   "home.subtitle": "뱀과 사다리가 매판 진짜 양자 동전으로 만들어지는 보드게임. 확률 구슬을 놓고 컴퓨터를 이겨보세요.",
   "home.play": "새 게임",
-  "home.offline": "모든 양자 연산은 기기 내 로컬에서 실행됩니다 — 네트워크 불필요.",
   "home.statsSummary": "{played}판 · 승률 {rate}%",
   "home.feature.dice.title": "양자 주사위",
   "home.feature.dice.body": "배치한 타일에 착지하면 큐비트 붕괴가 사다리/뱀을 결정합니다.",

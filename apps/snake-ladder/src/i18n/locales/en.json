@@ -2,7 +2,6 @@
   "home.title": "Snake & Ladder",
   "home.subtitle": "Snakes and ladders where every snake and ladder is rolled into being by a real quantum coin. Place your chance orbs and outsmart the computer.",
   "home.play": "New Game",
-  "home.offline": "All quantum circuits run locally — no network required.",
   "home.statsSummary": "{played} games · {rate}% win rate",
   "home.feature.dice.title": "Quantum Dice",
   "home.feature.dice.body": "Qubit collapse decides ladder vs snake when you land on a placed tile.",

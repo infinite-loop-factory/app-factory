@@ -5,7 +5,6 @@ export default {
     subtitle:
       "Snakes and ladders where every snake and ladder is rolled into being by a real quantum coin. Place your chance orbs and outsmart the computer.",
     play: "New Game",
-    offline: "All quantum circuits run locally — no network required.",
     statsSummary: "{played} games · {rate}% win rate",
     feature: {
       dice: {
