@@ -5,11 +5,12 @@ import { WoodPanel } from "@/components/ui/wood-panel";
 import { GAME_FONT } from "@/game/constants/theme";
 import i18n from "@/i18n";
 import { lightenColor } from "@/lib/color";
+import { type JourneyCounts, journeyLine } from "@/lib/share";
 
 type ResultCardProps = {
   won: boolean;
   rolls: number;
-  journey: string[];
+  journey: JourneyCounts;
   palette: CraftPalette;
   /** Daily-only extras — hidden when zero. */
   streak?: number;
@@ -51,9 +52,15 @@ export function ResultCard({
       >
         {resultLine}
       </Text>
-      {journey.length > 0 ? (
-        <Text style={{ fontSize: 18, letterSpacing: 2 }}>
-          {journey.slice(0, 14).join("")}
+      {journeyLine(journey).length > 0 ? (
+        <Text
+          style={{
+            color: palette.creamMuted,
+            fontFamily: GAME_FONT,
+            fontSize: 13,
+          }}
+        >
+          {journeyLine(journey)}
         </Text>
       ) : null}
       {streak > 1 ? (

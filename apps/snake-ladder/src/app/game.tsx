@@ -66,7 +66,11 @@ import { dispatchGameFeedback } from "@/lib/feedback";
 import { rollGoldDie } from "@/lib/monetization/gold-dice";
 import { showInterstitialAd } from "@/lib/monetization/interstitial-ads";
 import { resolveDisplayName } from "@/lib/settings";
-import { buildResultShareMessage } from "@/lib/share";
+import {
+  buildResultShareMessage,
+  EMPTY_JOURNEY,
+  type JourneyCounts,
+} from "@/lib/share";
 
 // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: screen root composing many independent conditional sections; logic lives in extracted hooks/helpers
 export default function GameScreen() {
@@ -102,7 +106,7 @@ export default function GameScreen() {
   // Shared-seed modes: same board for everyone, fair dice only.
   const isPreset = isDaily || isRoom;
   const rollCountRef = useRef(0);
-  const journeyRef = useRef<string[]>([]);
+  const journeyRef = useRef<JourneyCounts>({ ...EMPTY_JOURNEY });
   const [dailyAttempts, setDailyAttempts] = useState(1);
   const [dailyStreak, setDailyStreak] = useState(0);
   const [roomRound, setRoomRound] = useState(1);
@@ -124,7 +128,7 @@ export default function GameScreen() {
   );
 
   const onFeedback = useMemoizedFn((event: GameFeedbackEvent) => {
-    if (event.type === "tunnel") journeyRef.current.push("⚡");
+    if (event.type === "tunnel") journeyRef.current.tunnels += 1;
     dispatchGameFeedback(event, {
       hapticsEnabled: settings.hapticsEnabled,
       soundEnabled: settings.soundEnabled,
@@ -152,7 +156,7 @@ export default function GameScreen() {
 
   const startPreset = useMemoizedFn(() => {
     rollCountRef.current = 0;
-    journeyRef.current = [];
+    journeyRef.current = { ...EMPTY_JOURNEY };
     dailyRecordedRef.current = false;
     setGoldDiceEnabled(false);
     const now = new Date();
@@ -181,7 +185,8 @@ export default function GameScreen() {
 
   useEffect(() => {
     if (slideFx.tick === 0 || slideFx.kind === null) return;
-    journeyRef.current.push(slideFx.kind === "ladder" ? "🪜" : "🐍");
+    if (slideFx.kind === "ladder") journeyRef.current.ladders += 1;
+    else journeyRef.current.snakes += 1;
   }, [slideFx]);
 
   const onCellLongPress = useMemoizedFn((cell: number) => {
@@ -231,7 +236,7 @@ export default function GameScreen() {
     resetRecorded();
     setGoldDiceEnabled(false);
     rollCountRef.current = 0;
-    journeyRef.current = [];
+    journeyRef.current = { ...EMPTY_JOURNEY };
     if (isPreset) {
       if (isRoom) setRoomRound((r) => r + 1);
       startPreset();

@@ -145,11 +145,11 @@
   "share.button": "Share result",
   "share.header": "Quantum Snake & Ladder — Daily #{num}",
   "share.headerFree": "Quantum Snake & Ladder",
-  "share.win": "Won in {count} rolls 🏆",
-  "share.lose": "Lost after {count} rolls 🐍",
+  "share.win": "Won in {count} rolls",
+  "share.lose": "Lost after {count} rolls",
   "home.dailyDone": "Done today ✓",
   "home.dailyHint": "Same board for everyone today",
-  "share.streak": "🔥 {count}-day streak",
+  "share.streak": "{count}-day streak",
   "share.tryCount": " · try {n}",
   "home.room": "Room Code",
   "room.title": "Play a shared board",
@@ -162,5 +162,8 @@
   "fairness.seed": "Board seed {seed} — everyone with this board sees the same layout",
   "shop.rewarded": "Watch an ad · +{count} gold dice",
   "shop.rewardedHint": "Free · short video",
-  "shop.rewardedUnavailable": "Ad not ready yet — try again in a moment."
+  "shop.rewardedUnavailable": "Ad not ready yet — try again in a moment.",
+  "share.ladders": "Ladders {n}",
+  "share.snakes": "Snakes {n}",
+  "share.tunnels": "Tunnels {n}"
 }

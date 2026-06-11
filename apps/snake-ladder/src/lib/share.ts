@@ -4,25 +4,49 @@ import i18n from "@/i18n";
 export const GAME_PUBLIC_URL =
   "https://infinite-loop-factory.github.io/app-factory/snake-ladder";
 
+export type JourneyCounts = {
+  ladders: number;
+  snakes: number;
+  tunnels: number;
+};
+
+export const EMPTY_JOURNEY: JourneyCounts = {
+  ladders: 0,
+  snakes: 0,
+  tunnels: 0,
+};
+
+/** "Ladders 2 · Snakes 1 · Tunnels 1" — only non-zero events, no emoji. */
+export function journeyLine(counts: JourneyCounts): string {
+  const parts: string[] = [];
+  if (counts.ladders > 0) {
+    parts.push(i18n.t("share.ladders", { n: counts.ladders }));
+  }
+  if (counts.snakes > 0) {
+    parts.push(i18n.t("share.snakes", { n: counts.snakes }));
+  }
+  if (counts.tunnels > 0) {
+    parts.push(i18n.t("share.tunnels", { n: counts.tunnels }));
+  }
+  return parts.join(" · ");
+}
+
 type ShareParts = {
   /** Localized header line, e.g. "Quantum Snake & Ladder — Daily #162". */
   header: string;
-  /** Localized result line, e.g. "Won in 7 rolls 🏆". */
+  /** Localized result line, e.g. "Won in 7 rolls". */
   result: string;
-  /** Emoji journey collected from real board events (🪜🐍⚡). */
-  journey: string[];
+  /** Localized journey summary line (may be empty). */
+  journey: string;
 };
 
-const MAX_JOURNEY_GLYPHS = 14;
-
-/** Wordle-style share text: header, result, emoji journey, then the link. */
+/** Plain-text share message: header, result, journey, then the link. */
 export function buildShareMessage({
   header,
   result,
   journey,
 }: ShareParts): string {
-  const trail = journey.slice(0, MAX_JOURNEY_GLYPHS).join("");
-  return [header, result, trail, GAME_PUBLIC_URL]
+  return [header, result, journey, GAME_PUBLIC_URL]
     .filter((line) => line.length > 0)
     .join("\n");
 }
@@ -35,7 +59,7 @@ type ResultShareParts = {
   attempts: number;
   /** > 1 adds the streak line. */
   streak: number;
-  journey: string[];
+  journey: JourneyCounts;
 };
 
 /** Full localized result message: header(+streak), result(+try), journey, link. */
@@ -50,6 +74,6 @@ export function buildResultShareMessage(parts: ResultShareParts): string {
   return buildShareMessage({
     header: streakLine ? `${parts.header}\n${streakLine}` : parts.header,
     result,
-    journey: parts.journey,
+    journey: journeyLine(parts.journey),
   });
 }
