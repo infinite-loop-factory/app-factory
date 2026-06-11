@@ -92,7 +92,7 @@ export default {
     },
     step3: {
       title: "Roll & collapse",
-      body: "Land on a qubit tile to measure it — ladder up, snake down, or tunnel through rivals.",
+      body: "Land on an orb to measure it — ladder up, snake down, or tunnel through rivals. Every roll runs a real quantum circuit; open the Quantum log to verify it.",
     },
     start: "Got it",
   },
@@ -240,5 +240,8 @@ export default {
     start: "Start",
     random: "Random code",
     badge: "Room {code}",
+  },
+  fairness: {
+    seed: "Board seed {seed} — everyone with this board sees the same layout",
   },
 } as const;

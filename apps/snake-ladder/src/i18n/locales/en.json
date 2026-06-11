@@ -52,7 +52,7 @@
   "onboarding.step2.title": "Entangle & interfere",
   "onboarding.step2.body": "Pair qubits so collapse outcomes can interfere or resolve together.",
   "onboarding.step3.title": "Roll & collapse",
-  "onboarding.step3.body": "Land on a qubit tile to measure it — ladder up, snake down, or tunnel through rivals.",
+  "onboarding.step3.body": "Land on an orb to measure it — ladder up, snake down, or tunnel through rivals. Every roll runs a real quantum circuit; open the Quantum log to verify it.",
   "onboarding.start": "Got it",
   "settings.title": "Settings",
   "settings.stats.title": "Statistics",
@@ -158,5 +158,6 @@
   "room.start": "Start",
   "room.random": "Random code",
   "room.badge": "Room {code}",
-  "share.room": "Quantum Snake & Ladder — Room {code}"
+  "share.room": "Quantum Snake & Ladder — Room {code}",
+  "fairness.seed": "Board seed {seed} — everyone with this board sees the same layout"
 }

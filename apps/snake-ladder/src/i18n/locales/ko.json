@@ -52,7 +52,7 @@
   "onboarding.step2.title": "얽힘·간섭",
   "onboarding.step2.body": "큐비트 쌍을 얽혀 붕괴 결과가 간섭하거나 함께 결정되게 할 수 있습니다.",
   "onboarding.step3.title": "굴리기·붕괴",
-  "onboarding.step3.body": "큐비트 칸에 착지하면 측정됩니다 — 사다리 상승, 뱀 하강, 또는 터널링 통과.",
+  "onboarding.step3.body": "구슬 칸에 도착하면 측정돼요 — 사다리로 오르거나, 뱀으로 미끄러지거나, 상대를 통과해요. 모든 굴림은 진짜 양자 회로로 돌아가고, '양자 기록'을 열면 직접 검증할 수 있어요.",
   "onboarding.start": "시작하기",
   "settings.title": "설정",
   "settings.stats.title": "통계",
@@ -158,5 +158,6 @@
   "room.start": "시작",
   "room.random": "랜덤 코드",
   "room.badge": "룸 {code}",
-  "share.room": "양자 뱀사다리 — 룸 {code}"
+  "share.room": "양자 뱀사다리 — 룸 {code}",
+  "fairness.seed": "보드 시드 {seed} — 같은 보드를 받은 모두가 동일한 배치를 봐요"
 }

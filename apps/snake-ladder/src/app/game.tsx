@@ -244,6 +244,12 @@ export default function GameScreen() {
   const goldActive =
     !isPreset && goldDiceEnabled && monetization.goldDiceCount > 0;
 
+  const presetSeed = (() => {
+    if (isRoom) return seedFromCode(roomCode);
+    if (isDaily) return getDailySeed(new Date());
+    return null;
+  })();
+
   const rollDice = useMemoizedFn((charge: number) => {
     rollCountRef.current += 1;
     setThrowCharge(charge);
@@ -493,6 +499,19 @@ export default function GameScreen() {
           >
             {msg}
           </Text>
+          {presetSeed !== null ? (
+            <Text
+              style={{
+                color: `${palette.creamMuted}cc`,
+                fontSize: 10,
+                textAlign: "center",
+                marginTop: 3,
+              }}
+              testID="fairness-seed"
+            >
+              {i18n.t("fairness.seed", { seed: presetSeed })}
+            </Text>
+          ) : null}
         </WoodPanel>
 
         {state.phase === "setup" && state.currentPlayer === 0 ? (
