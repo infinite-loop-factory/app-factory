@@ -18,6 +18,7 @@ import { AppSettingsProvider, useAppSettings } from "@/hooks/use-app-settings";
 import { MonetizationProvider } from "@/hooks/use-monetization";
 import { requestTrackingPermissionIfNeeded } from "@/lib/monetization/att";
 import { preloadInterstitialAd } from "@/lib/monetization/interstitial-ads";
+import { preloadRewardedAd } from "@/lib/monetization/rewarded-ads";
 import "@/i18n";
 
 SplashScreen.preventAutoHideAsync();
@@ -37,7 +38,7 @@ function RootNavigation() {
   useEffect(() => {
     if (Platform.OS === "ios" || Platform.OS === "android") {
       void requestTrackingPermissionIfNeeded().then(() =>
-        preloadInterstitialAd(),
+        Promise.all([preloadInterstitialAd(), preloadRewardedAd()]),
       );
     }
   }, []);

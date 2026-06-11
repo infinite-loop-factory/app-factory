@@ -23,9 +23,11 @@ import { lightenColor } from "@/lib/color";
 import {
   CONSUMABLE_PRODUCT_IDS,
   GOLD_DICE_BY_PRODUCT,
+  GOLD_PER_REWARDED_AD,
   IAP_PRODUCT_IDS,
 } from "@/lib/monetization/constants";
 import { isNativeStorePlatform } from "@/lib/monetization/platform";
+import { showRewardedAd } from "@/lib/monetization/rewarded-ads";
 import { verifyStorePurchase } from "@/lib/monetization/verify-purchase";
 
 const ALL_SKUS = [
@@ -40,7 +42,26 @@ export default function ShopScreen() {
   const { monetization, addGoldDice, setAdRemovalPurchased } =
     useMonetization();
   const [restoring, setRestoring] = useState(false);
+  const [watchingAd, setWatchingAd] = useState(false);
   const nativeStore = isNativeStorePlatform();
+
+  const watchRewardedAd = async () => {
+    setWatchingAd(true);
+    try {
+      const earned = await showRewardedAd();
+      if (earned) {
+        addGoldDice(GOLD_PER_REWARDED_AD);
+        Alert.alert(
+          i18n.t("shop.purchaseSuccess"),
+          i18n.t("shop.goldAdded", { count: GOLD_PER_REWARDED_AD }),
+        );
+      } else {
+        Alert.alert(i18n.t("shop.rewardedUnavailable"));
+      }
+    } finally {
+      setWatchingAd(false);
+    }
+  };
 
   const grantPurchase = useCallback(
     (purchase: Purchase) => {
@@ -206,6 +227,63 @@ export default function ShopScreen() {
               </Text>
             </View>
           ) : null}
+
+          <Pressable
+            accessibilityRole="button"
+            disabled={watchingAd}
+            onPress={() => void watchRewardedAd()}
+            style={{ opacity: watchingAd ? 0.6 : 1 }}
+            testID="shop-rewarded-button"
+          >
+            <WoodPanel
+              contentStyle={{
+                padding: 16,
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: 12,
+              }}
+              palette={palette}
+            >
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: 10,
+                  flex: 1,
+                }}
+              >
+                <MaterialIcons
+                  color={palette.ladder}
+                  name="play-circle-outline"
+                  size={20}
+                />
+                <View style={{ flexShrink: 1 }}>
+                  <Text
+                    style={{
+                      color: palette.cream,
+                      fontFamily: GAME_FONT,
+                      fontSize: 15,
+                    }}
+                  >
+                    {i18n.t("shop.rewarded", { count: GOLD_PER_REWARDED_AD })}
+                  </Text>
+                  <Text style={{ color: palette.creamMuted, fontSize: 12 }}>
+                    {i18n.t("shop.rewardedHint")}
+                  </Text>
+                </View>
+              </View>
+              <Text
+                style={{
+                  color: palette.ladder,
+                  fontFamily: GAME_FONT,
+                  fontSize: 17,
+                }}
+              >
+                FREE
+              </Text>
+            </WoodPanel>
+          </Pressable>
 
           {CONSUMABLE_PRODUCT_IDS.map((sku) => (
             <Pressable

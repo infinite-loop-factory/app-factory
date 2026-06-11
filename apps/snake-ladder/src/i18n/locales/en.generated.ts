@@ -194,6 +194,9 @@ export default {
       "Purchase could not be verified. No items were granted.",
     webUnavailable:
       "In-app purchases are available in the iOS and Android apps only.",
+    rewarded: "Watch an ad · +{count} gold dice",
+    rewardedHint: "Free · short video",
+    rewardedUnavailable: "Ad not ready yet — try again in a moment.",
   },
   board: {
     qubit: {

@@ -15,6 +15,9 @@ export const GOLD_DICE_BY_PRODUCT: Record<string, number> = {
   [IAP_PRODUCT_IDS.goldDice100]: 100,
 };
 
+/** Owner decision: one rewarded video grants 5 gold dice (IAP packs stay primary). */
+export const GOLD_PER_REWARDED_AD = 5;
+
 export const CONSUMABLE_PRODUCT_IDS = [
   IAP_PRODUCT_IDS.goldDice10,
   IAP_PRODUCT_IDS.goldDice30,

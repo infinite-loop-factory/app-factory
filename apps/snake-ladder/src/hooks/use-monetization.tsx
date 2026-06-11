@@ -6,6 +6,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 import { prepareE2EStorage } from "@/lib/e2e-storage";
@@ -98,7 +99,10 @@ export function MonetizationProvider({ children }: { children: ReactNode }) {
     [updateMonetization],
   );
 
+  const sessionGamesRef = useRef(0);
+
   const notifyNewGameStarted = useCallback(() => {
+    sessionGamesRef.current += 1;
     updateMonetization((prev) => afterNewGameStarted(prev));
   }, [updateMonetization]);
 
@@ -107,7 +111,7 @@ export function MonetizationProvider({ children }: { children: ReactNode }) {
   }, [updateMonetization]);
 
   const shouldShowInterstitial = useCallback(
-    () => computeShouldShowAd(monetization),
+    () => computeShouldShowAd(monetization, sessionGamesRef.current),
     [monetization],
   );
 

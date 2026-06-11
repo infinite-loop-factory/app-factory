@@ -159,5 +159,8 @@
   "room.random": "Random code",
   "room.badge": "Room {code}",
   "share.room": "Quantum Snake & Ladder — Room {code}",
-  "fairness.seed": "Board seed {seed} — everyone with this board sees the same layout"
+  "fairness.seed": "Board seed {seed} — everyone with this board sees the same layout",
+  "shop.rewarded": "Watch an ad · +{count} gold dice",
+  "shop.rewardedHint": "Free · short video",
+  "shop.rewardedUnavailable": "Ad not ready yet — try again in a moment."
 }

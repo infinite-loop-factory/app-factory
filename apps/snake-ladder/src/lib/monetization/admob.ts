@@ -12,6 +12,12 @@ const GOOGLE_TEST_INTERSTITIAL = {
   android: "ca-app-pub-3940256099942544/4411468910",
 } as const;
 
+/** Google sample rewarded-video IDs. */
+const GOOGLE_TEST_REWARDED = {
+  ios: "ca-app-pub-3940256099942544/1712485313",
+  android: "ca-app-pub-3940256099942544/5224354917",
+} as const;
+
 function envOrTest(value: string | undefined, testId: string): string {
   return value && value.length > 0 ? value : testId;
 }
@@ -49,6 +55,23 @@ export function resolveInterstitialAdUnitId(): string | null {
     return envOrTest(
       readPublicEnv("ADMOB_ANDROID_INTERSTITIAL"),
       googleTestInterstitialId(),
+    );
+  }
+  return null;
+}
+
+/** Rewarded ad unit for the current platform. Falls back to Google test IDs in dev. */
+export function resolveRewardedAdUnitId(): string | null {
+  if (Platform.OS === "ios") {
+    return envOrTest(
+      readPublicEnv("ADMOB_IOS_REWARDED"),
+      GOOGLE_TEST_REWARDED.ios,
+    );
+  }
+  if (Platform.OS === "android") {
+    return envOrTest(
+      readPublicEnv("ADMOB_ANDROID_REWARDED"),
+      GOOGLE_TEST_REWARDED.android,
     );
   }
   return null;

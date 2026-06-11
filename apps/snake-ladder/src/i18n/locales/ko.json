@@ -159,5 +159,8 @@
   "room.random": "랜덤 코드",
   "room.badge": "룸 {code}",
   "share.room": "양자 뱀사다리 — 룸 {code}",
-  "fairness.seed": "보드 시드 {seed} — 같은 보드를 받은 모두가 동일한 배치를 봐요"
+  "fairness.seed": "보드 시드 {seed} — 같은 보드를 받은 모두가 동일한 배치를 봐요",
+  "shop.rewarded": "광고 보고 골드 {count}개 받기",
+  "shop.rewardedHint": "무료 · 짧은 영상",
+  "shop.rewardedUnavailable": "광고가 아직 준비되지 않았어요 — 잠시 후 다시 시도해 주세요."
 }

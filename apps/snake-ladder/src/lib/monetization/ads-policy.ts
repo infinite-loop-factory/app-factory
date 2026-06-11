@@ -6,8 +6,13 @@ import {
   AD_GAMES_INTERVAL,
 } from "@/lib/monetization/constants";
 
-export function shouldShowInterstitial(state: MonetizationState): boolean {
+export function shouldShowInterstitial(
+  state: MonetizationState,
+  /** Games started this app session — never interrupt the very first one. */
+  sessionGamesPlayed: number = Number.POSITIVE_INFINITY,
+): boolean {
   if (state.adRemovalPurchased) return false;
+  if (sessionGamesPlayed < 2) return false;
   if (state.gamesSinceLastAd < AD_GAMES_INTERVAL) return false;
   if (
     state.lastAdShownAt > 0 &&

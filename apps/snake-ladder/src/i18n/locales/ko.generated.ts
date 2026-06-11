@@ -193,6 +193,10 @@ export default {
     verificationFailed:
       "구매를 검증하지 못했습니다. 아이템이 지급되지 않았습니다.",
     webUnavailable: "인앱 결제는 iOS·Android 앱에서만 이용할 수 있습니다.",
+    rewarded: "광고 보고 골드 {count}개 받기",
+    rewardedHint: "무료 · 짧은 영상",
+    rewardedUnavailable:
+      "광고가 아직 준비되지 않았어요 — 잠시 후 다시 시도해 주세요.",
   },
   board: {
     qubit: {
