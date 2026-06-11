@@ -476,7 +476,8 @@ export default function GameScreen() {
           />
         </View>
 
-        <View className="items-center px-4 pb-3">
+        {/* no horizontal padding: board width is governed by getBoardCellSize */}
+        <View className="items-center pb-3">
           <BoardFx kind={slideFx.kind} palette={palette} tick={slideFx.tick}>
             <WoodPanel
               contentStyle={{ padding: 8 }}

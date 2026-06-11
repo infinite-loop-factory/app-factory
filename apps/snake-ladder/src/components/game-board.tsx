@@ -358,5 +358,5 @@ export function GameBoard({
 }
 
 export function getBoardCellSize(screenWidth: number): number {
-  return Math.floor(Math.min((screenWidth - 32) / BOARD_SIZE, 36));
+  return Math.floor(Math.min((screenWidth - 28) / BOARD_SIZE, 42));
 }
