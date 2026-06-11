@@ -36,6 +36,8 @@ export default {
     roll: "굴리기",
     playAgain: "다시 하기",
     back: "홈으로",
+    musicToggle: "배경 음악 켜기/끄기",
+    soundToggle: "효과음 켜기/끄기",
     restart: "새 게임",
     newGameTitle: "새 게임을 시작할까요?",
     newGameMessage: "진행 중인 판은 저장되지 않습니다.",
@@ -123,6 +125,7 @@ export default {
     diceSpeed: "주사위 애니메이션",
     theme: "테마",
     haptics: "햅틱",
+    music: "배경 음악",
     sound: "효과음",
     option: {
       slow: "느림",

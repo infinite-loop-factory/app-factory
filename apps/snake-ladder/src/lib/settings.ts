@@ -6,6 +6,7 @@ export interface AppSettings {
   movementSpeed: MovementSpeed;
   diceSpeed: DiceSpeed;
   soundEnabled: boolean;
+  musicEnabled: boolean;
   hapticsEnabled: boolean;
   theme: ThemeMode;
   /** Empty = localized default ("Computer" / "컴퓨터") */
@@ -18,6 +19,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
   movementSpeed: "normal",
   diceSpeed: "normal",
   soundEnabled: true,
+  musicEnabled: true,
   hapticsEnabled: true,
   theme: "light",
   opponentNickname: "",

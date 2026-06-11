@@ -78,7 +78,8 @@ export default function GameScreen() {
   const { width } = useWindowDimensions();
   const cellSize = useMemo(() => getBoardCellSize(width), [width]);
 
-  const { settings, timings, palette, recordGameResult } = useAppSettings();
+  const { settings, timings, palette, recordGameResult, updateSettings } =
+    useAppSettings();
   const {
     monetization,
     consumeGoldDice,
@@ -129,9 +130,9 @@ export default function GameScreen() {
   );
 
   useEffect(() => {
-    startBgm(settings.soundEnabled);
+    startBgm(settings.musicEnabled);
     return stopBgm;
-  }, [settings.soundEnabled]);
+  }, [settings.musicEnabled]);
 
   const onFeedback = useMemoizedFn((event: GameFeedbackEvent) => {
     if (event.type === "tunnel") journeyRef.current.tunnels += 1;
@@ -385,19 +386,63 @@ export default function GameScreen() {
           >
             {resolveHeaderTitle({ isDaily, roomCode, roomRound }, new Date())}
           </Text>
-          <Pressable
-            accessibilityLabel={i18n.t("game.restart")}
-            accessibilityRole="button"
-            className="h-10 w-10 items-center justify-center rounded-full"
-            onPress={() => confirmNewGame(startNewGame)}
-            style={{
-              backgroundColor: palette.frameWood,
-              borderWidth: 1.5,
-              borderColor: palette.frameWoodEdge,
-            }}
-          >
-            <MaterialIcons color={palette.cream} name="refresh" size={22} />
-          </Pressable>
+          <View className="flex-row items-center gap-2">
+            <Pressable
+              accessibilityLabel={i18n.t("game.musicToggle")}
+              accessibilityRole="button"
+              className="h-10 w-10 items-center justify-center rounded-full"
+              onPress={() =>
+                updateSettings({ musicEnabled: !settings.musicEnabled })
+              }
+              style={{
+                backgroundColor: palette.frameWood,
+                borderWidth: 1.5,
+                borderColor: palette.frameWoodEdge,
+                opacity: settings.musicEnabled ? 1 : 0.55,
+              }}
+              testID="game-music-button"
+            >
+              <MaterialIcons
+                color={palette.cream}
+                name={settings.musicEnabled ? "music-note" : "music-off"}
+                size={22}
+              />
+            </Pressable>
+            <Pressable
+              accessibilityLabel={i18n.t("game.soundToggle")}
+              accessibilityRole="button"
+              className="h-10 w-10 items-center justify-center rounded-full"
+              onPress={() =>
+                updateSettings({ soundEnabled: !settings.soundEnabled })
+              }
+              style={{
+                backgroundColor: palette.frameWood,
+                borderWidth: 1.5,
+                borderColor: palette.frameWoodEdge,
+                opacity: settings.soundEnabled ? 1 : 0.55,
+              }}
+              testID="game-sound-button"
+            >
+              <MaterialIcons
+                color={palette.cream}
+                name={settings.soundEnabled ? "volume-up" : "volume-off"}
+                size={22}
+              />
+            </Pressable>
+            <Pressable
+              accessibilityLabel={i18n.t("game.restart")}
+              accessibilityRole="button"
+              className="h-10 w-10 items-center justify-center rounded-full"
+              onPress={() => confirmNewGame(startNewGame)}
+              style={{
+                backgroundColor: palette.frameWood,
+                borderWidth: 1.5,
+                borderColor: palette.frameWoodEdge,
+              }}
+            >
+              <MaterialIcons color={palette.cream} name="refresh" size={22} />
+            </Pressable>
+          </View>
         </View>
 
         <View className="flex-row items-center justify-between px-4 pb-2">

@@ -334,6 +334,11 @@ export default function SettingsScreen() {
           onChange={(soundEnabled) => updateSettings({ soundEnabled })}
           value={settings.soundEnabled}
         />
+        <ToggleRow
+          label={i18n.t("settings.music")}
+          onChange={(musicEnabled) => updateSettings({ musicEnabled })}
+          value={settings.musicEnabled}
+        />
       </WoodPanel>
 
       <WoodPanel contentStyle={{ padding: 16, gap: 8 }} palette={palette}>

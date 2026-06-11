@@ -36,6 +36,8 @@ export default {
     roll: "Roll",
     playAgain: "Play Again",
     back: "Back to home",
+    musicToggle: "Music on/off",
+    soundToggle: "Sound effects on/off",
     restart: "Start new game",
     newGameTitle: "Start a new game?",
     newGameMessage: "Your current match progress will be lost.",
@@ -123,6 +125,7 @@ export default {
     diceSpeed: "Dice animation",
     theme: "Theme",
     haptics: "Haptics",
+    music: "Background music",
     sound: "Sound effects",
     option: {
       slow: "Slow",
