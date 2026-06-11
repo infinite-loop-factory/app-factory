@@ -19,23 +19,22 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { BoardFx } from "@/components/board-fx";
 import { ConfettiBurst } from "@/components/confetti-burst";
 import { DiceGlPrewarm } from "@/components/dice/dice-gl-prewarm";
-import { DiceDisplay } from "@/components/dice-display";
 import { DiceRollOverlay } from "@/components/dice-roll-overlay";
 import { GameBoard, getBoardCellSize } from "@/components/game-board";
+import { GameDock } from "@/components/game-dock";
 import { GoldDiceControls } from "@/components/gold-dice-controls";
 import { PlayerBadge } from "@/components/player-badge";
 import { QasmLogPanel } from "@/components/qasm-log-panel";
 import { QubitInspector } from "@/components/qubit-inspector";
 import { QubitSetupBar } from "@/components/qubit-setup-bar";
-import { RollButton } from "@/components/roll-button";
+import { ResultCard } from "@/components/result-card";
 import { TurnBanner } from "@/components/turn-banner";
 import { WoodPanel } from "@/components/ui/wood-panel";
 import { VictoryOverlay } from "@/components/victory-overlay";
 import { GAME_FONT } from "@/game/constants/theme";
-import { darkenColor } from "@/lib/color";
 
 const FELT_TEXTURE = require("@/assets/images/textures/felt-table.jpg");
-const WOOD_TEXTURE = require("@/assets/images/textures/wood-planks.jpg");
+const _WOOD_TEXTURE = require("@/assets/images/textures/wood-planks.jpg");
 
 import { useCpuOpponent } from "@/game/hooks/use-cpu-opponent";
 import { useGameController } from "@/game/hooks/use-game-controller";
@@ -43,7 +42,6 @@ import { useGameResultRecorder } from "@/game/hooks/use-game-result-recorder";
 import { useSlideFx } from "@/game/hooks/use-slide-fx";
 import {
   generateDailyPlacements,
-  getDailyNumber,
   getDailySeed,
   getDailyTheme,
 } from "@/game/lib/daily";
@@ -53,6 +51,10 @@ import {
   getActiveTurnPlayer,
   isGameInProgress,
   isSetbackMessage,
+  resolveDiceVariant,
+  resolveHeaderTitle,
+  resolvePresetSeed,
+  resolveShareHeader,
   resolveStatusMessage,
 } from "@/game/lib/game-screen-helpers";
 import { normalizeRoomCode, seedFromCode } from "@/game/lib/room";
@@ -64,8 +66,9 @@ import { dispatchGameFeedback } from "@/lib/feedback";
 import { rollGoldDie } from "@/lib/monetization/gold-dice";
 import { showInterstitialAd } from "@/lib/monetization/interstitial-ads";
 import { resolveDisplayName } from "@/lib/settings";
-import { buildShareMessage } from "@/lib/share";
+import { buildResultShareMessage } from "@/lib/share";
 
+// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: screen root composing many independent conditional sections; logic lives in extracted hooks/helpers
 export default function GameScreen() {
   const { width } = useWindowDimensions();
   const cellSize = useMemo(() => getBoardCellSize(width), [width]);
@@ -100,8 +103,9 @@ export default function GameScreen() {
   const isPreset = isDaily || isRoom;
   const rollCountRef = useRef(0);
   const journeyRef = useRef<string[]>([]);
-  const dailyAttemptsRef = useRef(1);
-  const dailyStreakRef = useRef(0);
+  const [dailyAttempts, setDailyAttempts] = useState(1);
+  const [dailyStreak, setDailyStreak] = useState(0);
+  const [roomRound, setRoomRound] = useState(1);
   const dailyRecordedRef = useRef(false);
 
   const playerName = useMemo(
@@ -157,7 +161,7 @@ export default function GameScreen() {
     startPresetGame(generateDailyPlacements(seed, orbs));
     if (!isRoom) {
       void recordDailyStart(seed).then((progress) => {
-        dailyAttemptsRef.current = progress.attempts;
+        setDailyAttempts(progress.attempts);
       });
     }
   });
@@ -171,7 +175,7 @@ export default function GameScreen() {
     dailyRecordedRef.current = true;
     const now = new Date();
     void recordDailyCompletion(getDailySeed(now), now).then((progress) => {
-      dailyStreakRef.current = progress.streak;
+      setDailyStreak(progress.streak);
     });
   }, [isDaily, state.gameOver]);
 
@@ -229,6 +233,7 @@ export default function GameScreen() {
     rollCountRef.current = 0;
     journeyRef.current = [];
     if (isPreset) {
+      if (isRoom) setRoomRound((r) => r + 1);
       startPreset();
       return;
     }
@@ -243,11 +248,7 @@ export default function GameScreen() {
   const goldActive =
     !isPreset && goldDiceEnabled && monetization.goldDiceCount > 0;
 
-  const presetSeed = (() => {
-    if (isRoom) return seedFromCode(roomCode);
-    if (isDaily) return getDailySeed(new Date());
-    return null;
-  })();
+  const presetSeed = resolvePresetSeed({ isDaily, roomCode }, new Date());
 
   const rollDice = useMemoizedFn((charge: number) => {
     rollCountRef.current += 1;
@@ -264,29 +265,13 @@ export default function GameScreen() {
   });
 
   const shareResult = useMemoizedFn(() => {
-    const won = state.positions[0] >= 100;
-    const header = (() => {
-      if (isRoom) return i18n.t("share.room", { code: roomCode });
-      if (isDaily) {
-        return i18n.t("share.header", { num: getDailyNumber(new Date()) });
-      }
-      return i18n.t("share.headerFree");
-    })();
-    const tryNote =
-      isDaily && dailyAttemptsRef.current > 1
-        ? i18n.t("share.tryCount", { n: dailyAttemptsRef.current })
-        : "";
-    const result = `${i18n.t(won ? "share.win" : "share.lose", {
-      count: rollCountRef.current,
-    })}${tryNote}`;
-    const streakLine =
-      isDaily && dailyStreakRef.current > 1
-        ? i18n.t("share.streak", { count: dailyStreakRef.current })
-        : "";
     void Share.share({
-      message: buildShareMessage({
-        header: streakLine ? `${header}\n${streakLine}` : header,
-        result,
+      message: buildResultShareMessage({
+        header: resolveShareHeader({ isDaily, roomCode }, new Date()),
+        won: state.positions[0] >= 100,
+        rolls: rollCountRef.current,
+        attempts: isDaily ? dailyAttempts : 0,
+        streak: isDaily ? dailyStreak : 0,
         journey: journeyRef.current,
       }),
     });
@@ -310,11 +295,7 @@ export default function GameScreen() {
   // Don't upsell right after a setback — reviewers flagged it as a dark pattern.
   const setbackMoment = isSetbackMessage(state.message);
 
-  // The rolling die wears the roller's color: cpu red, player blue/gold.
-  const diceVariant = (() => {
-    if (state.currentPlayer === 1) return "cpu" as const;
-    return goldActive ? ("gold" as const) : ("default" as const);
-  })();
+  const diceVariant = resolveDiceVariant(state.currentPlayer, goldActive);
 
   const showConfetti = state.gameOver && state.positions[0] >= 100;
 
@@ -391,15 +372,7 @@ export default function GameScreen() {
               textShadowRadius: 2,
             }}
           >
-            {(() => {
-              if (isRoom) return i18n.t("room.badge", { code: roomCode });
-              if (isDaily) {
-                return i18n.t("daily.badge", {
-                  num: getDailyNumber(new Date()),
-                });
-              }
-              return i18n.t("game.title");
-            })()}
+            {resolveHeaderTitle({ isDaily, roomCode, roomRound }, new Date())}
           </Text>
           <Pressable
             accessibilityLabel={i18n.t("game.restart")}
@@ -513,6 +486,17 @@ export default function GameScreen() {
           ) : null}
         </WoodPanel>
 
+        {state.phase === "gameover" ? (
+          <ResultCard
+            attempts={isDaily ? dailyAttempts : 0}
+            journey={journeyRef.current}
+            palette={palette}
+            rolls={rollCountRef.current}
+            streak={isDaily ? dailyStreak : 0}
+            won={state.positions[0] >= 100}
+          />
+        ) : null}
+
         {state.phase === "setup" && state.currentPlayer === 0 ? (
           <View className="px-4 pb-2">
             <Text
@@ -547,91 +531,19 @@ export default function GameScreen() {
         <QasmLogPanel logs={state.logs} palette={palette} />
 
         {/* bottom control dock */}
-        <ImageBackground
-          resizeMode="cover"
-          source={WOOD_TEXTURE}
-          style={{ marginTop: "auto" }}
-        >
-          <LinearGradient
-            colors={[
-              `${palette.frameWood}8c`,
-              `${palette.frameWood}b3`,
-              `${darkenColor(palette.frameWood, 0.7)}e6`,
-            ]}
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-              paddingHorizontal: 24,
-              paddingTop: 10,
-              paddingBottom: 14,
-              borderTopWidth: 2,
-              borderTopColor: "rgba(255,255,255,0.2)",
-            }}
-          >
-            {state.isRolling ? (
-              <View style={{ width: 72, height: 102 }} />
-            ) : (
-              <DiceDisplay
-                gold={goldActive}
-                palette={palette}
-                rolling={false}
-                value={state.dice}
-              />
-            )}
-            {canRoll ? (
-              <RollButton
-                accessibilityLabel={i18n.t("game.roll")}
-                backgroundColor={palette.playerYou}
-                label={i18n.t("game.roll")}
-                onPress={rollDice}
-                pulsing
-                testID="game-roll-button"
-              />
-            ) : null}
-            {canConfirmPass ? (
-              <RollButton
-                accessibilityLabel={i18n.t("setup.passTurn")}
-                backgroundColor={palette.ladder}
-                label={i18n.t("setup.passTurn")}
-                onPress={() => confirmPass()}
-                pulsing
-                testID="setup-pass-turn"
-              />
-            ) : null}
-            {state.phase === "gameover" ? (
-              <View
-                style={{ flexDirection: "row", alignItems: "center", gap: 10 }}
-              >
-                <Pressable
-                  accessibilityLabel={i18n.t("share.button")}
-                  accessibilityRole="button"
-                  onPress={shareResult}
-                  style={{
-                    width: 46,
-                    height: 46,
-                    borderRadius: 999,
-                    alignItems: "center",
-                    justifyContent: "center",
-                    backgroundColor: palette.playerYou,
-                    borderTopWidth: 1.5,
-                    borderTopColor: "rgba(255,255,255,0.35)",
-                  }}
-                  testID="game-share-button"
-                >
-                  <MaterialIcons color="#fff" name="ios-share" size={22} />
-                </Pressable>
-                <RollButton
-                  accessibilityLabel={i18n.t("game.playAgain")}
-                  backgroundColor={palette.orbGlow}
-                  label={i18n.t("game.playAgain")}
-                  onPress={() => confirmNewGame(startNewGame)}
-                  pulsing
-                />
-              </View>
-            ) : null}
-          </LinearGradient>
-        </ImageBackground>
+        <GameDock
+          canConfirmPass={canConfirmPass}
+          canRoll={canRoll}
+          diceValue={state.dice}
+          gameOver={state.phase === "gameover"}
+          goldActive={goldActive}
+          onConfirmPass={confirmPass}
+          onPlayAgain={() => confirmNewGame(startNewGame)}
+          onRoll={rollDice}
+          onShare={shareResult}
+          palette={palette}
+          rolling={state.isRolling}
+        />
       </View>
     </SafeAreaView>
   );

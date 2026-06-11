@@ -1,5 +1,8 @@
+import type { DiceVariant } from "@/components/dice/dice-variant";
 import type { GameState } from "@/game/types";
 
+import { getDailyNumber, getDailySeed } from "@/game/lib/daily";
+import { seedFromCode } from "@/game/lib/room";
 import i18n from "@/i18n";
 
 export function getActiveTurnPlayer(state: GameState): 0 | 1 | null {
@@ -43,6 +46,54 @@ export function isSetbackMessage(message: string): boolean {
     message === "play.overshootDone" ||
     message === "play.interference"
   );
+}
+
+type BoardMode = {
+  isDaily: boolean;
+  roomCode: string | null;
+  roomRound?: number;
+};
+
+/** Header title: room badge (with round), daily badge, or the plain title. */
+export function resolveHeaderTitle(mode: BoardMode, now: Date): string {
+  if (mode.roomCode !== null) {
+    const base = i18n.t("room.badge", { code: mode.roomCode });
+    return (mode.roomRound ?? 1) > 1 ? `${base} · R${mode.roomRound}` : base;
+  }
+  if (mode.isDaily) {
+    return i18n.t("daily.badge", { num: getDailyNumber(now) });
+  }
+  return i18n.t("game.title");
+}
+
+/** Share-text header for the current mode. */
+export function resolveShareHeader(mode: BoardMode, now: Date): string {
+  if (mode.roomCode !== null) {
+    return i18n.t("share.room", { code: mode.roomCode });
+  }
+  if (mode.isDaily) {
+    return i18n.t("share.header", { num: getDailyNumber(now) });
+  }
+  return i18n.t("share.headerFree");
+}
+
+/** Seed shown for shared-board modes; null for free play. */
+export function resolvePresetSeed(
+  mode: { isDaily: boolean; roomCode: string | null },
+  now: Date,
+): number | null {
+  if (mode.roomCode !== null) return seedFromCode(mode.roomCode);
+  if (mode.isDaily) return getDailySeed(now);
+  return null;
+}
+
+/** The rolling die wears the roller's color: cpu red, player blue/gold. */
+export function resolveDiceVariant(
+  currentPlayer: 0 | 1,
+  goldActive: boolean,
+): DiceVariant {
+  if (currentPlayer === 1) return "cpu";
+  return goldActive ? "gold" : "default";
 }
 
 export function resolveStatusMessage(
