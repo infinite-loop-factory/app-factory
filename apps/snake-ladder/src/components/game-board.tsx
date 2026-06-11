@@ -358,5 +358,7 @@ export function GameBoard({
 }
 
 export function getBoardCellSize(screenWidth: number): number {
-  return Math.floor(Math.min((screenWidth - 28) / BOARD_SIZE, 42));
+  // Align the board's outer edge with the px-4 HUD elements (badges, plank):
+  // 32 screen margin + 16 panel chrome, capped for desktop-web sanity.
+  return Math.floor(Math.min((screenWidth - 48) / BOARD_SIZE, 48));
 }
