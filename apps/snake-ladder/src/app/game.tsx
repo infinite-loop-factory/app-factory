@@ -3,7 +3,7 @@ import type { GameFeedbackEvent } from "@/lib/game-feedback";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useMemoizedFn } from "ahooks";
 import { LinearGradient } from "expo-linear-gradient";
-import { Link, useLocalSearchParams } from "expo-router";
+import { Link } from "expo-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Alert,
@@ -46,12 +46,8 @@ import { useCpuOpponent } from "@/game/hooks/use-cpu-opponent";
 import { useGameController } from "@/game/hooks/use-game-controller";
 import { useGameResultRecorder } from "@/game/hooks/use-game-result-recorder";
 import { useJourney } from "@/game/hooks/use-journey";
+import { usePresetMode } from "@/game/hooks/use-preset-mode";
 import { useSlideFx } from "@/game/hooks/use-slide-fx";
-import {
-  generateDailyPlacements,
-  getDailySeed,
-  getDailyTheme,
-} from "@/game/lib/daily";
 import {
   canConfirmPassNow,
   canRollNow,
@@ -60,15 +56,12 @@ import {
   isSetbackMessage,
   resolveDiceVariant,
   resolveHeaderTitle,
-  resolvePresetSeed,
   resolveShareHeader,
   resolveStatusMessage,
 } from "@/game/lib/game-screen-helpers";
-import { normalizeRoomCode, seedFromCode } from "@/game/lib/room";
 import { useAppSettings } from "@/hooks/use-app-settings";
 import { useMonetization } from "@/hooks/use-monetization";
 import i18n from "@/i18n";
-import { recordDailyCompletion, recordDailyStart } from "@/lib/daily-progress";
 import { dispatchGameFeedback } from "@/lib/feedback";
 import { rollGoldDie } from "@/lib/monetization/gold-dice";
 import { showInterstitialAd } from "@/lib/monetization/interstitial-ads";
@@ -98,18 +91,6 @@ export default function GameScreen() {
   const [inspectedCell, setInspectedCell] = useState<number | null>(null);
   const [soundSheetOpen, setSoundSheetOpen] = useState(false);
   const inspectTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const { mode, code } = useLocalSearchParams<{
-    mode?: string;
-    code?: string;
-  }>();
-  const isDaily = mode === "daily";
-  const roomCode =
-    mode === "room" && typeof code === "string" && code.length > 0
-      ? normalizeRoomCode(code)
-      : null;
-  const isRoom = roomCode !== null;
-  // Shared-seed modes: same board for everyone, fair dice only.
-  const isPreset = isDaily || isRoom;
   const {
     rollCountRef,
     journeyRef,
@@ -118,10 +99,6 @@ export default function GameScreen() {
     trackRoll,
     resetJourney,
   } = useJourney();
-  const [dailyAttempts, setDailyAttempts] = useState(1);
-  const [dailyStreak, setDailyStreak] = useState(0);
-  const [roomRound, setRoomRound] = useState(1);
-  const dailyRecordedRef = useRef(false);
 
   const playerName = useMemo(
     () =>
@@ -170,33 +147,25 @@ export default function GameScreen() {
   const slideFx = useSlideFx(state);
   const { resetRecorded } = useGameResultRecorder(state, recordGameResult);
 
-  const startPreset = useMemoizedFn(() => {
-    resetJourney();
-    dailyRecordedRef.current = false;
-    setGoldDiceEnabled(false);
-    const now = new Date();
-    const seed = isRoom ? seedFromCode(roomCode) : getDailySeed(now);
-    const orbs = isRoom ? 5 : getDailyTheme(now).orbsPerPlayer;
-    startPresetGame(generateDailyPlacements(seed, orbs));
-    if (!isRoom) {
-      void recordDailyStart(seed).then((progress) => {
-        setDailyAttempts(progress.attempts);
-      });
-    }
+  const {
+    isDaily,
+    isRoom,
+    isPreset,
+    roomCode,
+    roomRound,
+    presetSeed,
+    dailyAttempts,
+    dailyStreak,
+    startPreset,
+    bumpRoomRound,
+  } = usePresetMode({
+    startPresetGame,
+    gameOver: state.gameOver,
+    onBoardStart: () => {
+      resetJourney();
+      setGoldDiceEnabled(false);
+    },
   });
-
-  useEffect(() => {
-    if (isPreset) startPreset();
-  }, [isPreset]);
-
-  useEffect(() => {
-    if (!(isDaily && state.gameOver) || dailyRecordedRef.current) return;
-    dailyRecordedRef.current = true;
-    const now = new Date();
-    void recordDailyCompletion(getDailySeed(now), now).then((progress) => {
-      setDailyStreak(progress.streak);
-    });
-  }, [isDaily, state.gameOver]);
 
   useEffect(() => {
     if (slideFx.tick === 0 || slideFx.kind === null) return;
@@ -251,7 +220,7 @@ export default function GameScreen() {
     setGoldDiceEnabled(false);
     resetJourney();
     if (isPreset) {
-      if (isRoom) setRoomRound((r) => r + 1);
+      if (isRoom) bumpRoomRound();
       startPreset();
       return;
     }
@@ -265,8 +234,6 @@ export default function GameScreen() {
   // Gold dice are locked out of shared-seed modes — scores must be fair.
   const goldActive =
     !isPreset && goldDiceEnabled && monetization.goldDiceCount > 0;
-
-  const presetSeed = resolvePresetSeed({ isDaily, roomCode }, new Date());
 
   const rollDice = useMemoizedFn((charge: number) => {
     trackRoll();
