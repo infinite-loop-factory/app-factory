@@ -66,7 +66,6 @@ import { showInterstitialAd } from "@/lib/monetization/interstitial-ads";
 import { resolveDisplayName } from "@/lib/settings";
 import { buildResultShareMessage } from "@/lib/share";
 
-// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: screen root composing many independent conditional sections; logic lives in extracted hooks/helpers
 export default function GameScreen() {
   const { width } = useWindowDimensions();
   const cellSize = useMemo(() => getBoardCellSize(width), [width]);
