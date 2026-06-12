@@ -1,10 +1,10 @@
 import type { ReactNode } from "react";
 import type { CraftPalette } from "@/game/constants/palettes";
 import type { SlideFx } from "@/game/hooks/use-slide-fx";
-import type { GameState } from "@/game/types";
+import type { GameState, PlacedQubit } from "@/game/types";
 
 import { MaterialIcons } from "@expo/vector-icons";
-import { useEffect } from "react";
+import { memo, useEffect, useMemo } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import Animated, {
   Easing,
@@ -143,10 +143,13 @@ function destinationTint(
   return null;
 }
 
-function BoardCell({
+// Memoized: 100 cells would otherwise re-render on every hop tick. Props
+// stay reference-stable during movement because qubits only change on
+// placement/collapse.
+const BoardCell = memo(function BoardCell({
   cell,
   cellSize,
-  state,
+  qubits,
   palette,
   selectable,
   onCellPress,
@@ -155,7 +158,7 @@ function BoardCell({
 }: {
   cell: number;
   cellSize: number;
-  state: GameState;
+  qubits: PlacedQubit[];
   palette: CraftPalette;
   selectable: boolean;
   onCellPress?: (cell: number) => void;
@@ -163,7 +166,6 @@ function BoardCell({
   connections: ReturnType<typeof getSnakeLadderConnections>;
 }) {
   const { col, row } = cellToVisualCoord(cell);
-  const qubits = state.qubits.filter((q) => q.cell === cell);
   const tint = destinationTint(cell, connections, palette);
   const isGoal = cell === TOTAL_CELLS;
   const isStart = cell === 1;
@@ -261,7 +263,9 @@ function BoardCell({
       ))}
     </Pressable>
   );
-}
+});
+
+const EMPTY_QUBITS: PlacedQubit[] = [];
 
 export function GameBoard({
   state,
@@ -274,7 +278,19 @@ export function GameBoard({
 }: GameBoardProps) {
   const boardWidth = BOARD_SIZE * cellSize;
   const boardHeight = BOARD_SIZE * cellSize;
-  const connections = getSnakeLadderConnections(state.qubits);
+  const connections = useMemo(
+    () => getSnakeLadderConnections(state.qubits),
+    [state.qubits],
+  );
+  const qubitsByCell = useMemo(() => {
+    const map = new Map<number, PlacedQubit[]>();
+    for (const qubit of state.qubits) {
+      const list = map.get(qubit.cell) ?? [];
+      list.push(qubit);
+      map.set(qubit.cell, list);
+    }
+    return map;
+  }, [state.qubits]);
 
   const pathPoints = (() => {
     if (state.phase !== "gameover") return null;
@@ -323,8 +339,8 @@ export function GameBoard({
               onCellLongPress={onCellLongPress}
               onCellPress={onCellPress}
               palette={palette}
+              qubits={qubitsByCell.get(cell) ?? EMPTY_QUBITS}
               selectable={selectable}
-              state={state}
             />
           );
         })}
