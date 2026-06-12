@@ -97,7 +97,7 @@
   "privacy.section.contact.title": "문의",
   "privacy.section.contact.body": "정책 관련 문의: github.com/infinite-loop-factory/app-factory 이슈 또는 스토어 등록 정보의 게시자 연락처를 이용해 주세요.",
   "privacy.publicUrl": "공개 URL: {url}",
-  "shop.unavailable": "이 빌드에서는 스토어를 사용할 수 없어요. 앱을 최신 버전으로 업데이트해 주세요.",
+  "shop.unavailable": "지금 이 기기에서는 스토어를 사용할 수 없어요.",
   "shop.title": "상점",
   "shop.goldBalance": "골드 주사위: {count}개",
   "shop.goldDescription": "골드 주사위는 원하는 눈이 50%, 나머지 각 10% 확률로 나옵니다. 사용 시 소모됩니다.",

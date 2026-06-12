@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 
-jest.mock("expo-iap", () => {
-  throw new Error("Cannot find native module 'ExpoIap'");
-});
+jest.mock("expo-modules-core", () => ({
+  requireOptionalNativeModule: () => null,
+}));
 
 import {
   isIapAvailable,
