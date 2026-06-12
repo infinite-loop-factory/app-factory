@@ -45,6 +45,7 @@ const TEXTURE_FILL = { width: "100%", height: "100%" } as const;
 import { useCpuOpponent } from "@/game/hooks/use-cpu-opponent";
 import { useGameController } from "@/game/hooks/use-game-controller";
 import { useGameResultRecorder } from "@/game/hooks/use-game-result-recorder";
+import { useGoldRoll } from "@/game/hooks/use-gold-roll";
 import { useJourney } from "@/game/hooks/use-journey";
 import { usePresetMode } from "@/game/hooks/use-preset-mode";
 import { useSlideFx } from "@/game/hooks/use-slide-fx";
@@ -63,7 +64,6 @@ import { useAppSettings } from "@/hooks/use-app-settings";
 import { useMonetization } from "@/hooks/use-monetization";
 import i18n from "@/i18n";
 import { dispatchGameFeedback } from "@/lib/feedback";
-import { rollGoldDie } from "@/lib/monetization/gold-dice";
 import { showInterstitialAd } from "@/lib/monetization/interstitial-ads";
 import { resolveDisplayName } from "@/lib/settings";
 import { buildResultShareMessage } from "@/lib/share";
@@ -82,12 +82,6 @@ export default function GameScreen() {
     notifyInterstitialShown,
     shouldShowInterstitial,
   } = useMonetization();
-  const [goldDiceEnabled, setGoldDiceEnabled] = useState(false);
-  const [goldDesiredFace, setGoldDesiredFace] = useState(6);
-  const [pendingForcedRoll, setPendingForcedRoll] = useState<number | null>(
-    null,
-  );
-  const [throwCharge, setThrowCharge] = useState(0.5);
   const [inspectedCell, setInspectedCell] = useState<number | null>(null);
   const [soundSheetOpen, setSoundSheetOpen] = useState(false);
   const inspectTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -163,8 +157,27 @@ export default function GameScreen() {
     gameOver: state.gameOver,
     onBoardStart: () => {
       resetJourney();
-      setGoldDiceEnabled(false);
+      disableGoldDice();
     },
+  });
+
+  const {
+    goldDiceEnabled,
+    goldDesiredFace,
+    setGoldDesiredFace,
+    pendingForcedRoll,
+    throwCharge,
+    goldActive,
+    rollDice,
+    prepareCpuRoll,
+    toggleGoldDice,
+    disableGoldDice,
+  } = useGoldRoll({
+    isPreset,
+    goldDiceCount: monetization.goldDiceCount,
+    consumeGoldDice,
+    handleRoll,
+    onRollStart: trackRoll,
   });
 
   useEffect(() => {
@@ -217,7 +230,7 @@ export default function GameScreen() {
       }
     }
     resetRecorded();
-    setGoldDiceEnabled(false);
+    disableGoldDice();
     resetJourney();
     if (isPreset) {
       if (isRoom) bumpRoomRound();
@@ -229,24 +242,6 @@ export default function GameScreen() {
 
   const startNewGame = useMemoizedFn(() => {
     void beginNewGame();
-  });
-
-  // Gold dice are locked out of shared-seed modes — scores must be fair.
-  const goldActive =
-    !isPreset && goldDiceEnabled && monetization.goldDiceCount > 0;
-
-  const rollDice = useMemoizedFn((charge: number) => {
-    trackRoll();
-    setThrowCharge(charge);
-    if (goldActive) {
-      if (!consumeGoldDice(1)) return;
-      const forced = rollGoldDie(goldDesiredFace);
-      setPendingForcedRoll(forced);
-      void handleRoll(forced);
-      return;
-    }
-    setPendingForcedRoll(null);
-    void handleRoll();
   });
 
   const shareResult = useMemoizedFn(() => {
@@ -268,10 +263,7 @@ export default function GameScreen() {
     placeCpuQubit,
     confirmPass,
     handleRoll,
-    onBeforeRoll: () => {
-      setPendingForcedRoll(null);
-      setThrowCharge(0.3 + Math.random() * 0.55);
-    },
+    onBeforeRoll: prepareCpuRoll,
   });
 
   const canRoll = canRollNow(state);
@@ -525,7 +517,7 @@ export default function GameScreen() {
             enabled={goldDiceEnabled}
             goldDiceCount={monetization.goldDiceCount}
             onSelectFace={setGoldDesiredFace}
-            onToggle={() => setGoldDiceEnabled((v) => !v)}
+            onToggle={toggleGoldDice}
             palette={palette}
             suppressCta={setbackMoment}
           />
