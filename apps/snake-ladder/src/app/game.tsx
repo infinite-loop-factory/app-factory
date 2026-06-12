@@ -1,14 +1,11 @@
 import type { GameFeedbackEvent } from "@/lib/game-feedback";
 
-import { MaterialIcons } from "@expo/vector-icons";
 import { useMemoizedFn } from "ahooks";
 import { LinearGradient } from "expo-linear-gradient";
-import { Link } from "expo-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Alert,
   ImageBackground,
-  Pressable,
   Share,
   StyleSheet,
   Text,
@@ -22,9 +19,11 @@ import { DiceGlPrewarm } from "@/components/dice/dice-gl-prewarm";
 import { DiceRollOverlay } from "@/components/dice-roll-overlay";
 import { GameBoard, getBoardCellSize } from "@/components/game-board";
 import { GameDock } from "@/components/game-dock";
+import { GameHeader } from "@/components/game-header";
+import { GameHudRow } from "@/components/game-hud-row";
+import { GameMessagePlank } from "@/components/game-message-plank";
 import { GameSettingsSheet } from "@/components/game-settings-sheet";
 import { GoldDiceControls } from "@/components/gold-dice-controls";
-import { PlayerBadge } from "@/components/player-badge";
 import { QasmLogPanel } from "@/components/qasm-log-panel";
 import { QubitInspector } from "@/components/qubit-inspector";
 import { QubitSetupBar } from "@/components/qubit-setup-bar";
@@ -32,7 +31,6 @@ import { ResultCard } from "@/components/result-card";
 import { TurnBanner } from "@/components/turn-banner";
 import { WoodPanel } from "@/components/ui/wood-panel";
 import { VictoryOverlay } from "@/components/victory-overlay";
-import { GAME_FONT } from "@/game/constants/theme";
 import { startBgm, stopBgm } from "@/lib/bgm";
 
 const FELT_TEXTURE = require("@/assets/images/textures/felt-table.jpg");
@@ -319,95 +317,23 @@ export default function GameScreen() {
           value={state.dice}
           variant={diceVariant}
         />
-        <View className="flex-row items-center justify-between px-4 py-2">
-          <Link asChild href="/">
-            <Pressable
-              accessibilityLabel={i18n.t("game.back")}
-              accessibilityRole="button"
-              className="h-10 w-10 items-center justify-center rounded-full"
-              style={{
-                backgroundColor: palette.frameWood,
-                borderWidth: 1.5,
-                borderColor: palette.frameWoodEdge,
-              }}
-            >
-              <MaterialIcons
-                color={palette.cream}
-                name="arrow-back"
-                size={22}
-              />
-            </Pressable>
-          </Link>
-          <Text
-            style={{
-              color: palette.cream,
-              fontSize: 22,
-              fontFamily: GAME_FONT,
-              letterSpacing: 1,
-              textShadowColor: "rgba(0,0,0,0.3)",
-              textShadowOffset: { width: 0, height: 2 },
-              textShadowRadius: 2,
-            }}
-          >
-            {resolveHeaderTitle({ isDaily, roomCode, roomRound }, new Date())}
-          </Text>
-          <View className="flex-row items-center gap-2">
-            <Pressable
-              accessibilityLabel={i18n.t("settings.title")}
-              accessibilityRole="button"
-              className="h-10 w-10 items-center justify-center rounded-full"
-              onPress={() => setSoundSheetOpen(true)}
-              style={{
-                backgroundColor: palette.frameWood,
-                borderWidth: 1.5,
-                borderColor: palette.frameWoodEdge,
-              }}
-              testID="game-settings-button"
-            >
-              <MaterialIcons color={palette.cream} name="settings" size={22} />
-            </Pressable>
-            <Pressable
-              accessibilityLabel={i18n.t("game.restart")}
-              accessibilityRole="button"
-              className="h-10 w-10 items-center justify-center rounded-full"
-              onPress={() => confirmNewGame(startNewGame)}
-              style={{
-                backgroundColor: palette.frameWood,
-                borderWidth: 1.5,
-                borderColor: palette.frameWoodEdge,
-              }}
-            >
-              <MaterialIcons color={palette.cream} name="refresh" size={22} />
-            </Pressable>
-          </View>
-        </View>
+        <GameHeader
+          onOpenSettings={() => setSoundSheetOpen(true)}
+          onRestart={() => confirmNewGame(startNewGame)}
+          palette={palette}
+          title={resolveHeaderTitle(
+            { isDaily, roomCode, roomRound },
+            new Date(),
+          )}
+        />
 
-        <View className="flex-row items-center justify-between px-4 pb-2">
-          <PlayerBadge
-            color={palette.playerYou}
-            isActive={getActiveTurnPlayer(state) === 0}
-            name={playerName}
-            palette={palette}
-            position={state.positions[0]}
-          />
-          <Text
-            style={{
-              color: palette.creamMuted,
-              fontSize: 14,
-              fontWeight: "900",
-              letterSpacing: 2,
-            }}
-          >
-            VS
-          </Text>
-          <PlayerBadge
-            color={palette.playerCpu}
-            isActive={getActiveTurnPlayer(state) === 1}
-            name={opponentName}
-            palette={palette}
-            position={state.positions[1]}
-          />
-        </View>
+        <GameHudRow
+          activePlayer={getActiveTurnPlayer(state)}
+          opponentName={opponentName}
+          palette={palette}
+          playerName={playerName}
+          positions={state.positions}
+        />
 
         {/* no horizontal padding: board width is governed by getBoardCellSize */}
         <View className="items-center pb-3">
@@ -449,37 +375,7 @@ export default function GameScreen() {
           </BoardFx>
         </View>
 
-        <WoodPanel
-          contentStyle={{ paddingHorizontal: 16, paddingVertical: 9 }}
-          edge={4}
-          palette={palette}
-          radius={12}
-          style={{ marginHorizontal: 16, marginBottom: 10 }}
-        >
-          <Text
-            style={{
-              color: palette.cream,
-              fontFamily: GAME_FONT,
-              fontSize: 16,
-              textAlign: "center",
-            }}
-          >
-            {msg}
-          </Text>
-          {presetSeed !== null ? (
-            <Text
-              style={{
-                color: `${palette.creamMuted}cc`,
-                fontSize: 10,
-                textAlign: "center",
-                marginTop: 3,
-              }}
-              testID="fairness-seed"
-            >
-              {i18n.t("fairness.seed", { seed: presetSeed })}
-            </Text>
-          ) : null}
-        </WoodPanel>
+        <GameMessagePlank message={msg} palette={palette} seed={presetSeed} />
 
         {state.phase === "gameover" ? (
           <ResultCard
