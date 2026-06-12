@@ -9,7 +9,7 @@ on:
       - "packages/**"
       - "scripts/web-publish.ts"
       - "package.json"
-      - "pnpm-lock.yaml"
+      - "bun.lock"
 
 permissions:
   contents: write
@@ -23,16 +23,17 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-
       - uses: actions/setup-node@v4
         with:
           node-version: 24
-          cache: "pnpm"
+
+      - name: Install bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: package.json
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: bun install --frozen-lockfile
 
       - name: Checkout existing gh-pages
         uses: actions/checkout@v4
@@ -57,9 +58,9 @@ jobs:
           echo "Changed files:"
           echo "$CHANGED_FILES"
 
-          if echo "$CHANGED_FILES" | grep -qE "^packages/|^package.json|^pnpm-lock.yaml|^scripts/web-publish.ts"; then
+          if echo "$CHANGED_FILES" | grep -qE "^packages/|^package.json|^bun.lock|^scripts/web-publish.ts"; then
             echo "Global configuration or shared package changed. Building ALL apps."
-            pnpm tsx scripts/web-publish.ts
+            bunx tsx scripts/web-publish.ts
           else
             CHANGED_APPS=$(echo "$CHANGED_FILES" | grep "^apps/" | cut -d/ -f2 | sort | uniq)
             
@@ -78,7 +79,7 @@ jobs:
 
             if [ -n "$BUILD_ARGS" ]; then
               echo "Running build for specific apps..."
-              pnpm tsx scripts/web-publish.ts $BUILD_ARGS
+              bunx tsx scripts/web-publish.ts $BUILD_ARGS
             else
               echo "No valid apps to build found in changes."
             fi

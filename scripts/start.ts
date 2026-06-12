@@ -88,7 +88,7 @@ async function main() {
     script = platform;
   }
 
-  let command = `pnpm --filter "@infinite-loop-factory/${selectedApp}" ${script}`;
+  let command = `bun run --filter "@infinite-loop-factory/${selectedApp}" ${script}`;
   if (!platform) {
     command += " --clear";
   }

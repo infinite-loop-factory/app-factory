@@ -30,7 +30,7 @@ for (const locale of ["en", "ko"]) {
     fs.readFileSync(path.join(localesDir, `${locale}.json`), "utf8"),
   );
   const nested = unflatten(flat);
-  const out = `// Generated from ${locale}.json — edit JSON then run: pnpm i18n:build\nexport default ${JSON.stringify(nested, null, 2)} as const\n`;
+  const out = `// Generated from ${locale}.json — edit JSON then run: bun run i18n:build\nexport default ${JSON.stringify(nested, null, 2)} as const\n`;
   const file = path.join(localesDir, `${locale}.generated.ts`);
   fs.writeFileSync(file, out);
   generated.push(file);

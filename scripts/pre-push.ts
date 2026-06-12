@@ -61,9 +61,10 @@ async function getDefaultMergeBase(local: string): Promise<string> {
   return getFirstCommit(local);
 }
 
-function runPnpm(args: string[]): Promise<number> {
+function runTurbo(turboArgs: string[]): Promise<number> {
   const isWindow = process.platform === "win32";
-  const cmd = isWindow ? "pnpm.cmd" : "pnpm";
+  const cmd = isWindow ? "bunx.cmd" : "bunx";
+  const args = ["turbo", ...turboArgs];
 
   return new Promise((resolve, reject) => {
     const child = spawn(cmd, args, { stdio: "inherit", shell: isWindow });
@@ -192,8 +193,7 @@ async function main() {
   // If certain root config files changed, run full test suite
   const FULL_RUN_ROOT_FILES = new Set([
     "package.json",
-    "pnpm-workspace.yaml",
-    "pnpm-lock.yaml",
+    "bun.lock",
     "turbo.json",
   ]);
   const fullRunTriggers = Array.from(changed)
@@ -206,7 +206,7 @@ async function main() {
         `Root config changed (${fullRunTriggers.join(", ")}); running full test suite`,
       ),
     );
-    const code = await runPnpm(["test"]);
+    const code = await runTurbo(["run", "test"]);
     process.exit(code);
   }
 
@@ -221,17 +221,13 @@ async function main() {
     console.log(chalk.dim(`- ${t}`));
   });
 
-  const args: string[] = [];
+  // Turbo skips packages without a test script, so no --if-present dance.
+  const args: string[] = ["run", "test"];
   for (const t of targets) {
-    args.push("--filter", `./${t}`);
+    args.push(`--filter=./${t}`);
   }
-  // Use --if-present to avoid failing on packages without a test script
-  // Important: pass --if-present to pnpm (before the script name),
-  // otherwise it will be forwarded to the underlying script (e.g. Jest)
-  // and cause "Unrecognized option \"if-present\"" errors.
-  args.push("run", "--if-present", "test");
 
-  const code = await runPnpm(args);
+  const code = await runTurbo(args);
   process.exit(code);
 }
 

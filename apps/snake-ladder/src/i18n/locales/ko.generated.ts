@@ -1,4 +1,4 @@
-// Generated from ko.json — edit JSON then run: pnpm i18n:build
+// Generated from ko.json — edit JSON then run: bun run i18n:build
 export default {
   home: {
     title: "Snake & Ladder",
