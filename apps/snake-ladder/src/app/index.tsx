@@ -26,7 +26,8 @@ import { winRate } from "@/lib/stats";
 
 const FELT_TEXTURE = require("@/assets/images/textures/felt-table.jpg");
 const HERO_ART = require("@/assets/images/art/hero-snake-ladder.png");
-const LOGO_EMBLEM = require("@/assets/images/art/logo-emblem.png");
+// Match the home emblem to the actual launcher icon for brand consistency.
+const LOGO_EMBLEM = require("@/assets/images/icon.png");
 
 export default function HomeScreen() {
   const router = useRouter();

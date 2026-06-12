@@ -2,7 +2,8 @@ import { ActivityIndicator, Image, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { CRAFT_LIGHT } from "@/game/constants/palettes";
 
-const LOGO_EMBLEM = require("@/assets/images/art/logo-emblem.png");
+// Keep the boot emblem identical to the launcher icon (and home emblem).
+const LOGO_EMBLEM = require("@/assets/images/icon.png");
 
 export function BootScreen() {
   return (

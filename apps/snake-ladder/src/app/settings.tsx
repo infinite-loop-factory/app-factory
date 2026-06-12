@@ -68,9 +68,9 @@ function OptionRow<T extends string>({
                 borderRadius: 999,
                 borderWidth: 1,
                 borderColor: selected
-                  ? lightenColor(palette.playerYou, 0.35)
+                  ? lightenColor(palette.ladder, 0.35)
                   : INPUT_BORDER,
-                backgroundColor: selected ? palette.playerYou : INPUT_BG,
+                backgroundColor: selected ? palette.ladder : INPUT_BG,
               }}
             >
               <Text
