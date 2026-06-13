@@ -1,0 +1,76 @@
+# sip-note — A8 Place Detail (PlaceDetailHero + 노트 리스트 + 위시리스트 토글 + addNote 라운드트립)
+#
+# 장소 상세는 실 스택 라우트라 딥링크 직행 가능: `sip-note:///place/<id>` (마커 탭 불필요).
+# seed 의 고정 id(e2e-bar: 노트 3건 / e2e-distillery: 빈 상태) 사용.
+#
+# 검증 항목:
+#   1) place/e2e-bar → Hero + 카테고리(바 / 펍) + 장소명 + 노트 리스트(Lagavulin 16)
+#   2) 위시리스트 ♡ → ♥ 토글 (accessibilityLabel 전환)
+#   3) place/e2e-distillery(빈) → "이 장소의 기록이 아직 없어요" + addNote CTA
+#   4) addNote → Compose(placeId prefill) → 카테고리+이름+저장 → 노트 노출
+#
+# 실행 (cwd = apps/sip-note):
+#   ~/.maestro/bin/maestro test e2e/flows/place-detail.yaml
+appId: com.infiniteloopfactory.sipnote
+name: place detail
+---
+- launchApp:
+    clearState: true
+    permissions:
+      all: allow
+- extendedWaitUntil:
+    visible: "테이스팅 피드"
+    timeout: 60000
+- runFlow: helpers/seed-tasting-fixtures.yaml
+
+# --- (1) place/e2e-bar (노트 3건) ---
+- openLink:
+    link: "sip-note:///place/e2e-bar"
+- extendedWaitUntil:
+    visible: "Aged Oak Bar"
+    timeout: 15000
+- assertVisible: "바 / 펍"
+- assertVisible: "Lagavulin 16"
+# 노트가 있는 상세의 "+ 이 장소에 기록 추가" CTA 는 리스트 하단(폴드 아래)이라
+# 여기서 단정하지 않는다. 빈 상태(distillery) 단계에서 CTA 가시를 검증한다.
+- takeScreenshot:
+    path: e2e/.maestro-output/place-detail-bar
+
+# --- (2) 위시리스트 토글 (♡ → ♥) ---
+# 하트 버튼은 accessibilityLabel → Android content-desc 로 노출되어 text selector 로 매칭된다.
+- assertVisible: "위시리스트에 추가"
+- tapOn:
+    text: "위시리스트에 추가"
+    retryTapIfNoChange: true
+- extendedWaitUntil:
+    visible: "위시리스트에서 제거"
+    timeout: 5000
+
+# --- (3) 빈 상태: place/e2e-distillery ---
+- openLink:
+    link: "sip-note:///place/e2e-distillery"
+- extendedWaitUntil:
+    visible: "Highland Distillery"
+    timeout: 15000
+- assertVisible: "이 장소의 기록이 아직 없어요"
+- assertVisible: "이 장소에 기록 추가"
+- takeScreenshot:
+    path: e2e/.maestro-output/place-detail-empty
+
+# --- (4) addNote → Compose(placeId prefill) → 저장 → 노트 노출 ---
+- tapOn:
+    text: "이 장소에 기록 추가"
+    retryTapIfNoChange: true
+- extendedWaitUntil:
+    visible: "새 기록"
+    timeout: 10000
+- tapOn: "위스키"
+- tapOn: "주류 이름을 입력하세요"
+- inputText: "Old Tom Gin"
+- tapOn:
+    text: "저장"
+    retryTapIfNoChange: true
+# Compose 는 placeId 로 push 되었으므로 저장 후 장소 상세로 복귀 → 노트 노출.
+- extendedWaitUntil:
+    visible: "Old Tom Gin"
+    timeout: 10000

@@ -1,0 +1,20 @@
+# sip-note — Helper: 테마 오버라이드 (subflow 전용)
+#
+# `_layout.tsx` 가 마운트마다 강제 다크로 만들기 때문에 adb uimode 로는 라이트 전환이
+# 불가능하다. dev.tsx 의 `?theme=` 가 nativewind setColorScheme 으로 전역·영속 오버라이드.
+#
+# 사용:
+#   - runFlow:
+#       file: helpers/set-theme.yaml
+#       env:
+#         MODE: light   # 또는 dark
+#
+# dev.tsx 는 테마 적용 후 router.replace("/") → 홈으로 복귀한다.
+appId: com.infiniteloopfactory.sipnote
+name: set theme
+---
+- openLink:
+    link: "sip-note:///dev?theme=${MODE}"
+- extendedWaitUntil:
+    visible: "테이스팅 피드"
+    timeout: 15000

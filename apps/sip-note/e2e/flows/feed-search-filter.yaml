@@ -1,0 +1,90 @@
+# sip-note — A4 Feed Search & Filter
+#
+# 피드 카테고리 필터 + 텍스트 검색 + 결과 0 건 빈 상태 검증.
+# 인-flow 로 노트 2 건 생성 (위스키 / 와인) 후 FilterBar 동작 검증.
+#
+# 검증 순서 — 카테고리 필터를 먼저 (키보드 미노출 상태) 검증한 뒤
+# 검색 input 사용. RN FilterBar 의 horizontal ScrollView 가
+# `keyboardShouldPersistTaps` 기본값 "never" 라 키보드 노출 상태에선
+# chip 첫 탭이 dismiss 로 흡수됨 → 검색 후 chip 검증을 피한다.
+#
+# 실행 (cwd = apps/sip-note):
+#   ~/.maestro/bin/maestro test e2e/flows/feed-search-filter.yaml
+
+appId: com.infiniteloopfactory.sipnote
+name: feed search filter
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible: "테이스팅 피드"
+    timeout: 60000
+- extendedWaitUntil:
+    visible: "아직 기록이 없어요"
+    timeout: 30000
+
+# --- (1) 노트 #1: 위스키 / Glenfiddich 12 ---
+- tapOn: "기록 추가"
+- extendedWaitUntil:
+    visible: "새 기록"
+    timeout: 10000
+- tapOn: "위스키"
+- tapOn: "주류 이름을 입력하세요"
+- inputText: "Glenfiddich 12"
+- tapOn: "저장"
+- extendedWaitUntil:
+    visible: "Glenfiddich 12"
+    timeout: 10000
+
+# --- (2) 노트 #2: 와인 / Cabernet ---
+- tapOn: "기록 추가"
+- extendedWaitUntil:
+    visible: "새 기록"
+    timeout: 10000
+- tapOn: "와인"
+- tapOn: "주류 이름을 입력하세요"
+- inputText: "Cabernet"
+- tapOn: "저장"
+- extendedWaitUntil:
+    visible: "Cabernet"
+    timeout: 10000
+- assertVisible: "Glenfiddich 12"
+
+# --- (3) 카테고리 필터: 위스키 → Glenfiddich 만 ---
+- tapOn:
+    text: "위스키"
+    index: 0
+- assertVisible: "Glenfiddich 12"
+- assertNotVisible: "Cabernet"
+
+# --- (4) 결과 0 건: 위스키 → 맥주 toggle ---
+# 위스키 활성 → 맥주 탭 → 맥주 단독 활성 (카테고리 chip 은 단일 토글이므로 자동 교체).
+- tapOn:
+    text: "맥주"
+    index: 0
+- extendedWaitUntil:
+    visible: "검색 결과가 없어요"
+    timeout: 5000
+- assertNotVisible: "Glenfiddich 12"
+- assertNotVisible: "Cabernet"
+
+- takeScreenshot:
+    path: e2e/.maestro-output/feed-search-filter-no-results
+
+# --- (5) 필터 해제: 맥주 재탭 (toggle off) → 둘 다 복원 ---
+- tapOn:
+    text: "맥주"
+    index: 0
+- assertVisible: "Glenfiddich 12"
+- assertVisible: "Cabernet"
+
+# --- (6) 텍스트 검색: "Cab" → Cabernet 만 ---
+- tapOn: "기록·태그·메모 검색"
+- inputText: "Cab"
+- assertVisible: "Cabernet"
+- assertNotVisible: "Glenfiddich 12"
+
+# --- (7) 검색어 지우기 → 둘 다 복원 ---
+- eraseText: 5
+- assertVisible: "Glenfiddich 12"
+- assertVisible: "Cabernet"

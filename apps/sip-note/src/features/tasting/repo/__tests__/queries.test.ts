@@ -50,6 +50,25 @@ describe("buildListQuery", () => {
     expect(params).toEqual(["smoky", "peat"]);
   });
 
+  it("placeId 단독 필터 — 장소 상세 화면에서 노트 리스트 조회용", () => {
+    const { sql, params } = buildListQuery({ placeId: "place-1" });
+    expect(sql).toBe(
+      "SELECT * FROM tasting_notes WHERE place_id = ? ORDER BY date DESC",
+    );
+    expect(params).toEqual(["place-1"]);
+  });
+
+  it("placeId + 카테고리 결합 — AND 로 연결", () => {
+    const { sql, params } = buildListQuery({
+      placeId: "place-1",
+      category: "whiskey",
+    });
+    expect(sql).toBe(
+      "SELECT * FROM tasting_notes WHERE category = ? AND place_id = ? ORDER BY date DESC",
+    );
+    expect(params).toEqual(["whiskey", "place-1"]);
+  });
+
   it("모든 필터 결합 — AND 로 연결되고 params 가 순서대로 누적", () => {
     const { sql, params } = buildListQuery({
       category: "whiskey",

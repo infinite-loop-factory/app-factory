@@ -1,0 +1,101 @@
+# sip-note — A3 Compose Edit / Delete
+#
+# 노트 상세 → 수정 → 삭제 골든 패스.
+# 1) 인-flow 로 노트 1 건 생성 (A2 와 동일 패턴, seed helper 부재)
+# 2) 피드 카드 탭 → Detail (CaskHero + 카테고리 배지 + 이름)
+# 3) "수정" → Compose (편집 모드, 헤더 "기록 수정") → 이름 변경 → 저장 →
+#    Detail 복귀 시 useFocusEffect 로 갱신된 이름 노출
+# 4) "삭제" → 네이티브 Alert "이 기록을 삭제할까요?" → destructive "삭제"
+# 5) 피드 빈 상태 복귀
+#
+# dev 빌드 (Expo dev client) + maestro hierarchy-based tap 조합에서
+# RN Pressable onPress 가 첫 탭에서 종종 무시되는 케이스가 관찰돼
+# 모든 navigation/state-mutation 탭에 retryTapIfNoChange 적용.
+#
+# 실행 (cwd = apps/sip-note):
+#   ~/.maestro/bin/maestro test e2e/flows/compose-edit-delete.yaml
+
+appId: com.infiniteloopfactory.sipnote
+name: compose edit delete
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible: "테이스팅 피드"
+    timeout: 60000
+- extendedWaitUntil:
+    visible: "아직 기록이 없어요"
+    timeout: 30000
+
+# --- (1) 노트 생성 (A2 최소 골든 패스 재사용) ---
+- tapOn:
+    text: "기록 추가"
+    retryTapIfNoChange: true
+- extendedWaitUntil:
+    visible: "새 기록"
+    timeout: 10000
+- tapOn:
+    text: "위스키"
+    retryTapIfNoChange: true
+- tapOn: "주류 이름을 입력하세요"
+- inputText: "Glenfiddich 12"
+- tapOn:
+    text: "저장"
+    retryTapIfNoChange: true
+- extendedWaitUntil:
+    visible: "Glenfiddich 12"
+    timeout: 10000
+
+# --- (2) 카드 탭 → Detail ---
+- tapOn:
+    text: "Glenfiddich 12"
+    retryTapIfNoChange: true
+- extendedWaitUntil:
+    visible: "수정"
+    timeout: 10000
+- assertVisible: "Glenfiddich 12"
+- assertVisible: "수정"
+- assertVisible: "삭제"
+
+# --- (3) 수정: 이름 변경 → 저장 → Detail 자동 갱신 (useFocusEffect) ---
+- tapOn:
+    text: "수정"
+    retryTapIfNoChange: true
+- extendedWaitUntil:
+    visible: "기록 수정"
+    timeout: 10000
+- tapOn: "Glenfiddich 12"
+- eraseText: 20
+- inputText: "Glenfiddich 15"
+- tapOn:
+    text: "저장"
+    retryTapIfNoChange: true
+
+# Detail 복귀 → useFocusEffect 가 repo.get(id) 재호출 → 새 이름 노출
+- extendedWaitUntil:
+    visible: "Glenfiddich 15"
+    timeout: 10000
+- assertNotVisible: "Glenfiddich 12"
+
+# --- (4) 삭제: Alert → destructive ---
+- tapOn:
+    text: "삭제"
+    retryTapIfNoChange: true
+- extendedWaitUntil:
+    visible: "이 기록을 삭제할까요?"
+    timeout: 5000
+# Alert 표시 동안 Detail 의 "삭제" 버튼은 가려져 단일 노드 (index 불필요)
+- tapOn:
+    text: "삭제"
+    retryTapIfNoChange: true
+
+# --- (5) 빈 상태 복귀 ---
+- extendedWaitUntil:
+    visible: "테이스팅 피드"
+    timeout: 10000
+- extendedWaitUntil:
+    visible: "아직 기록이 없어요"
+    timeout: 10000
+
+- takeScreenshot:
+    path: e2e/.maestro-output/compose-edit-delete-empty

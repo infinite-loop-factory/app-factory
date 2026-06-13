@@ -85,7 +85,11 @@
       "priceUnitBottle": "병",
       "date": "날짜",
       "photos": "사진",
-      "photosHint": "선택 · 최대 5장"
+      "photosHint": "선택 · 최대 5장",
+      "place": "장소",
+      "placeHint": "선택",
+      "placePlaceholder": "장소 선택",
+      "placeRemove": "장소 제거"
     },
     "a11y": {
       "removePhoto": "사진 제거",
@@ -111,17 +115,36 @@
     "detail": {
       "title": "장소 상세",
       "visitCount": "{{count}}회 방문",
-      "recentNote": "최근 기록"
+      "recentNote": "최근 기록",
+      "notes": "기록",
+      "empty": "이 장소의 기록이 아직 없어요",
+      "addNote": "이 장소에 기록 추가",
+      "notFound": "장소를 찾을 수 없어요",
+      "wishlistAdd": "위시리스트에 추가",
+      "wishlistRemove": "위시리스트에서 제거"
     },
     "wishlist": {
       "title": "위시리스트",
       "add": "위시리스트에 추가",
       "added": "위시리스트에 추가했어요"
     },
+    "summary": {
+      "viewDetail": "상세 보기"
+    },
     "map": {
       "filterAll": "전체",
       "searchPlaceholder": "장소 검색",
       "longPressHint": "지도에서 길게 눌러 위시리스트에 추가"
+    },
+    "picker": {
+      "title": "장소 선택",
+      "searchPlaceholder": "장소 이름·주소",
+      "empty": "검색 결과가 없어요",
+      "addNew": "새 장소 추가",
+      "newTitle": "새 장소",
+      "namePlaceholder": "장소 이름",
+      "addressPlaceholder": "주소 (선택)",
+      "useCurrentLocation": "현재 위치 사용"
     }
   },
   "pairing": {

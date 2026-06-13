@@ -1,0 +1,31 @@
+# sip-note — B5 Error Not Found
+#
+# 존재하지 않는 noteId 로 deep link 진입 → `tasting.detail.notFound` 메시지 노출 검증.
+# `note/[id].tsx` 에서 `repo.get(id) === null` 분기 → "기록을 찾을 수 없어요" 표시.
+#
+# Place 의 not-found 도 유사 (`place.detail.notFound = "장소를 찾을 수 없어요"`) 이지만
+# 본 flow 는 노트 케이스만 다룸. 추후 place 케이스도 동일 패턴으로 확장 가능.
+#
+# 실행 (cwd = apps/sip-note):
+#   ~/.maestro/bin/maestro test e2e/flows/error-not-found.yaml
+
+appId: com.infiniteloopfactory.sipnote
+name: error not found
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible: "테이스팅 피드"
+    timeout: 60000
+
+# 존재하지 않는 noteId 로 deep link 진입
+- openLink:
+    link: "sip-note:///note/this-id-does-not-exist"
+
+# notFound 텍스트 노출 — repo.get returns null → 분기 화면
+- extendedWaitUntil:
+    visible: "기록을 찾을 수 없어요"
+    timeout: 10000
+
+- takeScreenshot:
+    path: e2e/.maestro-output/error-not-found

@@ -1,0 +1,35 @@
+# sip-note — B3 Theme Light (라이트 테마 오버라이드 + DayDivider brand-strong 스왑)
+#
+# _layout.tsx 강제 다크를 dev?theme=light 로 덮어 라이트 테마를 렌더한다 (set-theme 헬퍼).
+# seed 노트는 여러 날짜에 분산되어 홈 피드에 DayDivider(Today/Yesterday)가 노출되며,
+# 라이트에서 caption brand-strong 스왑(Phase 1 §6 / ADR-0011 9컷 #9)이 적용된다.
+# 색 스왑은 텍스트로 단정 불가 → 가시 확인 + 스크린샷으로 검증.
+#
+# 실행 (cwd = apps/sip-note):
+#   ~/.maestro/bin/maestro test e2e/flows/theme-light.yaml
+appId: com.infiniteloopfactory.sipnote
+name: theme light
+---
+- launchApp:
+    clearState: true
+    permissions:
+      all: allow
+- extendedWaitUntil:
+    visible: "테이스팅 피드"
+    timeout: 60000
+- runFlow: helpers/seed-tasting-fixtures.yaml
+
+# --- 라이트 테마 오버라이드 ---
+- runFlow:
+    file: helpers/set-theme.yaml
+    env:
+      MODE: light
+
+# --- 홈 피드 라이트 + DayDivider 노출 ---
+- extendedWaitUntil:
+    visible: "테이스팅 피드"
+    timeout: 15000
+- assertVisible: "Today"
+- assertVisible: "Lagavulin 16"
+- takeScreenshot:
+    path: e2e/.maestro-output/theme-light

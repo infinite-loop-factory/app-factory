@@ -1,13 +1,17 @@
 import type { PriceUnit, TastingCategory } from "@/db/schema";
+import type { Place, PlaceCategory } from "@/features/place/repo/types";
 import type {
   TastingNote,
   TastingNoteInput,
 } from "@/features/tasting/repo/types";
 
-import { useState } from "react";
-import { ScrollView, Text, TextInput, View } from "react-native";
+import { useEffect, useState } from "react";
+import { Pressable, ScrollView, Text, TextInput, View } from "react-native";
+import { PlacePicker } from "@/components/place-picker";
+import * as placeRepo from "@/features/place/repo/place-repo";
 import { useThemeColors } from "@/hooks/use-theme-colors";
 import i18n from "@/i18n";
+import { haptic } from "@/lib/haptics";
 import { CategoryGrid } from "./category-grid";
 import { PhotoStrip } from "./photo-strip";
 import { PriceRow } from "./price-row";
@@ -24,10 +28,14 @@ export type ComposeFormState = {
   price: string;
   priceUnit: PriceUnit;
   date: number;
+  placeId: string | null;
+  placeName: string | null;
+  placeCategory: PlaceCategory | null;
 };
 
 export type ComposeFormProps = {
   initial?: TastingNote;
+  initialPlaceId?: string;
   onChange: (state: ComposeFormState, isValid: boolean) => void;
 };
 
@@ -41,6 +49,9 @@ const blankState = (): ComposeFormState => ({
   price: "",
   priceUnit: "glass",
   date: Date.now(),
+  placeId: null,
+  placeName: null,
+  placeCategory: null,
 });
 
 const fromNote = (n: TastingNote): ComposeFormState => ({
@@ -53,6 +64,9 @@ const fromNote = (n: TastingNote): ComposeFormState => ({
   price: n.price != null ? String(n.price) : "",
   priceUnit: n.priceUnit ?? "glass",
   date: n.date,
+  placeId: n.placeId,
+  placeName: null,
+  placeCategory: null,
 });
 
 export function toInput(state: ComposeFormState): TastingNoteInput {
@@ -65,23 +79,70 @@ export function toInput(state: ComposeFormState): TastingNoteInput {
     price: state.price ? Number(state.price) : null,
     priceUnit: state.price ? state.priceUnit : null,
     date: state.date,
-    placeId: null,
+    placeId: state.placeId,
     tags: state.tags,
     photos: state.photos,
   };
 }
 
-export function ComposeForm({ initial, onChange }: ComposeFormProps) {
+export function ComposeForm({
+  initial,
+  initialPlaceId,
+  onChange,
+}: ComposeFormProps) {
   const colors = useThemeColors();
-  const [state, setState] = useState<ComposeFormState>(() =>
-    initial ? fromNote(initial) : blankState(),
-  );
+  const [state, setState] = useState<ComposeFormState>(() => {
+    if (initial) return fromNote(initial);
+    const blank = blankState();
+    return initialPlaceId ? { ...blank, placeId: initialPlaceId } : blank;
+  });
+  const [pickerVisible, setPickerVisible] = useState(false);
+
+  useEffect(() => {
+    const id = initial?.placeId ?? initialPlaceId;
+    if (!id) return;
+    let alive = true;
+    placeRepo.get(id).then((p) => {
+      if (!(alive && p)) return;
+      setState((prev) => ({
+        ...prev,
+        placeName: p.name,
+        placeCategory: p.category,
+      }));
+    });
+    return () => {
+      alive = false;
+    };
+  }, [initial?.placeId, initialPlaceId]);
 
   const update = <K extends keyof ComposeFormState>(
     key: K,
     val: ComposeFormState[K],
   ) => {
     const next = { ...state, [key]: val };
+    setState(next);
+    onChange(next, Boolean(next.category) && next.name.trim().length > 0);
+  };
+
+  const handleSelectPlace = (place: Place) => {
+    const next: ComposeFormState = {
+      ...state,
+      placeId: place.id,
+      placeName: place.name,
+      placeCategory: place.category,
+    };
+    setState(next);
+    onChange(next, Boolean(next.category) && next.name.trim().length > 0);
+  };
+
+  const handleClearPlace = () => {
+    haptic.selection();
+    const next: ComposeFormState = {
+      ...state,
+      placeId: null,
+      placeName: null,
+      placeCategory: null,
+    };
     setState(next);
     onChange(next, Boolean(next.category) && next.name.trim().length > 0);
   };
@@ -138,7 +199,48 @@ export function ComposeForm({ initial, onChange }: ComposeFormProps) {
         value={state.memo}
       />
 
-      {/* TODO Phase 2: 자동 위치 태깅 + 변경 UI. */}
+      <FieldLabel
+        hint={i18n.t("tasting.field.placeHint")}
+        label={i18n.t("tasting.field.place")}
+      />
+      <Pressable
+        accessibilityRole="button"
+        className="h-12 flex-row items-center justify-between rounded-md border border-border-subtle bg-surface-sunken px-3"
+        onPress={() => {
+          haptic.selection();
+          setPickerVisible(true);
+        }}
+      >
+        {state.placeName ? (
+          <View className="flex-1 flex-row items-center gap-2">
+            <Text
+              className="font-medium font-text text-body text-text"
+              numberOfLines={1}
+            >
+              {state.placeName}
+            </Text>
+            {state.placeCategory && (
+              <Text className="font-text text-caption text-text-muted">
+                {i18n.t(`placeCategory.${state.placeCategory}` as const)}
+              </Text>
+            )}
+          </View>
+        ) : (
+          <Text className="font-text text-body text-text-faint">
+            {i18n.t("tasting.field.placePlaceholder")}
+          </Text>
+        )}
+        {state.placeId && (
+          <Pressable
+            accessibilityLabel={i18n.t("tasting.field.placeRemove")}
+            accessibilityRole="button"
+            hitSlop={12}
+            onPress={handleClearPlace}
+          >
+            <Text className="font-text text-caption text-text-muted">×</Text>
+          </Pressable>
+        )}
+      </Pressable>
 
       <FieldLabel
         hint={i18n.t("tasting.field.priceHint")}
@@ -149,6 +251,12 @@ export function ComposeForm({ initial, onChange }: ComposeFormProps) {
         onAmountChange={(v) => update("price", v)}
         onUnitChange={(u) => update("priceUnit", u)}
         unit={state.priceUnit}
+      />
+
+      <PlacePicker
+        onClose={() => setPickerVisible(false)}
+        onSelect={handleSelectPlace}
+        visible={pickerVisible}
       />
     </ScrollView>
   );

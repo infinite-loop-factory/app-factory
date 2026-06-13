@@ -85,7 +85,11 @@
       "priceUnitBottle": "Bottle",
       "date": "Date",
       "photos": "Photos",
-      "photosHint": "Optional · max 5"
+      "photosHint": "Optional · max 5",
+      "place": "Place",
+      "placeHint": "Optional",
+      "placePlaceholder": "Select a place",
+      "placeRemove": "Remove place"
     },
     "a11y": {
       "removePhoto": "Remove photo",
@@ -111,17 +115,36 @@
     "detail": {
       "title": "Place Detail",
       "visitCount": "Visited {{count}} times",
-      "recentNote": "Recent Note"
+      "recentNote": "Recent Note",
+      "notes": "Notes",
+      "empty": "No notes for this place yet",
+      "addNote": "Add a note here",
+      "notFound": "Place not found",
+      "wishlistAdd": "Add to wishlist",
+      "wishlistRemove": "Remove from wishlist"
     },
     "wishlist": {
       "title": "Wishlist",
       "add": "Add to Wishlist",
       "added": "Added to wishlist"
     },
+    "summary": {
+      "viewDetail": "View Detail"
+    },
     "map": {
       "filterAll": "All",
       "searchPlaceholder": "Search places",
       "longPressHint": "Long-press the map to add a wishlist place"
+    },
+    "picker": {
+      "title": "Select Place",
+      "searchPlaceholder": "Place name or address",
+      "empty": "No matches",
+      "addNew": "Add new place",
+      "newTitle": "New Place",
+      "namePlaceholder": "Place name",
+      "addressPlaceholder": "Address (optional)",
+      "useCurrentLocation": "Use current location"
     }
   },
   "pairing": {

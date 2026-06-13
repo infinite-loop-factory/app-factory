@@ -1,0 +1,25 @@
+# sip-note — Home Smoke
+#
+# 앱이 정상 launch 되고 홈 탭의 헤더 + FAB 가 노출되는지 검증.
+# clearState: 매 실행 시 SQLite 비움 → 빈 상태 EmptyState 가 노출.
+#
+# 실행:
+#   ~/.maestro/bin/maestro test apps/sip-note/e2e/flows/home-smoke.yaml
+#
+# 사전 조건:
+#   - Pixel_8 (또는 다른) AVD 부팅 + dev client 설치
+#   - apps/sip-note/e2e/README.md 의 절차 따름
+
+appId: com.infiniteloopfactory.sipnote
+name: home smoke
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible: "테이스팅 피드"
+    timeout: 60000
+- assertVisible: "아직 기록이 없어요"
+- assertVisible: "기록 추가"
+# 호출 cwd = apps/sip-note 가정 (README 참조)
+- takeScreenshot:
+    path: e2e/.maestro-output/home-smoke-empty

@@ -1,7 +1,7 @@
 import type { TastingNote } from "@/features/tasting/repo/types";
 
-import { useLocalSearchParams, useRouter } from "expo-router";
-import { useEffect, useState } from "react";
+import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
+import { useCallback, useState } from "react";
 import { Alert, Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Path, Svg } from "react-native-svg";
@@ -23,16 +23,18 @@ export default function NoteDetailScreen() {
   const [note, setNote] = useState<TastingNote | null | undefined>(undefined);
   const [activePhoto, setActivePhoto] = useState(0);
 
-  useEffect(() => {
-    if (!id) return;
-    let active = true;
-    repo.get(id).then((n) => {
-      if (active) setNote(n);
-    });
-    return () => {
-      active = false;
-    };
-  }, [id]);
+  useFocusEffect(
+    useCallback(() => {
+      if (!id) return;
+      let active = true;
+      repo.get(id).then((n) => {
+        if (active) setNote(n);
+      });
+      return () => {
+        active = false;
+      };
+    }, [id]),
+  );
 
   if (note === undefined) return null;
 

@@ -1,0 +1,106 @@
+# sip-note — A9 Compose Location Tagging (PlacePicker subset)
+#
+# Compose 의 PlacePicker 진입 → 새 장소 추가 → 노트 저장까지의 흐름.
+# 위치 권한 / 좌표 자동 후보는 본 flow 에서 다루지 않음 (B1 / 후속 flow).
+# `useLocation` Switch 는 OFF 로 두고 latitude/longitude null 인 place 생성.
+#
+# 검증 항목:
+#   1) 빈 DB 에서 PlacePicker 진입 → "장소 선택" 헤더 + "장소 이름·주소" placeholder
+#   2) "검색 결과가 없어요" + "+ 새 장소 추가" 빈 상태 CTA
+#   3) newForm 모드 → "새 장소" 헤더 + "장소 이름" / "주소 (선택)" placeholder
+#   4) placeCategory 칩 6 종 (바 / 펍, 증류소, 와이너리, 브루어리, 레스토랑, 기타)
+#   5) 저장 → modal close → Compose 의 place 라벨 노출
+#   6) Compose 저장 → 피드 카드 1 건
+#
+# 실행 (cwd = apps/sip-note):
+#   ~/.maestro/bin/maestro test e2e/flows/compose-location-tagging.yaml
+
+appId: com.infiniteloopfactory.sipnote
+name: compose location tagging
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible: "테이스팅 피드"
+    timeout: 60000
+- extendedWaitUntil:
+    visible: "아직 기록이 없어요"
+    timeout: 30000
+
+# --- (1) Compose 진입 + 카테고리만 (이름은 placepicker 닫은 후) ---
+# 이름 input 후 키보드 up 상태 → scrollUntilVisible 가 스와이프 인식 안 되는 케이스 회피.
+- tapOn: "기록 추가"
+- extendedWaitUntil:
+    visible: "새 기록"
+    timeout: 10000
+- tapOn: "위스키"
+
+# --- (2) PlacePicker 진입 ---
+# Place 필드까지 스크롤 (키보드 미노출 상태라 안정).
+- scrollUntilVisible:
+    element:
+      text: "장소 선택"
+    direction: DOWN
+    timeout: 10000
+    visibilityPercentage: 50
+- tapOn: "장소 선택"
+- extendedWaitUntil:
+    visible: "장소 이름·주소"
+    timeout: 5000
+
+# Modal header / placeholder 노출 검증 (단, 헤더 "장소 선택" 은 Compose 의
+# placePlaceholder 와 충돌하므로 placeholder 텍스트로만 검증)
+- assertVisible: "장소 이름·주소"
+- assertVisible: "+ 새 장소 추가"
+
+# --- (3) "+ 새 장소 추가" 진입 ---
+# PlacePicker ScrollView 는 `keyboardShouldPersistTaps="handled"` 설정이라
+# 키보드 노출 상태에서도 첫 탭이 onPress 로 정상 fire (FilterBar 와 다른 점).
+- tapOn: "+ 새 장소 추가"
+- extendedWaitUntil:
+    visible: "새 장소"
+    timeout: 5000
+- assertVisible: "장소 이름"
+- assertVisible: "주소 (선택)"
+
+# placeCategory 6 종
+- assertVisible: "바 / 펍"
+- assertVisible: "증류소"
+- assertVisible: "와이너리"
+- assertVisible: "브루어리"
+- assertVisible: "레스토랑"
+
+# --- (4) 입력 + 카테고리 선택 ---
+# 새 폼의 "장소 이름" input 도 autoFocus. 그대로 입력 가능.
+- inputText: "Whiskey Bar Aged"
+- tapOn: "바 / 펍"
+
+# --- (5) 저장 (헤더 우측 "저장") ---
+# 헤더의 "저장" 만 활성 (newName.trim() 비어있지 않음). Compose 헤더의 "저장" 과
+# 충돌 없음 (Modal 노출 동안 Compose 헤더는 가려짐).
+- tapOn: "저장"
+
+# --- (6) Modal close → Compose 로 복귀, place 라벨 노출 ---
+- extendedWaitUntil:
+    visible: "Whiskey Bar Aged"
+    timeout: 10000
+- assertVisible: "바 / 펍"
+
+# --- (7) 이름 입력 (필수) → 위로 스크롤 ---
+- scrollUntilVisible:
+    element:
+      text: "주류 이름을 입력하세요"
+    direction: UP
+    timeout: 10000
+    visibilityPercentage: 50
+- tapOn: "주류 이름을 입력하세요"
+- inputText: "Lagavulin 16"
+
+# --- (8) Compose 저장 → 피드 ---
+- tapOn: "저장"
+- extendedWaitUntil:
+    visible: "Lagavulin 16"
+    timeout: 10000
+
+- takeScreenshot:
+    path: e2e/.maestro-output/compose-location-tagging-feed
