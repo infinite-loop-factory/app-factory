@@ -427,18 +427,18 @@ This table maps the metrics signal cells from `../matrix.md` for quick navigatio
 
 | Layer | Boundary | Coverage | Detail |
 |-------|----------|----------|--------|
-| L3-network | multi-tenant | ✅ | Per-tenant VPC flow byte/packet counters |
-| L3-network | cross-application | ✅ | Inter-VPC/peering flow metrics |
-| L4-transport | multi-tenant | ✅ | Per-tenant TCP retransmit rate, RTT histograms via eBPF |
-| L4-transport | cross-application | ✅ | Cross-service TCP RTT and retransmit metrics via eBPF |
-| mesh | multi-tenant | ✅ | Per-tenant RED from Envoy telemetry; `tenant.id` via baggage |
-| mesh | cross-application | ✅ | Cross-service RED metrics at mesh proxy; topology mapping |
-| mesh | slo | ✅ | Request rate and error rate as primary SLI sources |
-| mesh | release | ✅ | Request split metrics for canary traffic (Flagger/Argo Rollouts) |
-| L7-application | multi-tenant | ✅ | Per-tenant RED + custom business metrics with `tenant.id` |
-| L7-application | cross-application | ✅ | Inter-service histograms with `service.name` + `peer.service` |
-| L7-application | slo | ✅ | SLI metric computation; SLO targets in OpenSLO YAML |
-| L7-application | release | ✅ | Release marker; `service.version` label for before/after delta |
+| L3-network | multi-tenant | PASS | Per-tenant VPC flow byte/packet counters |
+| L3-network | cross-application | PASS | Inter-VPC/peering flow metrics |
+| L4-transport | multi-tenant | PASS | Per-tenant TCP retransmit rate, RTT histograms via eBPF |
+| L4-transport | cross-application | PASS | Cross-service TCP RTT and retransmit metrics via eBPF |
+| mesh | multi-tenant | PASS | Per-tenant RED from Envoy telemetry; `tenant.id` via baggage |
+| mesh | cross-application | PASS | Cross-service RED metrics at mesh proxy; topology mapping |
+| mesh | slo | PASS | Request rate and error rate as primary SLI sources |
+| mesh | release | PASS | Request split metrics for canary traffic (Flagger/Argo Rollouts) |
+| L7-application | multi-tenant | PASS | Per-tenant RED + custom business metrics with `tenant.id` |
+| L7-application | cross-application | PASS | Inter-service histograms with `service.name` + `peer.service` |
+| L7-application | slo | PASS | SLI metric computation; SLO targets in OpenSLO YAML |
+| L7-application | release | PASS | Release marker; `service.version` label for before/after delta |
 
 ---
 

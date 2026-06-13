@@ -41,6 +41,7 @@ export default function ReviewScoreCard({
             <Icon
               as={Star}
               className={`h-4 w-4 ${i < Math.floor(rate) ? "fill-yellow-400 text-yellow-400" : "fill-slate-200 text-slate-200"}`}
+              // biome-ignore lint/suspicious/noArrayIndexKey: fixed 5-star rating, index is the stable position
               key={`rate_${i}_${rate}`}
             />
           ))}

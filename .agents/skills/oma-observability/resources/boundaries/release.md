@@ -339,12 +339,12 @@ Cross-ref `../signals/audit.md` for the required audit log fields.
 
 | Layer | Signal | Status | Detail |
 |-------|--------|--------|--------|
-| L7 × release | metrics | ✅ | Canary SLI delta; error rate and latency per version |
-| L7 × release | logs | ✅ | Deployment events with `service.version` |
-| L7 × release | traces | ✅ | `service.version` tagging on every span |
-| L7 × release | profiles | ⚠️ | Regression comparison v(new) vs v(prev); tooling-dependent |
-| L7 × release | cost | ⚠️ | Cost delta per variant requires OpenCost label propagation |
-| mesh × release | metrics | ⚠️ | Canary routing rules observable via Envoy stats if mesh present |
+| L7 × release | metrics | PASS | Canary SLI delta; error rate and latency per version |
+| L7 × release | logs | PASS | Deployment events with `service.version` |
+| L7 × release | traces | PASS | `service.version` tagging on every span |
+| L7 × release | profiles | PARTIAL | Regression comparison v(new) vs v(prev); tooling-dependent |
+| L7 × release | cost | PARTIAL | Cost delta per variant requires OpenCost label propagation |
+| mesh × release | metrics | PARTIAL | Canary routing rules observable via Envoy stats if mesh present |
 
 ---
 

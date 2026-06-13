@@ -124,7 +124,7 @@ At session end, if total CD >= 50:
 ```
 Turn 3: frontend asked about icon library preference → clarify (+10)
 Turn 15: All tasks completed successfully
-Total CD: 10 ✅
+Total CD: 10
 ```
 
 ### Unhealthy Session (CD = 95)
@@ -133,7 +133,7 @@ Turn 2: backend assumed REST, user wanted GraphQL → correct (+25)
 Turn 8: backend used wrong auth method → correct (+25)
 Turn 12: frontend built wrong layout → redo (+40)
 Turn 14: Charter not checked before redo → modifier (+15, but capped)
-Total CD: 95 ❌ → RCA REQUIRED
+Total CD: 95 → RCA REQUIRED
 ```
 
 ---

@@ -187,10 +187,10 @@ the same threshold enforces budget-aware deployment freeze.
 
 | Layer | Signal | Status | Detail |
 |-------|--------|--------|--------|
-| L7-application | metrics | ✅ | SLI calculation from HTTP/gRPC counters and histograms |
-| L7-application | logs | ⚠️ | Burn-rate source when metrics unavailable; higher latency |
-| L7-application | traces | ⚠️ | Critical path traces complement metrics-based SLI |
-| mesh | metrics | ✅ | Golden signals from Envoy; zero-code instrumentation |
+| L7-application | metrics | PASS | SLI calculation from HTTP/gRPC counters and histograms |
+| L7-application | logs | PARTIAL | Burn-rate source when metrics unavailable; higher latency |
+| L7-application | traces | PARTIAL | Critical path traces complement metrics-based SLI |
+| mesh | metrics | PASS | Golden signals from Envoy; zero-code instrumentation |
 
 ---
 

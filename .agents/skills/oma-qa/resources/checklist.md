@@ -284,25 +284,25 @@
 
 ## Issue Prioritization
 
-### 🔴 CRITICAL (Block Deployment)
+### CRITICAL (Block Deployment)
 - Security vulnerabilities (SQL injection, XSS, auth bypass)
 - Data loss bugs
 - Application crashes
 - Complete feature breakage
 
-### 🟠 HIGH (Fix Before Launch)
+### HIGH (Fix Before Launch)
 - Performance issues (> 5s load time)
 - Major accessibility violations
 - Missing auth checks
 - Broken core functionality
 
-### 🟡 MEDIUM (Fix in Sprint)
+### MEDIUM (Fix in Sprint)
 - Minor bugs
 - Code quality issues
 - Missing tests
 - Minor accessibility issues
 
-### 🔵 LOW (Backlog)
+### LOW (Backlog)
 - Refactoring opportunities
 - Performance optimizations
 - Nice-to-have features

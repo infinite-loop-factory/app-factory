@@ -1,5 +1,5 @@
 ---
-description: Design workflow — create design systems, DESIGN.md, and design tokens with anti-pattern enforcement and accessibility checks
+description: Design workflow that creates design systems, DESIGN.md, and design tokens with anti-pattern enforcement and accessibility checks
 mode: agent
 ---
 <!-- oma:generated -->

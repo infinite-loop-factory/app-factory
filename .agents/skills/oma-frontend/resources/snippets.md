@@ -7,21 +7,21 @@ Copy-paste ready patterns. Use these as starting points, adapt to the specific t
 ## Next.js 16 framework canonicals (use these, never the legacy alternatives)
 
 ```tsx
-// ✅ Internal nav: <Link>, never <a href="/...">
+// Internal nav: <Link>, never <a href="/...">
 import Link from "next/link";
 <Link href="/gallery" className="...">View gallery</Link>
 
-// ✅ Custom font: next/font, never <link rel="stylesheet">
+// Custom font: next/font, never <link rel="stylesheet">
 import { Inter } from "next/font/google";
 const inter = Inter({ subsets: ["latin"] });
 <body className={inter.className}>...</body>
 
-// ✅ Images: next/image, never raw <img>
+// Images: next/image, never raw <img>
 import Image from "next/image";
 <Image src="/hero.png" alt="Hero scene" width={1200} height={600} priority />
 
-// ✅ Imports: only what you use. After refactoring, remove orphans.
-// ✅ useCallback / useEffect deps: list every referenced symbol exactly.
+// Imports: only what you use. After refactoring, remove orphans.
+// useCallback / useEffect deps: list every referenced symbol exactly.
 ```
 
 ---
@@ -79,26 +79,26 @@ Accessibility checklist for interactive surfaces:
 ## React 19 hook patterns
 
 ```tsx
-// ✅ Derive in render — no state, no effect
+// Derive in render — no state, no effect
 function ItemCount({ items }: { items: Item[] }) {
   const count = items.length;
   return <span>{count}</span>;
 }
 
-// ✅ Initialize once with a lazy initializer
+// Initialize once with a lazy initializer
 const [id] = useState(() => crypto.randomUUID());
 
-// ✅ Pass the ref OBJECT (not its current value) to children that need an instance.
+// Pass the ref OBJECT (not its current value) to children that need an instance.
 //   The child reads .current inside its own effect or event handler, never in render.
 function Selectable({ targetRef }: { targetRef: React.RefObject<THREE.Object3D> }) {
   // ...
 }
 
-// ❌ Never: useEffect that calls setState to mirror props/state
+// Never: useEffect that calls setState to mirror props/state
 //    eslint: react-hooks/set-state-in-effect
 // useEffect(() => { setCount(items.length); }, [items]);
 
-// ❌ Never: gate JSX on ref.current — it is null on first render, and refs
+// Never: gate JSX on ref.current — it is null on first render, and refs
 //    do not trigger re-renders when they attach
 //    eslint: react-hooks/refs
 // return ref.current ? <Child target={ref.current} /> : null;

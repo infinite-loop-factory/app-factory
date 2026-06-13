@@ -46,9 +46,8 @@ Detect broken references in `docs/**/*.md` (verify mode) and propose LLM-generat
 ### Dependencies
 - `cli/commands/docs/extract.ts`: markdown AST + L2 pattern extractor.
 - `cli/commands/docs/resolve.ts`: deterministic broken-ref checker.
-- `cli/commands/docs/reporter.ts`: markdown/JSON report renderer (LLM-optional).
-- `cli/commands/docs/sync-propose.ts`: git diff intake, reverse lookup, LLM patch proposer with secret redaction.
-- `cli/io/llm.ts`: thin Anthropic Messages wrapper used by reporter and sync proposer.
+- `cli/commands/docs/reporter.ts`: deterministic markdown/JSON report renderer (no LLM call; host LLM does narrative synthesis).
+- `cli/commands/docs/sync-propose.ts`: git diff intake, reverse lookup, candidate-doc selector with secret redaction (no LLM call; host LLM drafts patches).
 - `docs/generated/doc-refs.json`: single-direction reference index (git-tracked, regenerated on every verify run).
 - `docs/generated/url-drift.json`: lychee-produced URL drift report (written by background lychee spawn; gitignored or tracked at user discretion).
 - `lychee`: external Rust tool for URL link checking. Detected on PATH; install via `brew install lychee` or see https://github.com/lycheeverse/lychee#installation. Optional but recommended.

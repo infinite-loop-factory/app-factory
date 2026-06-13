@@ -3,7 +3,7 @@
 This guide orients agents and contributors working inside the Turborepo monorepo. Keep this close while making changes; it distills the conventions the team expects.
 
 ## Project Structure & Module Organization
-- `apps/` holds Expo apps such as `country-tracker`, `playlist`, and `dog-walk`. Each app keeps feature code under `app/` with colocated assets and tests (or in `__tests__/`).
+- `apps/` holds Expo apps such as `cat-meetup`, `dog-walk`, and `sip-note`. Each app keeps feature code under `app/` with colocated assets and tests (or in `__tests__/`).
 - `packages/` contains shared libraries. Reach for `@infinite-loop-factory/common` for cross-app utilities, `@infinite-loop-factory/ui` for design primitives, and `config-typescript` for reusable build settings.
 - `turbo/` provides Turborepo generators and templates. Update these if you change scaffolding logic, otherwise leave untouched.
 
@@ -49,6 +49,19 @@ This guide orients agents and contributors working inside the Turborepo monorepo
 2. If `target_vendor_for_agent === current_runtime_vendor`, use the runtime's native subagent path.
 3. If vendors differ, or native subagents are unavailable, use `oma agent:spawn` for that agent only.
 
+## Code Search
+
+Prefer **serena MCP** tools over native find/grep when locating code — they are symbol-aware and faster on large repos. Fall back to native Read / Glob / Grep only when serena is unavailable or for plain file content reads.
+
+| Task | Preferred tool |
+|------|----------------|
+| Locate a symbol definition (class / function / variable) | `find_symbol` |
+| Find references / callers of a symbol | `find_referencing_symbols` |
+| Outline a file's top-level symbols | `get_symbols_overview` |
+| Pattern or regex search across the codebase | `search_for_pattern` |
+| Find a file by name | `find_file` |
+| List directory contents | `list_dir` |
+
 ## Workflows
 
 Execute by naming the workflow in your prompt. Keywords are auto-detected via hooks.
@@ -65,6 +78,8 @@ Execute by naming the workflow in your prompt. Keywords are auto-detected via ho
 | deepsec | `deepsec.md` | Drive `oma-deepsec` end-to-end (setup / scan / pr-review / matchers / triage) |
 | scm | `scm.md` | SCM + Git operations + Conventional Commits |
 | docs | `docs.md` | Documentation drift verify + sync |
+| recap | `recap.md` | Daily / period AI conversation recap |
+| video | `video.md` | Brief → script → assets → render-spec → Remotion (oma-video) |
 
 To execute: read and follow `.agents/workflows/{name}.md` step by step.
 
@@ -96,6 +111,7 @@ Read the relevant file from `.agents/rules/` when working on matching code.
 | frontend | `.agents/rules/frontend.md` | **/*.{tsx,jsx,css,scss} |
 | i18n-guide | `.agents/rules/i18n-guide.md` | always |
 | infrastructure | `.agents/rules/infrastructure.md` | **/*.{tf,tfvars,hcl} |
+| market | `.agents/rules/market.md` | on request |
 | mobile | `.agents/rules/mobile.md` | **/*.{dart,swift,kt} |
 | quality | `.agents/rules/quality.md` | on request |
 

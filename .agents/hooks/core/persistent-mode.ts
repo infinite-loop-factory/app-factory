@@ -21,6 +21,7 @@ import {
   writeFileSync,
 } from "node:fs";
 import { join } from "node:path";
+import { agyConversationId, agyProjectDir, isAgyInput } from "./agy-input.ts";
 import { resolveGitRoot } from "./fs-utils.ts";
 import { makeBlockOutput } from "./hook-output.ts";
 import { isDeactivationRequest } from "./keyword-detector.ts";
@@ -63,6 +64,24 @@ function loadPersistentWorkflows(): string[] {
 
 function detectVendor(input: Record<string, unknown>): Vendor {
   const event = input.hook_event_name as string | undefined;
+  const hookEventName = input.hookEventName as string | undefined;
+
+  if (process.env.GROK_WORKSPACE_ROOT || hookEventName?.includes("stop")) {
+    if (process.env.GROK_WORKSPACE_ROOT) return "grok";
+  }
+
+  if (
+    process.env.KIRO_PROJECT_DIR ||
+    event === "stop" ||
+    hookEventName === "stop"
+  ) {
+    return "kiro";
+  }
+
+  // agy (Antigravity) Stop sends no hook_event_name; detect by stdin shape.
+  if (isAgyInput(input)) return "antigravity";
+  if (event === "Stop" && process.env.ANTIGRAVITY_PROJECT_DIR)
+    return "antigravity";
   if (event === "AfterAgent") return "gemini";
   if (event === "Stop") {
     if ("session_id" in input && !("sessionId" in input)) return "codex";
@@ -80,8 +99,27 @@ function getProjectDir(vendor: Vendor, input: Record<string, unknown>): string {
     case "gemini":
       dir = process.env.GEMINI_PROJECT_DIR || process.cwd();
       break;
+    case "antigravity":
+      dir =
+        agyProjectDir(input) ||
+        (input.cwd as string) ||
+        process.env.ANTIGRAVITY_PROJECT_DIR ||
+        process.env.AGY_PROJECT_DIR ||
+        process.env.GEMINI_PROJECT_DIR ||
+        process.cwd();
+      break;
     case "qwen":
       dir = process.env.QWEN_PROJECT_DIR || process.cwd();
+      break;
+    case "grok":
+      dir =
+        process.env.GROK_WORKSPACE_ROOT ||
+        (input.cwd as string) ||
+        process.cwd();
+      break;
+    case "kiro":
+      dir =
+        process.env.KIRO_PROJECT_DIR || (input.cwd as string) || process.cwd();
       break;
     default:
       dir = process.env.CLAUDE_PROJECT_DIR || process.cwd();
@@ -92,7 +130,10 @@ function getProjectDir(vendor: Vendor, input: Record<string, unknown>): string {
 
 function getSessionId(input: Record<string, unknown>): string {
   return (
-    (input.sessionId as string) || (input.session_id as string) || "unknown"
+    (input.sessionId as string) ||
+    (input.session_id as string) ||
+    agyConversationId(input) ||
+    "unknown"
   );
 }
 
@@ -227,7 +268,10 @@ async function main() {
 export function writeBlockAndExit(vendor: Vendor, reason: string): never {
   process.stderr.write(reason);
   process.stdout.write(makeBlockOutput(vendor, reason));
-  process.exit(2);
+  // agy gates the stop via the JSON `decision:"continue"` on stdout and treats
+  // a non-zero exit as a failed (fail-open) hook; exit 0 so the decision sticks.
+  // Other vendors block via exit code 2.
+  process.exit(vendor === "antigravity" ? 0 : 2);
 }
 
 if (import.meta.main) {

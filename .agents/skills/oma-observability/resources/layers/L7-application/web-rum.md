@@ -297,11 +297,11 @@ These cells from `../../matrix.md` are the primary drivers for this file:
 
 | Matrix cell | Symbol | Artifact |
 |------------|--------|---------|
-| L7 × multi-tenant × metrics | ✅ | Per-tenant CWV distribution (LCP p75, INP p75, CLS p75 segmented by `tenant.id`) |
-| L7 × cross-application × traces | ✅ | Primary: `traceparent` propagated via `propagateTraceHeaderCorsUrls` / `allowedTracingUrls` |
-| L7 × SLO × metrics | ✅ | CWV as SLI; LCP p75 ≤ 2.5s, INP p75 ≤ 200ms, CLS p75 ≤ 0.1 (see `../../boundaries/slo.md`) |
-| L7 × release × traces | ✅ | `service.version` on spans carries frontend build SHA + backend version for correlated release analysis |
-| L7 × privacy × logs | ✅ | PII masking in error stack traces and session replay; no `user.email` in metric labels |
+| L7 × multi-tenant × metrics | PASS | Per-tenant CWV distribution (LCP p75, INP p75, CLS p75 segmented by `tenant.id`) |
+| L7 × cross-application × traces | PASS | Primary: `traceparent` propagated via `propagateTraceHeaderCorsUrls` / `allowedTracingUrls` |
+| L7 × SLO × metrics | PASS | CWV as SLI; LCP p75 ≤ 2.5s, INP p75 ≤ 200ms, CLS p75 ≤ 0.1 (see `../../boundaries/slo.md`) |
+| L7 × release × traces | PASS | `service.version` on spans carries frontend build SHA + backend version for correlated release analysis |
+| L7 × privacy × logs | PASS | PII masking in error stack traces and session replay; no `user.email` in metric labels |
 
 ---
 

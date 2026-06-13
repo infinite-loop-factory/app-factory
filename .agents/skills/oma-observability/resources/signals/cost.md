@@ -266,19 +266,19 @@ Quick navigation for cost-column cells in `../matrix.md`:
 
 | Layer | Boundary | Status | Detail |
 |-------|----------|--------|--------|
-| L3-network | multi-tenant | ⚠️ | Egress byte attribution by tenant VPC; cost proxy, not unit economics |
-| L3-network | cross-application | ⚠️ | Cross-VPC egress cost attribution; unreliable without flow tagging |
-| L4-transport | multi-tenant | ⚠️ | L4 byte volume per tenant as cost proxy; rolls up into compute |
-| L4-transport | cross-application | ⚠️ | Cross-application byte volume; correlate with L7 for accuracy |
-| mesh | multi-tenant | ⚠️ | Request-level cost attribution by tenant via mesh telemetry; feeds OpenCost |
-| mesh | cross-application | ✅ | Per-service byte/request counts from Envoy; unit cost cross-service |
-| mesh | release | ⚠️ | Canary cost delta via per-version request counts in mesh telemetry |
-| L7-application | multi-tenant | ✅ | Primary use case: per-tenant OpenCost unit economics with `tenant.id` pod label |
-| L7-application | cross-application | ✅ | Per-service unit cost model; `gen_ai.cost.total_usd` span attribute for LLM |
-| L7-application | slo | ✅ | Gold-tier vs silver-tier cost delta; cost trade-off for SLO tier selection |
-| L7-application | release | ✅ | Canary cost delta: compare per-request cost across canary vs stable version |
+| L3-network | multi-tenant | PARTIAL | Egress byte attribution by tenant VPC; cost proxy, not unit economics |
+| L3-network | cross-application | PARTIAL | Cross-VPC egress cost attribution; unreliable without flow tagging |
+| L4-transport | multi-tenant | PARTIAL | L4 byte volume per tenant as cost proxy; rolls up into compute |
+| L4-transport | cross-application | PARTIAL | Cross-application byte volume; correlate with L7 for accuracy |
+| mesh | multi-tenant | PARTIAL | Request-level cost attribution by tenant via mesh telemetry; feeds OpenCost |
+| mesh | cross-application | PASS | Per-service byte/request counts from Envoy; unit cost cross-service |
+| mesh | release | PARTIAL | Canary cost delta via per-version request counts in mesh telemetry |
+| L7-application | multi-tenant | PASS | Primary use case: per-tenant OpenCost unit economics with `tenant.id` pod label |
+| L7-application | cross-application | PASS | Per-service unit cost model; `gen_ai.cost.total_usd` span attribute for LLM |
+| L7-application | slo | PASS | Gold-tier vs silver-tier cost delta; cost trade-off for SLO tier selection |
+| L7-application | release | PASS | Canary cost delta: compare per-request cost across canary vs stable version |
 
-L3 and L4 cost cells are ⚠️ because they produce a cost proxy (egress bytes) that informs FinOps egress billing but is insufficient for full unit-economics modeling. See `../matrix.md §C6` for the detailed caveat.
+L3 and L4 cost cells are PARTIAL because they produce a cost proxy (egress bytes) that informs FinOps egress billing but is insufficient for full unit-economics modeling. See `../matrix.md §C6` for the detailed caveat.
 
 ---
 
