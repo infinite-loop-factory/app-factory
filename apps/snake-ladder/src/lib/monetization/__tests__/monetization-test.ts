@@ -9,7 +9,10 @@ import {
   AD_GAMES_INTERVAL,
 } from "@/lib/monetization/constants";
 import { rollGoldDie } from "@/lib/monetization/gold-dice";
-import { DEFAULT_MONETIZATION } from "@/lib/monetization/state";
+import {
+  DEFAULT_MONETIZATION,
+  parseMonetization,
+} from "@/lib/monetization/state";
 
 describe("rollGoldDie", () => {
   afterEach(() => {
@@ -70,6 +73,41 @@ describe("shouldShowInterstitial", () => {
         lastAdShownAt: Date.now() - AD_COOLDOWN_MS - 1,
       }),
     ).toBe(true);
+  });
+});
+
+describe("parseMonetization", () => {
+  it("returns defaults for null or malformed JSON", () => {
+    expect(parseMonetization(null)).toEqual(DEFAULT_MONETIZATION);
+    expect(parseMonetization("{not json")).toEqual(DEFAULT_MONETIZATION);
+  });
+
+  it("reads back a valid persisted state", () => {
+    const state = {
+      goldDiceCount: 12,
+      adRemovalPurchased: true,
+      gamesSinceLastAd: 2,
+      lastAdShownAt: 1700,
+    };
+    expect(parseMonetization(JSON.stringify(state))).toEqual(state);
+  });
+
+  it("rejects tampered negative or non-numeric gold counts", () => {
+    expect(parseMonetization('{"goldDiceCount":-5}').goldDiceCount).toBe(0);
+    expect(parseMonetization('{"goldDiceCount":"999"}').goldDiceCount).toBe(
+      999,
+    );
+    expect(parseMonetization('{"goldDiceCount":null}').goldDiceCount).toBe(0);
+    expect(parseMonetization('{"goldDiceCount":1.9}').goldDiceCount).toBe(1);
+  });
+
+  it("coerces non-boolean ad removal to false", () => {
+    expect(
+      parseMonetization('{"adRemovalPurchased":1}').adRemovalPurchased,
+    ).toBe(false);
+    expect(
+      parseMonetization('{"adRemovalPurchased":"true"}').adRemovalPurchased,
+    ).toBe(false);
   });
 });
 

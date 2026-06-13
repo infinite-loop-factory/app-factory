@@ -55,10 +55,29 @@ export function applyCompletion(
   return { ...progress, completedSeed: seed, streak };
 }
 
+/** Clamp to a non-negative integer; reject NaN/strings/negatives from tampered storage. */
+function safeCount(value: unknown, fallback: number): number {
+  const n = typeof value === "number" ? value : Number(value);
+  return Number.isFinite(n) && n >= 0 ? Math.floor(n) : fallback;
+}
+
+/** Seeds are integers or null; reject any other shape. */
+function safeSeed(value: unknown): number | null {
+  return typeof value === "number" && Number.isFinite(value)
+    ? Math.floor(value)
+    : null;
+}
+
 export function parseDailyProgress(raw: string | null): DailyProgress {
   if (!raw) return EMPTY_DAILY_PROGRESS;
   try {
-    return { ...EMPTY_DAILY_PROGRESS, ...JSON.parse(raw) };
+    const parsed = JSON.parse(raw) as Partial<DailyProgress>;
+    return {
+      attemptSeed: safeSeed(parsed.attemptSeed),
+      attempts: safeCount(parsed.attempts, EMPTY_DAILY_PROGRESS.attempts),
+      completedSeed: safeSeed(parsed.completedSeed),
+      streak: safeCount(parsed.streak, EMPTY_DAILY_PROGRESS.streak),
+    };
   } catch {
     return EMPTY_DAILY_PROGRESS;
   }

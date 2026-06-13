@@ -48,4 +48,24 @@ describe("daily progress", () => {
     expect(parseDailyProgress("not-json")).toEqual(EMPTY_DAILY_PROGRESS);
     expect(parseDailyProgress(null)).toEqual(EMPTY_DAILY_PROGRESS);
   });
+
+  it("reads back a valid persisted state", () => {
+    const state = {
+      attemptSeed: 20260613,
+      attempts: 3,
+      completedSeed: 20260612,
+      streak: 5,
+    };
+    expect(parseDailyProgress(JSON.stringify(state))).toEqual(state);
+  });
+
+  it("sanitizes tampered counts and seeds", () => {
+    const parsed = parseDailyProgress(
+      '{"attemptSeed":"x","attempts":-4,"completedSeed":1.9,"streak":"99"}',
+    );
+    expect(parsed.attemptSeed).toBeNull();
+    expect(parsed.attempts).toBe(0);
+    expect(parsed.completedSeed).toBe(1);
+    expect(parsed.streak).toBe(99);
+  });
 });
