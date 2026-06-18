@@ -44,6 +44,21 @@ export function rollDie(): number {
   return Math.floor(Math.random() * 6) + 1;
 }
 
+/** The player whose turn comes after `player` (two-player toggle). */
+export function otherPlayer(player: 0 | 1): 0 | 1 {
+  return player === 0 ? 1 : 0;
+}
+
+/** A token reaching or passing the final cell has won. */
+export function isWinningCell(cell: number): boolean {
+  return cell >= TOTAL_CELLS;
+}
+
+/** Status message for a win, from the human player's point of view. */
+export function winMessage(player: 0 | 1): string {
+  return player === 0 ? "play.youWin" : "play.opponentWin";
+}
+
 export function sleep(ms: number): Promise<void> {
   return new Promise((r) => setTimeout(r, ms));
 }
