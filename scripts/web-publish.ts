@@ -160,8 +160,8 @@ function buildStaticPages() {
     const appOutputDir = path.join(distDir, packageName);
 
     try {
-      // Use pnpm exec expo to ensure we use the local expo version
-      execSync(`pnpm exec expo export --output-dir ${appOutputDir}`, {
+      // Use bunx expo to ensure we use the local expo version
+      execSync(`bunx expo export --output-dir ${appOutputDir}`, {
         stdio: "inherit",
         cwd: appPath,
         env: { ...process.env, BUILD_FLAG: "true" },

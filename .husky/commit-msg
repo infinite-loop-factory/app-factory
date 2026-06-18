@@ -1,1 +1,1 @@
-mise exec -- pnpm commitlint --edit "$1"
+mise exec -- bunx commitlint --edit "$1"

@@ -19,7 +19,20 @@ export function makePromptOutput(
         injectSteps: [{ ephemeralMessage: additionalContext }],
       });
     case "claude":
-      return JSON.stringify({ additionalContext });
+    case "commandcode":
+      // Official Claude Code docs (code.claude.com/docs/en/hooks) specify
+      // `hookSpecificOutput.additionalContext` — the top-level field is kept
+      // for back-compat with older builds that read it.
+      // commandcode (Command Code, commandcode.ai) mirrors the Claude hook
+      // dialect, but has NO prompt event (only PreToolUse/PostToolUse/Stop),
+      // so this branch never fires for it — kept for Vendor exhaustiveness.
+      return JSON.stringify({
+        additionalContext,
+        hookSpecificOutput: {
+          hookEventName: "UserPromptSubmit",
+          additionalContext,
+        },
+      });
     case "codex":
       return JSON.stringify({
         hookSpecificOutput: {
@@ -51,6 +64,10 @@ export function makePromptOutput(
     case "kiro":
       // Kiro CLI adds stdout directly to the agent context for prompt hooks.
       return additionalContext;
+    case "kimi":
+      // Kimi Code CLI: a blockable hook that exits 0 has its stdout appended to
+      // the model context (kimi.com/code/docs hooks). Plain text injects directly.
+      return additionalContext;
     case "pi":
       // pi (Earendil) reads this via the in-process bridge in
       // `.pi/extensions/oma/index.ts`, which lifts `additionalContext` into the
@@ -71,6 +88,7 @@ export function makeBlockOutput(vendor: Vendor, reason: string): string {
   switch (vendor) {
     case "claude":
     case "codex":
+    case "commandcode":
     case "cursor":
     case "kiro":
     case "qwen":
@@ -91,6 +109,20 @@ export function makeBlockOutput(vendor: Vendor, reason: string): string {
       // Grok Stop hooks are generally advisory. Emit block decision + rich
       // stderr message (persistent-mode already prints the reason to stderr).
       return JSON.stringify({ decision: "block", reason });
+    case "kimi":
+      // Kimi documents two blocking mechanisms: exit 2 + stderr, and a JSON
+      // `hookSpecificOutput.permissionDecision: "deny"` response. The oma hook
+      // router always exits 0 and writes the dialect to stdout, so we emit the
+      // JSON form. We also include the Claude-style `{decision:"block"}` keys so
+      // whichever shape Kimi's Stop handler honours, persistent-mode re-enters.
+      return JSON.stringify({
+        decision: "block",
+        reason,
+        hookSpecificOutput: {
+          permissionDecision: "deny",
+          permissionDecisionReason: reason,
+        },
+      });
   }
 }
 
@@ -100,9 +132,14 @@ export function makePreToolOutput(
 ): string {
   switch (vendor) {
     case "gemini":
+      // Official BeforeTool rewrite contract (geminicli.com/docs/hooks/reference):
+      // `hookSpecificOutput.tool_input` merges with and overrides the model's
+      // arguments. There is no "rewrite" decision value (only allow/deny).
       return JSON.stringify({
-        decision: "rewrite",
-        tool_input: updatedInput,
+        hookSpecificOutput: {
+          hookEventName: "BeforeTool",
+          tool_input: updatedInput,
+        },
       });
     case "cursor":
       return JSON.stringify({
@@ -114,11 +151,17 @@ export function makePreToolOutput(
       });
     case "claude":
     case "codex":
+    case "commandcode":
+    case "kimi":
     case "kiro":
     case "qwen":
+      // Codex requires `permissionDecision: "allow"` alongside `updatedInput`
+      // ("other updatedInput shapes are reported as errors" —
+      // developers.openai.com/codex/hooks); Claude documents the same shape.
       return JSON.stringify({
         hookSpecificOutput: {
           hookEventName: "PreToolUse",
+          permissionDecision: "allow",
           updatedInput,
         },
       });

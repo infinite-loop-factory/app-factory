@@ -1,0 +1,11 @@
+diff --git a/dist/runtime/components.js b/dist/runtime/components.js
+--- a/dist/runtime/components.js
++++ b/dist/runtime/components.js
+@@ -5,7 +5,6 @@
+ const api_1 = require("./api");
+ (0, api_1.cssInterop)(react_native_1.Image, { className: "style" });
+ (0, api_1.cssInterop)(react_native_1.Pressable, { className: "style" });
+-(0, api_1.cssInterop)(react_native_1.SafeAreaView, { className: "style" });
+ (0, api_1.cssInterop)(react_native_1.Switch, { className: "style" });
+ (0, api_1.cssInterop)(react_native_1.Text, { className: "style" });
+ (0, api_1.cssInterop)(react_native_1.TouchableHighlight, { className: "style" });

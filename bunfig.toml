@@ -1,0 +1,4 @@
+# React Native / Metro need a flat npm-style node_modules layout
+# (same reason the pnpm setup used node-linker=hoisted).
+[install]
+linker = "hoisted"

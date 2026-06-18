@@ -7,7 +7,6 @@
   "scripts": {
     "android": "DARK_MODE=media expo run:android",
     "clean": "git clean -xdf .cache .expo .turbo android ios node_modules",
-    "preinstall": "pnpm install --filter apps/dog-walk",
     "ios": "DARK_MODE=media expo run:ios",
     "lint": "biome lint --fix --unsafe --no-errors-on-unmatched",
     "start": "expo start",

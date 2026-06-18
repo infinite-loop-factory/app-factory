@@ -1,1 +1,1 @@
-mise exec -- pnpm exec tsx scripts/pre-push.ts
+mise exec -- bunx tsx scripts/pre-push.ts

@@ -30,7 +30,7 @@
     "ignoreUnknown": false,
     "includes": [
       "**",
-      "!**/.agents/hooks",
+      "!**/.agents",
       "!**/.claude/hooks",
       "!**/.codex/hooks",
       "!**/.cursor/hooks",
@@ -77,6 +77,15 @@
         "noUnusedFunctionParameters": "error",
         "noUnusedImports": "error",
         "noUnusedVariables": "error",
+        "useExhaustiveDependencies": {
+          "level": "error",
+          "options": {
+            "hooks": [
+              { "name": "useLatest", "stableResult": true },
+              { "name": "useMemoizedFn", "stableResult": true }
+            ]
+          }
+        },
         "useHookAtTopLevel": "error"
       },
       "nursery": {

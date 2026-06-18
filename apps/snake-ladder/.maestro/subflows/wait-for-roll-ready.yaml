@@ -1,0 +1,6 @@
+appId: com.infinite-loop-factory.snake-ladder
+---
+- extendedWaitUntil:
+    visible:
+      id: game-roll-button
+    timeout: 90000

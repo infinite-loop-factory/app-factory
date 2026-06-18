@@ -23,11 +23,7 @@
     "noEmit": true,
 
     "forceConsistentCasingInFileNames": true,
-    "typeRoots": [
-      "./node_modules",
-      "./node_modules/.pnpm/**/node_modules/@types",
-      "./node_modules/.pnpm/**/node_modules/*"
-    ]
+    "typeRoots": ["./node_modules"]
   },
   "exclude": ["node_modules", "build", "dist", ".next", ".expo"]
 }

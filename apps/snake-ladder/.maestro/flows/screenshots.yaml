@@ -1,0 +1,35 @@
+appId: com.infinite-loop-factory.snake-ladder
+---
+- launchApp:
+    clearState: true
+- runFlow: ../subflows/connect-metro.yaml
+- runFlow: ../subflows/dismiss-onboarding.yaml
+- takeScreenshot: epic-01-home
+- runFlow:
+    file: ../subflows/tap-id.yaml
+    env:
+      ID: home-settings-button
+- extendedWaitUntil:
+    visible:
+      id: settings-screen
+    timeout: 30000
+- takeScreenshot: epic-04-settings
+- runFlow:
+    file: ../subflows/tap-id.yaml
+    env:
+      ID: settings-back-button
+- extendedWaitUntil:
+    visible:
+      id: home-play-button
+    timeout: 30000
+- runFlow: ../subflows/start-game.yaml
+- takeScreenshot: epic-02-setup
+- runFlow: ../subflows/complete-setup.yaml
+- runFlow: ../subflows/wait-for-roll-ready.yaml
+- assertVisible:
+    id: gold-dice-panel
+- runFlow:
+    file: ../subflows/tap-id.yaml
+    env:
+      ID: gold-dice-toggle
+- takeScreenshot: epic-03-play-gold-dice

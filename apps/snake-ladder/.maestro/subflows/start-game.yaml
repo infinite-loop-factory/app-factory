@@ -1,0 +1,12 @@
+appId: com.infinite-loop-factory.snake-ladder
+---
+- extendedWaitUntil:
+    visible:
+      id: home-play-button
+    timeout: 45000
+- tapOn:
+    id: home-play-button
+- extendedWaitUntil:
+    visible:
+      id: qubit-config-0
+    timeout: 45000
