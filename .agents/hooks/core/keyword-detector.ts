@@ -284,6 +284,7 @@ function inferVendorFromScriptPath(): Vendor | null {
   if (path.includes(`${join(".codex", "hooks")}`)) return "codex";
   if (path.includes(`${join(".grok", "hooks")}`)) return "grok";
   if (path.includes(`${join(".kiro", "hooks")}`)) return "kiro";
+  if (path.includes(`${join(".kimi-code", "hooks")}`)) return "kimi";
   return null;
 }
 

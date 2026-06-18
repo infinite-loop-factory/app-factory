@@ -1,27 +1,28 @@
 {
   "$schema": "./hook-variant.schema.json",
-  "vendor": "claude",
-  "hookDir": ".claude/hooks",
-  "settingsFile": ".claude/settings.json",
-  "projectDirEnv": "CLAUDE_PROJECT_DIR",
+  "vendor": "kimi",
+  "hookDir": ".agents/hooks/core",
+  "settingsFile": ".kimi-code/config.toml",
+  "projectDirEnv": null,
   "runtime": "bun",
+  "homeOnly": true,
   "events": {
     "UserPromptSubmit": [
       {
         "hook": "keyword-detector.ts",
-        "timeout": 2
+        "timeout": 5
       },
       {
         "hook": "state-boundary.ts",
-        "timeout": 4
+        "timeout": 5
       },
       {
         "hook": "skill-injector.ts",
-        "timeout": 2
+        "timeout": 3
       },
       {
         "hook": "serena-primer.ts",
-        "timeout": 2
+        "timeout": 3
       }
     ],
     "PreToolUse": {
@@ -32,19 +33,6 @@
     "Stop": {
       "hook": "persistent-mode.ts",
       "timeout": 5
-    }
-  },
-  "statusLine": {
-    "hook": "hud.ts"
-  },
-  "extra": {
-    "permissions": {
-      "allow": [
-        "Bash(bun run:*)",
-        "Bash(bunx tsx:*)",
-        "Bash(git add:*)",
-        "mcp__serena__*"
-      ]
     }
   }
 }

@@ -62,6 +62,7 @@ async function main(): Promise<void> {
     });
 
     if (tableCount === 0 && puaCount === 0) {
+      console.log(`[flatten-tables] ${path}: nothing to change`);
       continue;
     }
 
@@ -69,6 +70,7 @@ async function main(): Promise<void> {
     const parts: string[] = [];
     if (tableCount) parts.push(`${tableCount} table(s) flattened`);
     if (puaCount) parts.push(`${puaCount} PUA char(s) stripped`);
+    console.log(`[flatten-tables] ${path}: ${parts.join(", ")}`);
   }
 }
 

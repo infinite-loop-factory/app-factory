@@ -99,6 +99,13 @@ export function getHookDir(vendor: Vendor): string {
       return ".grok/hooks";
     case "kiro":
       return ".kiro/hooks";
+    case "kimi":
+      // Kimi Code CLI is global-only (homeOnly variant): its runtime hooks live
+      // in ~/.kimi-code/hooks, so there is no project hook dir to join with
+      // projectDir. Mirror antigravity and point at the SSOT core dir (where
+      // filter-test-output.sh lives in a project install); otherwise the
+      // rewrite no-ops gracefully (test-filter is advisory).
+      return ".agents/hooks/core";
     case "pi":
       // pi keeps the core scripts (and filter-test-output.sh) inside the
       // bridge's directory extension, not a dedicated hooks dir.
