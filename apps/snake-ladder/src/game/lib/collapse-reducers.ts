@@ -4,7 +4,7 @@
  */
 import type { GameState, LogEntry, PlacedQubit } from "@/game/types";
 
-import { computeDisplacement } from "@/game/lib/game-helpers";
+import { computeDisplacement, otherPlayer } from "@/game/lib/game-helpers";
 
 type AddLog = (type: LogEntry["type"], message: string) => void;
 
@@ -41,7 +41,7 @@ export function applyInterferenceCollapse(
     }),
     isCollapsing: false,
     isMoving: false,
-    currentPlayer: (args.player === 0 ? 1 : 0) as 0 | 1,
+    currentPlayer: otherPlayer(args.player),
     message: "play.interference",
   };
 }

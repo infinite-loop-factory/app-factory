@@ -35,11 +35,14 @@ import {
   computeDisplacement,
   createInitialState,
   INITIAL_SETUP,
+  isWinningCell,
   linkEntangledQubits,
   nextQubitId,
+  otherPlayer,
   resetQubitIdCounter,
   rollDie,
   sleep,
+  winMessage,
 } from "@/game/lib/game-helpers";
 import { runQuantumCircuit } from "@/game/lib/local-sim";
 import {
@@ -263,13 +266,13 @@ export function useGameController(options: GameControllerOptions = {}) {
 
       await slideToCell(player, targetCell, newCell, outcome === "ladder");
 
-      const gameOver = newCell >= TOTAL_CELLS;
+      const gameOver = isWinningCell(newCell);
       if (gameOver) {
         emitFeedback({ type: player === 0 ? "win" : "lose" });
       }
       let finishMessage: string | null = null;
       if (gameOver) {
-        finishMessage = player === 0 ? "play.youWin" : "play.opponentWin";
+        finishMessage = winMessage(player);
       }
       setState((prev) => ({
         ...prev,
@@ -277,9 +280,7 @@ export function useGameController(options: GameControllerOptions = {}) {
         isMoving: false,
         gameOver,
         phase: gameOver ? ("gameover" as GamePhase) : prev.phase,
-        currentPlayer: gameOver
-          ? prev.currentPlayer
-          : ((player === 0 ? 1 : 0) as 0 | 1),
+        currentPlayer: gameOver ? prev.currentPlayer : otherPlayer(player),
         message: finishMessage ?? prev.message,
       }));
       collapsingRef.current = false;
@@ -361,12 +362,12 @@ export function useGameController(options: GameControllerOptions = {}) {
           isRolling: false,
           isMoving: false,
           message: "play.overshootDone",
-          currentPlayer: (player === 0 ? 1 : 0) as 0 | 1,
+          currentPlayer: otherPlayer(player),
         }));
         return;
       }
 
-      const opponent = (player === 0 ? 1 : 0) as 0 | 1;
+      const opponent = otherPlayer(player);
       const opponentCell = snap.positions[opponent];
       let tunneled = false;
 
@@ -396,7 +397,7 @@ export function useGameController(options: GameControllerOptions = {}) {
       await sleep(DICE_SETTLE_PAUSE_MS);
       await hopAlongBoard(player, currentCell, targetCell);
 
-      if (targetCell >= TOTAL_CELLS) {
+      if (isWinningCell(targetCell)) {
         emitFeedback({ type: player === 0 ? "win" : "lose" });
         setState((prev) => ({
           ...prev,
@@ -404,7 +405,7 @@ export function useGameController(options: GameControllerOptions = {}) {
           isMoving: false,
           gameOver: true,
           phase: "gameover",
-          message: player === 0 ? "play.youWin" : "play.opponentWin",
+          message: winMessage(player),
         }));
         return;
       }
@@ -438,13 +439,13 @@ export function useGameController(options: GameControllerOptions = {}) {
           collapsedQubit.destinationCell ??
           computeDisplacement(outcome, targetCell, addLog);
         await slideToCell(player, targetCell, newCell, outcome === "ladder");
-        const gameOver = newCell >= TOTAL_CELLS;
+        const gameOver = isWinningCell(newCell);
         if (gameOver) {
           emitFeedback({ type: player === 0 ? "win" : "lose" });
         }
         const endMessage = (() => {
           if (gameOver) {
-            return player === 0 ? "play.youWin" : "play.opponentWin";
+            return winMessage(player);
           }
           return outcome === "ladder" ? "play.ladder" : "play.snake";
         })();
@@ -454,9 +455,7 @@ export function useGameController(options: GameControllerOptions = {}) {
           isMoving: false,
           gameOver,
           phase: gameOver ? "gameover" : prev.phase,
-          currentPlayer: gameOver
-            ? prev.currentPlayer
-            : ((player === 0 ? 1 : 0) as 0 | 1),
+          currentPlayer: gameOver ? prev.currentPlayer : otherPlayer(player),
           message: endMessage,
         }));
         return;
@@ -467,7 +466,7 @@ export function useGameController(options: GameControllerOptions = {}) {
         isRolling: false,
         isMoving: false,
         message: "play.moved",
-        currentPlayer: (player === 0 ? 1 : 0) as 0 | 1,
+        currentPlayer: otherPlayer(player),
       }));
     },
     [addLog, emitFeedback, hopAlongBoard, runCollapse, slideToCell],
