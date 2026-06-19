@@ -29,6 +29,8 @@ type RollButtonProps = {
   testID?: string;
   /** Gentle attention pulse while waiting for the player's input. */
   pulsing?: boolean;
+  /** Label color — pass a dark ink for bright faces (e.g. gold) to keep AA contrast. */
+  textColor?: string;
 };
 
 export function RollButton({
@@ -39,7 +41,13 @@ export function RollButton({
   accessibilityLabel,
   testID,
   pulsing = false,
+  textColor = "#fff",
 }: RollButtonProps) {
+  // Light text reads against a dark drop shadow; dark ink reads embossed.
+  const isDarkInk = textColor !== "#fff";
+  const textShadowColor = isDarkInk
+    ? "rgba(255,255,255,0.3)"
+    : "rgba(0,0,0,0.35)";
   const pulse = useSharedValue(1);
   const sink = useSharedValue(0);
   const charge = useSharedValue(0);
@@ -135,12 +143,13 @@ export function RollButton({
               }}
             >
               <Text
+                maxFontSizeMultiplier={1.3}
                 style={{
-                  color: "#fff",
+                  color: textColor,
                   fontSize: 21,
                   fontFamily: GAME_FONT,
                   letterSpacing: 1.5,
-                  textShadowColor: "rgba(0,0,0,0.35)",
+                  textShadowColor,
                   textShadowOffset: { width: 0, height: 2 },
                   textShadowRadius: 2,
                 }}

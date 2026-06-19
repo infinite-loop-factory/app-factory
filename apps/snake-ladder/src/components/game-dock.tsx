@@ -5,6 +5,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { ImageBackground, Pressable, View } from "react-native";
 import { DiceDisplay } from "@/components/dice-display";
 import { RollButton } from "@/components/roll-button";
+import { ON_GOLD_INK } from "@/game/constants/theme";
 import i18n from "@/i18n";
 import { darkenColor } from "@/lib/color";
 
@@ -118,6 +119,7 @@ export function GameDock({
               label={i18n.t("game.playAgain")}
               onPress={onPlayAgain}
               pulsing
+              textColor={ON_GOLD_INK}
             />
           </View>
         ) : null}
