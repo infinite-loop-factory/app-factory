@@ -4,7 +4,7 @@ import { Link } from "expo-router";
 import { Alert, Pressable, Switch, Text, TextInput, View } from "react-native";
 import { ScreenShell } from "@/components/ui/screen-shell";
 import { WoodPanel } from "@/components/ui/wood-panel";
-import { GAME_FONT } from "@/game/constants/theme";
+import { GAME_FONT, ON_GOLD_INK } from "@/game/constants/theme";
 import { useAppSettings } from "@/hooks/use-app-settings";
 import { useMonetization } from "@/hooks/use-monetization";
 import i18n from "@/i18n";
@@ -277,7 +277,7 @@ export default function SettingsScreen() {
             >
               <Text
                 style={{
-                  color: "#3a2c10",
+                  color: ON_GOLD_INK,
                   fontFamily: GAME_FONT,
                   fontSize: 13,
                 }}

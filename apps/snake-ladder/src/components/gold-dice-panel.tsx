@@ -1,6 +1,7 @@
 import type { CraftPalette } from "@/game/constants/palettes";
 
 import { Pressable, Text, View } from "react-native";
+import { ON_GOLD_INK } from "@/game/constants/theme";
 import i18n from "@/i18n";
 
 type GoldDicePanelProps = {
@@ -59,7 +60,7 @@ export function GoldDicePanel({
         >
           <Text
             style={{
-              color: enabled ? "#3a2a06" : palette.creamMuted,
+              color: enabled ? ON_GOLD_INK : palette.creamMuted,
               fontWeight: "900",
               fontSize: 12,
               letterSpacing: 0.5,
@@ -92,7 +93,7 @@ export function GoldDicePanel({
             >
               <Text
                 style={{
-                  color: desiredFace === face ? "#3a2a06" : palette.cream,
+                  color: desiredFace === face ? ON_GOLD_INK : palette.cream,
                   fontWeight: "900",
                   fontSize: 16,
                 }}
