@@ -166,8 +166,10 @@
     - 발견 이슈 #5(Maps API 키 부재, 위 Phase 0 참조): 키 발급·`prebuild --clean` 리빌드 후 실지도 렌더.
     - 발견 이슈(cut 7 라이트 place 딥링크 홈 리셋): `GluestackUIProvider` 의 `setColorScheme(mode)` 피드백 루프가 근본 원인 → `colorScheme !== mode` 가드로 수정. 9 컷 체인 flow 연속 결정화는 Maestro 2.5.1 의 settle/retry primitive 부재로 잔여(재실행 시 채움).
     - 상세 `e2e/test-plan.md` §C / §발견 이슈 #3·#5, `e2e/README.md` §지도 의존 flow 참조.
-- [ ] 지오펜싱 알림 — 위시리스트 장소 근처 푸시 (`expo-task-manager` + `expo-notifications`)
-  - Phase 2 carry-over — 별도 PR
+- [x] 지오펜싱 알림 — 위시리스트 장소 근처 푸시 (`expo-task-manager` + `expo-notifications`)
+  - Phase 2 carry-over PR 에서 구현 (`feature/sip-note-geofencing`). 위시리스트 추가 시 권한 체인(foreground→background→notification) 온보딩 → 반경 500m 진입 시 로컬 알림 → 탭 시 `/place/[id]` 딥링크.
+  - 코어 선구현: `services/location/geofence.ts`(syncGeofences/placesToRegions), `geofence-task.ts`(defineTask + Enter 핸들러 + 30분 쿨다운), `services/notification/`(핸들러/채널/권한/표시 + deep-link). iOS 20-region cap(근접순). 설정화면(on-off·반경)·per-place radius 는 Phase 4.
+  - 런타임 검증은 EAS dev build 필요(Expo Go 불가). 자동 게이트(tsc/test/lint) 통과.
 
 ---
 
@@ -198,9 +200,10 @@
 - [ ] 알림 서비스 (`src/services/notification/`) — 권한 요청, 채널 셋업, 스케줄 헬퍼
 - [ ] 로컬 알림: **주간 기록 리마인더** (기본 금요일 저녁, 시간 설정 가능)
 - [ ] 로컬 알림: **주간 리포트** (일요일 아침, "이번 주 N잔 / 평균 점수 X.X")
-- [ ] 백그라운드 **지오펜싱** (`expo-location` + `expo-task-manager`)
+- [x] 백그라운드 **지오펜싱** (`expo-location` + `expo-task-manager`)
   - 위시리스트 장소 반경 진입 감지 → 로컬 알림
   - 알림 탭 → 장소 상세 딥링크
+  - 코어는 Phase 2 carry-over PR 에서 선구현. Phase 4 에서는 설정화면(on/off·반경 슬라이더)·per-place radius·`geofence_triggers`(마이그레이션 v4)만 추가.
 - [ ] **뱃지 시스템**
   - 스키마 (마이그레이션 v4): `badges` (id, type, title, description, condition, unlocked_at)
   - 조건 평가기 (기록 저장/장소 추가/페어링 등록 훅에서 트리거)
