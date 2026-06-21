@@ -32,7 +32,9 @@ export interface RouteRecommendation {
 // ── Constants ────────────────────────────────────────────────
 
 const MINS_PER_STOP = 2;
-const MINS_PER_TRANSFER = 3;
+/** Baseline transfer time used when no real walking distance is available.
+ *  Screens replace this with the KRIC walking estimate via use-route-transfer-minutes. */
+export const MINS_PER_TRANSFER = 3;
 /** Transfer penalty so fewer-transfers beats fewer-hops in Dijkstra */
 const TRANSFER_PENALTY = 1000;
 

@@ -28,7 +28,7 @@ import { GradientBackground } from "@/components/ui/gradient-background";
 import { StationLineBadges } from "@/components/ui/station-line-badges";
 import { useRouteSearch } from "@/context/route-search-context";
 import { useStations } from "@/data/station-store";
-import { useStationTimetable } from "@/hooks/use-station-timetable";
+import { useRouteEta } from "@/hooks/use-route-eta";
 import i18n from "@/i18n";
 import { findNearestStations, formatDistance } from "@/utils/geo";
 import { recommendRoutes } from "@/utils/route-calculator";
@@ -229,15 +229,16 @@ export default function GoNowTab() {
                 </View>
               </View>
               <View className="gap-4">
-                {recommendations.map((rec, index) => (
-                  <RouteCard
-                    destination={endStation!}
-                    index={index}
-                    key={`rec-${rec.departure.station.id}-${rec.departure.station.line}`}
-                    onPress={handleTapRoute}
-                    rec={rec}
-                  />
-                ))}
+                {endStation &&
+                  recommendations.map((rec, index) => (
+                    <RouteCard
+                      destination={endStation}
+                      index={index}
+                      key={`rec-${rec.departure.station.id}-${rec.departure.station.line}`}
+                      onPress={handleTapRoute}
+                      rec={rec}
+                    />
+                  ))}
               </View>
             </View>
           )}
@@ -317,13 +318,6 @@ function GpsStatusBar({
 const RANK_LABELS = ["최적", "추천", "추천", "추천"] as const;
 const RANK_COLORS = ["#2563EB", "#64748B", "#64748B", "#64748B"] as const;
 
-function formatArrivalTime(totalMinutes: number): string {
-  const arrival = new Date(Date.now() + totalMinutes * 60_000);
-  const h = arrival.getHours().toString().padStart(2, "0");
-  const m = arrival.getMinutes().toString().padStart(2, "0");
-  return `${h}:${m}`;
-}
-
 function RouteCard({
   rec,
   index,
@@ -337,25 +331,17 @@ function RouteCard({
 }) {
   const isBest = index === 0;
 
-  const { departures } = useStationTimetable(
-    rec.departure.station.name,
-    rec.departure.station.line,
-    5,
-    destination.name,
-  );
-
-  // First train we can actually board after walking to the station
-  const catchable = departures.find(
-    (d) => d.minutesFromNow >= rec.walkingMinutes,
-  );
-  const waitMinutes =
-    catchable != null ? catchable.minutesFromNow - rec.walkingMinutes : null;
-  const realTotalMinutes =
-    waitMinutes != null
-      ? rec.walkingMinutes + waitMinutes + rec.route.totalTime
-      : null;
-  const displayTotal = realTotalMinutes ?? rec.totalMinutes;
-  const arrivalTime = formatArrivalTime(displayTotal);
+  const {
+    waitMinutes,
+    totalMinutes: displayTotal,
+    arrivalTime,
+  } = useRouteEta({
+    startStationName: rec.departure.station.name,
+    startStationLine: rec.departure.station.line,
+    destinationStationName: destination.name,
+    travelMinutes: rec.route.totalTime,
+    walkingMinutes: rec.walkingMinutes,
+  });
 
   return (
     <Pressable onPress={() => onPress(rec)}>

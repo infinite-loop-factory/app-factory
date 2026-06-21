@@ -60,6 +60,9 @@
     "transferTo": "transfer",
     "direction": "direction",
     "viaFailed": "Direct route found (could not find path through via station)",
+    "includesWait": "incl. {{minutes}} min wait",
+    "routeNotFound": "No route found",
+    "routeNotFoundDescription": "There is no connected route between the selected stations. Some lines may not be synced yet.",
     "newSearch": "New route search"
   },
   "favorites": {

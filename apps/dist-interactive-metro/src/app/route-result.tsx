@@ -34,6 +34,7 @@ import {
   removeFavoriteRoute,
 } from "@/data/favorites";
 import { useStations } from "@/data/station-store";
+import { useRealtimeRouteEta } from "@/hooks/use-realtime-route-eta";
 import { useStationTimetable } from "@/hooks/use-station-timetable";
 import { useTransferInfo } from "@/hooks/use-transfer-info";
 import i18n from "@/i18n";
@@ -44,6 +45,119 @@ if (
   UIManager.setLayoutAnimationEnabledExperimental
 ) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
+}
+
+interface SegmentGroup {
+  start: RouteSegment;
+  intermediates: RouteSegment[];
+  end: RouteSegment;
+  isTransfer: boolean;
+}
+
+/** Collapse the flat segment list into departure → transfer → end chunks. */
+function buildGroupedSegments(routeInfo: RouteInfo | null): SegmentGroup[] {
+  if (!routeInfo || routeInfo.segments.length === 0) return [];
+
+  const chunks: SegmentGroup[] = [];
+  let currentIntermediates: RouteSegment[] = [];
+  let lastKeyPoint = routeInfo.segments[0];
+  if (!lastKeyPoint) return [];
+
+  for (let i = 1; i < routeInfo.segments.length; i++) {
+    const seg = routeInfo.segments[i];
+    if (!seg) continue;
+    const isLast = i === routeInfo.segments.length - 1;
+
+    if (seg.isTransfer || isLast) {
+      chunks.push({
+        start: lastKeyPoint,
+        intermediates: currentIntermediates,
+        end: seg,
+        isTransfer: !!lastKeyPoint.isTransfer,
+      });
+      lastKeyPoint = seg;
+      currentIntermediates = [];
+    } else {
+      currentIntermediates.push(seg);
+    }
+  }
+
+  return chunks;
+}
+
+function RouteNotFound({
+  onBack,
+  topInset,
+}: {
+  onBack: () => void;
+  topInset: number;
+}) {
+  return (
+    <GradientBackground>
+      <View className="flex-1 px-4" style={{ paddingTop: topInset }}>
+        <View className="mb-6 flex-row items-center gap-3">
+          <Pressable
+            accessibilityLabel={i18n.t("common.back")}
+            className="h-10 w-10 items-center justify-center rounded-full bg-white active:bg-gray-50 dark:bg-gray-800"
+            onPress={onBack}
+            style={{
+              shadowColor: "#000",
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.1,
+              shadowRadius: 4,
+              elevation: 3,
+            }}
+          >
+            <ArrowLeft color="#111827" size={20} />
+          </Pressable>
+          <Text className="font-bold text-2xl text-gray-900 dark:text-gray-100">
+            {i18n.t("routeResult.title")}
+          </Text>
+        </View>
+        <View className="flex-1 items-center justify-center">
+          <View className="mb-6 h-20 w-20 items-center justify-center rounded-full bg-red-50 dark:bg-red-900/20">
+            <MapPin color="#EF4444" size={40} />
+          </View>
+          <Text className="mb-2 text-center font-bold text-gray-900 text-xl dark:text-gray-100">
+            {i18n.t("routeResult.routeNotFound")}
+          </Text>
+          <Text className="mb-8 text-center text-gray-500">
+            {i18n.t("routeResult.routeNotFoundDescription")}
+          </Text>
+          <Pressable
+            className="w-full items-center rounded-2xl bg-blue-600 py-4 shadow-lg active:bg-blue-700"
+            onPress={onBack}
+            style={{
+              shadowColor: "#2563EB",
+              shadowOffset: { width: 0, height: 4 },
+              shadowOpacity: 0.3,
+              shadowRadius: 8,
+              elevation: 4,
+            }}
+          >
+            <Text className="font-bold text-lg text-white">
+              {i18n.t("routeResult.newSearch")}
+            </Text>
+          </Pressable>
+        </View>
+      </View>
+    </GradientBackground>
+  );
+}
+
+function WaitNote({
+  hasRealtimeWait,
+  waitMinutes,
+}: {
+  hasRealtimeWait: boolean;
+  waitMinutes: number | null;
+}) {
+  if (!hasRealtimeWait || waitMinutes == null) return null;
+  return (
+    <Text className="mt-0.5 text-[10px] text-gray-400">
+      {i18n.t("routeResult.includesWait", { minutes: waitMinutes })}
+    </Text>
+  );
 }
 
 interface TransferInfoBadgeProps {
@@ -353,52 +467,21 @@ export default function RouteResultScreen() {
     }
   }, [startStation, endStation, viaStation, isFavorite]);
 
-  const eta = useMemo(() => {
-    if (!routeInfo) return "";
-    const now = new Date();
-    now.setMinutes(now.getMinutes() + routeInfo.totalTime);
-    return now.toLocaleTimeString("ko-KR", {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-    });
-  }, [routeInfo]);
-
   // Group segments into logical chunks (departure -> transfer -> end)
-  const groupedSegments = useMemo(() => {
-    if (!routeInfo || routeInfo.segments.length === 0) return [];
+  const groupedSegments = useMemo(
+    () => buildGroupedSegments(routeInfo),
+    [routeInfo],
+  );
 
-    const chunks: Array<{
-      start: RouteSegment;
-      intermediates: RouteSegment[];
-      end: RouteSegment;
-      isTransfer: boolean;
-    }> = [];
-    let currentIntermediates: RouteSegment[] = [];
-    let lastKeyPoint = routeInfo.segments[0];
-    if (!lastKeyPoint) return [];
-
-    for (let i = 1; i < routeInfo.segments.length; i++) {
-      const seg = routeInfo.segments[i];
-      if (!seg) continue;
-      const isLast = i === routeInfo.segments.length - 1;
-
-      if (seg.isTransfer || isLast) {
-        chunks.push({
-          start: lastKeyPoint,
-          intermediates: currentIntermediates,
-          end: seg,
-          isTransfer: !!lastKeyPoint.isTransfer,
-        });
-        lastKeyPoint = seg;
-        currentIntermediates = [];
-      } else {
-        currentIntermediates.push(seg);
-      }
-    }
-
-    return chunks;
-  }, [routeInfo]);
+  // Realistic ETA: next boardable train (toward the first leg's destination)
+  // plus subway travel with real interchange walking time; falls back to
+  // travel-only when offline.
+  const routeEta = useRealtimeRouteEta({
+    routeInfo,
+    startStation,
+    firstLegDestinationName:
+      groupedSegments[0]?.end.station.name ?? endStation?.name ?? "",
+  });
 
   if (!(routeInfo && startStation && endStation)) {
     return (
@@ -418,57 +501,7 @@ export default function RouteResultScreen() {
 
   if (routeInfo.totalTime === 0) {
     return (
-      <GradientBackground>
-        <View className="flex-1 px-4" style={{ paddingTop: insets.top + 16 }}>
-          <View className="mb-6 flex-row items-center gap-3">
-            <Pressable
-              accessibilityLabel={i18n.t("common.back")}
-              className="h-10 w-10 items-center justify-center rounded-full bg-white active:bg-gray-50 dark:bg-gray-800"
-              onPress={() => router.back()}
-              style={{
-                shadowColor: "#000",
-                shadowOffset: { width: 0, height: 2 },
-                shadowOpacity: 0.1,
-                shadowRadius: 4,
-                elevation: 3,
-              }}
-            >
-              <ArrowLeft color="#111827" size={20} />
-            </Pressable>
-            <Text className="font-bold text-2xl text-gray-900 dark:text-gray-100">
-              {i18n.t("routeResult.title")}
-            </Text>
-          </View>
-          <View className="flex-1 items-center justify-center">
-            <View className="mb-6 h-20 w-20 items-center justify-center rounded-full bg-red-50 dark:bg-red-900/20">
-              <MapPin color="#EF4444" size={40} />
-            </View>
-            <Text className="mb-2 text-center font-bold text-gray-900 text-xl dark:text-gray-100">
-              {i18n.t("routeResult.routeNotFound", {
-                defaultValue: "경로를 찾을 수 없습니다",
-              })}
-            </Text>
-            <Text className="mb-8 text-center text-gray-500">
-              선택하신 두 역 사이의 환승 정보나 연결된 경로가 없습니다.
-            </Text>
-            <Pressable
-              className="w-full items-center rounded-2xl bg-blue-600 py-4 shadow-lg active:bg-blue-700"
-              onPress={() => router.back()}
-              style={{
-                shadowColor: "#2563EB",
-                shadowOffset: { width: 0, height: 4 },
-                shadowOpacity: 0.3,
-                shadowRadius: 8,
-                elevation: 4,
-              }}
-            >
-              <Text className="font-bold text-lg text-white">
-                {i18n.t("routeResult.newSearch")}
-              </Text>
-            </Pressable>
-          </View>
-        </View>
-      </GradientBackground>
+      <RouteNotFound onBack={() => router.back()} topInset={insets.top + 16} />
     );
   }
 
@@ -575,17 +608,21 @@ export default function RouteResultScreen() {
                   <Clock color="#2563EB" size={20} />
                 </View>
                 <Text className="mt-2 font-bold text-gray-900 text-lg dark:text-gray-100">
-                  {routeInfo.totalTime}
+                  {routeEta.totalMinutes}
                   <Text className="font-normal text-gray-500 text-sm">
                     {i18n.t("routeResult.minutes")}
                   </Text>
                 </Text>
                 <Text className="mt-0.5 font-medium text-blue-600 text-xs">
-                  {eta}{" "}
+                  {routeEta.arrivalTime}{" "}
                   {i18n.t("stationSelect.arrivalShort", {
                     defaultValue: "도착",
                   })}
                 </Text>
+                <WaitNote
+                  hasRealtimeWait={routeEta.hasRealtimeWait}
+                  waitMinutes={routeEta.waitMinutes}
+                />
               </View>
               <View className="items-center">
                 <View className="h-10 w-10 items-center justify-center rounded-full bg-green-50">
