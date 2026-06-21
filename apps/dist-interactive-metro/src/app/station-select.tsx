@@ -17,7 +17,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { StationLineBadges } from "@/components/ui/station-line-badges";
 import { useRouteSearch } from "@/context/route-search-context";
 import { addRecentStation, getRecentStations } from "@/data/recent-stations";
-import { useStations } from "@/data/station-store";
+import { useAvailableLineNames, useStations } from "@/data/station-store";
 import { lines } from "@/data/stations";
 import i18n from "@/i18n";
 import { matchChoseong } from "@/utils/hangul";
@@ -31,6 +31,11 @@ export default function StationSelectScreen() {
 
   const { setStartStation, setViaStation, setEndStation } = useRouteSearch();
   const stations = useStations();
+  const availableLineNames = useAvailableLineNames();
+  const availableLines = useMemo(
+    () => lines.filter((line) => availableLineNames.has(line.name)),
+    [availableLineNames],
+  );
 
   const [keyword, setKeyword] = useState("");
   const [recentStations, setRecentStations] = useState<Station[]>([]);
@@ -217,7 +222,7 @@ export default function StationSelectScreen() {
                 {i18n.t("stationSelect.allLines")}
               </Text>
             </Pressable>
-            {lines.map((line) => (
+            {availableLines.map((line) => (
               <Pressable
                 className="rounded-xl px-5 py-2.5"
                 key={line.id}
