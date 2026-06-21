@@ -80,7 +80,7 @@ npx expo prebuild --platform android
 npx expo run:android --device Pixel_8
 ```
 
-소요: 첫 빌드 ≈ 5–15 분. 이후엔 metro 만 띄우면 됨 (`pnpm --filter sip-note start`).
+소요: 첫 빌드 ≈ 5–15 분. 이후엔 metro 만 띄우면 됨 (`bun run --filter "@infinite-loop-factory/sip-note" start`).
 
 > `android/` 디렉토리는 CNG (Continuous Native Generation) 정책에 따라 *commit 하지 않는다* — `.gitignore` 에 추가 후 prebuild 시마다 재생성. (ADR 추가 시 cross-link)
 
@@ -123,7 +123,7 @@ ADR-0011 의 *Phase 마무리 의무 캡처 9 컷* 은 본 e2e 의 별도 flow (
 |---|---|
 | `Could not find any device` | AVD 부팅 안 됨 → `~/Library/Android/sdk/emulator/emulator -avd Pixel_8 &` |
 | `App com.infiniteloopfactory.sipnote not found` | dev client 미설치 → `npx expo run:android` 한 번 실행 |
-| `Element not found: ...` | metro 가 stale → `pnpm --filter sip-note start --clear` |
+| `Element not found: ...` | metro 가 stale → `bun run --filter "@infinite-loop-factory/sip-note" start --clear` |
 | 한글 텍스트 매치 실패 | i18n 키 변경 / 줄바꿈 / 공백. `maestro studio` 로 hierarchy 확인 |
 | 첫 launch timeout | `timeout: 30000` (30s) 도 부족하면 시뮬레이터 cold start. AVD 미리 부팅 |
 | **지도 진입 시 앱이 런처로 튕김** | playstore AVD 의 GMS 가 `MapsDynamite` 모듈을 미프로비저닝 (`MapView` native init crash, test-plan §발견 이슈 #3). `adb logcat \| grep MapsCoreDynamite` 로 확인. **해결**: `google_apis`(비-playstore) 이미지 기반 AVD 사용 — 모듈이 GMS 에 번들됨. 아래 §지도 의존 flow 참조 |

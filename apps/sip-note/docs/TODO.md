@@ -12,7 +12,7 @@
   에 키로 등록 후 `i18n.t()` 로 사용. 컴포넌트 내 한글/영문 하드코딩 금지
   (a11y 라벨 / 빈 상태 / 헤더 카피 / 단위 표기 모두 포함)
 - 커밋 컨벤션: `feat | fix | refactor | docs | test | chore | style | perf` (`.claude/rules/commit.md`)
-- 런타임 명령: pnpm + mise (`pnpm install`, `mise run …`) (`.claude/rules/dev-workflow.md`)
+- 런타임 명령: bun + mise (`bun install`, `mise run …`) (`.claude/rules/dev-workflow.md`)
 - 비즈니스 로직 분리: `feature → service → repository → db` (`.claude/rules/backend.md`)
 
 ---

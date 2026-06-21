@@ -387,7 +387,7 @@ Bundle 이 어떤 형태로 오든 다음을 강제한다.
 | Claude Code 응답 언어 | 한국어 (`.claude/rules/i18n-guide.md`) |
 | 코드 / 토큰명 / 커밋 메시지 | 영문 |
 | 커밋 컨벤션 | `feat / fix / refactor / docs / test / chore / style / perf` |
-| 런타임 | pnpm + mise (`pnpm install`, `mise run …`) |
+| 런타임 | bun + mise (`bun install`, `mise run …`) |
 
 ### 핵심 룰 한 줄 요약
 
