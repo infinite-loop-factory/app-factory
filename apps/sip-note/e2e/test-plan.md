@@ -67,6 +67,7 @@
 | B3 | `theme-light.yaml` ✅ | `dev?theme=light` 오버라이드 → 라이트 테마 → 홈 DayDivider caption brand-strong 스왑 (Phase 1 §6 / ADR-0011 9 컷 #9) | High | ✅ PASS (2026-05-30 10회차, Pixel_8, 스크린샷 `theme-light.png` 실제 라이트 렌더). adb uimode 불가(`_layout` 강제-다크) → dev 딥링크 오버라이드로 대체. **발견 이슈 #4** 해소 후 동작 |
 | B4 | `db-fresh-install.yaml` | clearState 후 SQLite 마이그레이션 v1→v3 자동 실행 + 첫 launch 정상 부팅 | Medium | ⏸ flow yaml 미작성 — 검증 보류 |
 | B5 | `error-not-found.yaml` ✅ | 존재하지 않는 noteId 딥링크 → "기록을 찾을 수 없어요" 노출 (place 케이스는 후속 PR) | Low | ✅ PASS (2026-05-10, Pixel_8, 5/5 step + 스크린샷 `e2e/.maestro-output/error-not-found.png`). stack 라우트 deep link (`sip-note:///note/<id>`) 은 환경 이슈 #2 와 무관하게 정상 |
+| B6 | `geofence-deeplink.yaml` | 지오펜싱 알림 도착지 딥링크 — `place/e2e-wish`(위시리스트 ♥ + 빈 상태) + `place/e2e-bar`(바/펍 + 노트 3). ⚠️ `openLink` 는 expo-router 링킹이라 도착지 렌더만 검증 — `deep-link.ts` 알림 리스너 자체와 실 geofence enter 는 범위 밖(유닛 테스트 + EAS dev build 수동 검증 몫). 지도 비의존(기본 Pixel_8 가능) | Medium | ⏳ flow 작성 완료 — 실행 검증 대기 |
 
 ## C. ADR-0011 Phase 2 Re-verification 9 컷
 
@@ -116,6 +117,7 @@
 - 위시리스트 추가 (지도 long-press / 검색) (Phase 3)
 - 데이터 내보내기 (Phase 3)
 - 알림 / 지오펜싱 / 뱃지 / 통계 / 설정 (Phase 4)
+  - *단, 지오펜싱 알림 딥링크 착지(`/place/[id]`)는 B6 `geofence-deeplink.yaml` 로 커버. 실 geofence enter 트리거(GPS mock 의존)·`deep-link.ts` 알림 리스너 실행은 여전히 범위 밖.*
 
 Phase 3·4 코드 진입 시 본 문서의 §A·§B 에 flow 추가.
 

@@ -19,6 +19,7 @@ e2e/
 │   ├── place-summary-sheet.yaml         — A7 시트 peek/half + 상세 보기
 │   ├── place-detail.yaml                — A8 장소 상세 + 위시리스트 + addNote
 │   ├── theme-light.yaml                 — B3 라이트 테마 오버라이드
+│   ├── geofence-deeplink.yaml           — B6 지오펜싱 알림 딥링크 착지
 │   ├── checkpoint-phase-2-screenshots.yaml — C ADR-0011 9 컷
 │   └── helpers/
 │       ├── seed-tasting-fixtures.yaml   — dev 딥링크 결정적 시딩 (subflow)
