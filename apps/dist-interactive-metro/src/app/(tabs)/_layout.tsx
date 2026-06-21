@@ -1,16 +1,28 @@
 import { Tabs } from "expo-router";
 import { useColorScheme } from "nativewind";
+import { useEffect, useState } from "react";
 import { TabBarIcon } from "@/components/navigation/tab-bar-icon";
 import { COLORS } from "@/constants/colors";
+import { type DefaultHomeTab, getDefaultHomeTab } from "@/data/app-preferences";
 import i18n from "@/i18n";
 
 const isDev = typeof __DEV__ !== "undefined" && __DEV__;
 
 export default function TabLayout() {
   const { colorScheme } = useColorScheme();
+  // initialRouteName must be known at first mount, so wait for the stored
+  // preference before rendering the navigator.
+  const [initialTab, setInitialTab] = useState<DefaultHomeTab | null>(null);
+
+  useEffect(() => {
+    getDefaultHomeTab().then(setInitialTab);
+  }, []);
+
+  if (!initialTab) return null;
 
   return (
     <Tabs
+      initialRouteName={initialTab}
       screenOptions={{
         tabBarActiveTintColor: COLORS[colorScheme ?? "light"].tint,
         headerShown: false,

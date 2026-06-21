@@ -84,8 +84,6 @@
     "description": "Upcoming trains for your favorite routes",
     "emptyTitle": "No favorites yet",
     "emptyDescription": "Add routes to favorites and see upcoming trains here",
-    "comingSoonTitle": "Notifications coming soon",
-    "comingSoonDescription": "Real-time transit info, favorite route delay alerts and more will be available in future updates.",
     "addFavorites": "Add a favorite route",
     "nextTrains": "Next trains",
     "from": "From"
@@ -102,9 +100,6 @@
   },
   "settings": {
     "description": "Customize and personalize your app",
-    "notificationSettings": "Notification settings",
-    "notificationComingSoon": "Coming soon",
-    "comingSoon": "Available in future updates",
     "defaultHome": "Default home screen",
     "defaultHomeDescription": "Choose which screen appears when you open the app",
     "appInfo": "App info",
@@ -120,9 +115,6 @@
     "language": "Language",
     "languageKo": "한국어",
     "languageEn": "English"
-  },
-  "notificationSettings": {
-    "placeholder": "Notification settings screen. (Not yet implemented)"
   },
   "notFound": {
     "title": "Screen not found",
