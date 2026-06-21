@@ -304,6 +304,13 @@ async function syncCoordinates(
   return coords;
 }
 
+/** Parse a station's line-position order; invalid values sort to the end so a
+ *  malformed API row never scrambles the line sequence (and thus graph edges). */
+function parseStinConsOrdr(value: string): number {
+  const n = Number(value);
+  return Number.isFinite(n) ? n : Number.MAX_SAFE_INTEGER;
+}
+
 function itemsToStation(
   items: SubwayRouteInfoItem[],
   target: SyncTarget,
@@ -311,7 +318,10 @@ function itemsToStation(
 ): Station[] {
   return items
     .slice()
-    .sort((a, b) => Number(a.stinConsOrdr) - Number(b.stinConsOrdr))
+    .sort(
+      (a, b) =>
+        parseStinConsOrdr(a.stinConsOrdr) - parseStinConsOrdr(b.stinConsOrdr),
+    )
     .map((item) => {
       const s: Station = {
         id: buildStationId(item.railOprIsttCd, item.stinCd),

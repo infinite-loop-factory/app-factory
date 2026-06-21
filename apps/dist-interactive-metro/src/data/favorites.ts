@@ -13,11 +13,12 @@ export async function getFavoriteRoutes(): Promise<FavoriteRoute[]> {
   }
 }
 
+/** Returns true when the favorite was persisted (or already existed). */
 export async function addFavoriteRoute(route: {
   startStation: Station;
   endStation: Station;
   viaStation?: Station;
-}): Promise<void> {
+}): Promise<boolean> {
   try {
     const favorites = await getFavoriteRoutes();
 
@@ -28,7 +29,7 @@ export async function addFavoriteRoute(route: {
         f.endStation.id === route.endStation.id &&
         f.viaStation?.id === route.viaStation?.id,
     );
-    if (isDuplicate) return;
+    if (isDuplicate) return true;
 
     const newRoute: FavoriteRoute = {
       ...route,
@@ -39,26 +40,31 @@ export async function addFavoriteRoute(route: {
       STORAGE_KEY,
       JSON.stringify([newRoute, ...favorites]),
     );
+    return true;
   } catch {
-    // ignore write errors
+    return false;
   }
 }
 
-export async function removeFavoriteRoute(id: string): Promise<void> {
+/** Returns true when the removal was persisted. */
+export async function removeFavoriteRoute(id: string): Promise<boolean> {
   try {
     const favorites = await getFavoriteRoutes();
     const filtered = favorites.filter((r) => r.id !== id);
     await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(filtered));
+    return true;
   } catch {
-    // ignore
+    return false;
   }
 }
 
-export async function clearAllFavorites(): Promise<void> {
+/** Returns true when the favorites store was cleared. */
+export async function clearAllFavorites(): Promise<boolean> {
   try {
     await AsyncStorage.removeItem(STORAGE_KEY);
+    return true;
   } catch {
-    // ignore
+    return false;
   }
 }
 

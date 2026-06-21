@@ -78,7 +78,8 @@
     "lastSearched": "마지막 검색",
     "today": "오늘",
     "yesterday": "어제",
-    "daysAgo": "{{count}}일 전"
+    "daysAgo": "{{count}}일 전",
+    "saveFailed": "즐겨찾기를 저장하지 못했습니다. 다시 시도해 주세요."
   },
   "notifications": {
     "title": "실시간 출발",

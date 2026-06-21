@@ -16,6 +16,9 @@
 
 const BASE_URL = "https://openapi.kric.go.kr/openapi";
 
+/** Abort a request that hangs longer than this (poor mobile connectivity). */
+const REQUEST_TIMEOUT_MS = 15_000;
+
 function getServiceKey(): string {
   const key = process.env.EXPO_PUBLIC_KRIC_SERVICE_KEY;
   if (!key) throw new Error("EXPO_PUBLIC_KRIC_SERVICE_KEY is not set");
@@ -74,8 +77,10 @@ async function get<T>(
   });
   const url = `${BASE_URL}/${path}?serviceKey=${getServiceKey()}&${qs.toString()}`;
 
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
   try {
-    const res = await fetch(url);
+    const res = await fetch(url, { signal: controller.signal });
 
     if (!res.ok) {
       throw new Error(`KRIC HTTP ${res.status} for ${path}`);
@@ -85,10 +90,17 @@ async function get<T>(
     const json = JSON.parse(text) as KricEnvelope<T>;
     return extractItems<T>(json);
   } catch (err) {
-    const msg = err instanceof Error ? err.message : String(err);
+    let msg: string;
+    if (err instanceof Error && err.name === "AbortError") {
+      msg = `KRIC request timed out after ${REQUEST_TIMEOUT_MS}ms for ${path}`;
+    } else {
+      msg = err instanceof Error ? err.message : String(err);
+    }
     // Mask serviceKey if it leaked into the error message
     const masked = msg.replace(getServiceKey(), "REDACTED");
     throw new Error(masked);
+  } finally {
+    clearTimeout(timeout);
   }
 }
 

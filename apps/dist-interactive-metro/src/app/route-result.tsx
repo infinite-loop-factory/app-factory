@@ -15,6 +15,7 @@ import {
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   ActivityIndicator,
+  Alert,
   LayoutAnimation,
   Platform,
   Pressable,
@@ -468,15 +469,17 @@ export default function RouteResultScreen() {
     );
 
     if (isFavorite && existing) {
-      await removeFavoriteRoute(existing.id);
-      setIsFavorite(false);
+      const ok = await removeFavoriteRoute(existing.id);
+      if (ok) setIsFavorite(false);
+      else Alert.alert(i18n.t("favorites.saveFailed"));
     } else if (!isFavorite) {
-      await addFavoriteRoute({
+      const ok = await addFavoriteRoute({
         startStation,
         endStation,
         ...(viaStation && { viaStation }),
       });
-      setIsFavorite(true);
+      if (ok) setIsFavorite(true);
+      else Alert.alert(i18n.t("favorites.saveFailed"));
     }
   }, [startStation, endStation, viaStation, isFavorite]);
 

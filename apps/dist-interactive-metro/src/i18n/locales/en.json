@@ -78,7 +78,8 @@
     "lastSearched": "Last searched",
     "today": "Today",
     "yesterday": "Yesterday",
-    "daysAgo": "{{count}} days ago"
+    "daysAgo": "{{count}} days ago",
+    "saveFailed": "Couldn't save favorite. Please try again."
   },
   "notifications": {
     "title": "Live Departures",
