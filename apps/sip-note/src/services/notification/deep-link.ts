@@ -7,7 +7,7 @@ import { Platform } from "react-native";
 
 function extractPlaceId(response: NotificationResponse | null): string | null {
   const data = response?.notification.request.content.data;
-  if (!data || data.type !== "geofence") return null;
+  if (data?.type !== "geofence") return null;
   const placeId = data.placeId;
   return typeof placeId === "string" && placeId.length > 0 ? placeId : null;
 }
