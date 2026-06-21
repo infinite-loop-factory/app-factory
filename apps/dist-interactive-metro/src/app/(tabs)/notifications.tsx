@@ -2,7 +2,7 @@ import type { UpcomingDeparture } from "@/hooks/use-station-timetable";
 import type { FavoriteRoute } from "@/types/station";
 
 import { useRouter } from "expo-router";
-import { Bell, Clock, Navigation } from "lucide-react-native";
+import { Clock, Navigation } from "lucide-react-native";
 import { useCallback, useEffect, useState } from "react";
 import {
   ActivityIndicator,
@@ -199,11 +199,11 @@ export default function NotificationsTab() {
             <View className="mb-6">
               <View className="flex-row items-center gap-3">
                 <View className="h-12 w-12 items-center justify-center rounded-2xl bg-blue-500 shadow-sm">
-                  <Bell color="white" fill="white" size={26} />
+                  <Clock color="white" size={26} />
                 </View>
                 <View>
                   <Text className="font-bold text-3xl text-gray-900 dark:text-gray-100">
-                    {i18n.t("tabs.notifications")}
+                    {i18n.t("notifications.title")}
                   </Text>
                   <Text className="text-gray-500 dark:text-gray-400">
                     {i18n.t("notifications.description")}
@@ -219,11 +219,11 @@ export default function NotificationsTab() {
         <View className="flex-1 px-5 py-6">
           <View className="mb-8 flex-row items-center gap-3">
             <View className="h-12 w-12 items-center justify-center rounded-2xl bg-blue-500 shadow-sm">
-              <Bell color="white" fill="white" size={26} />
+              <Clock color="white" size={26} />
             </View>
             <View>
               <Text className="font-bold text-3xl text-gray-900 dark:text-gray-100">
-                {i18n.t("tabs.notifications")}
+                {i18n.t("notifications.title")}
               </Text>
               <Text className="text-gray-500 dark:text-gray-400">
                 {i18n.t("notifications.description")}
@@ -233,7 +233,7 @@ export default function NotificationsTab() {
           <EmptyState
             actionLabel={i18n.t("notifications.addFavorites")}
             description={i18n.t("notifications.emptyDescription")}
-            icon={<Bell color="#D1D5DB" size={64} />}
+            icon={<Clock color="#D1D5DB" size={64} />}
             onAction={() => router.navigate("/(tabs)/favorites")}
             title={i18n.t("notifications.emptyTitle")}
           />

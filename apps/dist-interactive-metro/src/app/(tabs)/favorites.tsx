@@ -204,7 +204,7 @@ export default function FavoritesTab() {
             actionLabel={i18n.t("favorites.searchRoutes")}
             description={i18n.t("favorites.emptyDescription")}
             icon={<Heart color="#D1D5DB" size={64} />}
-            onAction={() => router.navigate("/(tabs)")}
+            onAction={() => router.navigate("/(tabs)/search")}
             title={i18n.t("favorites.emptyTitle")}
           />
         </View>

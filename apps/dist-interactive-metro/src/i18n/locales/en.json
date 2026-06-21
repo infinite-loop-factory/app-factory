@@ -4,7 +4,7 @@
   "tabs": {
     "goNow": "Go Now",
     "routeGuide": "Route",
-    "notifications": "Notifications",
+    "notifications": "Live",
     "favorites": "Favorites",
     "settings": "Settings"
   },
@@ -81,6 +81,7 @@
     "daysAgo": "{{count}} days ago"
   },
   "notifications": {
+    "title": "Live Departures",
     "description": "Upcoming trains for your favorite routes",
     "emptyTitle": "No favorites yet",
     "emptyDescription": "Add routes to favorites and see upcoming trains here",

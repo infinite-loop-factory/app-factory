@@ -59,7 +59,7 @@ export default function TabLayout() {
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
               color={color}
-              name={focused ? "notifications" : "notifications-outline"}
+              name={focused ? "time" : "time-outline"}
             />
           ),
         }}

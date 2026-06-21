@@ -4,7 +4,7 @@
   "tabs": {
     "goNow": "지금 출발",
     "routeGuide": "경로 검색",
-    "notifications": "알림",
+    "notifications": "실시간",
     "favorites": "즐겨찾기",
     "settings": "설정"
   },
@@ -81,6 +81,7 @@
     "daysAgo": "{{count}}일 전"
   },
   "notifications": {
+    "title": "실시간 출발",
     "description": "즐겨찾기 경로의 다음 출발 열차",
     "emptyTitle": "즐겨찾기가 없습니다",
     "emptyDescription": "즐겨찾기에 경로를 추가하면 다음 열차 정보를 여기서 볼 수 있습니다",
