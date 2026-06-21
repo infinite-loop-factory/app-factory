@@ -63,6 +63,8 @@
     "includesWait": "incl. {{minutes}} min wait",
     "routeNotFound": "No route found",
     "routeNotFoundDescription": "There is no connected route between the selected stations. Some lines may not be synced yet.",
+    "sameStationTitle": "You're already there",
+    "sameStationDescription": "The departure and destination are the same station. Please pick a different destination.",
     "newSearch": "New route search"
   },
   "favorites": {

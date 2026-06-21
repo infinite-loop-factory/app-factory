@@ -2,6 +2,7 @@ import type { RouteInfo, RouteSegment } from "@/utils/route-calculator";
 
 import { useLocalSearchParams, useRouter } from "expo-router";
 import {
+  AlertTriangle,
   ArrowLeft,
   ArrowRight,
   ChevronDown,
@@ -88,10 +89,22 @@ function buildGroupedSegments(routeInfo: RouteInfo | null): SegmentGroup[] {
 function RouteNotFound({
   onBack,
   topInset,
+  sameStation,
 }: {
   onBack: () => void;
   topInset: number;
+  sameStation: boolean;
 }) {
+  const iconBg = sameStation
+    ? "bg-blue-50 dark:bg-blue-900/20"
+    : "bg-red-50 dark:bg-red-900/20";
+  const iconColor = sameStation ? "#2563EB" : "#EF4444";
+  const title = sameStation
+    ? i18n.t("routeResult.sameStationTitle")
+    : i18n.t("routeResult.routeNotFound");
+  const description = sameStation
+    ? i18n.t("routeResult.sameStationDescription")
+    : i18n.t("routeResult.routeNotFoundDescription");
   return (
     <GradientBackground>
       <View className="flex-1 px-4" style={{ paddingTop: topInset }}>
@@ -115,15 +128,15 @@ function RouteNotFound({
           </Text>
         </View>
         <View className="flex-1 items-center justify-center">
-          <View className="mb-6 h-20 w-20 items-center justify-center rounded-full bg-red-50 dark:bg-red-900/20">
-            <MapPin color="#EF4444" size={40} />
+          <View
+            className={`mb-6 h-20 w-20 items-center justify-center rounded-full ${iconBg}`}
+          >
+            <MapPin color={iconColor} size={40} />
           </View>
           <Text className="mb-2 text-center font-bold text-gray-900 text-xl dark:text-gray-100">
-            {i18n.t("routeResult.routeNotFound")}
+            {title}
           </Text>
-          <Text className="mb-8 text-center text-gray-500">
-            {i18n.t("routeResult.routeNotFoundDescription")}
-          </Text>
+          <Text className="mb-8 text-center text-gray-500">{description}</Text>
           <Pressable
             className="w-full items-center rounded-2xl bg-blue-600 py-4 shadow-lg active:bg-blue-700"
             onPress={onBack}
@@ -501,7 +514,11 @@ export default function RouteResultScreen() {
 
   if (routeInfo.totalTime === 0) {
     return (
-      <RouteNotFound onBack={() => router.back()} topInset={insets.top + 16} />
+      <RouteNotFound
+        onBack={() => router.back()}
+        sameStation={routeInfo.sameStation === true}
+        topInset={insets.top + 16}
+      />
     );
   }
 
@@ -541,8 +558,9 @@ export default function RouteResultScreen() {
           <ElevatedCard className="mb-6 p-5">
             {routeInfo.viaFailed && (
               <View className="mb-4 flex-row items-center gap-2 rounded-lg bg-amber-50 p-3">
-                <Text className="text-amber-700 text-xs">
-                  ⚠ {i18n.t("routeResult.viaFailed")}
+                <AlertTriangle color="#B45309" size={16} />
+                <Text className="flex-1 text-amber-700 text-xs">
+                  {i18n.t("routeResult.viaFailed")}
                 </Text>
               </View>
             )}

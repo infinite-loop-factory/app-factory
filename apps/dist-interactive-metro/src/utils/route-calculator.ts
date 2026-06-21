@@ -20,6 +20,10 @@ export interface RouteInfo {
   transfers: number;
   /** True if a 'via' station was requested but a path through it could not be found */
   viaFailed?: boolean;
+  /** True when start and destination are the same physical station */
+  sameStation?: boolean;
+  /** True when no connected path exists between start and destination */
+  notFound?: boolean;
 }
 
 export interface RouteRecommendation {
@@ -309,6 +313,17 @@ export function calculateRoute(
   end: Station,
   via?: Station,
 ): RouteInfo {
+  // Start and destination are the same physical station — nothing to route.
+  if (start.name === end.name) {
+    return {
+      segments: [{ station: start }],
+      totalStations: 1,
+      totalTime: 0,
+      transfers: 0,
+      sameStation: true,
+    };
+  }
+
   const stations = getAllStations();
   const graph = buildGraph(stations);
   const stationMap = getStationMap(stations);
@@ -349,6 +364,7 @@ export function calculateRoute(
       totalStations: 2,
       totalTime: 0,
       transfers: 0,
+      notFound: true,
     };
   }
   return buildRouteInfo(result, stationMap);
