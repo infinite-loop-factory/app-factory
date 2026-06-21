@@ -331,6 +331,16 @@ export default function RouteGuideTab() {
               </View>
             </ElevatedCard>
 
+            <Pressable
+              className="mt-3 flex-row items-center justify-center gap-2 rounded-2xl border border-blue-100 bg-blue-50/60 py-3 active:bg-blue-100 dark:border-blue-900/40 dark:bg-blue-900/20"
+              onPress={() => router.push("/departure-select")}
+            >
+              <Navigation color="#2563EB" size={16} />
+              <Text className="font-semibold text-blue-600 text-sm">
+                {i18n.t("homeScreen.useCurrentLocation")}
+              </Text>
+            </Pressable>
+
             <ViaInput
               onClear={() => {
                 setViaStation(null);

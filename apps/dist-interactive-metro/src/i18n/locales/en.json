@@ -19,7 +19,9 @@
     "addVia": "Add via",
     "search": "Search route",
     "searchHint": "Select departure and arrival stations to search for routes",
-    "searchAndExtras": "Search & more"
+    "searchAndExtras": "Search & more",
+    "swap": "Swap departure/arrival",
+    "useCurrentLocation": "Find departure by current location"
   },
   "stationSelect": {
     "departureTitle": "Select departure",
