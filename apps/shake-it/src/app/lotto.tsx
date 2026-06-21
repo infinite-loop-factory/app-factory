@@ -12,6 +12,9 @@ import {
   getDisplayNumbers,
   LOTTO_DISCLAIMER,
   LOTTO_GAME_COUNTS,
+  LOTTO_MAX_FIXED_COUNT,
+  LOTTO_MAX_NUMBER,
+  LOTTO_MIN_NUMBER,
   LOTTO_PICK_COUNT,
   type LottoDisplayMode,
   type LottoGame,
@@ -44,6 +47,11 @@ const DISPLAY_MODE_OPTIONS: {
   { label: "추첨순", value: "drawOrder" },
   { label: "오름차순", value: "sorted" },
 ];
+
+const FIXED_NUMBER_GRID = Array.from(
+  { length: LOTTO_MAX_NUMBER - LOTTO_MIN_NUMBER + 1 },
+  (_, index) => LOTTO_MIN_NUMBER + index,
+);
 
 function isNativeRuntime() {
   return process.env.EXPO_OS !== "web";
@@ -457,9 +465,243 @@ function LottoGameCountPickerModal({
   );
 }
 
+function LottoFixedNumberSettingRow({
+  disabled,
+  fixedNumbers,
+  onPress,
+}: {
+  disabled: boolean;
+  fixedNumbers: number[];
+  onPress: () => void;
+}) {
+  const hasFixedNumbers = fixedNumbers.length > 0;
+  const previewLabel = hasFixedNumbers
+    ? fixedNumbers.map(formatLottoNumber).join(", ")
+    : "선택 안 함";
+
+  return (
+    <Pressable
+      accessibilityLabel={
+        hasFixedNumbers
+          ? `고정 번호 선택, 현재 ${fixedNumbers.join(", ")}`
+          : "고정 번호 선택, 현재 선택 안 함"
+      }
+      accessibilityRole="button"
+      accessibilityState={{ disabled }}
+      className="h-12 flex-row items-center justify-between rounded-lg border px-4"
+      disabled={disabled}
+      onPress={onPress}
+      style={{
+        backgroundColor: C.white,
+        borderColor: C.border,
+        borderCurve: "continuous",
+        opacity: disabled ? 0.58 : 1,
+      }}
+    >
+      <View className="flex-row items-center gap-3">
+        <View
+          className="h-8 w-8 items-center justify-center rounded-full"
+          style={{ backgroundColor: C.surface }}
+        >
+          <MaterialIcons color={C.primary} name="push-pin" size={18} />
+        </View>
+        <Text
+          className="font-extrabold text-base"
+          style={{ color: C.textMain }}
+        >
+          고정 번호
+        </Text>
+      </View>
+
+      <View className="flex-1 flex-row items-center justify-end gap-2">
+        <Text
+          className="flex-shrink font-extrabold text-base"
+          numberOfLines={1}
+          style={{ color: hasFixedNumbers ? C.primary : C.textSub }}
+        >
+          {previewLabel}
+        </Text>
+        <MaterialIcons color={C.textSub} name="keyboard-arrow-down" size={22} />
+      </View>
+    </Pressable>
+  );
+}
+
+function LottoFixedNumberPickerModal({
+  selectedNumbers,
+  visible,
+  onClose,
+  onConfirm,
+}: {
+  selectedNumbers: number[];
+  visible: boolean;
+  onClose: () => void;
+  onConfirm: (numbers: number[]) => void;
+}) {
+  const [draft, setDraft] = useState<number[]>(selectedNumbers);
+
+  useEffect(() => {
+    if (visible) {
+      setDraft(selectedNumbers);
+    }
+  }, [selectedNumbers, visible]);
+
+  const isFull = draft.length >= LOTTO_MAX_FIXED_COUNT;
+
+  const toggleNumber = useCallback((number: number) => {
+    setDraft((current) => {
+      if (current.includes(number)) {
+        return current.filter((value) => value !== number);
+      }
+
+      if (current.length >= LOTTO_MAX_FIXED_COUNT) {
+        return current;
+      }
+
+      return [...current, number];
+    });
+  }, []);
+
+  return (
+    <Modal
+      animationType="fade"
+      onRequestClose={onClose}
+      transparent
+      visible={visible}
+    >
+      <View className="flex-1 justify-end bg-black/45 px-4 pb-6">
+        <Pressable
+          accessibilityLabel="고정 번호 선택 닫기"
+          className="absolute inset-0"
+          onPress={onClose}
+        />
+
+        <View className="max-h-[82%] rounded-[28px] bg-white px-5 pt-5 pb-4">
+          <View className="mb-4 flex-row items-start justify-between gap-4">
+            <View className="flex-1">
+              <Text
+                className="font-extrabold text-[22px]"
+                style={{ color: C.textMain, lineHeight: 30 }}
+              >
+                고정 번호
+              </Text>
+              <Text
+                className="mt-1 font-medium text-sm"
+                style={{ color: C.textSub, lineHeight: 20 }}
+              >
+                항상 포함할 번호를 최대 {LOTTO_MAX_FIXED_COUNT}개까지
+                선택하세요.
+              </Text>
+            </View>
+            <Pressable
+              accessibilityLabel="고정 번호 선택 닫기"
+              className="h-9 w-9 items-center justify-center rounded-full"
+              onPress={onClose}
+              style={{ backgroundColor: C.surface }}
+            >
+              <MaterialIcons color={C.textSub} name="close" size={20} />
+            </Pressable>
+          </View>
+
+          <Text
+            className="mb-3 font-semibold text-sm"
+            style={{ color: C.textSub }}
+          >
+            선택 {draft.length} / {LOTTO_MAX_FIXED_COUNT}
+          </Text>
+
+          <ScrollView
+            className="max-h-[320px]"
+            contentContainerStyle={{ paddingBottom: 4 }}
+            showsVerticalScrollIndicator={false}
+          >
+            <View className="flex-row flex-wrap justify-center gap-2">
+              {FIXED_NUMBER_GRID.map((number) => {
+                const isSelected = draft.includes(number);
+                const isDisabled = !isSelected && isFull;
+
+                return (
+                  <Pressable
+                    accessibilityLabel={`${number}번 ${
+                      isSelected ? "고정 해제" : "고정 선택"
+                    }`}
+                    accessibilityRole="button"
+                    accessibilityState={{
+                      disabled: isDisabled,
+                      selected: isSelected,
+                    }}
+                    className="h-12 w-12 items-center justify-center rounded-full border"
+                    disabled={isDisabled}
+                    key={number}
+                    onPress={() => {
+                      toggleNumber(number);
+                    }}
+                    style={{
+                      backgroundColor: isSelected ? C.primary : C.surface,
+                      borderColor: isSelected ? C.primary : C.border,
+                      borderCurve: "continuous",
+                      opacity: isDisabled ? 0.4 : 1,
+                    }}
+                  >
+                    <Text
+                      className="font-extrabold text-sm"
+                      style={{
+                        color: isSelected ? C.white : C.textMain,
+                        fontVariant: ["tabular-nums"],
+                      }}
+                    >
+                      {formatLottoNumber(number)}
+                    </Text>
+                  </Pressable>
+                );
+              })}
+            </View>
+          </ScrollView>
+
+          <View className="mt-4 flex-row gap-3">
+            <Pressable
+              accessibilityLabel="고정 번호 초기화"
+              accessibilityRole="button"
+              className="h-12 flex-1 items-center justify-center rounded-lg border"
+              onPress={() => {
+                setDraft([]);
+              }}
+              style={{
+                backgroundColor: C.white,
+                borderColor: C.border,
+                borderCurve: "continuous",
+              }}
+            >
+              <Text
+                className="font-extrabold text-sm"
+                style={{ color: C.textSub }}
+              >
+                초기화
+              </Text>
+            </Pressable>
+            <Pressable
+              accessibilityLabel="고정 번호 적용"
+              accessibilityRole="button"
+              className="h-12 flex-1 items-center justify-center rounded-lg"
+              onPress={() => {
+                onConfirm(draft);
+              }}
+              style={{ backgroundColor: C.primary, borderCurve: "continuous" }}
+            >
+              <Text className="font-extrabold text-sm text-white">적용</Text>
+            </Pressable>
+          </View>
+        </View>
+      </View>
+    </Modal>
+  );
+}
+
 export default function LottoScreen() {
   const [drawState, setDrawState] = useState<DrawState>("idle");
   const [selectedGameCount, setSelectedGameCount] = useState<LottoGameCount>(1);
+  const [fixedNumbers, setFixedNumbers] = useState<number[]>([]);
+  const [isFixedPickerVisible, setFixedPickerVisible] = useState(false);
   const [displayMode, setDisplayMode] = useState<LottoDisplayMode>("drawOrder");
   const [games, setGames] = useState<LottoGame[]>([]);
   const [visibleNumbers, setVisibleNumbers] = useState<number[]>([]);
@@ -535,7 +777,11 @@ export default function LottoScreen() {
       return;
     }
 
-    const nextGames = generateLottoGames(selectedGameCount);
+    const nextGames = generateLottoGames(
+      selectedGameCount,
+      Math.random,
+      fixedNumbers,
+    );
     const firstGame = nextGames[0];
 
     if (!firstGame) {
@@ -572,6 +818,7 @@ export default function LottoScreen() {
   }, [
     clearDrawingTimers,
     clearResultModalTimer,
+    fixedNumbers,
     playHaptic,
     scheduleResultModal,
     selectedGameCount,
@@ -659,15 +906,29 @@ export default function LottoScreen() {
         </Text>
       </View>
 
-      <LottoGameCountSettingRow
-        disabled={isDrawing}
-        onPress={() => {
-          setGameCountPickerVisible(true);
-        }}
-        selectedGameCount={selectedGameCount}
-      />
+      <View className="gap-3">
+        <LottoGameCountSettingRow
+          disabled={isDrawing}
+          onPress={() => {
+            setGameCountPickerVisible(true);
+          }}
+          selectedGameCount={selectedGameCount}
+        />
 
-      <LottoDrawingMachine isDrawing={isDrawing} numbers={visibleNumbers} />
+        <LottoFixedNumberSettingRow
+          disabled={isDrawing}
+          fixedNumbers={fixedNumbers}
+          onPress={() => {
+            setFixedPickerVisible(true);
+          }}
+        />
+      </View>
+
+      <LottoDrawingMachine
+        fixedNumbers={fixedNumbers}
+        isDrawing={isDrawing}
+        numbers={visibleNumbers}
+      />
 
       <View className="gap-3">
         <Pressable
@@ -765,6 +1026,18 @@ export default function LottoScreen() {
         }}
         selectedGameCount={selectedGameCount}
         visible={isGameCountPickerVisible && !isDrawing}
+      />
+
+      <LottoFixedNumberPickerModal
+        onClose={() => {
+          setFixedPickerVisible(false);
+        }}
+        onConfirm={(numbers) => {
+          setFixedNumbers(numbers);
+          setFixedPickerVisible(false);
+        }}
+        selectedNumbers={fixedNumbers}
+        visible={isFixedPickerVisible && !isDrawing}
       />
     </ScrollView>
   );

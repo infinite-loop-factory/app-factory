@@ -5,6 +5,7 @@ import {
   generateLottoNumbers,
   getDisplayNumbers,
   LOTTO_DISCLAIMER,
+  LOTTO_MAX_FIXED_COUNT,
   LOTTO_MAX_NUMBER,
   LOTTO_MIN_NUMBER,
   LOTTO_PICK_COUNT,
@@ -121,5 +122,80 @@ describe("formatLottoGames", () => {
         LOTTO_DISCLAIMER,
       ].join("\n"),
     );
+  });
+});
+
+describe("fixed numbers", () => {
+  it("always includes the fixed numbers first in draw order", () => {
+    const numbers = generateLottoNumbers(() => 0, [7, 14, 21]);
+
+    expect(numbers).toHaveLength(LOTTO_PICK_COUNT);
+    expect(numbers.slice(0, 3)).toEqual([7, 14, 21]);
+    expect(new Set(numbers).size).toBe(LOTTO_PICK_COUNT);
+  });
+
+  it("excludes fixed numbers from the random pool", () => {
+    const numbers = generateLottoNumbers(() => 0, [1]);
+
+    expect(numbers).toEqual([1, 2, 3, 4, 5, 6]);
+    expect(numbers.slice(1)).not.toContain(1);
+  });
+
+  it("clamps the fixed count to the maximum and keeps one random slot", () => {
+    const numbers = generateLottoNumbers(() => 0, [1, 2, 3, 4, 5, 6, 7]);
+
+    expect(numbers).toHaveLength(LOTTO_PICK_COUNT);
+    expect(numbers.slice(0, LOTTO_MAX_FIXED_COUNT)).toEqual([1, 2, 3, 4, 5]);
+    expect(new Set(numbers).size).toBe(LOTTO_PICK_COUNT);
+    // Exactly one slot beyond the five fixed numbers is random.
+    expect(numbers).toEqual([1, 2, 3, 4, 5, 6]);
+  });
+
+  it("ignores out-of-range, non-integer, and duplicate fixed inputs", () => {
+    const numbers = generateLottoNumbers(
+      () => 0,
+      [0, 46, 7, 7, 3.5, -1, Number.NaN],
+    );
+
+    expect(numbers).toHaveLength(LOTTO_PICK_COUNT);
+    expect(numbers[0]).toBe(7);
+    expect(numbers.filter((number) => number === 7)).toHaveLength(1);
+    expect(new Set(numbers).size).toBe(LOTTO_PICK_COUNT);
+    expect(
+      numbers.every(
+        (number) => number >= LOTTO_MIN_NUMBER && number <= LOTTO_MAX_NUMBER,
+      ),
+    ).toBe(true);
+  });
+
+  it("includes the fixed numbers in every game of a multi-game draw", () => {
+    const games = generateLottoGames(5, Math.random, [9, 18, 27]);
+
+    expect(games).toHaveLength(5);
+    games.forEach((game, index) => {
+      expect(game.id).toBe(`game-${index + 1}`);
+      expect(game.numbers).toHaveLength(LOTTO_PICK_COUNT);
+      expect(new Set(game.numbers).size).toBe(LOTTO_PICK_COUNT);
+      expect(game.numbers).toEqual(expect.arrayContaining([9, 18, 27]));
+    });
+  });
+
+  it("terminates with a shrunken dedupe space (five fixed numbers)", () => {
+    const games = generateLottoGames(5, Math.random, [1, 2, 3, 4, 5]);
+
+    expect(games).toHaveLength(5);
+    games.forEach((game) => {
+      expect(game.numbers).toHaveLength(LOTTO_PICK_COUNT);
+      expect(new Set(game.numbers).size).toBe(LOTTO_PICK_COUNT);
+      expect(game.numbers).toEqual(expect.arrayContaining([1, 2, 3, 4, 5]));
+    });
+  });
+
+  it("keeps a fixed number in draw order without double counting", () => {
+    const numbers = generateLottoNumbers(() => 0, [40]);
+
+    expect(numbers[0]).toBe(40);
+    expect(numbers.filter((number) => number === 40)).toHaveLength(1);
+    expect(numbers).toHaveLength(LOTTO_PICK_COUNT);
   });
 });
