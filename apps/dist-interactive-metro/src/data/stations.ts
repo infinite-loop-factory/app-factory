@@ -1031,19 +1031,19 @@ export const stations: Station[] = [
     connections: ["6호선"],
   },
   {
+    id: "530",
+    name: "행당",
+    line: "5호선",
+    lineNumber: "5",
+    lineColor: "#996CAC",
+  },
+  {
     id: "529",
     name: "왕십리",
     line: "5호선",
     lineNumber: "5",
     lineColor: "#996CAC",
     connections: ["2호선", "경의중앙선"],
-  },
-  {
-    id: "530",
-    name: "행당",
-    line: "5호선",
-    lineNumber: "5",
-    lineColor: "#996CAC",
   },
   {
     id: "531",

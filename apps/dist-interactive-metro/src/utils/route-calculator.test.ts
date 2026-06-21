@@ -52,6 +52,18 @@ describe("calculateRoute", () => {
     expect(route.segments.some((s) => s.isTransfer)).toBe(true);
   });
 
+  it("orders line 5 as 청구 → 행당 → 왕십리", () => {
+    // Regression: the static bundle once listed 왕십리 before 행당.
+    const route = calculateRoute(
+      station("청구", "5호선"),
+      station("왕십리", "5호선"),
+    );
+    expect(route.transfers).toBe(0);
+    const names = route.segments.map((s) => s.station.name);
+    expect(names).toContain("행당");
+    expect(names.indexOf("행당")).toBeLessThan(names.indexOf("왕십리"));
+  });
+
   it("produces a monotonic travel time as more stops are added", () => {
     const short = calculateRoute(
       station("청량리", "1호선"),
