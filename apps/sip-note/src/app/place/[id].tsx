@@ -12,6 +12,10 @@ import * as tastingRepo from "@/features/tasting/repo/tasting-note-repo";
 import { useThemeColors } from "@/hooks/use-theme-colors";
 import i18n from "@/i18n";
 import { haptic } from "@/lib/haptics";
+import {
+  enableWishlistGeofencing,
+  syncGeofences,
+} from "@/services/location/geofence";
 
 export default function PlaceDetailScreen() {
   const router = useRouter();
@@ -43,6 +47,13 @@ export default function PlaceDetailScreen() {
     haptic.selection();
     const next = await placeRepo.toggleWishlist(place.id);
     setPlace(next);
+    // 위시리스트에 추가하는 순간 지오펜싱 권한을 요청(자연스러운 컨텍스트)하고,
+    // 제거 시에는 권한 요청 없이 모니터링 region 만 갱신한다.
+    if (next.isWishlist) {
+      await enableWishlistGeofencing();
+    } else {
+      await syncGeofences();
+    }
   };
 
   const handleAddNote = () => {

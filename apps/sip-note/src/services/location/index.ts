@@ -33,6 +33,8 @@ export async function getLastKnownPosition(): Promise<LocationCoords | null> {
 }
 
 export {
+  getBackgroundLocationPermissionStatus,
   getLocationPermissionStatus,
+  requestBackgroundLocationPermission,
   requestLocationPermission,
 } from "./permissions";

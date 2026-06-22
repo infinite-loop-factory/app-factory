@@ -1,0 +1,55 @@
+# sip-note — B6 Geofence Notification Deep-Link 착지 검증
+#
+# 지오펜싱 알림 탭 시 services/notification/deep-link.ts 가 router.push(`/place/${placeId}`) 한다.
+# Maestro 는 알림 페이로드를 직접 발화할 수 없으므로, 등가물인 stack 라우트 딥링크
+# `sip-note:///place/<id>` 로 "알림이 가리키는 도착지" 를 검증한다.
+#
+# ⚠️ 한계: openLink 는 expo-router 링킹 경로라 도착지 라우트 렌더만 검증한다.
+#    deep-link.ts 의 알림 응답 리스너 자체는 실행되지 않음(유닛 테스트 + EAS dev build 수동 검증 몫).
+#    실 geofence enter 트리거는 GPS mock 의존이라 Maestro 범위 밖(adb emu geo fix 별도).
+#
+# 지도 비의존 — 기본 Pixel_8 AVD 로 실행 가능(GOOGLE_MAPS_API_KEY 불필요).
+#
+# 검증 항목:
+#   1) place/e2e-wish (위시리스트 장소 = geofence 충실 시나리오)
+#      → 장소명 + 카테고리(레스토랑) + 위시리스트 ♥(제거 라벨) + 빈 상태
+#   2) place/e2e-bar (노트 3건 = 풍부한 도착지)
+#      → 장소명 + 카테고리(바 / 펍) + 노트 리스트(Lagavulin 16)
+#
+# 실행 (cwd = apps/sip-note):
+#   ~/.maestro/bin/maestro test e2e/flows/geofence-deeplink.yaml
+appId: com.infiniteloopfactory.sipnote
+name: geofence deeplink
+---
+- launchApp:
+    clearState: true
+    permissions:
+      all: allow
+- extendedWaitUntil:
+    visible: "테이스팅 피드"
+    timeout: 60000
+- runFlow: helpers/seed-tasting-fixtures.yaml
+
+# --- (1) 위시리스트 장소 알림 도착지: place/e2e-wish (geofence 충실 시나리오) ---
+- openLink:
+    link: "sip-note:///place/e2e-wish"
+- extendedWaitUntil:
+    visible: "Wishlist Tavern"
+    timeout: 15000
+- assertVisible: "레스토랑"
+# 지오펜싱은 위시리스트 장소만 모니터링 → ♥(제거 라벨, accessibilityLabel/content-desc)로 위시리스트 상태 확인
+- assertVisible: "위시리스트에서 제거"
+- assertVisible: "이 장소의 기록이 아직 없어요"
+- takeScreenshot:
+    path: e2e/.maestro-output/geofence-deeplink-wish
+
+# --- (2) 풍부한 도착지 검증: place/e2e-bar (노트 3건) ---
+- openLink:
+    link: "sip-note:///place/e2e-bar"
+- extendedWaitUntil:
+    visible: "Aged Oak Bar"
+    timeout: 15000
+- assertVisible: "바 / 펍"
+- assertVisible: "Lagavulin 16"
+- takeScreenshot:
+    path: e2e/.maestro-output/geofence-deeplink-bar

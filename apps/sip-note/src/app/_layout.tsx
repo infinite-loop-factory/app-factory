@@ -15,6 +15,15 @@ import { LogBox } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
+import { syncGeofences } from "@/services/location/geofence";
+// top-level side-effect: 백그라운드 wakeup 시에도 번들 로드 시점에 지오펜싱 task 를 등록한다.
+import "@/services/location/geofence-task";
+
+import {
+  ensureAndroidChannel,
+  initNotifications,
+} from "@/services/notification";
+import { useNotificationDeepLink } from "@/services/notification/deep-link";
 import "@/i18n";
 
 // LogBox 의 화면 하단 워닝 바가 dev 빌드에서 hit-test 를 흡수해
@@ -38,6 +47,20 @@ export default function RootLayout() {
     didInitTheme.current = true;
     setColorScheme("dark");
   }, [setColorScheme]);
+
+  // 알림 핸들러/채널 초기화(권한 프롬프트 없음) + 보유 권한 기반 지오펜싱 재동기화.
+  // syncGeofences 는 백그라운드 위치 권한 미보유 시 내부적으로 no-op 한다.
+  const didInitNotif = useRef(false);
+  useEffect(() => {
+    if (didInitNotif.current) return;
+    didInitNotif.current = true;
+    initNotifications();
+    void ensureAndroidChannel();
+    void syncGeofences();
+  }, []);
+
+  // 알림 탭 → 장소 상세 딥링크(warm + cold start).
+  useNotificationDeepLink();
   const [loaded] = useFonts({
     "Fraunces-Regular": require("../assets/fonts/Fraunces-Regular.ttf"),
     "Fraunces-SemiBold": require("../assets/fonts/Fraunces-SemiBold.ttf"),
