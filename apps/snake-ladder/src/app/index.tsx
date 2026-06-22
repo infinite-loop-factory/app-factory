@@ -16,7 +16,7 @@ import { OnboardingModal } from "@/components/onboarding-modal";
 import { RollButton } from "@/components/roll-button";
 import { RoomCodeModal } from "@/components/room-code-modal";
 import { WoodPanel } from "@/components/ui/wood-panel";
-import { GAME_FONT } from "@/game/constants/theme";
+import { GAME_FONT, ON_GOLD_INK } from "@/game/constants/theme";
 import { getDailySeed } from "@/game/lib/daily";
 import { useAppSettings } from "@/hooks/use-app-settings";
 import i18n from "@/i18n";
@@ -272,6 +272,7 @@ export default function HomeScreen() {
                       gap: 8,
                       paddingHorizontal: 14,
                       paddingVertical: 9,
+                      minHeight: 46,
                     }}
                     key={item.titleKey}
                     palette={palette}
@@ -284,11 +285,12 @@ export default function HomeScreen() {
                       size={19}
                     />
                     <Text
-                      numberOfLines={1}
+                      numberOfLines={2}
                       style={{
                         color: palette.cream,
                         fontFamily: GAME_FONT,
                         fontSize: 14,
+                        lineHeight: 18,
                         flexShrink: 1,
                       }}
                     >
@@ -308,6 +310,7 @@ export default function HomeScreen() {
                   onPress={() => router.push("/game?mode=daily")}
                   pulsing={!dailyDone}
                   testID="home-daily-button"
+                  textColor={ON_GOLD_INK}
                 />
                 <Text
                   style={{
