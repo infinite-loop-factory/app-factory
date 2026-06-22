@@ -16,7 +16,7 @@ import { Pressable, ScrollView, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ElevatedCard } from "@/components/ui/elevated-card";
 import { GradientBackground } from "@/components/ui/gradient-background";
-import { LineBadge } from "@/components/ui/line-badge";
+import { StationLineBadges } from "@/components/ui/station-line-badges";
 import { useRouteSearch } from "@/context/route-search-context";
 import { clearRecentStations, getRecentStations } from "@/data/recent-stations";
 import i18n from "@/i18n";
@@ -73,7 +73,7 @@ function StationInput({
               <Text className="font-bold text-gray-900 text-lg dark:text-gray-100">
                 {station.name}
               </Text>
-              <LineBadge color={station.lineColor} line={station.line} />
+              <StationLineBadges station={station} />
             </View>
           ) : (
             <Text className="text-gray-400 text-lg">{placeholder}</Text>
@@ -137,7 +137,7 @@ function RecentStationsList({
               <Text className="mb-2 font-bold text-base text-gray-900 dark:text-gray-100">
                 {station.name}
               </Text>
-              <LineBadge color={station.lineColor} line={station.line} />
+              <StationLineBadges size="sm" station={station} />
             </Pressable>
           ))}
         </View>
@@ -194,7 +194,7 @@ function ViaInput({
               <Text className="font-bold text-gray-700 dark:text-gray-200">
                 {viaStation.name}
               </Text>
-              <LineBadge color={viaStation.lineColor} line={viaStation.line} />
+              <StationLineBadges size="sm" station={viaStation} />
             </View>
           ) : (
             <Text className="text-gray-500 text-sm">
@@ -330,6 +330,16 @@ export default function RouteGuideTab() {
                 />
               </View>
             </ElevatedCard>
+
+            <Pressable
+              className="mt-3 flex-row items-center justify-center gap-2 rounded-2xl border border-blue-100 bg-blue-50/60 py-3 active:bg-blue-100 dark:border-blue-900/40 dark:bg-blue-900/20"
+              onPress={() => router.push("/departure-select")}
+            >
+              <Navigation color="#2563EB" size={16} />
+              <Text className="font-semibold text-blue-600 text-sm">
+                {i18n.t("homeScreen.useCurrentLocation")}
+              </Text>
+            </Pressable>
 
             <ViaInput
               onClear={() => {

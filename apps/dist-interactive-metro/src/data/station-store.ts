@@ -13,7 +13,13 @@ import { stations as staticStations } from "./stations";
 
 let _dynamic: Station[] = [];
 let _merged: Station[] = staticStations;
+let _availableLineNames: ReadonlySet<string> =
+  computeAvailableLineNames(_merged);
 const listeners = new Set<() => void>();
+
+function computeAvailableLineNames(stations: Station[]): ReadonlySet<string> {
+  return new Set(stations.map((s) => s.line));
+}
 
 function notify(): void {
   for (const listener of listeners) {
@@ -44,7 +50,20 @@ export function setDynamicStations(stations: Station[]): void {
 
   _dynamic = nextDynamic;
   _merged = [...staticStations, ..._dynamic];
+  _availableLineNames = computeAvailableLineNames(_merged);
   notify();
+}
+
+/** Line names that currently have at least one station loaded (static + dynamic).
+ *  Lines declared in the metro legend but not yet synced from KRIC are absent,
+ *  so callers can avoid advertising routes that cannot be computed offline. */
+export function getAvailableLineNames(): ReadonlySet<string> {
+  return _availableLineNames;
+}
+
+/** Reactive variant of getAvailableLineNames() for React components. */
+export function useAvailableLineNames(): ReadonlySet<string> {
+  return useSyncExternalStore(subscribe, () => _availableLineNames);
 }
 
 /** Return all stations (static + dynamic) using useSyncExternalStore for React. */

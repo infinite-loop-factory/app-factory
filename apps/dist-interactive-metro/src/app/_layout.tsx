@@ -13,6 +13,7 @@ import { useEffect, useRef } from "react";
 import { AppState, View } from "react-native";
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
 import { UpdateBanner } from "@/components/update-banner";
+import { LanguageProvider, useLanguage } from "@/context/language-context";
 import { RouteSearchProvider } from "@/context/route-search-context";
 import {
   SyncStatusProvider,
@@ -117,6 +118,30 @@ function DataRefreshTrigger() {
   return null;
 }
 
+/** Remounts the navigation stack when locale changes, forcing all i18n strings to refresh.
+ *  KricSyncTrigger and DataRefreshTrigger are intentionally outside the key-ed View
+ *  so locale switches don't re-trigger station syncs.
+ */
+function AppContent() {
+  const { locale } = useLanguage();
+  return (
+    <>
+      <KricSyncTrigger />
+      <DataRefreshTrigger />
+      <View key={locale} style={{ flex: 1 }}>
+        <Stack>
+          <Stack.Screen name="(tabs)" options={hiddenHeaderOptions} />
+          <Stack.Screen name="route-result" options={hiddenHeaderOptions} />
+          <Stack.Screen name="departure-select" options={hiddenHeaderOptions} />
+          <Stack.Screen name="station-select" options={hiddenHeaderOptions} />
+          <Stack.Screen name="+not-found" />
+        </Stack>
+        <UpdateBanner />
+      </View>
+    </>
+  );
+}
+
 export default function RootLayout() {
   const { colorScheme } = useColorScheme();
   const [loaded] = useFonts({
@@ -136,33 +161,15 @@ export default function RootLayout() {
   return (
     <GluestackUIProvider mode={colorScheme ?? "light"}>
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-        <RouteSearchProvider>
-          <SyncStatusProvider>
-            <UpdateBannerProvider>
-              <KricSyncTrigger />
-              <DataRefreshTrigger />
-              <View style={{ flex: 1 }}>
-                <Stack>
-                  <Stack.Screen name="(tabs)" options={hiddenHeaderOptions} />
-                  <Stack.Screen
-                    name="route-result"
-                    options={hiddenHeaderOptions}
-                  />
-                  <Stack.Screen
-                    name="departure-select"
-                    options={hiddenHeaderOptions}
-                  />
-                  <Stack.Screen
-                    name="station-select"
-                    options={hiddenHeaderOptions}
-                  />
-                  <Stack.Screen name="+not-found" />
-                </Stack>
-                <UpdateBanner />
-              </View>
-            </UpdateBannerProvider>
-          </SyncStatusProvider>
-        </RouteSearchProvider>
+        <LanguageProvider>
+          <RouteSearchProvider>
+            <SyncStatusProvider>
+              <UpdateBannerProvider>
+                <AppContent />
+              </UpdateBannerProvider>
+            </SyncStatusProvider>
+          </RouteSearchProvider>
+        </LanguageProvider>
       </ThemeProvider>
     </GluestackUIProvider>
   );

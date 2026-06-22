@@ -25,9 +25,10 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ElevatedCard } from "@/components/ui/elevated-card";
 import { GradientBackground } from "@/components/ui/gradient-background";
-import { LineBadge } from "@/components/ui/line-badge";
+import { StationLineBadges } from "@/components/ui/station-line-badges";
 import { useRouteSearch } from "@/context/route-search-context";
 import { useStations } from "@/data/station-store";
+import { useRouteEta } from "@/hooks/use-route-eta";
 import i18n from "@/i18n";
 import { findNearestStations, formatDistance } from "@/utils/geo";
 import { recommendRoutes } from "@/utils/route-calculator";
@@ -185,10 +186,7 @@ export default function GoNowTab() {
                         <Text className="font-bold text-gray-900 text-xl dark:text-gray-100">
                           {endStation.name}
                         </Text>
-                        <LineBadge
-                          color={endStation.lineColor}
-                          line={endStation.line}
-                        />
+                        <StationLineBadges station={endStation} />
                       </View>
                     ) : (
                       <Text className="text-gray-400 text-lg">
@@ -231,14 +229,16 @@ export default function GoNowTab() {
                 </View>
               </View>
               <View className="gap-4">
-                {recommendations.map((rec, index) => (
-                  <RouteCard
-                    index={index}
-                    key={`rec-${rec.departure.station.id}-${rec.departure.station.line}`}
-                    onPress={handleTapRoute}
-                    rec={rec}
-                  />
-                ))}
+                {endStation &&
+                  recommendations.map((rec, index) => (
+                    <RouteCard
+                      destination={endStation}
+                      index={index}
+                      key={`rec-${rec.departure.station.id}-${rec.departure.station.line}`}
+                      onPress={handleTapRoute}
+                      rec={rec}
+                    />
+                  ))}
               </View>
             </View>
           )}
@@ -321,13 +321,28 @@ const RANK_COLORS = ["#2563EB", "#64748B", "#64748B", "#64748B"] as const;
 function RouteCard({
   rec,
   index,
+  destination,
   onPress,
 }: {
   rec: RouteRecommendation;
   index: number;
+  destination: Station;
   onPress: (rec: RouteRecommendation) => void;
 }) {
   const isBest = index === 0;
+
+  const {
+    waitMinutes,
+    totalMinutes: displayTotal,
+    arrivalTime,
+  } = useRouteEta({
+    startStationName: rec.departure.station.name,
+    startStationLine: rec.departure.station.line,
+    destinationStationName: destination.name,
+    travelMinutes: rec.route.totalTime,
+    walkingMinutes: rec.walkingMinutes,
+  });
+
   return (
     <Pressable onPress={() => onPress(rec)}>
       <ElevatedCard
@@ -347,21 +362,36 @@ function RouteCard({
             <Text
               className={`font-bold text-2xl ${isBest ? "text-blue-600" : "text-gray-900 dark:text-gray-100"}`}
             >
-              {rec.totalMinutes}
+              {displayTotal}
               <Text className="font-medium text-gray-500 text-sm">분</Text>
             </Text>
           </View>
-          <ChevronRight color="#D1D5DB" size={20} />
+          <View className="flex-row items-center gap-2">
+            <View className="rounded-lg bg-gray-100 px-2.5 py-1 dark:bg-gray-700">
+              <Text className="font-bold text-gray-700 text-sm dark:text-gray-200">
+                도착 {arrivalTime}
+              </Text>
+            </View>
+            <ChevronRight color="#D1D5DB" size={20} />
+          </View>
         </View>
 
         {/* Breakdown Row */}
-        <View className="mb-5 flex-row items-center gap-3">
+        <View className="mb-5 flex-row flex-wrap items-center gap-2">
           <View className="flex-row items-center gap-1.5 rounded-full bg-gray-50 px-3 py-1.5 dark:bg-gray-900/50">
             <Footprints color="#6B7280" size={14} />
             <Text className="font-medium text-gray-600 text-xs dark:text-gray-400">
               도보 {rec.walkingMinutes}분
             </Text>
           </View>
+          {waitMinutes != null && (
+            <View className="flex-row items-center gap-1.5 rounded-full bg-amber-50 px-3 py-1.5 dark:bg-amber-900/20">
+              <Clock color="#D97706" size={14} />
+              <Text className="font-medium text-amber-700 text-xs dark:text-amber-400">
+                대기 {waitMinutes}분
+              </Text>
+            </View>
+          )}
           <View className="flex-row items-center gap-1.5 rounded-full bg-gray-50 px-3 py-1.5 dark:bg-gray-900/50">
             <Clock color="#6B7280" size={14} />
             <Text className="font-medium text-gray-600 text-xs dark:text-gray-400">
@@ -387,11 +417,7 @@ function RouteCard({
               <Text className="font-bold text-base text-gray-900 dark:text-gray-100">
                 {rec.departure.station.name}
               </Text>
-              <LineBadge
-                color={rec.departure.station.lineColor}
-                line={rec.departure.station.line}
-                size="sm"
-              />
+              <StationLineBadges size="sm" station={rec.departure.station} />
             </View>
             <Text className="font-medium text-blue-600 text-xs">
               현위치에서 {formatDistance(rec.departure.distanceM)}

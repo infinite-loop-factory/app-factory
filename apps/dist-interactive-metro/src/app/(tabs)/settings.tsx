@@ -1,17 +1,45 @@
+import Constants from "expo-constants";
 import {
   ChevronRight,
+  Globe,
+  Home,
   Info,
   Settings as SettingsIcon,
 } from "lucide-react-native";
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Alert, Pressable, ScrollView, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useLanguage } from "@/context/language-context";
+import {
+  DEFAULT_HOME_TABS,
+  type DefaultHomeTab,
+  getDefaultHomeTab,
+  setDefaultHomeTab,
+} from "@/data/app-preferences";
 import { clearAllFavorites } from "@/data/favorites";
 import { clearRecentStations } from "@/data/recent-stations";
 import i18n from "@/i18n";
 
+const TAB_LABEL_KEY: Record<DefaultHomeTab, string> = {
+  index: "tabs.goNow",
+  search: "tabs.routeGuide",
+};
+
+const APP_VERSION = Constants.expoConfig?.version ?? "0.0.0";
+
 export default function SettingsTab() {
   const insets = useSafeAreaInsets();
+  const { locale, setLocale } = useLanguage();
+  const [defaultTab, setDefaultTab] = useState<DefaultHomeTab | null>(null);
+
+  useEffect(() => {
+    getDefaultHomeTab().then(setDefaultTab);
+  }, []);
+
+  const handleSelectDefaultTab = useCallback((tab: DefaultHomeTab) => {
+    setDefaultTab(tab);
+    setDefaultHomeTab(tab);
+  }, []);
 
   const handleClearRecent = useCallback(() => {
     Alert.alert(i18n.t("settings.confirmClearRecent"), "", [
@@ -62,6 +90,73 @@ export default function SettingsTab() {
         </View>
 
         <View className="gap-4">
+          {/* Language */}
+          <SettingsCard
+            icon={<Globe color="#6B7280" size={20} />}
+            title={i18n.t("settings.language")}
+          >
+            <View className="flex-row gap-3 p-4">
+              {(["ko", "en"] as const).map((lang) => {
+                const isActive = locale === lang;
+                const label =
+                  lang === "ko"
+                    ? i18n.t("settings.languageKo")
+                    : i18n.t("settings.languageEn");
+                return (
+                  <Pressable
+                    className={`flex-1 items-center rounded-xl py-2.5 ${
+                      isActive ? "bg-blue-600" : "bg-gray-100 dark:bg-gray-800"
+                    }`}
+                    key={lang}
+                    onPress={() => setLocale(lang)}
+                  >
+                    <Text
+                      className={`font-medium text-base ${
+                        isActive
+                          ? "text-white"
+                          : "text-gray-700 dark:text-gray-300"
+                      }`}
+                    >
+                      {label}
+                    </Text>
+                  </Pressable>
+                );
+              })}
+            </View>
+          </SettingsCard>
+
+          {/* Default home screen */}
+          <SettingsCard
+            description={i18n.t("settings.defaultHomeDescription")}
+            icon={<Home color="#6B7280" size={20} />}
+            title={i18n.t("settings.defaultHome")}
+          >
+            <View className="flex-row gap-3 p-4">
+              {DEFAULT_HOME_TABS.map((tab) => {
+                const isActive = defaultTab === tab;
+                return (
+                  <Pressable
+                    className={`flex-1 items-center rounded-xl py-2.5 ${
+                      isActive ? "bg-blue-600" : "bg-gray-100 dark:bg-gray-800"
+                    }`}
+                    key={tab}
+                    onPress={() => handleSelectDefaultTab(tab)}
+                  >
+                    <Text
+                      className={`font-medium text-base ${
+                        isActive
+                          ? "text-white"
+                          : "text-gray-700 dark:text-gray-300"
+                      }`}
+                    >
+                      {i18n.t(TAB_LABEL_KEY[tab])}
+                    </Text>
+                  </Pressable>
+                );
+              })}
+            </View>
+          </SettingsCard>
+
           {/* App info */}
           <SettingsCard
             icon={<Info color="#6B7280" size={20} />}
@@ -72,7 +167,7 @@ export default function SettingsTab() {
                 {i18n.t("settings.version")}
               </Text>
               <Text className="text-gray-500 text-sm dark:text-gray-500">
-                1.0.0
+                {APP_VERSION}
               </Text>
             </View>
             <View className="flex-row items-center justify-between px-4 py-3">

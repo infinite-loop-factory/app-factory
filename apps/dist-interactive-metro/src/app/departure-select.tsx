@@ -23,7 +23,7 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ElevatedCard } from "@/components/ui/elevated-card";
 import { GradientBackground } from "@/components/ui/gradient-background";
-import { LineBadge } from "@/components/ui/line-badge";
+import { StationLineBadges } from "@/components/ui/station-line-badges";
 import { useRouteSearch } from "@/context/route-search-context";
 import { addRecentStation } from "@/data/recent-stations";
 import { useStations } from "@/data/station-store";
@@ -214,17 +214,10 @@ export default function DepartureSelectScreen() {
                           </View>
 
                           <View className="mb-3 flex-row items-center gap-2">
-                            <LineBadge
-                              color={item.station.lineColor}
-                              line={item.station.line}
+                            <StationLineBadges
                               size="sm"
+                              station={item.station}
                             />
-                            {item.station.connections &&
-                              item.station.connections.length > 0 && (
-                                <Text className="text-gray-400 text-xs">
-                                  환승: {item.station.connections.join(", ")}
-                                </Text>
-                              )}
                           </View>
 
                           <View className="flex-row items-center gap-3">

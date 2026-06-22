@@ -14,10 +14,10 @@ import {
   View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { LineBadge } from "@/components/ui/line-badge";
+import { StationLineBadges } from "@/components/ui/station-line-badges";
 import { useRouteSearch } from "@/context/route-search-context";
 import { addRecentStation, getRecentStations } from "@/data/recent-stations";
-import { useStations } from "@/data/station-store";
+import { useAvailableLineNames, useStations } from "@/data/station-store";
 import { lines } from "@/data/stations";
 import i18n from "@/i18n";
 import { matchChoseong } from "@/utils/hangul";
@@ -31,6 +31,11 @@ export default function StationSelectScreen() {
 
   const { setStartStation, setViaStation, setEndStation } = useRouteSearch();
   const stations = useStations();
+  const availableLineNames = useAvailableLineNames();
+  const availableLines = useMemo(
+    () => lines.filter((line) => availableLineNames.has(line.name)),
+    [availableLineNames],
+  );
 
   const [keyword, setKeyword] = useState("");
   const [recentStations, setRecentStations] = useState<Station[]>([]);
@@ -119,19 +124,7 @@ export default function StationSelectScreen() {
           <Text className="mb-1.5 font-bold text-gray-900 text-lg dark:text-gray-100">
             {item.name}
           </Text>
-          <View className="flex-row items-center gap-2">
-            <LineBadge color={item.lineColor} line={item.line} size="sm" />
-            {item.connections && item.connections.length > 0 && (
-              <View className="flex-row items-center gap-1 rounded-full bg-gray-50 px-2 py-0.5 dark:bg-gray-900">
-                <Text className="font-bold text-[10px] text-gray-400">
-                  TRANSFERS
-                </Text>
-                <Text className="text-gray-600 text-xs dark:text-gray-400">
-                  {item.connections.join(", ")}
-                </Text>
-              </View>
-            )}
-          </View>
+          <StationLineBadges size="sm" station={item} />
         </View>
         <View className="h-8 w-8 items-center justify-center rounded-full bg-gray-50 dark:bg-gray-800">
           {keyword.trim() ? (
@@ -229,7 +222,7 @@ export default function StationSelectScreen() {
                 {i18n.t("stationSelect.allLines")}
               </Text>
             </Pressable>
-            {lines.map((line) => (
+            {availableLines.map((line) => (
               <Pressable
                 className="rounded-xl px-5 py-2.5"
                 key={line.id}

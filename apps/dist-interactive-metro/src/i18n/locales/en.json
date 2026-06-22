@@ -4,7 +4,7 @@
   "tabs": {
     "goNow": "Go Now",
     "routeGuide": "Route",
-    "notifications": "Notifications",
+    "notifications": "Live",
     "favorites": "Favorites",
     "settings": "Settings"
   },
@@ -19,7 +19,9 @@
     "addVia": "Add via",
     "search": "Search route",
     "searchHint": "Select departure and arrival stations to search for routes",
-    "searchAndExtras": "Search & more"
+    "searchAndExtras": "Search & more",
+    "swap": "Swap departure/arrival",
+    "useCurrentLocation": "Find departure by current location"
   },
   "stationSelect": {
     "departureTitle": "Select departure",
@@ -60,6 +62,11 @@
     "transferTo": "transfer",
     "direction": "direction",
     "viaFailed": "Direct route found (could not find path through via station)",
+    "includesWait": "incl. {{minutes}} min wait",
+    "routeNotFound": "No route found",
+    "routeNotFoundDescription": "There is no connected route between the selected stations. Some lines may not be synced yet.",
+    "sameStationTitle": "You're already there",
+    "sameStationDescription": "The departure and destination are the same station. Please pick a different destination.",
     "newSearch": "New route search"
   },
   "favorites": {
@@ -71,14 +78,14 @@
     "lastSearched": "Last searched",
     "today": "Today",
     "yesterday": "Yesterday",
-    "daysAgo": "{{count}} days ago"
+    "daysAgo": "{{count}} days ago",
+    "saveFailed": "Couldn't save favorite. Please try again."
   },
   "notifications": {
+    "title": "Live Departures",
     "description": "Upcoming trains for your favorite routes",
     "emptyTitle": "No favorites yet",
     "emptyDescription": "Add routes to favorites and see upcoming trains here",
-    "comingSoonTitle": "Notifications coming soon",
-    "comingSoonDescription": "Real-time transit info, favorite route delay alerts and more will be available in future updates.",
     "addFavorites": "Add a favorite route",
     "nextTrains": "Next trains",
     "from": "From"
@@ -90,13 +97,11 @@
     "departure": "Departs",
     "direction": "direction",
     "loading": "Loading timetable…",
-    "noUpcoming": "No more trains today"
+    "noUpcoming": "No more trains today",
+    "now": "now"
   },
   "settings": {
     "description": "Customize and personalize your app",
-    "notificationSettings": "Notification settings",
-    "notificationComingSoon": "Coming soon",
-    "comingSoon": "Available in future updates",
     "defaultHome": "Default home screen",
     "defaultHomeDescription": "Choose which screen appears when you open the app",
     "appInfo": "App info",
@@ -108,10 +113,10 @@
     "confirmClearRecent": "Clear recent search history?",
     "confirmClearFavorites": "Delete all favorites?",
     "cancel": "Cancel",
-    "confirm": "Delete"
-  },
-  "notificationSettings": {
-    "placeholder": "Notification settings screen. (Not yet implemented)"
+    "confirm": "Delete",
+    "language": "Language",
+    "languageKo": "한국어",
+    "languageEn": "English"
   },
   "notFound": {
     "title": "Screen not found",

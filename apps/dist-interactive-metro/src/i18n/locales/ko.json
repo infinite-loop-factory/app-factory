@@ -4,6 +4,7 @@
   "tabs": {
     "goNow": "지금 출발",
     "routeGuide": "경로 검색",
+    "notifications": "실시간",
     "favorites": "즐겨찾기",
     "settings": "설정"
   },
@@ -19,7 +20,8 @@
     "search": "경로 검색",
     "searchHint": "출발역과 도착역을 선택하면 경로를 검색할 수 있습니다",
     "searchAndExtras": "검색 및 부가 기능",
-    "swap": "출발/도착 교체"
+    "swap": "출발/도착 교체",
+    "useCurrentLocation": "현재 위치로 출발역 찾기"
   },
   "stationSelect": {
     "departureTitle": "출발역 선택",
@@ -60,6 +62,11 @@
     "transferTo": "(으)로 환승",
     "direction": "방면",
     "viaFailed": "직통 경로를 찾았습니다 (경유지를 거치는 경로를 찾을 수 없음)",
+    "includesWait": "대기 {{minutes}}분 포함",
+    "routeNotFound": "경로를 찾을 수 없습니다",
+    "routeNotFoundDescription": "선택하신 두 역 사이의 연결된 경로가 없습니다. 일부 노선이 아직 동기화되지 않았을 수 있어요.",
+    "sameStationTitle": "이미 도착역이에요",
+    "sameStationDescription": "출발역과 도착역이 같은 역입니다. 다른 도착역을 선택해 주세요.",
     "newSearch": "새로운 경로 검색"
   },
   "favorites": {
@@ -71,10 +78,22 @@
     "lastSearched": "마지막 검색",
     "today": "오늘",
     "yesterday": "어제",
-    "daysAgo": "{{count}}일 전"
+    "daysAgo": "{{count}}일 전",
+    "saveFailed": "즐겨찾기를 저장하지 못했습니다. 다시 시도해 주세요."
+  },
+  "notifications": {
+    "title": "실시간 출발",
+    "description": "즐겨찾기 경로의 다음 출발 열차",
+    "emptyTitle": "즐겨찾기가 없습니다",
+    "emptyDescription": "즐겨찾기에 경로를 추가하면 다음 열차 정보를 여기서 볼 수 있습니다",
+    "addFavorites": "즐겨찾기 추가",
+    "nextTrains": "다음 열차",
+    "from": "출발"
   },
   "settings": {
     "description": "앱 환경을 설정하고 개인화하세요",
+    "defaultHome": "기본 시작 화면",
+    "defaultHomeDescription": "앱을 열었을 때 처음 보이는 화면을 선택하세요",
     "appInfo": "앱 정보",
     "version": "버전",
     "madeBy": "제작",
@@ -84,7 +103,10 @@
     "confirmClearRecent": "최근 검색 기록을 삭제하시겠습니까?",
     "confirmClearFavorites": "즐겨찾기를 모두 삭제하시겠습니까?",
     "cancel": "취소",
-    "confirm": "삭제"
+    "confirm": "삭제",
+    "language": "언어",
+    "languageKo": "한국어",
+    "languageEn": "English"
   },
   "notFound": {
     "title": "화면을 찾을 수 없습니다",
@@ -138,7 +160,8 @@
     "departure": "출발",
     "direction": "방면",
     "loading": "배차 정보 불러오는 중…",
-    "noUpcoming": "오늘 이후 열차 없음"
+    "noUpcoming": "오늘 이후 열차 없음",
+    "now": "지금"
   },
   "transferInfo": {
     "walkingDistance": "{{distance}}m 도보",
