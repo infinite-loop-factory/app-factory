@@ -1,3 +1,4 @@
+import { MaterialIcons } from "@expo/vector-icons";
 import { memo, useEffect, useRef } from "react";
 import { Animated, Easing, Text, View } from "react-native";
 import { LOTTO_MAX_NUMBER, LOTTO_PICK_COUNT } from "@/utils/lotto";
@@ -161,14 +162,22 @@ function getBallColor(number: number) {
   return "#22C55E";
 }
 
-function LottoNumberBall({ number }: { number: number }) {
+function LottoNumberBall({
+  isFixed = false,
+  number,
+}: {
+  isFixed?: boolean;
+  number: number;
+}) {
   return (
     <View
-      accessibilityLabel={`로또 번호 ${number}`}
+      accessibilityLabel={`로또 번호 ${number}${isFixed ? " (고정)" : ""}`}
       className="h-12 w-12 items-center justify-center rounded-full"
       style={{
         backgroundColor: getBallColor(number),
+        borderColor: C.primary,
         borderCurve: "continuous",
+        borderWidth: isFixed ? 3 : 0,
         boxShadow: "0 8px 18px rgba(25, 31, 40, 0.18)",
       }}
     >
@@ -179,6 +188,22 @@ function LottoNumberBall({ number }: { number: number }) {
       >
         {number}
       </Text>
+      {isFixed ? (
+        <View
+          className="absolute items-center justify-center rounded-full"
+          style={{
+            top: -5,
+            right: -5,
+            width: 18,
+            height: 18,
+            backgroundColor: C.primary,
+            borderColor: C.white,
+            borderWidth: 1.5,
+          }}
+        >
+          <MaterialIcons color={C.white} name="push-pin" size={10} />
+        </View>
+      ) : null}
     </View>
   );
 }
@@ -222,9 +247,11 @@ function MachineNumberBall({ number }: { number: number }) {
 }
 
 export const LottoDrawingMachine = memo(function LottoDrawingMachine({
+  fixedNumbers = [],
   isDrawing,
   numbers,
 }: {
+  fixedNumbers?: number[];
   isDrawing: boolean;
   numbers: number[];
 }) {
@@ -413,7 +440,11 @@ export const LottoDrawingMachine = memo(function LottoDrawingMachine({
           const number = numbers[index];
 
           return number ? (
-            <LottoNumberBall key={slot.id} number={number} />
+            <LottoNumberBall
+              isFixed={fixedNumbers.includes(number)}
+              key={slot.id}
+              number={number}
+            />
           ) : (
             <View
               accessibilityLabel={`${slot.label}번째 번호 대기 중`}

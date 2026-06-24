@@ -4,6 +4,8 @@ export const LOTTO_PICK_COUNT = 6;
 export const LOTTO_DISCLAIMER = "무작위 추천이며 당첨을 보장하지 않아요.";
 export const LOTTO_GAME_COUNTS = [1, 3, 5] as const;
 export const LOTTO_DUPLICATE_RETRY_LIMIT = 20;
+// 고정 번호 최대 개수 - 최소 1개는 무작위 슬롯으로 남긴다.
+export const LOTTO_MAX_FIXED_COUNT = LOTTO_PICK_COUNT - 1;
 
 export type LottoGameCount = (typeof LOTTO_GAME_COUNTS)[number];
 export type LottoDisplayMode = "drawOrder" | "sorted";
@@ -13,12 +15,42 @@ export type LottoGame = {
   numbers: number[];
 };
 
-export function generateLottoNumbers(random = Math.random) {
+export function sanitizeFixedNumbers(fixedNumbers: number[]): number[] {
+  const sanitized: number[] = [];
+  const seen = new Set<number>();
+
+  for (const value of fixedNumbers) {
+    if (
+      !Number.isInteger(value) ||
+      value < LOTTO_MIN_NUMBER ||
+      value > LOTTO_MAX_NUMBER ||
+      seen.has(value)
+    ) {
+      continue;
+    }
+
+    seen.add(value);
+    sanitized.push(value);
+
+    if (sanitized.length >= LOTTO_MAX_FIXED_COUNT) {
+      break;
+    }
+  }
+
+  return sanitized;
+}
+
+export function generateLottoNumbers(
+  random = Math.random,
+  fixedNumbers: number[] = [],
+) {
+  const fixed = sanitizeFixedNumbers(fixedNumbers);
+  const fixedSet = new Set(fixed);
   const pool = Array.from(
     { length: LOTTO_MAX_NUMBER },
     (_, index) => index + LOTTO_MIN_NUMBER,
-  );
-  const pickedNumbers: number[] = [];
+  ).filter((number) => !fixedSet.has(number));
+  const pickedNumbers: number[] = [...fixed];
 
   while (pickedNumbers.length < LOTTO_PICK_COUNT) {
     const pickedIndex = Math.min(
@@ -42,13 +74,15 @@ function createCombinationKey(numbers: number[]) {
 export function generateLottoGames(
   count: LottoGameCount,
   random = Math.random,
+  fixedNumbers: number[] = [],
 ): LottoGame[] {
   const games: LottoGame[] = [];
   const usedCombinationKeys = new Set<string>();
+  const fixed = sanitizeFixedNumbers(fixedNumbers);
 
   while (games.length < count) {
     let retryCount = 0;
-    let numbers = generateLottoNumbers(random);
+    let numbers = generateLottoNumbers(random, fixed);
     let combinationKey = createCombinationKey(numbers);
 
     while (
@@ -56,7 +90,7 @@ export function generateLottoGames(
       retryCount < LOTTO_DUPLICATE_RETRY_LIMIT
     ) {
       retryCount += 1;
-      numbers = generateLottoNumbers(random);
+      numbers = generateLottoNumbers(random, fixed);
       combinationKey = createCombinationKey(numbers);
     }
 
